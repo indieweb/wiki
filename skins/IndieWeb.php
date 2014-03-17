@@ -234,67 +234,6 @@ class IndieWebTemplate extends QuickTemplate {
 	</div>
 	<?php } ?>
 
-    <div class="gumax-portlet" id="p-Links">
-		<div class="gumax-p-navigation banners">
-			<?php
-			if($this->data['pagetitle'] != 'Sponsors - IndieWebCamp') {
-			?>
-  			<h5>Event Sponsors</h5>
-  			<ul style="">
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/thumb/a/a9/google-logo.png/150px-google-logo.png" alt="Google" border="0" width="150" /></a>
-				</li>
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/thumb/d/d1/superfeedr-logo.png/110px-superfeedr-logo.png" alt="Superfeedr" border="0" width="150" /></a>
-				</li>
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/0/0d/idno-logo.png" alt="Idno" border="0" width="100" /></a>
-				</li>
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/thumb/0/09/network-redux-logo.png/150px-network-redux-logo.png" alt="Network Redux" border="0" width="150" /></a>
-				</li>
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/thumb/c/c0/elemental-logo.png/160px-elemental-logo.png" alt="Elemental Technologies" border="0" width="160" /></a>
-				</li>
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/wiki/images/thumb/e/e2/status-net-logo.png/150px-status-net-logo.png" alt="StatusNet" border="0" width="150" /></a>
-				</li>
-				<li style="border: 0; margin-top: 20px;">
-					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/thumb/f/f4/mozillalogo.jpg/120px-mozillalogo.jpg" alt="Mozilla" border="0" width="120" /></a>
-				</li>
-  				<li style="border: 0; margin-top: 20px;">
-  					<a href="/Sponsors"><img src="http://indiewebcamp.com/wiki/images/thumb/1/1f/ualogo.png/160px-ualogo.png" alt="Urban Airship" border="0" width="150" /></a>
-  				</li>
-  				<li style="border: 0; margin-top: 20px;">
-  					<a href="/Sponsors"><img src="http://indiewebcamp.com/images/thumb/8/89/geoloqi-logo.png/160px-geoloqi-logo.png" alt="Geoloqi" border="0" width="150" /></a>
-  				</li>
-  				<li style="border: 0; margin-top: 20px;">
-  					<a href="/Sponsors"><img src="http://indiewebcamp.com/wiki/images/thumb/4/41/tropologo-vert.png/110px-tropologo-vert.png" alt="Tropo" border="0" width="110" /></a>
-  				</li>
-  				<li style="border: 0; margin-top: 20px;">
-  					<a href="/Sponsors"><img src="http://indiewebcamp.com/wiki/images/5/54/wklogo.png" alt="Wieden+Kennedy" border="0" width="157" /></a>
-  				</li>
-  				<li style="border: 0; margin-top: 20px; margin-bottom: 20px">
-  					<a href="/how-to-sponsor">You?</a>
-  				</li>
-	        </ul>
-	        <br />
-	        <h5>Media Sponsors</h5>
-	        <ul style="">
-	        	<li style="border: 0; margin-top: 20px;">
-	        		<a href="https://webmaker.org/"><img src="http://www.mozilla.org/media/img/webmaker/mozparty.png" width="120" /></a>
-	        	</li>
-	        	<li style="border: 0; margin-top: 20px;">
-	        		<a href="http://opensourcebridge.org/"><img src="http://opensourcebridge.org/wp-content/uploads/2009/01/imgopensourcebridge.jpg" width="140" /></a>
-	        	</li>
-	        </ul>
-      <?php
-      }
-      ?>
-        </div>        
-    </div>
-
-
     </div>
     <!-- end of Navigation Menu -->
 
@@ -467,7 +406,9 @@ class IndieWebTemplate extends QuickTemplate {
     <!-- =================== end of gumax-page-footer =================== -->
   </div>
 
-
+<?php
+include(dirname(__FILE__).'/sponsors.php');
+?>
 
     <?php $this->html('reporttime') ?>
 <script type="text/javascript">
