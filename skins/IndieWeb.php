@@ -88,10 +88,8 @@ class IndieWebTemplate extends QuickTemplate {
     <!--[if IE 7]><style type="text/css">@import "<?php $this->text('stylepath') ?>/<?php $this->text('stylename') ?>/IE70Fixes.css?<?php echo $GLOBALS['wgStyleVersion'] ?>";</style><![endif]-->
     <!--[if lt IE 7]><script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath') ?>/common/IEFixes.js?<?php echo $GLOBALS['wgStyleVersion'] ?>"></script>
     <meta http-equiv="imagetoolbar" content="no" /><![endif]-->
-	<meta property="og:title" content="IndieWebCamp" />
-	<meta property="og:type" content="event" />
-	<meta property="og:url" content="http://indiewebcamp.com" />
-	<meta property="og:image" content="http://indiewebcamp.com/wiki/skins/indieweb/images/indiewebcamp_logo_color.png" />
+	<meta property="og:title" content="<?php $this->text('pagetitle') ?>" />
+	<meta property="og:image" content="http://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" />
 	<meta property="og:site_name" content="IndieWebCamp" />
 	<meta property="fb:admins" content="11500459,31600719,214611" />
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/irc/apple-touch-icon-57x57-precomposed.png">
@@ -218,7 +216,7 @@ class IndieWebTemplate extends QuickTemplate {
     <div id="gumax-p-navigation-wrapper">
 
     <div id="main-logo-wrapper">
-      <a href="/" id="main-logo"><h1>IndieWebCamp</h1></a>
+      <a href="/" id="main-logo"><img src="http://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
     </div>
 
 	<?php foreach ($this->data['sidebar'] as $bar => $cont) { ?>
