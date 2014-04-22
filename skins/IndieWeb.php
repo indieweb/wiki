@@ -97,6 +97,8 @@ class IndieWebTemplate extends QuickTemplate {
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/irc/apple-touch-icon-114x114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/irc/apple-touch-icon-144x144-precomposed.png">
 
+    <script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
+
     <?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
 
     <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/common/wikibits.js?<?php echo $GLOBALS['wgStyleVersion'] ?>"><!-- wikibits js --></script>
