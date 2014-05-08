@@ -132,7 +132,7 @@ class IndieWebTemplate extends QuickTemplate {
 
 <body <?php if($this->data['body_ondblclick']) { ?>ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>
 <?php if($this->data['body_onload'    ]) { ?>onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
- class="mediawiki <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
+ class="mediawiki h-entry <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
 
 <div class="gumax-center" align="center">
 
@@ -168,6 +168,7 @@ class IndieWebTemplate extends QuickTemplate {
                                         } else {
                                                 echo $linker->tooltipAndAccesskey( "ca-$key" );
                                         }
+					if( $action['text'] == 'Page') { echo ' class="u-url"'; }
 				echo '>';
                    echo htmlspecialchars($action['text']) ?></a> <?php
                    	// echo '<!-- '; echo var_dump($this->skin); echo ' -->';
@@ -246,8 +247,8 @@ class IndieWebTemplate extends QuickTemplate {
     
         <a name="top" id="top"></a>
         <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
-        <h1 class="firstHeading"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
-        <div id= "bodyContent" class="gumax-bodyContent">
+        <h1 class="firstHeading p-name"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
+        <div id= "bodyContent" class="gumax-bodyContent e-content">
             <?php /* <h3 id="siteSub"><?php $this->msg('tagline') ?></h3> */ ?>
             <div id="contentSub"><?php if( $this->data['title'] != 'Home' ) { $this->html('subtitle'); } ?></div>
             <?php if($this->data['undelete']) { ?><div id="contentSub2"><?php $this->html('undelete') ?></div><?php } ?>
