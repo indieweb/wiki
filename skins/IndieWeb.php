@@ -175,12 +175,6 @@ class IndieWebTemplate extends QuickTemplate {
                             </a> <?php
                                if($key != $lastkey) ?></li>
                         <?php }; ?>
-
-                        <li><a href="#">Recent Changes</a></li>
-                        <li><a href="#">Page</a></li>
-                        <li><a href="#">Edit</a></li>
-                        <li><a href="#">History</a></li>
-                        <li><a href="#">Watch</a></li>
                     </ul>
                 </li>
             </ul>
