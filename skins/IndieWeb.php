@@ -143,9 +143,6 @@ class IndieWebTemplate extends QuickTemplate {
 
         <section class="top-bar-section">
             <ul class="right">
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-
                 <!-- LOGIN -->
                 <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
                 <?php $item = $this->data['personal_urls'][$lastkey];
@@ -171,8 +168,29 @@ class IndieWebTemplate extends QuickTemplate {
                         </div>
                     </form>
                 </li>
+            </ul>
 
-
+            <ul class="left">
+                <li class="has-dropdown">
+                    <a href="#">Get Started</a>
+                    <ul class="dropdown">
+                        <li><a href="#">IRC</a></li>
+                    </ul>
+                </li>
+                <li><a href="#">Principles</a></li>
+                <li><a href="#">Events</a></li>
+                <li><a href="#">Projects</a></li>
+                <li><a href="#">Building Blocks</a></li>
+                <li class="has-dropdown">
+                    <a href="#">Wiki Tools</a>
+                    <ul class="dropdown">
+                        <li><a href="#">Recent Changes</a></li>
+                        <li><a href="#">Page</a></li>
+                        <li><a href="#">Edit</a></li>
+                        <li><a href="#">History</a></li>
+                        <li><a href="#">Watch</a></li>
+                    </ul>
+                </li>
             </ul>
         </section>
     </nav>
