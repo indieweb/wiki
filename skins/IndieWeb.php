@@ -68,9 +68,9 @@ class IndieWebTemplate extends QuickTemplate {
 	<meta property="fb:admins" content="11500459,31600719,214611" />
 
     <script src="/wiki/skins/indieweb/js/vendor/modernizr.js"></script>
-    <script src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
 
     <script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
+    <script src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
 
     <?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
 
