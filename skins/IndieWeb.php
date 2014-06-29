@@ -133,9 +133,6 @@ class IndieWebTemplate extends QuickTemplate {
 <?php if($this->data['body_onload'    ]) { ?>onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
  class="mediawiki h-entry <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
 
-    <!-- HEADER -->
-    <div class="row">IndieWebCamp is a 2-day creator camp focused on growing the independent web</div>
-
     <!-- TOP NAV -->
     <ul class="row" id="topNav">
         <li><a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a></li>
