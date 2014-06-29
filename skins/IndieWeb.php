@@ -132,50 +132,14 @@ class IndieWebTemplate extends QuickTemplate {
 <?php if($this->data['body_onload'    ]) { ?>onload="<?php     $this->text('body_onload')     ?>"<?php } ?>
  class="mediawiki h-entry <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
 
-<div class="gumax-center" align="center">
+    <!-- HEADER -->
+    <div id="header-text">IndieWebCamp is a 2-day creator camp focused on growing the independent web</div>
 
-    <!-- ===== Header ===== -->
-    <div id="gumax-header">
-    	<div id="header-text">IndieWebCamp is a 2-day creator camp focused on growing the independent web</div>
-        <a id="topHeader"></a>
-
-    </div> <!-- end of header DIV -->
-    <!-- ===== end of Header ===== -->
-
-
-    <!-- ===== gumax-page-actions ===== -->
-    <div id="gumax-page-actions">
-      <div id="gumax-content-actions" style="text-align: left">
-        <div class="middle-content">
-        <ul style="margin-left: 40px;">
-            <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
-            <?php foreach($this->data['content_actions'] as $key => $action) { ?>
-               <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
-                   if($action['class']) { ?>class="<?php echo htmlspecialchars($action['class']) ?>"<?php } ?>
-               ><a href="<?php echo htmlspecialchars($action['href']). '"';
-                                        # We don't want to give the watch tab an accesskey if the
-                                        # page is being edited, because that conflicts with the
-                                        # accesskey on the watch checkbox.  We also don't want to
-                                        # give the edit tab an accesskey, because that's fairly su-
-                                        # perfluous and conflicts with an accesskey (Ctrl-E) often
-                                        # used for editing in Safari.
-					$linker = new Linker();
-                                        if( in_array( $action, array( 'edit', 'submit' ) )
-                                        && in_array( $key, array( 'edit', 'watch', 'unwatch' ))) {
-                                                echo $linker->tooltip( "ca-$key" );
-                                        } else {
-                                                echo $linker->tooltipAndAccesskey( "ca-$key" );
-                                        }
-					if( $action['text'] == 'Page') { echo ' class="u-url"'; }
-				echo '>';
-                   echo htmlspecialchars($action['text']) ?></a> <?php
-                   	// echo '<!-- '; echo var_dump($this->skin); echo ' -->';
-                   if($key != $lastkey) //echo "&#8226;" ?></li>
-            <?php } ?>
-
-			<!-- Login link in header bar -->
-	         <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
-	         <?php $item = $this->data['personal_urls'][$lastkey];
+    <!-- TOP NAV -->
+    <ul>
+		<!-- Login link in header bar -->
+	   <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
+	   <?php $item = $this->data['personal_urls'][$lastkey];
 	              ?><li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>"><a href="<?php
 	               echo htmlspecialchars($item['href']) ?>"<?php
 	              if(!empty($item['class'])) { ?> class="<?php
@@ -184,46 +148,31 @@ class IndieWebTemplate extends QuickTemplate {
 
 
         <!-- Search -->
-                <form action="<?php $this->text('searchaction') ?>" id="searchform" style="display: inline-block; float: right;">
-                    <input id="searchInput" name="search" type="text" <?php
-                        if($this->haveMsg('accesskey-search')) {
-                            ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
-                        if( isset( $this->data['search'] ) ) {
-                            ?> value="<?php $this->text('search') ?>"<?php } ?> />
-                    <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
-                </form>
-        <!-- end of Search -->
-
-        </ul>
-        </div>
-
-      </div>
-    </div>
-    <!-- ===== end of gumax-page-actions ===== -->
+        <form action="<?php $this->text('searchaction') ?>" id="searchform" style="display: inline-block; float: right;">
+            <input id="searchInput" name="search" type="text" <?php
+                if($this->haveMsg('accesskey-search')) {
+                    ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
+                if( isset( $this->data['search'] ) ) {
+                    ?> value="<?php $this->text('search') ?>"<?php } ?> />
+            <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
+        </form>
+    </ul>
     
 
-<div id="gumax-rbox" class="middle-content" align="left">
-<div class="gumax-rbcontentwrap"><div class="gumax-rbcontent">
-
-    <!-- =================== gumax-page =================== -->
+    <!-- NOTICE -->
     <div id="gumax-page">
     <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
-    <!-- ===== Content body ===== -->
-    <div id="gumax-content-body">
-    
-    <table id="gumax-content-body-table"><tr><td class="gumax-content-left">
-    <!-- Navigation Menu -->
-    <div id="gumax-p-navigation-wrapper">
-
+    <!-- LOGO -->
     <div id="main-logo-wrapper">
       <a href="/" id="main-logo"><img src="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
     </div>
 
+    <!-- SIDE NAV -->
 	<?php foreach ($this->data['sidebar'] as $bar => $cont) { ?>
-	<div class='gumax-portlet' id='p-<?php echo Sanitizer::escapeId($bar) ?>'>
+	<div id='p-<?php echo Sanitizer::escapeId($bar) ?>'>
 		<h5><?php $out = wfMsg( $bar ); if (wfEmptyMsg($bar, $out)) echo $bar; else echo $out; ?></h5>
-		<div class="gumax-p-navigation">
+		<div>
 			<ul>
                 <?php foreach($cont as $key => $val) { ?>
                     <li id="<?php echo Sanitizer::escapeId($val['id']) ?>"<?php
@@ -235,48 +184,25 @@ class IndieWebTemplate extends QuickTemplate {
 	</div>
 	<?php } ?>
 
-    </div>
-    <!-- end of Navigation Menu -->
-
-    </td><td class="gumax-content-right"> <!-- Main Content TD -->
-
     <!-- Main Content -->
     <div id="content">
     
-        <a name="top" id="top"></a>
-        <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
-        <h1 class="firstHeading p-name"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
-        <div id= "bodyContent" class="gumax-bodyContent e-content">
-            <?php /* <h3 id="siteSub"><?php $this->msg('tagline') ?></h3> */ ?>
-            <div id="contentSub"><?php if( $this->data['title'] != 'Home' ) { $this->html('subtitle'); } ?></div>
-            <?php if($this->data['undelete']) { ?><div id="contentSub2"><?php $this->html('undelete') ?></div><?php } ?>
-            <?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
-            <?php if(0 && $this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
-            <!-- start content -->
-            <?php $this->html('bodytext') ?>
-            <?php if($this->data['catlinks']) { ?><div id="catlinks"><?php $this->html('catlinks') ?></div><?php } ?>
-            <!-- end content -->
-            <div class="visualClear"></div>
-        </div>
-    </div>
-    <!-- end of Main Content -->
-    </td></tr></table>
-    </div>
-    <!-- ===== end of Content body ===== -->
-
-    </div> <!-- end of gumax-page DIV -->
-    <!-- =================== end of gumax-page =================== -->
-</div></div>
-<div class="gumax-rbbot"><div><div></div></div></div></div>
-</div>
-</div>
+    <a name="top" id="top"></a>
+    <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
+    <h1 class="firstHeading p-name"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
+    
+    <?php /* <h3 id="siteSub"><?php $this->msg('tagline') ?></h3> */ ?>
+    <div id="contentSub"><?php if( $this->data['title'] != 'Home' ) { $this->html('subtitle'); } ?></div>
+    <?php if($this->data['undelete']) { ?><div id="contentSub2"><?php $this->html('undelete') ?></div><?php } ?>
+    <?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
+    <?php if(0 && $this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
+    <!-- start content -->
+    <?php $this->html('bodytext') ?>
+    <?php if($this->data['catlinks']) { ?><div id="catlinks"><?php $this->html('catlinks') ?></div><?php } ?>
+    <!-- end content -->
 
 
-  <div class="bottom">
-    <!-- ===== gumax-page-actions ===== -->
-    <div id="gumax-page-actions">
-      <div id="gumax-content-actions">
-        <div class="middle-content">
+    <!-- BOTTOM -->
         <ul>
             <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
             <?php foreach($this->data['content_actions'] as $key => $action) { ?>
@@ -315,12 +241,9 @@ class IndieWebTemplate extends QuickTemplate {
             <!-- end of show back to top link only -->
 
         </ul>
-        </div>
-      </div>
-    </div>
-    <!-- ===== end of gumax-page-actions ===== -->
 
-    <!-- =================== gumax-page-footer =================== -->
+
+    <!-- FOOTER -->
     <div id="gumax-page-footer">
 
       <div class="middle-content">
@@ -374,38 +297,7 @@ class IndieWebTemplate extends QuickTemplate {
         </div> <!-- end of personal-tools DIV -->
         <!-- end of personal tools  -->
 
-        <!-- gumax-footer -->
-        <div id="gumax-footer">
-            <div id="gumax-f-message">
-                <?php if($this->data['lastmod']) { ?><span id="f-lastmod"><?php    $this->html('lastmod')    ?></span>
-                <?php } ?><?php if($this->data['viewcount' ]) { ?><span id="f-viewcount"><?php  $this->html('viewcount')  ?> </span>
-                <?php } ?>
-            </div>
-                <?php
-			/*
-            <ul id="gumax-f-list">
-                        $footerlinks = array(
-                            'numberofwatchingusers', 'credits',
-                            'privacy', 'about', 'disclaimer', 'tagline',
-                        );
-                        foreach( $footerlinks as $aLink ) {
-                            if( isset( $this->data[$aLink] ) && $this->data[$aLink] ) {
-                ?>				<li id="<?php echo$aLink?>"><?php $this->html($aLink) ?> | </li>
-                <?php 		}
-                        }
-        		<li>Design by Aaron Parecki | </li>
-                <li id="f-designby"><a href="http://paulgu.com">Skin by Paul Gu</a></li>
-            </ul>
-			*/
-                ?>
-        </div>
-        <!-- end of gumax-footer -->
         <?php $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */ ?>
-      </div>
-        
-    </div>
-    <!-- =================== end of gumax-page-footer =================== -->
-  </div>
 
 <?php
 include(dirname(__FILE__).'/sponsors.php');
