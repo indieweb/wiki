@@ -69,8 +69,6 @@ class IndieWebTemplate extends QuickTemplate {
 
     <script src="/wiki/skins/indieweb/js/vendor/modernizr.js"></script>
     <script src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
-    <script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
-
     <script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
 
     <?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
@@ -370,6 +368,7 @@ class IndieWebTemplate extends QuickTemplate {
     <?php $this->html('reporttime') ?>
     </footer>
 
+<script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
 <script>
     $(document).foundation();
 </script>
