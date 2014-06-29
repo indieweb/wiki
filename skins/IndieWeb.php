@@ -93,10 +93,7 @@ class IndieWebTemplate extends QuickTemplate {
 	<meta property="og:site_name" content="IndieWebCamp" />
 	<meta property="fb:admins" content="11500459,31600719,214611" />
 
-    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="/irc/apple-touch-icon-57x57-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="/irc/apple-touch-icon-72x72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="/irc/apple-touch-icon-114x114-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/irc/apple-touch-icon-144x144-precomposed.png">
+    <script src="js/vendor/modernizr.js"></script>
 
     <script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
 
@@ -292,6 +289,13 @@ include(dirname(__FILE__).'/sponsors.php');
 ?>
 
 <?php $this->html('reporttime') ?>
+
+<script src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
+<script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
+<script>
+    $(document).foundation();
+</script>
+
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
