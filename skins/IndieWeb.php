@@ -78,6 +78,9 @@ class IndieWebTemplate extends QuickTemplate {
     <title><?php $this->text('pagetitle') ?></title>
 
     <meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
+    <link rel="shortcut icon" href="/wiki/skins/indieweb/favicon.ico" />
+    <link rel="icon" type="image/png" href="/wiki/skins/indieweb/favicon.png" />
+
     <?php $this->html('headlinks') ?>
     
     <!-- Stylesheets -->
@@ -99,9 +102,9 @@ class IndieWebTemplate extends QuickTemplate {
 
     <?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
 
-    <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/common/wikibits.js?<?php echo $GLOBALS['wgStyleVersion'] ?>"><!-- wikibits js --></script>
+    <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('stylepath' ) ?>/common/wikibits.js?<?php echo $GLOBALS['wgStyleVersion'] ?>"></script>
     <?php    if($this->data['jsvarurl'  ]) { ?>
-        <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl'  ) ?>"><!-- site js --></script>
+        <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('jsvarurl'  ) ?>"></script>
     <?php    } ?>
     <?php    if($this->data['pagecss'   ]) { ?>
         <style type="text/css"><?php $this->html('pagecss'   ) ?></style>
@@ -148,7 +151,7 @@ class IndieWebTemplate extends QuickTemplate {
 
 
         <!-- Search -->
-        <form action="<?php $this->text('searchaction') ?>" id="searchform" style="display: inline-block; float: right;">
+        <form action="<?php $this->text('searchaction') ?>" id="searchform">
             <input id="searchInput" name="search" type="text" <?php
                 if($this->haveMsg('accesskey-search')) {
                     ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
@@ -180,7 +183,7 @@ class IndieWebTemplate extends QuickTemplate {
 	<?php } ?>
 
     <!-- Main Content -->    
-    <a name="top" id="top"></a>
+    <a id="top"></a>
 
 
     <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
