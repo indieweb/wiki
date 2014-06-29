@@ -134,29 +134,37 @@ class IndieWebTemplate extends QuickTemplate {
  class="mediawiki h-entry <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
 
     <!-- TOP NAV -->
-    <ul class="row" id="topNav">
-        <li><a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a></li>
+    <nav class="top-bar" data-topbar>
+        <ul class="title-area">
+            <li class="name">
+                <a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
+            </li>
+        </ul>
 
-		<!-- Login link in header bar -->
-	   <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
-	   <?php $item = $this->data['personal_urls'][$lastkey];
-	              ?><li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>"><a href="<?php
-	               echo htmlspecialchars($item['href']) ?>"<?php
-	              if(!empty($item['class'])) { ?> class="<?php
-	               echo htmlspecialchars($item['class']) ?>"<?php } ?>><?php
-	               echo htmlspecialchars($item['text']) ?></a></li>
-
-
-        <!-- Search -->
-        <form action="<?php $this->text('searchaction') ?>" id="searchform">
-            <input id="searchInput" name="search" type="text" <?php
-                if($this->haveMsg('accesskey-search')) {
-                    ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
+        <section class="top-bar-section">
+            <ul class="right">
+                <?php $item = $this->data['personal_urls'][$lastkey];?>
+                <li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>">
+                    <a href="<?php echo htmlspecialchars($item['href']) ?>"
+                        <?php if(!empty($item['class'])) { ?> 
+                            class="<?pho echo htmlspecialchars($item['class']) ?>"
+                        <?php } ?>><?php echo htmlspecialchars($item['text']) ?></a>
+                </li>
+                <li>
+                    <form action="<?php $this->text('searchaction') ?>" id="searchform">
+                    <input id="searchInput" name="search" type="text" <?php
+                        if($this->haveMsg('accesskey-search')) {
+                        ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
                 if( isset( $this->data['search'] ) ) {
                     ?> value="<?php $this->text('search') ?>"<?php } ?> />
-            <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
-        </form>
-    </ul>
+                    <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
+                    </form>
+
+                </li>
+            </ul>
+        </section>
+    </nav>
+
     
 
     <!-- NOTICE -->
