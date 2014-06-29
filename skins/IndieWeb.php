@@ -213,33 +213,7 @@ class IndieWebTemplate extends QuickTemplate {
 	    <div class="large-3 columns side">
             <h4>Events</h4>
             <script type="application/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
-            <script type="application/javascript">
-              $(function() {
-                $.getJSON("http://indiewebcamp.com/wiki/api.php?action=parse&page=Events&format=json&callback=?", function(data) {
-                  var rendered_html = data.parse.text['*'];
-                  var upcoming_events = $(rendered_html).find('.h-event').filter(function(i, event) { return moment($(event).find('.dt-start').first().text()) > moment(); });
-                  var next_event = upcoming_events.first();
 
-                  var big_event_shown = false;
-                  var small_event_shown = false;
-
-                  $.each(upcoming_events, function(i, event) {
-                    console.log(event);
-
-                    event = $(event);
-                    if(event.hasClass('big')) {
-                      if(big_event_shown) return false;
-                      big_event_shown = true;
-                    } else {
-                      if(small_event_shown) return false;
-                      small_event_shown = true;
-                    }
-
-                    $('.upcoming-events ul').append($(event).closest('li'));
-                  });
-                });
-              });
-            </script> 
 
             <div class="upcoming-events">
               <ul>
@@ -375,6 +349,32 @@ class IndieWebTemplate extends QuickTemplate {
 <script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
 <script>
     $(document).foundation();
+
+  $(function() {
+    $.getJSON("http://indiewebcamp.com/wiki/api.php?action=parse&page=Events&format=json&callback=?", function(data) {
+      var rendered_html = data.parse.text['*'];
+      var upcoming_events = $(rendered_html).find('.h-event').filter(function(i, event) { return moment($(event).find('.dt-start').first().text()) > moment(); });
+      var next_event = upcoming_events.first();
+
+      var big_event_shown = false;
+      var small_event_shown = false;
+
+      $.each(upcoming_events, function(i, event) {
+        console.log(event);
+
+        event = $(event);
+        if(event.hasClass('big')) {
+          if(big_event_shown) return false;
+          big_event_shown = true;
+        } else {
+          if(small_event_shown) return false;
+          small_event_shown = true;
+        }
+
+        $('.upcoming-events ul').append($(event).closest('li'));
+      });
+    });
+  }); 
 </script>
 
 <script type="text/javascript">
