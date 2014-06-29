@@ -273,8 +273,8 @@ class IndieWebTemplate extends QuickTemplate {
 
 
     <!-- FOOTER -->
-    <div class="row">
-    <ul>
+    <div class="row" id="bottomtools">
+        <ul>
         <?php if($this->data['notspecialpage']) { foreach( array( 'whatlinkshere', 'recentchangeslinked' ) as $special ) { ?>
 		 <li id="t-<?php echo $special?>"><a href="<?php
                 echo htmlspecialchars($this->data['nav_urls'][$special]['href'])
@@ -300,10 +300,10 @@ class IndieWebTemplate extends QuickTemplate {
 
                 wfRunHooks( 'IndieWebTemplateToolboxEnd', array( &$this ) ); ?>
 
-            </ul>
+        </ul>
     </div>
 
-
+    <div class="row" id="bottomlogin"
             <!-- Login -->
                 <ul>
                   <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
@@ -316,14 +316,17 @@ class IndieWebTemplate extends QuickTemplate {
 	                   <?php if($key != $lastkey) echo "|" ?></li>
                  <?php } ?>
                 </ul>
+    </div>
 
             <!-- end of Login -->
 
+    </div class="row" id="bottomscripts">
         <?php $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */ ?>
+    </div>
 
-<?php
-include(dirname(__FILE__).'/sponsors.php');
-?>
+    <div class="row" id="sponsors">
+        <?php include(dirname(__FILE__).'/sponsors.php'); ?>
+    </div>
 
 <?php $this->html('reporttime') ?>
 
