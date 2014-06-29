@@ -143,14 +143,15 @@ class IndieWebTemplate extends QuickTemplate {
 
         <section class="top-bar-section">
             <ul class="right">
-<?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
-<?php $item = $this->data['personal_urls'][$lastkey];
-?><li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>"><a href="<?php
-echo htmlspecialchars($item['href']) ?>"<?php
-if(!empty($item['class'])) { ?> class="<?php
-echo htmlspecialchars($item['class']) ?>"<?php } ?>><?php
-echo htmlspecialchars($item['text']) ?></a></li>
-                <li>
+                <!-- LOGIN -->
+                <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
+                <?php $item = $this->data['personal_urls'][$lastkey];
+                ?><li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>"><a href="<?php
+                echo htmlspecialchars($item['href']) ?>"<?php
+                if(!empty($item['class'])) { ?> class="<?php
+                echo htmlspecialchars($item['class']) ?>"<?php } ?>><?php
+                echo htmlspecialchars($item['text']) ?></a></li>
+                <li class="has-form">
                     <form action="<?php $this->text('searchaction') ?>" id="searchform">
                     <input id="searchInput" name="search" type="text" <?php
                         if($this->haveMsg('accesskey-search')) {
