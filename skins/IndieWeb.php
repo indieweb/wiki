@@ -232,6 +232,8 @@ class IndieWebTemplate extends QuickTemplate {
 
 
     <!-- BOTTOM -->
+    <footer>
+
     <div class="row" id="bottomwiki">
         <ul>
             <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
@@ -326,11 +328,10 @@ class IndieWebTemplate extends QuickTemplate {
         <?php $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */ ?>
     </div>
 
-    <footer>
         <?php include(dirname(__FILE__).'/sponsors.php'); ?>
-    </footer>
 
-<?php $this->html('reporttime') ?>
+    <?php $this->html('reporttime') ?>
+    </footer>
 
 <script src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
 <script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
