@@ -69,15 +69,21 @@ class IndieWebTemplate extends QuickTemplate {
         wfSuppressWarnings();
 
 ?><!DOCTYPE html>
-<html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" >
+
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php $this->text('pagetitle') ?></title>
 
     <meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
     <?php $this->html('headlinks') ?>
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" type="text/css" href="indieweb.css">
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/foundation.css">
 
 	<meta property="og:title" content="<?php $this->text('pagetitle') ?>" />
 	<meta property="og:image" content="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" />
