@@ -207,9 +207,9 @@ class IndieWebTemplate extends QuickTemplate {
 	    
 	    </div>
 	    <div class="large-3 columns">
-	    	<h3>What is IndieWeb?</h3>
+	    	<h4>What is Indie?</h4>
 	    	<p>
-		    	<a href="/File:icon_4611.png" class="image"><img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48"></a>
+		    	<a href="/File:icon_4611.png" class="image"><img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48"></a><br />
 		    
 				<b>Your content is yours</b><br>When you post something on the web, it should belong to you, not a corporation. Too many companies have gone out of business and <a href="/site-deaths" title="site-deaths">lost all of their users’ data</a>. By joining the IndieWeb, your content stays yours and in your control.
 			</p>
