@@ -350,6 +350,7 @@ class IndieWebTemplate extends QuickTemplate {
 <script>
     $(document).foundation();
 
+/*
   $(function() {
     $.getJSON("http://indiewebcamp.com/wiki/api.php?action=parse&page=Events&format=json&callback=?", function(data) {
       var rendered_html = data.parse.text['*'];
@@ -375,6 +376,7 @@ class IndieWebTemplate extends QuickTemplate {
       });
     });
   }); 
+*/
 </script>
 
 <script type="text/javascript">
