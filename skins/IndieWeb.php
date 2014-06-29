@@ -110,7 +110,7 @@ class IndieWebTemplate extends QuickTemplate {
     <nav class="top-bar" data-topbar>
         <ul class="title-area">
             <li class="name">
-                <a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
+                <a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-small.png" alt="IndieWebCamp"></a>
             </li>
         </ul>
 
@@ -142,6 +142,7 @@ class IndieWebTemplate extends QuickTemplate {
                     </form>
                 </li>
             </ul>
+           
 
             <ul class="left">
                 <li class="has-dropdown">
@@ -154,6 +155,7 @@ class IndieWebTemplate extends QuickTemplate {
                 <li><a href="#">Events</a></li>
                 <li><a href="#">Projects</a></li>
                 <li><a href="#">Building Blocks</a></li>
+                
                 <li class="has-dropdown">
                     <a href="#">Wiki Tools</a>
                     <ul class="dropdown">
@@ -172,7 +174,8 @@ class IndieWebTemplate extends QuickTemplate {
                             };
                             echo '>';
                             echo htmlspecialchars($action['text']); ?>
-                            </a> <?php
+                            </a>
+                            <?php
                                if($key != $lastkey) ?></li>
                         <?php }; ?>
                     </ul>
@@ -181,26 +184,51 @@ class IndieWebTemplate extends QuickTemplate {
         </section>
     </nav>
 
-    
+    <div class="row">
+	    <div class="large-9 columns">
+	        <!-- NOTICE -->
+	        <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
+	    
+	        <!-- Main Content -->    
+	        <a id="top"></a>
+	    
+	    
+	        <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
+	        <h1 class="firstHeading p-name"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
+	        
+	        <div id="contentSub"><?php if( $this->data['title'] != 'Home' ) { $this->html('subtitle'); } ?></div>
+	        <?php if($this->data['undelete']) { ?><div id="contentSub2"><?php $this->html('undelete') ?></div><?php } ?>
+	        <?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
+	        <?php if(0 && $this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
+	        <!-- start content -->
+	        <?php $this->html('bodytext') ?>
+	        <?php if($this->data['catlinks']) { ?><div id="catlinks"><?php $this->html('catlinks') ?></div><?php } ?>
+	        <!-- end content -->
+	    
+	    </div>
+	    <div class="large-3 columns">
+	    	<h3>What is IndieWeb?</h3>
+	    	<p>
+		    	<a href="/File:icon_4611.png" class="image"><img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48"></a>
+		    
+				<b>Your content is yours</b><br>When you post something on the web, it should belong to you, not a corporation. Too many companies have gone out of business and <a href="/site-deaths" title="site-deaths">lost all of their users’ data</a>. By joining the IndieWeb, your content stays yours and in your control.
+			</p>
+			
+			<p>
+				<a href="/File:icon_31635.png" class="image"><img alt="icon 31635.png" src="http://indiewebcamp.com/images/thumb/1/1f/icon_31635.png/48px-icon_31635.png" height="48" width="48"></a>
+		    
+		    	<b>You are better connected</b><br>Your articles and status messages can <a href="/POSSE" title="POSSE">go to all services</a>, not just one, allowing you to engage with everyone. Even replies and likes on other services can <a href="/backfeed" title="backfeed">come back to your site</a> so they’re all in one place.
+		    </p>
+		    
+		    <p>
+		    	<a href="/File:icon_2003.png" class="image"><img alt="icon 2003.png" src="http://indiewebcamp.com/images/thumb/d/d9/icon_2003.png/48px-icon_2003.png" height="48" width="48"></a>
+		    
+		    	<b>You are in control</b><br>You can post anything you want, in any format you want, with no one monitoring you. In addition, you share simple readable links such as <i>example.com/ideas</i>. These links are <a href="/permalinks" title="permalinks">permanent</a> and will always work.
+		    </p>
+		    
+	    </div>
+    </div>
 
-    <!-- NOTICE -->
-    <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
-
-    <!-- Main Content -->    
-    <a id="top"></a>
-
-
-    <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
-    <h1 class="firstHeading p-name"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
-    
-    <div id="contentSub"><?php if( $this->data['title'] != 'Home' ) { $this->html('subtitle'); } ?></div>
-    <?php if($this->data['undelete']) { ?><div id="contentSub2"><?php $this->html('undelete') ?></div><?php } ?>
-    <?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
-    <?php if(0 && $this->data['showjumplinks']) { ?><div id="jump-to-nav"><?php $this->msg('jumpto') ?> <a href="#column-one"><?php $this->msg('jumptonavigation') ?></a>, <a href="#searchInput"><?php $this->msg('jumptosearch') ?></a></div><?php } ?>
-    <!-- start content -->
-    <?php $this->html('bodytext') ?>
-    <?php if($this->data['catlinks']) { ?><div id="catlinks"><?php $this->html('catlinks') ?></div><?php } ?>
-    <!-- end content -->
 
 
     <!-- BOTTOM -->
