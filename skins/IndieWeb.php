@@ -101,6 +101,7 @@ class IndieWebTemplate extends QuickTemplate {
     <!-- Head Scripts -->
     <?php $this->html('headscripts') ?>
 
+
 </head>
 
 <body <?php if($this->data['body_ondblclick']) { ?>ondblclick="<?php $this->text('body_ondblclick') ?>"<?php } ?>
@@ -246,19 +247,19 @@ class IndieWebTemplate extends QuickTemplate {
 
 	    	<h4>What is Indie?</h4>
 	    	<p>
-		    	<a href="/File:icon_4611.png" class="image"><img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48"></a>
+		    	<img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48">
 		    
 				<b>Your content is yours</b><br>When you post something on the web, it should belong to you, not a corporation. Too many companies have gone out of business and <a href="/site-deaths" title="site-deaths">lost all of their users’ data</a>. By joining the IndieWeb, your content stays yours and in your control.
 			</p>
 			
 			<p>
-				<a href="/File:icon_31635.png" class="image"><img alt="icon 31635.png" src="http://indiewebcamp.com/images/thumb/1/1f/icon_31635.png/48px-icon_31635.png" height="48" width="48"></a>
+				<img alt="icon 31635.png" src="http://indiewebcamp.com/images/thumb/1/1f/icon_31635.png/48px-icon_31635.png" height="48" width="48">
 		    
 		    	<b>You are better connected</b><br>Your articles and status messages can <a href="/POSSE" title="POSSE">go to all services</a>, not just one, allowing you to engage with everyone. Even replies and likes on other services can <a href="/backfeed" title="backfeed">come back to your site</a> so they’re all in one place.
 		    </p>
 		    
 		    <p>
-		    	<a href="/File:icon_2003.png" class="image"><img alt="icon 2003.png" src="http://indiewebcamp.com/images/thumb/d/d9/icon_2003.png/48px-icon_2003.png" height="48" width="48"></a>
+		    	<img alt="icon 2003.png" src="http://indiewebcamp.com/images/thumb/d/d9/icon_2003.png/48px-icon_2003.png" height="48" width="48">
 		    
 		    	<b>You are in control</b><br>You can post anything you want, in any format you want, with no one monitoring you. In addition, you share simple readable links such as <i>example.com/ideas</i>. These links are <a href="/permalinks" title="permalinks">permanent</a> and will always work.
 		    </p>
