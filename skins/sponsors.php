@@ -1,5 +1,5 @@
 <div class="row">
-<ul>
+<ul class="sponsor-logos">
 	<li><a href="https://www.brid.gy/"><img src="http://indiewebcamp.com/sponsor-logos/bridgy.png" alt="Bridgy"></a></li>
 	<li><a href="http://mozilla.org/"><img src="http://indiewebcamp.com/sponsor-logos/mozilla.png" alt="Mozilla"></a></li>
 	<li><a href="http://idno.co/"><img src="http://indiewebcamp.com/sponsor-logos/idno.png" alt="Idno"></a></li>
