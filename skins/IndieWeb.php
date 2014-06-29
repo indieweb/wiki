@@ -143,8 +143,8 @@ class IndieWebTemplate extends QuickTemplate {
 
         <section class="top-bar-section">
             <ul class="right">
-                <li>Link</li>
-                <li>Link</li>
+                <li><a href="#">Link</a></li>
+                <li><a href="#">Link</a></li>
 
                 <!-- LOGIN -->
                 <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
