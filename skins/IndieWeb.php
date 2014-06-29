@@ -342,7 +342,7 @@ class IndieWebTemplate extends QuickTemplate {
         </ul>
     </div>
 
-    <div class="row" id="bottomlogin"
+    <div class="row" id="bottomlogin">
             <!-- Login -->
                 <ul>
                   <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
