@@ -87,6 +87,7 @@ class IndieWebTemplate extends QuickTemplate {
 
     <link rel="stylesheet" href="/wiki/skins/indieweb/css/normalize.css">
     <link rel="stylesheet" href="/wiki/skins/indieweb/css/foundation.css">
+    <link rel="stylesheet" href="/wiki/skins/indieweb/css/main.css">
 
 	<meta property="og:title" content="<?php $this->text('pagetitle') ?>" />
 	<meta property="og:image" content="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" />
@@ -133,10 +134,12 @@ class IndieWebTemplate extends QuickTemplate {
  class="mediawiki h-entry <?php $this->text('nsclass') ?> <?php $this->text('dir') ?> <?php $this->text('pageclass') ?>">
 
     <!-- HEADER -->
-    <div id="header-text">IndieWebCamp is a 2-day creator camp focused on growing the independent web</div>
+    <div class="row">IndieWebCamp is a 2-day creator camp focused on growing the independent web</div>
 
     <!-- TOP NAV -->
-    <ul>
+    <ul class="row" id="topNav">
+        <li><a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a></li>
+
 		<!-- Login link in header bar -->
 	   <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
 	   <?php $item = $this->data['personal_urls'][$lastkey];
@@ -163,7 +166,7 @@ class IndieWebTemplate extends QuickTemplate {
     <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
     <!-- LOGO -->
-    <a href="/" id="main-logo"><img src="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
+    
 
     <!-- SIDE NAV -->
 	<?php foreach ($this->data['sidebar'] as $bar => $cont) { ?>
