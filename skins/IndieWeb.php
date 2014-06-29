@@ -175,9 +175,7 @@ class IndieWebTemplate extends QuickTemplate {
                             echo '>';
                             echo htmlspecialchars($action['text']); ?>
                             </a>
-                            <?php
-                               if($key != $lastkey) ?></li>
-                        <?php }; ?>
+                            <?php if ($key != $lastkey) { ?></li><?php }; ?>
                     </ul>
                 </li>
             </ul>
