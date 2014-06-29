@@ -210,8 +210,8 @@ class IndieWebTemplate extends QuickTemplate {
 	    </div>
 	    <div class="large-3 columns side">
             <h4>Events</h4>
-            <script type="application/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
-
+<!--             <script type="application/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
+ -->
             <script type="application/javascript">
               $(function() {
                 $.getJSON("http://indiewebcamp.com/wiki/api.php?action=parse&page=Events&format=json&callback=?", function(data) {
