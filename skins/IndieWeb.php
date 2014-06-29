@@ -157,6 +157,25 @@ class IndieWebTemplate extends QuickTemplate {
                 <li class="has-dropdown">
                     <a href="#">Wiki Tools</a>
                     <ul class="dropdown">
+                        <!-- gnarly wiki things -->
+                        <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
+                        <?php foreach($this->data['content_actions'] as $key => $action) { ?>
+                           <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
+                               if($action['class']) { ?>class="<?php echo htmlspecialchars($action['class']) ?>"<?php } ?>
+                           ><a href="<?php 
+                            echo htmlspecialchars($action['href']). '"';
+                            $linker = new Linker();
+                            if ( in_array( $action, array( 'edit', 'submit' ) ) && in_array( $key, array( 'edit', 'watch', 'unwatch' ))) {
+                                echo $linker->tooltip( "ca-$key" );
+                            } else {
+                                echo $linker->tooltipAndAccesskey( "ca-$key" );
+                            };
+                            echo '>';
+                            echo htmlspecialchars($action['text']); ?>
+                            </a> <?php
+                               if($key != $lastkey) ?></li>
+                        <?php }; ?>
+
                         <li><a href="#">Recent Changes</a></li>
                         <li><a href="#">Page</a></li>
                         <li><a href="#">Edit</a></li>
