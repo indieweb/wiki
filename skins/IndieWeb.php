@@ -232,6 +232,7 @@ class IndieWebTemplate extends QuickTemplate {
 
 
     <!-- BOTTOM -->
+    <div class="row" id="bottomwiki">
         <ul>
             <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
             <?php foreach($this->data['content_actions'] as $key => $action) { ?>
@@ -270,6 +271,7 @@ class IndieWebTemplate extends QuickTemplate {
             <!-- end of show back to top link only -->
 
         </ul>
+    </div>
 
 
     <!-- FOOTER -->
