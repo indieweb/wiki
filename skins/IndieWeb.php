@@ -200,23 +200,6 @@ class IndieWebTemplate extends QuickTemplate {
     <!-- NOTICE -->
     <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
-    <!-- LOGO -->
-    
-
-    <!-- SIDE NAV -->
-	<?php foreach ($this->data['sidebar'] as $bar => $cont) { ?>
-	<div id='p-<?php echo Sanitizer::escapeId($bar) ?>'>
-		<h5><?php $out = wfMsg( $bar ); if (wfEmptyMsg($bar, $out)) echo $bar; else echo $out; ?></h5>
-			<ul>
-                <?php foreach($cont as $key => $val) { ?>
-                    <li id="<?php echo Sanitizer::escapeId($val['id']) ?>"<?php
-                    if ( $val['active'] ) { ?> class="active" <?php }
-                    ?>><a href="<?php echo htmlspecialchars($val['href']) ?>"><?php echo htmlspecialchars($val['text']) ?></a></li>
-                <?php } ?>
-			</ul>
-	</div>
-	<?php } ?>
-
     <!-- Main Content -->    
     <a id="top"></a>
 
