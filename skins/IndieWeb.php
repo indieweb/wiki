@@ -212,9 +212,6 @@ class IndieWebTemplate extends QuickTemplate {
 	    </div>
 	    <div class="large-3 columns side">
             <h4>Events</h4>
-            <script type="application/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
-
-
             <div class="upcoming-events">
               <ul>
               </ul>
@@ -349,8 +346,11 @@ class IndieWebTemplate extends QuickTemplate {
 <script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
 <script>
     $(document).foundation();
+</script>
 
-/*
+<!--
+<script type="application/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
+<script>
   $(function() {
     $.getJSON("http://indiewebcamp.com/wiki/api.php?action=parse&page=Events&format=json&callback=?", function(data) {
       var rendered_html = data.parse.text['*'];
@@ -376,8 +376,9 @@ class IndieWebTemplate extends QuickTemplate {
       });
     });
   }); 
-*/
 </script>
+-->
+
 
 <script type="text/javascript">
 
