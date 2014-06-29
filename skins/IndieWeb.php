@@ -160,19 +160,15 @@ class IndieWebTemplate extends QuickTemplate {
     
 
     <!-- NOTICE -->
-    <div id="gumax-page">
     <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 
     <!-- LOGO -->
-    <div id="main-logo-wrapper">
-      <a href="/" id="main-logo"><img src="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
-    </div>
+    <a href="/" id="main-logo"><img src="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" width="155" alt="IndieWebCamp"></a>
 
     <!-- SIDE NAV -->
 	<?php foreach ($this->data['sidebar'] as $bar => $cont) { ?>
 	<div id='p-<?php echo Sanitizer::escapeId($bar) ?>'>
 		<h5><?php $out = wfMsg( $bar ); if (wfEmptyMsg($bar, $out)) echo $bar; else echo $out; ?></h5>
-		<div>
 			<ul>
                 <?php foreach($cont as $key => $val) { ?>
                     <li id="<?php echo Sanitizer::escapeId($val['id']) ?>"<?php
@@ -180,18 +176,16 @@ class IndieWebTemplate extends QuickTemplate {
                     ?>><a href="<?php echo htmlspecialchars($val['href']) ?>"><?php echo htmlspecialchars($val['text']) ?></a></li>
                 <?php } ?>
 			</ul>
-		</div>
 	</div>
 	<?php } ?>
 
-    <!-- Main Content -->
-    <div id="content">
-    
+    <!-- Main Content -->    
     <a name="top" id="top"></a>
+
+
     <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
     <h1 class="firstHeading p-name"><?php $this->data['displaytitle']!=""?$this->html('title'):$this->text('title') ?></h1>
     
-    <?php /* <h3 id="siteSub"><?php $this->msg('tagline') ?></h3> */ ?>
     <div id="contentSub"><?php if( $this->data['title'] != 'Home' ) { $this->html('subtitle'); } ?></div>
     <?php if($this->data['undelete']) { ?><div id="contentSub2"><?php $this->html('undelete') ?></div><?php } ?>
     <?php if($this->data['newtalk'] ) { ?><div class="usermessage"><?php $this->html('newtalk')  ?></div><?php } ?>
@@ -244,13 +238,8 @@ class IndieWebTemplate extends QuickTemplate {
 
 
     <!-- FOOTER -->
-    <div id="gumax-page-footer">
-
-      <div class="middle-content">
-        <!-- personal tools  -->
-        <div id="gumax-personal-tools">
-            <ul>
-              <?php if($this->data['notspecialpage']) { foreach( array( 'whatlinkshere', 'recentchangeslinked' ) as $special ) { ?>
+    <ul>
+        <?php if($this->data['notspecialpage']) { foreach( array( 'whatlinkshere', 'recentchangeslinked' ) as $special ) { ?>
 		 <li id="t-<?php echo $special?>"><a href="<?php
                 echo htmlspecialchars($this->data['nav_urls'][$special]['href'])
                 ?>"><?php echo $this->msg($special) ?></a> | </li>
@@ -279,7 +268,6 @@ class IndieWebTemplate extends QuickTemplate {
 
 
             <!-- Login -->
-            <div id="gumax-footer-login">
                 <ul>
                   <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
                   <?php foreach($this->data['personal_urls'] as $key => $item) {
@@ -291,11 +279,8 @@ class IndieWebTemplate extends QuickTemplate {
 	                   <?php if($key != $lastkey) echo "|" ?></li>
                  <?php } ?>
                 </ul>
-            </div>
-            <!-- end of Login -->
 
-        </div> <!-- end of personal-tools DIV -->
-        <!-- end of personal tools  -->
+            <!-- end of Login -->
 
         <?php $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */ ?>
 
@@ -303,7 +288,7 @@ class IndieWebTemplate extends QuickTemplate {
 include(dirname(__FILE__).'/sponsors.php');
 ?>
 
-    <?php $this->html('reporttime') ?>
+<?php $this->html('reporttime') ?>
 <script type="text/javascript">
 
   var _gaq = _gaq || [];
