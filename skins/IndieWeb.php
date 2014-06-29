@@ -143,6 +143,9 @@ class IndieWebTemplate extends QuickTemplate {
 
         <section class="top-bar-section">
             <ul class="right">
+                <li>Link</li>
+                <li>Link</li>
+
                 <!-- LOGIN -->
                 <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
                 <?php $item = $this->data['personal_urls'][$lastkey];
@@ -151,18 +154,25 @@ class IndieWebTemplate extends QuickTemplate {
                 if(!empty($item['class'])) { ?> class="<?php
                 echo htmlspecialchars($item['class']) ?>"<?php } ?>><?php
                 echo htmlspecialchars($item['text']) ?></a></li>
+
+
+                <!-- SEARCH -->
                 <li class="has-form">
-                    <div class="large-8 small-6 columns">
-                        <form action="<?php $this->text('searchaction') ?>" id="searchform">
-                    <input id="searchInput" name="search" type="text" <?php
-                        if($this->haveMsg('accesskey-search')) {
-                        ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
-                if( isset( $this->data['search'] ) ) {
-                    ?> value="<?php $this->text('search') ?>"<?php } ?> />
-                    <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
+                    <form action="<?php $this->text('searchaction') ?>" id="searchform">
+                        <div class="large-8 small-6 columns">
+                            <input id="searchInput" name="search" type="text" <?php
+                                if($this->haveMsg('accesskey-search')) {
+                                ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
+                                if( isset( $this->data['search'] ) ) {
+                                ?> value="<?php $this->text('search') ?>"<?php } ?> />
+                        </div>
+                        <div class="large-4 small-3 columns">
+                            <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
+                        </div>
                     </form>
-                    </div>
                 </li>
+
+
             </ul>
         </section>
     </nav>
