@@ -326,9 +326,9 @@ class IndieWebTemplate extends QuickTemplate {
         <?php $this->html('bottomscripts'); /* JS call to runBodyOnloadHook */ ?>
     </div>
 
-    <div class="row" id="sponsors">
+    <footer>
         <?php include(dirname(__FILE__).'/sponsors.php'); ?>
-    </div>
+    </footer>
 
 <?php $this->html('reporttime') ?>
 
