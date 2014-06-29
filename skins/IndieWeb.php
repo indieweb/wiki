@@ -207,6 +207,40 @@ class IndieWebTemplate extends QuickTemplate {
 	    
 	    </div>
 	    <div class="large-3 columns side">
+            <h4>Events</h4>
+            <script type="application/javascript" src="http://momentjs.com/downloads/moment.min.js"></script>
+
+            <script type="application/javascript">
+              $(function() {
+                $.getJSON("http://indiewebcamp.com/wiki/api.php?action=parse&page=Events&format=json&callback=?", function(data) {
+                  var rendered_html = data.parse.text['*'];
+                  var upcoming_events = $(rendered_html).find('.h-event').filter(function(i, event) { return moment($(event).find('.dt-start').first().text()) > moment(); });
+                  var next_event = upcoming_events.first();
+
+                  var big_event_shown = false;
+                  var small_event_shown = false;
+
+                  $.each(upcoming_events, function(i, event) {
+                    event = $(event);
+                    if(event.hasClass('big')) {
+                      if(big_event_shown) return false;
+                      big_event_shown = true;
+                    } else {
+                      if(small_event_shown) return false;
+                      small_event_shown = true;
+                    }
+
+                    $('.upcoming_events ul').append($(event).closest('li'));
+                  });
+                });
+              });
+            </script> 
+
+            <div class="upcoming_events">
+              <ul>
+              </ul>
+            </div>
+
 	    	<h4>What is Indie?</h4>
 	    	<p>
 		    	<a href="/File:icon_4611.png" class="image"><img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48"></a>
