@@ -82,8 +82,8 @@ class IndieWebTemplate extends QuickTemplate {
     
     <!-- Stylesheets -->
 
-    <link rel="stylesheet" href="css/normalize.css">
-    <link rel="stylesheet" href="css/foundation.css">
+    <link rel="stylesheet" href="/wiki/skins/indieweb/css/normalize.css">
+    <link rel="stylesheet" href="/wiki/skins/indieweb/css/foundation.css">
 
 	<meta property="og:title" content="<?php $this->text('pagetitle') ?>" />
 	<meta property="og:image" content="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" />
