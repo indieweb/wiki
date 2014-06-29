@@ -234,13 +234,13 @@ class IndieWebTemplate extends QuickTemplate {
                       small_event_shown = true;
                     }
 
-                    $('.upcoming_events ul').append($(event).closest('li'));
+                    $('.upcoming-events ul').append($(event).closest('li'));
                   });
                 });
               });
             </script> 
 
-            <div class="upcoming_events">
+            <div class="upcoming-events">
               <ul>
               </ul>
             </div>
