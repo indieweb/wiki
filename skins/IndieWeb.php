@@ -159,23 +159,29 @@ class IndieWebTemplate extends QuickTemplate {
                 <li class="has-dropdown">
                     <a href="#">Wiki Tools</a>
                     <ul class="dropdown">
-                        <!-- gnarly wiki things -->
-                        <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
-                        <?php foreach($this->data['content_actions'] as $key => $action) { ?>
-                           <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
-                               if($action['class']) { ?>class="<?php echo htmlspecialchars($action['class']) ?>"<?php } ?>
-                           ><a href="<?php 
-                            echo htmlspecialchars($action['href']). '"';
-                            $linker = new Linker();
-                            if ( in_array( $action, array( 'edit', 'submit' ) ) && in_array( $key, array( 'edit', 'watch', 'unwatch' ))) {
-                                echo $linker->tooltip( "ca-$key" );
-                            } else {
-                                echo $linker->tooltipAndAccesskey( "ca-$key" );
-                            };
-                            echo '>';
-                            echo htmlspecialchars($action['text']); ?>
-                            </a>
-                            <?php if ($key != $lastkey) { ?></li><?php }; ?>
+                    <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
+            <?php foreach($this->data['content_actions'] as $key => $action) { ?>
+               <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
+                   if($action['class']) { ?>class="<?php echo htmlspecialchars($action['class']) ?>"<?php } ?>
+               ><a href="<?php echo htmlspecialchars($action['href']). '"';
+                                        # We don't want to give the watch tab an accesskey if the
+                                        # page is being edited, because that conflicts with the
+                                        # accesskey on the watch checkbox.  We also don't want to
+                                        # give the edit tab an accesskey, because that's fairly su-
+                                        # perfluous and conflicts with an accesskey (Ctrl-E) often
+                                        # used for editing in Safari.
+                    $linker = new Linker();
+                                        if( in_array( $action, array( 'edit', 'submit' ) )
+                                        && in_array( $key, array( 'edit', 'watch', 'unwatch' ))) {
+                                                echo $linker->tooltip( "ca-$key" );
+                                        } else {
+                                                echo $linker->tooltipAndAccesskey( "ca-$key" );
+                                        }
+                echo '>';
+                   echo htmlspecialchars($action['text']) ?></a> <?php
+                    // echo '<!-- '; echo var_dump($this->skin); echo ' -->';
+                   if($key != $lastkey) //echo "&#8226;" ?></li>
+            <?php } ?>
                     </ul>
                 </li>
             </ul>
