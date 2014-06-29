@@ -67,7 +67,7 @@ class IndieWebTemplate extends QuickTemplate {
 	<meta property="og:site_name" content="IndieWebCamp" />
 	<meta property="fb:admins" content="11500459,31600719,214611" />
 
-    <script src="js/vendor/modernizr.js"></script>
+    <script src="/wiki/skins/indieweb/js/vendor/modernizr.js"></script>
 
     <script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
 
@@ -273,6 +273,7 @@ class IndieWebTemplate extends QuickTemplate {
 
 
     <!-- FOOTER -->
+    <div class="row">
     <ul>
         <?php if($this->data['notspecialpage']) { foreach( array( 'whatlinkshere', 'recentchangeslinked' ) as $special ) { ?>
 		 <li id="t-<?php echo $special?>"><a href="<?php
@@ -300,6 +301,7 @@ class IndieWebTemplate extends QuickTemplate {
                 wfRunHooks( 'IndieWebTemplateToolboxEnd', array( &$this ) ); ?>
 
             </ul>
+    </div>
 
 
             <!-- Login -->
