@@ -152,7 +152,8 @@ class IndieWebTemplate extends QuickTemplate {
                 echo htmlspecialchars($item['class']) ?>"<?php } ?>><?php
                 echo htmlspecialchars($item['text']) ?></a></li>
                 <li class="has-form">
-                    <form action="<?php $this->text('searchaction') ?>" id="searchform">
+                    <div class="large-8 small-6 columns">
+                        <form action="<?php $this->text('searchaction') ?>" id="searchform">
                     <input id="searchInput" name="search" type="text" <?php
                         if($this->haveMsg('accesskey-search')) {
                         ?>accesskey="<?php $this->msg('accesskey-search') ?>"<?php }
@@ -160,7 +161,7 @@ class IndieWebTemplate extends QuickTemplate {
                     ?> value="<?php $this->text('search') ?>"<?php } ?> />
                     <input type='submit' name="fulltext" class="searchButton" id="mw-searchButton" value="<?php $this->msg('searchbutton') ?>" />
                     </form>
-
+                    </div>
                 </li>
             </ul>
         </section>
