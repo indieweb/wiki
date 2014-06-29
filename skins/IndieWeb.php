@@ -222,6 +222,8 @@ class IndieWebTemplate extends QuickTemplate {
                   var small_event_shown = false;
 
                   $.each(upcoming_events, function(i, event) {
+                    console.log(event);
+
                     event = $(event);
                     if(event.hasClass('big')) {
                       if(big_event_shown) return false;
