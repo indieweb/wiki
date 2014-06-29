@@ -186,7 +186,7 @@ class IndieWebTemplate extends QuickTemplate {
     </nav>
 
     <div class="row">
-	    <div class="large-9 columns">
+	    <div class="large-9 columns main-body">
 	        <!-- NOTICE -->
 	        <?php if($this->data['sitenotice']) { ?><div id="siteNotice"><?php $this->html('sitenotice') ?></div><?php } ?>
 	    
