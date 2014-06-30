@@ -12,13 +12,13 @@ require_once('includes/SkinTemplate.php');
  * @package MediaWiki
  * @subpackage Skins
  */
-class SkinIndieWeb extends SkinTemplate {
+class SkinIndieWebTeahouse extends SkinTemplate {
     /** Using IndieWeb */
     function initPage( &$out ) {
         SkinTemplate::initPage( $out );
-        $this->skinname  = 'IndieWeb';
-        $this->stylename = 'indieweb';
-        $this->template  = 'IndieWebTemplate';
+        $this->skinname  = 'IndieWebTeahouse';
+        $this->stylename = 'indiewebTeahouse';
+        $this->template  = 'IndieWebTeahouseTemplate';
     }
 }
 
@@ -27,7 +27,7 @@ class SkinIndieWeb extends SkinTemplate {
  * @package MediaWiki
  * @subpackage Skins
  */
-class IndieWebTemplate extends QuickTemplate {
+class IndieWebTeahouseTemplate extends QuickTemplate {
     /**
      * Template filter callback for IndieWeb skin.
      * Takes an associative array of data set from a SkinTemplate-based
@@ -51,23 +51,23 @@ class IndieWebTemplate extends QuickTemplate {
     <title><?php $this->text('pagetitle') ?></title>
 
     <meta http-equiv="Content-Type" content="<?php $this->text('mimetype') ?>; charset=<?php $this->text('charset') ?>" />
-    <link rel="shortcut icon" href="/wiki/skins/indieweb/favicon.ico" />
-    <link rel="icon" type="image/png" href="/wiki/skins/indieweb/favicon.png" />
+    <link rel="shortcut icon" href="/wiki/skins/indieweb-teahouse/favicon.ico" />
+    <link rel="icon" type="image/png" href="/wiki/skins/indieweb-teahouse/favicon.png" />
 
     <?php $this->html('headlinks') ?>
     
     <!-- Stylesheets -->
 
-    <link rel="stylesheet" href="/wiki/skins/indieweb/css/normalize.css">
-    <link rel="stylesheet" href="/wiki/skins/indieweb/css/foundation.css">
-    <link rel="stylesheet" href="/wiki/skins/indieweb/css/main.css">
+    <link rel="stylesheet" href="/wiki/skins/indieweb-teahouse/css/normalize.css">
+    <link rel="stylesheet" href="/wiki/skins/indieweb-teahouse/css/foundation.css">
+    <link rel="stylesheet" href="/wiki/skins/indieweb-teahouse/css/main.css">
 
 	<meta property="og:title" content="<?php $this->text('pagetitle') ?>" />
-	<meta property="og:image" content="https://indiewebcamp.com/wiki/skins/indieweb/indiewebcamp-logo-500px.png" />
+	<meta property="og:image" content="https://indiewebcamp.com/wiki/skins/indieweb-teahouse/indiewebcamp-logo-500px.png" />
 	<meta property="og:site_name" content="IndieWebCamp" />
 	<meta property="fb:admins" content="11500459,31600719,214611" />
 
-    <script src="/wiki/skins/indieweb/js/vendor/modernizr.js"></script>
+    <script src="/wiki/skins/indieweb-teahouse/js/vendor/modernizr.js"></script>
 
     <?php print Skin::makeGlobalVariablesScript( $this->data ); ?>
 
@@ -108,7 +108,7 @@ class IndieWebTemplate extends QuickTemplate {
     <nav class="top-bar" data-topbar>
         <ul class="title-area">
             <li class="name">
-                <a href="/"><img src="/wiki/skins/indieweb/indiewebcamp-logo-small.png" alt="IndieWebCamp"></a>
+                <a href="/"><img src="/wiki/skins/indieweb-teahouse/indiewebcamp-logo-small.png" alt="IndieWebCamp"></a>
             </li>
         </ul>
 
@@ -342,11 +342,11 @@ class IndieWebTemplate extends QuickTemplate {
     </footer>
 
 
-<script type="text/javascript" src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
-<script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
+<script type="text/javascript" src="/wiki/skins/indieweb-teahouse/js/vendor/jquery.js"></script>
+<script type="text/javascript" src="/wiki/skins/indieweb-teahouse/fragmentions.js"></script>
 
 
-<script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
+<script src="/wiki/skins/indieweb-teahouse/js/foundation.min.js"></script>
 <script>
     $(document).foundation();
 </script>
