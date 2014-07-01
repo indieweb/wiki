@@ -14,11 +14,16 @@ require_once('includes/SkinTemplate.php');
  */
 class SkinIndieWebTeahouse extends SkinTemplate {
     /** Using IndieWeb */
-    function initPage( &$out ) {
+    function initPage( OutputPage $out ) {
         SkinTemplate::initPage( $out );
         $this->skinname  = 'IndieWebTeahouse';
         $this->stylename = 'indiewebTeahouse';
         $this->template  = 'IndieWebTeahouseTemplate';
+    }
+
+    function setupSkinUserCss( OutputPage $out ){
+        parent::setupSkinUserCss( $out );
+        $out->addModuleStyles( 'skins.vector' );
     }
 }
 
@@ -79,7 +84,7 @@ class IndieWebTeahouseTemplate extends QuickTemplate {
         <style type="text/css"><?php $this->html('pagecss'   ) ?></style>
     <?php    }
         if($this->data['usercss'   ]) { ?>
-        <style type="text/css"><?php $this->html('usercss'   ) ?></style>
+        <style type="text/css" rel="usercss"><?php $this->html('usercss'   ) ?></style>
     <?php    }
         if($this->data['userjs'    ]) { ?>
         <script type="<?php $this->text('jsmimetype') ?>" src="<?php $this->text('userjs' ) ?>"></script>
@@ -93,6 +98,10 @@ class IndieWebTeahouseTemplate extends QuickTemplate {
     <?php } ?>
     <?php if(isset($wgWebmention)) { ?>
       <link href="<?= $wgWebmention ?>" rel="webmention" />
+    <?php } ?>
+
+    <?php if($this->data['username']) { ?>
+      <style type="text/css" href="http://<?= strtolower($this->data['username']) ?>/indiewebcamp.css">
     <?php } ?>
     
     <!-- Head Scripts -->
@@ -115,7 +124,7 @@ class IndieWebTeahouseTemplate extends QuickTemplate {
         <section class="top-bar-section">
             <ul class="right">
                 <!-- LOGIN -->
-                <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
+                <?php $keys = array_keys($this->data['personal_urls']); $lastkey = end($keys) ?>
                 <?php $item = $this->data['personal_urls'][$lastkey];
                 ?><li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>"><a href="<?php
                 echo htmlspecialchars($item['href']) ?>"<?php
@@ -157,7 +166,7 @@ class IndieWebTeahouseTemplate extends QuickTemplate {
                 <li class="has-dropdown">
                     <a href="#">Wiki Tools</a>
                     <ul class="dropdown">
-                    <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
+                    <?php $keys = array_keys($this->data['content_actions']); $lastkey = end($keys) ?>
             <?php foreach($this->data['content_actions'] as $key => $action) { ?>
                <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
                    if($action['class']) { ?>class="<?php echo htmlspecialchars($action['class']) ?>"<?php } ?>
@@ -244,7 +253,7 @@ class IndieWebTeahouseTemplate extends QuickTemplate {
 
     <div class="row" id="bottomwiki">
         <ul>
-            <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
+            <?php $keys = array_keys($this->data['content_actions']); $lastkey = end($keys) ?>
             <?php foreach($this->data['content_actions'] as $key => $action) { ?>
                <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
                    if($action['class']) { ?>class="<?php echo htmlspecialchars($action['class']) ?>"<?php } ?>
@@ -318,7 +327,7 @@ class IndieWebTeahouseTemplate extends QuickTemplate {
     <div class="row" id="bottomlogin"
             <!-- Login -->
                 <ul>
-                  <?php $lastkey = end(array_keys($this->data['personal_urls'])) ?>
+                  <?php $keys = array_keys($this->data['personal_urls']); $lastkey = end($keys) ?>
                   <?php foreach($this->data['personal_urls'] as $key => $item) {
 	                  ?><li id="gumax-pt-<?php echo Sanitizer::escapeId($key) ?>"><a href="<?php
 	                   echo htmlspecialchars($item['href']) ?>"<?php
