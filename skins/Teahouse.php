@@ -95,7 +95,7 @@ class TeahouseTemplate extends QuickTemplate {
     <?php } ?>
 
     <?php if($this->data['username']) { ?>
-      <style type="text/css" href="http://<?= strtolower($this->data['username']) ?>/indiewebcamp.css">
+      <link rel="stylesheet" href="http://<?= strtolower($this->data['username']) ?>/indiewebcamp.css">
     <?php } ?>
     
     <!-- Head Scripts -->
