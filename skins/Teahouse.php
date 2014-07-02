@@ -147,19 +147,20 @@ class TeahouseTemplate extends QuickTemplate {
 
             <ul class="left">
                 <li class="has-dropdown">
-                    <a href="#">Get Started</a>
+                    <a href="http://indiewebcamp.com/Getting_Started">Get Started</a>
                     <ul class="dropdown">
-                        <li><a href="#">IRC</a></li>
+                        <li><a href="http://indiewebcamp.com/IRC">IRC</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Principles</a></li>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Building Blocks</a></li>
+                <li><a href="http://indiewebcamp.com/principles">Principles</a></li>
+                <li><a href="http://indiewebcamp.com/Events">Events</a></li>
+                <li><a href="http://indiewebcamp.com/Projects">Projects</a></li>
+                <li><a href="http://indiewebcamp.com/building-blocks">Building Blocks</a></li>
                 
                 <li class="has-dropdown">
                     <a href="#">Wiki Tools</a>
                     <ul class="dropdown">
+                    <li><a href="http://indiewebcamp.com/Special:RecentChanges">Recent Changes</a></li>
                     <?php $keys = array_keys($this->data['content_actions']); $lastkey = end($keys) ?>
             <?php foreach($this->data['content_actions'] as $key => $action) { ?>
                <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
@@ -220,7 +221,7 @@ class TeahouseTemplate extends QuickTemplate {
 
 	    	<h4>What is Indie?</h4>
 	    	<p>
-		    	<img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48">
+		    	<a href="/"><img alt="icon 4611.png" src="http://indiewebcamp.com/images/thumb/d/d7/icon_4611.png/48px-icon_4611.png" height="48" width="48"></a>
 		    
 				<b>Your content is yours</b><br>When you post something on the web, it should belong to you, not a corporation. Too many companies have gone out of business and <a href="/site-deaths" title="site-deaths">lost all of their users’ data</a>. By joining the IndieWeb, your content stays yours and in your control.
 			</p>
@@ -344,12 +345,12 @@ class TeahouseTemplate extends QuickTemplate {
     <?php $this->html('reporttime') ?>
     </footer>
 
-
 <script type="text/javascript" src="<?php echo $skinPath ?>/js/vendor/jquery.js"></script>
 <script type="text/javascript" src="<?php echo $skinPath ?>/fragmentions.js"></script>
 
 
 <script src="<?php echo $skinPath ?>/js/foundation.min.js"></script>
+
 <script>
     $(document).foundation();
 </script>
@@ -383,8 +384,12 @@ class TeahouseTemplate extends QuickTemplate {
   }); 
 </script>
 
-<script type="text/javascript">
+<script>
+/* kills underlines for linked images. this is a dirty hack. filthy, really. fix me later. */
+$("img").parents("a").css("border", "0 none");
+</script>
 
+<script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-16359758-21']);
   _gaq.push(['_trackPageview']);
@@ -394,7 +399,6 @@ class TeahouseTemplate extends QuickTemplate {
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
 </script>
 
 </body></html>
