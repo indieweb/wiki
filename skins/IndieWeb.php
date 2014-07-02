@@ -144,19 +144,20 @@ class IndieWebTemplate extends QuickTemplate {
 
             <ul class="left">
                 <li class="has-dropdown">
-                    <a href="#">Get Started</a>
+                    <a href="http://indiewebcamp.com/Getting_Started">Get Started</a>
                     <ul class="dropdown">
-                        <li><a href="#">IRC</a></li>
+                        <li><a href="http://indiewebcamp.com/IRC">IRC</a></li>
                     </ul>
                 </li>
-                <li><a href="#">Principles</a></li>
-                <li><a href="#">Events</a></li>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Building Blocks</a></li>
+                <li><a href="http://indiewebcamp.com/principles">Principles</a></li>
+                <li><a href="http://indiewebcamp.com/Events">Events</a></li>
+                <li><a href="http://indiewebcamp.com/Projects">Projects</a></li>
+                <li><a href="http://indiewebcamp.com/building-blocks">Building Blocks</a></li>
                 
                 <li class="has-dropdown">
                     <a href="#">Wiki Tools</a>
                     <ul class="dropdown">
+                    <li><a href="http://indiewebcamp.com/Special:RecentChanges">Recent Changes</a></li>
                     <?php $lastkey = end(array_keys($this->data['content_actions'])) ?>
             <?php foreach($this->data['content_actions'] as $key => $action) { ?>
                <li id="ca-<?php echo Sanitizer::escapeId($key) ?>" <?php
@@ -341,10 +342,8 @@ class IndieWebTemplate extends QuickTemplate {
     <?php $this->html('reporttime') ?>
     </footer>
 
-
 <script type="text/javascript" src="/wiki/skins/indieweb/js/vendor/jquery.js"></script>
 <script type="text/javascript" src="/wiki/skins/indieweb/fragmentions.js"></script>
-
 
 <script src="/wiki/skins/indieweb/js/foundation.min.js"></script>
 <script>
@@ -380,8 +379,12 @@ class IndieWebTemplate extends QuickTemplate {
   }); 
 </script>
 
-<script type="text/javascript">
+<script>
+/* kills underlines for linked images. this is a dirty hack. filthy, really. fix me later. */
+$("img").parents("a").css("border", "0 none");
+</script>
 
+<script type="text/javascript">
   var _gaq = _gaq || [];
   _gaq.push(['_setAccount', 'UA-16359758-21']);
   _gaq.push(['_trackPageview']);
@@ -391,7 +394,6 @@ class IndieWebTemplate extends QuickTemplate {
     ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
   })();
-
 </script>
 
 </body></html>
