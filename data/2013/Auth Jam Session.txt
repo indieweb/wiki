@@ -1,0 +1,62 @@
+http://indiewebcamp.com/2013/Auth_Jam_Session
+
+{{stub}}
+
+notes at: https://etherpad.mozilla.org/indiewebcamp-indieauth
+
+= Indie Auth Jam =
+
+== Agenda ==
+* Any problems with IndieAuth and your site?
+** Rob Lord: having problems with IndieAuth as of 2013-06-22 - couldn't log into IndieWebCamp. Possible cause: rel="me nofollow" or rel="nofollow me" found in twitter.com/r0bl0rd and github.com/r0bl0rd Fixed. HTTP vs HTTPS err.
+* IndieAuth recent changes:
+** enforced http / https consistency
+** if your auth provider redirects to an https profile URL, you MUST directly link to the https version
+
+== IndieAuth + Persona ==
+* https://etherpad.mozilla.org/user-research-auth-questions
+* add: rel="me" href="mailto:foo@bar.com"
+* Can we extend IndieAuth for people who don't have a domain
+** Use Webfinger (optional) to detect when people are delegating authority accidentally to wrong email
+* Perhaps restrict it to rel="me" href="mailto:you@yourdomain.com" on yourdomain.com
+** On second thought, this is a bad idea... too heavy burden for security to individuals
+
+== IndieAuth + Persona + WebFinger ==
+* rel-me to an email
+* email is authenticated with Persona with verification with requiredEmail
+* final check is WebFinger discovery on the email address to make sure it links back to the original home page
+
+== IndieAuth + SMS ==
+* rel="tel:..."
+* IndieAuth server sends a one-time txt to your phone number that you have to enter into the IndieAuth web form flos
+* SMS uri scheme defined in RFC 5724: http://www.ietf.org/rfc/rfc5724.txt
+** supported on Apple Mobile Safari to launch Messages app:
+** http://developer.apple.com/library/ios/#featuredarticles/iPhoneURLScheme_Reference/Articles/sms.html
+* TEL URI scheme defined in http://tools.ietf.org/html/rfc3966
+
+
+Example: 
+Adding something like this to your site should enable SMS authentication on IndiAuth.
+
+<pre>
+<a rel="me" href="sms:+15035555555">(503) 555-5555</a>
+</pre>
+
+== RelMeAuth 101 - by tantek ==
+http://microformats.org/wiki/RelMeAuth
+
+Which providers support rel=me?
+* see: http://microformats.org/wiki/hcard-xfn-supporting-friends-lists#Services_with_XFN_rel.3D.22me.22_to_multiple_external_sites
+
+How does the RelMeAuth flow work?
+* http://microformats.org/wiki/web-sign-in
+Try:
+* http://tantek.com/relmeauth/
+
+How do you consume IndieAuth?
+* ... use the IndieAuth.com service - see there for instructions.
+
+== What about IndieAuth being a Persona IdP? ==
+* Log in to a site with your email address, starts the IndieAuth process
+
+[[Category:2013]]

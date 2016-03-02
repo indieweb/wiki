@@ -1,0 +1,29 @@
+http://indiewebcamp.com/consuming
+
+{{stub}}
+
+How to consume various indieweb [[building-blocks]]:
+* [[h-entry#How_to_consume_h-entry|h-entry]]
+* [[in-reply-to#How_to_consume_in-reply-to|in-reply-to]]
+* [[authorship]]
+* [[original-post-discovery]]
+* …
+
+== Use cases for consuming feeds ==
+* reading posts from people I follow
+* "here's a microformats feed, [https://www.beeminder.com/overview mind] the values for category x and property y" from Beeminder - Allows them to avoid writing OAuth integration with every provider's proprietary API
+
+[[User:WaterPigs.co.uk|Barnaby Walters]] documented several personal feed consuming/processing itches in [http://waterpigs.co.uk/articles/web-dataflow-itches Web Dataflow Itches]
+
+== Issues ==
+=== Multiple feeds on one page ===
+It’s fairly common [http://indiewebcamp.com/irc/2013-10-21/line/1382390539] (examples needed) to have a feed page with one “main” feed on, and then other auxiliary feeds, e.g. recent tweets
+
+This forces feed readers and any other app which consumes feeds to present the user with a UI asking them to choose which feed to subscribe to. 
+* As soon as this choice is made, the feed content no longer has a URL (requires extra non-URI state to be stored), complicating things for the feed reader and meaning that the user can’t seamlessly move that feed to another reader (portability) or recommend it to others, as it has no URI.
+* …
+
+Possible solution: give the h-feeds id attributes so they all have URLs
+* I don’t like this much as it requires publishers to put poorly-understood attributes on all h-feeds, otherwise they’re useless. It also requires all microformats2 parsers to understand parsing from an ID element, which is not currently part of the spec. IDs are intangible — users can’t look at a HTML document and see what each ID means. URLs are tangible, it’s obvious what they represent. --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 14:39, 21 October 2013 (PDT)
+
+Previously discussed in #microformats on IRC, result of discussion was “consume first h-feed found” [http://microformats.org/wiki/h-feed#What_should_a_subscriber_do_with_a_page_with_multiple_feeds]

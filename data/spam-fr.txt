@@ -1,0 +1,122 @@
+http://indiewebcamp.com/spam-fr
+
+''Cette page a démarré sur [[spam]]''
+
+{{stub-fr}}
+
+Le '''<dfn>spam</dfn>''' est un contenu non sollicité, souvent transmis via [[email-fr|e-mail]], soumis par des [[comments-fr|commentaires]] ou posté sur les [http://microformats.org/wiki/Special:RecentChanges wikis populaires].
+
+Presque tous les types d'entrées de data sur le web pourraient potentiellement être vulnérables au contenu spam. Typiquement, les plus vulnérables sont les formulaires de commentaires non protégés et les endpoints en rapport sur les domaines du fait de la [[monoculture-fr|monoculture]].
+
+== L'Orage à Venir du Spam ==
+Le spam a détruit efficacement les premiers protocoles de [[pingback-fr|pingback]]/[[trackback-fr|trackback]]et reblogs de [[WordPress-fr|WordPress]].
+* http://piedtype.com/2013/05/21/spammers-use-trackbacks-pingbacks-and-reblogs/ 
+
+Si/Quand les [[webmention]]s, réponses/likes/reposts/RSVPs + h-entry réussissent/ront, les spammers l'adopteront tout autant.
+
+Il nous incombe de penser et préempter dès à présent la manière de combattre le spam. 
+
+Si vous acceptez les webmentions et si vous enrichissez votre affichage (affichage de commentaires inter-sites, likes, reposts, RSVPs), alors vous êtes potentiellement vulnérables au spam.
+
+=== Spam WordPress ===
+[[WordPress-fr|WordPress]] est à la fois une cible énorme et un outil pour les spammers. Plus WordPress est devenu populaire, plus il a été ciblé. En analysant les tactiques (et faiblesses) des spammers contre WordPress, nous pouvons trouver les clés qui nous aident à les bloquer à partir de l'indieweb.
+==== Spam de Pingback  ====
+WordPress est peut-être la super-cible du spam de [[Pingback-fr|Pingback]]. À un point el que Akismet s'apprête à fermer (ou l'a déjà fait) les pingbacks. Comme cité au-dessus : 
+* http://piedtype.com/2013/05/21/spammers-use-trackbacks-pingbacks-and-reblogs/ 
+
+==== Spam de Like====
+WordPress a présenté une fonctionnalité spécifique à WordPress appelée "WordPress Like" qui est en fait leur version du bouton [[Facebook-fr|Facebook]] "Like". Les spammers créent des blogs de spam [[WordPress.com]] et "Like" ensuite d'autres blogs WordPress afin de recevoir des liens vers leurs blogs de spam. Ainsi, les utilisateurs de WordPress se plaignent que la plupart de leurs likes soient des "fakes" ou provenant uniquement de spammers.
+* http://piedtype.com/2013/05/02/spammers-like-wordpress-news-too/
+* http://piedtype.com/2013/04/20/why-i-turned-off-wordpress-like/
+
+==== Spam d'Abonnés ====
+Comme cela a été noté dans : 
+* http://onecoolsitebloggingtips.com/2013/04/09/wordpress-com-follower-management/
+* http://piedtype.com/2013/04/12/issues-wordpress-needs-to-address/
+
+Comme cela fut noté dans le post onecoolsitebloggingtips, les blogs de spam ont plusieurs points faibles :
+* lien vers des profils Twitter/Facebook/WordPress.com inexistants
+* lien vers des profils Twitter/Facebook/WordPress.com inactifs depuis des mois
+
+Ceci sous-tend que si nous exigeons que le lien de symétrie [[rel-me-fr|rel-me]] vérifie tous les sites Twitter/Facebook/WordPress.com (et d'autres ?) que quelqu'un lie, nous pourrons alors éliminer quelques-uns du spam.
+
+== Prévention du Spam  ==
+Il existe plein de techniques qui peuvent être utilisées pour lutter contre le spam.
+
+Note : <em>Prévenir</em>, et non minimiser. Le but ici est de produire une défense anti-spam une fonctionnalité avec <strong>zéro maintenance</strong>. Des solutions partielles, allant des queues de modération, etc. ajoute encore une taxe de maintenance, ce dont personne ne veut.
+
+=== Degrés de Séparation ===
+'''Note :''' Ce qui suit est brainstorm, et ne reflète pas les implémentations actuelles, et a probablement besoin d'être travaillé --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 16:21, 22 May 2013 (PDT)
+
+Typiquement, je considère les whitelists comme négatives pour accepter un commentaire général — elle semble élitiste et similaire à la recherche en bulle (par ex. piégée dans une bulle). Néanmoins, les whitelists sont les mesure de prévention probablement les plus directes et efficaces.
+
+Par conséquent, une approche basée sur la whitelist plus flexible serait implémentée comme suit : 
+
+Réglage initial : 
+
+* Je démarre par une whitelist de personnes — par ex. mon carnet d'adresses (contacts de premier degré) 
+* Mon logiciel crawle leurs sites web et extrait la data [[xfn-fr|XFN]] et les [[mentions-fr|mentions]] de personne (contacts de 2nd degré)
+* J'associe chaque contact de second degré avec son contact associé de premier degré, en construisant un graphe sans ajouter véritablement les personnes de 2n degré à mon carnet d'adresses
+* Je recrawle périodiquement le graphe et le met à jour
+** peut-être que s'abonner à leurs feeds via [[pubsubhubbub-fr|pubsubhubbub]] et en ajoutant toute personne mentionnée  serait une bonne solution
+** Avons-nous un moyen de notifier les parties intéressées qu'une liste XFN a été mise à jour ?
+* Chaque fois qu'un nouveau contact est ajouté (ou un contact de second degré migre au 1er degré) son site web est crawlé pour les mentions à ajouter dans le graphe
+
+Poster une note citant quelqu'un :
+
+# Je poste une note [[mention-fr|mentionnant]]/[[in reply to-fr|en réponse à]] quelqu'un pas encore présent dans mon carnet d'adresses
+# Son site web est crawlé, tous les [[microformats-fr|microformats]] sont parsés et ajoutés comme un contact de premier degré
+# Tout futur commentaire provenant d'eux sera accepté automatiquement comme indiqué en-dessous 
+
+Recevoir un commentaire d'un contact de premier degré :
+
+# Je poste une note, et quelqu'un dans mon carnet d'adresse soumet un commentaire
+# Le commentaire est automatiquement approuvé car c'est un contact de premier degré
+# Toute personne  mentionnée dans ce commentaire-là est ajoutée au graphe des contacts de second degré
+#* TODO : ou 1er degré, car ils ont été activement ajoutés dans la conversation ?
+
+Recevoir un commentaire d'une personne inconnue :
+
+# Je poste une note
+# Quelqu'un que je ne connais pas soumet un commentaire, qui n'est pas affiché publiquement
+# Je reçois une notification me demandant d'approuver la personne
+#* Si je fais ainsi, elle est ajoutée à mon carnet d'adresses, son commentaire passe en public et tous les futurs commentaires de sa part sont acceptés
+#* Se je ne le fais pas, elle est ajoutée dans une liste noire et tout futur commentaire de sa part sera ignoré
+
+=== les abonnés d'abonnés Twitter  ===
+Dans un revirement de la sorte, nous pouvons utiliser les [[silo-fr|silo]]s de connexions existants comme un filtre potentiel anti-spam.
+
+Voici comment vous pourriez utiliser le graphique social de Twitter comme une white-list dynamique de second degré : 
+
+Note : quand vous visitez le profil de quelqu'un sur [[Twitter-fr|Twitter]], si vous ne le suivez pas déjà, il vous affiche quelles sont les personnes que vous <em>êtes en train</em> de suivre (vos "abonnés"), et qui sont en train de les suivre. Ceci pourrait être utilisé de la façon suivante : 
+
+Algorithme :
+
+Quand votre site A reçoit un commentaire d'un site indieweb B : 
+* Est-ce que B a un lien [[rel-me-fr|rel-me]] confirmé vers un profil [[Twitter-fr|Twitter]] Tb ?
+* Est-ce que votre Twitter Ta suit Tb ? Oui ? Accepter le commentaire.
+* Est-ce que n'importe lequel des abonnés à Ta suit Tb ? Oui ? Accepter le commentaire.
+
+=== Autre ===
+Peut-être briser ça en sections distinctes si vous envisagez de continuer : 
+
+* Modération — le forme la plus simple de prévention. N'affiche pas publiquement toute donnée provenant d'un tiers jusqu'à ce que vous l'ayez approvué manuellement.
+
+* [[captchas-fr|captchas]] — images ou défis designés pour déjouer une machine mais triviaux à compléter pour un humain
+** Par exemple “écrivez le code dans la boîte (image embrouillée)" ou “entrez la somme de 4 + 6”
+** Principales problématiques d'UX ([http://uxmovement.com/forms/captchas-vs-spambots-why-the-checkbox-captcha-wins], [http://www.webdesignerdepot.com/2013/02/recaptchaing-the-importance-of-ux/])
+
+* Détection automatique de spam  — utiliser quelques algorithme/entraînement apprenant de data pour décider si oui ou non c'est du spam
+** Exemple de service : [http://akismet.com/ akismet]
+
+* Blacklisting — imaginer d'où proviennent les IPs de beaucoup de spam, les blacklister
+
+* Whitelisting — l'inverse du blacklisting. Avoir une liste pré-déterminée de personnes dont vous accepterez les data
+
+* Haute barrière à l'entrée — un peu équivalent à un captcha : forcer l'utilisateur à exécuter quelque tâche/satisfaire quelque condition avant de l'autoriser à entrer de la data.
+** Un exemple étant ce wiki très particulier — nous avons zéro spam du fait du besoin de se connecter en utilisant votre propre domaine via  [[indieauth-fr|indieauth]] (nous avons de la chance / sous le radar - les spammers ont des blogs et ne savent pas lier vers des profils spam sur d'autres réseaux comme [[Twitter-fr|Twitter]].
+
+* Paiment via Hashcash
+
+== Voir aussi ==
+* [[comments-fr|commentaires]]

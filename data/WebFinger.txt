@@ -1,0 +1,124 @@
+http://indiewebcamp.com/WebFinger
+
+<dfn>'''[http://webfinger.net/ WebFinger]'''</dfn> is a [[discovery]] protocol for the web that uses email address-like identifiers to get info about users; it has been largely superseded on the indieweb by the use of personal web sites and [[representative h-card]].
+
+The name "WebFinger" is based on the unix finger tool.
+
+== IndieWeb Examples ==
+
+* [[User:Willnorris.com|Will Norris]] supports WebFinger on https://willnorris.com
+** e.g., https://willnorris.com/.well-known/webfinger?resource=acct:will@willnorris.com
+** He has written about how to serve WebFinger static files on nginx: https://willnorris.com/2014/07/webfinger-with-static-files-nginx
+* {{pfefferle}} supports WebFinger on [https://notizblog.org notizblog.org]
+** e.g., https://client.webfinger.net/lookup?resource=pfefferle%40notizblog.org
+** He has developed a plugin for WordPress: https://wordpress.org/plugins/webfinger/
+* add yourself...
+
+__TOC__
+
+== Problems ==
+
+
+=== Use of email address-like IDs ===
+
+This is widely regarded as a benefit of webfinger (“normal people don’t understand URIs and are more comfortable with email addresses”). Problems with this:
+* [[Why_web_sign-in#Why_not_email|general problems with email addresses]] as personal identifiers
+* looking like email addresses is great for usability, *until* it turns out that sometimes webfinger IDs aren’t email addresses — opening ambiguity and confusion (is this email address a webfinger ID? Can I send email to this webfinger ID?)
+* ''web''finger IDs are not ''web'' addresses — you can’t perform HTTP requests on them
+* WebFinger thinking ties us to the widely failed “one-to-many server-to-user” federated social web model, where there is a federation of servers, each with possibly many users on. Taking an indieweb approach where everyone has at best their own domain name, at worst a subdomain, using webfinger becomes tiresome (why tantek@tantek.com when tantek.com will do? or worse, georgelandon@george.landon.org. Lots of typing)
+
+=== acct: schema ===
+
+I never figured out exactly what use this is. Someone else care to explain? --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:45, 10 March 2013 (PDT)
+
+* It is kind of a unique, url aware identifier: &lt;username&gt;@&lt;domain&gt;. But because it looks like an email address, it is prefixed with the acct: (it think for account) protocol. --[[User:Notizblog.org|Matthias Pfefferle]]
+
+=== DRY Violation ===
+
+WebFinger relies on [[DRY]]-violating XRD files (which within themselves sometimes repeat data due to incompatible implementations) for storing information. Extra, non-human-readable files are extremely likely to not be maintained. Better to store profile data and links in HTML(+[[microformats]]) as visible data.
+
+=== Well Known URLs ===
+
+Webfinger relies on well-known URLs (namespaced to a certain degree to /.well-known/). Any use of well known URLs limits flexibility, portability etc. HTML links and hypermedia discovery should be utilised instead (if webfinger IDs were webby and could be requested, this would not be necessary!).
+
+=== Can't Delegate ===
+
+Because Webfinger relies on well-known URLs existing on the domain, it is challenging and sometimes not even possible to delegate handling Webfinger queries to an external service. 
+
+You could do some clever reverse proxy configuration with Nginx or Apache to serve the .well-known folder from another system, but if you have a traditional shared host or static website, then this isn't possible. 
+
+== Minimal Usefulness ==
+<blockquote>"the only webfinger relation that matters is email address -> home page. everything else (avatar, blog, homepage, name) is already well defined / implemented / supported as [[hCard]]/[[h-card]] on your home page. <br/>oh and [[rel-me]] for all those "other" profiles for those that spray & pray their content across silos"</blockquote>
+
+== Implementations ==
+
+* [[idno]] implements the basic webfinger protocol. Indiewebcamp attendees currently using this include:
+** [[User:Werd.io|Werd.io]]
+
+Other indiewebcamp related projects making use of webfinger include:
+
+* [[Diaspora]] use webfinger IDs as their main way of referring to a person, for search and mentions (via [[salmon]])
+* [[StatusNet]] uses webfinger for discovery and mentions (via D*’s custom version of salmon)
+* identengine.com’s profile discovery API accepts webfinger IDs as input
+
+== IRC Transcript ==
+[http://indiewebcamp.com/irc/2011-06-28#t1309282668000 2011-06-28 #indiewebcamp]:
+
+[10:38am] tantek: The IndieWeb does not care about WebFinger - because it doesn't need it.
+
+[10:38am] dbounds1: What makes you say that?
+
+[10:38am] tantek: because it wasn't even *mentioned* the entire weekend.
+
+[10:38am] brennannovak: I whole heartedly agree with tantek about activity streams
+
+[10:39am] tantek: it turns out, when you focus on actual pragmatic/practical discussions of what *you* need to build/code/ux/design for *your* indie web site, people DO NOT CARE about WebFinger
+
+[10:39am] tantek: they *so* don't care that it doesn't even come up
+
+[10:39am] tantek: dbounds1 - thus I'm fairly convinced that WebFinger is pretty much a waste of time
+
+[10:40am] dbounds1: webfinger or discovery in general?
+
+[10:40am] tantek: oh we did plenty of work on discovery
+
+[10:40am] tantek: just turns out none of it needed webfinger
+
+[10:41am] dbounds1: is any of this discovery conversation documented?
+
+[10:41am] brennannovak: tantek: hrm... I kinda feel web finger (or the whole OStatus stack) wasn't 
+discussed much all weekend because everyone was talking about different dimensions of what the "indie 
+web"  means
+
+[10:41am] dbounds1: Personally, I'm not interested in anything that leverages XML. 
+
+[10:42am] tantek: brennannovak - nope, it was because we were focused on *actual* practical solutions 
+for *ourselves*
+
+[10:42am] brennannovak: true
+
+[10:42am] tantek: rather than architectures for theoretical needs of the masses
+
+[10:42am] tantek: which is what nearly all other groups in this space are hung-up on
+
+[10:42am] dbounds1: Depending on what you're building XRD/JRD and WebFinger are quite useful. I'd be interested in hearing what alternatives were proposed / suggested / used from the weekend.
+
+[10:43am] brennannovak: yes, that is what I mean... we all were just focusing on our own implementations- which seem to be more about consuming / posting to large sites like Twitter / Facebook already
+
+[10:43am] tantek: brennannovak - we were prioritizing in personal and practical ways.
+
+[10:44am] brennannovak: yes, whoot!
+
+[10:44am] tantek: and it turns out, when you do that, such things as XRD/WebFinger are actually not necessary
+
+[10:44am] tantek: or rather
+
+[10:44am] tantek: there's more important practical work to be done *first*
+
+[10:44am] brennannovak: precisely
+
+[10:44am] tantek: when you get around to actually building a site that *YOU* will use for YOURSELF
+
+== WebFist ==
+
+[[Webfist]] is the software used to run a distributed fallback network to enable webfinger on email address from providers that do not yet support webfinger.

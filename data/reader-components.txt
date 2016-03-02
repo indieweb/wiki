@@ -1,0 +1,16 @@
+http://indiewebcamp.com/reader-components
+
+=Reader Components=
+A [[reader]] describes a common user experience model of a feed of updates compiled from multiple sources. In order to construct this, there are various components needed. This is an attempt to delimit them and point to existing components where possible.
+== Feed Presentation ==
+A Feed is normally a list of entries, ordered by time. Presentation of them often has 2 or 3 levels of detail. For [[articles]] this would correspond to name, summary and content. For  [[notes]], the name, summary and content may be the same, or expansion may show a [[photo]].
+== Entry extraction ==
+Extracting useful name/summary/content info may make sense as  standalone service- silo equivalents are twitter cards and facebook previews. For content already marked with [[h-entry]] this is a straightforward process; for legacy or silo content heuristics may be needed to remap existing markup. 
+== Entry store and splicing ==
+Separating out entries and re-ordering them based on time (or other criteria) is also important. Deciding which entries to display is a complex and contested problem in silos, and one that may make sense as a service
+== Entry read state ==
+It is often useful for the user to know if this is an entry they have already read. Storing this state is necessary for this to be implemented. There are many presentations possible from hiding read, to unbolding or showing a read-up-to cursor, but the underlying data is equivalent.
+== Entry like/share/reply state ==
+Being able to like, repost or reply to an entry is a valuable user feature. displaying this state to the user is also useful, and in a distributed system like indieweb potentially complex to rediscover.
+== Feed updated state ==
+Knowing when new entries are available is also useful. This may imply polling or notification. In either case doing this on a persistent endpoint (server) rather than client-side is probably better. This can also be a useful caching point, to reduce the thundering herd problem.

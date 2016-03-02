@@ -1,0 +1,140 @@
+http://indiewebcamp.com/h-feed
+
+{{stub}}
+
+'''<dfn>[http://microformats.org/wiki/h-feed h-feed]</dfn>''' is a [[microformats2]] experiment with a top level feed object to contain [[h-entry]] [[posts]]. It is functionally a [[DRY]]er replacement for RSS/Atom [[feed files]] and thus could supersede them.
+
+== How ==
+=== How to markup ===
+Mark up your 
+* index page with class="h-feed" (e.g. on the <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code>)
+* its top level <code>&lt;h1&gt;</code> with class="p-name"
+** if it links to the index (itself) then class="u-url" on that hyperlink
+** otherwise if you lack any top level links, this works: <code><nowiki><a class="u-url" href="/"></a></nowiki></code>
+* markup the [[h-card]] you already have on your index page with class="p-author"
+* and add class="u-photo" on the representative photo of your index page (e.g. banner etc.), or leave it out and let consumers imply/use the u-photo of the p-author h-card you marked up in the previous step
+
+=== How to test ===
+Feeds marked up with h-feed should work in the same way as simple lists of h-entries. See [[feed#How_To_Test|How to Test Feeds]].
+
+=== How to consume ===
+See [[feed#How_To_Consume|How to Consume Feeds]]
+
+== Why ==
+So indie [[readers]] who subscribe to your site can display:
+* a name (and icon) for your site/feed in a list
+* [[authorship]] of the feed
+* multiple feeds from a page (less common)
+
+== WordPress and HFeed ==
+
+A large percentage of WordPress themes use hfeed on every page, as opposed to only on pages with multiple hentrys. Due to the popularity of WordPress, this is present on a large number of websites.
+
+== IndieWeb Examples ==
+IndieWeb community members that support h-feed:
+
+=== Tantek ===
+[[User:Tantek|Tantek Çelik]] supports h-feed on his [http://tantek.com/ tantek.com] home page using an index.html template and [[Falcon]] since [http://tantek.com/2012/198/t1/added-microformats2-h-feed-h-entry 2012-07-16], at [[User:Sandeep.io|Sandeep Shetty]]'s encouragement, to help with the indie [[reader]] he is building.
+
+=== Shane Becker ===
+[[User:veganstraightedge.com|Shane Becker]] supports h-feed on his [http://veganstraightedge.com/ veganstraightedge.com] home page using for his composite feed of posts and on each post-type specific feed ([http://veganstraightedge.com/notes /notes], [http://veganstraightedge.com/articles /articles], [http://veganstraightedge.com/bookmarks /bookmarks], [http://veganstraightedge.com/videos /videos], [http://veganstraightedge.com/notes /notes]) since [https://github.com/veganstraightedge/sbbme/commit/90a6d6eabeb3ff4d64177f163146f1e506dd0600#diff-75a266e0ac273be00ba708fb9e5ad5e1 2012-11-18] (private repo). He previously supported just hfeed on his feeds since [https://github.com/veganstraightedge/sbbme/commit/4d24ced47e2d15894326948c45983e75cd5e9f23#diff-bb387ef52f60f88effbf8d999def732aR1 2010-06-04] (private repo). 
+
+=== Will Norris ===
+[[User:Willnorris.com|Will Norris]] supports h-feed on his [https://willnorris.com/ willnorris.com] home page since mid-2013 using WordPress and a modified version of [https://github.com/pfefferle/wordpress-uf2 wordpress-uf2] (modifications to be sent upstream at soonish?)
+
+=== Kevin Marks ===
+{{kevinmarks}} has had an h-feed on [http://kevinmarks.com kevinmarks.com] since 2013-12-10 and of course has one on [http://known.kevinmarks.com known.kevinmarks.com], like all [[known]] sites.
+
+=== Barnaby Walters ===
+[[User:Waterpigs.co.uk|Barnaby Walters]] supports h-feed on his [http://Waterpigs.co.uk waterpigs.co.uk] home page since 2014-01-21
+* [http://waterpigs.co.uk/services/microformats-to-atom/ h-feed to atom gateway]
+
+=== Jeena ===
+[[User:Jeena.net|Jeena]] supports h-feed for his blog posts and notes on https://jeena.net since 2014-02-25
+
+=== Tom Morris ===
+[[User:Tommorris.org|Tom Morris]] supports h-feed for posts on [http://tommorris.org/ tommorris.org] since 2014-02-25.
+
+=== Bear ===
+{{bear}} supports h-feed for his blog posts at https://bear.im/bearlog since 2014-07-25. Feed discovery is lacking and needs to be added to his home page.
+
+=== Pelle Wessman ===
+{{voxpelli}} supports h-feed for his blog posts, archive, bookmarks and interactions at http://voxpelli.com/ since [https://github.com/voxpelli/voxpelli.github.com/commit/b12f4a9efadfd00a7276e151f2c3696f6b7a9279 2014-09-07]. For blog posts only partial content with titles only – for bookmarks and interactions full content.
+
+=== gRegor Morrill ===
+{{gRegor}} supports h-feed for [[notes]] at http://gregorlove.com/notes/ since 2014-??-??.
+* Since this feed is not on the homepage, the navigation link to the notes uses <code>rel="feed"</code> for [[feed discovery]].
+
+=== Ben Roberts ===
+{{benthatmustbeme}} supports h-feed on his site's main page as well as all other post lists including type specific pages (/note, /photo , etc) and monthly archives.  Feeds still need next/previous links, these will likely only be on a separate (primary) h-feed off the main page. The main page has had h-feed since March 2014 but was implemented to add h-feed to any post list type page in May 2015.
+
+=== rhiaro ===
+{{rhiaro}} has h-feed on homepage and all pages which are a collection of her own posts (eg. rhiaro.co.uk/tag/indieweb, rhiaro.co.uk/travel, rhiaro.co.uk/2015, rhiaro.co.uk/likes) since 2015-02-??.
+* Plans to add rel=feed or something from homepage/side menu to discover different feeds.
+
+=== Jonny Barnes ===
+{{jonnybarnes}} supports h-feed for [[notes]] at https://jonnybarnes.uk/notes since ?
+
+==Brainstorming==
+
+=== partial feeds===
+Partial (e.g. truncated) vs full h-feeds.
+
+A lot of blogs have feeds with partial content, where the entries only have post names/titles, permalinks, and sometimes summaries but not full post content. This could be done for UX reasons where the reader is not subjected to a full long post but a quick list of shorter summaries.
+
+If you do have a partial feed (e.g. on your home page), it is good (for indie [[reader]] consumption) to also have a separate full feed page.
+
+The partial feed can use a <code>u-uid u-url</code> to link to the full feed page which could be discovered by a canonical h-feed discovery algorithm.
+<pre>
+    <div class="h-feed" id="partial_feed">
+        <h1 class="p-name">
+         <a class="u-url" href="#partial_feed">Partial Feed</a></h1>
+        <a class="u-uid u-url" href="/feed.html">Full Feed</a>
+        <ol>
+            <li class="h-entry"><a href="permalink1">Article1 name</a></li>
+            <li class="h-entry"><a href="permalink2">Article2 name</a></li>
+        </ol>
+    </div>
+</pre>
+
+==== design freedom ====
+The possibility of separate partial vs full feeds provides more design freedom for content publishers, since they can choose to have a full or partial (or no!) feed on their homepage and thus design accordingly.
+
+<blockquote>acegiak: KartikPrabhu: my wife's site (which I'm helping her add microformats etc to) is a potential test for this because she's an artist and wants her landing page to be quite specific in appearance.</blockquote>
+from: http://indiewebcamp.com/irc/2014-03-27/line/1395970560
+
+=== canonical feed autodiscovery ===
+==== prior work ====
+Feed readers discover the links to legacy RSS/Atom feed files automatically from HTML pages by parsing for links with <code>rel="alternate"</code> and  <code>type="application/rss+xml"</code> or <code>type="application/atom+xml"</code> respectively. 
+
+When such links use the <code>&lt;link&gt;</code> tag in the <code>&lt;head&gt;</code> of the page, this provides the potential for a nice UX where the user does not need to know about the 'plumbing' of feeds / feed files. 
+
+Example from [http://adactio.com adactio.com] in [http://feedly.com Feedly]
+
+[[File:autodiscovery-feed-example-adactio.jpg|500px|thumb|center|autodiscovery feed example from adactio.com]]
+
+How can (possibly multiple) h-feed feeds be discovered similarly?
+
+==== rel feed ====
+Link to h-feed marked-up html pages from the home page using <code>rel="feed"</code> with <code>type="text/html"</code> and an optional <code>title=""Feed Title"</code>. Also, suggested to have <code>rel="feed alternate"</code>. See also [[rel-feed]].
+
+More on:
+
+1. http://tools.ietf.org/html/draft-ietf-atompub-autodiscovery-01
+
+2. http://blog.whatwg.org/feed-autodiscovery
+
+==== url uid ====
+Alternatively, if an h-feed has a u-url u-uid property that is not the URL of the current page itself, then that u-url u-uid URL can be treated as the canonical full feed.
+
+== Articles ==
+* [http://blog.superfeedr.com/indieweb-microformats-fragments-subscriptions/ "IndieWeb: fragment subscriptions to microformats"] on Superfeedr.
+
+== See Also ==
+* [[feeds]]
+* [[microformats2]]
+* [[h-entry]]
+* [[reader]]
+* http://microformats.org/wiki/h-feed
+Legacy:
+*  [[RSS]]/[[Atom]] [[feed files]]

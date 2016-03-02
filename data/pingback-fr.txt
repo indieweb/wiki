@@ -1,0 +1,35 @@
+http://indiewebcamp.com/pingback-fr
+
+''Cette page a démarré sur [[pingback]]''
+
+{{stub-fr}}
+
+Le '''<dfn>pingback</dfn>''' est un protocole destiné aux sites web afin de notifier d'autres sites web quand ils ont posté un lien vers eux (respectivement).
+
+== FAQ ==
+=== Comment j'implémente la réception ===
+Comment j'implémente la réception de pingbacks ?
+# Premièrement, ne pas s'ennuyer avec XML-RPC.
+# Deuxièmement, implémentez à la place la réception de [[webmention-fr|webmention]] (plus facile à implémenter, plus facile aussi à envoyer).
+# Pour finir, utilisez le proxy pingback [[webmention.io-fr|webmention.io]] pour recevoir des pingbacks de votre part et les transmettre comme des webmentions.
+#* Ajoutez ce lien de découverte de pinback à vos pages permaliens de posts : 
+<blockquote><code>&lt;link <br/>&nbsp;rel="pingback" <br/><span style="white-space:nowrap">&nbsp;<nowiki>href="http://webmention.io/webmention?forward=http://exemple.com/webmention"</nowiki></span> /></code></blockquote> en remplaçant <code><nowiki>http://exemple.com/webmention</nowiki></code> par l'URL vers votre endpoint webmention que vous avez implémenté en étape 2.
+C'est fait. Vous voulez plus de docs webmention.io ? Regardez : [http://webmention.io webmention.io]
+
+=== Comment tester la réception de  pingbacks ? ===
+* Demandez à quelqu'un sur [[IRC-fr|IRC]] de poster une note qui fait un lien vers vous et "pingback" votre serveur.
+* Créez un compte-test sur [[wordpress.com]] et essayez de poster dessus des liens vers votre propre site.
+** Remarquez que plusieurs créateurs ont expérimenté un service peu fiable et un manque de logs utiles, rendant wordpress.com moins utile qu'une implémentation test pingback ([http://indiewebcamp.com/irc/2013-04-22#t1366664907 conversation sur IRC])
+
+=== Comment tester l'envoi ===
+Comment puis-je tester l'envoi de pingbacks ?
+* Créez une page avec un lien vers http://webmention.io et envoyez un pingback vers la page. Puis vérifiez l'API webmention.io pour voir si votre lien est listé : http://webmention.io/api/links?target=http%3A%2F%2Fwebmention.io
+
+== Voir aussi  ==
+* [[webmention-fr|webmention]], une ré-implémentation simple, moderne, minimale de pingback
+* [[webmention.io-fr|webmention.io]], un projet open-source et un service hébergé pour recevoir des pinbacks de la part de votre site indieweb
+* http://www.hixie.ch/specs/pingback/pingback
+* http://en.wikipedia.org/wiki/Pingback
+* http://en.support.wordpress.com/comments/pingbacks/
+
+[[Categorie:building-blocks]]

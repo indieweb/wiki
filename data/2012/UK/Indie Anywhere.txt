@@ -1,0 +1,133 @@
+http://indiewebcamp.com/2012/UK/Indie_Anywhere
+
+'''<dfn>Indie Anywhere</dfn>''' was a brainstorming session during [[2012/UK|IndieWebCampUK 2012]].
+
+== Archived Session ==
+
+Archived from:
+* https://etherpad.mozilla.org/indieweb-indieanywhere
+
+----
+
+Welcome to the IndieAnywhere EtherPad!
+
+2012-253 The Bridge room / The Skiff
+
+Participants:
+* Tantek - tantek.com (@t)
+* Barnaby - waterpigs.co.uk (@barnabywalters)
+
+This is a session at indiewebcampUK covering the use cases and implementation of a possible indieweb version of twitter's @anywhere.
+
+Per their description[1] Twitter's @anywhere consists of four things:
+([1] https://dev.twitter.com/docs/anywhere/welcome )
+
+* "Follow Buttons" - this is handled by indieweb [[WebActions]].
+* "Hovercards" - ...
+* "linkify Twitter usernames" - ...
+* "Connect to Twitter" - this is handled by [[IndieAuth]]
+
+Focusing on the indieweb equivalent of 
+* Linkify usernames and hovercards.
+
+Twitter says:
+ "need a registered client application" [1]
+
+On the indieweb, ideally we shouldn't require any kind of registration to make this functionality work.
+
+== Linkifying ==
+
+Twitter's @Anywhere provides a javascript that does "Auto-linkification of Twitter usernames".
+
+In  the "Linkify Example", Twitter seems to only hyperlink the username portion, and not the "@" symbol.
+
+This doesn't make sense, because:
+* it makes a smaller click/tap target
+* it implies the that @ is not part of the reference, but it is.
+
+Twitter also linkifies all potential @-names on a page (or within a selector) which seems prone to false positives.
+
+Instead it seems to make more sense to provide a function for deliberately linkifying chunks of specific text (either serverside, or clientside).
+
+Simple Indieweb linkify answer is:
+* Use https://github.com/tantek/cassis auto_link() function to linkify both @-names to Twitter, and URLs (works both in JS clientside or in PHP serverside)
+
+e.g. 
+* @t -> <code>&lt;a href="http://twitter.com/t">@t&lt;/a></code>
+* tantek.com -> <code>&lt;a href="http://tantek.com">tantek.com&lt;/a></code>
+
+Next step for better IndieWeb UX:
+* @-names should link to the equivalent indieweb URLs, using user full name, and microformats.
+** e.g. @t -> <code>&lt;a class="h-card" href="http://tantek.com/">Tantek Çelik&lt;/a></code>
+** e.g. via a static server-side lookup table ([http://indiewebcamp.com/irc/2012-08-29#t1346252812 aaronparecki.com does this])
+** better: do discovery via Twitter profile retrieval on their "website" URL and use that
+** even better: cache the results of that discovery (on client and/or serverside)
+** even better: do rel-me verification on @-name vs. respective website
+** even better: persistently cache rel-me verified @-name + website pairs on your indieweb server
+
+== Hovercards ==
+
+Twitter has:
+* https://dev.twitter.com/docs/anywhere/welcome#hovercards
+
+Hovering on an @-name shows:
+* logo/avatar
+* full name
+* location from profile
+* "more..." link
+* follow button
+
+Clicking "more..." link shows in addition:
+* website URL
+* bio
+* latest tweet
+* stats: tweets, following, followers
+
+These are nearly all hCard related features which we can use microformats2 h-card to easily upgrade the above auto-linkify markup :
+
+* &lt;a class="h-card" href="http://tantek.com">Tantek Çelik&lt;/a>
+
+the hCard indicates that the link is a person with properties:
+* url: http://tantek.com
+* name: Tantek Çelik
+then we could create a javascript library to automatically provide "hovercard" like functionality purely based on that markup.
+
+indiehovercard.js implementation outline:
+* for all hCards:
+** go get the representative hCard from the url
+** from that rep hCard, get:
+*** logo/photo
+*** updated full name
+*** location (via adr / geo / or street-address/locality/region/country-name)
+*** bio (via note)
+*** latest post (p-name of most recent h-entry on that URL)
+*** stats? punt on this for now. question why each of these stats is interesting at all (# of tweets? how is that useful. # following, what does that really mean in an indieweb scenario? # followers, is that even possible to determine in a fully distributed system?)
+** attach handlers to all .h-card elements to hover / first-tap show hovercard
+** mimic display / styling of Twitter hovercards (perhaps consider FB hovercards also)
+
+Similarly on Facebook, their "hovercards" (when you hover over hyperlinked full names) shows you
+* cover photo
+* avatar/logo
+* full name
+* workplace
+* # of mutual friends that the reader and that link have in common
+* 5 hyperlinked avatars of those friends
+* mini-hovercard on those avatars that just popup and display their full name
+
+Wordpress.com Blogs have Hovercards [http://photos.waterpigs.co.uk/p/nr screenshot]
+* Profile Photo
+* Nice border
+* Username
+* location
+* Bio
+* the Reply links are some kind of z-index bug
+* Note ability to turn hovercards off
+
+indiehovercard.js could get mutual friends using XFN.
+
+----
+
+== See Also ==
+* [[hovercard]]
+* [[Twitter]]
+* [[WordPress]]

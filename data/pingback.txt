@@ -1,0 +1,99 @@
+http://indiewebcamp.com/pingback
+
+{{stub}}
+
+'''<dfn>pingback</dfn>''' is a legacy [[XML-RPC]] based protocol for web sites to notify other web sites when they've posted a link to them (respectively). Pingback superseded [[Trackback]] and it itself has been superseded by the [[Webmention]] protocol.
+
+== FAQ ==
+=== How do I implement receiving ===
+How do I implement receiving pingbacks?
+# First, don't bother with XML-RPC.
+# Second, implement receiving [[webmention]] instead (easier to implement, easier to send too).
+# Lastly, for backward compatibility with those that send pingbacks, use the [[webmention.io]] pingback proxy to receive pingbacks on your behalf and pass them along to your server as webmentions.
+#* Add this pingback discovery link to your post permalink pages: <blockquote><code>&lt;link <br/>&nbsp;rel="pingback" <br/><span style="white-space:nowrap">&nbsp;<nowiki>href="http://webmention.io/webmention?forward=http://example.com/webmention"</nowiki></span> /></code></blockquote> substituting <code><nowiki>http://example.com/webmention</nowiki></code> with the URL to your webmention endpoint that you implemented in step 2.
+You're done. Also see [http://webmention.io webmention.io] for more docs.
+
+=== How do I implement sending ===
+Consider also sending pingbacks purely for backward compatibility with sites that support receiving them but are unlikely to be updated to support webmention.
+* See [https://gist.github.com/aaronpk/5744879 this gist] for code that can be adapted.
+** Don't bother to formally construct XML-RPC structures - XML-RPC is deadend tech.
+** Just concatenate the strings you need (as documented in that gist) to generate an XML-RPC response by hand.
+
+=== How do I test receiving ===
+How do I test receiving pingbacks?
+* Ask someone in [[IRC]] to post a note that links to you and pingbacks your server.
+* Create a test [[wordpress.com]] account and try posting links to your own site on it.
+** Note that several creators have experienced unreliable service and lack of useful logs, making wordpress.com less useful as a pingback test implementation ([http://indiewebcamp.com/irc/2013-04-22#t1366664907 conversation in IRC])
+* Send a pingback to yourself manually using curl. See [https://gist.github.com/aaronpk/5744879 this gist] for an example
+
+=== How do I test sending ===
+How do I test sending pingbacks?
+* Create a page with a link to http://webmention.io and send a pingback to the page. Then check the Webmention.io API to see if your link is listed: http://webmention.io/api/links?target=http%3A%2F%2Fwebmention.io
+** I found this to be ambiguous. Send a pingback to your own page that contains a link to webmention.io? Or send a pingback to webmention.io? Either way, that webemention.io API link indicates "This site does not allow public access to its mentions". What I did to test sending was send a pingback to the webmention.io forwarding URL <tt><nowiki>http://webmention.io/webmention?forward=http://example.com/endpoint</nowiki></tt>. This sent back a webmention to my endpoint successfully. So, pending a "real post" test, I can presume pingback sending is working. — [[User:Gregorlove.com|gRegor]] 08:16, 6 February 2014 (PST)
+
+== Problems ==
+=== Poor display ===
+'''Pingback''' (the specification) is very vague and somewhat contradictory about displaying pingbacks. It says things like:
+* "include this information on her site"
+** could mean the link, the comment post, a portion thereof?
+* "Bob's blogging system then includes a link back to Alice's post on his original post."
+** implying that perhaps ''only'' links show-up from pingbacks
+* "Reader's <nowiki>[sic]</nowiki> of Bob's article can follow this link to Alice's post to read her opinion."
+** implying that readers can't see Alice's opinion on Bob's article, and have to follow the link to Alice's post to read it. seems a bit inconvenient, and not how comment presentation works on typical blogs, or [[silo]] posts.
+* the "Conformance Requirements" do not mention any requirement for displaying pingback links or content therefrom on the original post
+* in the "Example", it says: <blockquote><p>"Bob's blog also retrieves other data required from the content of Alice's new post, such as the '''page title''', an '''extract of the page content surrounding the link''' to Bob's post, any attributes indicating '''which language the page is in''', and '''so forth'''.</p><p>"Finally, Bob's post records the pingback in its database, and regenerates the static pages referring to Bob's post so that they '''mention the pingback.'''"</p>'''emphasis''' added.</blockquote>
+** This is vague but provides some additional display guidance which is unfortunately not very well thought out and leaves much to be desired:
+*** ''page title'' - this is odd as typical comments displayed on post pages don't have titles, just comment text.
+*** ''extract of the page content surrounding the link'' - in practice this is unreadable and unfriendly. It doesn't look at all like a comment and usually has both leading and trailing ellipses making you wonder what the broader context of the comment is.
+*** ''which language the page is in'' - this could be useful for marking up the display of the comment with a <code>lang</code> attribute, and the link to the comment permalink with the <code>hreflang</code> attribute.
+
+In practice:
+
+Pingback displays are nearly always useless, e.g.
+* https://blog.mozilla.org/blog/2013/04/10/gearing-up-for-the-next-chapter/
+
+Problems demonstrated:
+* "Pingback from" is jargon - provides no value to the user - only noise
+* the title of the comment blog post is useless as it provides a summary of the original blog post
+* the [...] ... [...] summary text is nearly unreadable without more context, and doesn't even show what phrase linked to the original blog post
+** in the first pingback, even just including the entire first paragraph of the comment post would have been better.And if it wasn't a reply then it should just be a list of related articles (date, author, linked post name, all marked up with [[h-cite]]), rather than including cryptic broken summaries.
+* the overall visual design is very dated and has fallen behind modern comment presentation designs
+
+=== Spam ===
+WordPress is perhaps the top target of [[Pingback]] spam. So much so that Akismet is about to shut off (or has already?) pingbacks. As cited above:
+* http://piedtype.com/2013/05/21/spammers-use-trackbacks-pingbacks-and-reblogs/
+==== spam blog plagiarisms ====
+Summary: There are spamblogs that simply plagiarize popular tech publications (WIRED, TechCrunch, etc.) and then send pingbacks to all the links therein. It's a real world problem that's already affecting us because the spambacks show up in [[IRC]] via [[Loqi]].
+
+Spammers install [[WordPress]], then simply plagiarize (sometimes they [[reblog]] and link/attribute) others' blogposts with links and send pingbacks to all the links.
+
+We've seen it happen in the [[IRC]] channel when spammers plagiarized the [[WIRED]] article to their own WordPress blogs and we started to see pingback spam from them (sadly the WIRED article itself didn't send pingbacks).
+
+Note that when spammers can easily install a WordPress plugin for [[webmention]], this same problem will start to occur on sites that accept webmentions.
+
+=== DDOS ===
+{{main|DDOS}}
+
+There is a known DDOS attack that uses servers with Pingback endpoints as part of the DDOS. See [[DDOS]] for more details.
+
+== Projects ==
+* https://github.com/aaronpk/webmention.io - webmention.io open source to run as a standalone process that can receive pingbacks (as well as webmentions) on your behalf (was <nowiki>https://github.com/aaronpk/Pingback</nowiki>)
+
+== History ==
+A brief history of pingback:
+{{main|timeline}}
+* 2002-07-07 (C): '''[[Pingback]] concept described''' (but not yet named) as "automatic trackback" by Stuart Langridge[http://web.archive.org/web/20030814080916/http://www.kryogenix.org/days/80.html] - first automatic way to let someone know that you linked to their site.
+* 2002-09-02 (T): '''Pingback term introduced''' by Stuart Langridge[http://web.archive.org/web/20030820210236/http://www.kryogenix.org/days/179.html]
+* 2002-09-02 (I): '''Pingback first implemented''' by Simon Willison ([http://web.archive.org/web/20030817120358/http://simon.incutio.com/archive/2002/09/02/testingPingback] - presumed UK timestamp). Additional source: @t conversation with Simon in Brighton, UK 2013-09-07), '''second implementation''' by Stuart Langridge[http://web.archive.org/web/20030419054748/http://www.kryogenix.org/days/182.html] (presumed US/CA timestamp).
+* 2002-09-04 (S): '''Pingback [http://www.kryogenix.org/writings/tech/pingback.html first specified]''' by Stuart Langridge[http://web.archive.org/web/20030817120843/http://simon.incutio.com/archive/2002/09/04/pingBackSpec]
+* 2002-09-23 (S): '''Pingback 1.0 spec published''' by Ian Hickson[http://ln.hixie.ch/?start=1032794857&count=1][http://web.archive.org/web/20030605023339/http://ln.hixie.ch/?start=1032794857&count=1][http://web.archive.org/web/20030826071601/http://simon.incutio.com/archive/2002/09/24/pingback10]
+...
+* 2003(?) Pingback spam takes off (needs sources)
+
+== See Also ==
+* [[webmention]], a simple, modern, minimal reimplementation of pingback
+* [[webmention.io]], an open-source project and hosted service for receiving pingbacks on behalf of your indieweb site
+* http://www.hixie.ch/specs/pingback/pingback
+* http://en.wikipedia.org/wiki/Pingback
+* http://en.support.wordpress.com/comments/pingbacks/
+* [[spam]]

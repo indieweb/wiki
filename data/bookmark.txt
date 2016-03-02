@@ -1,0 +1,120 @@
+http://indiewebcamp.com/bookmark
+
+<span style="float:right;height:128px;font-size:128px;margin-top:48px">🔖</span>
+
+{{stub}}
+
+A '''<dfn>bookmark</dfn>''' (or <dfn>linkblog</dfn>) is a [[post]] that is primarily comprised of a URL, often title text from that URL, sometimes optional text describing, [[tag]]ging, or quoting from its contents.
+
+== Why ==
+Why should you post bookmark posts? Good question. People seem to have reasons for doing so.
+(please feel free to replace this rhetorical question with actual reasoning)
+
+* I bookmark things usually as 'read later', 'will read again' or 'should reference in a paper'. - {{rhiaro}}
+* i bookmark other peoples sites or twitter accounts and setting `rel=following` onto links – {{dym_cx}}
+
+__TOC__
+== How ==
+=== How to markup ===
+How to markup a bookmark post. Use an h-entry as usual and a u-bookmark-of property on the link to the actual URL you are bookmarking. E.g.
+
+<pre><nowiki>
+<span class="h-entry"> ... 
+ <a class="u-bookmark-of" href="http://someothersite.example.com/permalink47">...</a>
+</span>
+</nowiki></pre>
+
+The trailing preposition "of" helps communicate this in the same that we have u-in-reply-to instead of u-reply.
+
+For bookmarks that contain both a link and a meaningful title, consider using "u-bookmark-of h-cite" instead:
+
+<pre><nowiki>
+<span class="h-entry"> ... 
+  <a class="u-bookmark-of h-cite" href="https://www.digitalocean.com/community/tutorials/how-to-upgrade-ubuntu-12-04-lts-to-ubuntu-14-04-lts">
+    How to Upgrade Ubuntu 12.04 LTS to Ubuntu 14.04 LTS
+  </a>
+</span>
+</nowiki></pre>
+
+== IndieWeb Examples ==
+=== Aaron Parecki ===
+[[User:Aaronparecki.com|Aaron Parecki]] previously used [[WordPress]] to post bookmarks on [http://aaron.pk/bookmarks/ aaron.pk/bookmarks] using a custom Wordpress post type since 2010-12-18. He now uses [[Quill]] to post bookmarks to [[p3k]] as of 2014-09-07[https://aaronparecki.com/notes/2014/09/07/1/indieweb-bookmarks]. 
+
+These bookmark posts contain:
+* URL
+* Title/text
+* Optional tags
+* Optional snippet of text manually copied from the URL as a way to remember why I bookmarked it ([http://aaron.pk/bookmarks/?bookmark=hashcash example])
+* Optional note about why I bookmarked it
+
+Video showing browser bookmarklet from [[Quill]] used to post bookmarks: 
+* http://aaronparecki.com/notes/2014/09/07/1/indieweb-bookmarks
+
+=== Kyle Mahan ===
+{{kylewm}} uses [[Red Wind]] to post bookmarks on his site kylewm.com [https://kylewm.com/2014/07/meet-the-man-building-an-ai-that-mimics-our-neocortex-and-could-kill since 2014-07-08]. E.g.:
+* https://kylewm.com/2014/07/meet-the-man-building-an-ai-that-mimics-our-neocortex-and-could-kill
+
+=== Barnaby Walters ===
+[[User:Waterpigs.co.uk|Barnaby Walters]] uses [[Taproot]] to post bookmarks on his site waterpigs.co.uk as [[notes]] tagged with "[http://waterpigs.co.uk/notes/?tagged=bookmark bookmark]" since ????-??-??. These bookmark posts contain:
+* URL
+* Tags
+* Text note with one or more URLs inline
+
+=== Jeremy Keith ===
+[[User:adactio.com|Jeremy Keith]] posts bookmarks on his own site at [http://adactio.com/links/ adactio.com/links] since ????-??-?? and [[POSSE]]s them to [https://delicious.com/adactio Delicious]. These bookmark posts contain:
+* URL
+* Title
+* tags
+* Description
+
+=== Shane Becker ===
+{{veganstraightedge}} imports bookmarks to [http://veganstraightedge.com/bookmarks veganstraightedge.com/bookmarks] by [[PESOS]]ing from [[Instapaper]] (tagged with "imported:from=instapaper.com") and [[Pinboard]] (tagged with "imported:from=pinboard.in") since ????-??-??. He sub-categorizes them by adding a "fave", "read-later", "watch-later" or "listen-later" tag to a bookmark post. The linked title of a bookmark post goes to the bookmarked URL, not the bookmark post's permalink. Bookmark posts have a '''⇜''' before the title to help indicate that the link goes to an external site. The '''⇜''' is applied using a CSS :before selector and a content property to keep it out of the actual HTML/microformat content. These bookmark posts contain:
+* URL
+* Title
+* tags
+* Excerpt (optional)
+* Description (optional)
+
+=== Ben Roberts ===
+{{benthatmustbeme}} has been able to post bookmarks since 2014-10-10, with [[Postly]] though has not used it much yet other than as testing.
+https://ben.thatmustbe.me/bookmark/2014/10/10/6/bookmark
+
+=== atomicules ===
+[[User:atomicules.co.uk]], taking a slightly different approach, I decided I did not want to host or own every bookmark I make as I would never have a self-hosted tool as quick and as convenient as Pinboard, etc, nor did I want the clutter of bookmarks offtopic to that of my website. I did, however, already have link type posts, so I decided to start syndicating these out to [[Pinboard]] (See that page for my example).
+
+== Silos ==
+Bookmark hosting silos:
+* [[Instapaper]]
+* [[Pinboard]]
+
+The below image is of the bookmark display on Pinboard, which adopts a text-first somewhat minimalist design which shows the name, when it was bookmarked, and by whom. A description and tags can be optionally added.
+
+[[File:Pinboard.png]]
+
+Previously:
+* [[delicious]]
+
+== Similar Post Kinds ==
+Text of a '''bookmark post''' is most often the title of the linked resource, i.e. created by the author of the linked resource, rather than the person posting the bookmark post.
+
+This is a key distinction between a bookmark and other kinds of posts.
+
+=== Reply ===
+The text of a ''[[reply]]'' is written by the person posting the reply, and often a new statement in response to the original post.
+
+If the text of a bookmark post is written as commentary on the bookmark, then that should likely be a reply post instead.
+
+=== Repost ===
+The text of a [[repost]] comes from the entirety of the <em>content</em> of a bookmark rather than the name or title of the bookmarked resource.
+
+If the text of a bookmark post is the entirety of the contents of the thing that is bookmarked, then that should likely be a repost instead.
+
+=== Quotation ===
+The text of a [[quotation]] comes from part of the <em>content</em> of a bookmark rather than the name or title of the bookmarked resource.
+
+If the text of a bookmark post is merely part of the contents of the thing that is bookmarked, then that should likely be a quotation instead.
+
+== See Also ==
+* [[posts]]
+* [[note]]
+* [[h-cite]]

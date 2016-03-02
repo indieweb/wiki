@@ -1,0 +1,82 @@
+http://indiewebcamp.com/location
+
+{{stub}}
+
+'''<dfn>location</dfn>''' is a key aspect of [[checkin]] and [[event]] [[posts]]. It's also sometimes an aspect of posts in general, e.g. where a [[note]] or [[photo]]/[[video]] was posted from. The aspect of location is sometimes referred to as [[geo]] for short.
+
+== Enabling Technologies ==
+* Markup / microformats
+** [http://microformats.org/wiki/h-geo h-geo] for lat/long locations
+** [http://microformats.org/wiki/h-adr h-adr] for structured address locations
+** [http://microformats.org/wiki/h-card h-card] for named [[venues]]
+* Data exchange
+** [http://geojson.org/ GeoJSON]
+* Location Services
+** [http://geoloqi.com Geoloqi]
+** OSM [[Nominatim]]
+* Venues database
+** [https://wiki.openstreetmap.org/wiki/API OpenStreetMap API] and [https://wiki.openstreetmap.org/wiki/Databases_and_data_access_APIs data access]
+** [http://www.geonames.org/export/ws-overview.html Geonames Web Services]
+*** findNearbyPlaceName used by StatusNet
+
+== How ==
+=== How to determine the location of a microformat ===
+To accommodate various different location use-cases, there are multiple places within a microformat structure where location data can be placed. Given a microformat, to determine it’s location:
+
+* create a stack of property maps where location data might be found, in order of priority
+* for each potential location property, search the stack for a valid property value
+
+In more detail (pseudocode):
+* given a microformat structure <var>mf</var>, to find the location it represents:
+* let <var>location-sources</var> be a list of microformats, containing the following, in this order:
+** <var>mf</var>
+** if <var>mf</var> has a ''location'' property which is a microformat, that value
+** if <var>mf</var> has an ''adr'' property which is a microformat, that value
+** if <var>mf</var> has a ''geo'' property:
+*** if the geo property is a microformat, that value
+*** else if the geo property is a string, parse it as a geo: URL and append a derived microformat containing the properties of the geo: URL: latitude+longitude if they’re both present, and altitude if it was present
+* for each of the following location properties, search the property map stack in order of priority for a valid value. As soon as one is found, consider that the value. If none are found, the microformat does not have this property
+** street-address
+** extended-address
+** post-office-box
+** locality
+** region
+** postal-code
+** country-name
+** label
+** latitude
+** longitude
+** altitude
+
+== Motion ==
+Location information may also contain indication about motion, e.g. a person at a location, but in motion, by some method. Such information in practice includes things like:
+* velocity (perhaps with a specific motion vector in 2 or 3 dimensions)
+* mode of motion / transport (e.g. walking, running, bicycling, driving, stationary)
+
+== Brainstorming ==
+
+[http://indiewebcamp.com/note#Location Location in Notes] discusses some of the issues in adding a location to a note. 
+
+The two most common visual elements in presenting location are a textual description of the location and/or a map.
+
+=== Textual Description ===
+
+There is an issue of specificity. With all of the details possible in a address, relevancy can be reduced if you add in all the possible details.
+
+For example, to use the site of IWC Cambridge...
+
+'''The Ray and Maria Stata Center, 32 Massachusetts Institute of Technology, Vassar Street, MIT, Cambridge, Middlesex County, Massachusetts, USA, 02139-4309'''
+
+The most common textual description is merely the locality, region, and country....Cambridge, Massachusetts, USA. The country is often omitted if it is the same as the individual's usual country. 
+
+From a Microformats point of view, once a location has a name(The Ray and Maria Stata Center, for example), it goes from an address to a venue(and a h-adr to a h-card).
+
+The utility of displaying coordinates is debatable. While having them available can be useful...for example, to allow location to be identified on a map, they do not, by themselves, enhance human conception of a where a person is.
+
+== See Also ==
+* [[geo]]
+* [[checkin]] / [[venue]]
+* [[event]]
+* [[note]]
+* [[photo]]
+* [[video]]

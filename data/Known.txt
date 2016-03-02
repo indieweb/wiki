@@ -1,0 +1,253 @@
+http://indiewebcamp.com/Known
+
+<div class="floatright"><img alt="Known logo" src="https://withknown.com/img/logo_k.png" width="100" height="100"></div>
+
+'''<dfn>[http://withknown.com Known]</dfn>''' is an open publishing / community platform [[project]]. It aims to be a simple, beautiful way to share your story using a variety of media from any device. It adheres to the IndieWeb [[building-blocks|technologies]] and [[principles]].
+<br clear="both">
+== Goals & Model ==
+
+Known aims to be easy to install, use and customize. It adheres to IndieWeb [[building-blocks|technologies]] and [[principles]].
+
+Known is also a full-time business endeavor with the following paid products:
+
+* A managed, [[SaaS]] service.
+* Enterprise licenses.
+* Support subscriptions.
+* Customizations.
+
+It is currently concentrating on higher education educators and institutions as its first customers.
+
+[[User:werd.io|Ben Werdmuller]] and [[User:erinjorichey.com|Erin Jo Richey]] have founded Known, Inc as a seed-funded startup incubated at [http://matter.vc Matter Ventures]. It formally launched on September 11, 2014, and has graduated from the Matter program.
+
+== Releases ==
+
+Known was released in September 2014. Packages can be downloaded from [http://withknown.com withknown.com].
+
+== Development ==
+
+Known was released at [http://withknown.com withknown.com] in September 2014. Both a fully-hosted version and a self-hosted version are available. Users will be able to move their content from one to the other, in order to (for example) try the software using the hosted version before configuring their own server.
+
+Documentation is being written at [http://docs.withknown.com docs.withknown.com] and there are some installation guides at https://withknown.com/guides/
+
+=== Plugins & themes ===
+
+Known has a full plugin architecture, making use of [[PHP]] lazy loading and the observer pattern. This makes it very easy to create new content types or behaviors.
+
+Known is being developed with the rule that "indie" content - internal posts, likes, etc - are bundled as included plugins in the main source code repository. If you want to [[POSSE]] to external sites, you need to install those plugins separately (although they may also be included in a downloadable distribution of the content).
+
+Currently, content includes:
+
+* Posts ([[articles]])
+* Status updates ([[notes]])
+* [[Photos]] (images)
+* Events ([[events]])
+* [[Checkins]] (places)
+* Chickens (chickens)
+** Chickens were demonstrated at the [[2013]] camp but have not been made available as a plugin.
+
+Supported [[webmention]] annotations include:
+
+* [[Replies]]
+* [[Likes]]
+* Reshares
+* [[RSVPs]]
+
+Known also has a [[Webfinger]] endpoint that plugins can extend.
+
+== IndieWeb Examples ==
+
+People currently using Known as their primary site:
+* [http://werd.io Ben Werdmuller] - werd.io
+* [http://s.ly Jesse Vincent] - s.ly
+* [http://erinjo.is Erin Jo Richey] - erinjo.is
+* [http://mapkyca.com Marcus Povey] - mapkyca.com
+* [http://timowens.io/ Tim Owens] - timowens.io
+* [http://davidwiley.social/ David Wiley] - davidwiley.social
+* [http://amblin.io/ Matthew Gregg] - amblin.io
+* [http://ampoliros.net/ Hugo Roy] - ampoliros.net
+* [http://www.averymiller.org/ Avery Miller] - averymiller.org
+* [http://elliottucker.net Elliot Tucker] - elliottucker.net
+* [http://andrewmarks.media Andrew Marks] - andrewmarks.media
+* [http://www.clintpatty.com Clint Patterson] - clintpatty.com
+* [http://www.rmendes.net Rick Mendes] - rmendes.net
+* [http://www.petersell.com Andreas Petersell] - petersell.com
+* [https://kash.space Kash] - kash.space
+* [https://cleverdevil.io Jonathan LaCour] - cleverdevil.io
+* [https://tinokremer.nl Tino Kremer] - tinokremer.nl
+* [http://www.funwhilelost.com Andrew Jacobs] - www.funwhilelost.com
+
+People currently using Known as a secondary site or trying it out:
+* [[User:KevinMarks.com|Kevin Marks]] - known.kevinmarks.com
+* [[User:Www.boffosocko.com|Chris Aldrich]] - stream.boffosocko.com
+
+People currently using Known as a public stream for a private community
+* [[User:achangeiscoming.net|Jon Pincus]] stream.tapestrymaker.net
+
+As of September 25, 2014, there were over 3,000 Known sites, spread between the Known service and self-hosted sites.
+
+== How to ==
+=== Install ===
+See http://docs.withknown.com/en/latest/install/
+
+=== Upgrade ===
+To upgrade, copy the new Known installation files over the existing installation.  Known's core files can be safely overwritten.  It's '''always''' a good idea to perform a backup, both of the files and of the database before upgrading.
+
+=== Setup Known on nginx ===
+[[User:elliottucker.net]] has posted a full how-to here https://elliottucker.net/setting-up-known-with-nginx-indieweb.html Note - the source code change is no longer required and you can now also use Known with MySql.
+
+[[User:kylewm.com]] tried unsuccessfully to reproduce reported issues with callbacks from Twitter and Facebook. Here is the configuration that worked for me https://gist.github.com/kylewm/7d8cbc9a72984d67c646
+
+=== Use MongoDB ===
+Mongo is only used now if it's explicitly specified in the config.ini file, e.g.,
+
+<code><pre>
+database = 'Mongo'
+filesystem = 'local'
+uploadpath = '/var/www/data/'
+</pre></code>
+
+(of course replace /var/www/data with your chosen data directory)
+
+* Note that {{benwerd}} recommends MySQL over MongoDB these days[http://werd.io/2014/thedavidjohnson-we-actually-recommend-mysql-known-started-with-mongodb-but]
+
+=== Transition from WordPress ===
+(stub)
+
+{{davidmead}} is in the process of transitioning his personal site from WordPress to Known.
+
+As Known works only on a domain or sub-domain at the moment, I had to create blog.davidjohnmead.com and install it to there. I didn't want to blow away [http://davidjohnmead.com my current WP blog] until the Known site was running, connected to the silos and able to import my WP content. I also have content on [http://davidmead.withknown.com davidmead.withknown.com] to pull in as that's where I'd been playing around with Known.
+
+==== Steps from WordPress ====
+* Created sub-domain on Media Temple of http://blog.davidjohnmead.com
+* Created new FTP user
+* Downloaded zipped ‘Dunham’ version from http://withknown.com
+* Unzipped and put it in sub-domain's HTML folder
+* Browsed to domain and saw the start up page
+* Needed db info. Went back in to MT and created new MySQL for Known to use
+* Entered info but something was wrong (fat fingers or Chrome  auto-fill) Had error on page. Back buttoning didn’t take me back to the form. Had to delete the config.ini and start again. '''Some better handling of this error would be great'''.
+* Ended up editing the config.ini and FTP it up to the server. It works!
+* Filled in profile, setting and site configuration
+* Has nice step through on how & where to create the APIs to interact with the different social silos. A couple of the steps are a little out of synch, but I think that's more the silo's updating. Nothing you can't muddle through.
+* Add rel="me" links from WP page to Known site for [https://indieauth.com/ IndieAuth]
+* Go through social media and update the URL in my profiles with blog.davidjohnmead.com so [https://indieauth.com/ IndieAuth] and [https://www.brid.gy/ Brid.gy] work.
+
+==== Issues moving from WordPress ====
+* Encountered various errors on pages for plugin's, posting, and editing entries. Most have these have been fixed by {{benwerd}} updating GitHub and myself FTPing the files/folders to my server.
+
+* Big issue around having curl errors after posting/editing certain content. See GitHub [https://github.com/idno/idno/issues/629 issue 629], [https://github.com/idno/idno/issues/635 issue 635], and [https://github.com/idno/idno/issues/630 issue 630]. Looks like there may be progress but if you are on a shared server (like myself) editing the apache config to get around the basedir issue cannot be done.
+
+==== Next steps to move from WordPress ====
+* Find a URL shortener for creating [[permalinks]]. Used the Hum plugin in WP.
+* Set up CRON to back up Known site to Dropbox etc.
+
+==== Issues moving from hosted Known site  ====
+When Known was first released I started using it at [http://davidmead.withknown.com], posting over 240 pieces there for about 2 months. The export hasn't worked in the settings, so {{benwerd}} sent me the export.  This is an entities.sql file and the folders associated with my posts.
+* I copied the folders containing my posts to the 'Uploads' folder on my server. I now have 2 sub-folders there: blog.davidjohnmead & davidmead.withknown.com
+* I can import the entities.sql file into my current hosted Known blog (after backing it all up) using phpMyAdmin. No problems there. All the old entries merged with the new, and I could see them in phpMyAdmin, but none of the entries display on blog.davidjohnmead.com.
+
+Looking at the [https://github.com/idno/Known/issues/734 Issue 734] on the Known GitHub, it seems there are a lot more hoops to jump through including changing imported URL's etc. Not as easy as I first thought.
+
+=== Import from Flickr ===
+To import your [[Flickr]] photos, use this Known plugin: 
+* https://www.marcus-povey.co.uk/2015/02/12/import-your-flickr-photos-into-known/
+
+=== How to use Quill ===
+To setup a Known instance so that you can use Quill to publish to it (this has not been extensively tested by the indieweb users as of now, and it seems that the /micropub endpoint is not fully working) :
+* You may have to install the indiepub plugin: https://github.com/idno/indiepub 
+* And then enable the micropub endpoint.
+
+=== How to use the API ===
+See https://www.marcus-povey.co.uk/2015/05/28/using-the-known-api/ for a good API intro.
+
+Idno/Pages/Admin/Users.php is the user administration endpoint, which translates to /admin/users as a URI endpoint.
+
+== Troubleshooting ==
+=== Fix 404 Not Found on /begin ===
+
+This usually means .htaccess is missing or more often, not allowed, based on the Apache configuration. If you manually visit /index.php/begin instead and see a landing page, it means that htaccess is not being allowed to rewrite URLs.
+
+At least in recent versions of Ubuntu, Apache is configured by default with ''AllowOverride Off''. To allow, create a new &lt;Directory> configuration in /etc/apache2/apache2.conf for your Known install, with ''AllowOverride All'', and restart Apache.
+
+<code><pre>
+<Directory /var/www/html>
+         Options Indexes FollowSymLinks
+         AllowOverride All
+         Require all granted
+</Directory>
+</pre></code> 
+
+* Would a better sysadmin than me review this please! [[User:Kylewm.com|Kylewm.com]]
+
+=== Plugins and Themes Missing ===
+
+We're not sure what causes this yet, it should "just work". Some things to check:
+* Check that your www-data user has read/execute permissions on the IdnoPlugins and Themes directories
+* Try adding <code>path = /path/to/your/known/</code> in your config.ini
+* The Apache error log may give some hints, e.g. <code>/var/log/apache2/error.log</code>.
+
+Update: This seems to have been fixed in version 0.6.3
+
+=== The target page does not exist ===
+If you send a webmention to a Known install that runs behind a TLS offloader, e.g. with a curl command like:
+<blockquote style="font-family:monospace"><nowiki>
+curl -i -d "source=http://tantek.com/2015/017/f1&target=https://michielbdejong.com/2015/joining-the-indie-web-my-motivation-cc-by-michiel-de-jong" https://michielbdejong.com/webmention/
+</nowiki></blockquote>
+
+and get an HTTP error like: <samp>HTTP/1.1 400 Bad Request</samp> with contents:
+<blockquote style="font-family:monospace">
+{"error":"target_not_found","error_text":"The target page does not exist."}
+</blockquote>
+
+A workaround for this is documented in https://github.com/idno/idno/issues/724
+
+== Itches ==
+
+=== Notifications ===
+
+=== New content types ===
+
+* Generic [[files|file]] uploads
+* Self-contained [[HTML5]] widgets (eg, [[games]], or educational tutorials, or [[ebooks]])
+* [[Audio]]
+* [[Video]]
+* [[Reviews]]
+
+=== IndieFriends ===
+
+Known is designed to be a multi-user system (although Ben and Erin are currently using it as single-user sites). The intention, therefore, is to implement a traditional asymmetrical social networking friends / following model - with an IndieWeb spin.
+
+* Each user will have a following page, with [[h-card|h-cards]] marked up using [[XFN]] links to each followed user's [[profile]].
+* When User A starts following User B, an appropriate link is made on the following page. A [[webmention]] is sent with the source set to User A's following page, and the target set to User B's [[profile]] page.
+* User B's system notifies User B, who can react accordingly.
+* Ideally, this is then attached to a reader component. See below ...
+
+In a future embodiment, each step in the webmention process could be signed on a per-user basis (I'm interested in [[HTTP signatures]], with keys exchanged / assigned at the point of mention. This would allow content to be made privately available to individual users. Other methods of retrieving private web content should also be considered.
+
+=== Reader ===
+
+Because it's not enough to publish: a way to _consume_ IndieWeb content from a Known user's followed sites and users.
+
+=== Common Webmentions ===
+[[Bridgy]] publish will POSSE your content if you include a webmention to a service-specific URL (e.g. `https://brid.gy/publish/facebook`).  It would be great to turn these into simple check-box options when you're publishing via Known.  (I'm curious what the interface looks like when you've plugged in their paid solution "Convoy")
+
+== Criticism ==
+=== No HTTPS support ===
+<strike>withknown.com doesn’t support [[https]] for browsing, during signup, or on anyone’s subdomain, meaning that authentication credentials and cookies can easily be intercepted on public wifi networks, as well as private content.</strike>
+* The domain supports [[https]] for *.withknown.com domains. The next release of EFF HTTPSEverywhere will automatically redirect.
+
+The hosted service now supports HTTPS by default for all *.withknown.com domains. Custom domains are... [http://werd.io/2015/why-the-secure-web-isnt-ready-for-primetime-but-we complicated]... but work is ongoing. Self hosted services are unaffected, and can be HTTPS or not at the owner's discretion.
+
+== Articles ==
+Articles written about Known, especially in the press / mainstream media (most recent first)
+* 2014-09-24: WIRED Italia: <cite>[http://www.wired.it/internet/social-network/2014/09/24/known-piattaforma-conserva-post/ Known, la piattaforma che conserva i tuoi post]</cite>
+* 2014-09-17: WIRED: <cite>[http://www.wired.com/2014/09/known/ Out in the Open: A Blogging Tool That Lets You Actually Own What You Post on Facebook]</cite>
+* 2014-09-11: GigaOm: <cite>[https://gigaom.com/2014/09/11/indieweb-advocates-launch-known-so-bloggers-can-be-social-and-still-control-their-content/ IndieWeb advocates launch Known so bloggers can be social and still control their content]</cite>
+== Videos ==
+Videos about Known (most recent first.
+* 2014-09-17: Matter Demo Day at The Paley Center for Media https://www.youtube.com/watch?v=uz7jJwsaydE
+
+== Unrelated ==
+* [https://en.wikipedia.org/wiki/There_are_known_knowns There are known knowns]
+
+== See Also ==
+* [[projects]]

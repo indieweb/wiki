@@ -1,0 +1,359 @@
+http://indiewebcamp.com/Nginx
+
+'''<dfn>[http://wiki.nginx.org/Main Nginx]</dfn>''' is one of the two commonly used HTTPd server [[projects]] ([[Apache]] being the other).
+__TOC__
+== Why ==
+Nginx is designed to be '''modular''' and you can alter it by building your own binaries. The version you find with most packaging systems come with a core set of features so you may not need to do a custom build.
+
+The other great part about Nginx is that it is designed from the beginning to work with '''virtual hosts''' and that most of the common use cases are already listed in the [http://wiki.nginx.org/Configuration Configuration] of the Nginx Wiki.
+
+== IndieWeb Examples ==
+Please list any sites you know of that also use Nginx for their IndieWeb server.
+* [https://bear.im bear.im] uses Nginx for the static site and journal site.
+* [https://aaronparecki.com aaronparecki.com] uses Nginx with php-fpm to serve [[p3k]]
+* {{kylewm}} uses nginx and uwsgi to serve [[Red Wind]]
+* [https://indiewebcamp.com indiewebcamp.com] uses Nginx with php-fpm to run MediaWiki
+* [https://jonnybarnes.net jonnybarnes.net] uses Nginx with php-fpm to serve his Laravel powered website
+* {{rascul}} uses nginx for his site.
+* {{willnorris}} uses nginx for his site, and has written [https://www.google.com/search?as_sitesearch=willnorris.com&q=nginx a few posts about it].
+*[http://elliottucker.net elliottucker] uses Nginx with php-fpm and Varnish to run his [http://withknown.com Known] site.
+
+== How to ==
+=== SSL Setup ===
+The site [https://istlsfastyet.com/ Is TLS Fast Yet? ] includes a lot of information about SSL setup and includes their own [https://github.com/igrigorik/istlsfastyet.com/tree/master/nginx Nginx configs in GitHub].
+
+Mozilla maintains a great [https://wiki.mozilla.org/Security/Server_Side_TLS#Recommended_Ciphersuite wiki page about server-side configuration] which includes pointers for all modern web servers.
+
+Robert Love has a great [http://blog.rlove.org/2013/12/strong-ssl-crypto.html how-to guide for configuring Nginx] to have strong SSL support.
+
+The IETF has a [http://datatracker.ietf.org/doc/draft-ietf-uta-tls-bcp/?include_text=1 document with recommendations for Secure Use of TLS and DTLS].
+
+Notes on [https://aralbalkan.com/scribbles/setting-up-ssl-with-nginx-using-a-namecheap-essentialssl-wildcard-certificate-on-digitalocean/ setting up SSL with nginx (using a NameCheap EssentialSSL wildcard certificate on DigitalOcean)]
+
+=== /etc/nginx/nginx.conf ===
+The core configuration for Nginx resides in '''/etc/nginx/nginx.conf''' - here is where you will put entries that are designed to be global to all virtual hosts. It is also where you configure how Nginx will use the systems resources.
+
+    user www-data;
+    worker_processes  2;
+    error_log  /var/log/nginx/error.log  info;
+    pid        /var/run/nginx.pid;
+    events {
+        worker_connections  1024;
+    }
+    http {
+        include       mime.types;
+        default_type  application/octet-stream;
+    
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+    
+        access_log        /var/log/nginx/access.log  main;
+        sendfile          on;
+        client_max_body_size 100M;
+        server_tokens     off;
+        keepalive_timeout 65;
+        gzip              on;
+    
+        # Read "Which Cipher List Should I Use?" below to select cipher list
+        ssl_ciphers <insert cipher list>
+        ssl_protocols             TLSv1 TLSv1.1 TLSv1.2;
+        ssl_prefer_server_ciphers on;
+        ssl_session_timeout       5m;
+    
+       # Enable this if your want HSTS (recommended)
+       # add_header Strict-Transport-Security max-age=15768000;
+ 
+       # OCSP Stapling ---
+       # fetch OCSP records from URL in ssl_certificate and cache them
+       ssl_stapling on;
+       ssl_stapling_verify on;
+       ## verify chain of trust of OCSP response using Root CA and Intermediate certs
+       ssl_trusted_certificate /etc/ssl/certs;
+    
+       # use an internal DNS resolver if your behind a firewall, this is Google's DNS server
+       resolver 8.8.8.8;
+    
+        include conf.d/*.conf;
+    }
+
+
+With this as your core config, the remaining items all go into each virtual hosts config, which will be included automatically when you put them in /etc/nginx/conf.d/ and name them as a *.conf file.
+
+=== Which Cipher List should I use? ===
+This list is from the excellent Mozilla Security page https://wiki.mozilla.org/Security/Server_Side_TLS
+
+==== PFS (Perfect Forward Secrecy) ====
+In case you're using *DH* ciphers, you'll need a dhparam file for the [https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange Diffie–Hellman key exchange] step.
+
+    openssl dhparam -rand - 2048 > /etc/nginx/mywebsite.com.dh.pem
+
+and add it to the nginx config, next to the ssl certificate line:
+
+    ssl_dhparam /etc/etc/nginx/mywebsite.com.dh.pem
+
+For details, see the [http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_dhparam nginx documentation].
+
+==== Modern compatibility ====
+For servers that do not need to maintain backwards compatibility and what higher security
+
+    ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK
+
+==== Intermediate compatibility (default) ====
+
+For servers that do not need legacy clients but need to support a wider range of clients
+
+    ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:AES128-GCM-SHA256:AES256-GCM-SHA384:AES128-SHA256:AES256-SHA256:AES128-SHA:AES256-SHA:AES:CAMELLIA:DES-CBC3-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!MD5:!PSK:!aECDH:!EDH-DSS-DES-CBC3-SHA:!EDH-RSA-DES-CBC3-SHA:!KRB5-DES-CBC3-SHA
+
+Here is what the above config contains section by section ('''note''': the best place to grok this is, of course, the [http://wiki.nginx.org/Modules primary docs for Nginx])
+
+* '''user www-data;''' which system user Nginx will switch to when dropping priviledges to run as a daemon - varies by OS, shown is Ubuntu.
+* '''worker_processes 2;''' how many worker threads to create. I consider two to be the minimum and you can increase this if you run on a multiple core server.
+* '''worker_connections 1024;''' the maximum number of sockets each worker process is allowed to handle. Make sure this value and the '''worker_processes''' value is less than the open files setting for your system.
+* '''client_max_body_size 100M;''' sets the maximum post body size, set to some large value if you are expecting to handle photo or video uploads.
+* '''server_tokens off;''' this prevents Nginx from leaking information about it's version.
+* '''ssl_ciphers''' The list of SSL Ciphers shown is selected to offer a balance of good client support but to also enable Perfect Forward Secrecy.  For a lot more detail please read [https://community.qualys.com/blogs/securitylabs/2013/06/25/ssl-labs-deploying-forward-secrecy SSL Labs article on deploying forward secrecy].
+* '''ssl_protocols''' The order Nginx should look for when negotiating the secure link.
+* '''ssl_prefer_server_ciphers''' Do not allow the client to dictate which ciphers will be used - there lies madness as you will almost always end up in lowest-common-denominator land *shudder*.
+
+=== static site example ===
+For example, a basic static site with zero extra processing, would have as part of '''/etc/nginx/conf.d/example.com.conf''':
+
+    server {
+        listen      80;
+        server_name example.com;
+        root        /srv/example;
+        access_log  /var/log/nginx/example.log main;
+    
+        include conf.d/redirects.txt;
+    
+        location / {
+            try_files $uri $uri.html $uri/ =404;
+        }
+    }
+
+* '''listen 80;''' tells Nginx to open port 80 for requests.
+* '''server_name example.com;''' if the client making the connection on port 80 is looking for http://example.com, then use this server config to answer the request.
+* '''root /srv/exampe;''' where Nginx should look for static files by default. This can (and is often) overridden in the various *location* entries.
+* "include conf.d/redirects.txt" when you have a static site you are removing one of the few benefits that a dynamic site has, the ability to adjust url routing. To solve this we need to include a file in our config and then tell the webserver to reload when new items are added.
+** redirects.txt sample: "rewrite ^/old/url/*$ https://example.com/new/url permanent;
+* '''location /''' if the path portion of the requested URI matches the given text string, then handle the request using the config inside of this '''location''' block.
+* '''try_files''' Nginx will try and handle the given request (as modified by any '''location''' rewrite rules, in the order given. Our example above says the following until it finds a file that matches:
+** try the URI as given by looking for the file after pre-pending the root path
+** try the URI as given but append '''.html''' to the filename
+** try the URI as given but append '''/''' so that it will search inside of any matching subdirectories
+** and as the last resort, return the 404 status code
+
+=== static site with SSL termination ===
+
+    server {
+        listen       80;
+        server_name  example.com;
+        rewrite      ^ <nowiki>https://$server_name$request_uri</nowiki>? permanent;
+    }
+    server {
+        listen       443 default_server ssl;
+        server_name  example.com;
+        root         /srv/example.com;
+    
+        access_log   /var/log/nginx/example.com.log main;
+    
+        ssl_certificate     /etc/nginx/ssl/example.com.crt;
+        ssl_certificate_key /etc/nginx/ssl/example.com.key;
+        add_header Strict-Transport-Security max-age=15768000;
+        location / {
+            try_files $uri $uri.html $uri/ =404;
+        }
+    }
+
+=== nginx 1.9.5+ ===
+[http://nginx.org/en/CHANGES Nginx includes HTTP2 support from version 1.9.5]. If it's enabled for the build, you can use the following:
+
+    server {
+        listen       80;
+        server_name  example.com;
+        rewrite      ^ <nowiki>https://$server_name$request_uri</nowiki>? permanent;
+    }
+    server {
+        listen       443 default_server ssl http2;
+        server_name  example.com;
+        root         /srv/example.com;
+    
+        access_log   /var/log/nginx/example.com.log main;
+    
+        ssl_certificate     /etc/nginx/ssl/example.com.crt;
+        ssl_certificate_key /etc/nginx/ssl/example.com.key;
+        add_header Strict-Transport-Security max-age=15768000;
+        location / {
+            try_files $uri $uri.html $uri/ =404;
+        }
+    }
+
+=== Using PHP with nginx ===
+When using PHP with apache, PHP gets compiled as the apache module mod_php. nginx doesn't do things the same way. So we must take advantage of the fastcgi module built into PHP, namely php5-fpm. Once that's installed we can use it in nginx like so:
+
+<pre>
+server {
+    listen 80;
+    server_name example.org;
+
+    root /path/to/website/files;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ index.php?$query_string;
+    }
+
+    location ~* \.php {
+        fastcgi_pass 127.0.0.1:9000;
+        //or fastcgi_pass unix:/path/to/php5-fpm.sock
+        fastcgi_index index.php;
+        include /path/to/nginx/fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+    }
+}
+</pre>
+
+=== Using uWSGI with Ngnix ===
+
+This is how I ({{kylewm}}) configured nginx to proxy to uWSGI (which in turn runs my [[Python]]/Flask application). nginx serves resources under /static directly.
+
+<pre>
+server {
+    listen       80;
+    server_name  kylewm.com;
+    access_log /srv/www/redwind/logs/access.log;
+    error_log /srv/www/redwind/logs/error.log;
+    client_max_body_size 10M;
+
+    location / { try_files $uri @redwind; }
+    location @redwind {
+      include uwsgi_params;
+      uwsgi_pass unix:/tmp/uwsgi.sock;
+    }
+    location /static {
+      root /home/kmahan/redwind/redwind;
+      expires 30d;
+    }
+}
+</pre>
+
+And here is the uWSGI configuration to launch the application (communicates with nginx via /tmp/uwsgi.sock)
+
+<pre>
+[uwsgi]
+master=true
+processes=4
+threads=2
+socket=/tmp/uwsgi.sock
+chmod-socket=666
+spooler=spool
+module=redwind:app
+pidfile=/tmp/redwind.pid
+daemonize=uwsgi.log
+</pre>
+
+
+=== Using Rails with a Nginx cache ===
+
+Just a brain dump, perhaps it will be usefull for others too. About a year ago I ([[User:Jeena.net|Jeena]]) got on the HackerNews frontpage which put my server down for a couple of hours (load of 24 and more) and I couldn't do anything to get it up again until it was gone from the front page. After That I tried to fix it and configured a cache layer which is build in into Nginx. Today I hit the HN again and now after one hour on it the load is in between 0.3 and 1.0. It looks like the cache helps a lot. But I have to add that we also got a more powerful server which could also account for some of the success.
+
+This is my cleaned up configuration (I have other stuff in it like ssl/php/owncloud, etc.) I marked the three lines which I think are the important ones with a #* at the end of the line.
+
+<pre>
+proxy_cache_path /var/lib/nginx/cache/example.net keys_zone=examplenet:30m; #*
+
+upstream example_net {
+        server unix:///home/example/example.net/tmp/example_net.sock;
+}
+
+server {
+        server_name example.net www.example.net;
+        root /home/example/example.net/public/;
+
+        access_log /var/log/nginx/example.net-access.log;
+        error_log /var/log/nginx/example.net-error.log;
+
+        merge_slashes off;
+        
+        location ~* ^/assets/ {
+            # Per RFC2616 - 1 year maximum expiry
+            # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
+            expires 1y;
+            add_header Cache-Control public;
+
+            # Some browsers still send conditional-GET requests if there's a
+            # Last-Modified header or an ETag header even if they haven't
+            # reached the expiry date sent in the Expires header.
+            add_header Last-Modified "";
+            add_header ETag "";
+            break;
+        }
+        
+        location / {
+                try_files $uri $uri @rails; #*
+                expires max;
+                access_log off;
+        }
+        
+        location @rails {
+
+                proxy_pass http://example_net;
+                proxy_next_upstream error timeout invalid_header http_500 http_502 http_503;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto https;
+                proxy_redirect off;
+                proxy_cache examplenet; #*
+        }
+}
+</pre>
+
+=== Serve files without extensions ===
+AKA: How do I get HTML files served without the .html extension in the URL?
+
+The '''try_files''' example in the '''static site example''' shows how nginx can be told how to look for the requested resource - specifically the '''$uri.html''' part.
+
+=== Proxy WebSockets ===
+
+Proxying [[websockets]] through nginx makes it easy to support [[https]] connections (if the server is already configured for https, secure websockets will just work). It is also a convenient way to collect multiple server processes so they all serve over the same public port.
+
+This snippet will proxy a service running on localhost:8077 to the path /_updates. By default nginx will close the connection after a short idle period; the very long read timeout (1 day) prevents this from happening.
+
+<pre><nowiki>
+    location /_updates {    
+        proxy_pass http://localhost:8077;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 86400s;
+    }
+</nowiki></pre>
+
+===Serve HTTPS more securely===
+See [[User:Jonnybarnes.uk|Jonny]]’s blog-post for more information: https://jonnybarnes.uk/blog/2015/04/hardening-https-with-nginx
+
+== Silo Examples ==
+=== Instagram ===
+[[Instagram]] uses nginx to serve the frames that constitute the majority of their "native iOS app" content and interface, as demonstrated by this nginx default error message:
+
+[[Image:2014-234-instagram-502-nginx.jpg|150px|thumb]]
+
+== FAQ ==
+If you have a <span id="Frequently_Asked_Questions_and_issues">question</span> about nginx or are having an issue with it, feel free to add it here with a === heading === and hopefully one of the nginx experts in the community will answer it and we can start an FAQ!
+
+=== What is POODLE ===
+
+The POODLE attack (which stands for "Padding Oracle On Downgraded Legacy Encryption") is a man-in-the-middle exploit which takes advantage of Internet and security software clients' fallback to SSL 3.0 - see https://en.wikipedia.org/wiki/POODLE
+
+=== What is HeartBleed ===
+
+Heartbleed is a security bug disclosed in April 2014 in the OpenSSL cryptography library, which is a widely used implementation of the Transport Layer Security (TLS) protocol. Heartbleed may be exploited regardless of whether the party using a vulnerable OpenSSL instance for TLS is a server or a client. - see https://en.wikipedia.org/wiki/Heartbleed
+
+=== ... add an FAQ here ... ===
+
+== See Also ==
+* [[Apache]]
+* [[https]]
+* [[projects]]

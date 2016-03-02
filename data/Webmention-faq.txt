@@ -1,0 +1,117 @@
+http://indiewebcamp.com/Webmention-faq
+
+The '''<dfn>Webmention FAQ</dfn>''' is for documenting frequently asked questions about [[Webmention]] and their answers. Infrequently asked questions may be collected in resolved [[Webmention#Issues|Issues]].
+
+== FAQ ==
+=== What is the canonical URL for the Webmention spec ===
+Webmention, the living specification, is developed at https://indiewebcamp.com/Webmention. Periodic stable updates are published at http://webmention.net. You may use webmention.net as a canonical reference.
+
+=== Why webmention instead of pingback ===
+
+Webmentions are:
+* '''Simpler'''. By dropping XML-RPC, webmention is simpler than Pingback. This means:
+** '''Less work to implement'''
+** '''Easier to test'''
+** Both of which combine to enable '''more reliable, interoperable implementations, sooner'''.
+* '''Re-using only HTTP enables easier testing and UI'''. By using only HTTP, it's possible to construct '''simple HTML forms that exercise the protocol''', which is a good design principle for web protocols in general[http://tantek.com/2013/258/t2/web-protocols-should-use-http-params-no-xml]. This enables simpler/easier testing (with just a static HTML file), and the ability to provide simple (no JS needed) webmention submit forms on blog posts for others to paste URLs to their replies (some IndieWeb participants are already doing this, e.g. http://adactio.com/ and http://aaronparecki.com/ posts).
+
+=== Why webmention instead of Trackback ===
+{{main|Trackback}}
+* Trackback, lacking link verification, is more easily and heavily spammed
+* Plus all the reasons [[webmention#Why|why]] webmention instead of pingback
+
+=== Which links should receive webmentions ===
+Which links in a [[post]] should receive webmentions?
+
+Webmentions should be sent to all URLs a post can be considered to mention — this includes
+* [[in-reply-to]] URL(s)
+* [[rsvp]] URLs
+* URLs linked to in the content, including URLs of people mentioned
+
+What do existing implementations do?
+
+* I send [[pingback]]s (webmentions coming soon) to the in-reply-to URL if set, and all URLs in the post content field. --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 09:14, 10 April 2013 (PDT)
+
+=== Should webmentions be sent for links to static assets ===
+Should webmentions be sent for links to static asset URLs e.g. images, audio?
+
+What do existing implementations do?
+
+* [[Taproot]] sends webmentions to all URLs in a post without discriminating by type of link --[[User:Waterpigs.co.uk|Barnaby Walters]] 09:01, 26 November 2013 (PST)
+* [[Stapibas]] sends linkbacks to all URLs, independent of their type -- [[User:Cweiske]]
+
+=== Should webmentions be sent for embeds ===
+Should webmentions be sent for resources embedded in a post like the URLs in "src" and "data" attributes?
+* &lt;audio src&gt;
+* &lt;embed src&gt;
+* &lt;iframe src&gt;
+* &lt;img src&gt;
+* &lt;object data&gt;
+* &lt;source src&gt;
+* &lt;video src&gt;
+* ... others?
+
+And what about "srcset"? Is anyone on the indieweb even bothering to publish with srcset?
+
+What would the receiver of a webmention for an embed do with that notification?
+
+===Should webmentions be sent for removals ===
+{{main|deleted}}
+* If the source post is edited to remove a link to the target, should a webmention be sent to the target to inform them of the removal of the mention?
+** [[http://kartikprabhu.com kartikprabhu.com]] sends webmentions to links that are removed while editing an article.
+* Do any implementations for receiving webmentions do anything with such a webmention POST?
+** [[http://kartikprabhu.com kartikprabhu.com]] deletes the existing mention-response from database, if it receives a mention where the source no longer links to target.
+
+===How does this solve the spam problem===
+How does this solve the spam problem that plagued Trackback and Pingback? 
+
+[[Trackback]] was particularly susceptible to [[spam]] since the URL and content of the comment was sent in the payload. 
+
+[[Pingback]] improved on this by making the "ping" only contain the URL of the comment, so that the link could be verified.
+
+[[Webmention]] is a simplification of Pingback, so by itself does not provide any new anti-spam measures.
+
+Instead, [[spam]] is treated as its own issue, with several possible solutions being documented on the [[spam#Spam_Prevention|Spam Prevention]] page, including most recently, the [[Vouch]] protocol.
+
+In practice, [[Webmention]] receivers look for specific [[h-entry]] markup to render [[comments]], [[likes]], [[reposts]], and other [[responses]], which all add a minor barrier (for now) for spammers above and beyond Pingback.
+
+We expect that as Webmention grows in popularity, implementers will need to implement:
+* The '''[[Vouch]]''' extension to Webmention
+
+=== POSSE or Send Webmentions First ===
+Should an indieweb publisher [[POSSE]] first, or send webmentions first?
+
+It is '''better to POSSE a post first''', and then send webmentions for all links in a post, for two reasons:
+
+# '''Easier de-duplication at the receiver'''. By sending webmentions after POSSEing and adding <code>u-syndication</code> links on your post to the POSSE copies, the webmention receiver(s) will see those <code>u-syndication</code> links and be able to use them immediately to de-duplicate any proxy webmentions it may have received due to your POSSE copies. The opposite order is harder to de-dupe since it requires [[original-post-discovery]] which is more work than simply getting u-syndication links from parsing the [[h-entry]].
+# '''POSSE reply threading'''. When indie A replies to indie B and sends B a webmention, when B goes to reply back to A, if B's copy of A's post already knows the Ap POSSE copy, then B can immediately reply back both to A, and POSSE reply thread their Bp POSSE copy to Ap.
+
+Reference: [http://indiewebcamp.com/irc/2015-05-28#t1432854959848 2015-05-28 IRC discussion/background]
+
+=== Why is the target URL a required parameter ===
+
+Technically, the "target" parameter does not add any semantics to the webmention request. Without the target parameter, the webmention request means essentially the same thing, which is indicating the source URL may be of interest to the webmention endpoint.
+
+By including the "target" parameter in the webmention request, it makes verifying the webmention easier for the recipient, since they have an exact string to look for on the source page. With the target parameter, the receiver searches for an exact match. Without the target parameter, the receiver doesn't know exactly what to look for, and would have to look for any link matching the receiver's domain, adding complexity to the verification code. 
+
+Additionally, since the receiver also [[webmention#must_follow_redirects|must follow redirects]] on the target URL, expecting the receiver to follow redirects for ''all URLs on a page'' is unreasonable. Having a single URL to follow is much simpler.
+
+Since it's no extra burden on the sender to include the target parameter, and makes verification easier for the receiver, including the target parameter is required in the spec.
+
+Also, a webmention endpoint may handle multiple possible target sites, as webmention.herokuapp.com does, for example, so can't make an a priori choice about which domain to check the source for links to.
+
+Issue: "Possible" handling of multiple target sites is at best a feature of a Webmention endpoint. It is not documented or even expected in the current Webmention recommendation. -- 07:42, 26 July 2015 (PDT) {{csarven}}
+* Similar to the reason we have a webmention endpoint in the first place (rather than having the URL handle webmentions itself), we prefer to design protocols that don't limit the implementation details. Having the '''ability''' for an endpoint to handle multiple domains is a good thing, and we should not design the protocol where that is impossible. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 08:01, 26 July 2015 (PDT)
+
+=== How does Webmention scale ===
+Because it is peer-to-peer, Webmention scales naturally with the web, in contrast to centralized update methods such as pinging a central ping server which quickly gets overloaded, or having to consume a firehose of all updates (e.g. the twitter firehose) which becomes too big a burden.
+
+=== What if multiple webmention endpoints are discovered ===
+(or, what if I want people to send me webmentions to multiple endpoints)
+
+Senders are expected to only send the webmention to the first endpoint they discover. This is to avoid a situation where a web page can advertise a large number of endpoints and require the sender make an unreasonable number of requests to deliver the webmentions.
+
+If a receiver wants to use multiple webmention endpoints (for example, if one endpoint exists to send notifications, and another exists to archive the source documents, and another exists to collect a backup copy of comments), it should set up a single endpoint and forward a copy of incoming mentions to the other endpoints. In the real world, the only way a receiver can guarantee its multiple endpoints will receive mentions is if it sends them itself, since even if the spec says senders should send to all advertised endpoints, there is no way to guarantee the sender will actually do so.
+
+== See Also ==
+* [[Webmention]]

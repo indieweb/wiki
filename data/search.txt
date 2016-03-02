@@ -1,0 +1,189 @@
+http://indiewebcamp.com/search
+
+<span style="float:right;height:128px;font-size:128px;margin:0 0 -64px">🔍</span>
+
+{{stub}}
+
+'''<dfn>search</dfn>''' in the context of the IndieWeb refers to being able to search your personal site for your own content. Personal site searchability is a requirement for [[IndieMark]] Level 1.
+
+== Why ==
+Why should your site be searchable? 
+* You want your independently created and owned content to be found and preferably above and beyond content on [[silos]].
+
+Why should your site have a search UI?
+* Convenient indieweb site search is a very commonly requested feature by readers / users of indieweb sites. 
+* They don't want to have to think to go to Google (and take the extra steps) to search your site. 
+* Make it easy for your friends that read your site to find stuff there by having a simple search box in the top right of every page (common UI convention) that allows the user to type something in and perform a search on your site. You can of course use 3rd party search engine to do this, even returning results directly from them. E.g. using a Google search box on your site.
+
+== How ==
+How to implement search on your site.
+
+=== searchability - level 1 ===
+Make sure your site is at least searchable (IndieMark search level 1). This means:
+* '''allow robots to index'''. Permissive or no robots.txt. Either don't have /robots.txt (easiest), or if you have one, it MUST allow search engines to index public posts on your site.
+* '''post content in HTML'''. Your post content MUST be in the visible HTML of the page retrieved from your post permalink. No depending on [[Javascript]] to render your post content - if you can't <kbd>curl</kbd> it, it's not on the web.
+* '''site-specific searchability'''. Be able to use "site:yoursite.example.com search-term" in [[Google]] and other search engines (that support site-specific searches) directly to find and display your posts in search results.
+
+=== search box - level 2 ===
+Add a simple search box to your site using a static form that submits to a search engine to provide time ordered (most recent first) results! (IndieMark search level 2)
+
+ E.g.<pre><nowiki>
+<form class="search" action="http://www.google.com/search" method="get">
+<input type="hidden" name="as_sitesearch" value="tantek.com"/>
+<input type="hidden" name="tbs" value="sbd:1,cdr:1,cd_min:1/1/1970"/>
+<input type="search" name="q"/>
+<button type="submit">Search</button>
+</form>
+</nowiki></pre>
+
+And change '''tantek.com''' to your personal site name!  This HTML has been [[selfdogfood]] tested live since [http://tantek.com/2012/188/t1/real-time-most-recent-first-search-push-indieweb-falcon 2012-07-06].
+
+Search form styling is left as an exercise for the creator.
+
+=== site search with 3rd party backend - level 3 ===
+Search where your site uses a 3rd party search service (e.g. Google), but still provides the results on your own domain. (IndieMark search level 3)
+
+How to TBD.
+
+==== Third Party Search Services ====
+* [https://www.google.com/cse Google Custom Search Engine]
+* [https://duckduckgo.com/search_box DuckDuckGo Search Box]
+* [https://swiftype.com/ Swiftype]
+* [http://tapirgo.com/ Tapir]
+
+=== site search with site backend - level 4 ===
+Search where your site handles all the indexing and search queries. (IndieMark search level 4)
+
+How to TBD.
+
+==== Software ====
+* [http://www.gigablast.com/ gigablast], C++
+* [http://www.opensearchserver.com/ OpenSearchServer], Java
+* [http://www.openwebspider.org/ OpenWebSpider], C#
+* [http://regain.sourceforge.net/ regain], Java,
+* [http://www.sphider.eu/ sphider], PHP
+* [http://git.cweiske.de/phinde.git phinde], PHP
+* [http://www.tsep.info/ TSEP] The Search Engine Project, PHP
+
+=== client side search ===
+Possible level 5.
+
+How to TBD.
+
+Start with: http://lunrjs.com/
+I.e.:
+* Background XHR your recent content storage files to the client
+* Feed them in structured form to lunr.js to build an index
+* Enhance your search box / form with JS to do it all clientside if you have a lunr.js search index available
+
+== IndieWeb Examples ==
+IndieWeb sites that have search interfaces.
+=== Tantek ===
+{{t}} has had a search interface on his site [http://tantek.com/ tantek.com] since [http://tantek.com/2012/188/t1/real-time-most-recent-first-search-push-indieweb-falcon 2012-07-06] which uses a simple static form that submits to Google search ([[indiemark#search|IndieMark search]] level 2).
+
+=== Aaron Parecki ===
+{{aaronpk}} has had a search interface on his site [http://aaronparecki.com/ aaronparecki.com] since 2012-07 which uses a simple static form that submits to Google search scoped to the website and with query parameters that indicate to Google to return posts in reverse date order ([[indiemark#search|IndieMark search]] level 2).
+
+=== Ben Werdmuller ===
+{{benwerd}} has had a search interface on his site [http://werd.io/ werd.io] since (2013-06-20) which uses his own site's backend ([[MongoDB]] in particular). ([[indiemark#search|IndieMark search]] level 4).
+
+=== Barnaby Walters ===
+{{barnabywalters}} added a simple static search form (based on Tantek’s code) to [http://waterpigs.co.uk waterpigs.co.uk] on 2014-02-24 which submits to a site-scoped Google search ([[indiemark#search|IndieMark search]] level 2).
+
+Also experimenting with local search engine which indexes the archive of all the pages I’ve linked to as well as [[mentions]] of my own pages using [[Elasticsearch]].
+
+UI as of 2014-03-01, showing authorship information, page name, excerpt, URL:
+http://waterpigs.co.uk/img/2014-03-01-indie-search-halsway.png
+
+=== Dan Lyke ===
+
+{{danlyke}} has had [http://www.flutterby.com/archives/comments/3477.html locally hosted search since March of 2001], and currently has a simple search which uses his PostgreSQL back-end text indexes, and does some ordering of search results based on phrases, and "+" and "-" to require and exclude. ([[indiemark#search|IndieMark search]] level 4).
+
+Since I'm scanning various other sites for inbound links, I'd like to, at some point, index those other sites as well for additional search options.
+
+=== Emma Kuo ===
+{{emmak}} has implemented (since at least 2014-07-18) native search (level 4) on http://notenoughneon.com/ to find text matches in the filestore. Search results show a snippet of the relevant post, with matches highlighted.
+
+=== Ben Roberts ===
+{{benthatmustbeme}} has a search box on his site since [https://github.com/dissolve/postly/commit/ca8f9718a191359e525ab7d70eff538bda463f05 2014-09-30] which simply submits to Google search ([[indiemark#search|IndieMark search]] level 2) ordered by most recent post.
+
+=== Kyle Mahan ===
+{{kylewm}} previously had local search backed by Postgres full text matching (@@ operator) on 2015-01-16. Posts were presented as a standard h-feed, but I'd wanted to style them more like "search results" (and have more results per page) in the future.
+
+In 2016-01, I converted my site to [[Known]], which uses MySQL full text search by default.
+
+=== Christian Weiske ===
+[[File:phinde_search_indieweb.png|300px|thumb|right]]
+{{cweiske}} wrote his own generic search engine ''phinde'' that powers his blog search since 2016-02-05. The search engine is running on http://search.cweiske.de/ and supports site-specific search.
+Indie search level 4.
+
+''phinde'' supports faceted browsing on tags, domain, language and file type. It indexes not only the blog but all linked URLs.
+Crawling, indexing and the HTML frontend are written in PHP, data storage and searching is dona in ElasticSearch.
+
+The search form is available on the [http://cweiske.de/tagebuch/ blog index] and [http://cweiske.de/tagebuch/tag/indieweb tag index] pages, as well on [http://cweiske.de/tagebuch/gimp-remove-watermark-lines.htm single blog posts].
+
+== Design ==
+If in doubt: copy Google.
+
+=== Search UI ===
+To start with, no need for anything more than a single-line text box and “Search” button — keep things focused.
+
+=== Indexing ===
+Due to widespread use of [[microformats]] on the indieweb, each page being indexed is rich in semantics which can be indexed e.g. explicit name, publication datetime [[authorship]] information, relations like [[in-reply-to]], representative image, etc.
+
+Some properties can be faked if microformats markup isn’t present:
+* '''name''' can be substituted with the contents of the <code>title</code> element
+
+Many semantics similar to microformats ones can be found in invisible metadata like OGP meta elements — whether or not it can be trusted or gives a better search experience requires further experimentation.
+
+To get the best results a plaintext representation of each page should be indexed. In lieu of a HTML to Plaintext algorithm, some steps to follow include:
+* Remove the <code>head</code> element from the page
+* Remove any other <code>script</code>, <code>style</code> elements from the page
+* Replace embedded content (e.g. images, videos, audio) with it’s text-based accessible fallback e.g. <code>alt</code> attribute for images
+* …
+
+=== Result Display ===
+Results should be displayed in order of relevance by default. Having the option to order search results by datetime might also be useful.
+
+Each result should form a block with clear visual thingness separating it from other results. A click anywhere on the block should navigate immediately to the search result URL, which should be shown in it’s entirety at the bottom of the block.
+* the only reason I can think of to ''not'' navigate immediately, i.e. navigate via an intermediate redirect is to check whether or not the page exists and show an archived copy instead. Perhaps that checking is better left to a browser extension which acts only on a 404 --[[User:Waterpigs.co.uk|Barnaby Walters]] 09:51, 28 February 2014 (PST)
+
+
+== Brainstorming ==
+=== Faceted scoped search ===
+Beyond raw searching of the contents of your site, it may also be useful to index and be able to search within:
+* a time window (from/to dates/times)
+* a geography (location proximity, within an area / polygon)
+* person mentions
+
+=== Site plus links search ===
+Beyond searching just the contents of what you publish on your own indieweb site, it may be useful to *also* index:
+* every page that you link to in your posts
+And then provide results from those as well as your own site.
+
+=== Site plus linked sites ===
+Beyond searching just the contents of what you publish on your own indieweb site, it may be useful to *also* index:
+* every '''site''' of pages that you link to in your posts, perhaps using [[PuSH]] discovery for those sites.
+And then provide results from those as well as your own site.
+
+=== Social search ===
+Beyond searching just the contents of what you publish on your own indieweb site, it may be useful to *also* index:
+* every '''indieweb site''' of any person you mention 
+** in your posts
+** sidebar
+** friends lists
+** etc. anywhere on your site.
+* every site you follow in your indie [[reader]]
+And then provide results from their sites as well as your own site.
+
+=== More brainstorms ===
+See additional brainstorms at:
+* http://p.cweiske.de/118
+
+== See Also ==
+* [[Getting Started]]
+* [[IndieMark]]
+* [[reader]]
+
+Search related sessions at past IndieWebCamps:
+* [[2012/Open Real Time Search Engine]]

@@ -1,0 +1,83 @@
+http://indiewebcamp.com/Foursquare
+
+{{pagelogo|https://pbs.twimg.com/profile_images/558713009053257729/LA-bC1JY_400x400.png}}
+{{stub}}
+
+'''<dfn>[http://foursquare.com Foursquare]</dfn>''' is a location-based [[checkin]] [[silo]] that allows posting a [[photo]] and/or a [[note]] along with a checkin, as well as creating and sharing lists of venues. 
+
+== Checkins ==
+* Checkins can optionally contain photos or notes.
+* Photos and notes (as [[comments]]) can also be added to existing checkins. 
+* Only the author of the checkin may add photos, but any of their friends may add comments.
+* Foursquare provides a [[web hook]] that can run every time a user checks in. [https://developer.foursquare.com/overview/realtime]
+
+== Lists ==
+Foursquare supports creating and sharing lists of venues. By default, Foursquare starts you off with a "to-do" list. It is possible to create lists with any name, so there are many examples of lists of favorite places, collecting places to visit in another city, or lists of places that have something in common.
+
+* [https://foursquare.com/aaronpk/list/mustvisit-bars-in-portland "Must-visit bars in Portland"]
+* [https://foursquare.com/aaronpk/list/bars-to-work-from-in-the-kerns-neighborhood "Bars to work from in the Kerns neighborhood"]
+* [https://foursquare.com/aaronpk/list/berlin Berlin]
+
+
+== Limitations ==
+Checkin notes have a length limitation of 200 characters.
+
+== Export ==
+Foursquare has feed files and an API that can be used for export.
+
+=== How To ===
+==== Feeds ====
+Foursquare provides feed files of all your checkins in multiple formats: RSS, KML and ICS.
+* https://foursquare.com/feeds/ when logged in will show customized feed URLs that use special tokens for access (do not share them)
+
+==== API ====
+# Set up a Foursquare Developer account at https://developer.foursquare.com/
+# Either write your own script or use [https://github.com/mko/mowens.com-public/blob/master/scripts/foursquare-to-file.js the one] {{mko}} wrote to extract all of your Foursquare data to your local file system. The script works by connecting to Foursquare, counting how many checkins you have to determine the total number of pages of data it needs to download, and then it makes periodic calls to the Foursquare API to download the files to your local machine or server, staying within the Foursquare rate limits.
+# Convert your Foursquare API JSON files into h-entry h-as-checkin files by writing a second script to construct meaningful HTML representations of the checkins. [https://github.com/mko/mowens.com-public/blob/master/scripts/foursquare-file-to-hentry.js The script mko wrote] will handle most of the conversion from a Foursquare JSON object to a h-entry JSON object. Since he uses [[Indie.js]], the script has a decent amount of data relevant only to his purposes at this time, but it would not be difficult to convert the script into a generic converter if needed.
+
+Examples:
+* {{mko}} has exported all his Foursquare checkins, and has also <blockquote> imported all of my posted photos, likes, and comments, though the likes and comments haven't been converted into IndieWeb mentions yet.</blockquote>
+
+== POSSE ==
+=== Ben Werdmuller ===
+{{benwerd}} has been [[POSSE]]ing his checkins using [[idno]] (now Known) on werd.io to Foursquare since 2013(??). Examples:
+* ... first check-in on werd.io that POSSEd to Foursquare?
+
+=== Michael Owens ===
+{{mko}} has been [[POSSE]]ing his checkins to Foursquare since 2014-??-??.
+<blockquote>If I check in via my site, it'll check me in via Foursquare and ignore the push response for the checkin (so I don't get duplicate checkins).</blockquote>
+
+Michael also supports [[PESOS]] from Foursquare: <blockquote>I've got a push endpoint on my site, so anytime I check-in on Foursquare through the app, it'll check me in via my site as well. </blockquote>
+
+== Event support ==
+Foursquare does some amount of tracking of what events are happening at venues in their venue database.
+
+Thus part of their UI provides the user of optionally also checking into a specific [[event]] at a [[venue]], e.g. a particular showing of a movie at a movie theater, or a concert at a music hall.
+
+The result is that others seeing your checkin see that you also checked in at a specific event at the venue, e.g.:
+
+[[File:foursquare-event-screenshot.png|320px]]
+
+== API ==
+Foursquare has an [[API]] and if you use [[venue]] information from it, you must provide attribution/linking.
+* https://developer.foursquare.com/overview/attribution
+
+See also analysis of the Foursquare API by Social Web WG:
+* https://www.w3.org/wiki/Socialwg/Social_API/Foursquare_API
+
+== Venue claiming ==
+Foursquare provides the ability for someone officially associated with a venue to "claim" that venue which then gives that person more authority over the venue, including the ability to associate events with the venue (as documented above)
+
+See also:
+* http://www.slideshare.net/OkimoClinic/how-to-create-an-event-on-foursquare
+
+In short:
+* someone from the venue has to go to https://foursquare.com/venue/claim
+* and claim it as a venue they manage
+* they make you give a phone number to "receive a call to verify your claim". The call asks you to record a sentence stating your name and relationship to the venue. The call appears to not be manually screened, but presumably is archived.
+* they'll either mail you a postcard, or you can pay $1-20 (depending on city) with a credit card to "verify" it
+
+== See Also ==
+* [[location]]
+* [[geo]]
+* [[checkin]]

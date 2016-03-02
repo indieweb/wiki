@@ -1,0 +1,228 @@
+http://indiewebcamp.com/reply-context
+
+A '''<dfn>reply context</dfn>''' is the display of what a [[reply]] post is in reply to, including linking to that original post with [[in-reply-to]] markup, showing some amount of that original post like author name, icon, summary / ellipsed content, and datetime published.
+
+Reply contexts became more important when replies started to have their own top level permalinks, which appears to have been popularized by [[Twitter]] treating @-replies like any other tweet. Twitter started by displaying the immediate reply-context of what an @-reply was in reply to, but eventually started recursively displaying reply-contexts on up to the tweet at the start of a thread.
+
+== Why ==
+Why show reply contexts?
+
+* '''reader understanding'''. They provide readers the context of what's being replied. Better user experience through increased comprehension from the provided context.
+* '''completeness of your reply'''. Storing a reply context ensures that your copy of your content is always the most complete. The very nature of a reply is that it makes little sense out of context, and if you don’t store and show that context then the canonical copy is less valuable than any copies syndicated out and shown by the replied-to article.
+* '''temporal context'''. Storing a reply context freezes the content you’re replying to in time, meaning that if it goes away or changes, you still have a copy of the original content you replied to.
+** Take, for (contrived) example, a reply agreeing with an anti-war article. A month later the replied-to domain gets bought by a pro-war organisation and all the content on the site is changed to reflect that. By storing a reply context you protect your intent from misunderstandings.
+
+== How to ==
+=== Display ===
+'''How should reply contexts be displayed?'''
+
+For general guidance on primarily textual reply-context presentation best practices, see
+* [[reply-context-examples#Indieweb_Examples]]
+
+==== reply to a photo ====
+How to reply to a photo, see this real world photo reply-context example:
+* https://kylewm.com/2014/05/i-used-to-live-in-bernal-heights-when-i-lived-in-the-city-looks-like
+
+And brainstorming:
+* [[reply-context-examples#reply_to_a_photo]]
+
+=== Markup ===
+'''How should reply contexts be marked up?'''
+
+For consistency with [[comment-presentation#How_to_markup|comment markup]], reply contexts should be marked up as an embedded [[h-cite]] in a .u-in-reply-to so that it’s a nested microformat property of the parent ([http://waterpigs.co.uk/notes/4QfGbM/ example]). Like this:
+
+<pre><nowiki>
+<div class="h-entry">
+ <div class="p-in-reply-to h-cite">
+  <p class="p-author h-card">Emily Smith</p>
+  <p class="p-content">Blah blah blah blah</p>
+  <a class="u-url" href="permalink"><time class="dt-published">YYYY-MM-DD</time></a>
+  <p>Accessed on: <time class="dt-accessed">YYYY-MM-DD</time></p>
+ </div>
+ 
+ <p class="p-author h-card">James Bloggs</p>
+ <p class="e-content">Ha ha ha too right emily</p>
+</div>
+</nowiki></pre>
+
+
+'''Why mark up reply contexts?'''
+
+* Allows feed readers/conversation viewers/other microformats consumers to provide a better UX. E.G. a feed reader can parse a reply with a marked-up reply-context and use that data to show what the reply is commenting on without having to make another request, or as a temporary preview whilst it’s loading the original content.
+
+'''Why use h-cite instead of h-entry for reply contexts?'''
+
+* Because it's more precise. Your reply-contexts are citations of someone else's work, not an attempt to propagate (syndicate) their work.
+
+'''Why not use h-entry in addition?'''
+
+* Because h-entry implies syndication semantics, which are not what a reply-context is showing/conveying.
+
+== Levels ==
+There is a broad spectrum of reply-context presentation that can be roughly ordered in terms of fidelity and difficulty, from simplest/easiest to richest (silo-parity) and most challenging.
+=== URL ===
+Since a reply has to be [[in-reply-to]] to <em>something</em> (a URL), the simplest reply context is to simply show the URL (hyperlinked of course) of the original with perhaps a text label like:
+<blockquote>In reply to: hyperlinked-URL-of-original</blockquote>
+IndieWeb Examples of URL-only :
+* ... {{t}} does this ... example on [[reply-context-examples]]
+* ...
+
+=== icon ===
+The next easiest thing to add is the icon (or avatar) of the author of the original post. 
+
+For example, replies to tweets can retrieve the icon purely by inspecting the URL for the first path segment for the Twitter username, and then embedding a dynamic image redirect URL, e.g.  https://twitter.com/benwerd/profile_image: https://twitter.com/benwerd/profile_image?x=.jpg See [[Twitter#Profile_Image_URLs|Twitter: Profile Image URLs]] for details.
+
+Replies to indieweb posts can retrieve the icon from a [[nicknames-cache]].
+
+IndieWeb Examples of icon plus URL:
+* none so far
+
+=== author name ===
+Next, you can sometimes determine the author's name from a [[nicknames-cache]].
+
+Determining the author's name and their icon (more broadly/reliably than above), requires implementing the [[authorship]] algorithm on the original post, which requires more work than just parsing it for its h-entry as above.
+
+IndieWeb Examples of icon URL dt-published and author name:
+* none so far
+
+=== published ===
+The original's published date is the next interesting (and slightly harder) thing to retrieve and display in a reply-context. With this step, an implementation must retrieve the original post and determine its "dt-published" (e.g. from parsing its [[h-entry]]).
+
+The date and time of the original should be displayed and hyperlinked to the original's URL.
+
+IndieWeb Examples of icon URL and dt-published:
+* none so far
+
+=== original content ===
+Lastly, the <em>content</em> of an original post is the hardest thing to display <em>well</em> in a <em>singular</em> reply-context, due to numerous additional variables. Some challenges:
+* length of original content - how do you truncate/abbreviate (if at all) original content to "fit" into a reasonably sized reply-context?
+* markup in original
+** do you allow any markup from the original content (e.g. links, images)?
+** or do do you always display only plain text from originals?
+** or use your own auto-linking on the plain text from originals?
+
+IndieWeb Examples of icon URL dt-published author name and original content:
+* ... a lot of folks - see [[reply-context-examples]] and copy a short list here inline
+* ...
+
+=== recursive reply-contexts ===
+{{main|recursive reply-contexts}}
+(previously called: <span id="reply_thread">reply thread</span> and <span id="history_thread">history thread</span>)
+
+Popular silos (e.g. [[Twitter]]) recursively display reply-contexts of originals/replies from the tweet that you're replying to, and if it was a reply itself, what it replies to etc. on up through the original tweet at the start of the thread.
+
+IndieWeb Examples of icon URL dt-published author name original content for reply-contexts up through the original post that started the thread:
+* [[User:ben.thatmustbe.me|Ben Roberts]] e.g. [http://ben.thatmustbe.me/note/2014/9/12/1/_ on 2014-09-12]
+* ...
+
+== Notifications ==
+Sites should send notifications using [[webmention]] for every [[h-cite]] / URL (u-url) in reply-contexts of posts.
+
+== IndieWeb Examples ==
+{{main|reply-context-examples}}
+In order of deployment:
+
+* '''[[User:Aaronparecki.com|Aaron Parecki]]''' displaying full h-cite reply-contexts on aaronparecki.com since at least 2013-04-19 using [[p3k]]
+** [http://aaronparecki.com/replies/2013/04/19/2/indieweb example], [http://aaronparecki.com/replies/2013/04/21/1/ multiple reply example]
+
+* '''[[User:WaterPigs.co.uk|Barnaby Walters]]''' displaying full h-cite reply-contexts on waterpigs.co.uk since at least 2013-05-16 using [[Taproot]]
+** [http://waterpigs.co.uk/notes/1424/ example]
+
+* '''[[User:Sandeep.io|Sandeep Shetty]]''' displaying full reply-contexts on sandeep.io since ??? using [[Converspace]]
+** [http://www.sandeep.io/32 example]
+
+* '''[[User:Tantek.com|Tantek Çelik]]''' displaying minimal reply-contexts on tantek.com since at least 2013-07-09 using [[Falcon]]
+** [http://tantek.com/2013/190/t6/oauth-traded-evil-user-pass-dev-complexity-app-keys-tos example], [http://tantek.com/2013/132/t2/been-t-since-day-joined-2006 multiple reply example]
+
+* '''[[User:Werd.io|Ben Werdmuller]]''' displaying minimal reply-contexts on werd.io since 2013-06-24 using [[idno]]
+** [http://werd.io/view/51c921fcbed7de745b274ae6 example], [http://werd.io/view/51f01e17bed7de2b1d060400 multiple reply example]
+
+* '''[[User:Bret.io|Bret Comnes]]''' displaying minimal reply-contexts on bret.io since at least 2013-06-24
+** [http://bret.io/2013/06/24/t4/ example]
+
+* '''Julian Schweinsberg''' displaying full reply-contexts on jschweinsberg.de since 2013-08-21
+** [http://jschweinsberg.de/2013/08/21/1377101842/ example]
+
+* '''Barry Frost''' displaying reply-contexts on barryfrost.com since 2013-09-15
+** [http://barryfrost.com/posts/4 example]
+
+* '''[[User:Brennannovak.com|Brennan Novak]]''' displaying h-cite reply-contexts on brennannovak.com since 2013-10-11
+** [https://brennannovak.com/notes/334 first reply-context example]
+** markup issue as of 2013-10-28: reply-context marked up as h-entry instead of h-cite, parent note not actually marked up with h-entry so no way of knowing it’s a reply!
+
+* '''[[User:Kartikprabhu.com|Kartik Prabhu]]''' displaying minimal reply-contexts on kartikprabhu.com since at least 2014-03-17
+** [http://kartikprabhu.com/notes/disappearing-ny-book example]
+
+* '''[[User:Snarfed.org]]''' displaying reply-contexts as embeds on [https://snarfed.org/ snarfed.org] (and like-contexts, repost-contexts, etc). [https://snarfed.org/responses See all replies.]
+** [https://snarfed.org/2014-06-05_twitter-therealfitz-this-analysis-of-restaurants Twitter example]
+** [https://snarfed.org/2014-05-28_alexis-shoemate-for-you-and-gina Facebook example]
+
+* '''[[User:Ben.thatmustbe.me|Ben Roberts]]''' displaying recursive reply-contexts in [Postly] since 2014-09-12
+** [http://ben.thatmustbe.me/note/2014/9/12/1/_ example]
+
+* '''[[User:david.shanske.com|David Shanske]]''' displaying limited reply-contexts since 2014
+** Example Pending
+
+== of silo posts ==
+Reply contexts where the original is on a silo may sometimes need or deserve special treatment.
+
+If you reply to a [[silo]] post where the silo does not mark up their HTML pages with [[h-entry]], (e.g. post a comment on your own site, and the POSSE it to an Instagram post), you will need to do further processing in order to display the reply context as high fidelity as other indieweb posts.
+
+You may find the following tools useful:
+
+* [https://github.com/aaronpk/php-mf2-instagram-shim php-mf2-instagram-shim] - converts Instagram posts to h-entry
+* [https://github.com/aaronpk/php-mf2-twitter-shim php-mf2-twitter-shim] - converts Tweets to h-entry
+* [https://github.com/indieweb/php-mf2-shim php-mf2-shim] - converts Tweets and Facebook posts to h-entry
+
+== Brainstorming ==
+=== CRUD ===
+Though one advantage of storing and showing a reply-context is freezing the original context of what you're replying to, it may make sense to accept some updates.
+
+For this to work, an original post that accepts and displays [[comments]] should send webmentions to all the [[comments]] permalinks when the original post is updated or deleted.
+
+==== Update ====
+* If your reply post receives a webmention from the original post, re-read the reply-context from the original, and consider updating the reply-context on your reply accordingly. Possibilities to consider:
+** automatically accept minor changes to the original that may just be typos
+** store the latest reply-context update separately and optionally present a UI to accept it (and perhaps update your reply accordingly as well).
+** maybe note dt-updated as edited/updated
+** check reply-context author name/avatar for updates
+
+==== Delete ====
+* If your reply post receives a webmention of the original post, and when attempting to re-read the reply-context your server receives a 410 from the original post, then the original post has been deleted. What should you do with your reply and reply-context? 
+** Leave it alone? (Do nothing)
+** Unlink the original?
+** Note in the reply-context that the original appears to have been deleted, but keep the reply-context from before.
+** This may be something we need to do individual UI experimentation on to get a feel for what are good options to consider.
+
+Examples:
+* http://aaronparecki.com/replies/2014/05/17/1/ - replied to a tweet which was deleted
+
+==== Events RSVPs Invitations ====
+This applies to [[event]] posts as well, and any [[responses]] to them, e.g. any changes to the event (name, , location, times, description etc.) should make the event send a webmention to any
+* [[RSVP]]s in reply to the event
+* [[invitation]]s to the event
+* and comments, likes, reposts etc. as in response to other posts in general
+So that they can update their respective reply-contexts accordingly.
+
+See [[event#Response_context_CRUD|event: Response context CRUD]] for more details on how event posts should send webmentions to enable RSVP/reply-context CRUD.
+
+=== Fork On Text ===
+[https://github.com/kylewm/forkontext Fork On Text] is an open source project in development to provide reply-contexts as a service, self-described as "Service to upgrade simple reply contexts with full reply contexts by fetching and storing remote content."
+
+* https://github.com/kylewm/forkontext
+
+=== Client side with JavaScript ===
+
+We could write a single reusable JS library that fetches, renders, and injects reply context(s) into the current page. Details: [https://snarfed.org/client-side-reply-contexts-with-javascript Client side reply contexts with JavaScript].
+
+== Silo Examples ==
+{{main|reply-context-examples#Silo_Examples}}
+Some silos display reply-contexts, including [[App.net]] (who mark them up with h-cite) and [[Twitter]].
+
+== See Also ==
+* [[in-reply-to]]
+* [[rel-in-reply-to]]
+* [[reply]]
+* [[comment]]
+* [[multiple-reply]]
+* [[webmention]]

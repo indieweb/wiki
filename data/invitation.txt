@@ -1,0 +1,146 @@
+http://indiewebcamp.com/invitation
+
+{{stub}}
+
+An '''<dfn>invitation</dfn>''' is an optional feature of an [[event]] post (an event with invitations), or a [[reply]] to an event post that also notifies a list of invitees that they've been invited to the event, or a special case of that, an [[RSVP]] to an event that also invites additional people to it. In all cases, the invitation is also the act of notifying (sending of [[webmentions]] to) one or more individuals that they have been invited to an event.
+
+== Why ==
+=== Why invitation posts ===
+Why implement invitation posts?
+
+So you can invite other people from your own site to others' [[event]]s that they (indieweb community members like [[User:Aaronparecki.com|Aaron Parecki]] and [[User:Werd.io|Ben Werdmuller]]) post on their own sites.
+
+=== Why RSVP with invitations ===
+Why implement [[RSVP]]+invitation posts?
+
+So when you RSVP to go to an event you can simultaneously invite others to join you.
+
+Or when you RSVP maybe to an event you can invite others to consider going.
+
+Or when you RSVP no to an event you can invite others to go in your place.
+
+=== Why publish an event with invitations ===
+Why implement [[event]]+invitation posts?
+
+So when you post an [[event]] you can at the same time explicitly invite people to it and notify them accordingly.
+
+== How to ==
+How-tos for invitations are very similar to the how tos for [[replies]] so we won't duplicate common info here.
+
+=== Display invitations on an event ===
+Whether from the event author or received via invitations from others, events can display invitations in various ways:
+* [[facepile]] of icons of those invited
+** perhaps only the most recent n of them (perhaps also limited to only those the (logged in with [[indieauth]]) viewer is ([[XFN]]) following/friends with) if this gets too large, with a link to expand or view all that are invited. E.g. <br/>[[File:event-attendees-facebook.png]]<br/>See [[event#Attendees]] for more discussion about this silo screenshot demonstrating this.
+* at a minimum a list of those invited, perhaps time-order interleaved with other interactions with the event e.g. comments.
+
+=== Publish an event with invitations ===
+How to markup invitations inside and event and notify those invited:
+# List the invitations with elements with <code>class="u-invitee h-card"</code> inside the [[h-event]], that at a minimum link to the homepages of those invited.
+# Send webmentions from the [[event]] post to the homepages of those invited.
+
+(a complete h-event + u-invitee h-card markup example would be nice too)
+
+=== Publish an invitation ===
+1. Post a [[reply]] to an [[event]] and follow the [http://microformats.org/wiki/invitation-brainstorming#h-entry_plus_additions microformats2 h-entry plus proposal] to also post names/links to the invitees using the proposed <code>u-invitee</code> property:
+* <code>&lt;a class="u-invitee h-card" href="http://caseorganic.com/">Amber Case&lt;/a></code> - however this assumes that you want the invitee's name, hyperlinked, in your readable text. Other h-card markup is of course allowed. You may have multiple invitees inside a single h-entry. Duplicate this markup for each invitee inside the h-entry.
+
+2. Send a webmention to the event post as you would for a reply to any post.
+
+3. Send a webmention to each invitee's [[homepage]] (which you've presumably already linked as shown in the example)
+
+See [[reply#Make_a_comment]] for more general details on posting replies.
+
+(a complete h-entry + in-reply-to an event + u-invitee markup example would be nice too)
+
+=== Publish an RSVP with invitations ===
+# Publish an [[RSVP]] as you normally would, e.g. "going to ... " (event name / link)
+# in the same post, append some text like "and inviting Alison, Brogan, Clayton" to join me, 
+#* where A, B, C are each mini h-cards of the form <blockquote><code>&lt;a class="u-invitee h-card" href="Alison-homepage-URL"&gt;Alison&lt;/a&gt;</code></blockquote> etc.
+# Send same webmentions as above to event post and each invitee's [[homepage]].
+
+=== Update an invitation ===
+Similarly, update your [[post]] and resend the webmentions.
+
+See [[reply#Update_a_comment]] for more general details on updating replies.
+
+=== Delete an invitation ===
+Similarly, delete your invitation, resend the webmentions, and be prepared to return 410 GONE for your invitation permalink.
+
+See [[reply#Delete_a_comment]] for more general details on deleting replies.
+
+== IndieWeb Examples ==
+=== Kyle Mahan ===
+* {{kylewm}} posted a standalone invitation [https://kylewm.com/2015/02/invited-a-class-h-card-p-invitee-href-http-werd-io on 2015-02-23]
+
+=== Prototypes ===
+==== Gregor Love ====
+* {{gregor}} has experimented with simple text invitations/inquiries, e.g. when asking [[2014]] attendees if they were planning to attend [[2015]].
+** http://gregorlove.com/notes/2015/06/16/2/
+** http://gregorlove.com/notes/2015/06/16/3/
+
+These notes did not include <code>u-invitee</code> markup because I was not familiar with it and was writing the notes with Twitter as the intended destination.
+
+== IndieWeb Implementations ==
+In datetime order of implementation (earliest first)
+
+=== Bridgy ===
+[[Bridgy]] implemented this for [[Facebook]] event invitees [https://github.com/snarfed/bridgy/issues/71 on 2014/02/26]. [https://www.brid.gy/rsvp/facebook/11500459/1449931115256635/31600719 Example.]
+
+== Brainstorming ==
+=== User Flow ===
+Here is a potential invitation post user flow (from IRC[http://indiewebcamp.com/irc/2014-01-29#t1391032748]).
+
+# Aaron posts an [[event]]
+# Ben posts an [[invitation]] to the event, inviting Caseorganic
+# Ben's site sends [[webmentions]] from that invitation post *both* to the event (on Aaron's site), and to Caseorganic (presumably a [[homepage webmention]])
+# Aaron's event post handles receiving that invitation webmention, using some heuristic as to whether to allow it or not (e.g. it could check if Ben is already invited, and the event allows attendees to invite others or it could check if Ben is a friend, and the event is open to friends and friends of friends or some other option - e.g. just allow all invitations for now)
+# Caseorganic's site receives the webmention and adds it to the queue of site-level mentions. Upon retrieving the "source" of the webmention, it recognizes (per the home page link being marked up with u-invitee) it as invitation notification
+# Caseorganic's site shows the invitation notification and provides the option to create an [[RSVP]] post in reply to the event post (and in reply to the invitation post!), perhaps even with simple buttons to RSVP "yes" "maybe" "no" "save" (tracking).
+# Caseorganic posts an RSVP, which replies to (hyperlinks with [[in-reply-to]]) Aaron's event post, and to Ben's invitation post.
+# Aaron's event post handles the RSVP mention as per already figured out on [[RSVP]]
+# Ben's invitation post is updated to note that the invitation was replied to and accepted/tentative/declined (according to the p-rsvp of the RSVP post of yes/maybe/no).
+
+Simplifications welcome.
+
+=== POSSEing invitations ===
+It makes sense to [[POSSE]] invitations for all the same reasons it makes sense to POSSE [[responses]] in general. I.e.
+
+Why POSSE an invitation post?
+* POSSE thread reply to the POSSE copy of the event post (e.g. an @-reply to a tweet announcing the event), perhaps even posting the invitation as a [[multi-reply]] itself[http://indiewebcamp.com/irc/2014-10-20#t1413861481768].
+* Provide another notification mechanism for indieweb invitees (e.g. @-mentions on [[Twitter]], or notifications on [[Facebook]])
+* Provide a way to for those without their own site to receive notification of the invitation
+
+How to POSSE an invitation post:
+* Write invitation post prose in such a way that it reads just fine as text (per text/notification first design), e.g. based on [https://kylewm.com/2015/02/invited-a-class-h-card-p-invitee-href-http-werd-io Kyle's invitation post]: <blockquote>Hey @benwerd @erinjo @kevinmarks @snarfed @t, you should come to Homebrew Website Club 2015 February 25 https://kylewm.com/2015/02/homebrew-website-club-2015-february-25</blockquote> either typed just like that, and have your site convert the @-mentions to name+site links in your indie invitation post, or <blockquote>Hey Ben, Erin, Kevin, Ryan, Tantek you should come to Homebrew Website Club 2015 February 25 https://kylewm.com/2015/02/homebrew-website-club-2015-february-25</blockquote> where it's expected that your [[creating]] UI auto-completes the people mentions with named links to their personal sites, and your POSSE-to-Twitter code converts those mentions to @-mentions.
+
+==== POSSEing to Facebook ====
+POSSEing invitations to [[Facebook]] must currently be done manually.
+
+The Facebook API does not support sending invitations.[https://developers.facebook.com/docs/graph-api/reference/v2.2/event/invited#publish]
+
+==== POSSEing to Twitter ====
+POSSEing invitations to [[Twitter]] requires:
+* design the "plain text" version of your invitation post (to either create manually, or preferably automatically from your indie invitation post) - please share your design thoughts in this [[#Brainstorming]] section.
+* convert any indieweb person links/preferences in your post to Twitter @-names
+* post resulting plain text as a tweet
+
+Rabbithole - plain text *replies* to plain text invitation POSSE copies:
+* of course POSSEing an invitation to Twitter then begs the question of how do the people you @-invite that way @-reply with plain text RSVP semantics that are predictable/discoverable/readable/parsable?
+
+Rabbithole 2 - plain text event / invitation / RSVP flow:
+* and then that begs the question of an entire plain text event creation, invitation, RSVP flow. that basically means figuring out the plain text authoring / interaction flow for all of https://www.w3.org/wiki/Socialwg/Social_API/User_stories#RSVPs_invitations_comments_to_an_event
+
+==== Proxying an invitation ====
+If an invitation post had an explicit in-reply-to to a [[Facebook]] POSSE copy of the event, and explicit u-invitee h-card markup of all invitees that included both their indieweb and [[Facebook]] profile URLs[http://indiewebcamp.com/irc/2014-10-20#t1413861499545], then a POSSE proxy (like [[Bridgy]] Publish) could proxy the invitation to Facebook[http://indiewebcamp.com/irc/2014-10-20#t1413861555730][http://indiewebcamp.com/irc/2014-10-20#t1413872790127], if the FB API actually supported inviting people to events, which as of 2015-03-04 it does not :( [https://developers.facebook.com/docs/graph-api/reference/v2.2/event/invited#publish]
+
+Proxying an invitation to Twitter may be possible (e.g. via [[Bridgy]] Publish) but requires defining / designing what a good "plain text" POSSE copy equivalent of an invitation post would/should look like.
+
+== See also ==
+* [[posts]]
+* [[replies]]
+* [[event]]
+* [[RSVP]]
+* [[webmention]]
+* [[homepage]]
+* http://microformats.org/wiki/invitation
+* [[responses]] - other specialized types of replies

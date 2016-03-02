@@ -1,0 +1,64 @@
+http://indiewebcamp.com/2013/UK/WebMention
+
+{{stub}}
+
+Archived from https://etherpad.mozilla.org/indiewebcamp-webmention, please clean up.
+
+== WebMention Session (Day 1) ==
+
+* http://indiewebcamp.com/webmention
+* http://webmention.org/
+* https://gist.github.com/aaronpk/6475852 - webmention-demo.sh
+* https://plus.google.com/hangouts/_/NpmZRNQvQhhRkVVuBCs5vQ?hl=en audio and video feed
+
+Useful to separate the webmention notification mechanism from issues like anti-spam and displaying comments. This allows us to talk about webmention as a notification mechanism for things other than commenting as well, and lets us tackle the other problems separately.
+
+Even without the notification mechanism, we would still need to address issues of spam and rendering comments from other domains, it's just that we wouldn't be getting these comments in real time, but we could still crawl the web or look at HTTP referers looking for inbound links.
+
+Look for rel of both http://webmention.org and webmention
+
+* Shane: I think that the implementation for looking at rel tags would probably be best regex'ing for webmention rather than searching for both?
+    
+webmentions handle notifications, can do whatever you want with the reply once you have it
+Ping a webmention endpoint, discovered from post url, can be included in http header
+
+Components are curl + microformas parser
+
+* Content posted in Aaron's reply post of Barnaby's post happens *before* web mention
+* Then Aaron sent a webmention to Barnaby's post's webmention endpoint
+* Then Barnaby's site verified the webmention and incorporated Aaron's reply as a comment on that post.
+Aaron's reply uses the "summary" from the parsed h-entry from Barnaby's original post.
+
+Is there source code out there that does this?
+* Microformats2 parsers: http://microformats.org/wiki/microformats2#Implementations
+* auto-link and auto-embed: https://github.com/tantek/cassis/blob/master/cassis.js#L1068
+
+One possible anti-spam solution: whitelist of domains that automatically have their comments displayed, based on domains of people who you have mentioned on your site already (implicit trust). For webmention, simply only allow people to comment on your site that you follow. If I ever comment on your site (it's an example of implicit trust) and so any person's site that I've commented on can comment on my site. 
+
+Could even go 2-3 levels out - friend of a friend - and use your friends' whitelists. But then you have a bunch of people on sites with their own servers with great whitelists that become prime targets for being hacked
+
+At the same time you don't want to create the same thing as pingback or trackback. 
+
+Tantek: what happened between trackback and pingback is salmon.  Was too hard to implement. Maybe 3-4 people ever implemented it. 
+
+Diaspora has Salmon: https://github.com/diaspora/diaspora/wiki/Message-passing-in-Diaspora
+
+Sandeep invented/discovered WebMention from a simplification of Pingback - http://en.wikipedia.org/wiki/WebMention - let's keep track (update wiki)
+
+Example of a reply to a reply showing up on the original post:
+http://aaronparecki.com/repliees/2013/06/28/1/indieweb
+
+Sandeep's comment uses a convention of /cc and linking to the original.
+
+A social solution can often be better than a technical solution. I don't need to be alerted to a comment from someone outside my network. The solution is that someone could alert me to the post that's in my whitelisted network if I do need to see that piece of content. 
+
+Jeremy had the idea of just putting a URL submission on your post instead of a comment box.
+A  user with a reply that doesn't have webmention could then go to  Jeremy's post, submit the reply URL and have it show up as a comment.  This would be a good suggestion for comment display/submission UI on  posts that accept/display comments.
+
+A form for webmentions would not require any backend code since the action would just be the webmention notification endpoint.
+
+Webmention as a notification of a private post: http://indiewebcamp.com/indieweb-messaging
+
+Aaronpk: Could also have the post not be text, but could be an "I owe you x money" and then if another person pays them, they can create a "I paid you x" post on their site, so the debt can be kept track of.
+
+[[Category:2013/UK]]

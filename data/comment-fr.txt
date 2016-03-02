@@ -1,0 +1,210 @@
+http://indiewebcamp.com/comment-fr
+
+''Cette page a démarré sur [[comment]]''
+
+Un '''<dfn>commentaire</dfn>''' est une forme de [[post-fr|post]] qui vient en réponse à quelque autre post, ce qui peut ou ne pas faire sens sans lire ou au moins connaître le contexte du post source.
+
+Les commentaires ont rarement (même si parfois) des noms/titres, bien qu'ils aient parfois une autre structure comme plusieurs paragraphes, ou des blocs de citation qui sont en train d'être spécifiquement répondus.
+
+== Réponse ==
+=== Distinction réponse ===
+Est-ce qu'une "[[reply-fr|réponse]]" (ou les [[reply-fr|réponses]]) est juste un cas spécial de commentaire ?
+
+* [[Twitter-fr|Twitter]] utilise "Répondre à" dans son UI.
+* [[Facebook-fr|Facebook]] utilise "Commenter" dans on UI
+
+Les réponses sur Twitter démarrent typiquement par une référence-nom (@-nom, URL indieweb).
+
+Tandis que les commentaires ne démarrent que parfois avec une référence explicite de nom.
+
+Une autre distinction (peut-être utile pour les discussions indieweb) est le contexte. Une réponse est le permalien vers un post de réponse. Un commentaire est la copie syndiquée d'une réponse présentée sous le post original (indiquant que la réponse est en-réponse-à)
+
+Tous les indices/distinctions/cas d'utilisation supplémentaires sont les bienvenus.
+
+=== Exemples de Réponses ===
+Les membres de la communauté de l'IndieWeb répondent (commentent) sur leurs propres sites en référence à un post sur quelque autre site :
+
+'''Bonnes pratiques - les tweets POSSÉs en fil de discussion''' - les réponses postées sur le site indieweb et POSSÉes vers Twitter de manière à ce que les tweet syndiqué fasse un lien arrière vers le tweet répondu - assemblant ainsi les tweets dans un fil sur Twitter et fournissant là-bas une bonne expérience.
+
+* aaronparecki.com
+** réponse à un tweet : http://aaronparecki.com/replies/2013/01/27/1/
+*** copie syndiquée : https://twitter.com/aaronpk/status/295714219544944640
+*** en-réponse-à : https://twitter.com/veganstraightedge/status/295713694757834752
+** réponse à un post indieweb : http://aaronparecki.com/replies/2013/03/19/1/indiewebcamp
+*** copie syndiquée : https://twitter.com/aaronpk/status/321983471838973952
+*** en-réponse-à : http://www.bradryanbice.com/2013/03/i-launched-a-new-look-and-feel-today-and-im-tweeting-from-wordpress/
+**** copie syndiquée : https://twitter.com/bradryanbice/status/314105447667863552
+* waterpigs.co.uk
+** http://waterpigs.co.uk/notes/1083/
+** http://waterpigs.co.uk/notes/974/
+
+'''Réponses adhoc/prose''' - la prose et les liens dans la ligne étant utilisés pour indiquer ce qui est répondu à qui : 
+* tantek.com - utilise la prose "in-reply-to: dans le post lui-même.
+** http://tantek.com/2012/174/t2/opposite-posse-pesos-publish-elsewhere
+** http://tantek.com/2011/261/t3/calling-web-actions-webactions-make-sense-seconds-users
+** http://tantek.com/2011/165/t3/visited-google-declined-nda-visitor-badge-printed
+
+=== Granularité ===
+Même si la plupart des implémentations de commentaires permettent les commentaires au niveau du post, un nombre croissant de [[silos-fr|silos]] autorisent les commentaires granuleux, par exemple des mots, phrases ou paragraphes : 
+* [[Medium-fr|Medium]] permet les commentaires au niveau paragraphe, en utilisant [[Twitter-fr|Twitter]] comme identifiant de connexion pour le commentateur. Sélectionnez le texte dans un paragraphe amène aussi un plus (+) et un bouton tweet. Le bouton (+) permet/ajoute les commentaires aux paragraphes, tandis que le bouton tweet cite le texte sélectionné dans une [[web action-fr]] tweet spécifique à Twitter qui fait apparaître une fenêtre pop-up afin de compléter l'action sur Twitter. Interaction très similaire à la webaction select-to-quote avec le verbe post dans la web action toolbelt.
+* Les discussions [[Branch-fr|Branch]] peuvent être bifurquées au niveau de la phrase
+* Le livre en ligne “Real World Haskell” a des commentaires au niveau paragraphe ([http://book.realworldhaskell.org/read/why-functional-programming-why-haskell.html exemple])
+* [http://theyworkforyou.com/ TheyWorkForYou] a des annations pour chaque déclaration dans Hansard (l'enregistrement officile de ce qui est dit au Parlement Britannique). Ils sont montrés dans la ligne. Exemples : [http://www.theyworkforyou.com/lords/?id=2013-06-03a.937.4#g965.0 1], [http://www.theyworkforyou.com/debates/?id=2013-07-01a.590.3#g591.1 2]
+* …
+
+== Comment Faire ==
+=== Produire un Commentaire ===
+Comment publier un commentaire indieweb pour répondre à un post original
+# '''Écrire un [[post-fr|post]]''' ([[note-fr|note]]/[[article-fr|article]]/[[comment-fr|commentaire]]) sur votre propre site
+# '''Produire un Lien vers l'original''' avec [[rel-in-reply-to-fr|rel="in-reply-to"]]
+#* Si vous utilisez le microformat [[h-entry-fr|h-entry]] pour marquer votre commentaire (vous devriez), ajouter aussi au lien class="u-in-reply-to"
+# '''Envoyer un [[pingback-fr|pingback]]/[[webmention-fr|webmention]] à partir du serveur vers le serveur de l'original
+Idéalement votre serveur/logiciel devrait produire le '''(3) pingback/webmention''' pour tous les liens dans votre post.
+
+==== POSSEr un commentaire ====
+Pour POSSEr des commentaires : 
+* '''Paramétrer des reply-to propriétaires sur les copies POSSE'''. par ex. au moment de [[Twitter-fr#POSSEr_les_Notes_sur_Twitter|POSSEr des notes sur Twitter]] qui sont elles-mêmes des @-replies (ou vous pouvez trouver une copie POSSÉe sur Twitter du post que vous êtes en train de commenter), réglez le <code>in_reply_to_status_id</code> sur l'id du tweet pour laquelle le @-reply est une réponse à. Ceci devrait être même automatiquement géré par votre serveur/logiciel. Pour les détails, regardez : 
+** [[Twitter-fr#R.C3.A9ponses_POSS.C3.89es_sur_Twitter|Réponses sur Twitter]]
+** [[Twitter-fr#POSSEr_des_r.C3.A9ponses_.C3.A0_des_tweets|POSSEr des réponses à d'autres posts sur Twitter]]
+
+
+Ceci se fait aussi quand B commente sur le post de A et envoie une webmention, et que A et B POSSent leurs posts, à chaque fois que les deux POSSE (par ex sur Twitter), leurs copies POSSÉes font aussi un lien là. De cette manière ceux sur le silo (par ex. Twitter), pourront suivre la conversation, même si A et B son en train de se répondre/lier directement en pair à pair entre leurs posts indieweb.
+
+Les exemple(s) Indieweb d'un post de réponse qui a été uniquement POSSÉ vers Twitter avec l'id-status-in-reply-to réglée vers la copie POSSE Twitter du post original.
+
+* http://aaronparecki.com/replies/2013/04/25/1/indieweb-qs
+** copie POSSÉe : https://twitter.com/aaronpk/status/327604371414204417	
+* ...
+
+En tant qu'implémenteur, considérez ceci sous forme de question : 
+
+* Quand vous postez un commentaire en rapport avec un post indieweb, au moment de POSSEr votre commentaire vers Twitter, lui donnez-vous l'id-in_reply_to_status de la copie Twitter du poste originale indieweb (que vous commentez) ? 
+
+
+Auto-découverte de la copie POSSÉe sur Twitter du post que vous êtes en train de commenter : 
+* Comment je trouve les copies POSSÉes que je suis en train de commenter ? (par exemple pour "POSSEr un commentaire' au-dessus, être capable de "trouver une copie POSSÉe sur Twitter du post que vous commentez")
+** Réponse proposée : sur le permalien du post original que vous êtes en train de commenter, cherchez les liens <code>rel~=syndication</code>, ou si non trouvés, alors cherchez les liens <code>class~=u-syndication</code> à l'intérieur de [[h-entry-fr|h-entry]].  Voir aussi [[posts-elsewhere-fr|posts ailleurs]] qui décrit comment les liens vers les copies syndiquées des posts sont publiés à ce jour et suggère un marquage pour faire de même.
+** Si aucun lien rel-syndication ou u-syndication n'est trouvé (ne trouvant pas ainsi une copie POSSÉe sur Twitter du post que vous commentez), envisagez de fournir une UI (par ex un champ de formulaire) pour que l'auteur de la réponse saisisse manuellement l'URL de la copie POSSEe sur Twitter du post qu'il commente.
+
+
+Auto-découverte d'un post original à partir de sa copie POSSÉe que vous êtes en train de commenter : 
+* Comment je trouver un post original à partir d'une copie POSSÉe à laquelle je réponds ?
+** par ex. "Lien vers l'original" dans la section au-dessus "Produire un commentaire", ce serait mieux si votre implémentation détectait automatiquement quand vous êtes en train de répondre à une copie POSSÉe (par ex. un tweet), l'original auto-découvert, et relié à la place au post original (bien plus indieweb) 
+** en résumé :
+*** chercher un lien rel=canonical dans la copie POSSÉe qui fait un lien arrière vers l'original - utilisez ça 
+*** autrement si un permalien-raccourci entre parenthèses est la dernière chose dans la copie POSSÉe, convertissez cela vers une URL, et faites l'étape suivante que l'URL est la dernière chose
+*** autrement si une URL est la dernière chose dans la copie POSSÉe allez retrouver cette URL et regardez si elle fait un lien arrière vers la copie POSSEe avec rel=syndication, ensuite utilisez cette URL
+** Voir : [[original-post-discovery-fr|dévouverte-post-orginal]] pour plus de détails.
+
+=== Afficher un post commentaire ===
+Comment afficher vos propres réponses / les posts de commentaires sur votre propre site.
+
+(Cette section pourrait se dilater, détails)
+
+* Premièrement, affichez le  [[reply-context-fr|contexte de ce à quoi vous répondez]], si vous répondez à un post unique original, ou si vous postez une [[multiple-reply-fr|réponses-à-plusieurs]]
+** Envisagez de déballer les raccourcis-URLs  dans ce contexte, c'est à dire les URLs des raccourcisseurs de domaines t.co, bit.ly, j.mp, etc. à la fois dans l'affichage et dans href.
+* Le reste de votre présentation devrait être cohérent avec tout type de réponse que vous avez postée, par ex. une [[note-fr|note]] ou un [[article-fr|article]]
+
+==== exemples IndieWeb d'affichage de posts de commentaires ====
+Exemples IndieWeb d'affichage d'un post-réponse à un post original unique : 
+* http://aaronparecki.com/replies/2013/04/19/2/indieweb
+
+[[File:example-reply-showing-context-aaronpk.png|link=http://aaronparecki.com/replies/2013/04/19/2/indieweb]]
+
+Exemple IndieWeb d'affichage d'un post-réponse vers une photo, affichant le contexte : 
+
+[[File:example-reply-to-photo-showing-context.png]]
+
+Exemples IndieWeb d'affichage d'une [[multiple-reply-fr|réponse à plusieurs]] autres posts : 
+* http://aaronparecki.com/replies/2013/04/21/1/
+* http://aaronparecki.com/replies/2012/12/05/15/leweb
+
+===Mettre à jour un commentaire ===
+Quand vous mettez à jour un post-réponse sur votre site : 
+* Notez explicitement les dates et heures de mise à jour avec une propriété <code>dt-updated</code> dans le [[h-entry-fr|h-entry]] de la réponse : 
+** "Mis à jour le : &lt;time class="dt-updated">AAAA-MM-JJ HH:MM:SS&lt;/time>" la présentation dépend de vous
+* envoyer une autre webmention vers le post original avec votre permalien de réponse mis à jour.
+
+Si un serveur reçoit une webmention pour un commentaire existant, le serveur devrait : 
+* re-requêter le permalien de réponse qu'il a bien été envoyé 
+* s'il renvoie un 410 GONE, le serveur devrait l'effacer. Voir [[deleted#Handling|handling deleted posts]].
+* autrement retrouver le h-entry de réponse et 
+** s'assurer que c'est encore [[in-reply-to-fr|in-reply-to]] à l'original (si non, mais lie encore en retour, le ramener à une mention. Si ni l'un ni l'autre, alors le traiter comme [[deleted|effacé]] et retirer/enterrer selon la [[deleted#Handling|gestion de l'effacement des posts]]).
+** mettre à jour le contenu du commentaire sur votre site
+** noter peut-être le dt-updated pour des intentions d'affichage
+
+==== Discussion ====
+* Apart from the content, [[converspace]] has also been updating h-card info (author name, url, photo) and reply type (mention, reply, like, repost) which has been useful when the source URL does not have proper markup when making the initial webmention and then fixes it for subsequent webmentions &mdash; [[User:Www.sandeep.io|Www.sandeep.io]] 03:43, 26 June 2013 (PDT)
+* The time-period to update a comment should be limited (f.e. 5 min) so that none could destroy the context of a result discussion, by editing the whole comment. --[[User:Notizblog.org|Matthias Pfefferle]]
+** This should be dependent on the target. Targets could employ different strategies like storing versions of comments (like Facebook does) or just mark a comments as being edited with a list of edit timestamps. &mdash; [[User:Www.sandeep.io|Www.sandeep.io]] 04:03, 26 June 2013 (PDT)
+* If you are moderating new comments, don't forget to also moderate updates. -[[User:Www.sandeep.io|Www.sandeep.io]] 20:22, 7 July 2013 (PDT)
+
+=== Effacer un commentaire ===
+{{main-fr|deleted#Handling-fr}}
+
+When you delete a reply post on your site, you server should send webmentions to all the links you mentioned in your post.
+
+When your server gets a request for the permalink of the reply that was deleted, it should return the 410 GONE HTTP status code.
+
+For more details see: [[deleted#Handling|handling deleted posts]].
+
+=== Accepter un commentaire ===
+Comment recevoir un commentaire indieweb répondant à un post original 
+# '''Écoutez les [[pingback-fr|pingback]]/[[webmention-fr|webmention]]''' sur votre serveur (avoir votre support logiciel serveur)
+# '''Liez-le''' s'il fait référence à un permalien sur votre site, et '''affichez-le''' (ou un résumé) sous votre post original à ce permalien.
+
+Support complémentaire
+* laisser s'afficher automatiquement tous les commentaires sur quelque URL par ex.<code>/mentions</code>
+** Rendez-cela possible si c'est disponible sous forme de [[feed-fr|flux]] [[PuSH-fr|PuSH]]-par-abonnement, vous donnant des notifications
+* n'afficher que les commentaires sous les posts avec des auteurs qui passent une approbation intelligente liste-blanche/manuelle 
+** le commentateur est cité dans la note à laquelle il répond
+** le commentateur est dans votre liste de contacts 
+** le commentateur est à 1, 2, etc degrés de séparation de vous
+
+Même mieux, si le(s) post(s) originaux avait un bouton [[webaction-fr|webaction]] "Réponse" qui en cliquant, emmènerait le lecteur/commentateur sur sa propre interface de post de blog, avec un '''(2) Lien vers l'original''' (pour faire un commentaire) déjà pré-rempli dans laquelle le commentateur pourrait simplement ajouter un texte de commentaire et puis poster.
+
+=== Afficher les commentaires reçus ===
+Ansi vous avez implémenté l'acceptation de webmentions, maintenant comment les affichez-vous sur votre site ?
+
+{{main-fr|comments-presentation-fr}}
+
+Résumé : 
+# Parsez la source de la webmention sur (le premier) [[h-entry]].
+# Si l'hyperlien dans le [[h-entry-fr|h-entry]] vers la cible webmention a un marquage [[in-reply-to-fr|in-reply-to]], affichez le [[h-entry-fr|h-entry]] (résumé/contenu abrégé si nécessaire) dans une section "Commentaires", peut-être dans le [[posts-fr#Footer_sections|pied de page du post]]. Voir [[comments-presentation-fr|présentation-commentaire]] pour les détails.
+# Autrement, si l'hyperlien vers le post original manque de marquage in-reply-to, alors ajoutez-le vers une section "Articles en Rapport" ou "Mentions", à nouveau dans le pied de page du post.
+
+=== Beware ===
+Beware if you receive and display comments, apparently spammers are now attacking indieweb-like blogging solutions:
+* https://twitter.com/tomayac/status/342680604573315072 <blockquote>Disabling the commenting function on my home-brew blog software. Spammers, you win. Also, fsck you. http://blog.tomayac.com/index.php?date=2013-06-06&time=18:27:29&perma=Disabling+Blog+Comme.html :-(</blockquote>
+
+=== Logiciel supportant ===
+Hébergement de contenu / logiciel de blog :
+* '''[[WordPress-fr|WordPress]]''' supporte automatiquement l'envoi de pingbacks. Les comptes sur [[wordpress.com]] font ça aussi.
+
+Bibliothèques 
+* Il existe des bibliothèques open source pour les [[pingback-fr|pingback]] et [[webmention-fr|webmention]] que vous pouvez utiliser pour ajouter cette fonctionnalité à votre propre logiciel de blogging.
+* ...
+
+== FAQ ==
+
+'''Quelle est la différence entre <code>rel=in-reply-to</code> et <code>class=u-in-reply-to</code>?''' [http://logbot.glob.com.au/?c=freenode%23microformats&s=today#c53725]
+
+les attributs rel sont étendues à toute la page, les noms de classes u-* classnames sont étendus à l'ancêtre le plus proche avec la classe class=h-*. Par conséquent sur une page de liste de réponses, cela ferait plus sens d'avoir des liens rel=in-reply-to pour toutes les réponses sur la page parce qu'ils seraient touts appliqués à la page de liste, tandis que ce serait approprié d'avoir des propriétés u-in-reply-to sur chacun des h-entries.
+
+tl;dr: utilisez u-in-reply-to partout, et rel=in-reply-to sur les pages permaliens des [[post-fr|posts]].
+
+== Embarquements de Commentaires ==
+Quelques [[silos-fr|silos]] ont une inclusion de commentaires qui est utilisé par différents sites pour héberger les commentaires ailleurs :
+* [[Disqus-fr|Disqus]] - leur focus est de fournir des commentaires ou ("discussion" - d'où son nom) sections sur d'autres pages.
+* [[Facebook-fr|Facebook]] - Voir [[Facebook-fr#Commentaires_Embarqués|Commentaires Embarqués]]
+
+== Voir aussi ==
+* [[reply-context-fr|contexte de réponse]]
+* [[in-reply-to-fr|in-reply-to]]
+* [[multiple-reply-fr|multiple reply]]
+* [[post-fr|post]]
+* [[note-fr|note]]
+* [[comments-policies-fr|Politiques de commentaire]]
+* [[webmention-fr|webmention]]
+* [[pingback-fr|pingback]]
+* [[responses-fr|réactions]] - autres types (spécialisés) de réponses

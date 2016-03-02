@@ -1,0 +1,108 @@
+http://indiewebcamp.com/indieauth-fr
+
+''Cette page a démarré sur <span class="rel-canonical">[[IndieAuth]]</span>''
+
+<div style="float: right; clear:both; padding: 10px; margin: 0 0 0 auto; width: 240px; border: 1px #ccc solid; background-color: #fffee7;">IndieAuth Provider Status: {{indieauth-status-fr}}</div>
+= IndieAuth =
+
+== Qu'est-ce qu'IndieAuth ==
+IndieAuth est une implémentation de [http://microformats.org/wiki/RelMeAuth-fr RelMeAuth] avec une API REST au-dessus.
+
+IndieAuth est un moyen '''d'utiliser votre propre nom de domaine''' pour vous connecter sur des sites web. C'est comme [[OpenID-fr|OpenID]], mais en plus simple ! Il fonctionne en reliant votre site web à un ou plusieurs fournisseurs d'authentification tels que [[Twitter-fr|Twitter]] ou [[Google-fr|Google]], puis en saisissant votre nom de domaine dans le formulaire de connexion présent sur les sites web qui supportent IndieAuth.
+
+__TOC__
+
+== Pourquoi IndieAuth ==
+
+IndieAuth fait partie du mouvement Indie Web pour reprendre le contrôle de votre identité en ligne. Au lieu de vous connecter sur des sites web avec des identifiants comme "vous sur Twitter" ou "vous sur Facebook", vous devriez pouvoir vous connecter tout simplement comme "vous". Nous ne devrions pas faire confiance à Twitter ou Facebook pour fournir nos identités authentifiées, nous devrions pouvoir utiliser nos propres noms de domaines pour se connecter à partir de n'importe où sur les sites.
+
+IndieAuth a été construit tant pour les utilisateurs que les développeurs, afin de faciliter autant que possible le démarrage d'une nouvelle méthode pour se connecter sur le web, sans les complexités d'OpenID.
+
+''[[todo-fr]] : À traduire les questions souvent posées : [http://indieauth.com/#faq Frequently Asked Questions]''
+
+=== Pourquoi pas OpenID, email etc ===
+Voir : [[Why web sign-in-fr|Pourquoi une connexion web]].
+
+=== Pourquoi pas WebFinger ===
+''Pourquoi ne pas ajouter le support [[WebFinger-fr|WebFinger]] à IndieAuth ?''
+
+<blockquote>"The problem is it's too easy to not own your email address (@gmail.com, etc) so it's not really an "indie" identifier. The point of IndieAuth is to encourage people to own their online identity."[http://aaronparecki.com/replies/2013/07/01/1/indieauth][https://twitter.com/aaronpk/status/351893272089735168]</blockquote>
+
+Le problème est qu'il est trop facile de ne pas posséder votre propre adresse email (gmail.com, etc) aussi ce n'est pas vraiment un identifiant "indie". L'objectif d'IndieAuth est d'encourager les personnes à posséder leurs propres identités en ligne. [http://aaronparecki.com/replies/2013/07/01/1/indieauth][https://twitter.com/aaronpk/status/351893272089735168]
+
+== Comment paramétrer IndieAuth ==
+* Ajoutez un lien sur votre page personnelle vers vos différents profils sociaux avec l'attribut rel="me"
+* Assurez-vous que vos profils produisent un lien retour vers votre page personnelle 
+* Saisissez votre domaine dans une boîte de connexion "Connexion Web" en utilisant votre propre domaine comme votre identité en ligne !
+
+== L'API IndieAuth ==
+L'API IndieAuth vous permet de supporter les connexions [http://microformats.org/wiki/RelMeAuth-fr RelMeAuth] sans devoir récrire le code OAuth pour chaque fournisseur !
+
+[http://indieauth.com/#documentation Lisez la documentation complète]
+
+== Code Source ==
+Le [https://github.com/aaronpk/IndieAuth code source IndieAuth] est disponible sur Github. Sentez-vous à l'aise pour le forker et proposer des requêtes si vous produisez des modifications.
+
+== Problèmes ==
+SVP ouvrez les problématiques sur le [https://github.com/aaronpk/IndieAuth/issues?state=open projet Github IndieAuth].
+
+=== Contact page support ===
+Quelques sites ont une page contact/à propos séparée où ils listent tous les autres profils avec des liens [[rel-me-fr|rel-me]], et puis lient vers cette page séparée à partir de leurs pages d'accueil avec rel=me. C'est un moyen valide de supporter la [[web-sign-in-fr|connexion web]] selon la spéc. [[relmeauth-fr|relmeauth]].
+
+Néanmoins, IndieAuth ne supporte pas à l'heure actuelle les liens rel-me suivants à un degré de profondeur sur les sites des personnes pour chercher des fournisseurs d'authentification.
+
+=== Support OpenID ===
+But : IndieAuth devrait au moins supporter une OpenID fournie par un serveur indieweb en lui-même (par ex. ignorer peut-être toute délégation OpenID). Le fait d'être un fournisseur OpenID auto-hébergé permet à l'indépendant d'éviter complètement toute dépendance aux [[silo-fr|silo]]s, même éphémère, pour l'authentification.
+
+IndieAuth a supporté aussi la consommation OpenID tout comme la [[web-sign-in-fr|connexion web]].
+
+Il y a eu des problèmes étranges avec les OpenIDs provenant de différents fournisseurs OpenID
+* [[OpenID#Why_does_IndieAuth_not_support_OpenID|Why does IndieAuth not support OpenID?]]
+** est-ce que ces problèmes provenaient d'OpenIDs déléguées ?
+*** avec quels fournisseurs (qui étaient délégués vers) ?
+
+Quels étaient ces problèmes spécifiques ? Documentons-les ici : 
+* serveur/URL - erreurs rencontrées
+* ...
+
+Github Issue: https://github.com/aaronpk/IndieAuth/issues/16
+
+
+=== link rel me support ===
+Il y a eu quelques personnes (par ex. cweiske sur [[irc]]) qui voulaient utiliser :
+* <code>&lt;link rel="me"></code>
+sur sa page d'accueil au lieu d'un lien visible vers l'un de ses profils (par ex. github).
+
+Raison : "takes away part of my freedom to design my page as I like"
+
+Bien que ceci soit moins visible, et plus enclin à devenir obsolète (ou malicieusement inséré sans que le propriétaire ne le réalise, ou sans que quiconque puisse voir la réalisation du site), c'est quelque chose que nous devrions envisager s'il existe suffisamment d'exemples du vrai monde de propriétaires de sites web indie voulant produire [[relmeauth-fr|RelMeAuth]] de cette façon.
+
+Contournement :  "could of course display:none it" ... "but that would be worse"
+
+Github Issue : https://github.com/aaronpk/IndieAuth/issues/15
+
+== À faire ==
+Vous souhaitez aider ? Regardez si vous pouvez contribuer sur l'un (ou plus) des sujets suivants : 
+* '''<span id="support-ftfa">support Authentification à Deux Facteurs (TFA)</span>''' pour les fournisseurs qui le supportent (par ex. Google)
+** Voir l'[http://wordpress.org/extend/plugins/google-authenticator/ extension WordPress Google Authenticator] pour les trucs/patterns/source (PHP) montrant comment faire ça.
+** Voir aussi [http://www.twilio.com/blog/2013/04/add-two-factor-authentication-to-your-website-with-google-authenticator-and-twilio-sms.html Add Two-Factor Authentication To Your Website with Google Authenticator] (exemples Python)
+* Ajouter le support pour des liens à un niveau de profondeur comme /contact (selon l'algorithme et les exemples du vrai monde sur [http://microformats.org/wiki/RelMeAuth-fr#utilisateurs_avec_des_pages_de_contact_s.C3.A9par.C3.A9es RelMeAuth : utilisateurs avec des pages de contact séparées]).
+* Paramétrer indieauth.com comme une délégation OpenID de façon à ce que vous puissiez l'utiliser sur des sites qui utilisent OpenID au lieu de déléguer à des sites comme myopenid.com
+* créer un Diagramme d'Architecture pour IndieAuth selon [http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/ Mozilla Security Blog: Speeding Up Security Reviews]
+* créer un Diagramme Détaillé d'Application pour IndieAuth selon le même[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
+* écrire une énumération des flux de Data selon le même modèle[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
+* écrire une Analyse de Risques selon le même modèle[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
+
+=== Problèmes ===
+* Le token peut être envoyé à IndieAuth sans TLS (ou les docs le font apparaître ainsi) de telle manière qu'une requête pourrait être refusée (*non* redirigée) pour empêcher l'empoisemment DNS, MITM et les attaques "race-condition".
+* Un soin tout particulier devrait être pris par le client pour s'assurer qu'aucun token ne soit ré-utilisé (au moins dans un laps de temps raisonnable) pour empêcher les attaques "replay".
+
+== Conférences ==
+* 2012-06-24 : Aaron Parecki [http://opensourcebridge.org/sessions/856 a fait une conférence sur IndieAuth] lors de la conférence Open Source Bridge 2012 à Portland ! Mardi 26 juin à 16:45
+
+== Voir aussi ==
+* [[RelMeAuth-fr|RelMeAuth]]
+* [[microformats-fr|microfomats]]
+* [[sign-in-use-cases-fr|Cas d'Usages de Connexion Web]]
+
+[[Category:building-blocks-fr]]

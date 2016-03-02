@@ -1,0 +1,192 @@
+http://indiewebcamp.com/communication
+
+{{stub}}
+
+'''<dfn>communication</dfn>''' in the context of the indieweb refers to using your personal website as a starting point and potentially way for people to <dfn>contact</dfn> you.
+
+== How ==
+=== Make your homepage homescreen friendly ===
+Add an [[icon]] to your personal site so that others can add your site to their home screens on their devices.
+=== Add a contact card ===
+Put an [[h-card]] on your home page with links to ways you want to be contacted, in your preference order. 
+=== Add a contact UI ===
+Put that h-card on a separate <samp>/contact</samp> page on your website, e.g. at you.example.com/contact with:
+# Easily recognizable / clickable icons for each link to a way to contact you.
+# Optional: conditionally show/hide ways to contact you based on:
+#* browser device/OS
+#* your time of day / interruptibility
+
+For detailed markup instructions, see:
+* http://tantek.com/2014/120/b1/markup-people-focused-mobile-communication
+
+For examples, [[#IndieWeb_Examples|see below]].
+
+== Why ==
+See:
+* <cite>[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience Toward A People Focused Mobile Communication Experience]</cite>
+
+== IndieWeb Examples ==
+IndieWeb community members doing this.
+=== Tantek ===
+{{t}} is experimenting with a prototype at tantek.com/contact since 2014-11-18 (and previously at contact.html since 2014-06 at [[2014|IndieWebCamp 2014]])
+* conditional showing of Facetime button only for iOS and MacOS (as of 2014-10-11 at [[2014/Cambridge|IndieWebCamp Cambridge]])
+* animated "Add to Homescreen" instruction drop-down on first load (as of 2014-10-29 at W3C TPAC - verified on {{hober}}'s iPad).  Lot's of fiddling, but here's the code using [http://cubiq.org/add-to-home-screen Matteo's "Add to Home Screen" library] that worked: <blockquote style="white-space:pre"><code style="background:none"><nowiki><script src="/addtohome.min.js"></script>
+<script>
+var addtohome = addToHomescreen({
+  maxDisplayCount: 1,
+  detectHomescreen: "hash"
+});
+</script>
+</nowiki></code></blockquote>
+
+=== Tim Owens ===
+[[User:Timowens.io|Tim Owens]] has set up a nice indie comms page on http://timowens.io/contact/ since 2014-10-11 (at [[2014/Cambridge|IndieWebCamp Cambridge]]) including:
+* shows an animated "Add to Homescreen" instruction drop-down on first load.
+
+== Previous Examples ==
+=== Ben Werdmuller ===
+[[User:Werd.io|Ben Werdmuller]] used icons to link to a small handful of ways to reach him on his [http://werd.io/ werd.io] homepage. (2014-...-...?)
+
+== Projects ==
+=== Lets Talk ===
+'''<dfn>[http://userscripts.org/scripts/show/408847 Let's Talk]</dfn>''' is a userscript that renders [[h-card]]s in a standard format. When you go to someone’s web site, Let’s Talk shows you at a glance how to contact them and which methods they prefer. See https://snarfed.org/2014-03-10_lets-talk-userscript for more details.
+
+== Brainstorming ==
+=== Three button UI ===
+Ideally an IndieWeb contact UI (e.g. someone's <kbd>/contact</kbd> page) should have three buttons:
+
+<pre>
+[txt] [call] [video]
+</pre>
+(screenshot/mockup needed!)
+
+Perhaps enabled/disabled based on sign-in, time of day, sleep status etc.
+
+The three buttons would behave as follows:
+
+==== Txt button ====
+[txt] button -> reveal a text message entering UI:
+
+<pre>
+(Sign-in) (if they're not already signed in with indieauth)
+[ message text area ]
+(Send)
+</pre>
+(screenshot/mockup needed!)
+
+Clicking the (Send) button would:
+
+At a minimum:
+*# submit the message to the recipient's IndieWeb server
+*# the recipient's IndieWeb server would send a [[push notification]] to the recipient's currently active client devices (e.g. mobile, laptop).
+
+Better (advantage: sender's site keeps a copy of the message)
+*# [[webaction]] to send a direct message
+*# handled by the sender's already registered [[indie-config]] handler
+*# the sender's own site shows a pop-up confirmation UI to send that message to the recipient
+*# the sender's site saves the message at a private permalink
+*# and sends a IndieWeb private message from their site to the recipient's site
+*# the recipient's website saves a copy of the private message at a private permalink
+*# the recipient's IndieWeb server sends a [[push notification]] to the recipient's currently active client devices (e.g. mobile, laptop).
+
+Even better (advantage: no need for additional pop-up confirmation UI)
+*# have already gotten [[Micropub]] authorization from the sender at sign-in time
+*# use Micropub to private publish the message as a private outgoing message on the sender's website
+*# the sender's site saves the message at a private permalink
+*# and sends a IndieWeb private message from their site to the recipient's site
+*# the recipient's website saves a copy of the private message at a private permalink
+*# the recipient's IndieWeb server sends a [[push notification]] to the recipient's currently active client devices (e.g. mobile, laptop).
+
+So people can txt you without ever leaving the web, or depending on a 3rd party site/intermediary/service/addressing system.
+
+Fallback: 
+* without IndieAuth sign-in, fallback to a page of existing services
+** sms, FB Messenger, Gtalk, email, Twitter DM
+
+==== Call and video buttons ====
+[call] + [video] -> initiate a WebRTC call (e.g. [[Firefox Hello]]) with only-voice or video+voice accordingly
+* assuming your client browser supported that
+** if not, it can fall back to a page of existing services
+*** FaceTime, Skype, etc.
+
+Ideally the mechanism for an audio call, while in-progress, could allow the caller and/or callee to opt-in to allowing for video, and if both did so, the audio call would be upgraded to audio+video.
+
+=== Verb redirect URLs ===
+Might be convenient to setup a few redirect URLs (perhaps even as a building block of said 3 button UI)
+
+* <kbd>/txt</kbd> and/or <kbd>/sms</kbd> - redirects to an SMS: URL for you, or provides a simple SMS txting UI (similar to such UIs on mobile apps like [[iMessage]], [[Google Hangouts]] etc.)
+* <kbd>/call</kbd> - redirects to a FaceTime (audio) URL, or tel: URL, or provides a WebRTC start call UI.
+* <kbd>/facetime</kbd> - redirects to a FaceTime (video) URL to make a video call
+
+=== Mockups ===
+==== iOS7 home page ====
+Here are some mockups for how you could present a top level bar of communication, collaboration, and other options that feel familiar to an iOS7 iPhone/iPod user:
+
+<div style="border:.5em solid gray;float:left">[[File:mobile-personal-home-icons-folders-ios7.jpg]]<br/>[[File:2013-346-tantek-home-posts.jpg]]</div><br style="clear:both"/>
+
+
+
+==== Contact expanded ====
+When a viewer taps the '''Contact''' icon folder it expands as follows, and then the viewer can tap the mode of messaging/communicating they want to use to contact me which immediately opens a new message (txt, FB Messenger, G+ Hangouts, AIM IM), or starts a new call (FaceTime, Skype), or Twitter new direct message window. Directly to communicating - bypassing all comm app home page / activity distractors.
+
+The one change I'd make from these mockups are some of the labels. All of the labels should be verbs, not nouns, indicating the action the user wants to take and thus reinforcing their intention.
+
+E.g. "Messages" should be "txt message", "Messenger" should be "FB message", "Hangouts" should be "GTalk", and the rest seem to read fine as verbs.
+
+<div style="border:.5em solid gray;float:left">[[File:mobile-personal-home-contact-ios7.jpg]]<br/>[[File:2013-346-tantek-home-posts.jpg]]</div><br style="clear:both"/>
+
+
+
+==== iOS6 mockups ====
+Original prototypes done in iOS6, probably not worth implementing, but may contain interesting UI ideas nonetheless:
+
+<div style="border:.5em solid gray;float:left">[[File:mobile-personal-home-icons-folders-mockup.jpg]]<br/>[[File:2013-346-tantek-home-posts.jpg]]</div><br style="clear:both"/>
+
+
+'''Contact expanded'''
+
+The one change I'd make from these mockups are some of the labels. All of the labels should be verbs, not nouns, indicating the action the user wants to take and thus reinforcing their intention.
+
+E.g. "Messages" should be "txt message", "Messenger" should be "FB message", "Hangouts" should be "GTalk", and the rest seem to read fine as verbs.
+
+<div style="border:.5em solid gray;float:left">[[File:mobile-personal-home-contact.jpg]]<br/>[[File:2013-346-tantek-home-posts.jpg]]</div><br style="clear:both"/>
+
+
+=== Improving Install Experience ===
+Currently sites have to use a convoluted script to attempt to prompt the user to add their comms page to the home screen AKA install it.
+
+"[http://updates.html5rocks.com/2015/03/increasing-engagement-with-app-install-banners-in-chrome-for-android Web App install banners]" may be one way of improving this UX, but it requires that your comms page be / have:
+* [[HTTPS]]
+* have a [[web app manifest]][http://updates.html5rocks.com/2014/11/Support-for-installable-web-apps-with-webapp-manifest-in-chrome-38-for-Android] (see [https://github.com/GoogleChrome/samples/tree/gh-pages/app-install-banner sample manifest])
+** short_name
+** 144x144 png icon with explicit mime type of image/png
+* a [[service worker]][http://www.html5rocks.com/en/tutorials/service-worker/introduction/] registered on the site, e.g. see the [https://github.com/GoogleChrome/samples/blob/gh-pages/service-worker/custom-offline-page/service-worker.js simple custom offline page example]
+
+Limitations:
+* The user must visit your site "twice over two separate days during the course of two weeks."[http://updates.html5rocks.com/2015/03/increasing-engagement-with-app-install-banners-in-chrome-for-android]
+** This fails to address the use-case of meeting in person and exchanging contact (web) addresses and expecting it to be one-click "installable" upon loading the page *once*
+
+== Additional Use Cases ==
+=== Authentication ===
+When communicating from one indieweb user to another, how do you authenticate that the person you are communicating with is actually the person you think it is? This applies to [[messaging]] in general.
+
+(This use-case is a stub and should be expanded)
+
+== Articles ==
+Articles on some of the challenges of person-based communication:
+* <span class="h-cite"><time class="dt-published">2013-11-18</time> <span class="p-publisher">WIRED</span>: <cite class="p-name">[http://www.wired.com/2013/11/canwetalk/ Can We Talk?]</cite> by <span class="p-author h-card">Mat Honan</span>. <span class="u-url">http://www.wired.com/2013/11/canwetalk/ </span></span>
+
+Articles about researching and solving personal / indieweb based communication:
+
+* <span class="h-cite"><time class="dt-published">2014-04-30</time> <span class="p-author h-card">Tantek Çelik</span>: <cite class="p-name">[http://tantek.com/2014/120/b1/markup-people-focused-mobile-communication Markup For People Focused Mobile Communication]</cite></span>
+* <span class="h-cite"><time class="dt-published">2014-03-25</time> <span class="p-author h-card">Tantek Çelik</span>: <cite class="p-name">[http://tantek.com/2014/084/b1/urls-people-focused-mobile-communication URLs For People Focused Mobile Communication]</cite></span>
+* 2014-03-19 Ben Werdmüller: [http://werd.io/2014/seeking-an-indieweb-alternative-to-google-voice Seeking an #indieweb alternative to Google Voice]
+* <span class="h-cite"><time class="dt-published">2014-03-08</time> <span class="p-author h-card">Tantek Çelik</span>: <cite class="p-name">[http://tantek.com/2014/067/b2/mockups-people-focused-mobile-communication Mockups For People Focused Mobile Communication]</cite></span>
+* <span class="h-cite"><time class="dt-published">2014-03-08</time> <span class="p-author h-card">Tantek Çelik</span>: <cite class="p-name">[http://tantek.com/2014/067/b1/building-blocks-people-focused-mobile-communication Building Blocks For People Focused Mobile Communication]</cite></span>
+* <span class="h-cite"><time class="dt-published">2013-12-04</time> <span class="p-author h-card">Tantek Çelik</span>: <cite class="p-name">[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience Toward A People Focused Mobile Communication Experience]</cite></span>
+
+== See Also ==
+* [[homepage]]
+* [[icon]]
+* [[mobile]]
+* [[messaging]]

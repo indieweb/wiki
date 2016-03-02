@@ -1,0 +1,56 @@
+http://indiewebcamp.com/posts-elsewhere-fr
+
+''Cette page a démarré sur <span class="rel-canonical">[[post-elsewhere]]</span>''
+{{stub-fr}}
+
+Plusieurs blogs IndieWeb ont des sections sur leurs pages permaliens de [[posts-fr|posts]] faisant un lien vers les versions syndiquées [[POSSE-fr|POSSÉe]]s de leurs posts sur les [[silos-fr|silos]], et parfois sur les commentaires des silos comme Hacker News. Cette page est ici pour documenter de tels exemples d'interfaces-utilisateur de "posts-ailleurs" et du marquage suggéré.
+
+__TOC__
+
+== Exemples ==
+=== Automatique ===
+Les sites indieweb où toutes (la plupart ?) des notes sont automatiquement publiées avec des liens vers les copies syndiquées : 
+* aaronParecki.com, par ex. http://aaronparecki.com/notes/2013/03/12/5/sxsw-sterling13 a une section : <blockquote>Share & Respond <br><ul><li>Reply on Twitter</li><li>Reply on App.net</li></ul></blockquote> où chacun des items de liste fait un lien vers la copie syndiquée de la note sur ces silos, avec <code>rel="syndication"</code>.
+* '''tommorris.org''', par ex. http://tommorris.org/posts/8197 a une section : <blockquote>This post is syndicated to:<ol><li>Twitter</li><li>App.net</li></ol></blockquote> où chacun des items de la liste fait un lien vers la copie syndiquée sur ces silos, avec  <code>rel="syndication"</code>.
+* '''waterpigs.co.uk''', par ex. http://waterpigs.co.uk/notes/1114/ a une section : <blockquote>Also Posted On: twitter.com</blockquote> où  "twitter.com" fait un lien vers la copie syndiquée de la note sur Twitter.
+** Cette section est générée automatiquement à partir de tous noms de domaines des URLs dans la liste "downstreamDuplicates" sur cette note (placez .json sur la fin de l'URL pour voir ça ‘raw’), par conséquent dans les cas où je poste sur facebook ce domaine est aussi ajouté  --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 02:41, 19 March 2013 (PDT)
+** les liens vers les copies syndiquées ont ce marquage : 
+*** <code>class="u-as-downstream-duplicate u-alternate"</code>
+
+
+
+=== Manuel (exemples) ===
+Les sites indieweb où quelques notes sont publiées manuellement avec des liens vers les copies syndiquées :
+* tantek.com, par ex. http://tantek.com/2013/073/b1/silos-vs-open-social-web a une section : <blockquote>[http://tantek.com/2013/073/b1/silos-vs-open-social-web#silos-vs-open-social-web-elsewhere Elsewhere]<br><ul><li>Twitter</li><li>Hacker News</li><li>Google+</li></ul></blockquote> où chacun des items de liste fait un lien vers une syndication du titre du post de blog et le permalien sur ces silos.
+** Mise à  jour 2013-077 : J'envisage de changer le l'en-tête de cette section pour passer de "Elsewhere/Ailleurs" à "Syndication" ce qui semble le bon usage du mot dans un sens plus général - vous pouvez voir aussi cet épisode syndiqué sur les réseaux suivants. - [[User:Tantek.com|Tantek]] 14:51, 18 March 2013 (PDT)
+** Mise à jour 2013-099 : Je conserve "Ailleurs" pour le moment au moins sur ce post car c'est plus général, et cela couvre tous les items de la liste, tandis que les deux premiers sont en fait des syndications intentionnelles par l'auteur. - [[User:Tantek.com|Tantek]] 01:26, 10 April 2013 (PDT)
+** les liens vers les copies syndiquées (Twitter, Google+) ont ce marquage sur eux : 
+*** <code>rel="syndication" class="u-syndication"</code>
+* ...
+
+== Marquage Suggéré ==
+Au moment de lier vers les copies syndiquées POSSE des posts, nous devrions marquer ces liens de manière à ce qu'ils puissent être automatiquement découverts. Ceci est utile pour remonter les liens des copies POSSÉes de [[comment-fr#Produire un commentaire|commentaires de posts]]. 
+
+Implémentations existantes sur les liens vers les copies POSSÉes des posts : 
+* Waterpigs.co.uk utilise <code>class="u-as-downstream-duplicate u-alternate"</code>
+* Tantek.com utilise <code>rel="syndication" class="u-syndication"</code>
+* aaronparecki.com utilise <code>rel="syndication"</code>
+
+Propositions :
+* '''<code>[http://microformats.org/wiki/rel-syndication-fr rel=syndication]</code>''' - indique que la destination du lien est une syndication d'une copie syndiquée de la source du lien. Bien qu'une copie syndiquée puisse ressembler à un "alternate" (c.a.d <code>rel="alternate"</code>), il y a suffisamment de potentiel pour l'infériorité (fiabilité, CGU, abréviation de contenu) dans la copie syndiquée que ce devrait être indiqué explicitement. Aussi, "syndication" sous-tend que l'auteur du post a voulu délibérément que son post soit copié vers la destination syndiquée. L'opposé est bien sûr le [[rel-canonical-fr|rel-canonical]] existant qui pourrait être utilisé pour lier à partir de la copie d'un post vers l'orginal.
+* '''<code>class=u-syndication</code>''' - sémantique équivalent, mais concentré pour partir du [[h-entry-fr|h-entry]] plutôt que de la page, et de ce fait qu'il puisse être présent dans plus de contextes que la valeur rel. Cela fait sens d'utiliser les deux sur les pages permalien de posts.
+
+== Cette traduction ailleurs ==
+'''Elsewhere of this Translation''' - une liste de liens vers les copies syndiquée [[POSSÉe]]s d'un post qui est une traduction d'un autre post. 
+
+par ex. en français "cette traduction ailleurs"
+
+Exemples :
+* Cette traduction ailleurs : section dans [http://christopheducamp.com/blog/le-premier-fil-de-discussion-federe-de-commentaires-indieweb#cette-traduction-ailleurs Le Premier Fil de Discussion Fédéré de Commentaires #Indieweb] ...
+
+== Voir aussi ==
+* [[elsewhere-fr|ailleurs]]
+* [[posts-fr|posts]]
+* [[comments-fr|commentaires]]
+* [[identity-elsewhere-fr|identité ailleurs]]
+* http://microformats.org/wiki/rel-syndication-fr

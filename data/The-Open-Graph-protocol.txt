@@ -1,0 +1,87 @@
+http://indiewebcamp.com/The-Open-Graph-protocol
+
+{{stub}}
+
+'''<dfn>[http://ogp.me/ The Open Graph protocol]</dfn>''' (<dfn>OGP</dfn>) is an open* standard developed by [[Facebook]] for annotating the primary subject of an HTML page via a set of custom <code>&lt;meta&gt;</code> tags in the document head for the purpose of Facebook showing [[link preview]]s.
+
+<nowiki>*</nowiki>OGP is licensed using the [http://openwebfoundation.org/legal/the-0-9-agreements---necessary-claims Open Web Foundation Agreement, Version 0.9]. Though not as good as [[CC0]]+[[OWFa]] 1.0, it's still a considerably open license for a web standard written by one company.
+
+__TOC__
+
+== Alternative ==
+Use [[microformats]] to markup the <em>visible</em> information on the page instead, which can be used for a [[link preview]] - the whole purpose of OGP.
+
+== Required Properties ==
+The four required properties for every page are:
+* og:title - The title of your object as it should appear within the graph, e.g., "The Rock".
+* og:type - The type of your object, e.g., "video.movie". Depending on the type you specify, other properties may also be required.
+* og:image - An image URL which should represent your object within the graph.
+* og:url - The canonical URL of your object that will be used as its permanent ID in the graph, e.g., "http://www.imdb.com/title/tt0117500/".
+
+== Criticism ==
+=== Pseudo-RDFa ===
+Rather than use existing meta tag "name" attribute, OGP uses the RDFa "property" attribute, as well as prefixes property names with "og:" to give the appearance of RDFa:
+
+Instead of:
+<pre><nowiki>
+<meta name="description" content="invisible description of the page"/> 
+</nowiki></pre>
+
+OGP uses:
+<pre><nowiki>
+<meta property="og:description" content="invisible description of the page"/>
+</nowiki></pre>
+
+(actual meta name from web legacy and OGP property from their spec)
+
+Text from the Open Graph Object Debugger if you use <code>meta name="description"</code>:
+
+<blockquote><p>Extraneous Property: Objects of this type do not allow properties named 'description'.</p>
+<p>Mismatched Metadata: The parser's result for this metadata did not match the input metadata. Likely, this was caused by the data being ordered in an unexpected way, multiple values being given for a property only expecting a single value, or property values for a given property being mismatched. Here are the input properties that were not seen in the parsed result: 'og:description' </p></blockquote>
+
+=== Depends on Invisible Metadata ===
+Meta tags, no matter how well-intentioned, are another form of invisible metadata. They are subject to the same problems as meta keywords. ([[DRY]] violation, rotting, spamming, etc.).
+
+The RDF-apologism of using a "property" attribute instead of a "name" attribute doesn't change this, nor does the "og:" syntactic vinegar prefix.
+
+=== Disallows relative URLs ===
+Apparently OGP doesn't allow relative URLs[http://indiewebcamp.com/irc/2014-08-19/line/1408480229851].
+If you put relative paths into og meta tags:
+
+<code><nowiki><meta property="og:image" content="images/logo.png" /></nowiki></code>
+
+The Open Graph Object Debugger will say it is not an image.
+
+=== Does not support SVG images ===
+If you include :
+
+<code><nowiki><meta property="og:image" content="http://mysite.com/logo.svg" /></nowiki></code>
+
+The Open Graph Object Debugger will say it is not an image.
+
+== Indieweb Examples ==
+=== David Shanske ===
+{{gwg}} is using Open Graph to store data for a link preview when liking/bookmarking/etc on his site.
+* The title from :title
+* An excerpt of the URL from :description
+* The site name from :site_name (Many sites do not offer the site_name field.
+* Tags from article:tag, og:video:tag, etc.
+* A featured image from :image.
+
+This is enough to generate a [[link preview]] in many cases.
+
+=== gRegor Morrill ===
+{{gRegor}} is using <code>og:title</code>, <code>og:type</code>, and <code>og:image</code>. I do not use <code>og:description</code> because I do not have summaries set up for each post. Facebook uses the <code>meta description</code> as a fallback.
+* Facebook complains that my <code>og:image</code> is too small/cannot be downloaded. It says they require the image to be 200x200. Despite that, it usually shows up when I share a link on Facebook.
+
+== Silo Examples ==
+=== Twitter ===
+[[Twitter]] prefers [[Twitter Cards]], but will fallback to using some OGP meta tags.
+
+=== Apple ===
+Apple’s News app ([https://www.apple.com/pr/library/2015/06/08Apple-Announces-News-App-for-iPhone-iPad.html announced 2015-06-08]) will [https://developer.apple.com/library/prerelease/ios/documentation/General/Conceptual/News_Publishing_Guide/RSSBestPractices.html prefer Open Graph tags] over general meta tags or [[Schema.org]] metadata.
+
+== See Also ==
+* [https://developers.facebook.com/tools/debug/og/object/ Facebook's Open Graph Object Debugger]
+* [[microformats]]
+* [[link-preview]]

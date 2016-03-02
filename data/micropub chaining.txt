@@ -1,0 +1,40 @@
+http://indiewebcamp.com/micropub_chaining
+
+{{stub}}
+
+'''<dfn>micropub chaining</dfn>''' is when you have one [[micropub]] endpoint itself use micropub to post to another micropub endpoint, like to [[POSSE]] a post to [[silos]], or to a community site or other [[commons]]. 
+
+2015-06-08 Concept described in IRC by {{benthatmustbeme}} http://indiewebcamp.com/irc/2015-06-08/line/1433793069686
+
+2015-06-23 Term proposed in IRC by {{t}} [http://indiewebcamp.com/irc/2015-06-24/line/1435175907946][http://indiewebcamp.com/irc/2015-06-24/line/1435176714166]
+
+== Why ==
+By supporting micropub chaining on the micropub endpoint, you can use any any micropub client to post to your site, and let your server handle automatic [[POSSE]]ing (e.g. via [[silo.pub]]) to [[silos]], or cross-posting.
+
+== How to ==
+Your server must be both a Micropub server implementation with an endpoint, and then have stored state to be able to be a Micropub client implementation to post to other Micropub endpoints.
+
+== IndieWeb Examples ==
+* {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} has Micropub Chaining working via [[Postly]] to [[mpTweet]] as of 2015-07-27.  mptweet first requests a token with scope "register" from the user site, then sends ?register=<mpTweet's URL>&register_token=<token to allow posting to mpTweet>.   When syndicating mpTweet only uses content + url
+
+== Brainstorming ==
+
+=== Authorization Flow ===
+One of the more difficult pieces will be getting the user interface for the initial set up.  Getting a token to the first endpoint in the chain will be a slightly confusing task.   Say there is some external site PublishToSomeSilo.xyz that we want to add to our chained micropub endpoints, how do we add this?
+
+# visit PublishToSomeSilo.xyz and select to sign-up (probably at this point you will authorize the site to publish on your behalf).
+# redirect to primary sites endpoint with <micropub endpoint>/?register=PublishToSomeSilo.xyz
+# follow general flow as if <micropub endpoint>/?register=PublishToSomeSilo.xyz is a client looking to use access  PublishToSomeSilo.xyz
+# after verifying the token, store the token and URL and possibly other data (fields to add??) somewhere 
+# redirect to PublishToSomeSilo.xyz and get notification that your endpoint can now syndicate to this site.
+~{{benthatmustbeme}} 2015-06-25 
+
+=== Annotate canonical url for post ===
+The chained (secondary) micropub endpoint may not be specifically designed to be a micropub endpoint.  How does one specify the canonical url in micropub post?  syndication-of=<url> or maybe just url=<url> but this has been overloaded already polling data to edit a post. ~{{benthatmustbeme}} 2015-06-25
+
+=== Custom text for syndicated copy ===
+It might be beneficial to be able to send different syndication targets, different values for some fields (content for example) to allow syndicated copies to be abbreviated versions.  How would the Micropub client application display this?  how would it send the data as it requires embedded items (gets ugly in form encoding)  ~{{benthatmustbeme}} 2015-06-25
+
+== See Also ==
+* [[Micropub]]
+* [[POSSE]]

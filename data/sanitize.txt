@@ -1,0 +1,48 @@
+http://indiewebcamp.com/sanitize
+
+{{stub}}
+
+'''<dfn>sanitize</dfn>''', specifically "<dfn>sanitizing</dfn> HTML", "sanitizing for (display inside) HTML", or "<dfn>sanitization</dfn>" is a common operation performed by any site which displays content from external sources, including user entry.
+
+[[Comments]] (and thus [[comments-presentation]]) is one particularly obvious area where sanitizing of some degree is essential.
+
+== IndieWeb Examples ==
+* ... who does what when they receive comments via [[webmention]] or [[Bridgy]] ?
+* [[Idno]] currently aggressively strips tags.
+* [[WordPress]] only allows a [http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ small whitelist of tags]: <code>a, abbr, acronym, b, blockquote, cite, code, pre, del, em, i, q, strike, strong</code>. It also whitelists attributes within those tags.
+
+== Approaches ==
+There are numerous approaches to sanitizing / filtering for HTML.
+E.g.
+* only allow [[plaintext]]
+* allow only whitelisted HTML tags
+* allow all HTML but strip &lt;script&gt; etc.
+* ...
+
+Here are some additional resources:
+* https://github.com/microcosm-cc/bluemonday - a sanitization library
+* http://pythonhosted.org/feedparser/html-sanitization.html
+* https://web.archive.org/web/20080826033749/http://diveintomark.org/archives/2003/06/12/how_to_consume_rss_safely
+* https://developers.google.com/caja/ (also https://code.google.com/p/google-caja/ ? ) - "the most insanely thorough sanitizer" - Kevin Marks
+* http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ - WordPress's minimal HTML tag whitelist. notably, it allows links, but not images.
+* https://www.npmjs.org/package/sanitize-html
+
+== User Experience ==
+=== Literal text ===
+Users typically expect that whatever they type into a comment box will be shown literally, e.g. if a user types in:
+
+<pre><nowiki>if b<a and a>c then you do not know whether b>c</nowiki></pre>
+
+They expect to see that text in the comment.
+
+What you might see, due to perhaps overly aggressive sanitizing (e.g. a regex) that thinks it is removing HTML:
+
+<pre>if bc then you do not know whether b>c</pre>
+
+=== Some markup ===
+Other sites, e.g. [[Flickr]] permit user entry of a few tags so that users may add explicit hyperlinks, and some amount of text formatting to their comments.
+
+== See Also ==
+* [[comments]]
+* [[plaintext]]
+* [[webmention]]

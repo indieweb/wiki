@@ -1,0 +1,432 @@
+http://indiewebcamp.com/like
+
+{{stub}}
+<span style="float:right;height:128px;font-size:128px;color:red">♥</span>
+'''<dfn>like</dfn>''' is a popular [[webaction]] button and in some cases [[post]] type on various [[silos]] such as [[Facebook]] and [[Instagram]] (uses a heart ♥). It is similar to but different from a [[favorite]].
+
+== How ==
+=== mark up and post a like ===
+To post a "like", the post's [[h-entry]] MUST hyperlink to the permalink of the thing that is being liked, with <code>class="u-like-of"</code>. E.g.
+<pre><nowiki>
+<span class="h-entry"> ... 
+ <a class="u-like-of" href="http://someothersite.example.com/permalink47">...</a>
+</span>
+</nowiki></pre>
+Demonstrates an h-entry for a "like" of <nowiki>http://someothersite.example.com/permalink47</nowiki>.
+
+The trailing preposition "of" helps communicate this in the same that we have <code>u-in-reply-to</code> instead of <code>u-reply</code>. 
+
+=== receive and markup incoming likes ===
+Likes are received in exactly the same way [[comments]] are, by accepting incoming [[webmentions]] to URLs on your site. When validating the webmention source, check for a h-entry with a <code>like-of</code> property pointing to the target URL (your URL). If there is one, that h-entry is a like of your page! Store it however you wish, and optionally display it on the liked page.
+
+Likes are commonly displayed either as a [[facepile]], separate from any other comments/responses ([http://aaronparecki.com/notes/2014/05/18/1/imessage example]), or inline with other responses ([http://waterpigs.co.uk/notes/4W1Ekd/ example]).
+
+Likes are marked up similarly to other [[responses]]. Here’s an example h-entry with a like:
+
+<pre><nowiki>
+<article class="h-entry">
+  <a class="p-author h-card" href="http://waterpigs.co.uk">Barnaby Walters</a>
+  <div class="e-content">This is a note. I make lots of them.</div>
+  
+  <article class="p-like h-cite">
+    <a class="p-author h-card" href="http://cb.example.com">Example Liker CB</a> liked this 
+    on <a class="u-url" href="http://cb.example.com/like47">
+      <time class="dt-published">2014-05-18</time></a> 
+  </article>
+</article>
+</nowiki></pre>
+
+Note: a <code><nowiki><a class="u-like-of" href=""></a></nowiki></code> inside the <code>h-cite</code> is unnecessary, since the h-cite itself is <em>on</em> a <code>u-like</code> property inside the h-entry.
+
+=== POSSE a like ===
+If you're [[POSSE]]ing a like of a [[silo]] post to the silo itself, use [[Bridgy]] Publish to do so (e.g. [[Twitter]]), call the silo API directly from your site (e.g. [[Flickr]]), or do so manually (e.g. [[Facebook]]).
+
+If you're [[POSSE]]ing a like of a post on an indie web site that only supports [[comments]], you can do so by POSSEing the plain-text equivalent of your like post (with a permalink to your original like post) as a comment directly on said indieweb site.
+
+"Name likes this post. (Originally liked at Permalink)"
+
+Examples:
+* ... none so far
+
+== IndieWeb Examples ==
+Examples in the wild of indieweb creators publishing reposts. Add yourself!
+
+=== Sandeep ===
+[[User:Sandeep.io|Sandeep Shetty]] has started posting "like" [[posts]] on his own site with a different presentation than other post types, e.g.:
+
+* http://www.sandeep.io/40
+** is a "like" of http://aaronparecki.com/notes/2013/06/09/1/jawboneup-fuelband-qs
+
+In some ways this resembles a [[quote]] post (e.g. like on [[Tumblr]]) but the presentation is different enough (usually quote posts are either *only* the quote, or if the quote is entirety, it might just be a [[repost]]).
+
+[[File:sandeep.io-like-example.png]]
+
+=== Ben Werdmuller ===
+Ben Werdmuller as of IndieWebCamp [[2013]] implemented likes on werd.io, but called them favorites (because he preferred the term, though they behave like likes).
+
+Example:
+* http://werd.io/view/51d1fd3dbed7de817a526da2
+** Is a like of: http://tantek.com/2013/182/t2/publish-elsewhere-syndicate-silo-pesetas-indieweb
+
+=== Brid.gy ===
+As of the end of 2013, [[Bridgy]] now sends webmentions for Facebook and Twitter likes, Twitter favorites, and Google+ +1s. It uses <code>class="u-like u-like-of"</code> to support both the original property and the counterproposal above.
+
+=== Ryan Barrett ===
+[[User:Snarfed.org|Ryan Barrett]] posts likes on [http://snarfed.org/ snarfed.org] since 2014-02-04, e.g.
+* http://snarfed.org/2014-02-04_re-today-is-the-last-day-of-luckily-can-be-used-as-a-replacement
+** is a like of: http://aaronparecki.com/notes/2014/02/01/1/
+
+Here's the [https://snarfed.org/indieweb-press-this-bookmarklets-for-wordpress bookmarklet/plugin] and [https://snarfed.org/easy-indieweb-interactions-on-android Android setup] he uses to indie like (and reply, retweet, etc) with minimal friction on both web and mobile.
+
+=== Barnaby Walters ===
+[[User:Waterpigs.co.uk|Barnaby Walters]] posts likes on [http://waterpigs.co.uk/ waterpigs.co.uk] since ????-??-??, e.g. 
+* ???? - permalink to Barnaby's first indie like
+** is a like of: ???
+
+=== Kyle Mahan ===
+{{kylewm}} posts likes on [https://kylewm.com kylewm.com] since 2014-03-13, e.g.,
+* https://kylewm.com/like/2014/03/13/2
+** is a like of http://caseorganic.com/notes/2014/03/12/1/
+* likes are POSSEd to Twitter if the target publishes a [rel-syndication] URL for Twitter
+
+=== Kartik Prabhu ===
+Kartik Prabhu posts likes on kartikprabhu.com since 2014-07-09, e.g. 
+* https://kartikprabhu.com/notes/chloeweil - permalink to Kartik's first indie like
+** is a like of: http://adactio.com/notes/7024/ & https://twitter.com/adactio/status/486979851287793667
+
+=== Acegiak ===
+[[User:Acegiak.net Acegiak]] posts likes on [http://acegiak.net/ acegiak.net] since at least 2014-03-27.
+Acegiak's posts may have multiple verbs for a single piece of content.
+* http://acegiak.net/2014/03/28/kyle-mahan-all-how-i-hate-that-java-util-map-getobject-is-not-generified-probably-the-biggest-source-of-my-java-api-related-bugs-2/
+** is a like of http://kylewm.com/note/2014/03/28/1
+* http://acegiak.net/2014/03/27/hexington-stand-up-comic-gifskumail-nanjiani/
+** is a like, repost and comment of http://hexington.tumblr.com/post/80872320480/stand-up-comic-gifs-kumail-nanjiani
+
+=== Aaron Parecki ===
+{{aaronpk}} posts likes on aaronparecki.com/likes [https://aaronparecki.com/likes/2014/12/26/1/ since 2014-12-26]. E.g.
+* https://aaronparecki.com/likes/2014/12/26/1/
+** is a like of indieweb post https://indiewebcat.com/notes/2014/12/23/3/businesscatual
+* announcement: https://aaronparecki.com/replies/2014/12/26/1/indieweb-20150101
+
+=== Tantek ===
+{{t}} posts likes on tantek.com [http://tantek.com/2014/365/f since 2014-12-31]. E.g.
+* http://tantek.com/2014/365/f1
+** is a like of tweet https://twitter.com/strwbrryLttr23/status/514098814983372800
+* http://tantek.com/2014/365/f2
+** is a like of indieweb post https://aaronparecki.com/replies/2014/12/26/1/indieweb-20150101
+* announcement: http://tantek.com/2014/365/t1/indieweb-like-posts-2015-commitment-done
+
+__TOC__
+== Silo Examples ==
+=== 500px ===
+[[500px]] uses a Like button with a thumbs up (👍) icon.
+E.g. on http://500px.com/photo/79538847/lifeguard-cottages-cuckmere-haven-by-al-power
+=== Facebook ===
+[[Facebook]] popularized [[like]] as a verb and "likes" as an indicator on posts, originally with a thumbs-up icon 👍 as a visual affordance on "like" buttons (use of 👍 retired 2013-11-07[http://www.fastcodesign.com/3021307/innovation-by-design/why-facebooks-new-like-button-had-to-ditch-the-thumbs-up][http://www.zdnet.com/article/no-thumbs-up-for-facebooks-new-icons/]). Examples:
+==== FB like permalink ====
+Here is an individual like post (linked from /username/allactivity) https://www.facebook.com/tantek.celik/posts/10100983037811143:0 (should be viewable without login). For likes of ''pages'' and maybe other objects, it's rendered like this: <blockquote><img src="https://twitter.com/t/profile_image" style="max-height:3em; float:left; margin-right:0.3em"/> [[Tantek Çelik]] likes [[Indie Web Camp]]. <br/>March 19 · 🌎<br/><img style="float:left; margin-right:0.5em" src="https://fbcdn-profile-a.akamaihd.net/hprofile-ak-xpf1/v/t1.0-1/c56.0.100.100/p100x100/1975203_688448337859860_574801534_n.png?oh=7301435b80e2d50d37328d753d6f06b2&oe=552D9580&__gda__=1430511383_f706c9efc17d2d277a524eab6e54d8b4"/> '''Indie Web Camp'''<br/>Community<br/><br/>110 Likes<br/>1 talking about this </blockquote> where person-[[icon]] and name is linked to profile, object of like is linked to object's page, date is linked to permalink, and below that a [[link-preview]] is shown for the page being liked.
+
+For ''posts'', the post is rendered with a small "X likes this" tag at the top:
+
+[[File:fb_like_post.png|506px]]
+
+==== FB likes in allactivity ====
+Like posts in-stream appear much more succinctly. Examples in the /username/allactivity stream:
+* <blockquote>👍  [[Tantek Çelik]] likes [[Indie Web Camp]].<br/>[https://www.facebook.com/tantek.celik/posts/10100983037811143:0 March 19]</blockquote> with a small link-preview of the liked thing to the right of that. The user's name is linked to their profile, and the name of the thing liked is linked to it. The date/time e.g. "March 19th" is invisible at first and shows only upon hovering over the entry, at which point it appears and is linked to the like post permalink.
+* A like of an album with multiple photos. Relevant when designing UIs for collapsing multiple separate photo likes. This is technically a different thing - one like of [https://www.facebook.com/media/set/?set=a.567969566672874.1073741987.276430682493432&type=3 an album] - but the display considerations are similar.
+[[File:facebook_like_photo_album.png|600px]]
+
+==== FB likes in right sidebar ====
+In the right-side [[notifications]] stream: <blockquote style="width:15em"><img src="https://twitter.com/t/profile_image" style="max-height:2.7em; float:left; margin-right:0.4em"/> '''Tantek Çelik''' likes <br/>Indie Web Camp. <hr/><img src="https://twitter.com/t/profile_image" style="max-height:2.7em; float:left; margin-right:0.4em"/> '''Tantek Çelik''' likes <br/> Jane Smith's photo. <hr/><img src="https://twitter.com/t/profile_image" style="max-height:2.7em; float:left; margin-right:0.4em"/> '''Tantek Çelik''' likes <br/> John Smith's post.</blockquote> Hovering over these in-stream like posts shows a pop-up to the left with the liked post/thing, including content, comments, and buttons/actions to interact with it.
+==== likes vs liked ====
+Facebook explicitly uses the present tense verb "likes" whereas others (e.g. [[notification#Platform_Examples]], [[Instagram]]) use the past tense "liked".
+* The use of the present tense "likes" term is an odd inconsistency even with other items in Facebook's right sidebar stream which use past tense verbs: "commented", "took [a photo]", "added [n new photos]", "shared [user's video]", "shared [a link]". Unlikely that's a mistake, likely there was a deliberate reason for "likes" instead of "liked".
+* Possible explanation: maybe to imply "still likes it" instead of "liked this in the past". Thus perhaps focusing on the emotional state (present, likes), rather than the action ("liked").
+
+=== FriendFeed ===
+<!-- id="Friendfeed" NOT a typo --><span id="Friendfeed">FriendFeed</span> first introduced the like button on 2007-10-30[https://en.wikipedia.org/wiki/Like_button#Use_on_FriendFeed][http://blog.friendfeed.com/2007/10/i-like-it-i-like-it.html] as a simple light blue-gray text link: <span style="color:rgb(119,119,204); text-decoration:underline">Like</span> and a smiley face for the summary display of likes: <br/>
+[http://blog.friendfeed.com/2007/10/i-like-it-i-like-it.html <img src="http://friendfeed.com/static/images/like-screenshot.png?v=2" style="max-width:100%" alt="Post summary with Comment and Like links"/>]<br/>
+Note the use of a short list of up to three likers by text name, and "and N other people like this", a precursor to modern [[facepile]] display techniques.
+
+=== Instagram ===
+<span style="color:grey">♥</span> [[Instagram]] also uses [[like]] in their UI, but gives it a heart icon.
+
+==== Instagram followings activity ====
+Instagram's UI has a heart inside a talk bubble icon button at the bottom, which when clicked, presents recent activity (likes, comments, following, person-taggings) of you and your posts (photos, videos). If you then tap the "FOLLOWING" tab at the top, it shows similar activity by and for those you follow (for the most part that is, it doesn't show you when people follow the people you are following). 
+
+What's particularly interesting is their approach to like clustering, which we can learn from:
+
+[[File:2015-023-instagram-like-clustering.jpg]]
+
+=== Twitter ===
+[https://blog.twitter.com/2015/hearts-on-twitter Since 2015-11-03] Twitter has started using a heart symbol and "like" as a replacement for their previous star and "[[favorite]]" terminology.
+
+== Variants ==
+Some sites have a feature similar to likes but called something else.
+=== We Heart It ===
+<span style="color:red">♥</span> [http://weheartit.com/ We Heart It] uses the text word "heart" as a verb and "hearted" as a past tense indicator.
+
+=== 500px ===
+[[500px]] has a heart button (with white heart icon on red background <span style="background:red;color:white;padding:.2em">♥</span>) <em>in addition to</em> and right next to a Like button:
+E.g. on http://500px.com/photo/79538847/lifeguard-cottages-cuckmere-haven-by-al-power?from=user
+
+== Icon considerations ==
+=== Star vs Heart ===
+<blockquote>For a couple years, registered Airbnb users have been able to '''star''' the properties they browse, and save them to a list. But Gebbia’s team wondered whether just a few tweaks here and there could change engagement, so they changed that star to a '''heart'''. To their surprise, '''engagement went up by a whopping 30%'''.[http://www.fastcodesign.com/1670890/how-airbnb-evolved-to-focus-on-social-rather-than-searches#From_A_Star_To_A_Heart]</blockquote> '''Emphasis''' added.
+
+== Brainstorming ==
+=== notification first design ===
+Seems sensible to start with a notification first design of what a like post could look like. Some ideas, based on research on [[notification#Platform_Examples|notification examples]]. Assumptions:
+* Notifications may have only one "action" upon activation, which can be assumed to activate a link or a the equivalent thereof. For posts, they would activate permalinks (thus no reason to include them explicitly).
+* Notifications have an implication of being (semi-)realtime, and show when they were received, which is close enough to a published date as to not need an explicit published date.
+
+Using "likes" explicitly instead of "liked" for the same (apparent) [[like#likes_vs_liked|reason the Facebook examples do]].
+
+Liking an indieweb post:
+* <blockquote>likes Aaron Parecki's post.</blockquote>
+* <blockquote>likes Aaron Parecki's note/reply/checkin/RSVP.</blockquote>
+* <blockquote>likes Aaron Parecki's article "A Little Twitter Developer History".</blockquote>
+Liking a tweet:
+* <blockquote>likes @aaronpk's tweet.</blockquote>
+Liking an Instagram photo:
+* <blockquote>likes aaronpk's photo.</blockquote>
+
+Sequential likes can be clustered for more efficient presentation:
+* <blockquote>likes @aaronpk's tweet and Aaron Parecki's post.</blockquote>
+* <blockquote>likes aaronpk's photo, @aaronpk's tweet, and Aaron Parecki's post.</blockquote>
+
+Another additional clustering can be done in some cases with authorship knowledge. E.g. with a [[nicknames cache]] that helped determined that those liked posts were all created by the same person, the likes could be clustered further:
+* <blockquote>likes Aaron Parecki's photo, tweet, and post.</blockquote>
+
+
+In the simpler case of adjacent likes of the same URL person(source)'s things, they can be clustered purely by inspection (without lookup or referencing a nicknames sidetable), e.g. from:
+* <blockquote>likes NovemberProjectSF’s photo, NovemberProjectSF’s photo, NovemberProjectSF’s photo, NovemberProjectSF’s photo, NovemberProjectSF’s photo, NovemberProjectSF’s photo, NovemberProjectSF’s photo, NovemberProjectSF's photo album “NPSF: Our Year in Photos”, NovemberProjectSF’s post, and NovemberProjectSF’s photo.</blockquote>
+To omitting their name from immediately subsequent likes:
+* <blockquote>likes NovemberProjectSF’s photo, photo, photo, photo, photo, photo, photo, photo album “NPSF: Our Year in Photos”, post, and photo.</blockquote>
+However, a series of "photo, photo, photo" looks nonsensical and robotic, and thus we should simplify that too. Sets of consecutive items of the same type from the same source can be clustered with a leading count:
+* <blockquote>likes 7 of NovemberProjectSF’s photos, photo album “NPSF: Our Year in Photos”, post, and photo.</blockquote>
+
+
+=== text only design ===
+Going from a notification first design to a text only design, we must:
+* drop the expectation of a primary activation action
+However, these days, most text-only conduits/presentations also [[auto-link]], thus providing URLs in the text provides user-activation options, buttons/actions/navigation of a sort.
+* drop the expectation of realtime, as the text may go through any number of text-like conduits such as IM, IRC, Email, SMS, Twitter delayed much after the post time.
+Thus it makes sense to add any links inline, and an explicit date and time of publication.
+
+Liking an indieweb post:
+* <blockquote>likes Aaron Parecki's post http... . 21:00 on 2014-12-27</blockquote>
+* <blockquote>likes Aaron Parecki's note/reply/checkin/RSVP http... . 22:00 on 2014-12-27</blockquote>
+* <blockquote>likes Aaron Parecki's article "A Little Twitter Developer History" http... . 23:00 on 2014-12-27</blockquote>
+Liking a tweet:
+* <blockquote>likes @aaronpk's tweet http... . 23:30 on 2014-12-27</blockquote>
+Liking an Instagram photo:
+* <blockquote>likes aaronpk's photo http... . 23:30 on 2014-12-27</blockquote>
+
+Note: "HH:MM on YYYY-MM-DD" is used instead of "YYYY-MM-DD at HH:MM" because the HH:MM more often than not tends to be a more distinguishing aspect of the datetime stamp than the date, especially when clustered or placed in list form.
+
+Previously: "YYYY-MM-DD at HH:MM" with " at " date/time delimiter is used instead of just "YYYY-MM-DD HH:MM" for better readability. Also, this explicit use of " at " is based on the prior art (design) of [[Facebook]] using phrasing like "<small style="color:gray">January 5 at 9:30am</small>" for datetime permalinks on profile posts.
+
+Sequential likes on the same day can be clustered for more efficient presentation:
+
+* <blockquote>likes @aaronpk's tweet http... at 23:30 and Aaron Parecki's post http... at 21:00 on 2014-12-27</blockquote>
+* <blockquote>likes aaronpk's photo http... at 23:45, @aaronpk's tweet http... at 23:30, and Aaron Parecki's post http... at 21:00 on 2014-12-27</blockquote>
+
+"at HH:MM" is used rather than "(HH:MM)" (previous design) because a plain parenthesized time looks like the duration of the thing before it[http://indiewebcamp.com/irc/2015-01-03#t1420277869596].
+
+Issue: the "at HH:MM" suffix could easily be misinterpreted as the publication time of the thing being liked, as opposed to the like post itself. Prefixing may be another option.
+
+With authorship knowledge, e.g. with a [[nicknames cache]], that determined that those liked posts were all created by the same person, the likes could be clustered further:
+* <blockquote>likes Aaron Parecki's photo http... at 23:45, tweet http... at 23:30, and post http... at 21:00 on 2014-12-27</blockquote>
+
+
+In the simpler case of adjacent likes of the same URL person(source)'s things, they can be clustered purely by inspection (without lookup or referencing a nicknames sidetable), e.g. from:
+* <blockquote>likes NovemberProjectSF’s photo http... at 00:54, NovemberProjectSF’s photo http... at 00:53, NovemberProjectSF’s photo http... at 00:52, NovemberProjectSF’s photo http... at 00:52, NovemberProjectSF’s photo http... at 00:50, NovemberProjectSF’s photo http... at 00:49, NovemberProjectSF’s photo http... at 00:49, NovemberProjectSF's photo album “NPSF: Our Year in Photos” http... at 00:47, NovemberProjectSF’s post http... at 00:46, and NovemberProjectSF’s photo http... at 00:45.</blockquote>
+To omitting their name from immediately subsequent likes (2015-019 works in [[Falcon]]).
+* <blockquote>likes NovemberProjectSF’s photo http... at 00:54, photo http... at 00:53, photo http... at 00:52, photo http... at 00:52, photo http... at 00:50, photo http... at 00:49, photo http... at 00:49, photo album “NPSF: Our Year in Photos” http... at 00:47, post http... at 00:46, and photo http... at 00:45.</blockquote>
+And then with more specific mentions for link text by numbering consecutive items of the same type:
+* <blockquote>likes NovemberProjectSF’s photo 1 http... at 00:54, photo 2 http... at 00:53, photo 3 http... at 00:52, photo 4 http... at 00:52, photo 5 http... at 00:50, photo 6 http... at 00:49, photo 7 http... at 00:49, photo album “NPSF: Our Year in Photos” http... at 00:47, post http... at 00:46, and photo http... at 00:45.</blockquote>
+Also further clustering of sets of consecutive items of the same type from the same source with a leading count, and parenthesizing such sets:
+* <blockquote>likes 7 of NovemberProjectSF’s photos (photo 1 http... at 00:54, photo 2 http... at 00:53, photo 3 http... at 00:52, photo 4 http... at 00:52, photo 5 http... at 00:50, photo 6 http... at 00:49, photo 7 http... at 00:49), photo album “NPSF: Our Year in Photos” http... at 00:47, post http... at 00:46, and photo http... at 00:45.</blockquote>
+
+=== inline hypertext design ===
+The next progressive enhancement from text is lightly styled hypertext, including images and hyperlinks.
+
+Liking an indieweb post:
+* <blockquote>likes {{aaronpk}}'s post.<span style="color:gray;font-size:.73em;float:right">21:00 on 2014-12-27</span></blockquote>
+** "{{aaronpk}}'s post" links to the permalink of the thing liked
+*** instead of separate "{{aaronpk}}" links to his home page and "post" links to the permalink of the thing liked
+** "21:00 on 2014-12-27" links to the permalink of the like post, when displayed elsewhere, e.g. in-stream.
+* <blockquote>likes {{aaronpk}}'s note/reply/checkin/RSVP.<span style="color:gray;font-size:.73em;float:right">22:00 on 2014-12-27</span></blockquote>
+** etc.
+* <blockquote>likes {{aaronpk}}'s article "A Little Twitter Developer History".<span style="color:gray;font-size:.73em;float:right">23:00 on 2014-12-27</span></blockquote>
+** similarly for an event or review
+** could be marked up with [[h-cite]] as well.
+Liking a tweet:
+* <blockquote>likes @aaronpk's tweet.<span style="color:gray;font-size:.73em;float:right">23:30 on 2014-12-27</span></blockquote>
+** "@aaronpk's tweet" links to the permalink of the favorited tweet
+*** instead of separate "@aaronpk" link to Twitter profile and "tweet" link to tweet permalink
+Liking an Instagram photo:
+* <blockquote>likes aaronpk's photo.<span style="color:gray;font-size:.73em;float:right">23:45 on 2014-12-27</span></blockquote>
+** "aaronpk's photo" links to the permalink of the liked photo
+*** instead of "aaronpk" link to his IG profile and "photo" link to the IG photo permalink
+
+These designs work for both in-stream like posts, and like post permalinks.
+
+In-stream, collapse multiple sequential like posts from the same day:
+* <blockquote>likes @aaronpk's tweet <span style="color:gray;font-size:.73em">at 23:30</span> and {{aaronpk}}'s post <span style="color:gray;font-size:.73em;">at 21:00</span>.<div>&nbsp;<span style="color:gray;font-size:.73em;float:right;margin-top:1em">on 2014-12-27</span></div><br/></blockquote>
+* <blockquote>likes aaronpk's photo <span style="color:gray;font-size:.73em">at 23:45</span>, @aaronpk's tweet <span style="color:gray;font-size:.73em">at 23:30</span>, and {{aaronpk}}'s post <span style="color:gray;font-size:.73em;">at 21:00</span>.<div>&nbsp;<span style="color:gray;font-size:.73em;float:right;margin-top:1em">on 2014-12-27</span></div><br/></blockquote>
+
+Where the times (e.g. "at 21:00") link to the permalinks of each like post respectively, and the date "on 2014-12-27" links to the archive of all like posts for that day, which will likely show these (and maybe others) in expanded form like the above individual like posts stacked one on top the other.
+
+Again with authorship knowledge, e.g. with a [[nicknames cache]], that determined that those liked posts were all created by the same person, the likes could be clustered further:
+* <blockquote>likes {{aaronpk}}'s photo <span style="color:gray;font-size:.73em">at 23:45</span>, tweet <span style="color:gray;font-size:.73em">at 23:30</span>, and post <span style="color:gray;font-size:.73em;">at 21:00</span>.<div>&nbsp;<span style="color:gray;font-size:.73em;float:right;margin-top:1em">on 2014-12-27</span></div><br/></blockquote>
+
+
+=== markup for hypertext design ===
+Note: markup of times should include timezone explicitly! E.g. using "datetime" attribute of the time element.
+
+Minimal markup for liking an indieweb post:
+<pre><nowiki>
+<p class="h-entry">likes 
+  <a class="u-like-of" href="http://aaronparecki.com/...">Aaron Parecki's post</a>.
+  <a class="u-url" href="/2014/361/f1">
+    <span class="dt-published"><time class="value">21:00</time> 
+      on <time class="value">2014-12-27</time></span>
+  </a>
+</p>
+</nowiki></pre>
+Similarly, for note/reply/checkin/RSVP.
+
+[[authorship]] is presumed to work via [[rel-author]], e.g. for such posts in a stream/archive on a page. On a permalink page, such pages typically contain authorship information already somewhere, presuming the h-entry for them is on the body rather than the div in the above example.
+
+Markup for liking an indieweb article with a name in particular, one could use a simple embedded h-cite as well:
+<pre><nowiki>
+<p class="h-entry">likes 
+  <a class="u-like-of h-cite" href="http://aaronparecki.com/...">
+    <span class="p-author">Aaron Parecki</span>'s 
+    article "<span class="p-name">A Little Twitter Developer History</span>"
+  </a>.
+  <a class="u-url" href="/2014/361/f3">
+    <span class="dt-published"><time class="value">23:00</time>
+     on <time class="value">2014-12-27</time></span>
+  </a>
+</p>
+</nowiki></pre>
+
+This would also be a good consuming code test case to make sure it follow [[authorship]] and didn't misinterpret the author of the article as the author of the like.
+
+
+Markup for multiple in-stream sequential like posts from the same day, collapsed:
+<pre><nowiki>
+<p>
+<span class="h-entry"><span class="p-name">likes 
+  <a class="u-like-of" href="http://twitter.com/aaronpk/...">@aaronpk's tweet</a></span>
+  <a class="u-url" href="/2014/361/f4">at 
+     <time class="dt-published" datetime="2014-12-27 23:30">23:30</time></a>
+</span> and
+<span class="h-entry"><abbr class="p-name" title="likes Aaron Parecki's post">
+  <a class="u-like-of" href="http://aaronparecki.com/...">Aaron Parecki's post</a></abbr>
+  <a class="u-url" href="/2014/361/f1">at 
+     <time class="dt-published" datetime="2014-12-27 21:00">21:00</time></a>
+</span>.
+<a href="/2014/361/f">on <time>2014-12-27</time></a>
+</p>
+</nowiki></pre>
+
+<pre><nowiki>
+<p>
+<span class="h-entry"><span class="p-name">likes 
+  <a class="u-like-of" href="http://instagram.com/...">aaronpk's photo</a></span>
+  <a class="u-url" href="/2014/361/f5">at 
+     <time class="dt-published" datetime="2014-12-27 23:45">23:45</time></a>
+</span>,
+<span class="h-entry"><abbr class="p-name" title="likes @aaronpk's tweet">
+  <a class="u-like-of" href="http://twitter.com/aaronpk/...">@aaronpk's tweet</a></abbr>
+  <a class="u-url" href="/2014/361/f4">at 
+     <time class="dt-published" datetime="2014-12-27 23:30">23:30</time></a>
+</span>, and
+<span class="h-entry"><abbr class="p-name" title="likes Aaron Parecki's post">
+  <a class="u-like-of" href="http://aaronparecki.com/...">Aaron Parecki's post</a></abbr>
+  <a class="u-url" href="/2014/361/f1">at 
+     <time class="dt-published" datetime="2014-12-27 21:00">21:00</time></a>
+</span>.
+<a href="/2014/361/f">on <time>2014-12-27</time></a>
+</p>
+</nowiki></pre>
+
+Again with authorship knowledge, e.g. were all created by the same person, the inline text collapses further, and the expanded explicit p-name for second and latter likes gets the author's full name rather than (silo-specific) username:
+
+<pre><nowiki>
+<p>
+<span class="h-entry"><span class="p-name">likes 
+  <a class="u-like-of" href="http://instagram.com/...">Aaron Parecki's photo</a></span>
+  <a class="u-url" href="/2014/361/f5">at 
+     <time class="dt-published" datetime="2014-12-27 23:45">23:45</time></a>
+</span>,
+<span class="h-entry"><abbr class="p-name" title="likes Aaron Parecki's tweet">
+  <a class="u-like-of" href="http://twitter.com/aaronpk/...">tweet</a></abbr>
+  <a class="u-url" href="/2014/361/f4">at 
+     <time class="dt-published" datetime="2014-12-27 23:30">23:30</time></a>
+</span>, and
+<span class="h-entry"><abbr class="p-name" title="likes Aaron Parecki's post">
+  <a class="u-like-of" href="http://aaronparecki.com/...">post</a></abbr>
+  <a class="u-url" href="/2014/361/f1">at 
+     <time class="dt-published" datetime="2014-12-27 21:00">21:00</time></a>
+</span>.
+<a href="/2014/361/f">on <time>2014-12-27</time></a>
+</p>
+</nowiki></pre>
+
+
+CSS styling for images, colors, layout is left as an exercise to the builder.
+
+=== URL design ===
+[[URL design]] for like post permalinks is likely to be very similar to other posts.
+
+Any use of date in the permalink should work like any other post.
+
+Some additional details:
+* character short code for short URLs.
+** 'f' is suggested by the [http://tantek.com/w/Whistle#design Whistle shortener design] (for favorite, avoiding "l" (for like) since it often looks like "1" or "I" for URL retypability).
+* slugs
+** recommendation: no slug
+** research: existing [[#IndieWeb_Examples]] mostly have no slug, or put some sort of auto-text-content slug from the liked post, even if it has no slug of its own
+** avoid: putting a slug on a like post (especially more of a slug than the liked post) because you should not do more "SEO" than the original liked post, which is a risk. Having a like post show up higher in search results than the liked post itself is both bad form/rude, and worse for the user, who should see the original post in search results before any likes about it.
+
+Thus if your post permalink paths are of the form:
+* <samp>/YYYY/DDD/tn</samp>
+Then a "like" post permalink may have a path like:
+* <kbd>/2014/363/f1</kbd>
+
+=== Reacji vs Like ===
+Reacji are far more expressive than likes.
+I am no longer storing likes of my posts and instead converts them to reacji hearts.  This has a side effect that parsing the mf2 on pages that are "liked" by others is converted instead to a reacji heart comment.  Soon I may actually post my likes of other's posts as reacji hearts as well.  {{benthatmustbeme}}
+
+== Discussion ==
+=== Likes of different things ===
+Facebook seems to differentiate between likes of posts and likes of pages. This seems like an important semantic difference. Is the indieweb equivalent of liking a page a [[favourite]]? - [[user:acegiak.net]]
+
+=== Previous markup ===
+<span id="Previously">Previously</span> the class "u-like" was used, but "u-like-of" is better.
+ 
+Advantages of u-like-of over u-like for this purpose:
+* '''Reads better''' <blockquote>it reads better, more consistently with in-reply-to, e.g. “this post is in-reply-to that post”, “this post is a like-of that post” — Barnaby Walters</blockquote><blockquote>KartikPrabhu supports like-of for ease of reading specially easy for beginners</blockquote>
+* '''Frees up u-like for linking to permalinks of likes'''. This frees up "u-like" (and "p-like") to actually indicate that the URL being linked is a like itself (e.g. similar to "p-comment").
+
+== Related ==
+Possibly related posts and videos to "likes" and "liking"
+* http://www.pbs.org/wgbh/pages/frontline/generation-like/
+
+== See Also ==
+* https://en.wikipedia.org/wiki/Like_button
+* [[favorite]]
+* [[posts]]
+* [[silos]]
+* [[Facebook]]
+* [[Instagram]]
+* [[note]]
+* [[quote]]
+* [[repost]]
+* [[webactions]]
+* [[responses]] - other specialized types of replies

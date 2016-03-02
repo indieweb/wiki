@@ -1,0 +1,396 @@
+http://indiewebcamp.com/2014/UK/Demos
+
+= Start Demos =
+Demos at the start of [[2014/UK|IndieWebCampUK 2014]], just after the [[2014/UK/Introduction|Introduction]] session.
+
+Transcribed from [http://indiewebcamp.com/irc/2014-09-06#t1409996268148 IRC Logs].
+
+See also: Kevin’s [http://www.kevinmarks.com/indiewebcampUK20140906.html IWC UK Selfdogfooding Demos Notes]
+
+== Tantek Çelik ==
+http://tantek.com
+
+*  I just demonstrated /https Level 2 support on my site tantek.com
+* also showed that relmeauth.php is currently broken so I need help with that
+* demonstrated signing in with @t - using Twitter for sign-in to my own site
+* showed that the session cookie that is set is sent on Encrypted Connections Only
+
+== Jeremy Keith ==
+http://adactio.com
+
+* noted he got webmentions working last year
+* since then he got notes posting working on his site
+* including POSSEing to Twitter
+* when he's logged into his own site he goes to adactio.com/notes, it has a textarea at the top because he's logged in
+* he posts a note there, which automatically POSSEs to Twitter
+* then using Bridgy, anyone who @-replies, or likes etc. shows up on his post original
+* also he has a "Choose File" button below his textarea — he can choose a picture which posts it to his own site
+* storing photos on his own site, will see how hosting fees go. He stores various forms of the image
+* uses srcset to serve small.jpg medium.jpg or large.jpg in the version of the image/photo post on his home page
+* POSSEs the photo to Twitter, also to Flickr
+* still hasn't moved his archives from Flickr to his own site, but nevermind the history, from now on, he hasn't given Flickr anything new — all the photos on Flickr since he implemented this are copies
+* narrows the window, shows responsive design on his adactio.com/notes, e.g. for a phone display
+* wanted to POSSE to Instagram but no API to post there — there is ownyourgram, which does a PESOS
+* Jeremy may try to get another instances of his updated software running, e.g. on his wife Jessica's site
+
+== Tom Morris ==
+tommorris.org
+
+* posts notes on there, primarily text based — occassionally photos and such
+* added recently: articles section: tommorris.org/articles
+* uses Mozilla Persona to sign-in, using Rails+Omniauth. Persona was the only thing that didn't need an API Key, because he's not starting an app, he's signing into a website!
+* when Tom is logged in it just shows his [[posting interface]] at the top of his home page tommorris.org with title, text content, check boxes for POSSE to Facebook and Twitter
+* also has a full posting interface with tags, lat, long, location label, License popup
+* feature he's added recently tommorris.org/places
+* using geodienste.lyrk.de for map tiles, which they also serve over https
+* each place he can associate with different things, has an edit link, lat long and an OpenStreetMap reference — clicking on that goes to the OpenStreetMap object for that place
+* also has a Add New Venue UI
+* would like to post photos on there at some point because still currently using Flickr, and Wikimedia commons, also wants to work on image resizing
+
+== Sam Machin ==
+sammachin.com
+
+* rather than posting things, working on owning his own communications — last year showed WebRTC to make a call
+* the idea is that we can replace all forms of phones with URLs
+* you call me by going to my page
+* your contacts become your bookmarks
+* goes to sammachin.github.io/talk/ (front end code is running on github)
+* a lot of backend infrastructure you have to do to get working, so he's doing that as a separate open source setup, and separate static HTML+CSS to do the call stuff
+* "Voicemail is shit. Everyone hates it." -sammachin
+
+
+== Nat Welch ==
+AKA icco
+
+* had the inverse problem — a bunch of sites that did webmentions and such
+* got rid of his entire hosting system
+* started version 2.0 on the train ride over here
+* old sites: pseudoweb.net (long form, markdown), sadnet.com (for people to tweet at him, site about when he was sad about thing) tumble.io scraped pinboard links
+* next version is /natnatnat, as of four hours ago
+
+== Pelle Wessman ==
+voxpelli.com
+
+* at last year's IndieWebCamp, got tired of hosting his own server
+* everytime he wanted to do something it was hard because he had to update Linux, so he's switched to github pages for everything
+* last year's IWC UK, worked on server for embedding webmentions on static pages, uses Jekyll on github pages
+* add a form at the bottom of each post like Jeremy for people to send their webmentions. It's embedded with JS, which pulls down the webmentions and displays them inline
+* the other service is a Heroku app — webmention.herokuapp.com
+* you just sign in with github, add a basic rel=webmention link (it gives you the <link> code to copy / paste to your posts and the <script> to embed)
+* in addition wrote a tool to test webmentions, including XSS tests — "webmention-testpinger" also included in his webmention endpoint
+* it runs everytime automatically with every deployment and runs the tests to make sure they all pass
+* his herokuapp uses Glenn's microformats2js parser to retrieve the actual content of mentions
+
+== Glenn Jones ==
+
+* last year showed that he writes the articles on his blog are in HTML in a folder which syncs automatically to his server
+* but these days mostly uses his phone for writing notes, taking pictures, checkins. Went to build a completely new system: transmat.io, built in Node.js
+* transmat.io/glennjones
+* goes to transmat.io/glennjones/add, shows a Post UI with textarea built using ContentEditable (it's one of the worst pieces of the standard to work with) which automatically links URLs, @-names, hashtags
+* optional photo, checkin, reply; public/private lock toggle
+* clicking the reply option shows a "in-reply-to" URL field
+* added UI to "Push to" (POSSE) to other sites, e.g. Twitter — UI to *set up* POSSE, which is then automatic
+* everything in the system, if you put /json at the end, gives the JSON microformats for it, always just generated by parsing the HTML of the page
+* shows a "store at" UI for archiving/backing up his transmat posts as static files on his local laptop — all this HTML has the microformats markup of the original and a special manifest with offline CSS file
+* over the last year has been building it up experimentally
+* shows how bridgy is connected to his permalinks too, showing favorites and replies
+* "Reclaim your Tweets": you upload a Twitter zip file archive
+* Loads all your old tweets into Transmat
+* Glenn has imported all his old tweets to his own sites, including interactions with each tweet like favorites, retweets, and replies (not included in the archive)
+* as he goes through the tweets, he imports the account information for everyone he's interacted with to transmat.io/glennjones/people — goal is to eventually do autocomplete with that info while typing
+* has started adding places too: transmat.io/glennjones/places
+* can edit a place with a geofence, lat long radius
+* has a near.html page for figuring out which of *his* Places are nere where he is now
+
+== Shane Hudson ==
+www.shanehudson.net
+
+* last time he was here was trying to use WordPress using webmention
+* gave up and wrote his own CMS, and gave up again and started to use Craft (http://buildwithcraft.com/)
+* has not pushed it live yet (www.shanehudson.net still uses WordPress), craft version is at http://www.shanehudson.co.uk/shanehudson.new/, has webmentions and fragmentions etc
+* last night built a geolocation thing (plugin?) for his Craft CMS — it automatically finds his geo
+* provides UI to enter heading, body, tags, mentioned URLs
+* has got webmentions working — somebody wrote a plugin for sending, so he wrote a plugin for receiving them
+* in order to switch to Craft, needs to move interactions on his WordPress posts to his Craft CMS
+
+== Andrew Marks ==
+https://andrewmarks.media
+
+* has a Known install setup, exploring IndieWeb stuff
+* has a soundcloud page - he makes music, also has a film blog on WordPress
+* quickly shows Known, demos posting photo
+* shows location checkin — quickly locates 68 Middle street
+
+
+== Tim Retout ==
+retout.co.uk
+
+* Debian developer has discovered IndieWeb 2 weeks ago
+* shows his home page — backend in Node, has posts
+* using pump.io - set it up on his website the other weekend
+* shows that he has A+ SSL
+
+
+== Rosa Fox ==
+http://techfox.co.uk/
+
+* Just noticed that my CSS doesn't work over https... should fix that!
+* has been working as web developer for 7 months!
+* static site, blog is linked to WordPress (techfoxuk.wordpress.com)
+* with rails has built a basic outline and deployed to Heroku, will be working on that this weekend
+
+== Barnaby Walters ==
+waterpigs.co.uk
+
+* now demoing shrewdness.waterpigs.co.uk
+* fed up with looking at 20 different sites, wanted to build a reader, didn't want to have to visit twitter to read people's stuff
+* first got distracted and built open source yahoo pipes called "intertubes" (It's Yahoo! Pipes but without the sunsetting feature), then got back to his use-case
+* built Shrewdness - essentially a Tweetdeck clone
+* you can subscribe to a bunch of URLs, e.g. twitter-style firehose feed of everyone he follows on twitter
+* it only parses microformats2, doesn't touch the twitter API at all, still gets twitter info via a twitter to microformats2 proxy converter
+* second column is his mentions, all webmentions to his site show up there
+* third column is search (using elastic search on the backend)
+* can't figure out what it means by relevant, so just uses ordered by date
+* demonstrates multiple searches, creating a new search column
+* barnabywalters site supports micropub — it's a way of having your website having an API that client apps can post to. With this you can use other people's client software to post to your site
+* this enables "Reply" buttons in shrewdness
+* connected to his site waterpigs.co.uk, posted a reply from within shrewdness and shows that the reply has been posted on waterpigs.co.uk
+* subscribed to over 60 feeds in shrewdness, all based on microformats2 — no need to support RSS or Atom
+
+== Al Power ==
+alpower.com
+
+* loves playing with CMSs, classic tinkerer, also photographer
+* trying out kirby and perch
+
+== Joschi Kuphal ==
+jkphl.is, @jkphl
+
+* has implemented webmentions receiving on his site
+* posting articles now, would like to post photos, notes etc.
+* Using Typo3, popular open source CMS in central Europe
+* would like to put some of these functionality into Typo3 extensions
+* wrote an Indieweb plugin for Typo3
+
+== Calum Ryan ==
+calumryan.com @calum_ryan
+
+* has another site culturebook.co.uk — shows demo.culturebook.co.uk based on Modux(sp?)
+
+= Hack Day Demos =
+Demos from the Hack Day! See also the [[2014/UK/Hack_Day_Intro|Hack Day Intro]].
+
+Based on original notes taken in IRC http://indiewebcamp.com/irc/2014-09-07#t1410104851439 plus some memory recall.
+
+See also:
+* 2014-09-07 {{kevinmarks}}’s [http://www.kevinmarks.com/indiewebcampUK20140907.html IndieWebCamp UK Demos notes].
+* 2014-09-18 {{t}} blog post: [http://tantek.com/2014/259/b1/indiewebcampuk-hack-day-https-webactions IndieWebCampUK 2014 Hack Day Demos: HTTPS, #webactions, new & improved #indieweb sites] (has corrections and improvements upon this page and "Hack Day Demos" section, feel free to apply them to this page). 
+
+== Glenn Jones ==
+[[User:Glennjones.net|Glenn]] built improvements to [[transmat]]. ([http://indiewebcamp.com/irc/2014-09-07#t1410104860317 IRC notes]).
+
+He built a map view that shows the venues nearest to his current location (via GeoLocation API).
+
+He also found an open source HTML5 JS open source pedometer and repurposed it into transmat so that when running on his Android as a web app, it can detect when he's walking, and only do GPS lookups when he's walking, so it saves battery.
+
+Now he has an HTML5 JS app that can auto-[[checkin]] for him while he's walking.
+
+== Barnaby and Pelle ==
+[[User:waterpigs.co.uk|Barnaby]] and [[User:voxpelli.com|Pelle]] built cross-site reply [[webactions]] that work purely via their websites - no browser extension needed! (first time this has been done; [http://indiewebcamp.com/irc/2014-09-07/line/1410105094362 IRC notes]).
+
+Barnaby has setup [[registerProtocolHandler]] on [[Taproot]] to register a handler for the "web+indie:" protocol when he loads a particular page on his website so that his website is registered to handle [[web actions]] via the &lt;indie-action> tag.
+
+Barnaby demonstrates loading the page that calls registerProtocolHandler. The browser asks to confirm that he wants waterpigs.co.uk to handle "web+indie" URLs.
+
+Then Baranby goes to Pelle's website home page where he has a list of posts that he's written, with &lt;indie-action> tags next each with "Reply", "Like", and "Tip" webactions.
+
+Pelle's site also has a web component ([https://github.com/voxpelli/indie-action-component open sourced on github]) to handle his &lt;indie-action> tags, which creates an iframe that uses that same protocol handler using a Promise, which connects the iframe to calling the handler that Taproot registered.
+
+Thus without anything installed in the browser, barnabywalters can go to voxpelli_'s site, click the Reply button that was there which automatically goes to barnabywalters Taproot UI to post a reply!
+
+== Barnaby Walters ==
+[[User:waterpigs.co.uk|Barnaby]] also built a [[map]]-view aggregator that shows [[icons]] for people at the [[location]]s embedded in their recent [[posts]]. ([http://indiewebcamp.com/irc/2014-09-07#t1410105383720 IRC notes])
+
+This is a demo URL for now, but Barnaby plans to include this map view as another column type in [[shrewdness]], so you can have a map view of recent posts from people you're following.
+
+== Grant ==
+Grant got a fancy new domain http://Grant.codes and setup [[transmat]] on it - which makes it the second installation of transmat! ([http://indiewebcamp.com/irc/2014-09-07#t1410105570671 IRC notes]).
+
+And also built a contact page: http://grant.codes/contact
+
+It has links and text for various methods:
+* email
+* [[Twitter]] DM
+* [[Facebook]] Messenger
+* [[Skype]] call
+but no icons yet.
+
+Grant has implemented a [http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience people focused communication] [[UI]] on his site!
+
+== Jeremy Keith ==
+=== adactio https ===
+[[User:adactio.com|Jeremy Keith]] has gotten [[https]] working on adactio.com! ([http://indiewebcamp.com/irc/2014-09-07#t1410105716815 IRC notes]).
+
+Jeremy has achieved [[https]] Level 4. All adactio.com URLs redirect to https. However subdomains (e.g. austin.adactio.com) are still http.
+
+=== adactio webactions ===
+Jeremy's also implemented the new &lt;indie-action> tag for [[webactions]] around his existing Tweet action links, both on his post permalinks, and on his posts in-stream (e.g. on his home page or when paginated).
+
+== Shane Hudson  ==
+[[User:www.shanehudson.net|Shane]] went from no SSL and no comments yesterday to [[https]] level 5! He also imported the contents of all his old comments from his [[WordPress]] blog to his [[Craft]] install                                                                                                                                                                                                                                                                                                                                                       (the CMS he's dogfooding, contributing plugins to, selfdogfooding). ([http://indiewebcamp.com/irc/2014-09-07#t1410105943119 IRC notes]).
+
+He was able to get SSL setup on his site with an A rating, and forward secrecy, and is thus [[https]] level 5.
+
+Shane also wrote a script to do the import of comments from WordPress to Craft. It's "a bit crude, dealing with XML to CSV a few times".
+
+== Nat Welch ==
+[[User:natwelch.com|Nat Welch]] (AKA icco on IRC) got his blog running (his own software) in [[Go]] hosted on [[AppEngine]] with SSL, achieving [[https]] level 4! ([http://indiewebcamp.com/irc/2014-09-07#t1410106090135 IRC notes]).
+
+AppEngine does SSL for free if you're ok with SNI.
+
+So now Nat has SSL Labs rating A- on writing.natwelch.com! And also automatic redirect works from http to https. Thus he has also achieved [[https]] Level 4!
+
+Right now he's using AppEngine default auth, using his [[Google]] account. Eventually he wants to use indieauth to auth into his site.
+
+
+== Tim Retout ==
+[[User:retout.co.uk|Tim]] got pump.io running on his site and added support to it for [[POSSE]]ing to [[Twitter]]. ([http://indiewebcamp.com/irc/2014-09-07#t1410106321482 IRC notes])
+
+His goal is to add all the indieweb feature support too like webmentions, microformats etc. He has to run off to catch a train.
+
+He is also too humble, as he helped numerous people in person at the camp get on SSL, [[https]] level 4 or 5 at that. A round of applause for Tim![http://indiewebcamp.com/irc/2014-09-07#t1410106432954]
+
+
+== Tom Morris ==
+=== responsive tommorris.org ===
+[[User:tommorris.org|Tom]] shows his current site tommorris.org. His CSS is now "less sucky" and made his site more [[responsive]] on mobile / small display etc. ([http://indiewebcamp.com/irc/2014-09-07#t1410106462828 IRC notes])
+
+=== mf2py as a service ===
+Tom also got the [[Python]] [[microformats2]] parser (mf2py) running as a service that you can submit your URLs to and get back pretty-printed [[JSON]]. 
+
+=== tommorris https ===
+Tom got his main site tommorris.org up to [[https]] Level 4 with an A- rating, but has not yet done so with *.tommorris.org (e.g. wiki.tommorris.org).
+
+During the next demo, Tom got his SSL Labs rating from A- to A with some help from Aral. And during the demo after that took his rating up to A+ thanks to the post: https://scotthelme.co.uk/setting-up-hsts-in-nginx/
+
+== Kevin Beynon ==
+[[User:kevinbeynon.com|Kevin]] got IndieAuth login to his own site working! ([http://indiewebcamp.com/irc/2014-09-07#t1410106823945 IRC notes])
+
+Kevin started by showing us his site home page kevinbeynon.com using a tablet. We projected it by holding up to the Talky HD camera.
+
+He pointed out that there is no admin link on the home page then went to his "secret" URL at /admin/ which has an [[IndieAuth]] login screen. He entered his own URL, and chose to [[RelMeAuth]] authenticate using Twitter which redirected to it and back and came back with the message "Log-in Successful".
+
+Kevin went to his home page again, and showed that it now has visible links to "admin" and "log out". Next he plans to bring his post [[creating]] and [[editing interface]] into his home page front end, so that he can do inline editing and post [[notes]] from his home page.
+
+
+== Joschi Kuphal ==
+[[User:jkphl.is|Joschi]] got his site's https support to SSL rating A+, fixed his [[webmention]] implementation, and implemented [[webactions]] on permalinks. ([http://indiewebcamp.com/irc/2014-09-07#t1410107005021 IRC notes])
+
+=== jkphl https A+ ===
+Joschi noted that his site was running with SSL before but had some flaws. He worked on it and improved his site's rating from F to A+.
+
+=== jkphl webmentions fixed ===
+He also fixed some flaws with his webmention implementation thanks to feedback from Ryan Barrett online.
+
+=== jkphl permalinks webactions ===
+Third, Joschi implemented webactions on permalinks, in particular he added &lt;indie-action> markup around his default Twitter, G+, Facebook "share" links.  He then demonstrated his site working with Barnaby Walters's Web Action Hero Toolkit browser extension.
+
+== Chris Asteriou ==
+[[User:digitalbliss.uk.com|Chris]] is fairly new to the IndieWeb and started with going through [[IndieMark]], adding h-entry and h-card markup, and a notes section to his site.([http://indiewebcamp.com/irc/2014-09-07#t1410107371615 IRC notes])
+
+=== digitalbliss microformats ===
+Chris showed digitalbliss.uk.com, noted that he added [[h-entry]] on his page with entries. He clicked the "Play" link at top to show this. And then he marked up the info at bottom of his home page with [[h-card]].
+
+=== digitalbliss notes ===
+Chris added a notes section and used the verification tools on indiewebify.me to check it and verify that he reached [[IndieMark]] Level 2.
+
+== Tantek ==
+[[User:tantek.com|Tantek]] switched his permalink webactions from &lt;action> tags to &lt;indie-action> tags and researched the UX of [[webactions]] on posts in a stream (e.g. a home page).
+
+=== tantek indie-action ===
+Based on the webactions discussion session in the first day with Tantek, Jeremy, and Pelle, they concluded that the &lt;indie-action> tag was more appropriate than the &lt;action> tag.
+
+Tantek initially publicly proposed the &lt;action> tag for consideration in a session on Web Actions at Open Source Bridge 2012, and then later implemented them at last year's IndieWebcampUK 2013 which were then demonstrated working with Barnaby Walters's browser extension.
+
+Changing from &lt;action> to &lt;indie-action> at a minimum better fits with the web component model. Jeremy Keith pointed out that an &lt;indie-action> tag in particular would be a good example of a web component, worthy as a case-study for web components.
+
+Tantek updated his permalink webactions to use &lt;indie-action> tags and Barnaby updated his browser extension to support them as well.
+
+=== in-stream webactions ===
+Tantek analyzed the UI of various [[silos]], in particular [[Instagram]] and [[Twitter]]. 
+
+Instagram has a very minimal simple webaction UI, with just "Like", "Comment", and "..." (more) buttons, the first two with both icon and text labels, which makes sense since their primary content is large (relative to the UI) images/video (visual media). Instagram's webactions are identical on photos viewed on their own screen, and when in a stream of media. Deliberately designed consistency.
+
+Twitter on the other hand is horribly inconsistent between different views of tweets, and even different streams, sometimes their webactions are:
+* on the right with text labels
+* on the left with no text labels
+Their trend seems to be icon only, likely because the text label distracts from the tweet text content around it, especially in a stream of tweets that are primarily (nearly all) just text.
+
+Tantek walked through comparisons of Twitter's different webactions button icon/text usage/placements with Aral, who came to the same conclusions from the data.
+
+It may be ok to use both icon and text labels on note/post permalink pages, as there is more distinction between the (single) content area, and the footer of webactions.
+
+However, the conclusions is that in-stream webactions should use just icons (clear ones at that) when among posts that are primarily, mostly, or perhaps even often just text.
+
+Next Tantek is working on implementing icon-only webactions on his home page posts stream. He made some progress but realized it will require him to rework some storage code first.
+
+== Aral Balkan ==
+[[User:aralbalkan.com|Aral]] upgraded his site's [[https]] support to SSL rating A+ and https Level 5, and his how-to blog post about it! ([http://indiewebcamp.com/irc/2014-09-07#t1410107764986 IRC notes])
+
+Aral already supported [[https]] on his site aralbalkan.com beforehand. On IndieWebCampUK hack day he added support for forward secrecy, which raised its SSL rating from A- to A+ and thus he achieved https Level 5! 
+
+Apparently it took him only 2 lines of code to implement that change on [[nginx]], and noted that it's a bit harder on Apache. 
+
+After his demo, Aral also [https://aralbalkan.com/scribbles/setting-up-ssl-with-nginx-using-a-namecheap-essentialssl-wildcard-certificate-on-digitalocean/ updated his blog post about SSL setup with nginx] with what he learned and how to get to SSL rating A+.
+ 
+== Rosa Fox ==
+[[User:techfox.co.uk|Rosa]] created a UI on her site for CRUD posting of projects. ([http://indiewebcamp.com/irc/2014-09-07#t1410108119278 IRC notes])
+
+Rosa wanted to make her own CMS with support for posting images and tags. She demonstrated her local dev install of her new CMS with:
+* a UI for creating a new project
+* <abbr title="create, read, update, delete">CRUD</abbr> [[posting interface]] for projects
+* using Postgres to store data
+
+== Aaron Parecki ==
+[[User:aaronparecki.com|Aaron]] participated remotely, added support for posting [[bookmarks]] to his site, and added bookmarks posting via [[micropub]] to his [[Quill]] app! ([http://indiewebcamp.com/irc/2014-09-07#t1410108409577 IRC notes])
+
+Aaron has been publishing bookmarks to another place for a long time in a [[WordPress] install at aaron.pk/bookmarks and he wanted to integrate them into his main site aaronparecki.com.
+
+Once Aaron got the bookmark post type implemented in his publishing software [[p3k]] and deployed to his site, he did a mass import from the aaron.pk/bookmarks WordPress XML export. 
+
+That was the last thing aaronpk was using WordPress for, so he's no longer using WordPress to publish any of his own content.
+
+Now all of Aaron's bookmarks are at http://aaronparecki.com/bookmarks all marked up with [[microformats]]. Each bookmark is an [[h-entry]], and  embedded inside is an [[h-cite]] of the bookmark itself.
+
+This also means you can [[comment]], [[bookmark]], and [[like]] his bookmarks themselves!
+
+During later demos, Aaron also updated his [[Quill]] app with a bookmark [[posting interface]], as well as a bookmarklet so you can quickly open the Quill UI to make a bookmark.
+
+== Kevin Marks ==
+[[User:kevinmarks.com|Kevin]] built a feed coverter that takes legacy RSS/Atom feeds and produces modern readable and usable [[h-entry]] page, including such niceties as inline playable audio elements in converted podcasts. ([http://indiewebcamp.com/irc/2014-09-07#t1410108668254 IRC notes])
+
+Kevin noticed that people are building [[h-feed]] [[readers]], so he built a tool that takes legacy [[RSS]] [[Atom]] feeds and unmunges them and produces nice clean [[h-entry]] feeds.
+
+The converter is at http://feed.unmung.com/. Unmung.com is a URL he bought ages ago, and set it up on [[Google]] [[AppEngine]].
+
+E.g. if you put in xkcd.com/rss.xml into it, it generates a nice readable HTML page with h-entry, which you can then subscribe to in an indie [[reader]] like Barnaby's [[shrewdness]].
+
+Kevin demonstrated using unmung to convert a podcast feed http://feeds.wnyc.org/onthemedia into an h-feed with embedded playable HTML5 &lt;audio> elements, providing an actual useful interface, much better than the original feed.
+
+Kevin made the point that no one wants to parse RSS or Atom any more. Now by parsing the microformats JSON representation, you can get any existing RSS or Atom etc.
+
+You can now subscribe to iTunes podcasts etc. in your indieweb reader!
+
+== Robin Taylor ==
+[[User:robintaylor.uk|Robin]] added support for https (including forward secrecy, getting an SSL "A" rating) to his site robintaylor.uk and automatic redirects from http to https, achieving [[https]] Level 5!
+([http://indiewebcamp.com/irc/2014-09-07#t1410108992611 IRC notes])
+
+== UK Homebrew Website Clubs ==
+As we were wrapping up, Tom Morris asked openly if anyone would be interested in coming to a [[Homebrew Website Club]] in London. Jeremy Keith similarly asked the group for interest in a Homebrew Website Club Brighton. 
+
+Both had quite a bit of interest, so we can expect to start seeing more Homebrew Website Club meetups in more locations!
+
+== Conclusion ==
+https://twitter.com/kevinbeynon/status/508714996197756928
+
+<blockquote>The people I met at @indiewebcamp are the A-Team of the Internet. Give them some tape and an oxy-acetalyne torch and they'll fix the web.</blockquote>

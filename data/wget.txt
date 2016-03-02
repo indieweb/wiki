@@ -1,0 +1,43 @@
+http://indiewebcamp.com/wget
+
+{{stub}}
+
+'''<dfn>wget</dfn>''' is a unix utility for recursively downloading and [[archiving]] webpages.
+
+== How To ==
+
+=== Installation ===
+
+==== Linux ====
+
+Most linux distros should come with wget installed. If not, use your applicable package manager.
+
+==== Mac OS X ====
+
+* I installed wget via homebrew, and don’t recall having any problems, although homebrew can be a pain if you install lots of stuff from source. <code>brew install wget</code> --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 09:39, 26 April 2013 (PDT)
+
+=== Archive a Site ===
+
+Creating a full mirror of a site can be a challenge, especially if any of the site's content is loaded via [[Javascript]]. Assuming you have a typical HTML-only site, you can create a mirror with the following command:
+
+<pre>wget --mirror --page-requisites --convert-links -e robots=off -P . http://example.com/</pre>
+
+Add <code>--domains=example.com,s3.amazonaws.com,subdomain.example.com</code> if you have assets on other domains or subdomains that are required to display the page. (Be sure to include the primary domain here too)
+
+wget will fetch the first page then recursively follow all the links it finds (including CSS, JS and images) on the same domain into a folder in the current directory called whatever the site domain is.
+
+You can then browse through all the site's files, and most links should work, since the <code>--convert-links</code> option will rewrite the links it finds in the HTML to the local version. You can also configure a local web server to serve this folder at a URL.
+
+==== Serve the archive with nginx ====
+<pre>
+server {
+  listen 80;
+  server_name archive.example.com;
+  root /web/sites/example.com;  # set this to wherever your archive is stored
+  index index.html;
+  default_type text/html; # treat files with unknown extensions as html rather than prompt the browser to download the file
+}
+</pre>
+
+== See Also ==
+* [[archive]]

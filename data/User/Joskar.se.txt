@@ -1,0 +1,55 @@
+http://indiewebcamp.com/User%3AJoskar.se
+
+'''<dfn>Johnny Oskarsson</dfn>''' is a student living in Gothenburg, Sweden.
+
+__NOTOC__
+=<span class="h-card">[https://joskar.se Johnny Oskarsson]</span>=
+
+== Projects ==
+
+* A [[microformats2]] parser, written in C (utilizing [http://github.com/google/gumbo-parser gumbo-parser] for HTML parsing). Will most likely be open-sourced one day. A day when I don't care about how ugly the code is.
+* [https://joskar.se https://joskar.se] -- my personal website. Mostly written in Bourne Shell (/bin/sh) and C (see above).
+
+== Working On ==
+
+=== "Identity transform" for MF2/HTML ===
+A way to do an "identity transform" on my MF2/HTML-pages. Currently I'm losing some meta-data when editing pages using my CMS. This will also help when I want to add data (such as webmentions) to an existing page.
+
+=== [[Webmention]] support ===
+Currently one can send webmentions to [https://joskar.se/webmention my webmention endpoint], and they will be validated (asynchronously). The webmentions will not show up anywhere since I need to solve the above task first ("Identity transform").
+
+=== Microformats2 parser ===
+* The above-mentioned mf2 parser. It is almost feature-complete now, except for backwards compatibility with the older microformats. It will most likely be open-sourced some day.
+* I am also working on a tool for extracting MF2 from the command-line (I am coding my website in /bin/sh after all...), aptly codenamed `mfget' (for now). It is simplistic by design, and it can currently do these things:
+** Get a value (or several) from the parse-tree: <code>mfget <file.html /items/entry/name [...]</code>
+** Encode the values in hexadecimal: <code>mfget <file.html x/items/entry/name</code> (This way it is easier to use `cut' and other command-line tools without worrying.)
+** Iterate over one arbitrary parameter: <code>mfget <file.html /items/entry[]/name</code>
+
+=== Content Management System ===
+I have built a "simple" CMS using a sort of templating system. The templates are basically HTML files with some shell script sprinkled throughout. The "identity transform" described above is a milestone in this project, which I have yet to complete.
+
+== Itches ==
+
+=== DRY ===
+
+I am trying to operate on the data already stored in my MF2/HTML as much as possible. See the "Identity transform" section above.
+
+* I don't have any explicit links to alternate pages or syndication in the <code>&lt;body&gt;</code> of my pages. I ''do'' however use CSS to show the <code>&lt;link&gt;</code>-elements which are residing in <code>&lt;head&gt;</code>. This is because most crawlers only look for <code>rel="alternate"</code> in head, and putting the same link in <code>&lt;body&gt;</code> for the sake of navigation would be a violation of [[DRY]].
+** As a side note, text browsers such as [http://lynx.isc.org/ lynx] already show <code>&lt;link&gt;</code> elements in <code>&lt;head&gt;</code> if they have a title-attribute set. Why modern graphical browsers don't allow this by default is beyond me.
+
+=== Bilingual support ===
+
+For some reason I thought it would be cool to have bilingual support on my website. Perhaps mostly because I thought it would be silly to host primarily English content on a Swedish ccTLD (.se). Obviously communication with the Indieweb community will mostly be English, so that leaves me with no choice. Who knows, if I keep using a frontpage with an obscure language then perhaps people will be more willing to code in language detection on their websites as well :)
+
+* All translated pages on my website have the <code>lang</code>-attribute set on the html tag, and a link to a translation with <code>rel="alternate"</code>, <code>hreflang="..."</code>, and <code>href="..."</code> set.
+
+=== POSSEing to (unsupported) ===
+I am not a big "blogger", but I do like movies. So I want to [[POSSE]] some small thoughts I have on the subject of film to some film-reviewing silo, such as [https://mubi.com MUBI]. I already have an account there, so I might just as well try to incorporate support for it.
+
+* On 2014-10-16, I managed to import all of my "reviews" from MUBI to my site using their (unfortunately undocumented) [[snowflake]] API.
+
+== Things I am thinking about, but don't care enough to ask (for now) ==
+
+* Why does [[reply-context]] suggest using a p-in-reply-to instead of u-in-reply-to? I thought the in-reply-to was supposed to be a URL?
+** The prefix indicates to the parser where to find the value. If the value is in an href attribute, then you'd use "u-". If the value is plain text or a nested mf2 object, you'd use the "p-" prefix. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:42, 22 October 2014 (PDT)
+**Also, it seems like its conjunction with h-cite is important. But when parsed, wont the in-reply-to and h-cite become siblings in the parse-tree? Then they are not inherently related...

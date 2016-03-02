@@ -1,0 +1,72 @@
+http://indiewebcamp.com/distributed-indieauth
+
+[[Category:IndieAuth]]
+{{stub}}
+
+'''<dfn>distributed indieauth</dfn>''' is a way of using [[indieauth]] authorization in a distributed manner across websites, including how to have your website explicitly delegate to an [[authorization-endpoint|authorization server]] (such as indieauth.com) or act as its own authorization server.
+
+== Level 0: Enable web sign-in ==
+Link your website with a [[rel=me]] link to a common OAuth provider such as Github or Twitter. Or you can put your email address or phone number on your site to use Persona or SMS-based authentication.
+
+This will make login work with sites that implement [[RelMeAuth]] directly, and with sites that use an authorization API that supports RelMeAuth such as [[indieauth.com]].
+
+=== More ===
+* [[simple-indieauth-example]]
+
+== Level 1: Choose a public authorization server ==
+Choose a hosted authorization server and link it from your homepage:
+
+<pre>&lt;link rel="authorization_endpoint" href="https://indieauth.com/auth"&gt;</pre>
+
+=== Public authorization servers ===
+* [[indieauth.com]]: <pre>&lt;link rel="authorization_endpoint" href="https://indieauth.com/auth"&gt;</pre>
+
+* [[indieauth-openid]]: <pre>&lt;link rel="authorization_endpoint" href="http://indieauth.id.cweiske.de/"&gt;</pre>
+
+* [[indiecert.net]]: <pre>&lt;link rel="authorization_endpoint" href="https://indiecert.net/auth"&gt;</pre>
+
+== Level 2: Host your own authorization server ==
+Find or create an authorization server and tell [[IndieAuth]] clients to use it when signing in.
+The server has to implement the [[IndieAuthProtocol]].
+
+=== Use an authorization service ===
+Use an authorization service such as [[indieauth.com]] or [[indieauth-openid]].
+
+Link to it from your homepage as follows:
+
+<pre>&lt;link rel="authorization_endpoint" href="https://myauthserver.example.org/auth"&gt;</pre>
+
+=== Create your own authorization endpoint ===
+* [[authorization-endpoint]]
+* [[IndieAuthProtocol]]
+
+== Level 3: Use other IndieWeb apps ==
+In order to use IndieWeb apps such as [[OwnYourGram]] or [[Taproot]] to post to your own site, you effectively need to turn your site into an OAuth provider. 
+
+=== Use a token endpoint service ===
+Such as https://tokens.indieauth.com
+
+=== Create your own token endpoint ===
+* [[token-endpoint]]
+
+=== Create your micropub endpoint ===
+* [[micropub-endpoint]]
+
+=== More ===
+* [[auth-brainstorming]] (rough notes)
+
+
+== Sites that support distributed IndieAuth ==
+* [[Monocle]] on https://monocle.p3k.io/
+* [[OwnYourGram]] on http://ownyourgram.com/
+* [[Quill]] on https://quill.p3k.io/
+* [[Taproot]] on http://waterpigs.co.uk/
+* http://ben.thatmustbe.me/
+* https://kylewm.com as of 2014-10-19
+* [[Woodwind]] on https://reader.kylewm.com
+* [[indieauth.com]] since 2015-06-16
+
+== See Also ==
+* [[IndieAuth]]
+
+__TOC__

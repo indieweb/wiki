@@ -1,0 +1,193 @@
+http://indiewebcamp.com/private-webmention
+
+__TOC__
+
+'''<dfn>private-webmention</dfn>''' is a suggested protocol for combining [[microformats2]], [[Webmention]], and [[IndieAuth]] to convey [[private posts]] between two people or between groups of people.
+
+<div style="background: #fffbe3; padding: 4px; border: 1px #faeead solid;">
+Note: This is a draft spec, feel free to leave notes or comments inline, or share your thoughts on your own site and link to this page.
+</div>
+
+[[File:private-webmention-sequence-diagram.png|525px]]
+
+== Protocol Flow ==
+
+Alice (alice.example.com) wants to send a private message to Bob (bob.example.org)
+
+Alice creates a new (private) post on her site, which, given some authentication (to be described), will be visible at the following URL: https://alice.example.com/message/1. If the URL is accessed with no authentication, it MUST return:
+
+<pre>401 Unauthorized
+WWW-Authenticate: IndieAuth
+</pre>
+
+In the response body, it SHOULD display a human-readable IndieAuth login screen. 
+
+=== Webmention Request ===
+
+Alice then sends a [[webmention]] to Bob notifying him that `https://alice.example.com/message/1` linked to `https://bob.example.org/`. This would look like the following POST request from Alice's server:
+
+<pre>POST /webmention-endpoint HTTP/1.1
+Host: bob.example.org
+
+source=https://alice.example.com/message/1
+&target=https://bob.example.org/
+</pre>
+
+The [[webmention]] protocol then indicates that Bob's server should go fetch the contents of the source URL and verify there is actually a link to the target. In this case, the first request from Bob's server will fail with a <code>401</code> error. This would look like the following:
+
+<pre>GET /message/1 HTTP/1.1
+Host: alice.example.com
+
+HTTP/1.1 401 Unauthorized
+WWW-Authenticate: IndieAuth
+</pre>
+
+Bob then needs to prove to Alice he really is the intended recipient. This is where [[IndieAuth]] comes in.
+
+Note: there is an obvious advantage to having Alice indicate that this webmention will require authentication in order to verify, since that saves an HTTP request. Is there some additional parameter that could be sent in the initial webmention request indicating that authentication will be required?
+
+=== Verifying the Webmention ===
+
+==== Generating the authorization code ====
+Bob's webmention endpoint uses Bob's authorization endpoint to generate an authorization code (this is implementation-specific, but could also follow a spec so that the authorization endpoints are interchangeable). For now, we will assume there is a pre-established relationship between Bob's webmention endpoint and authorization code where a code can be obtained.
+
+==== Send the authorization code to Alice's server ====
+Bob's webmention endpoint sends the authorization code to Alice's token endpoint requesting an access token.
+
+Bob's webmention endpoint discovers Alice's token endpoint by looking for a <code>rel=token_endpoint</code> link on Alice's home page. 
+
+Bob's webmention endpoint then sends a POST request to Alice's token endpoint with the authorization code. (redirect_uri, client_id and state are not necessary in this case)
+
+<pre>POST /token HTTP/1.1
+Host: alice.example.com
+
+code=xxxxxxx&me=https://bob.example.org/</pre>
+
+==== Alice's server verifies the authorization code ====
+Alice's token endpoint verifies the authorization code against Bob's authorization endpoint and responds with an access token.
+
+Alice's token endpoint discovers Bob's authorization endpoint by looking for a <code>rel=authorization_endpoint</code> link on Bob's home page, which was indicated in the <code>me</code> parameter of this request.
+
+Alice's token endpoint then makes a request to Bob's authorization endpoint to verify the authorization code.
+
+<pre>POST /auth HTTP/1.1
+Host: bob.example.org
+
+code=xxxxxxx</pre>
+
+If the authorization code is valid, Bob's authorization endpoint responds with success, and indicates the user the code corresponds to.
+
+<pre>HTTP/1.1 200 Ok
+
+me=https://bob.example.org/</pre>
+
+Alice's token endpoint verifies that the authorization server responded with "https://bob.example.org/" and then generates an access token for Bob, and responds. 
+
+<pre>HTTP/1.1 200 Ok
+
+access_token=yyyyyyyyyy</pre>
+
+==== Bob requests the private message with the access token ====
+Bob re-fetches the original URL with the access token that Alice's token endpoint generated.
+
+<pre>GET /message/1 HTTP/1.1
+Host: alice.example.com
+Authorization: Bearer yyyyyyyyyy</pre>
+
+Alice's server verifies the token and responds with the private content. (Alice's server can either verify the token directly if her server and token endpoint share a database, otherwise this may happen via an HTTP request as described on [https://tokens.indieauth.com/ tokens.indieauth.com].
+
+Bob's server looks for the target URL as a normal webmention verification would do.
+
+This is similar to how Bob would sign in to Alice's website if he were using a browser.
+
+=== Generating the authorization code ===
+
+Bob's webmention endpoint needs to be able to generate an authorization code that can be verified by Bob's authorization endpoint. This means there needs to be a pre-established trust relationship between Bob's webmention endpoint and authorization endpoint. The protocol between the two endpoints does not need to be standardized, but there is an advantage to doing so, which is that Bob would be able to use a different authorization endpoint without any code change.
+
+
+== Threaded Conversations ==
+
+We can achieve threaded conversations by using the [[in-reply-to]] markup just like we do with public [[comments]]. If Bob wants to reply back to Alice, he just makes a new private post and adds <code>&lt;a href="https://alice.example.com/message/1" class="u-in-reply-to">https://alice.example.com/message/1&lt;/a&gt;</code>.
+
+Given this markup, it's left to the UI of the system displaying the message to display the messages in conversation order.
+
+== Sharing with Groups ==
+
+We can also extend this idea to sharing private messages with a group of people. All Alice would have to do is link to multiple peoples' URLs in the post and send webmentions to each server. 
+
+For example, Alice may make a post formatted like:
+
+<pre>
+<article class="h-entry">
+  <p><a href="https://alice.example.com/" rel="author">Alice</a>:</p>
+  <div class="p-content p-name">had a great time last night, thanks for having us over!</div>
+  <time datetime="2013-08-02T22:43:15-0700" class="dt-published">August 2, 2013 at 10:43pm PDT</time>
+  <p>Sent to:
+    <ul>
+      <li><a href="http://tantek.com/">tantek</a></li>
+      <li><a href="http://werd.io/">benwerd</a></li>
+      <li><a href="http://waterpigs.co.uk/">barnabywalters</a></li>
+    </ul>
+  </p>
+</article>
+</pre>
+
+Then when any of the three people verify the webmention, they will see their URL in the page and can accept the message.
+
+If Alice does not want to reveal the entire recipient list to everyone (like a BCC email) the server could just hide all other recipients other than the authenticating user.
+
+== Static Sites ==
+
+Static sites cannot perform dynamic authentication and can't return different responses given the validation of a token. However, if you're willing to accept security by obscurity (such as using a 128-bit random identifier in the URL) then you can still send private webmentions with a static site!
+
+=== Security by Obscurity ===
+Since a static site server can't choose to respond to a request with <code>HTTP 401</code>, it would be unable to send the initial <code>HTTP 401</code> response. However, if the message lives at a sufficiently obscure URL, this may be ok anyway.
+
+In this case, Alice would create a new html file named something like https://alice.example.com/message/74809250de2401300d0714109feae54c.html (or https://alice.example.com/message/73ZE9ngcTj4LUCUUjQQ8j8.html for equivalent randomness if you're using the NewBase60 charset). When Alice sends a webmention to bob.example.org, Bob's server would then go fetch that URL and would immediately get the HTML reply, and IndieAuth would not be required.
+
+If this is an acceptable trade-off (security by obscurity rather than using IndieAuth) then the protocol should work just as well, with no additional work needed on Bob's end! However, there should be some indication that this post was shared explicitly with Bob, so that Bob knows not to publicize the URL.
+
+''See also: [[capability-urls]]''
+
+=== Web Server Auth Module ===
+An alternative would be to have an Apache or nginx module that can handle the IndieAuth HTTP authorization. Given an Apache module such as <code>mod_authn_indie</code> it could handle sending the 401 reply and verifying the request given a token.
+
+Of course this wouldn't work in environments where you don't have access to the actual web server software, such as Github Pages or many shared hosting environments.
+
+== Notes ==
+* Can the initial webmention include a flag that says "this post is going to require authentication, come back with an IndieAuth code"
+* Can't you just always send an IndieAuth authorization code with every request? Especially sending it to all requests your server makes to your own whitelist.
+* We could add a 'recipients' to [[micropub]] (maybe as a space-delimited list), where a micropub server that supports this would default to 'only me', and the user can later log in to change the audience of posts that were made by a micropub client that does not support this feature. A public post could have 'recipients=public'.
+* A [[feed]] could include only public posts by default, but include group- and private posts when retrieved with an IndieAuth token (for feed readers that don't support sending the IndieAuth Authorization headers described here, we could also allow the token to be passed as a query parameter in the feed URL, as well as in the entry URLs the feed links to).
+
+== Issues ==
+* This protocol means any server can now receive a webmention to https://domain.com/ which are initiations of private messaging threads, and not meant to be displayed as an entry in a public comments section. So maybe a simple solution: only display comments on specific post URLs, not on your main home page.
+* This protocol is a hack that uses linked-to notifications to convey new messages which don't really have anything to do with the linked page.
+* This protocol completely leaves out [[reader]]s which will not see the message in the normal message stream.
+
+=== Denoting Privacy ===
+* If a reply context is fetched from a private post (assuming the post is pulled by the server automatically sending its auth key).  How do we specify that the post is private?  The reply might not be private and thus the reply context would show a private post publicly.  Perhaps an extension to mf2 to denote sections as privledged information, do not share publicly.
+
+== IndieWeb Examples ==
+=== Experiments ===
+==== Aaron Parecki ====
+{{aaronpk}} posted a private message on his own site that recipients could read if they signed-in via [[IndieAuth]]:
+* http://aaronparecki.com/messages/2013/08/04/1/first-indieweb-private-message-thread
+
+Nothing about the message is revealed from the UI without signing in. The only things that an unauthenticated viewer can guess at are from the URL.
+* date sent: That the message was posted on 2013-08-04
+* subject: first indieweb private message thread
+
+You cannot tell:
+* Subject: the exact subject
+* To: who the message was sent to (thus which domains to try signing in with).
+* Contents: the contents of the message, whether they are text, or hyperlinks, or anything else.
+* Sent-from: any physical geolocation information about where the message was sent from 
+
+== See Also ==
+* [[private posts]]
+* [[messaging]]
+* [[private-messaging-brainstorming]]
+* [[notification]]
+* [[distributed-indieauth]]
+* [http://spec.indieauth.com/ spec.indieauth.com]

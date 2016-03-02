@@ -1,0 +1,267 @@
+http://indiewebcamp.com/On_Evolving_IndieAuth_Followup
+
+This is a follow-up to Aral's 2013-08-31 blog post http://aralbalkan.com/notes/on-evolving-indieauth/ On evolving [[IndieAuth]] which itself is a response to the 2013-08-31 blog post http://waterpigs.co.uk/articles/indiewebcamp-signin-ux/
+
+Aral's post raises some good issues (which have been captured), but also misses existing known aspects of identity on the web, and indieweb efforts in general. This followup serves to clarify those points in the hopes that we as a community can better communicate these points in the future.
+
+<div style="float:left;">__TOC__</div>
+<div style="clear:both;"></div>
+
+== Improving Summary Explanation ==
+In response to a three-bullet lengthy explanation of what IndieAuth requires, Aral says: <blockquote>this is not a straightforward process</blockquote>
+
+This is a good point. Any explanation of how to use IndieAuth needs to start with a 1-2 sentence summary. No more. 
+
+Compare with: https://dev.twitter.com/docs/auth/sign-twitter (how Twitter sign-in works and how to set it up).
+
+Also compare with http://blog.facebook.com/blog.php?post=41735647130 - How Facebook Connect works and how to set it up / use it.
+
+* Issue noted: [[IndieAuth#Need_Simple_Copy_Paste_How_To|IndieAuth: New Simple Copy Paste How To]]
+
+== Signing in is hard ==
+Aral continues: <blockquote>Signing in is hard to do</blockquote>
+Also true. And has been challenging identity folks for decades.
+
+== Avoid Breaking User Flow ==
+Aral points out: <blockquote>The biggest problem with the process is that it breaks the user’s flow.</blockquote>
+
+This is true but for a different reason than Aral offers. 
+
+Security UX tests have shown that the bounce somewhere and bounce-back web UI flow is much more vulnerable to phishing attacks (originally studied as perhaps the biggest UX problem with [[OpenID]]).
+
+I don't have the citation to the study offhand, but a colleague of Rohit Khare did it (he may have the citation). - [[User:Tantek.com|Tantek]]
+
+* Once it is set up, IndieAuth is on par in terms of Breakup with many traditional authentication methods.  As of right now to make these edits, I clicked LogIn -> My domain was autofilled -> I clicked github, now I can edit.  Some things that could help improve this would be:
+** After populating the domain field and clicking sign in, auto attempt the last successful auth provider that was used.  Why do I need to make that decision every time?  Maybe make this behavior accessible similar to the `save login` checkbox (but a `remember last auth provider choice` checkbox).
+** Implement some form of one click sign in method with no page reloads IE, say I have signed into indie auth before, instead of bringing me to a form where I (auto)enter my domain and click sign in, use a cookie to remember the domain that was used.  Once that is in place, indie auth would be a one click sign in (Assuming the auth provider is confident that you are already authenticated).--[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
+
+== Web native identity requires using your website ==
+Specifically: <blockquote>The user wants to sign in and we are telling them to go away and edit a web page on their own server.</blockquote>
+
+The same would be true if the user:
+* didn't have an email address and have to set it up (which used to be true in the 1990s), or 
+* didn't have a cell phone number (which used to be true in the 1980s).
+
+We know we're actively building the indie <strong>web</strong> and thus, having a web site that represents you is a core part of web-native identity. Of course it's going to take some setup - web native identity is still very new.
+
+== IndieAuth builds on existing behavior ==
+<blockquote>Even if the user has their own server, they may not want to add the provided markup to it to expose their social networks...</blockquote>
+
+The assertion about "may not want to … expose their social networks" is generally false. The default behavior of people with their own websites is to openly link to their social network profiles. This is the existing emergent behavior that [[RelMeAuth]], and the [[Web sign-in]] experience, was designed and built-upon.
+
+* True or false, IndieAuth should accommodate those who wish to avoid silos all together, and it does mostly that already!  Right now, if not including this kind of information is a matter of visual preference or aesthetic design, IndieAuth searches for invisible data that has a rel=me, no?  If it is a matter of not wanting to reveal these profiles to a general audience, then are there oAuth providers that are just oAuth providers, not linked to a profile?  Typically in this situation I don't believe it much to ask this individual to use an authentication only profile, as this person is probably making other concessions to keep these things private (this issue does not seem to fit my idea of most people).   If its a matter of not wanting to use any 3rd party silo, then maybe we need to find a way to use google authenticator before using an oAuth provider.  That or have easy to use IndieAuth or persona instances that a shared style host could set up for you. --[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
+
+== Not exposing email address phone number ==
+<blockquote>Even if the user has their own server, they may not want to add the provided markup to it to expose their ... email address, or phone number.</blockquote>
+
+Not wanting to expose email address is true in more cases than not, (there are exceptions).
+
+Also, not wanting to expose phone number - also true in more cases than not (also has a few exceptions).
+
+SMS services have very poor (none or almost no) blocking abilities, therefore people in general do not want to expose their mobile phone number publicly to be potentially abused by spammers or other harassment.
+
+However if it was possible to only expose an SMS link to requests from the IndieAuth server, then it may be possible to setup SMS based IndieAuth without exposing the information publicly.
+
+If there were some way know to when a personal web site's server home page request was coming from indieauth.com, then that server could give return more info.
+
+== UI instead of code for rel-me ==
+<blockquote>... this step can be automated by tools that create a page specifically for IndieAuth</blockquote>
+
+Yes. That's a logical step. Some sort of home page configuration UI that lets you pick your "other profiles". Actually we've already seen such UIs. [[Pownce]] had one. [[G+]] has one. [[Storytlr]] is an indieweb project with such a UI.
+
+We should probably document those UIs with screenshots on here on the wiki.
+
+== Web is still better than email or phone ==
+<blockquote>However, if we can authenticate with an email address or a phone number, why do we need all the web page malarkey to begin with?</blockquote>
+
+Because you are not your email address and you are not your phone number. Already explained. Perhaps we need to expound on both of these further in the wiki:
+* [[Why_web_sign-in#Why_not_email|Why not email]]
+* [[Why_web_sign-in#Why_Not_Phone_Numbers|Why not phone numbers]]
+
+** Authenticating with email is fine, and we have fantastic tools like [[persona]] that solve that problem.  But that is a mix of Email and The Web.  The purpose of IndieAuth is to solve some of the many problems with email authentication on the web, using The Web to authenticate on the web, where the personal domain is your identity.  I believe The Web to fundamentally more accessible (fundamentally easier to hose your own website than run your own mail servers) and thus has the potential to be a much more independent form of online identity than email ever will (I still, in the meantime, love you mailpile). --[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
+
+== Physical Identity Non-goal ==
+<blockquote>Do we have a way of knowing, via IndieAuth, that you are really the walking bag of mostly water that you claim to be? No.</blockquote>
+
+[https://en.wikipedia.org/wiki/Straw_man Straw man]. No one is claiming to solve the "strong identity of the physical human" problem.
+
+Short of biometrics (hand/thumb print, retina, etc.) no one will bother - and physical identification has other downsides (can't delegate etc.)
+
+== Website selection and control ==
+<blockquote>all we are proving is that (a) you have write access to that web site</blockquote>
+
+That's all we ask. That you <em>control</em> the website/domain you are <em>self-identifying</em> with (by choosing to type it into a sign-in box). That's it and that's plenty good enough.
+
+== Why not email or phone number again ==
+<blockquote>we can simply authenticate you using your email address or your phone number</blockquote>
+
+Once again:
+* [[Why_web_sign-in#Why_not_email|Why not email]]
+* [[Why_web_sign-in#Why_Not_Phone_Numbers|Why not phone numbers]]
+
+We can't trust those. You don't own those. 
+
+Your email you sharecrop on a [[silo]] (or if its your own domain, then just type your own domain, simpler).
+
+Your phone number you get from an even smaller number of government monopoly providers. Also not yours.
+
+We can't trust those for <em>persistent identity</em> (the kind you come back to a site with days/weeks/months/years later, like a username).
+
+We <em>can</em> trust them for ephemeral authentication of your web identity (just in the moment, one time, unless they're still on your site). They're good enough for that, because you, the user, can swap them out at any time (burn them), and no website that uses your web identity depends on your email or phone number.
+
+== Use Persona for email sign-in ==
+<blockquote>To sign in to a site with your email address</blockquote>
+
+That's a solved problem. It's called Persona. http://www.mozilla.org/en-US/persona/
+
+== Ironic email identity breaks user flow ==
+<blockquote>Check your email and follow the link in the email</blockquote>
+
+But "check your email" means you must <em>break your flow</em>!
+
+Previously the post said: <blockquote>The biggest problem with the process is that it breaks the user’s flow</blockquote>
+
+This appears to be a contradiction.
+
+And if there's anything that breaks your flow, it's checking your email and getting distracted by all the crap there.
+
+<blockquote>Boom, you’re in.</blockquote>
+
+More like: Boom, you're now distracted by email hell as you look for an email from a previously unknown sender amongst all the email in your inbox etc.
+
+And you're distracted and no longer signing into a website.
+
+This is precisely why Persona avoids the "Check your email and follow the link in the email" in the normal flow. Only if your email has to use the Persona default provider implementation, and only then on first set-up, do you have to check your email.
+
+"Check your email and follow the link in the email" is to be avoided at all costs.
+
+== SMS identity costs and vulnerability ==
+<blockquote>How about with your phone number?</blockquote>
+
+Your phone provider is a government monopoly and is already sending everything to the government, long before websites or email providers did, thus using a phone number as identity is a step <em>backwards</em> from using Twitter or Facebook.
+
+<blockquote>Enter your phone number on the site.</blockquote>
+Does this require entering a 10-11 digit number you rarely enter anywhere else? It sounds about as bad as being asked to enter your IP address.
+
+<blockquote>Check your text messages...</blockquote>
+What if you're in a foreign country? Yeah fine that's probably a 1% edge case ;)
+
+<blockquote>...and follow the link in the message</blockquote>
+What if your phone doesn't have data coverage where you are? Again, foreign country use-case (1%?) or what if you're trying to sign-in on your <em>laptop</em>, not on your phone?
+
+<blockquote>Boom, you’re in.</blockquote>
+Or rather, boom, you've just been overcharged for an international txt message, or intl data roaming charges, or both. Yuck.
+
+== Signing as just you ==
+In reference to email and phone as identity, Aral wrote:
+<blockquote>allowing you to sign in not as ‘you on Twitter’ or ‘you on Facebook’ but as just ‘you’</blockquote>
+
+That's exactly what we seek to do with [[IndieAuth]] and [[Web sign-in]]:
+* allow you to sign in as <em>just</em> you, whatever domain name you call yourself.
+
+Allowing you to sign in not as 'you on Gmail' nor 'you on Yahoomail' nor 'you on Insert-Another-Email-Provider-Here'.
+
+Nor 'you on Verizon/AT&T/T-Mobile/O3/Orange/etc.'
+
+You are not a (phone) number.[https://en.wikipedia.org/wiki/Number_Six_%28The_Prisoner%29#I_am_not_a_number.2C_I_am_a_free_man]
+
+You on your own domain name is more indie, more free (as in freedom) than all of those.
+
+== HTML literacy is here ==
+<blockquote>...does not require us to ask you to … edit an HTML document</blockquote>
+
+Baristas learned to edit HTML during the dotcom boom of "web 1.0"
+
+<blockquote> to add microformats to it.</blockquote>
+
+Not microformats* plural, but microformat. [[rel=me]]. 6 characters. 7 if you count the additional space.
+
+This again however alludes to the aforementioned [[#UI_instead_of_code_for_rel-me|home page configuration UI goal]].
+
+Your site should give you a simple usable dashboard that let's you easily one-click add additional profiles for *you* (whether social network / web profiles, email, sms, or perhaps in the future (back to the past style), fax, or maybe even postcard receiving physical address ;)
+
+== Avoid yet more DRY violating files ==
+Aral suggests a new file with line-formatted information:
+<blockquote>What if you also created a simple me.txt file (ala humans.txt) on your site...</blockquote>
+
+Anyone who can write a plain text me.txt file and upload it can in practice also edit their index.html and upload it and their index.html already likely has this information, their name, hyperlink to their Twitter, hyperlink to their Facebook, perhaps even summary bio.
+
+Asking them to type it again into a me.txt violates two things:
+* '''[[DRY]] principle.''' me.txt duplicates the data unnecessarily.
+* '''Pave the cowpaths.''' People already publish their name, twitter, fb, bio on their home page. Better to ask them to simply add rel=me and a class name or two.
+
+This is much easier than what me.txt is asking for, which is many more steps:
+* create a new file
+* learn a new mystery format. It looks like an easy format, but things rarely stay that way. It also looks like a random YAML-esque text format thrown together in five minutes, which initially appears simple but is based on no existing formats or observed behaviours.
+* copy paste information into it and maybe get it wrong while duplicating (DRY violation symptom)
+* upload it to the right place
+
+me.txt seems like a lot more work - why advocate for the user to do a lot more work?
+
+** Maybe I am missing a subtlety here, but part of the beauty of the web is that fundamentally it is a bunch of servers serving up plain text files that have a standardized format. This ''Is'' what is being done here, but is based around the HTML5 + Microformat standards.  To reiterate what is said above, if someone can't add a hyperlink and 6 characters to their homepage, through whichever UI/UX the person is using to interact with their page, will they even be able to upload a text file to a web server?
+
+== Well-known Photo URLs ==
+Aral proposes:
+<blockquote>upload a profile photo called me.jpg or me.png to your website and other sites know to look for that for your photo</blockquote>
+
+"me.jpg" in particular is a hypothetical suggestion and has little merit, yet it is easy to see why this may have some appeal.
+* prior art: [[NeoCities]] (launched ~2013-06-21) has an implied convention for "me.jpg": <blockquote><code><nowiki><img src="me.jpg" alt="photo of me" /></nowiki></code></blockquote>Though no example of an actual *.neocities.org/me.jpg has been found yet.
+
+The general idea of having a "well-known location" for a photo has some merit, and is similar to the existing behaviour of publishing domain.com/favicon.ico.
+
+[[User:Tantek.com|Tantek Çelik]] has been posting his self-images / avatars by <em>convention</em> at:
+* /logo.jpg - for a small logo useful for embedding as part of an author [[h-card]]
+* /photo.jpg - larger photo useful for an address book entry
+Other examples?
+
+If that pattern emerges among indie web sites in general, then perhaps we can suggest that as a guideline/fallback in the absence of an h-card with u-photo or u-logo.
+
+== New formats are rarely simple ==
+Aral goes on to claim his new format is:
+<blockquote>Simple.</blockquote>
+
+Simple initially, but new and unknown, requiring:
+* people to learn it and 
+* developers to learn how to parse it, 
+** including all the ways people will inevitably break it (on purpose or otherwise). 
+
+Creating these files and uploading them to a server is no less complicated than publishing HTML, especially as there are vast amounts of resources dedicated to showing people how to use HTML, it’s been stress-tested for years, has proven to scale, is well understood by many, etc.
+
+== HTML is the new literacy ==
+Aral seems to have a problem with HTML:
+<blockquote>And no HTML necessary.</blockquote>
+
+And yet (perhaps unknowingly) proposes something worse:
+* A <em>new</em> file, with 
+* a <em>new</em> one-off text format. (see above)
+
+HTML is the new punctuation, the new literacy, and has been for over a decade.
+
+If someone complains about learning HTML, send them to https://webmaker.org/about
+
+Everyone should learn HTML, just as everyone should learn how to read and write. And people are learning simple HTML.
+
+Specifically for HTML, start here: https://wiki.mozilla.org/Learning/WebLiteracyStandard/Building/HTML
+
+== Well known is not web ==
+Aral claims his well known me.* file locations and formats are:
+<blockquote>But still web.</blockquote>
+
+But they're not "web" at all.
+* Nothing links to them.
+* They're not hypertext.
+* No one navigates between them with a browser.
+
+From Wikipedia, the [https://en.wikipedia.org/wiki/World_Wide_Web World Wide Web]: <blockquote>”is a system of interlinked hypertext documents accessed via the Internet. With a web browser, one can […] navigate between them via hyperlinks”.</blockquote>
+
+Not interlinked, not hypertext, not navigable in a web browser, not the web.
+
+== Aral’s Response ==
+
+* https://twitter.com/aral/status/374843814319775744
+* https://twitter.com/aral/status/374843879406993408
+
+== See Also ==
+* [[IndieAuth]]
+* [[Web sign-in]]
+* [[Why web_sign-in]]

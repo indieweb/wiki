@@ -1,0 +1,155 @@
+http://indiewebcamp.com/template
+
+{{stub}}
+
+A '''<dfn>template</dfn>''' is a file used to generate a page. Templates typically have codes, instructions, or special tags that are used by a publishing tool to fill in content. The result is then returned as a page, or sometimes constructed clientside.
+
+== Open Source Examples ==
+=== WordPress ===
+[[WordPress]] (the software) has templates which can be used to customize the look and feel of various pages on your WordPress blog.
+
+==== WordPress Template Issues ====
+WordPress splits markup responsibility between their "core" code (in functions like <code>body_class post_class</code>) and templates, thereby making it difficult / fragile for template authors to control the markup of the page — they're restricted by the hardcoded markup output by WordPress core.
+
+This poses real world problems, e.g. updating WordPress blogs to use [[h-feed]] and [[h-entry]] instead of class microformats <code>hfeed hentry</code>
+
+Based on this real world experience, when designing your own template system, empower it with the full ability to change the markup of any pages, and do not hard code any markup in your core CMS code.
+
+== Silo Examples ==
+Some silos have their own template formats which allow you to customize the look and feel of your blog on their site.
+* [[Blogger]]
+** https://support.google.com/blogger/answer/176245?hl=en
+* [[Tumblr]] (they call their templates "Custom Themes")
+** http://www.tumblr.com/docs/en/custom_themes
+
+== IndieWeb Thoughts ==
+=== Use Cases ===
+What are the use cases for indieweb templates, e.g. for specific indieweb [[projects]]?
+==== Falcon ====
+For [[Falcon]] I have encountered the following use cases for templates:
+* '''home page''' (uses file <samp>index.html</samp>) with blocks to fill in:
+** '''[[composite]] stream''' or most recent n (e.g. 16) [[posts]] (uses classname <code>stream</code> - number is hardcoded)
+** '''sidebar box list of recent articles''' - a few (e.g. 3) most recent [[articles]] (names + permalinks) (uses class name <code>recent-articles</code> - number is hardcoded)
+* '''legacy [[feed]]''' (uses file <samp>updates.atom</samp>) - 
+** most recent n (e.g. 3) posts (optionally filtered to only be of one or more specific post types. number is hardcoded)
+* '''post permalink''' (different per post type. currently hardcoded, needs templates)
+* '''archive page''' (composite/mult-post-type for [[bim]], [[newmonth]], day, and all posts of a single type on a day. currently hardcoded, needs templates)
+
+For the "needs templates" items, I'm planning on taking the approach of using [[microformats2]] [[h-entry]] and [[h-card]] to identify the elements that should be replaced with information.
+
+For outputting user visible datetime formatting in particular, I'm going to use a new (but hopefully more straightforward) datetime formatting format:
+* http://tantek.com/2013/325/t1/html-templates-indiewebcamp-datetime-formatting
+
+[[User:Tantek.com|Tantek]]
+
+==== Taproot ====
+[[Taproot]] uses templates everywhere to render data from filesystem storage into HTML for the web.
+* there’s a header and footer template which wrap the body of every page, adding basic navigation+stylesheets+js in the header, licensing information and credits in the footer
+** (next version) the header template handles putting microformats2 root classname(s) on the body element
+* the homepage is a single HTML file which gets loaded in between the padding
+For each content type there are typically three templates:
+* an editing template, a form which gets used both for creating new content and editing existing content
+** nice side effect of this is that fields can be prefilled by giving the template a partial post
+* a permalink page template
+* a list template, for [[feed]] views of the content — typically a list of compact versions of the permalink page template
+** usually enough difference between list and individual that I can’t reuse anything between them — better to hard code and optimise for both scenarios
+--[[User:Waterpigs.co.uk|Barnaby Walters]] 14:29, 21 November 2013 (PST)
+
+== HTML based template formats ==
+Very few templating systems use HTML itself to express template semantics in HTML (which seems like an obvious <em>simple</em> place to start, rather than jumping to a new syntax!)
+
+Note: if your templating system uses <code><nowiki>{{}}</nowiki></code> or <code>{% %}</code> or other DSL constructs to insert areas into template files, it's NOT HTML based, but rather, ASCII-based at best, since such templating sytems are assigning special meaning to those ASCII characters, rather than assigning special meaning to HTML markup.
+
+These are the few known HTML based template formats:
+
+* [http://tally.jit.su/simple Tally] is a template language that uses HTML5 data-* attributes.
+* [http://camendesign.com/dom_templating Templating With DOM] uses class names
+** but where is a simple markup example of an element that is repeated?
+** and how a template specifies a count of how many times / instances are filled in?
+*** one possibility is for the template-filling code to count the children of the element to decide how many times to iterate. A single child could mean 'as many as you see fit' as a single-entry list is unlikely as a design. This has the advantage that the template looks closer to the desired layout. Alternatively, the last child coudl contain ... to signal to append more.
+*** API is quite similar to jQuery in places
+* DOM Templating in Node.js
+** [https://github.com/fgnass/express-jsdom JSDOM]: For creating DOMs in node or client apps
+** [https://github.com/tmpvar/weld Weld.js]: 'Welding' data to a DOM template
+** [https://github.com/flatiron/plates Plates]: The followup to Weld.js that allows pure html templating in server and client node apps, without having to build a DOM tree.
+** [[jade]] is a template engine often used in NodeJS but is not restricted to it as it can generate HTML and when combined with [[stylus]] it can be used to generate fully styled pages or parts of a page
+* [http://www.cs.usfca.edu/~parrt/papers/mvc.templates.pdf Enforcing Strict Model-View Separation in Template Engines]
+** Argued benefits of DOM style templates:
+*** encapsulation: the look of a site is fully contained within templates and, likewise, the business logic is located entirely in the data model. Each speciﬁcation is a complete entity.
+*** clarity: a template is not a program whose emergent behavior is an HTML page; a template is an HTML file that a designer or programmer can read directly.
+***  division of labor: a graphics designer can build the site templates in parallel with the coders’ development efforts. This reduces the load on programmers not only by having a (usually less expensive) designer building the templates, but by reducing communication costs; designers can tweak the HTML without having to talk to a programmer. 
+*** component reuse: just as programmers break large methods down into smaller methods for clarity and reusability, designers can easily factor templates into various sub-templates such as gutters, navigation bars, search box, data lists, and so on. Entangled templates tend to be difficult to factor and can- not be reused with other data sources.
+*** single-point-of-change: by being able to factor templates, the designer can abstract out small elements like links and larger items like user record views. In the future, to change how every list of users, for example, appears on a site, the designer simply changes one template file. This also avoids the errors introduced by having multiple places to change a single behavior. Having a single place to change a single behavior in the model is also important. Logic in the template is to be avoided because “is admin user” logic is repeated in many templates.
+*** maintenance: changing the look of a site requires a template change not a program change. Changing a program is always much riskier than changing a template. In addition, template changes do not require restarting a live, currently- in-use server application whereas code changes normally require recompilations and restarts.
+*** interchangeable views: with an entangled data model and display, the designer cannot easily swap in a new look for such things as site “skins.” 
+*** security: templates for page customization are commonly made available to bloggers but, like macros in Microsoft Word, unrestricted templates pose a serious security risk. 
+* [http://incident57.com/codekit/help.html#kit Kit] is a templating language that uses HTML comments e.g. <code>&lt;!-- @import ... --&gt;</code>
+
+=== Brainstorming ===
+
+A DOM templating library should, given an HTML document, be able to make intelligent replacements and transformations of content.
+
+jQuery is one of the most well developed DOM transformation libraries, likely to be a good source of inspiration for DOM templating.
+
+DOM templating should optimise for HTML authoring and design process at all times, above all other concerns (e.g. performance can be dealt with later, human authoring experience is more important). The HTML templates must not be devalued by cryptic squiggly bracket notation — they must be useful design artifacts at all times.
+
+The HTML template should not depend on any one vocabulary, templating idiom, syntax, library or language.
+
+There should be no concept of “helpers” — typically they’re just functions which take a string and output a string, but wrapped up in a bunch of framework-specific nonsense which makes them impossible to reuse. Pushing the interpolation of variables up a layer into code means that functions can just be functions, and be reused extremely easily.
+
+=== Issues ===
+
+'''How to reuse header/footer markup whilst still keeping the template files standalone?'''
+
+Typically all pages on a site will share a basic layout, a header/footer or at least some invisible data (stylesheets, JS etc.) in the head. Allowing each individual template to not repeat this data is one of the main reasons templating languages exist. DOM Templating could share a common header/footer element and inject that into the DOM of each template, but then how to make each template a standalone useful HTML document?
+
+* One potential solution is to have modular templates with whatever CSS/JS links are required for the template to work in the template file itself, and then shared templates are injected in, maybe overwriting the other code. This way layouts can be coded in a DRY way whilst preserving each piece as being useful+viewable on its own --[[User:Waterpigs.co.uk|Barnaby Walters]] 02:10, 22 November 2013 (PST)
+
+* '''Minimal <code>&lt;head&gt;</code> + JS src siteheader approach''' - [[User:Tantek.com|Tantek]] 09:14, 22 November 2013 (PST)
+** Design very minimal <code>&lt;head&gt;</code> markup in templates such that it requires little if any change ever, e.g.:
+*** *one* <code>&lt;link rel=stylesheet&gt;</code> - all other handling of stylesheet includes etc. should be in that one stylesheet or done on the server. You should be minimizing your HTTP requests anyway.
+*** optionally *one* <code>&lt;script&gt;</code> for handling dynamic clientside behavior - all other including of scripts should be done by that one script or on the server.  You should be minimizing your HTTP requests anyway. Even this one script could likely be included at the top of the <code>&lt;body&gt;</code> along with the site header.
+*** everything else in the &lt;head&gt; is likely template specific (e.g. <code>&lt;title&gt;</code>, other link rels, metacrap etc.)
+** For visible site-headers (i.e. stuff just inside <code>&lt;body&gt;</code> at the top of the page), try: <code>&lt;script src&gt;</code> include it in in the template file and then also have the template engine replace that script src with the real site-header on the server. (similar with footer if needed) e.g.
+*** <code>&lt;body&gt;&lt;script src="include-site-header.js"&gt;&lt;/script&gt;...</code>
+*** <samp>include-site-header.js</samp> could just have a giant <code>document.write</code> statement.
+*** the template engine could process all <code>&lt;script src="include-***.js"&gt;</code> by reading them, stripping <code>document.write</code> from around the markup and including the result directly replacing the <code>&lt;script src&gt;&lt;/script&gt;</code> element from the template.
+
+== Other template formats ==
+The vast majority existing template formats use <code><nowiki>{{}}</nowiki></code> (e.g. [http://maxistentialist.tumblr.com/post/62838519332/the-small-cms-heres-something-i-need-its]) or that and/or <code>{% %}</code> (e.g. [http://liquidmarkup.org/]) or other DSL constructs to insert areas into template files.
+
+All of these add weird (new syntax) markup to HTML, or replace HTML altogether with another form of markup.
+
+Alphabetically:
+
+=== eRuby ===
+'''<dfn>[http://en.wikipedia.org/wiki/ERuby eRuby]</dfn>''' (AKA ERB) is a templating system that uses <code>&lt;% %&gt;</code> tags to '''e'''mbed '''Ruby''' into HTML.
+
+=== Haml ===
+'''<dfn>[http://en.wikipedia.org/wiki/Haml Haml]</dfn>''' is a replacement for eRuby that drops all HTML and uses its own markup language instead using <code>%tagname</code> e.g. <code>%h1</code>, linebreaks, and indentation. Doing so, claims haml.info,  "accelerates and simplifies template creation"[http://haml.info/].
+
+IndieWeb opinions of Haml:
+* -1 Aaronpk[http://indiewebcamp.com/irc/2013-11-26/line/1385483271]
+* -1 Tantek - anything that tries to be a replacement HTML is typically going to do a poor job, and fails the "quickly check it in the browser" editability test (Oh I have to setup Ruby first? Oh I have to check to make sure I have the right version of Ruby? More commandline futzing? Forget it.)
+* ...
+
+=== jinja2 ===
+{{main|jinja2}}
+[[jinja2]] uses <code>{% %}</code> syntax.
+
+=== Liquid ===
+'''<dfn>[http://liquidmarkup.org/ Liquid]</dfn>''' is a templating language extracted from the Shopify engine that uses <code>{% %} {{ }}</code> markup inside HTML.
+
+IndieWeb opinions of Liquid:
+* -1 Aaronpk: <blockquote>I don't like all the things like liquid, cause they invent other syntaxes for things that just end up being more complicated[http://indiewebcamp.com/irc/2013-11-26/line/1385483355]</blockquote>
+* ...
+
+=== Twig ===
+'''<dfn>[http://twig.sensiolabs.org/ Twig]</dfn>''' is a PHP based templating language very similar to Liquid.
+
+== Resources ==
+* http://garann.github.io/template-chooser/ 
+
+== See Also ==
+* [[projects]]
+* [[theme]]

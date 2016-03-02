@@ -1,0 +1,550 @@
+http://indiewebcamp.com/webactions
+
+A '''<dfn>web action</dfn>''' is the interface and user experience of taking a specific discrete action, across the web, from one site to another site or application. [http://tantek.com/2011/220/b1/web-actions-a-new-building-block]
+
+== Why ==
+You should put web action buttons (or links) on your posts so that users can quickly interact with them and perform common actions such as:
+* [[like]] (or [[favorite]])
+* [[repost]]
+* [[reply]]
+
+You should also consider putting web action buttons on your posts even when inline in a [[stream]] ([[composite stream|composite]], home page, or archive pages), so that users can quickly interact with your posts while reading through a collection of them (without having to dive into and out of each post to interact with it).
+
+Any button in the UI of a post which creates a [[response]] to that post should be a webaction.
+
+=== Why event specific ===
+You should put [[RSVP]] and [[invitation]] web action buttons (or links) on your [[event]] posts so that users can quickly RSVP to events that you post with common replies like:
+* RSVP yes - [ Going ]
+* RSVP maybe - [ Maybe ]
+* RSVP no - [ Can't go ]
+* RSVP interested - [ Save ]
+Clicking any of those should trigger the RSVP post creation handler on the user's own site to post the respective RSVP post.
+* Invitation - [ Invite ]
+Clicking that button should trigger the Invitation post creation handler on the user's own site to post an invitation post.
+
+For example see the RSVP webaction buttons that Facebook provides users on event posts:
+* http://microformats.org/wiki/rsvp-examples#2015_RSVP_buttons_update
+
+=== Why fallback silo webactions ===
+If you [[POSSE]] your posts to one or more [[silos]], you should consider providing fallback webaction buttons for one or more of those silos, since the user may have navigated to your post from its POSSE copy (which you could potentially detect via referer [sic] and provide fallbacks accordingly).
+
+== How ==
+=== How to markup ===
+How to markup web actions on your posts:
+==== Wrap tweet or share ====
+Use the <code>&lt;indie-action&gt;</code> tag to wrap any third party / [[silo]] action buttons/links you might already have on your site, e.g. "Tweet" / share / +1 buttons. Here is an example of wrapping an existing Tweet button (from [http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering an actual blog post]), whitespace/indenting added for readability.
+
+<pre><nowiki>
+<indie-action do="post" with="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering">
+ <span class="tweet-button">
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering" data-text="IndieWebCamp 2014 — Thoughts Before The Gathering:" data-count="horizontal" data-via="t" data-related="html5now:microformats">Tweet</a>
+  <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+ </span>
+</indie-action>
+</nowiki></pre>
+
+Note that everything inside the <code>&lt;span class="tweet-button"&gt;</code> is markup from Twitter, including the javascript. It's not required for web actions, just the markup that was there from before.
+
+The <code>&lt;indie-action&gt;</code> element is an example of a [http://w3c.github.io/webcomponents/spec/custom/ custom element], part of the [http://webcomponents.org/ web components] family of technologies. The element was initially <code>&lt;action&gt;</code>, but [http://w3c.github.io/webcomponents/spec/custom/#dfn-custom-element custom elements require a dash in the element name], hence <code>&lt;indie-action&gt;</code>.
+
+==== Wrap favorite reply retweet ====
+If you have Twitter "Favorite", "Reply", "Retweet" tweet action links, you can wrap those in  <code>&lt;indie-action&gt;</code> tags so that those with <code>&lt;indie-action&gt;</code> tag support will be able to automatically interact using their own site rather than a silo. Here's some sample markup (again [http://tantek.com/2014/175/t1/pdf14-why-need-indieweb-video-slides from an actual post]), note that text verbs have been updated to use the general [[like]], [[reply]], [[repost]] terms rather than Twitter's terms. Again whitespace added for wrapping/readability (and non-essential attributes removed)
+
+<pre><nowiki>
+<indie-action do="like" 
+ with="http://tantek.com/2014/175/t1/pdf14-why-need-indieweb-video-slides">
+ <a target="" 
+  href="https://twitter.com/intent/favorite?tweet_id=481682185359880192">
+  <img src="http://si0.twimg.com/images/dev/cms/intents/icons/favorite_hover.png" alt=""/> 
+  Like
+ </a>
+</indie-action>
+<indie-action do="repost" 
+ with="http://tantek.com/2014/175/t1/pdf14-why-need-indieweb-video-slides">
+ <a target="" 
+  href="https://twitter.com/intent/retweet?tweet_id=481682185359880192">
+  <img src="http://si0.twimg.com/images/dev/cms/intents/icons/retweet_hover.png" alt=""/> 
+  Repost
+ </a>
+</indie-action>
+<indie-action do="reply" 
+ with="http://tantek.com/2014/175/t1/pdf14-why-need-indieweb-video-slides">
+ <a target="" 
+  href="https://twitter.com/intent/tweet?in_reply_to=481682185359880192">
+  <img src="http://si0.twimg.com/images/dev/cms/intents/icons/reply_hover.png" alt=""/> 
+  Reply
+ </a>
+</indie-action>
+</nowiki></pre>
+
+==== action markup ====
+Here is a simple outline of <code>&lt;indie-action></code> markup:
+
+<pre><nowiki>
+  <indie-action do="post" with="permalink">
+   <a href=twitter>..</a>
+   <a href=pinterest>...</a>
+   ...
+  </indie-action>
+</nowiki></pre>
+
+==== action do verbs ====
+'''<code>do</code>''' takes a verb (could allow multiple verbs) - we can create a common verb registry like the [http://microformats.org/wiki/existing-rel-values rel registry]. A few possible common verbs (from analysis in "[http://tantek.com/2011/220/b1/web-actions-a-new-building-block#web-action-motivations Web Action Motivations and Clusters]") - though these should be iterated based on user experience design iterations (names, how many in particular, what specific meanings).
+* '''<code>post</code>''' - more specific than "share", more general than "comment", or "tweet"/"reply", though those might show up in a UI where a reader expected a Twitter-like experience
+* '''<code>reply</code>''' - specifically to reply to the current URL. Twitter uses a different icon. IndieNews and Barnaby.co.uk both have reply actions.
+* '''<code>repost</code>''' - generalization or Twitter's "retweet", Tumblr's "reblog" ("retumbl?"),  Pinterest "repin"
+* '''<code>like</code>''' - generalization of Twitter "favorite", Facebook "like", GooglePlus "+1". Alternatively, could split this up into separate verbs for "favorite" and "like", or further specialize: "heart" (Instagram "like"), "star" (Flickr "favorite" and Twitter "favorite"). It's not clear which approach (general or specific) is better. People do assign different meanings to favoriting vs. liking. (there's a photo on flic.kr/tantek with a conversation about this but can't find it now)
+
+See also: [[webactions-verbs-brainstorming]]
+
+==== with URL ====
+'''<code>with</code>''' takes a URL that represents a direct object for the verb to act on. The <code>with</code> attribute MUST be processed as a URL attribute in the same way that <code>href</code> is, by resolving relative URLs per document context.
+
+For most actions (e.g. reply, repost, like), the URL should resolve to a post permalink.
+
+Some actions may apply to a user / whole site (e.g. follow, add friend, invite), and those will likely thus resolve to a home page.
+
+Some actions may apply to any URL (e.g. bookmark).
+
+=== How to polyfill web action buttons ===
+{{main|indie-config#How_to_consume}}
+Until browsers have native support for handling web actions, you can make them work on your site with the consuming half of the [[indie-config]] polyfill.
+
+In short, add to the head of your pages with web actions:
+<blockquote><code>
+<script type="text/javascript" src="/path/to/indieconfig.js"></script><br/>
+<script type="text/javascript" src="/path/to/webaction.js"></script>
+</code></blockquote>
+
+See [[indie-config#How_to_consume|indie-config: How to consume]] for more details.
+
+=== How to handle web actions ===
+To set up your site to handle web actions, that is, to respond when you activate web actions buttons, you can use the "publish" half of the [[indie-config]] poly-fill. "Publish" in the context of indie-config refers to the act of your site "publishing" that it can handle web actions.
+
+See [[indie-config#How_to_publish|indie-config: How to publish]] for details of how to set this up on your site.
+
+== IndieWeb Examples ==
+<span id="Action_tag_examples_in_the_wild">Examples of real world web sites</span> using the <code>&lt;indie-action></code> tag. When this gets too big (say, 10+ sites) we can move it to [[webactions-examples-in-wild]]
+
+=== Barnaby Walters ===
+'''[[User:Waterpigs.co.uk|Barnaby Walters]]''' on notes [http://waterpigs.co.uk/notes/1123/ since at least 2013-03-15], e.g. 
+* http://waterpigs.co.uk/notes/1123/
+* have <code>&lt;action></code> tags with verbs: <code>post</code>, <code>reply</code>, <code>bookmark</code>
+
+=== Laurent ===
+'''[[User:Eschnou.com|Laurent]]''' (all posts?) since ????-??-??, e.g. 
+* http://eschnou.com/entry/on-silos-vs-an-open-social-web-indieweb---by-t-62-24891.html
+* have <code>&lt;action></code> tags with verb: <code>post</code>
+
+=== Tantek ===
+'''[[User:Tantek.com|Tantek]]''''s posts on tantek.com have the following web actions (using [[Falcon]]) [http://tantek.com/2013/251/t1/indieweb-reply-favorite-retweet-notes since 2013-09-08]:
+* [[articles]], e.g.:
+** http://tantek.com/2013/073/b1/silos-vs-open-social-web#silos-vs-open-social-web-elsewhere
+** have <code>&lt;indie-action></code> tags with verb: '''<code>post</code>''' with Tweet action fallback inside on each article post
+* [[notes]], e.g.:
+** 
+** have <code>&lt;indie-action></code> tags with verbs '''<code>like</code>, <code>repost</code>, <code>reply</code>''' with Tweet action fallback inside on each note post, and Twitter wording/icons (since the notes are primarily POSSEd to Twitter), e.g.: [http://tantek.com/2013/250/t1/demonstrating-falcon-indiewebcampuk-text-editor http://indiewebcamp.com/images/d/d2/tantek-com-demo-note-2013-251.png]
+* Since then updated (2014) to:
+** <samp> Like Repost Reply </samp> with the same icons as before.
+* 2014-09-07 updated from <code>&lt;action></code> (2013-09-08..2014-09.06) to <code>&lt;indie-action></code> tags per {{adactio}} suggestion and web components convention.
+
+=== Indienews ===
+'''Indienews''' comments pages, e.g.
+* http://news.indiewebcamp.com/post/shawfactor.com/2013/08/06/thoughts-on-extending-webmentions/
+* have <code>&lt;action inline></code> elements with <code>reply</code> verbs enabling in-context commenting ([http://waterpigs.co.uk/notes/4RRNLz/ demo])
+
+=== Barry Frost ===
+Some of Barry Frost's post have webactions as of 2013-10-01[http://barryfrost.com/posts/38], e.g.:
+* http://barryfrost.com/posts/38, http://barryfrost.com/posts/50
+* have <code>&lt;action></code> elements with bookmark, post, reply verbs and Twitter tweet action fallbacks.
+
+=== Glenn Jones ===
+'''[[User:glennjones.net|Glenn Jones]]''' notes, e.g. 
+* http://glennjones.net/notes/
+* have <code>&lt;action></code> element and fallback to Twitter actions.
+
+=== Kyle Mahan ===
+{{kylewm}} all posts on http://kylewm.com have "reply", "repost", and "favorite" webaction links as of 2014-05-15 [https://github.com/kylewm/redwind/commit/4ceb0e7d5a3efb3b68060df28761c56e7e49802d]
+* Links fallback to Twitter Reply, Retweet, Favorite if a Twitter syndication URL exists
+Then at some point (2014-??-??) Kyle dropped webactions when he rebuilt/simplified his site theme
+
+As of 2015-02-05, all post permalinks have "Reply" and "Like" [[webaction]] links, and supporting loading [[indie-config]] so anyone's site that registers an indie-config can use his webaction links to reply/like using their own site! E.g.
+* https://kylewm.com/2015/02/digitalocean-known-indieweb-publishing-platform-https
+
+=== Scott Gilbertson ===
+[[User:Luxagraf.net|Scott Gilbertson]] posts [[notes]] with "Reply" "Retweet" and "Favourite" webaction links [http://indiewebcamp.com/wiki/index.php?title=User:Luxagraf.net&diff=prev&oldid=9962 since ~2014-06-09]. Links fallback to [[Twitter]] reply, retweet, favorite tweet actions. Example:
+* https://luxagraf.net/field-notes/2014/06/people
+
+=== Michael Owens ===
+'''[[User:Mowens.com|Michael Owens]]''''s notes on mowens.com have the following web actions since 2014-08-14 (verified by {{t}}, possibly earlier)
+* [[notes]], e.g. https://mowens.com/notes/2014/07/01/2/
+** have <code>&lt;action></code> tags with verbs '''<code>reply</code>, <code>favorite</code>, <code>bookmark</code>, <code>repost</code>''' with mowens.com/interact fallback links which provide the following fallbacks as an inline progressive disclosure UI:
+** Reply: a [[webmention]] UI with form field to enter a URL of a reply
+** Favorite: placeholder text (presumably for links) to 
+*** "Favorite using * Twitter or * Facebook"
+** Bookmark: placeholder text (presumably for links) to 
+*** "Bookmark using * Instapaper or * Delicious"
+** Repost: [[citation]] UI text fields to copy/paste 
+*** <nowiki>"Short URL: [https://mowens.com/n/4Ws2]"</nowiki>
+*** <nowiki>"Permalink: [https://mowens.com/2014/...]"</nowiki>
+
+=== Pelle Wessman ===
+'''[[User:Kodfabrik.se|Pelle Wessman]]''' on posts since 2014-09-07 (deployed at [[2014/UK|IndieWebCampUK]] hack day!) e.g. 
+* http://voxpelli.com/2013/12/webmentions-for-static-pages/
+* have <code>&lt;indie-action></code> tags with verbs: <code>post</code>, <code>like</code>, <code>tip</code>
+
+=== Jeremy Keith ===
+'''{{adactio}}''' on post permalinks and in-stream on home page [http://adactio.com/notes/7408/ since 2014-09-07] (deployed at [[2014/UK|IndieWebCampUK]] hack day!) e.g. 
+* http://adactio.com/notes/7408/
+* have <code>&lt;indie-action></code> tags with verbs: <code>reply</code>, <code>repost</code>, <code>like</code>; with tweet action fallback links inside.
+
+=== David Shanske ===
+'''{{gwg}}''' on comments since 2015.
+
+=== Malcolm Blaney ===
+'''[[User:Unicyclic.com_mal|Malcolm Blaney]]''' on posts since 2015-09-08
+* default text "Want to share this? Click to choose a site:" and a settings link.
+* clicking the link tries to discover the users settings via indie-config, otherwise a dialog box is opened on the page as a fallback.
+* if the user has a webaction handler registered, their links are shown and stored in local storage.
+* otherwise the dialog is shown to explain web actions and allows them to choose either twitter or facebook instead (this is also saved in local storage).
+
+== Use Cases ==
+There are at least two key use cases that are worthy of exploring for webactions:
+
+=== Action Buttons ===
+1. Provide the familiar buttons UI of [[Twitter]], so that [[notes]] on your own site feel "at least as useful" as syndicated tweet copies. This is for the scenario where a reader of your tweets clicks a permalink on the tweet copy, navigates back to the original on your own site (perhaps to read more or view better embedded images / video), the reader can still favorite/reply/retweet/tweet etc. your note (all verbs/buttons which will act on the tweet copy of that note).
+
+There's been some demand for this in response to [[POSSE]]ing out to Twitter:
+<blockquote><p>Oops, the page I clicked thru to doesn't amplify the tweet, it simply repeats it. Bad UX. But there's more.[https://twitter.com/zeldman/status/24224559787941888]</p><p>If I want to reply to t's tweet, I can't do it from his site. I have to back-button back to Twitter. Lotta clicks.[https://twitter.com/zeldman/status/24224682530050048]</p>(and my ([[User:Tantek.com|Tantek]]) followup: http://tantek.com/2011/009/t4/falcon-needs-reply-buttons-fave-rt-coming, referenced in the broader post: http://tantek.com/2011/010/b1/owning-your-data)</blockquote> 
+
+=== Inline Comment UI ===
+2. Provide a UI for indieweb users to comment / link-blog your notes/articles on their own site
+
+By designing, developing for these two particular use cases, it may provide us a with a constrained enough design-space that we can come up with simple uses/guidelines for webactions that produce a good user experience on indieweb posts.
+
+=== Quote This ===
+3. Additionally, some news articles include "Tweet this" links <em>inside</em> an article, inline with the content, or quotes. Such "Tweet this" links appear to be contextually handcrafted, including an elided version of the text they're adjacent to, along with a permalink to the article, and a "via @-name" where @-name is the article author or publisher's Twitter account. E.g.:
+* http://gigaom.com/2013/11/05/how-jack-dorsey-approached-the-payments-market-as-a-buyer/ (cropped screenshots of "Tweet this" inline in context welcome)
+Generically, "Quote this" is a better non-silo-specific phrase for this functionality.
+
+__TOC__
+== Brainstorming ==
+=== which actions ===
+There are many possible web actions to place on / above / in a post. Here are some suggestions.
+
+In general, successful interfaces have very few web actions on a piece of content, e.g.:
+* [[Twitter]] tweets: header: 1 action (follow), footer: 3 actions (reply, retweet, favorite) plus "(...) More" for embedding/emailing tweets.
+* [[Instagram]] photos: 2 actions (like, comment) plus (...) for various other lesser actions.
+* [[Facebook]] posts: 2 actions (like, comment)
+
+==== note ====
+A [[note]] is most similar to a Twitter tweet, thus the following actions are recommended as buttons to be placed in the footer of a note, after info about the note such as date published, location:
+* like/favorite/heart/props
+* repost/retweet
+* reply
+If you [[POSSE]] to Twitter, providing familiar verbs (even wording and icons) provides a more comfortable and lower cognitive load actions interface to your readers.
+
+==== article ====
+An [[article]] is worthy of posting as a headline (article name) and permalink to anyone doing indie-bookmark posts, and as a short post on any number of services, and thus at a minimum it makes sense to include
+* post
+
+==== event ====
+For [[event]] posts in particular: 
+* RSVP popup (Going, Maybe, Can't Go)
+* Invite
+
+[[Facebook]] examples: http://microformats.org/wiki/rsvp-examples#2015_RSVP_buttons_update
+
+=== how many actions ===
+To minimize the cognitive load of an interface, minimize the options for the user to consider. E.g.
+* 2 options: [[Facebook]]: Like, Comment
+* 3 options: [[Instagram]]: Like, Comment, (...)
+* 4 options: [[Twitter]]: Reply, Retweet, Favorite, (...) More
+
+Thus consider having at most 4 actions on a post. Perhaps only 3 at most since the (...) button is not a web action (but rather a method of hiding the far more uncommon actions).
+
+=== what order ===
+By analyzing [[silo]] designs we see some patterns for what order actions are displayed. These patterns of convergence are slowly educating users and making them familiar with a certain order. There are likely reasons behind such convergence as well such as
+* ordered by increasing cognitive load
+* most commonly taken action(s) first
+* the last thing a user might want to do as last
+
+# '''like/favorite/props.''' [[Facebook]] and [[Instagram]] put "Like" first, [[Flickr]] puts "Favorite" first, and [[Google+]] puts +1 first. The reason for this is that it is likely both:
+#* The most common action taken
+#* The action that has the lowest impact, and thus lowest cognitive load of consideration.
+# '''repost/retweet.''' [[Twitter]] puts retweet second. In addition, retweeting takes a bit more consideration than favorite (i.e. "Do I really want to send this to all my followers?"), and yet, requires less thinking than a comment (i.e. "What should I to say/add to this text?"), thus it makes sense to put (if at all) "repost" after "like" but before "reply".
+# '''reply/comment.''' [[Facebook]] and [[Instagram]] both put "Comment" last (second, immediately after like). [[Twitter]] is an exception here and puts it first, likely to encourage the generation of more content on Twitter itself, since original tweets are the primary currency of Twitter (they don't do much to surface favorites in their UI). It makes sense to place "reply" at the end as commenting on a post requires the most cognitive load and thus is something a user would want to do <em>after</em> they've considered (and perhaps done) lower cognitive load options.
+
+The "(...) More" button/link in [[Instagram]] and [[Twitter]] is not a web action itself, but rather a way of hiding "other" much less common actions from the UI (progressive disclosure). 
+
+It's also typically placed away from the other buttons, often right-aligned with the content that it applies to (and thus out of the way).
+
+=== action fallbacks ===
+Inside the <code>&lt;action></code> element the publisher can place hardcoded markup for the equivalent existing provider-specific web actions which would then work as they do today.
+
+=== which silo buttons ===
+You should add provider-specific / silo-specific buttons only for the silos that your site [[POSSE]]s to.
+
+A lot of the design/UX we do on the indieweb is driven by doing the right thing for our friends to read and use our content.
+
+For example: one of your friends who reads your posts from a silo happens to click through on the permashortlink to your post, then reads the full post on your site, then wants to reply/favorite/like/repost, and should be able to click those buttons right there on your site, rather than clicking back to go to the silo, and looking for and clicking a button there. (e.g. this real-world complaint from [https://twitter.com/zeldman/status/24224682530050048 @zeldman re: having to click back to Twitter to reply].)
+
+Such buttons also help your site and your permalinks become a better (more complete) replacement for the silo-UIs your friends are used to interacting with.
+
+We should encourage our friends to interact more with our own sites than with silos.
+
+For [[event]] posts in particular, if you're POSSEing your indie events to Facebook, consider providing fallback buttons to that POSSE copy, e.g.  RSVP popup (Going, Maybe, Can't Go), Invite
+* See [http://microformats.org/wiki/rsvp-examples#2015_RSVP_buttons_update Facebook example events with buttons]
+
+=== conditional fallbacks ===
+Provide hardcoded markup for silo-specific web actions <em>only</em> when the HTTP referer [sic] shows that the user came from that silo.
+
+No need to direct any traffic to [[silos]] that didn't come from them.
+
+No need to pollute your user interface (a la [[NASCAR problem]]) with silo buttons unless your user came from that silo and would appreciate even expect those silo buttons.
+
+The whole point to start with is to support (provide a better user experience for) readers who are coming <em>from</em> the silos you've [[POSSE]]'d to. Make them feel at home (even <em>more</em> comfortable) on your own site, than they do on the silo they came from.
+
+=== clientside conditionals ===
+Conditional showing of silo buttons could even be done in clientside javascript, because non-JS useragents certainly do not care about silo buttons (<code>&lt;action&gt;</code> markup should be sufficient for any crawlers etc. to infer general UI semantics).
+
+E.g. on the serverside, always provide a [[rel-syndication]] ("View on ..silo-name..") link to [[POSSE]] copies of posts, because they are useful for [[original-post-discovery]] and POSSE threading (e.g. threading POSSE tweets) and other [[syndication-link-use-cases]].
+
+Then in JS on the clientside, replace the ("View on ..silo-name..") link with web action buttons (using <code>&lt;action&gt;</code> tags), with respective silo-specific fallback inside (perhaps referrer conditionally as noted above).
+
+Perhaps consider keeping (instead of replacing) the ("View on ..silo-name..") visible link (in addition to the web actions) if you think the silo POSSE copy of your post provides sufficient additional value to offset the cost of UI clutter and directing your readers to a silo.
+
+More advantages of dynamically adding silo buttons in clientside JS:
+* '''page size'''. omitting all that silo button markup in the HTML that is returned reduces initial retrieval page size which has numerous advantages, from performance to better search relevance (silo button markup only dilutes the relevance of semantic terms/headings/markup etc. in the page).
+* '''overall performance'''. check in JS whether the page appears to be rendered via a "slow" connection (however you want to define "slow", and using whatever technique you wish), and if so then don't load the 3rd party scripts at all (which would likely hurt page performance much more than any value they add).
+* '''potential privacy'''. Your clientside JS could also decide (e.g. based on a cookie) to not load 3rd party scripts for privacy/do-no-track reasons.
+
+=== minimum silo buttons ===
+Is there a minimal recommended silo button set for each [[silo]] that indieweb sites choose to [[POSSE]] to?
+
+E.g.:
+* [[Twitter]]
+** favorite(?) - as evidenced by users actually favoriting POSSE tweets ([[User:Tantek.com|Tantek]])
+** retweet(?) - similarly by users actually retweeting POSSE tweet ([[User:Tantek.com|Tantek]])
+** reply[https://twitter.com/zeldman/status/24224682530050048]
+* [[Facebook]]
+** Like - as evidenced by users liking things far more often than doing anything else with them on FB.
+* ...
+
+To be clear, this is not advocating for adding any more silo-specific buttons than you already have for whatever reasons you decided. Help figure out what are minimum sensible sets of silo-buttons for each silo and contribute to the above lists.
+
+=== silo button variance ===
+It's expected that indieweb sites will likely all end up with slightly different sets of action tags and silo buttons inside, based on:
+* personal preferences for UI/UX
+* whatever silos we choose to POSSE to (already a personal preference)
+
+=== silo button examples ===
+This article[https://briankoberlein.com/2014/10/25/older-universe/] has a collection of hyperlink-only silo buttons/links that we can use to create our own silo button fallbacks. '''generic''' webaction (with silo-specific label in parentheses) is for each silo-specific web action URL endpoint. Here are a few from that article, feel free to add more silo-specific web action endpoints as you find them. Add more different per-silo web action URLs as you find them!
+
+* [[Facebook]]
+** '''post''' (share): <nowiki>http://www.facebook.com/sharer.php?u=https://indiewebcamp.com/permalink&t=permalink%20-%20IndieWebCamp</nowiki>
+** ... like?
+** for event posts:
+*** ... Going?
+*** ... Maybe?
+*** ... Can't Go?
+*** ... Invite?
+
+* [[Google+]]
+** '''post''' (share): <nowiki>https://plus.google.com/share?url=https://indiewebcamp.com/permalink</nowiki>
+** ... +1 ?
+
+* [[Pinterest]]
+** '''bookmark''' (pin): <nowiki>http://pinterest.com/pin/create/button/?url=https%3A%2F%2Findiewebcamp.com%2Fpermalink&description=permalink%20-%20IndieWebCamp&media=https%3A%2F%2Findiewebcamp.com%2F7favicon.ico</nowiki>
+** ... ?
+
+* [[Reddit]]
+** '''bookmark''' (submit) : <nowiki>http://reddit.com/submit?url=https://indiewebcamp.com/permalink&title=permalink%20-%20IndieWebCamp</nowiki>
+** ...?
+
+* [[Tumblr]]
+** '''post''' (share) : <nowiki>http://www.tumblr.com/share/link?url=https%3A%2F%2Findiewebcamp.com%2Fpermalink&name=permalink%20-%20IndieWebCamp&description=A%20permalink%20is%20a%20URL%20which%20typically%20represents%20and%20retrieves%20a%20single%20post.</nowiki>
+** ... ?
+
+* [[Twitter]]
+** '''post''' (share): <nowiki>https://twitter.com/share?text=permalink%20-%20IndieWebCamp&url=https://indiewebcamp.com/permalink</nowiki>
+** ... favorite
+** ... reply
+** ... retweet
+
+=== icons reflecting current state ===
+Both [[reader readers]] and webactions on permalink posts should ideally be aware of that status of likes, reposts, and replys to a post.  Per our [[http://indiewebcamp.com/irc/2015-02-04#t1423086313956 discussion on IRC]] we have come up with 4 states and thus 4 options for each button. 
+
+Using Like as an example we have
+* Unknown if user has liked post or not
+* User has not liked post
+* User has tried to like the post but the post is not displaying the like for one of many possible reasons
+* User has liked post and the post is displaying the like
+
+Each of these could map to a different version of the icon.
+* Gray icon for unknown state
+* Empty / outline only for not liked
+* Combination of colors/strips/half and half for attempted to like but not confirmed
+* Solid color for confirmed like
+
+=== as part of post h-entry ===
+If webaction buttons were somehow properties (nested objects?) of their [[h-entry]], then indie [[readers]] and other h-entry consuming code could parse/extrac the webactions for a post, and then display them as part of their UI for that post.
+
+==== reader upgrading webactions to micropub ====
+If we do define how to publish / parse webactions, then [[readers]] can *upgrade* those webaction buttons to [[micropub]] if the user is signed into the reader with micropub (as is often the case today).
+
+=== sites upgrading webactions to micropub ===
+Note that we've had discussions where we already decided we don't want to make (or teach!) users to give their micropub credentials to every site they read, so for other sites (e.g. indieweb sites in general showing posts), they should:
+
+When displaying a post:
+* if the user is not logged into your site (e.g. via indieauth)
+** show webaction buttons and handle them via [[indie-config]] as you would
+* if the user is logged into your site ([[indieauth]])
+** webaction buttons directly linking to endpoints on that logged in site.
+* if the user is logged into your site with micropub auth (should only be the owner of the site themselves)
+** webaction buttons that do micropub directly
+
+== Verbs ==
+We need a registry of common verbs to use with web actions. This should be built based on research into real world usage and brainstorming on top of that:
+
+* [[webactions-verbs-research]]
+* [[webactions-verbs-brainstorming]]
+
+== Web Action Browser Support ==
+If you install a browser (or browser extension) that implements the action tag, you can click on action buttons on other sites (e.g. like those listed in the examples in the wild above), and then have the actions direct to your own site.
+
+Current implementations:
+
+=== Web Action Hero Toolbelt ===
+* The [https://github.com/barnabywalters/web-action-hero-toolbelt web action hero toolbelt] cross-browser extension allows you to use web actions right now in Firefox, Safari, Chrome or Opera.
+
+=== Greasemonkey Script ===
+* This is a bare-bones [https://kylewm.com/article/2014/09/09/1/greasemonkey-script-to-replace-indie-actions-with-links-to-my-site Greasemonkey script] that will replace the content of action and indie-action tags with a link to the "intent" urls specified at the top of the script.
+
+== Website Action URL Support ==
+{{main|Web Action URL APIs}}
+
+IndieWeb Support in particular:
+
+* [[User:Aaronparecki.com|Aaron Parecki]] has a URL endpoint for posting new notes/replies which he forces twitter to use for him.
+* [[User:Waterpigs.co.uk|Barnaby Walters]] has a URL API for creating new notes, which accepts several query string params, inReplyTo, text and tags.
+* ...
+
+== Drop Social Buttons ==
+The always insightful @IA wrote up a post explaining why we should consider dropping social buttons (perhaps currently the largest / most popular set of web actions)
+* http://informationarchitects.net/blog/sweep-the-sleaze/
+
+Follow-ups:
+* http://www.netmagazine.com/news/drop-social-media-buttons-call-121990
+* http://www.netmagazine.com/features/big-question-should-we-drop-social-media-buttons
+
+Some statics on sharing button use:
+* http://css-tricks.com/poll-results-sharing-buttons/
+
+=== Privacy concerns ===
+The social buttons used by a variety of silos often come with tracking cookies, meaning that the social networking services are alerted to the fact that logged-in readers have been reading content even if they do not actually take any actions (sharing, retweeting, +1ing/faveing). Depending on the nature of the content on your site, this may be a breach of your ethical standards and the reasonable standards of privacy. For instance, visits to sexuality, health and political sites may then lead tracking cookie organisations to draw unwanted or undesirable inferences that breach a users privacy.
+
+In 2010, the British developer Mischa Tuffield noted that Facebook and Google tracking cookies were used on the NHS Choices website, which is used by people to look up health conditions. See [http://mmt.me.uk/blog/2010/11/21/nhs-and-tracking/ here].
+
+Wikipedia has rejected the introduction of social share buttons partly on the grounds of privacy ([https://en.wikipedia.org/wiki/Wikipedia:Perennial_proposals#Share_pages_on_Facebook.2C_Twitter_etc. Wikipedia:Perennial proposals]).
+
+=== Adblock Plus blocking ===
+The browser extension "Adblock Plus" as of version 2.6.3 (possibly earlier) is known to block some social share buttons, even just Twitter tweet action hyperlinks!
+
+The following Adblock Plus filters appear to be at least blocking follow, tweet, and retweet links:
+
+<pre><nowiki>
+##a[href^="https://twitter.com/intent/follow?"]
+##a[href^="https://twitter.com/intent/retweet?tweet_id"]
+##a[href^="https://twitter.com/intent/tweet?"]
+</nowiki></pre>
+
+If you're using Tweet Actions as silo-specific fallbacks for web actions, be aware that your fallbacks may not show up on users' machines with Ad Block plus installed.
+
+If you're a user of Adblock Plus, you can re-enable these by:
+* go to a page which has them (e.g. http://tantek.com/2014/164/t1/web-idealists-have-a-point )
+* choose "Open blockable items" from the red "ABP" stop icon in the toolbar
+* note the blocked items in red in the list that opens in a pane below the web page (same window)
+* right-click / ctrl-click on each red item and choose "Disable Filter"
+* reload the page - the buttons / tweet actions should show up.
+
+== Drop Delegated Logins ==
+While delegated logins aren't necessarily seen as a web action, they are at least superficially similar, in that they typically consist of a button with a particular social site brand. MailChimp decided to drop theirs, read why:
+* http://blog.mailchimp.com/social-login-buttons-arent-worth-it/
+
+== Real-World Candidates for Web Actions ==
+
+Add links to/screenshots of existing website UIs which a web actions UI could replace
+
+* [http://photos.waterpigs.co.uk/p/mn Cognition Blog Post Response CTA]
+* [http://cweiske.de/tagebuch/phorkie-0.3.1.htm#federation phorkie federated forks] using rel=vcs-* to discover repo URLs for a website. Sites could have <code><action do="fork"></code> which UAs then redirect to the code hosting service of the user’s choice
+* … Add more here, move to a separate page once there are too many
+
+== Delegate URLs ==
+
+''See Also: [[Web_Action_URL_APIs]]''
+
+Web action delegate URLs are URLs which present a configurable UI for performing an action, which can be customized via query parameters in the URL. They're kind of like a callback URL but presenting a UI to help perform an action instead of performing it automatically with no user intervention.
+
+The web action delegate URL pattern is the practice of software allowing a user to set these custom URLs as delegates for certain actions within an application, probably with URL template placeholders which are auto-filled depending on the context of the delegation.
+
+Benefits:
+* '''No need to communicate directly between applications''', avoiding all the auth/security complexity which comes with doing so (e.g. OAuth)
+* Apps '''only need to submit the data they know about'''; any other data can be provided at the second step. * Encourages '''tiny, focused UIs'''
+* reduces the need to update UIs when the delegated system changes
+
+=== Apps which submit to to delegate URLs ===
+
+* '''[http://waterpigs.co.uk/pushups pushups]''' is a simple, standalone HTML+JS+CSS (download to clone) nose-activated pushup counting UI. Give it a URL, and when you’re done it delegates the data to the URL you provide, which is remembered using localstorage.
+
+== History ==
+=== 2012 ===
+Web actions were presented and discussed at OSBridge 2012.
+
+The 2012-06-28 OSBridge "Web Actions" presentation [http://tantek.com/presentations/2012/06/osb12-web-actions/#slide15 proposed] the <code>&lt;action></code> tag as follows:
+
+<pre><nowiki>
+  <action do="post" with="permalink">
+   <a href=twitter>..</a>
+   <a href=pinterest>...</a>
+   ...
+  </action>
+</nowiki></pre>
+
+But this has been updated as of [[2014/UK|IndieWebCampUK 2014]] to use <code>&lt;indie-action></code>, and due to sufficient rough consensus of running code, upgrade beyond brainstorm to actual how to markup. See earlier "How To" section above.
+
+<pre><nowiki>
+  <indie-action do="post" with="permalink">
+   <a href=twitter>..</a>
+   <a href=pinterest>...</a>
+   ...
+  </indie-action>
+</nowiki></pre>
+
+=== 2011 ===
+The concept of "web actions" was introduced to both capture the emergence of this new type of web interaction (e.g. the spread of "Blog this, Digg, Read later, Follow, Like, Share, Tweet, +1" buttons across pages[http://tantek.com/2011/220/b1/web-actions-a-new-building-block]), and as a user-centric reframing of the previous developer-centric notion of "[[web intents]]".
+
+At IndieWebCamp 2011, both [[Standardizing_Web_Intents|discussions]] and a [[2011/Demos#web_intents_user_experience|UX effort]] demonstrated that the term "web intents" was too confusing and too abstract to effectively do user centered research and design in the area. The term "web action" is based on the fact that from the user's perspective, they think they are taking an '''action''' when they click these buttons. When the term was tried out with others creating designs/UX in the space, it seemed to work much better to convey understanding.
+
+== Events ==
+Session notes from events where web actions have been discussed:
+
+* Session Notes from [[How_the_Indie_Web_Hooks_into_Hosted_Communities]] @ [[2011|IWC 2011]]
+* Session Notes from [[Standardizing_Web_Intents]] @ [[2011|IWC 2011]]
+* Demo Notes [[2011/Demos#web_intents_user_experience]] @ [[2011|IWC 2011]]
+* 2011-09-10 BarCampBrighton6 session http://lanyrd.com/2011/bcb6/shgxk/
+* 2011-09-18 WordCampPDX session
+* 2012-06-28 [http://tantek.com/presentations/2012/06/osb12-web-actions/ Web Actions] session at OSBridge
+
+== Articles ==
+* 2011-220 [[User:Tantek.com|Tantek]]'s [http://tantek.com/2011/220/b1/web-actions-a-new-building-block Web Actions: Identifying A New Building Block For The Web]
+* 2012-09-26 [[User:waterpigs.co.uk|Barnaby Walters]]’ [http://waterpigs.co.uk/articles/web-actions post on Web Actions]
+
+== See Also ==
+* A list of currently available [[Web Action URL APIs]]
+* https://wiki.mozilla.org/WebActions
+* The [http://tagboard.com/webactions #webactions tagboard]
+* [[indie-config]]
+* [[action button]]
+
+[[Category:building-blocks]]

@@ -1,0 +1,25 @@
+http://indiewebcamp.com/queueing
+
+{{stub}}
+
+== Message Queues ==
+* beanstalkd: Lightweight protocol based on memcached [http://indiewebcamp.com/irc/2014-03-26/line/1395898812]
+* gearman
+* [[Celery]] (in the Python world)
+** easy to use, but quite large.
+** can use Redis or RabbitMQ as the backend
+* Redis: a general key-value store that can store various data structures, including a FIFO queue.
+* uWSGI spooler
+** part of uWSGI
+** Simple file-based spool, similar in concept to mail spools
+** Processes 1 task every n-seconds, which means there is an unnecessary lag between queueing and processing. Probably more suitable for large background tasks.
+** lacking documentation
+
+=== IndieWeb Examples ===
+IndieWeb users using this approach
+* {{aaronpk}} likes beanstalk, uses it in [[p3k]]  
+* {{kylewm}} uses Redis with [http://flask.pocoo.org/snippets/73/ this Python/Flask snippet], lightly modified.
+** uwsgi spooler previously, polling every 30 seconds. It was simple and solid, but I didn't like that mentions weren't sent out right away, nor incoming mentions processed right away. Also no obvious way to query queued tasks for their status.
+
+== Alternatives ==
+* Make an entry somewhere for the task and then have a cron do it. You could also use a [http://www.sitepoint.com/web-bugs-for-job-scheduling-hack-or-solution/ web bug].

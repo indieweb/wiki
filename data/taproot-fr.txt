@@ -1,0 +1,53 @@
+http://indiewebcamp.com/taproot-fr
+
+''Cette page a démarré sur [[taproot]]''
+
+{{stub-fr}}
+
+= Taproot =
+
+Taproot est le logiciel de publication de [[User:WaterPigs.co.uk|Barnaby Walters]]’. Il est écrit en [[PHP-fr|PHP]] 5.4 et pilote la plupart du site [http://waterpigs.co.uk waterpigs.co.uk]. Il n'est pas actuellement sorti dans le public, bien que certaines parties le soient : 
+
+* [https://github.com/barnabywalters/php-helpers php-helpers] (Static helper functions, some utility classes and [[POSSE-fr|POSSE]] stuff including the truncenator.
+* [https://github.com/barnabywalters/php-abc php-abc] (ABC notation parsing)
+* [https://github.com/barnabywalters/php-activitystreams php-activitystreams]
+
+== Principes de Design ==
+
+En plus des [[principles-fr|principes]] IndieWebCamp, voici quelques principes découverts durant la construction de taproot.
+
+* '''Build software which feels safe, all other concerns''' (UI, UX, privacy, security) are secondary [http://waterpigs.co.uk/notes/1181/] — ceci se fonde sur une expérience personnelle à travers un [[selfdogfood-fr|selfdogfood]]ing taproot
+* '''Easy things should be easy, remove friction so hard things are only has hard as they need to be''' [http://waterpigs.co.uk/notes/1168/]
+* '''Use event listener patterns to build upon the same data in intelligent ways''' [http://waterpigs.co.uk/notes/1100/]
+
+== Structure ==
+
+Taproot a une structure hautement modulaire. Il est constitué d'une classe Application, qui gère la répartition d'événement, l'injection de simple dépendance, le routage et le chargement de module. Il y a deux types de modules — les modules complets, qui exposent les URLs, et les "listeners", qui écoutent les événements répartis dans Taproot.
+
+Actuellement il y a des modules pour Index, Notes, Articles, Contacts, Tunes, Tags et Mentions.
+
+Il y a un grand nombre d'écouteurs qui gèrent tout de l'authentification jusqu'au [[POSSE-fr|POSSE]] et la transformation de contenu. Généralement, si je veux ajouter une nouveau morceau de fonctionnalité, je le ferai dans un écouteur, si je veux ajouter un nouveau type de contenu, je créerai un nouveau module.
+
+=== Stockage ===
+
+La plupart des modules stockent leurs data à l'intérieur d'une database  accessible-PDO, avec l'exception partielle du module Contacts qui utilise la DB comme un cache — l'endroit canonique de la data est un partage [[CardDAV]].
+
+En date du 2013-03-24 je suis fatigué du DB et incertain, et je suis en train de ré-implémenter une nouvelle biblothèque CRUD qui me permet d'utiliser des fichiers pour le stockage de data, et ce quel que soit la DB que je veux pour l'indexation. --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:12, 24 March 2013 (PDT)
+
+== Notes ==
+
+Le module Notes est le principal endroit de mon usage Taproot. Il gère la création et l'affichage de petites [[note-fr|note]]s — presque comme des tweets, mais avec un champ potentiellement bien plus large grâce à l'usage excessif de mots-clés.
+
+Comme dans la plupart de Taproot, le module notes gères un CRUDL basique de data, et différents écouteurs font tout le reste, y compris la conversion du markdown, l'interprétation des hashtags, l'auto-lien des @names, la syndication de contenu.
+
+Poster une note ressemble à cela : 
+
+[[File:taproot-posting-ui.gif]]
+
+Un reste de l'UI de publication juste après la sauvegarde de la note : 
+
+[[File:note-saved-ui.png]]
+
+== Voir aussi ==
+* [http://waterpigs.co.uk/notes?tagged=taproot Notes de Barnaby taguées avec Taproot]
+* [[projects-fr|Projets]]

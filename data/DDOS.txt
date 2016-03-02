@@ -1,0 +1,71 @@
+http://indiewebcamp.com/DDOS
+
+{{stub}}
+
+'''<dfn>DDOS</dfn>''' stands for Distributed Denial of Service, and refers to an attack involving a large quantity of computers making many simultaneous requests to a single site.
+
+== Webmention ==
+
+As [[webmention]] uses the exact same notification/fetch/verify flow as [[Pingback]] (but without the unnecessary XMLRPC) it is vulnerable to the known [http://www.incapsula.com/blog/wordpress-security-alert-pingback-ddos.html pingback DDOS attack].
+
+Resources related to the [[WordPress]] pingback vulnerability:
+* [http://labs.sucuri.net/?is-my-wordpress-ddosing Check if your WordPress site was pingback abused]
+* [http://fooplugins.com/prevent-wordpress-pingback-ddos/ Beware : Your Site Is Part of a WordPress Pingback DDoS Botnet]
+
+Specifically, the attack involves an attacker creating a list of many (potentially hundreds of thousands) of websites which support webmention, and sending them all fake webmentions pointing towards the same source URL. All of the servers fetch the same URL simultaneously, and the victim’s servers are overloaded. The attack is unblockable because the attacks come from many different IP addresses.
+
+== How to avoid ==
+There are several possible measures which could be taken to prevent unwitting participation in this attack.
+
+=== Expiring token in endpoint ===
+Add an expiring, random or encrypted token to webmention endpoints, preventing the accumulation of lists of endpoints and forcing attackers to look up the webmention endpoint of each of the sites they want to use to DDOS a victim.
+
+=== Check client IP ===
+Check the client IP of the incoming webmention POST request against the possible IPs of the source URL hostname — if they don’t match, ignore the webmention without ever fetching the source URL.
+
+Example PHP webmention endpoint source code:
+
+<pre>
+// Anti-webmention DDOS measures
+$sourceIps = gethostbynamel(parse_url($source, PHP_URL_HOST));
+if ($sourceIps === false) {
+  // The source host cannot be resolved. Accept only if whitelisted IPs match.
+  $sourceIps = [];
+}
+
+$sourceIps = array_merge($sourceIps, $whitelistedIPs);
+
+if (!in_array($request->getClientIp(), $sourceIps)) {
+  // Error!
+  return new MentionException('x_request_not_from_source_ip', 'The webmention request didn’t come from an IP address which matched the source hostname.');
+}
+</pre>
+
+* This method requires web mentions to be sent by the web server only which isn't necessarily practical all the time.  Things like web mention endpoints separate from the web server don't seem possible with this method.  This also breaks the use of curl from any IP.  This seems overly restrictive.  --<span class="h-card">{{sparkline|https://farm3.staticflickr.com/2926/14055807513_dea2b533b6_s.jpg}}[[User:Bret.io|Bret Comnes]]</span> 10:38, 16 September 2014 (PDT)
+** As Barnaby notes, the endpoint could accept a ''hashcash'' with the request, this should in theory allow one to make requests from cURL --[[User:Jonnybarnes.uk|Jonnybarnes.uk]] 10:50, 16 September 2014 (PDT)
+
+=== Hashcash ===
+Require a hashcash “payment” parameter or header on incoming webmentions, accepting them if they’ve put enough processing power into the request to slow down a DDOS.
+
+=== HEAD request source first ===
+(Amplification mitigation) do a HEAD request to the source URL and check for text/html content type. This doesn’t prevent excess requests but it might reduce server load if the attacker is trying to DDOS a large, expensive-to-serve file e.g. video.
+
+=== Queue and delay GET source ===
+(Immediate load mitigation) queue and randomly delay actually performing the GET request for the source URL.
+
+=== Forward originating IP address ===
+When verifying a webmention (or pingback, for that matter) by checking the source site, include an '''X-Forwarded-For''' HTTP header in your request, with the value set to the IP address of the client that notified your server of the alleged webmention. If servers consistently use this header, a victim of a DDOS attack can more easily detect and filter these invalid requests when they see the same IP address (or a smaller subset of IP addresses controlled by the attacker) in the Forwarded field.
+
+That is, when verifying the contents of a webmention, your web server is, for that single request, kind of acting as an HTTP proxy for the IP that told you about the alleged webmention. As with any proxy, the way to prevent abuse is to indicate to the destination server the originating IP. In the case of webmention verification, privacy is not a particular concern: the IP address is likely the IP address of the source webserver itself (or some other machine controlled by the author who is sending the webmention).
+
+* [http://en.wikipedia.org/wiki/X-Forwarded-For Wikipedia article on the informal X-Forwarded-For header]
+* Akismet (and now WordPress too) use an [http://blog.akismet.com/2014/03/18/akismet-plugin-2-6/ X-Pingback-Forwarded-For header]. [Not clear to me why we need yet another distinct header name for this. -[[User:Npdoty.name|Npdoty.name]]]
+
+== Indieweb Examples ==
+* [[User:WaterPigs.co.uk|Barnaby Walters]] implemented expiring webmention endpoint tokens as of 2014-09-16; previously had implemented client IP checking on waterpigs.co.uk but ran into problems
+* {{aaronpk}} implemented expiring webmention endpoints on 2014-09-16. Each request to discover the webmention endpoint for a post results in a unique endpoint that is valid for 5 minutes.
+* …add yourself here!
+
+== See Also ==
+* [[webmention]]
+* [[spam]]

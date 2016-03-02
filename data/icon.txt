@@ -1,0 +1,364 @@
+http://indiewebcamp.com/icon
+
+An '''<dfn>icon</dfn>''' in the context of the indieweb typically refers to a home page icon for an indieweb site. Nearly all modern browsers support a simple rel=icon link, a few legacy and other browsers may require rel="shortcut icon", or a <kbd>/favicon.ico</kbd> (at the root).
+
+== Markup ==
+The <code>&lt;link rel="icon"&gt;</code> tag is a standard[http://www.w3.org/2005/10/howto-favicon] way for web pages to indicate an <code>icon</code> for the current page that is also suitable as the icon for a <code>shortcut</code> button to the current page.
+
+<pre><nowiki>
+<link rel="icon" href="logo.jpg" />
+</nowiki></pre>
+
+== iOS home screen ==
+To create an explicit icon (rather than the default page thumbnail) for a shortcut that an iOS user can save to their homescreen, you need a line of code like this in your head element:
+<pre><nowiki>
+<link rel="apple-touch-icon-precomposed" href="logo.jpg" />
+</nowiki></pre>
+The <code>link rel="apple-touch-icon-precomposed"</code> is an Apple proprietary link relation tag and must be used as is. It cannot be combined with other link rel values e.g. <code>link rel="icon apple-touch-icon-precomposed"</code>. Whereas that should work, and it's failure to work is a bug in iOS.
+
+''Why <code>apple-touch-icon-precomposed</code> instead of <code>apple-touch-icon</code>?''
+
+Because in iOS6 and earlier, Safari/iOS adds an ugly white drop shadow over the top of your icon when you use <code>rel="apple-touch-icon"</code>. The effect looks particularly bad on photo JPEG (like a personal icon/avatar). Using <code>apple-touch-icon-precomposed</code> avoids this problem.
+
+== Android home screen ==
+=== Chrome and Firefox for Android ===
+Both Chrome and Firefox for Android will work with the standard <code>rel="icon"</code> markup to enable users to save your icon in two steps: save the site as bookmark, then press-and-hold on the bookmark and select save to homescreen.
+
+=== Chrome M31 Beta for Android ===
+To enable one-step adding of your icon to the home screen in Chrome M31 Beta (or later) for Android, you need to also add this line of code to your head element (in addition to the standard <code>rel="icon"</code> markup described above).
+
+<pre><nowiki>
+<meta name="mobile-web-app-capable" content="yes" />
+</nowiki></pre>
+
+The <code>&lt;meta name="mobile-web-app-capable"&gt;</code> tag is a Google proprietary meta tag ([http://wiki.whatwg.org/index.php?title=MetaExtensions&diff=9413&oldid=9407 proposed as an officially registered meta name] as of 2013-12-10) and is further described in [https://developers.google.com/chrome/mobile/docs/installtohomescreen their documentation].
+
+This meta tag has the added side effect of making the browser bar disappear and the window open full screen.  The window also runs as its own App in the recent apps menu instead of as a tab in chrome.
+
+== IndieWeb Examples ==
+In rough order of implementation of an icon showing/representing themselves on their home page on at least [[iOS]] and [[Android]]:
+
+=== Jeremy Keith ===
+{{icon|http://adactio.com/apple-touch-icon.png}}
+[[User:Adactio.com|Jeremy Keith]] on [http://adactio.com/ adactio.com] has a single favicon for generic shortcuts, and an Apple-specific icon for [[iOS]] support (since ~2008):
+
+<pre style="clear:both"><nowiki>
+<link rel="shortcut icon" type="image/ico" href="/favicon.ico" />
+<link rel="shortcut icon apple-touch-icon" type="image/png" href="/icon.png" />
+</nowiki></pre>
+He also has an icon in a "well known" location that iOS looks for it:
+* <nowiki>http://adactio.com/apple-touch-icon.png</nowiki>
+And that's how iOS finds his icon, not via the <code>&lt;link rel="shortcut icon apple-touch-icon"...</code>
+
+=== Shane Becker ===
+{{icon|http://assets.veganstraightedge.com/images/apple-touch-icon-57-precomposed.png}}
+{{veganstraightedge}} on http://veganstraightedge.com has a variety of sizes of icons of his avatar/logo that he uses for his home page icon for saving to a home screen on [[iOS]] (since 2012-11-18) or Android (using the 192x192 size), using the following code:
+
+<pre style="clear:both"><nowiki>
+<!-- Fav and touch icons -->
+<link rel="shortcut icon" href="http://assets.veganstraightedge.com/images/favicon.ico" />
+<link rel="apple-touch-icon" sizes="57x57" href="http://assets.veganstraightedge.com/images/apple-touch-icon-precomposed.png" />
+<link rel="apple-touch-icon" sizes="60x60" href="http://assets.veganstraightedge.com/images/apple-touch-icon-60x60-precomposed.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="http://assets.veganstraightedge.com/images/apple-touch-icon-72x72-precomposed.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="http://assets.veganstraightedge.com/images/apple-touch-icon-76x76-precomposed.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="http://assets.veganstraightedge.com/images/apple-touch-icon-114x114-precomposed.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="http://assets.veganstraightedge.com/images/apple-touch-icon-120x120-precomposed.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="http://assets.veganstraightedge.com/images/apple-touch-icon-144x144-precomposed.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="http://assets.veganstraightedge.com/images/apple-touch-icon-152x152-precomposed.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="http://assets.veganstraightedge.com/images/apple-touch-icon-180x180-precomposed.png" />
+<link rel="icon" sizes="192x192" href="http://assets.veganstraightedge.com/images/touch-icon-192x192.png" />
+</nowiki></pre>
+
+=== Aaron Parecki ===
+{{icon|http://aaronparecki.com/images/aaronpk-256.jpg}}
+[[User:Aaronparecki.com|Aaron Parecki]] on [http://aaronparecki.com/ aaronparecki.com] has a variety of sizes of icons of himself he uses for his home page icon for saving to a home screen on [[iOS]] (since 2012-07), using the following code:
+
+<pre style="clear:both"><nowiki>
+<link rel="shortcut icon" type="image/ico" href="/favicon.ico">
+<link rel="shortcut icon" type="image/jpg" href="/images/aaronpk-256.jpg">
+<link rel="apple-touch-icon-precomposed" href="/images/aaronpk-256.jpg">
+</nowiki></pre>
+He also has a redirect from a "well known" location that iOS looks for it:
+* <nowiki>http://aaronparecki.com/apple-touch-icon.png</nowiki>
+Which redirects to:
+* <nowiki>http://aaronparecki.com/images/aaronpk-54.png</nowiki>
+
+=== Amber Case ===
+{{icon|http://caseorganic.com/images/caseorganic.jpg}}
+[[User:Caseorganic.com|Amber Case]] on [http://caseorganic.com/ caseorganic.com] has a variety of sizes of icons of herself she uses for her home page icon for saving to a home screen on [[iOS]] (since ????-??-??), using the following code:
+
+<pre style="clear:both"><nowiki>
+<link rel="shortcut icon" type="image/ico" href="/favicon.ico">
+<link rel="shortcut icon" type="image/jpg" href="/images/caseorganic.jpg">
+<link rel="apple-touch-icon-precomposed" href="/images/caseorganic.jpg">
+</nowiki></pre>
+
+=== Barnaby Walters ===
+{{icon|http://waterpigs.co.uk/photo.jpg}}
+[[User:WaterPigs.co.uk|Barnaby Walters]] on [[http://waterpigs.co.uk waterpigs.co.uk]] had a single generic house icon served using well-known URLs since [http://waterpigs.co.uk/notes/787/ 2013-01-01], a profile photo discoverable using rels since [http://waterpigs.co.uk/notes/4TQNY2/ 2013-12-05]. Code:
+
+<pre style="clear:both"><nowiki>
+<link rel="shortcut icon" href="/photo.jpg" />
+<link rel="apple-touch-icon-precomposed" href="/photo.jpg" />
+</nowiki></pre>
+
+=== Tantek ===
+{{icon|http://tantek.com/logo.jpg}}
+[[User:Tantek.com|Tantek Çelik]] on [http://tantek.com/ tantek.com] has a single 128x128 avatar .jpg he uses both elsewhere on his site, and for his home screen icon for both [[iOS]] and [[Android]], including enabling Chrome M31 one-step "Add to home screen" (since 2013-11-30; on 2013-12-02 switched from <code>apple-touch-icon</code> to <code>apple-touch-icon-precomposed</code> value; on 2014-07-19 switched from <code>rel="shortcut icon"</code> to <code>rel="icon"</code> value), using the following code:
+
+<pre style="clear:both"><nowiki>
+<link rel="icon" href="logo.jpg" />
+<link rel="apple-touch-icon-precomposed" href="logo.jpg" />
+<meta name="mobile-web-app-capable" content="yes" />
+</nowiki></pre>
+
+===Kartik Prabhu===
+{{icon|http://kartikprabhu.com/static/images/avatar.jpg}}
+[[User:kartikprabhu.com|Kartik Prabhu]] on [http://kartikprabhu.com kartikprabhu.com] with a 200x200 JPG avatar for home screen on [[iOS]] and [[Android]], including enabling Chrome M31 one-step "Add to home screen" (since 2013-12-01) with the code:
+
+<pre style="clear:both"><nowiki>
+<link rel=" shortcut icon" href="/static/images/avatar.jpg"/>
+<link rel="apple-touch-icon" sizes="150x150" href="/static/images/avatar.jpg" />
+<meta name="mobile-web-app-capable" content="yes" />
+</nowiki></pre>
+
+=== Kevin Marks ===
+{{icon|http://kevinmarks.com/km.jpg}}
+[[User:Kevinmarks.com|Kevin Marks]] on [http://kevinmarks.com/ kevinmarks.com] has a single 128x128 avatar .jpg he uses both elsewhere on his site, and for his home screen icon for both [[iOS]], [[Android]], and [[FirefoxOS]] including enabling Chrome M31 one-step "Add to home screen" (since 2013-12-02), using the following code:
+
+<pre style="clear:both"><nowiki>
+<link rel="shortcut icon" href="km.jpg" />
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="apple-touch-icon" href="km.jpg" />
+</nowiki></pre>
+
+=== Ben Werdmuller / idno ===
+{{icon|http://werd.io/file/5292511fbed7de0606dd79ae}} (apparently not returning as a JPG mimetype) 
+[[User:werd.io|Ben Werdmuller]] on [http://werd.io/ werd.io] has a single avatar JPG that is used as the browser favicon and homescreen icon across compatible operating systems, using the following code:
+
+<pre style="clear:both"><nowiki>
+<link rel="icon" type="image/png" href="http://werd.io/file/5292511fbed7de0606dd79ae">
+<link rel="apple-touch-icon-precomposed" href="http://werd.io/file/5292511fbed7de0606dd79ae">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+</nowiki></pre>
+
+Because [[idno]] is a multi-user software platform, this is achieved by giving each page on an idno site an effective "owner". The icon changes depending on the owner's avatar.
+
+=== Brennan Novak ===
+{{icon|https://brennannovak.com/uploads/sites/1/Me_Train_Tracks_200.jpg}}[[User:Brennannovak.com|Brennan Novak]] on [https://brennannovak.com/ brennannovak.com] has a single avatar JPG that is used as the browser favicon and homescreen icon.
+
+<pre style="clear:both"><nowiki>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes" />
+<link rel="shortcut icon" href="https://brennannovak.com/uploads/sites/1/Me_Train_Tracks_200.jpg" />
+<link rel="apple-touch-icon-precomposed" href="https://brennannovak.com/uploads/sites/1/Me_Train_Tracks_200.jpg" />
+</nowiki></pre>
+
+The longer file path is due to the JPG being uploaded via Social-igniter platform- I am easily able to update my avatar via web interface.
+
+=== Matthias Pfefferle ===
+{{icon|http://www.gravatar.com/avatar/dde87835cca4069dfae355ff6f29de6d?s=57}} (somehow not returning a PNG mimetype)
+[[User:Notizblog.org|Matthias Pfefferle]] on [https://notizblog.org/ notizblog.org] has a variety of sizes of icons using a simple [https://gist.github.com/pfefferle/1724438 WordPress plugin] and Gravatar.
+
+<pre style="clear:both"><nowiki>
+<link rel="apple-touch-icon" href="http://www.gravatar.com/avatar/dde87835cca4069dfae355ff6f29de6d?s=57" />
+<link rel="apple-touch-icon" sizes="72x72" href="http://www.gravatar.com/avatar/dde87835cca4069dfae355ff6f29de6d?s=72" />
+<link rel="apple-touch-icon" sizes="114x114" href="http://www.gravatar.com/avatar/dde87835cca4069dfae355ff6f29de6d?s=114" />
+<link rel="icon favicon shortcut" sizes="16x16" href="http://www.gravatar.com/avatar/dde87835cca4069dfae355ff6f29de6d?s=16" />
+</nowiki></pre>
+
+=== Chloe Weil ===
+{{icon|http://chloeweil.com/apple-touch-icon-precomposed.png}}
+Chloe Weil ([[2011/Guest_List#Apprentices|2011]]) on [http://chloeweil.com/ chloeweil.com] has icons at well known URLs since (at least 2013-12-06, likely much earlier)
+<pre style="clear:both">
+<nowiki>http://chloeweil.com/favicon.ico</nowiki>
+<nowiki>http://chloeweil.com/apple-touch-icon-precomposed.png</nowiki>
+</pre>
+
+=== Ashton McAllan ===
+{{icon|http://acegiak.net/wp-content/uploads/gwpf_icon/favicon.png}}
+[[User:acegiak.net|Ashton McAllan]] on [http://acegiak.net/ acegiak.net] has a single icon using [http://wordpress.org/plugins/genie-wp-favicon/ Genie WP Facivon Wordpress Plugin].
+
+<pre style="clear:both"><nowiki>
+<link rel="shortcut icon" href="http://acegiak.net/wp-content/uploads/gwpf_icon/favicon.png" />
+<link rel="apple-touch-icon" href="http://acegiak.net/wp-content/uploads/gwpf_icon/favicon.png" />
+</nowiki></pre>
+
+== FAQ ==
+=== Should you use a photo of your face ===
+Q: Should you use a photo of your face as your icon?
+
+A1: Yes. It's a good idea to use a photo of your face as your icon. People respond well to icons of faces. More:
+* "Faces are important because they remind us of our humanity."[http://epeus.blogspot.com/2009/05/faces-call-trust-code-in-our-brains.html?showComment=1244659786220#c7031364036983413314]
+* "It’s All About The Faces"[http://www.feld.com/wp/archives/2009/05/its-all-about-the-faces.html]
+* "The Faces, the *FACES*... it's *ALL* about the Motherf**king FACES!"[http://500hats.typepad.com/500blogs/2009/05/the-faces-the-faces-its-all-about-the-fking-faces-or-the-avatars-icons.html][https://twitter.com/davemcclure/status/1789385359]
+
+On the other hand, things you should NOT use as your icon:
+* a generic blogging/CMS icon
+* someone else's copyrighted material (e.g. a pop-media cartoon character)
+* text graphic (e.g. of your name)
+
+A2: No. Here are some reasons that IndieWeb community members have chosen to not use a photo of their face as their icon — you want to consider these reasons for your own icon as well.
+* {{gRegor}}: Several years ago I spent a lot of time designing my logo that appears at the top of gRegorLove.com and I wanted a favicon that corresponded. Given my characteristic capitalization, I chose a simple "g" from the logo for use as my favicon. The idea of using a photo had not occurred to me (pre-indieweb). I don't have strong opinions about others' use of photos, but for now I prefer the graphic on my own site.
+
+=== Why all the different sizes ===
+Q: Why provide different sized icons? Or not?
+
+A: Normally people actually design different icons for different resolutions, because often auto-sizing doesn't do a good job of resampling for icons. This is particularly important for logo/line art that uses PNG files.
+
+<strong>However if you're just using a JPG</strong> (which you should be for an icon of your face, see above), a single file (and size) that the device resamples to whatever size it needs is just fine. 
+
+<strong>A single 128x128 image seems to work fine in practice.</strong>
+
+=== Should I just use well known URLs ===
+Q: Both favicon.ico and the various apple-touch-icon(-precomposed).png files can be served via [[well-known|well-known URLs]] (i.e. put a file in the right place and it’ll be found), so should you do so since this requires less markup?
+
+A: No. Depending on "well known URLs" is bad for several reasons:
+* It's bad site design (e.g. it's not portable across pages) 
+* Depends on proprietary conventions (not standard) for your <em>file names</em>. You should use the standard markup as documented, and decide if you want to use the proprietary markup for platforms that require it.
+* Forces you to use .ico or .png format - both of which are inferior to JPG for photo-like personal icons/avatars (which is the whole point of this exercise).
+
+__TOC__
+
+== Browser Support ==
+How to add a site to your home screen on various mobile browsers:
+
+=== iOS Mobile Safari ===
+Using Mobile Safari:
+* Tap on the "Action" icon (rectangle with arrow popping out to the right)
+* Choose "Add to Home Screen" (note that the icon over that text is the icon for the site)
+
+iOS home screen with indieweb people icons on it:
+
+[[File:ios-people-icons-screenshot.jpg|frameless]]
+
+=== Chrome for Android ===
+Using Chrome for Android, you can 
+* first save the site as bookmark, then 
+* press-and-hold on the bookmark and select save to home screen.
+
+Using Chrome M31 Beta on Android, if the site has the Google proprietary meta name <code>mobile-web-app-capable</code>, you can with just one step:
+* use Chrome for Android’s "Add to home screen" menu item 
+to directly add an icon to the home screen in Android devices instead of first to a bookmarks collection, per [https://developers.google.com/chrome/mobile/docs/installtohomescreen].
+
+After successfully adding a home page shortcut icon from an indieweb site, here's what it might look like (screenshot from an Android Nexus 7 running kitkat)
+
+[[File:Tantek_on_home_screen.png|frameless]]
+
+=== Firefox for Android ===
+Using Firefox for Android, you can
+* bookmark the site
+* at the bottom of the screen, Firefox displays: '''Bookmark Added''' and also '''Options'''
+* select '''Options''' and then choose add to homescreen
+You should now see an icon on the home screen from the site you saved!
+
+=== Android browser comparisons ===
+Here is a screenshot of Android 4.3 running on an HTC ONE device. Each site was added twice.
+
+Using Firefox 25.0.1 on left, Chrome 31 on the right (in each pair)
+
+[[File:Homescreen_icons.jpg]]
+
+
+However, on [[User:Kevinmarks.com|Kevin Marks]]'s Nexus 7 (2013) device running Android 4.4, Firefox 25(?) adds an odd picture frame border to this (unlike Chrome 31(?) that added round corners) See example:<br/>
+
+[[File:homepageiconskm.jpg]]<br/>
+Chrome on left, Firefox on right
+
+* the "odd picture frame border" is from Firefox 25, Firefox 26 and above do not have that in my tests [[User:Bear.im|Bear.im]]
+
+On {{kylewm}}'s Samsung S3 running Android 4.4.2 and using the default Android browser to "Add to Home Screen", many sites have small icons with an orange flag behind them.<br/> [[File:kylewm-android-icons-2014-07-18.png|300px]]
+
+Compared to icons from Firefox for Android 30.0<br/>[[File:kylewm-android-firefox-icons-2014-07-19.png|300px]]
+
+* On {{gRegor}}'s Nexus 4 running Android 4.4.4 and using Chrome 35.0.1916.141:
+[[File:gregor-homescreen-2014-07-18.png|300px]]
+** Icons were added / screenshot taken on 2014-07-18.
+** Default bookmark names were not changed except for Erin Jo Richey, since hers defaulted to just "Known."
+
+=== Firefox OS ===
+Using FirefoxOS, when you make a bookmark by pressing the Star button bottom right, it offers to add the site to the home screen.
+When you do, it puts the icon within a circle, with the corners not quite touching the circumference:<br/>
+[[File:kmfirefoxosdesktop.png|frameless]]<br/>
+
+=== Nokia C5-00 ===
+The Nokia C5 homescreen has a row which can be filled with icons+names of contacts. From the homescreen, use the direction buttons to navigate to the row at the top of the homescreen containing an “Add” button. Select the button, then select a contact to add.
+
+[[File:nokia-c5-person-first-ui.jpg]]
+
+When selected, the icon expands to show full name, phone number and recent interactions with this person e.g. calls+texts, as well as action buttons for calling, texting and viewing the RSS feed for this person.
+
+[[File:nokia-c5-person-selected.JPG]]
+
+== Silo Support ==
+=== Google+  ===
+Google plus displays favicons for linked-to sites on the profile page.
+
+This is done by a generally usable webservice that renders them as 16x16 PNGs (decoding, rendering, resizing and caching them on google's servers) eg
+
+  https://s2.googleusercontent.com/s2/favicons?domain=twitter.com&alt=p 
+
+shows
+<img src="https://s2.googleusercontent.com/s2/favicons?domain=twitter.com&alt=p" >
+
+=== Tumblr ===
+Using browser UA sniffing (e.g. for iOS), [[Tumblr]] automatically (perhaps with default/typical templates) provides the markup linking the avatar/icon you set in the [http://tumblr.com/settings setting page] (click on your Tumblr name in the left column, then click (Change avatar) and pick a photo icon of yourself), to a shortcut icon both for iOS and bookmarking in Android.
+
+Examples of Tumblr hosted personal sites that do this:
+* http://hannahdonovan.com/
+* http://blog.dianakimball.com/
+* http://thormuller.com/
+* http://simonwillison.net/
+* ...
+
+Code that Tumblr uses: (e.g. hannahdonovan.com when retrieved with an iOS UA)
+<pre><nowiki>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="shortcut icon" href="http://31.media.tumblr.com/avatar_b2e548e2cec8_128.png">
+<link rel="apple-touch-icon-precomposed" href="http://31.media.tumblr.com/avatar_b2e548e2cec8_128.png">
+</nowiki></pre>
+
+==== Tumblr shortcut icon problems ====
+* '''iOS: Awkward hyperlink navigation.''' Launches as separate "web app" in iOS but permalinks (e.g. "Read More") switch to and open in Mobile Safari (known problem of using <code>apple-mobile-web-app-capable</code>)
+* '''iOS: Limited to iPhone4/iPod4Touch vertical dimensions''' Something about the meta viewport tag causes the separate "web app" to open in iPhone4/iPod4Touch vertical dimensions, leaving big unused black bars at the top and bottom in iPhone5/iPod5Touch.
+Both of these are reason enough to do your own shortcut icon markup / handling on your own site rather than depend on Tumblrs semi-awkward shortcut icon support.
+
+== Legacy Well Known Paths ==
+Some browsers on some [[platforms]] will look for icons in hard-coded locations on a website.
+=== favicon ===
+Internet Explorer versions 10 and before look for:
+* <code>/favicon.ico</code>
+See 2013-01-16 article [http://www.jonathantneal.com/blog/understand-the-favicon/ Understand the Favicon] for more details.
+
+=== apple-touch-icon ===
+iOS looks at the root of your server for:
+* <code>/apple-touch-icon.png</code>
+* <code>/apple-touch-icon-precomposed.png</code>
+
+== Advanced ==
+The following describe advanced or experimental techniques that are either non-trivial, potentially fragile, or both.
+
+=== iOS site as app ===
+To have iOS launch your home screen icon as a separate "app" (rather than a tab in Mobile Safari), you need to also add this tag in your head element:
+<pre><nowiki>
+<meta name="apple-mobile-web-app-capable" content="yes">
+</nowiki></pre>
+The <code>meta name="apple-mobile-web-app-capable"</code> is an Apple proprietary meta tag which instructs iOS that your site is capable of running on its own, without browser chrome (UI: title bar, URL box, search box, and footer back/forward/action/bookmark/tabs buttons) so make sure your site UI handles any such interactions (e.g. has [[citation]] UI on [[posts]] to allow easy copying of [[permalink]] URLs). See [https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html Apple Safari Configuring Web Applications documentation] for more details.
+
+Problems:
+* UX: hyperlinks (even local to your own site) will switch to and open in iOS Mobile Safari which can make for a jarring experience.
+** There are open source [[Javascript]] workarounds, but they all seem like they don't quite do the right thing (or it's not clear what "the right thing" is). Some URLs for further reading / coding:
+*** one JS gist: https://gist.github.com/kylebarrow/1042026
+*** another JS gist: https://gist.github.com/irae/1042167
+*** 2013-08-06 <cite>[http://stanislav.it/how-to-prevent-ios-standalone-mode-web-apps-from-opening-links-in-safari/ How to Prevent iOS Standalone Mode Web Apps From Opening Links in Safari]</cite>
+*** 2011-12-27 <cite>[http://www.bennadel.com/blog/2302-Preventing-Links-In-Standalone-iPhone-Applications-From-Opening-In-Mobile-Safari.htm Preventing Links In Standalone iPhone Applications From Opening In Mobile Safari]</cite>
+*** 2010-05-24 Stack Overflow: <cite>[http://stackoverflow.com/questions/2898740/iphone-safari-web-app-opens-links-in-new-window iPhone Safari Web App opens links in new window]</cite>
+
+== See Also ==
+* [[bookmarks]]
+* [[homepage]]
+* [[phone]]
+* How to add a shortcut to [[IRC#Logs_on_Your_iPhone_Home_Screen|#indiewebcamp today's IRC log to your home screen]]
+* [[social media icon set]]

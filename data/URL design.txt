@@ -1,0 +1,182 @@
+http://indiewebcamp.com/URL_design
+
+{{stub}}
+
+'''<dfn>URL design</dfn>''' is the practice of deliberately [[design]]ing URLs, in particular, [[permalinks]], typically for a better [[UX]] for everyone who [[create]]s, [[read]]s, and [[share]]s content. The guidance on this page refers specifically to designing URLs for personal social content.
+
+== Why ==
+By deliberately designing your URLs and URL structure, especially permalinks, you can: 
+* make them more usable
+* communicate rough topic of publication
+* make it easier for you to change your permalink policies over time (without breaking, or even having to change past years)
+* communicate date of publication (if desired; debatable)
+
+== How ==
+
+=== More Usable ===
+Make your permalinks more usable by:
+* keeping your URLs '''human readable''' for simpler conveyance of information with URLs
+* keeping your URLs '''short''' for easier sharing, reducing mental overload, greater reliability[https://aaronparecki.com/articles/2015/08/29/1/why-i-live-in-irc##Long%20URLs]
+* '''Avoid giant long strings of numbers or characters''', i.e. [[database]] IDs
+
+=== Dates ===
+Many people communicate date of publication by using a top-level structure that starts with the date:
+* <code>/YYYY/MM/DD/</code> - the date in order of hierarchical significance
+* <code>/YYYY/DDD/</code> - ISO ordinal date order, saves two characters (shorter is better, though may not be immediately understood by human readers), and communicates a linearity to your year of posts.
+
+Avoid the "literal" ISO 8601 date patterns of use <code>/YYYY-MM-DD/</code> or <code>/YYYYMMDD/</code> because by omitting path separators they are are less URL friendly (less hackable), e.g., [http://indiewebcamp.com/irc/2015-07-26 http://indiewebcamp.com/irc/2015-07-26].
+
+This is a very common practice, but possibly more of an implementation detail and convenience than recommended design. Publication date is useful, but can be communicated in the page itself. It's probably not so critical that it ''needs'' to be in the URL, especially if even the more useful [[#Topic|topic]] is considered optional. In particular, some pages are "evergreen" and regularly updated, e.g. the list of books you've read, so their publication date isn't very interesting.
+
+As an implementation detail, if you use date ([[bim]], etc) to identify your posts and URLs and ignore any slug, it's easier to change the slug (and your internal identifier) later. You can redirect old slug to new ones without doing this, though. The important thing is that you create and maintain the redirects so that your permalinks keep working. ''How'' you do it is less important. -{{snarfed}}
+
+
+=== Topic ===
+Communicate topic by using a "[[slug]]" somewhere after the date, e.g.
+* <code>../tag1-tag2-tag3</code>
+Also:
+* Many put the slug at the end of their permalinks
+* Make the slug '''optional''' for identifying the post (i.e. not a required part of a permalink) if at all possible, since it contains human written/readable/editable content and you may want to change it after the fact without any need for maintenance, URL redirects etc.
+* Some have chosen to make the slug required:
+** {{gRegor}}: I like the method of slugs being optional and redirecting to the canonical URL, but I thought about it for a while and decided that I preferred having only the year and month in my URL hierarchy. If, in rare situations, a URL slug gets truncated, I plan to perform a search on the partial slug and present possible matches on the 404 error page.
+
+=== Content Type ===
+Individuals with large quantities of different content types may want to differentiate in the URL what type of content to expect, as it primes the user for the subsequent interactions with the content. For example, take this comparison:
+* <code>/2014/11/10/url-design</code> - This URL could be anything about "URL design." It could be an [[article]], a [[favorite]], a [[reply]], or even a [[photo]] about "URL design."
+* <code>/2014/11/10/reply/url-design</code> - This URL would be give the reader of the URL immediate understanding of the content to expect at that URL: a [[reply]]. If a person was not looking for this type of content, it would allow them the ability to skip over this content or be ready for a threaded conversation around "URL design."
+
+=== Ordinal ===
+One of the drawbacks of having an optional topic slug as mentioned above is that a lot of posts could become difficult to pinpoint when posting multiple times per day. Adding a time-relative ordinal to the end of a given Date allows for better pinpointing while still maintaining relevancy to readers of the URL. Take the two Dates formats listed above and simply add the ordinal at the end (N). This maintains hierarchical significance in both types of Date URL structure.
+* <code>/YYYY/MM/DD/N/</code>
+* <code>/YYYY/DDD/N/</code>
+
+== Avoid ==
+See everything listed in this article and expand here inline:
+* http://manas.tungare.name/blog/url-design-sins-16-things-that-dont-belong-in-urls/
+
+=== Long URLs ===
+Long URLs are fragile and break in many places, e.g.
+* email - auto-wrapping at 70chars etc.
+* [[IRC]] / terminal UIs[https://aaronparecki.com/articles/2015/08/29/1/why-i-live-in-irc##Long%20URLs]
+* ...
+
+Long URLs look less trustworthy, especially when they have a bunch of <code>utm_...</code> tracking parameters.
+
+Long URLs look ugly when copy/pasted into IM/PM/DMs.
+
+== IndieWeb Examples ==
+See: [[permalinks#IndieWeb_Examples]]
+
+== Perspectives and Experience ==
+
+=== Aaron Parecki ===
+I've tried a number of different permalink formats over the years. Below is a list of some of my past attempts as well as a description of why I eventually moved away from it.
+
+==== Pre-2012 ====
+
+<code>/{year}/{ordinal day}/{type}/{sequence}/{optional slug}</code>
+
+Examples:
+* <code>/2011/203/article/1/enabling-ssh-on-the-seagate-blackarmor-nas-220</code>
+* <code>/2011/203/note/9</code>
+
+Issues: 
+* The type in the middle of the permalink is a strange mixing of hierarchy. The original intent was to provide a hint at the content to expect at the URL in case there was no slug
+* The ordinal day is not easily readable
+
+==== 2012-2015 ====
+
+<code>/{type}/{year}/{month}/{day}/{sequence}/{optional slug}</code>
+
+Examples:
+* <code>/notes/2015/12/23/1/h-card</code>
+* <code>/notes/2015/12/23/1</code>
+
+I originally had the type first to be able to create a feed for specific post types without querying a database, just reading the files on disk, since all notes were stored in a folder called "notes", articles in "articles", etc. The addition of a database as an index meant that this was no longer solving a problem. Moral of the story is: don't let implementation detail affect URL design.
+
+==== 2016-Present ====
+
+<code>/{year}/{month}/{day}/{sequence}/{optional slug}</code>
+
+Examples:
+* <code>/2015/12/23/1/h-card</code>
+* <code>/2015/12/23/1</code>
+
+
+
+
+== FAQ ==
+=== Why Not US Date Order ===
+Q: Why not US date order like <samp>/march/15/2014/</samp> ?
+
+A: Lots of problems with this:
+# US-centric - the web is world-wide
+# English-centric month name "march" is not international friendly (again, *world-wide* web)
+# does not follow hierarchical significance - "march" and "15" are less significant than 2014.
+# makes it harder to change URL policies every year (since the year is the 3rd component instead of the first.
+
+=== Time ===
+Q: What is a good way to represent time in a URL?
+
+A: There are several reasonable approaches. Using zero-padded hours HH (24hr), minutes MM, and seconds SS:
+
+# Immediately after the date with separators, e.g. <blockquote><code>/YYYY/MM/DD/HH/MM/SS</code></blockquote> or even <blockquote><code>/YYYY/MM/DD/HH:MM:SS</code></blockquote>
+# Immediately after the date without separators - less readable but ok <blockquote><code>/YYYY/MM/DD/HHMMSS</code></blockquote>
+
+Omitting the seconds SS is ok too if you don't find yourself posting more than once a minute. <blockquote><code>/YYYY/MM/DD/HH:MM</code></blockquote>
+
+Alternatively if you post more than once a second (e.g. automatic metrics), you may want to include a digit or two of decimal seconds. <blockquote><code>/YYYY/MM/DD/HH:MM:SS.ss</code></blockquote>
+
+=== Why not AM PM ===
+Q: Why not times with AM and PM like <samp>/12:57pm/</samp>?
+
+A: Some problems with this:
+# AM/PM are easily confused / misread (bad for usability)
+# makes the URL longer unnecessarily (compared to 24hr time)
+# less international - 24hr time is more readily recognized when reading world-wide.
+
+=== Why not content type first ===
+Q: Why not put the type of content first in the URL structure, e.g. <blockquote><code>/reply/2014/11/10</code></blockquote> ?
+
+A: Many reasons:
+# '''The more known/stable aspect should go first.''' Dates are much more well understood (stable) and well known than "kinds" of [[posts]], which are still squishy and growing. Permalinks and URLs in general are supposed to be stable, thus putting the more stable pieces first makes sense. Less change if you do have to change the squishy parts.
+# '''Year first allows changing URL policies''' more easily, like once a year. If your year is first, you can set a policy for how your URLs work each year and change it, not having to go back and change past years.
+# '''Experience.''' {{aaronpk}} in particular started with a type-first URL structure, and is now having to convert it all to date first because of various scaling, storage, and other reasons.[http://indiewebcamp.com/irc/2014-10-30#t1414695058382]
+
+Alternatively:
+# {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} puts content type first as a user feature /note/2015/8/12/4/ but do not depend on it for identifying posts (the problem {{aaronpk}} was having).  Putting in an incorrect type will automatically redirect to the correct URL.  This allows for more intuitive URLs for streams of type specific posts.  /note/ will list all notes, /photo/ only photos, etc.
+
+=== URL in a URL ===
+
+Q: How can I put a URL within a URL as in <code>http://example.com/other/http://example2.com/post</code>?
+
+A: The problem with the above example is that URLs can have only one instance of <code>http://</code> in them. Instead one could pass the second URL as an encoded parameter (which can be considered ugly), or simply remove the protocol part of the second URL as <code>http://example.com/otherexample2.com/post</code>. 
+
+<small>(This appears not to be true in all cases <code>https:// web.archive.org/save/http://your.web.site</code> will save a snapshot of the given URL to the Wayback Machine.)</small>
+
+== Articles ==
+More thoughts on (potentially additional aspects of) URL design:
+* http://manas.tungare.name/blog/url-design-sins-16-things-that-dont-belong-in-urls/
+* http://warpspire.com/posts/url-design/
+* http://www.smashingmagazine.com/2014/05/02/responsive-design-begins-with-the-url/
+* http://www.creativebloq.com/design/design-perfect-url-1126509
+* http://www.webmonkey.com/2011/01/a-guide-to-designing-cool-urls/
+* http://philarcher.org/diary/2013/uripersistence
+Semantic Web related:
+* http://www.w3.org/TR/cooluris/
+
+See also [[permalinks]] e.g. for why 
+* [http://www.w3.org/Provider/Style/URI Cool URIs don't change]
+
+== Brainstorming ==
+=== Posting UI ===
+* I use /new (or /new/note , /new/checkin) for my posting UI.  {{t}} asked why not /create instead of /new.  The URL is slightly shorter but I normally use /create for the internal site call to actually create the object, not  show the creation UI.  Additionally I feel this follows the naming scheme for text editors ("New Document") and "create" is more a software action. {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}}
+
+=== URL Template ===
+Consider creating a [https://tools.ietf.org/html/rfc6570 URI Template] for your site.
+
+E.g.
+* http://csarven.ca/linked-sdmx-data#uri-patterns
+
+== See Also ==
+* [[design]]

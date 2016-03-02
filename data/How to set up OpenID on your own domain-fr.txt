@@ -1,0 +1,72 @@
+http://indiewebcamp.com/How_to_set_up_OpenID_on_your_own_domain-fr
+
+Vous devez être indépendant comme ça pour contribuer sur ce wiki. 
+# vous devez disposer de votre propre domaine et, 
+# avoir compris comment installer dessus OpenID.
+
+
+Voici deux options pour le #2.
+* Facile : déléguer votre domaine à un autre fournisseur d'OpenID comme myOpenID
+* Plus difficile : paramétrer votre serveur pour être un fournisseur OpenID
+
+__TOC__
+
+== Déléguer votre domaine vers myOpenID ==
+
+''extrait traduit de https://www.myopenid.com/help#own_domain''
+
+Vous pouvez utiliser votre propre URL comme votre OpenID, et utiliser encore myOpenID comme votre serveur OpenID. Pour installer cela, [https://www.myopenid.com/signup créez un compte], et ajoutez le marquage suivant dans la section head de votre page :
+
+<pre>
+  <link rel="openid.server"
+        href="http://www.myopenid.com/server" />
+  <link rel="openid.delegate"
+        href="http://votrecompte.myopenid.com/" />
+  <link rel="openid2.local_id"
+        href="http://votrecompte.myopenid.com" />
+  <link rel="openid2.provider"
+        href="http://www.myopenid.com/server" />
+  <meta http-equiv="X-XRDS-Location"
+        content="http://www.myopenid.com/xrds?username=youraccount.myopenid.com" />
+</pre>
+(Si vous avez un compte .name à travers FreeYourID.com, remplacez prénom.nom.name par  votrecompte.myopenid.com au-dessus)
+
+Voilà. Vous pouvez désormais utiliser votre propre URL pour vous connecter sur les sites autorisant OpenID avec myOpenID comme votre serveur OpenID.
+
+Remarquez SVP que vous ne pourrez pas vous connecter sur myopenid.com avec votre propre URL ; vous devrez utilisez vos identifiants myOpenID.
+
+== Déléguer votre domaine à Vidoop ==
+'''ATTENTION : Vidoop n'existe plus, et leurs serveurs continuent à fonctionner du fait de la générosité des nouveaux propriétaires. Ils pourraient être fermés à tout moment.[http://www.anotherblogger.com/2009/05/30/openid-delegation-makes-vidoops-failure-painless/] Dès que possible pensez à changer de fournisseur OpenID.'''
+
+Si vous utilisez Viddop comme votre fournisseur OpenID, vous pouvez déléguer à partir de votre propre domaine en plaçant ce marquage dans la section <code>&lt;head&gt;</code> de votre page d'accueil :
+
+Extrait : https://myvidoop.com/help/what-is-delegation
+
+<pre><nowiki>
+<link rel="openid2.provider" href="https://myvidoop.com/openid" />
+<link rel="openid.server"    href="https://myvidoop.com/openid" />
+
+<link rel="openid2.local_id" href="http://username.myvidoop.com" />
+<link rel="openid.delegate"  href="http://username.myvidoop.com" />
+
+<meta http-equiv="X-XRDS-Location" content="http://username.myvidoop.com/xrds" />
+</nowiki></pre>
+
+Où "'''username'''" (dans les deux derniers éléments liens et l'élément meta) devrait être remplacé par votre nom d'utilisateur personnel sur Vidoop.
+
+== Installation sur votre propre serveur ==
+Une option est d'installer [http://siege.org/phpmyid.php phpMyID] sur votre serveur. C'est un fichier unique que vous pouvez déposer sur votre serveur pour créer un fournisseur OpenID.
+
+Vous pouvez lire quelques options supplémentaires ici : 
+
+http://www.intertwingly.net/blog/2007/01/03/OpenID-for-non-SuperUsers
+
+openid.net a de plus amples informations pour les développeurs : 
+http://openid.net/developers/
+
+== Résolutions de problèmes ==
+Si après avoir installé OpenID ou une délégation, la connexion ne semble pas fonctionner :
+
+* Si vous faites tourner WordPress - regardez si vous avez l'extension WP-SuperCache et effacez le cache ou désactivez le cache.
+* Vérifiez que quand vous chargez votre site dans votre navigateur, vous pouvez voir le source et voir la délégation OpenID <code>&lt;link&gt;</code> (et <code>&lt;meta&gt;</code>) tags.
+* Assurez-vous que vous avez changé "nomutilisateurs" dans ces tags pour spécifier votre propre nom d'utilisateur sur le service OpenID.

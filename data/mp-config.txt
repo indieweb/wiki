@@ -1,0 +1,51 @@
+http://indiewebcamp.com/mp-config
+
+{{stub}}
+
+'''<dfn>mp-config</dfn>''' is a method of using a query to a [[micropub]] endpoint to allow you indie website to discover user support for [[webactions]].
+
+= Detail =
+
+mp-config provides a server-side alternative to [[indie-config]] for discovering the user's action handler URLs. This method does not require a JavaScript or a custom schema handler to be registered in the browser, but it does require the user to support micropub and be signed in on the site they are browsing. 
+
+Along the same lines as [[micropub#Discovering_Supported_Syndication_Targets]], external sites could query the micropub endpoint for a list of action handler URLs.
+
+1. Aaron signs in to Barnaby's site with the "config" scope.
+
+2. Barnaby's site issues a GET request to Aaron's micropub endpoint, which replies with a url-encoded list of actions and their associated handler URL
+
+<code><pre>
+GET /micropub_endpoint?q=actions
+Authorization: Bearer xxxxxxxxx
+
+reply=http://aaron.com/reply?u={url}&repost=http://aaron.com/repost?u={url}
+</pre></code>
+
+3. When Barnaby renders indie-action elements, he substitutes Aaron's configured action handlers for Twitter intent URLs or whatever fallback he would normally use.
+
+= IndieWeb Examples =
+
+* {{kylewm}} Supports mp-config on https://kylewm.com as of 2014-10-19. When a micropub-enabled user signs in, kylewm.com will use their /micropub?q=config endpoint to determine web action handlers, that are used in place of Reply/Repost/Like indie-actions on each post permalink page.
+
+* {{benthatmustbeme}} Supports mp-config on ben.thatmustbe.me as of 2014-10-20.  This will add Like, Reply, Repost, and Bookmark actions if available.  It will also offer Edit and Delete on any post comments owned by the user.
+
+= Brainstorming =
+
+== Response format ==
+
+Micropub in general uses application/x-www-urlencoded to pass information back and forth. Some implementers prefer to return action -> URLs as a JSON object. {{kylewm}} will currently handle either one based on the value of the Content-Type header.
+
+== Authorization not needed to get list ==
+
+There is no real secure information given in the list of endpoints.  In fact you want this to be as readily available as possible.  As such I think the Auth header on the request to q=actions should be dropped.  - {{benthatmustbeme}}
+
+* I tend to agree. The only reason I can think of that a micropub access-token might be necessary is if someone has "secret" admin URLs (i.e. instead of a real authorization mechanism). Does anyone do this? If so, do we care about supporting it? [[User:Kylewm.com|Kylewm.com]] 21:43, 20 October 2014 (PDT)
+** If authorization isn't necessary, it makes me wonder if this isn't really micropub at all. A <code>&lt;link rel="indie_config"></code> would work just as well and would be a much lower bar for most sites to implement [[User:Kylewm.com|Kylewm.com]] 21:43, 20 October 2014 (PDT)
+
+== Micropub endpoint as indie-config page ==
+
+Rather than have a separate config for indie config {{benthatmustbeme}} queries ?q=indie-config to pull up configs formatted for use with [indie-config]
+
+== Micropub configuring of list ==
+
+In order to modify the list and allow different micropub clients to act for different actions, we could add some ability for a micropub client (when given "config" scope) to offer itself as a new client for an action.  so it submits ?q=config&action="reply"&url="microedit.com/reply?url={url}"

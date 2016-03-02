@@ -1,0 +1,94 @@
+http://indiewebcamp.com/sign-in-use-cases
+
+[[OpenID]] was inspired by the use case of bloggers wanting to comment on other blogs using their own blog as their sign-in identity.
+
+Here is a summary of current use cases for implementing web sign-in on your indie web site, e.g. with [[IndieAuth]] / [[RelMeAuth]], roughly ordered by frequency, originally as braindumped [http://indiewebcamp.com/irc/2012-07-02#t1341293391 on IRC] with subsequent additions.
+
+== show personal info ==
+'''(consider expanding this to its own page now that there is an IndieWeb Example)'''
+
+Show more detailed [[hCard]] to white-listed logged in users (e.g. phone number, home address)
+
+Every indie web site should have contact info either on its home page or on a contact/about page marked up with hCard.
+
+To avoid spam, you may prefer to keep your email address private. 
+
+To avoid telemarketing calls, you may prefer to keep your phone number private
+
+To avoid physical junk mail, you may prefer to keep your mailing address private.
+
+However, you may wish to disclose these details to signed-in users, or perhaps a white-list of trusted friends.
+
+Thus, if a user signs-into your site, you can check if their identity is in a white-list and if so, show a more detailed [[hCard]].
+
+This functionality is being considered for a [[IndieMark#identity|future level of the IndieMark identity axis]] since there is at least one implementation (http://ben.thatmustbe.me/ since 2014-08-13).
+
+== signed-in access only posts ==
+You may have some [[posts]] that you're ok with people reading, but don't want random anonymous crawlers to pick-up (with or without robots.txt compliance).
+
+Perhaps you want to share drafts in progress publicly with humans but do not want the drafts crawled and indexed. 
+
+IndieWeb community members who have implemented this:
+* Aaron Parecki, e.g.: http://aaronparecki.com/articles/2013/05/18/1/stop-reinventing-meta-tags (as of 2013-05-19, later this post might become public without sign-in)
+
+== limited access posts ==
+Show limited-access posts (e.g. geolocation [[checkins]]), or [[private posts]] in general.
+
+You may want to post something to only a specific set of friends (e.g. G+ Circles).
+
+Perhaps you want only some people to see your [[geo]]-checkins.
+
+Thus if a user signs into your site and is on a whitelist, you can show more posts to them on the home page, or allow access to permalinks to non-public posts.
+
+See also: [[private posts]]
+
+== messaging ==
+Show a "send me a message" form only to people who've logged in via Web Sign-in, and then their message comes automatically from whatever identity they signed-in with!
+
+This could send the message via email for example.
+
+Or, perhaps provide the option to send the message via txt/SMS, perhaps only allow a whitelist of specific set of friends to txt you.
+
+Related: [[2012/Simple_Indie_Web_Messaging_Stack]]
+
+== commenting ==
+=== inline commenting UI ===
+;Create
+:Allow signed in users to ''create'' comments by posting to their own website (e.g. via [[Micropub]]) and auto-[[webmention]] them back onto the post and display them in real-time. This way your website itself is indieweb [[friendly]] towards others with indiewebsites and empowers them to own their comments.
+;Update / Edit
+:Allow signed in users to ''edit'' their existing comments, perhaps similarly via [[Micropub]] edit to their own sites, auto-webmention [[CRUD]] update displayed in real-time on the post.
+;Delete
+:Allow signed in users to ''delete'' their existing comments, perhaps similarly via [[Micropub]] delete to their own sites, auto-webmention [[CRUD]] deletion displayed (animated?) in real-time on the post. Perhaps even with an "Undo delete" button where the comment used to be. And then implement Undo.
+
+=== local comments ===
+Allow local [[comments]] (perhaps again when in a white-list)
+* Though you should first implement [[comment#Accept_a_comment|accepting comments]] via notification via [[webmention]] and [[comments-presentation|displaying such comments]].
+
+This is the original use-case for decentralized identity that inspired [[OpenID]].
+
+You might want to only allow signed-in users to create local comments on your posts.
+
+Or perhaps again use a white-list to allow only a set of trusted users to make comments.
+
+== tagging ==
+Allow tagging (perhaps anyone? or a whitelist) of posted items (as pointed out by aaronpk here: http://www.flickr.com/photos/aaronpk/7492244882/in/photostream/ )
+
+== minor edits ==
+Allow minor edits to posts, e.g. to fix typos, grammar errors (again per a white-list) - check for % of change, or # of characters changed as a threshold.
+
+Also works as a use-case for drafts - i.e. allow minor edits to drafts.
+
+== major edits ==
+Allow major edits (an even smaller white-list)
+
+== new posts ==
+Allow posting new posts on behalf of (an even smaller white-list), e.g. something you might have an assistant do for you (without having to give *your* password/identity/full-access to)
+
+== delete posts ==
+Allow *deleting* posts (maybe only white-listed to your attorney?)
+
+== See Also ==
+* [[IndieAuth]]
+* [[private posts]]
+* [[RelMeAuth]]
+* [[Why web sign-in]]

@@ -1,0 +1,24 @@
+http://indiewebcamp.com/Apache
+
+{{stub}}
+
+'''<dfn>Apache</dfn>''' is widely deployed open source web server software.
+
+== Permissions ==
+
+Summary (from [http://serverfault.com/questions/357108/what-are-the-best-linux-permissions-to-use-for-my-website serverfault thread]):
+
+* Apache usually runs as the www-data, which will at the very least need read access to files
+* “Application” files (e.g. *.php) don’t need execute permissions as they’re not directly executed by the web server, they only need read permissions
+* Your user should own the files
+* The www-data user should own the group, which should have read and execute (why execute?) permissions
+* Any files or folders which will be changed by apache need to have write (+w) permissions for the group owner
+* Run <code>umask XXX</code> to set the default permissions for newly created files. <code>umask 007</code> sets permissions to read+write for owner and group, no permissions for others, which is a sensible default
+
+[https://en.wikipedia.org/wiki/File_system_permissions#Notation_of_traditional_Unix_permissions wikipedia] has a clear explanation of the unix permissions shorthand.
+
+== See Also ==
+* [[deployment]]
+* [[lighttpd]]
+* [[nginx]]
+* [[OpenLiteSpeed]]

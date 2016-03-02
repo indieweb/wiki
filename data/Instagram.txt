@@ -1,0 +1,234 @@
+http://indiewebcamp.com/Instagram
+
+{{pagelogo|https://pbs.twimg.com/profile_images/1550954462/instagramIcon_200x200.png}}
+{{stub}}
+
+'''<dfn>[http://instagram.com/ Instagram]</dfn>''' is a popular image hosting [[silo]] most well known for square [[photos]] that have been processed with an image filter. In 2013, Instagram added support for 15 second [[video]] posts.
+
+== Why ==
+Why use Instagram?
+=== Indie photo posting client ===
+Some of us have found it to be a useful client for posting to your site via [[Micropub]] and [[ownyourgram]].
+
+If your site supports receiving [[Micropub]] requests for publishing photos, you may want to consider creating a private Instagram account, using it to setup [[ownyourgram]], and then use Instagram’s native mobile app(s) and servers purely as a convenient client for posting [[photo]]s and short [[video]]s to your own site.
+
+This technique of using a silo purely as a client to get content to your own site is also referred to as "silos as plumbing".
+
+=== PESOS ===
+==== Tantek ====
+{{t}} uses Instagram to publish photos from his iPod touch, manually [[PESOS]] them to his own site (tantek.com), and then uses [[Falcon]] to automatically [[POSSE]] his [[photo]] posts to [[Facebook]] & [[Twitter]] with [[Bridgy]] Publish, as well as link back to the Instagram copy as [[syndication]].
+
+== Features ==
+(this section is a stub and needs your contribution to complete it!)
+* post [[photos]] with:
+** a caption (is just the first comment if it is by the author)
+** inline hyperlinked [[hashtags]]
+** [[person-tags]] at locations (points) on the photo 
+* [[comment]] on photos
+* [[like]] photos
+* [[follow]] users
+* [[notifications#Instagram|notifications]] of comments, likes, follows, and person-tags
+* [[report_abuse#Instagram|report abuse]] regarding a user, photo, or comment
+* search for
+** users
+** hashtags
+* [[private account]]
+* [[profile]] page (equivalent of indieweb [[homepage]]) configuration including
+** [[icon]]
+** name (as displayed next to icon, before posts)
+** 150 character bio
+** website
+* [[who to follow]] - shown when you follow someone
+** 3 suggested users to follow
+
+==Exporting your data==
+[http://instaport.me/ Instaport.me] and [http://flickstagram.org flickstagram.org] let you export your Instagram photos.
+
+[http://www.freedom.io/ freedom.io] ([https://github.com/snarfed/freedom source]) can copy all of your Instagram photos and videos to [[WordPress]], [[Tumblr]], or [[Blogger]], creating a new blog post for each, with the original dates and all comments intact.
+
+Norm's [https://github.com/norm/instagram-backup instagram-backup] tool exports Instagram photos and metadata.
+
+==POSSE==
+Instagram does not have a photo upload API. <strike>However they do have comments delete / create APIs</strike>. <b>Sadly commenting via the API is not supported</b>. So here's how you can fake POSSE to Instagram:
+
+# You post to Instagram using their client app, including location information, people tags, and caption (first comment).
+# Your server receives a notification of the photo post via webhook call back
+# Your server copies the photo (in [[PESOS]] fashion) to your own server
+## creating a permalink for the photo on your own server
+## copying the location information, people tags, and caption
+## adding a link to the copy of the photo on Instagram with [[rel-syndication]]
+# Your server deletes the first comment on the Instagram photo
+# Your server creates a new first comment (thus caption) on the Instagram photo, as you, with:
+## original caption contents followed by [[permashortlink]] for the photo on your server
+
+And bingo, you've effectively created a POSSE copy of your photo on Instagram since it now has a permashortlink back to the new "original" on your own site.
+
+At this point you can also use a service like [[Bridgy]] to [[backfeed]] comments on the photo from Instagram to your own site.
+
+=== IndieWeb Implementations ===
+* [[User:Aaronparecki.com|Aaron Parecki]]'s [[OwnYourGram]] service provides PESOS from Instagram for any site that supports micropub.
+* {{kylewm}} POSSEs likes for Instagram photos via the official Instagram API (which is read-only for everything except, inexplicably, for likes) [https://kylewm.com/2015/01/like-of-kristen-parks-cuba-bound-with-juliannarosed since 2015-01-03] 
+** Added POSSE for comments via "unofficial" API (Selenium/PhantomJS browser automation) [https://kylewm.com/2015/07/yum-lechuga on 2015-07-12]
+* [[Bridgy]] Publish can POSSE [[likes]] to Instagram since 2015-01-07
+* ...
+
+=== Manual Notes ===
+<span id="Manual_Notes_POSSE">Some users manually</span> cross-post occasional [[notes]] posts to Instagram, e.g.:
+==== Tweet text to Instagram ====
+* Original: https://twitter.com/ClaireWyckoff/status/532912362991648768 <blockquote>Worst way to die: you're mauled by a zombie and as you're about to turn you realize he's wearing Ed Hardy.</blockquote>
+* POSSE copy: [http://instagram.com/p/vWDDFlyTL8/ <img src="http://photos-e.ak.instagram.com/hphotos-ak-xpf1/10693307_1492129594399372_2131465102_n.jpg" style="width:256px"/>]
+
+As of this edit:
+* the original has only *2* favorites. (2,346 followers on account)
+* the POSSE copy: *130* likes and *3* comments. (14,512 followers on account)
+For some reason, POSSE copies, even of *notes*, on Instagram receive more [[interactions]] per follower.
+
+Hypothesis: the Instagram [[reader]] experience is so much smoother and nicer that it tends to encourage more use and thus more interactions.
+
+==== IndieWeb note to Instagram ====
+* Original: http://tantek.com/2016/001/t4/burn-very-brightly <blockquote>The light that burns twice as bright, <br/>burns half as long <br/>Life’s short, <br/>so burn very brightly</blockquote>
+* POSSE copy: [https://www.instagram.com/p/BABHGeGg9X9/ <img src="https://scontent-sjc2-1.cdninstagram.com/hphotos-xfp1/t51.2885-15/s480x480/e35/10261022_1943887429169134_703910364_n.jpg" style="width:256px"/>]
+
+==[[PESOS]]==
+Even though posting to Instagram is limited, retrieving you content is not impossible.
+
+Existing solutions for [[WordPress]]:
+* [https://wordpress.org/plugins/keyring-social-importers/ Keyring Social Importers] can will automatically create photo posts out of Instagram content once connected
+* [https://wordpress.org/plugins/dsgnwrks-instagram-importer/ DsgnWrks Instagram Importer] will do the same
+
+== API ==
+=== Supposed Features and Limitations ===
+* Instagram's [http://instagram.com/developer official API] can potentially create (and delete) comments and likes, but not photos.
+=== Like ===
+{{snarfed}} has found that Instagram's API now supports progammatically "liking" photos (used to 400).
+=== Location ===
+* [http://instagram.com/developer/endpoints/locations/ location of photos] - indicates use of [[Facebook]] places ID, [[Foursquare]] venue id (both v1 and v2 of their API)
+=== Cannot Comment ===
+{{snarfed}} has found that authing with scope=comments works, but the API call still 400s.
+
+According to [http://instagram.com/developer/endpoints/comments/#post_media_comments Instagram's API documentation],  their commenting API only works for those who are whitelisted. Unfortunately the [http://instagram.com/developer/endpoints/comments/#post_media_comments criteria for application for whitelisting] are very restrictive.
+
+=== Unofficial ===
+* Work has also been done on determining its unofficial API (which is against Instagram's terms of service, but allows you to post): https://github.com/mislav/instagram/wiki
+* Instagram Worm uploaded photos using private/undocumented API (needs citation)
+* Instagram private API changes affect unofficial apps and photos uploaded via unofficial apps http://www.theverge.com/2013/7/30/4570610/instagram-deleting-photos-from-instance-windows-phone-app
+
+=== Permissions approval ===
+
+Instagram is [http://developers.instagram.com/post/133424514006/instagram-platform-update locking down their API and requiring all apps to go through a review process] similar to [[Facebook]]'s. Apps can apply now; the API restrictions start in June 2016. [https://www.instagram.com/developer/review/ Developer details], [https://www.instagram.com/about/legal/terms/api/ legal details].
+
+Specifically, they plan to restrict and require approval for <code>/users/self/feed</code> and <code>/media/popular</code> and any use cases that send photos outside of Instagram.
+
+Here's the [https://www.instagram.com/developer/authorization/ new set of permissions] (OAuth scopes):
+
+<blockquote>
+* basic - to read a user’s profile info and media (granted by default)
+* public_content - to read any public profile info and media on a user’s behalf
+* follower_list - to read the list of followers and followed-by users
+* comments - to post and delete comments on a user’s behalf
+* relationships - to follow and unfollow accounts on a user’s behalf
+* likes - to like and unlike media on a user’s behalf
+</blockquote>
+
+{{snarfed}} [https://github.com/snarfed/bridgy/issues/603 applied for basic permissions for Bridgy and oauth-dropins] in Jan 2016. Both were rejected.
+
+==UX Observation==
+* Videos and Photos have a very similar UI. --[[User:Bret.io|Bret.io]] 00:38, 1 July 2013 (PDT)
+** Differences include a large play button on load for videos, and a caption display for photos.
+** [http://instagram.com/p/bMlGL1g9RG/ Example of video]
+** [http://instagram.com/p/bMj4vvA9ez/ Example of photo]
+
+* 2013 video UI: single-tapping would pause the video, you have to tap the play control to replay.
+* 2015 videos started autolooping (like [[Vine]]) without sound, and single-tapping was changed to toggle sound on/off.
+
+== Adoption ==
+* 2015-05-18 [http://www.refinery29.com/2015/05/87512/instagram-only-fashion-bloggers The Newest Fashion Bloggers Don't Even Have Blogs] - they use Instagram instead.
+
+== Criticism ==
+
+=== username takeovers ===
+
+[https://medium.com/@ainiesta/how-instagram-closed-my-account-and-gave-it-to-a-football-celebrity-625a6a770eb3 How Instagram closed my account and gave it to a football celebrity] - "My name is Andrés Iniesta and my only mistake was having the exact name and last name as a famous football player."
+
+===Bad Silo Interop with Twitter===
+Shortly after it was purchased by Facebook, [http://techcrunch.com/2012/12/09/it-appears-that-instagram-photos-arent-showing-up-in-twitter-streams-at-all/ Instagram stopped including Twitter metadata] on their photo pages, so Twitter Cards no longer show image previews for Instagram photos.
+
+Instagram drives more traffic to their site, at the cost of a worse experience for users.
+
+Using [[OwnYourGram]] or another method of PESOSing your photos out of Instagram, you can control how your photos are shared on other silos like Twitter. (e.g., by including Twitter metadata, or by posting the photos directly).
+
+===Downtime===
+* 2014-04-12 Instagram feeds were down as reported in this @Instagram tweet which itself has been deleted!
+** https://twitter.com/instagram/statuses/455025601553108993
+** <blockquote>We’re working to fix a feed delivery issue. Thank you for your patience.</blockquote>
+** see also: http://thenextweb.com/facebook/2014/04/12/instagram-confirms-that-its-service-is-down-due-to-a-feed-delivery-issue/
+
+* 2013-08-28 17:27-0400 EDT
+<a href="https://twitter.com/tessa/status/372834695391612928"><img src="https://pbs.twimg.com/media/BSyTLhLCAAAIF7o.png" width="300"></a>
+
+* 2014-08-22 various times throughout the day - "news" activity on photos feature was down with user-unfriendly [[nginx]] default error message:
+
+[[File:2014-234-instagram-502-nginx.jpg|frame|none|320px]]
+
+=== Switch from Foursquare to Facebook venues ===
+Some time in 2014-05, Instagram switched from using [[Foursquare]]'s venue database (e.g. in the iOS app UI) to using [[Facebook]]'s places database.
+
+This has resulted in:
+* fewer venue matches (often completely missing venues that were present on Foursquare)
+* less accurate venue locations such as misspellings, "venues" with varied granularity (business vs neighborhood)
+* loss of venue information when cross-posting from Instagram to Foursquare (i.e. checks you into the wrong location, or a generic neighborhood rather than a specific venue)
+
+==== See also ====
+* 2014-05-11 https://twitter.com/parislemon/status/465554365286084608 <blockquote>Instagram's decision to use Facebook's much worse place database over Foursquare's has made the product worse. Stupid.</blockquote>
+* 2014-05-11 https://twitter.com/parislemon/status/465555168851816448 <blockquote>The moment a decision is made for business/political reasons, the product starts to decay. Even if only a little bit.</blockquote>
+* 2014-05-12 <cite>[https://medium.com/five-hundred-words/dad4c3736409 Instagram Just Geotagged Us To Hell]</cite>
+
+=== Lack of privacy of location data ===
+When posting a photo to Instagram, if "add to photo map" is enabled (even if no venue is chosen) then the exact lat/lng of the photo is recorded. When viewing the single photo you won't see the location of it. However, when viewing the person's user profile you can switch to the map view and see their photos all on a map. 
+
+[[File:instagram-map-aaronpk-far.png|300px]]
+[[File:instagram-map-aaronpk-close.png|300px]]
+
+The map shows photos as clusters, and zooming in will expand the clusters into smaller clusters until finally individual photos appear on the map. 
+
+It is relatively easy to figure out the approximate location of someone's work or home by looking for these clusters.
+
+==== See Also ====
+* [[Flickr#Privacy]]
+
+=== Uneditable Custom Locations ===
+When adding a photo at a venue that doesn't exist, it is possible to create a "custom location", which is unfortunately not editable from that point on. 
+
+One potential up-side is when searching for venues, your custom locations now show up at the top of the list without needing a round-trip to the server to search.
+
+[[File:instagram-custom-location-search.png]]
+
+Creating this custom location prompts only for the name, the exact geo location is added automatically, meaning it is not possible to adjust the specific location of the venue.
+
+=== Censorship beyond community guidelines ===
+Instagram is establishing a history of censoring by removing (and sometimes restoring later)  and/or hashtag results that are not actual violations of their Community Guidelines, and are otherwise innocuous material. For example:
+
+; gay kiss
+: Instagram has [http://www.gaystarnews.com/article/instagram-removes-photo-gay-newlyweds-kissing030714 reportedly removed a photograph of a gay couple kissing at their wedding] as "inappropriate".
+; some sexual content
+: Instagram's removal of sexual content has been criticised as [http://www.thedailybeast.com/articles/2013/10/30/instagram-s-sex-censorship-is-inconsistent-and-hilarious.html being inconsistently enforced].
+; menstrual blood
+: http://www.scoopwhoop.com/news/insta-photo/
+: http://www.cosmopolitan.com/sex-love/news/a38309/instagram-apologizes-for-removing-poignant-photos-of-a-woman-on-her-period/
+
+=== DMCA ===
+* 2014-10-16 <cite>[http://justhugo.com/2015/10/16/freedom/ Your account has been deleted for not following our terms. You won’t be able to log into this account and no one else will be able to see it. We’re unable to restore accounts that are deleted for these types of violations.]</cite>
+
+=== No license metadata ===
+Unlike [[Flickr]] (and your own site if you so choose!), there's no metadata for marking photos or indeed whole photostreams as licensed under Creative Commons licenses.
+
+[http://i-am-cc.org/ i-am-cc.org] lets you choose a CC license for your Instagram photographs, but you have to log into the service every three months to 'renew' the license grant.
+
+== See also ==
+* [[silos]]
+* [[photos]]
+* [[photo uploads]]
+* [[videos]]
+* [http://instagram.com/developer/ Instagram Developer Documentation]
+** [http://instagram.com/developer/realtime/ Real-time Photo Updates] (via [[PuSH]]) 
+* http://flickstagram.org/

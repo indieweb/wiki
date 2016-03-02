@@ -1,0 +1,32 @@
+http://indiewebcamp.com/webmention-implementation-guide
+
+== Sending Webmentions ==
+
+The beauty of simple protocols is that you can do most of this manually very easily.
+<span id="rel_webmention"></span>
+* Given a target to which you want to send a webmention, you need to first discover it's webmention endpoint:
+ <nowiki>curl -i -s $target | grep 'rel="webmention"'</nowiki>
+** Note: this is only an approximation, your implementation MUST accept a "webmention" value among the space separated set of terms in the 'rel' attribute. Older implementations may use <code style="display:block"><nowiki>rel="http://webmention.org/"</nowiki></code> and some may use both: <code style="display:block"><nowiki>rel="webmention http://webmention.org/"</nowiki></code> neither of which are discovered by the grep above. Some may use single quotes (or no quotes at all) to surround the <code>webmention</code> rel value. Still others may only support discovery with an HTTP Link header (e.g. [[Taproot]]). Compliant implementations must check the HTTP Link headers for the rel value first, and if not found then parse for the rel value on a <code>&lt;link></code> or <code>&lt;a></code> element in the <code>&lt;head></code> per the HTML specification on parsing rel values.
+
+* Now to send the webmention:
+ <nowiki>curl -i -d "source=$your_url&target=$target_url" $targets_webmention_endpoint</nowiki>
+
+=== One-liner webmentions ===
+
+This will send the webmention in a single command:
+ <nowiki>curl -i -d "source=$your_url&target=$target_url" `curl -i -s $target_url | grep 'rel="http://webmention.org/"' | sed 's/rel="webmention"//' | grep -o -E 'https?://[^ ">]+' | sort | uniq`</nowiki>
+
+See also this gist for sending pingbacks manually: https://gist.github.com/aaronpk/5744879
+
+== Accepting Webmentions ==
+
+Currently the easiest way to test consuming webmentions is to implement sending them, then send yourself mentions.
+
+Once you’re ready to test integration with another site, you can either ask someone in [[IRC]] to send you a comment, or mention your page in IRC and send a webmention from IRC log URL for that line to your URL.
+
+For example [http://indiewebcamp.com/irc/2014-02-18/line/1392748409 this IRC line] links to http://caseorganic.com/notes/2014/02/18/1/. Pasting the URL for the IRC line into [http://indiewebify.me/send-webmentions the indiewebify.me webmention sender] will send webmentions for all the links on the page. Then you can check your page or your server logs to see if the webmention was successful — in this case the comment [http://caseorganic.com/notes/2014/02/18/1/#external_http_indiewebcamp_com_irc_2014-02-18_line_1392748409 successfully showed up] on the target page.
+
+== Resources ==
+* [https://github.com/pfefferle/node-webmention-testendpoint Node Webmention Testendpoint] - Generates a sample post and creates and endpoint you can use to test your webmention sending
+* [https://github.com/voxpelli/node-webmention-testpinger Node Webmention Testpinger] - pings your site with a variety of source URLs that contain real-world markup
+* [https://checkmention.appspot.com/ Checkmention] - This site lets you test your webmention implementation on your indieweb site, and whether it robustly detects certain types of XSS attacks.

@@ -1,0 +1,63 @@
+http://indiewebcamp.com/wiki-projects
+
+{{stub}}
+
+IndieWebCamp [[projects]] related to [[wiki-page]] hosting/creation/editing on your own site.
+
+== Existing Projects ==
+=== Smallest Federated Wiki ===
+{{main|Smallest Federated Wiki}}
+Smallest Federated Wiki was conceived/created/developed/launched at IndieWebCamp [[2011]]
+=== MediaWiki ===
+{{main|MediaWiki}}
+MediaWiki runs indiewebcamp.com, microformats.org/wiki, and is used by IndieWebCamp community members like [[User:Tommorris.org|Tom Morris]] on http://wiki.tommorris.org/
+=== ikiwiki ===
+{{main|ikiwiki}}
+ikiwiki is another independent site wiki, and is used by IndieWebCamp community members like [[User:greptilian.com|Philip Durbin]] on http://wiki.greptilian.com/
+
+== Brainstorming ==
+Thoughts on how an IndieWeb wiki could be implemented
+
+=== Static Pages Plus HTTP Headers ===
+This is a brainstorm by [[User:Tantek.com|Tantek Çelik]], originally discussed in [[IRC]] 2013-091, captured here for potential iteration.<blockquote>[1:21pm] tantek: I'm actually thinking of, how do I just use a static HTML page itself as the storage for a "wiki" page.</blockquote>
+
+* static HTML files as their own storage of their current/latest version
+* previous versions stored elsewhere (e.g. the filesystem)
+** date-time-stamp filename suffixing convention
+** new link rel to link to the previous [http://microformats.org/wiki/version#brainstorming historical version]
+** each version linking explicitly (via invisible <code>&lt;link></code> or visible hyperlink) to the previous version, and [http://microformats.org/wiki/version#current current version].
+*** this places a content requirement on the otherwise unrestricted HTML files. 
+*** alternatively if this information (what is the previous version) is kept in a database cache, it can be sent with the server as an HTTP LINK Header with rel value.
+** the combination would satisfy essential qualities 2,3,4 listed above.
+* for editability, it might be a neat trick to write software that made any static HTML page on your site automatically "editable" if you happened to be signed in with [[Web Sign-in]] / [[IndieAuth]].
+** similar to revisions/versions, a page could link to its editing interface/version/query parameter with a rel link as well, e.g. rel=edit, which has been previously proposed as part of [http://universaleditbutton.org/Suggestions#JavaScript_links_for_AJAX-driven_edits Universal Edit Button: links for AJAX-driven edits] but could be used for server-based editing state as well. E.g. <code>href="?edit=1"</code>. Again this might be best sent as an HTTP Link Header.
+** goal: make a page editable without putting any meta/link in the page itself.
+*** should be possible to use HTTP LINK rel=edit to an editing script (for browser plugin discovery)
+*** perhaps an HTTP LINK rel=script to execute an editing script (for browsers that don't know about rel=edit).
+
+Interface - there are many ways personal wiki software could provide editing / version browsing features, here are a few:
+
+UI for browsing previous versions:
+* slider in Etherpad
+* what archive.org puts up in the header on archived page results
+* That ins/del [http://codepen.io/barnabywalters/pen/nhmuw slider demo] I made may be of interest/use --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 06:40, 2 April 2013 (PDT)
+
+Brainstorm summary:
+# static HTML page as its own storage
+# *-date-time suffixed versions of said page in the file system (or perhaps in the YYYY/ directories), linking to latest version and previous versions with rel values
+# HTTP LINK headers for browser-editing-plugin discovery and javascript-based fallback
+# Access UIs via query parameters e.g. ?edit=1, ?history
+
+Related project:
+* http://microformats.org/wiki/version - for new link rels for the previous version/revision and the current/latest version.
+
+== Others ==
+Other projects that may be of help with designing/creating/building a wiki content system.
+
+* [http://www.mementoweb.org/  MementoWeb]
+** -1 memento seems horribly overdesigned, e.g. has way too many rels, none of them actually useful: original, timegate, timemap. - [[User:Tantek.com|Tantek]] 16:49, 1 April 2013 (PDT)
+
+== See Also ==
+* [[wiki]]
+* [[wiki-page]]
+* [[projects]]

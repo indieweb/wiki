@@ -1,0 +1,69 @@
+http://indiewebcamp.com/permashortlink
+
+A '''<dfn id=permashortlink>permashortlink</dfn>''' (abbreviated <dfn><abbr>PSL</abbr></dfn>) is a URL using a [[short-domain]] that expands to a [[permalink]]; on the IndieWeb, PSLs use personal short domains to expand to the same person's personal domain, thus minimizing the fragility often associated with shortlinks.
+
+== Why ==
+There are several reasons to create and maintain permashortlinks.
+* '''Content limits on [[POSSE]] destinations''', where providing a permashortlink at the end saves space over a full permalink, thus allowing you to POSSE more of your content.
+* '''More reliable''' in [[email]] (some mail programs truncate/break URLs >70 chars)
+* '''Look nicer''' in IM, browser screenshots.
+* '''(re)typability from print, images''' - have retyped URLs from screenshots in slides, books, print advertising, magazine articles, billboards.[http://tantek.com/w/ShortURLPrintExample]
+* '''Encourage visiting''' - The easier to read and type-in, the more folks visit the URL. 
+
+See also: http://tantek.com/w/Whistle#whyshortURLs
+
+== How ==
+Here is a simple way to setup permashortlinks:
+* Get a personal [[short-domain]]
+* Set it up to redirect to your personal [[domain]]
+* Setup short path handling on your personal domain to expand and redirect to your permalinks.
+
+== IndieWeb Examples ==
+Ordered roughly by when deployed.
+=== Tantek ===
+{{t}} uses [[Falcon]] running on tantek.com with [[algorithmic]] permashortlinks [https://twitter.com/t/status/8228455558 POSSEd since 2010-01-26]. Example:
+* https://twitter.com/t/status/8228455558 POSSE copy has http://ttk.me/t43W1 at the end, which links to:
+** http://tantek.com/2010/001/t1/declaring-independence-building-it
+
+Summary description:
+* <samp><nowiki>http://ttk.me/tSSSn</nowiki></samp> or
+* <samp><nowiki>http://ttk.me/b/SSSn</nowiki></samp> where:
+* SSS = sexagesimal epoch days - see http://tantek.com/w/NewBase60
+* t = literal 't' for short <em>text</em> [[notes]], and 'b' for blog [[posts]] / [[articles]]. Both from this list: http://tantek.com/w/Whistle#design
+* n = nth post of that type that day
+This is sufficient to expand to:
+* <samp><nowiki>http://tantek.com/YYYY/DDD/tn/</nowiki></samp> or
+* <samp><nowiki>http://tantek.com/YYYY/DDD/bn/</nowiki></samp> respectively, where:
+** YYYY = year
+** DDD = day of the year (see related: http://en.wikipedia.org/wiki/ISO_8601#Ordinal_dates )
+** t or b  = again a literal 't' or 'b'
+** n = nth post of that type that day
+** and that's sufficient to retrieve the post from storage, including slug text which follows the "...n/" in the permalink URL
+
+For more details and background/thinking, see the interview/article:
+* http://www.monkinetic.com/2010/05/26/tantek-celik-diso-20-brass-tacks
+
+=== Michael Owens ===
+{{mowens}} uses [[Whistler]] on https://mowens.com/ as of 2014-07-08.
+
+Whistler is a Node.js module that implements a flexible version of the [[Whistle]] algorithm (by Tantek at http://tantek.com/w/Whistle) for shortening, expanding, and explaining links using [[NewBase60]].
+
+Whistler and the NewBase60 Node.js modules are both available on NPM and GitHub:
+* Whistler
+** NPM: https://npmjs.org/package/whistler
+** GitHub: https://github.com/mko/Whistler
+* NewBase60
+** NPM: https://npmjs.org/package/newbase60
+** GitHub: https://github.com/mko/NewBase60
+
+== Silo Examples ==
+{{aaronpk}} 2009-12-08 I'm noticing everyone has their own URL shortener now.[https://twitter.com/aaronpk/status/6474702736] E.g. [[silos]]:
+=== Flickr ===
+[[Flickr]]: flic.kr -> flickr.com 
+=== Build It With Me ===
+[[Build It With Me]]: bldw.me -> builditwith.me 
+
+== See Also ==
+* [[permalink]]
+* [[short-domain]]
+* [[permashortcitations]]

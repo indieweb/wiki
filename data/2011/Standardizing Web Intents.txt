@@ -1,0 +1,141 @@
+http://indiewebcamp.com/2011/Standardizing_Web_Intents
+
+=Session Notes=
+
+==Notes from [[Amber Case]]==
+"The problem as I see it, is that identity is not enough -- you have to create actions that incentivize people to log in with a centralized identity" - [[Chris Messina]]
+
+If I wanted buttons all across the web for my preferred services, then this would be a way to do that" - CM. 
+A part of this though is about adding a set of verbs the the browser itself. For example now we have "input type = file". That's so boring. Why don't we have things like "input type = share". The browser should say, "okay, the browser's intent is this" - and here's the payload and where to send which items from point a to point b. 
+
+[[Tantek]] - have you figured out the different building blocks that would be needed for people to build this? Can you break it down for UI developers, UX designers, builders - etc. There may be too many things here for one person to do at once. 
+
+CM - There are ugly verbs that are out there they try to do sharing 
+
+There are tasks that can be handled in the browser on your indie web site oor on a generic JS library. This would be maybe like a post for the intents. All share buttons would be replaced with these intents. 
+
+Outbound intents or inbound intents. If I have a tweet button on my site, what is it called? 
+
+BenWard -- you call it a publisher. 
+
+Tantek - So that's the publisher 
+
+BenWard - Publisher is *really* generic. 
+
+CM - We'll call it receiver. 
+
+Tantek - in the Twitter model, twitter is the only reciver of the intents. 
+But I could create url.com/intent/blah 
+
+BenWard - The "blah" is where there could be some commonality between services. In the twitter case you could argue that there are two versions of sharing -one is the twitter version of sharing, a tweet box where you can share it to a wall or something. Vs. a re-tweet model where you echo it out to a set of people. Both of those things could stem from an article on the web. You see newspapers for example that have twitter accounts and are links to the top stories of the day - you could use that model where you share links .
+
+Chris - so add markup for intents. The simplest thing to get done this weekend is to replace any +1 button with firing off an intent or payload to some endpoint. 
+
+Tantek - So until Twitter published their intents API, every other model seemed like too much work. Is there a model there that we could transform into protocols or links? 
+
+Chris - So you could add intents to sites. Intent markup. Your verb, and then some payload. The JS library would replace all of these with whatever markup needs to be there in order for the browser to do the right thing. The intent for people to share, and whatever markup needs to be there for people to use it. So when I want a tweet button on my page, what do I do to get it there? 
+
+Ben Ward - the tweet button markup, in it's simplest form, is really a link to Twitter.com/share. You will end up on the interface page posting on a tweet. If you add the JS into the page as well, it will find these shares in the page and replace them with buttons. 
+
+Tantek: All of the intents you've talked about are web based - what if I wanted to intent something into a text document? 
+
+Chris: you'd have to figure out a way to invoke the local protocol handler. You'd have to have an intent handler. 
+
+Al Partridge: What if the like buttons on our site were ours, and not Facebooks - and that we could set up like buttons that saved things to our own site? (fantastic). 
+
+Tantek: Is there some taxonomy of cross- site verbs? 
+
+[[Amber Case]]: You'd need to compress these verbs or variables. 
+
+Chris Messina: Yes, you can use any of these three verbs to accomplish the same things. All we know is that we have this one piece of content that we want to share over there. Liking is pretty much reccomending, etc. 
+
+Tantek: Some people think of liking, and bookmarking and favoriting as the same thing. Should you have three different buttons for those? 
+
+Chris: That's a good question as we go forward. If a service provider sends it off as a favorite, so we store it as that. With delicious they take multiple shares, reccomends, etc. And we can take them in and store them as the same thing. 
+
+BenWard: In the case of Facebook's like button it means multiple things. It's a kind of drive-by low friction way of saying "I like this". But it's also signing you up to get updates from that entity in that news feed. 
+
+
+{| cellpadding="10" cellspacing="0" border="1"
+|'''Browser/Extension'''
+|'''Site Publisher'''
+|'''JS Library'''
+|'''Intent Receiving'''
+|'''Indie web site /discovering service'''
+|-
+|Hijack all like, +1, digg, tweet buttons, turn them into intents
+|Add markup for intents
+|Fall back behavior for intent links / add intents to site. 
+|Add reviewer APIs for various intents
+|List services and intents
+|-
+|
+|<nowiki><s:plusone></nowiki>
+|<nowiki>Intent verb=share>____</intent> <intent verb = sign in> intent callbacks</nowiki>
+|<nowiki>(<platform.js/>  <a href = twitter.com/share> Share </a></nowiki>
+|
+|}
+
+==Notes from Etherpad==
+http://etherpad.opensourcebridge.org/WebIntents
+
+Giving users choice about which services they use to perform certain actions.  For example, a site indicates that it wants to "share" a URL.  A user's "intent handler" prompts the user to select a service which is capable of handling a given intent.  The user chooses a service, and the intent handler sends the intent along.
+
+This is similar to the way that multiple desktop applications are able to register themselves as being capable of handling different MIME types.
+
+This is modeled heavily after the Intents functionality of Android.
+
+Twitter currently supports their own flavor of web intents, which grew out of their Tweet button.  They now support multiple verbs: share, tweet, retweet, favorite, reply, direct message, and follow.  These all live under the http://twitter.com/intent/ URL and accept arguments modeled after the Twitter Android and iOS apps.
+
+We currently have a proliferation of share buttons (Facebook Like, Digg, Google +1, Tweet, etc), which will only continue to get worse.  Web Intents would allow the services that are relevant to a specific user to appear.
+
+JSON Activity Streams recently finalized as 1.0.  Defines format to convey the "actor", "verb", and "object" (and other metadata) of a social activity.  Activity Streams were originally designed to represent a "receipt" of an activity which has occurred, after the fact.
+
+For web intents, let's assume that the user has logged into the browser, so the "actor" of an activity is provided by the browser context.  
+
+Some work already started by Paul Kinlan at Google (http://webintents.com).  
+
+Example markup:
+  <a href="#" data-verb="follow" data-object="chrismessina" />
+when user clicks on link, browser could intercept the request, and process the intent natively.
+
+Would there be a single or multiple services registered per intent? Most users would probably start with one, but the browser could track several, or split intents by service more granularly.
+
+Some problems with branded intent names (digg), but we could find generic terms (recommend).
+
+Service provider (such as Facebook or Twitter) could send back the interface to complete the request - the browser hands off the request to get back the full UI to post with.
+
+What if you don't want to set a default, because sometimes you use FB and sometimes Twitter for the same action? Then the user could be prompted to specify which they want.
+
+How do we structure this for fallback behavior, when the user doesn't have the browser or the plugin needed to understand the link? It could fallback to the site's preferred service, or a NASCAR approach.
+
+How does my indie website fit into this? When you log into the browser, you register your own site as handling those intents (that the browser knows it should handle). Then your site could federate as desired.
+
+Every intent is a UI for enfranchising yourself.
+
+The intent is a handoff or invocation for the handling service, whether it's Twitter or your own domain.
+
+Then you could do something like have a list of all the things you've "liked" across the web, on your own site.
+
+Both replacing the NASCAR approach, and hijacking it. We figure out the easiest way for people to use this, then redirect the behavior. It doesn't have to be either a browser change or extension, or a javascript library added to the page, it could be both, getting both users and site publishers to participate.
+
+Mozilla is working on identity in the browser. But identity isn't enough, you need the actions too. Login is the least interesting, but most findamental thing that needs to be done. We end up getting involved in complicated stuff around discovery, because the sites can't talk to each other.
+
+Mailto link is an interesting example of this: you click the link, and it opens your local email client. There's an extension to tell it to use Gmail instead. So you could have desktop intent handlers too.
+
+Browser w/extensions could: hijack all like, +1, tweet, etc. links and turn them into intents; handle intent links; register intents; keep login
+Site publisher could: add markup for intents
+JS library could: fallback behavior for intent links, add intents to site
+Intent receiver could: Add receiving APIs for various intents
+Indie website/Discovery service could: list services and intents
+
+Action items
+- browser addons that finds any tweet or +1 button and passes an intent that passes off to your indieweb site
+- use mailto: to point to whichever service you use as a metaphor for explaining intents
+- get js library for publishers to easily implement verbs 
+- add to HTML spec things like <input type=share>
+- icons for these generic verbs? http://nicolasgallagher.com/pure-css-gui-icons/demo/
+
+
+[[Category:Session Notes]]
+[[Category:2011]]

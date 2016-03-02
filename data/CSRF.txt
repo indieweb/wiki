@@ -1,0 +1,18 @@
+http://indiewebcamp.com/CSRF
+
+{{stub}}
+
+<dfn>CSRF</dfn> or Cross-Site Request Forgery is an attack that OAuth and IndieAuth clients (relying parties) need to be aware of, wherein victims unknowingly follow a link to a relying party callback URL prepared by an attacker. This tricks the user to authenticate to the relying party with an account under the attacker's control and thus potentially leak private data to the attacker.
+
+The most common prevention strategy involves generating a [[CSRF token]] (state, nonce) storing it in the browser session, and passing it into the authorization endpoint. Then when receiving a callback from the authorization endpoint, relying parties can simply compare the token to the one stored in the session to confirm that the request originated at the authorization endpoint. [http://en.wikipedia.org/wiki/Cross-site_request_forgery#Synchronizer_token_pattern]
+
+In the context of IndieAuth, clients MUST use the <code>state</code> parameter for this purpose. The value MUST not be guessable by an attacker and MUST be verified on the callback. 
+
+== Reference ==
+* [http://tools.ietf.org/html/rfc6749#section-10.12 Definition and discussion in OAuth 2 Spec]
+
+== See Also ==
+* [[IndieAuth]]
+* [[CSRF token]]
+
+[[Category:IndieAuth]]

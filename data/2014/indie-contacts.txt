@@ -1,0 +1,113 @@
+http://indiewebcamp.com/2014/indie-contacts
+
+IndieWebCamp 2014
+
+* 12:00 Portland session
+* 15:00 New York 
+
+"a better hcard creator"
+
+Improve on this:
+* http://microformats.org/code/hcard/creator.html
+
+extensible -- adding fields (for example a tattoo artist wants to use this for a CRM where a field might be what tattoo people want)
+
+could also be useful for sharing -- URL for people who can log in
+
+each silo has their own address books
+
+earlier work: FOAF.  but, it was in RDF, XML with namespaces etc., a lot of people made FOAFs and didn't do anything with them
+
+XFN was a response to FOAF (that's where the rel= came from)
+
+POCO (portable contacts), didn't really go anywhere
+* ^^^ what does this have to do with UI? Nothing
+
+used by programs, used by people.  one scenario where it's used by a person: what's Ben's phone number?  (but why don't you just go to his site?  he may not have published it)
+
+it's a private address book; and it's a friends list.  (it's two taste treats in one!)
+possibly: names and URLs [optionally] public; other attributes are private
+* filter is categories by who looks at it
+* on a social network, the people on your friends list are the people you subscribe to.  that's not the same as the general address book.
+* XFN has relationship types; they're only positive (no enemy, nemesis, etc.)
+
+Johannes wants a relationship between the things in his contacts and everything he's had to do with them.  if that's available as a service, then can do interesting things with apps on it
+Shane sees this (and smart linking, reader, private posts, and many other things) as on top of the address book
+
+You can install lots of apps on the indiebox, but they often don't share any data. They're stovepipes. You can't share between mediawiki and known and etc etc. It'd be nice if everything could read from an indie address book.
+
+Would Known use a contacts app? Yes definitely. So when they syndicate out to other services they can look up how to link to the person. @t on twitter. tantek.com for the web... etc If not everyone has an indie web site but they are mentioned on one, it would be good if they could still be notified
+
+^^^ rel=me already solves that today
+1. get someone's URL (e.g. tantek.com)
+2. collect all their rel=me links (optionally confirm them) - phpmf2 gives you this in JSON
+3. if you're looking for a particular silo profile, look it up by domain (e.g. twitter.com/)
+
+what about things that aren't public? like doctors
+
+Doctors have websites. Their websites should simply markup their existing contact info with h-card. Doctor's phone numbers are usually public (or at least their answering service).
+
+you appear to have a different relationship with your doctor than i do :)  when i ask them to change their website they laugh
+
+Does your doctor not have a website? (perhaps only in the future-world of SF do doctors have websites?)
+they don't have their cell # on their web site but i have it
+
+so this is for legacy backward compat?
+
+most of my friends don't have their phone numbers on the web 
+
+* friends phone numbers, home addresses, urls, home pages, silo urls, keys, birthrates, death dates, interactions with contact, following status, significant dates, photos/avatars, email, IM, irc handles, canoncial source (URL), recency, catgories of people, type of relationship (all of hcard basically)
+
+Shane asks but which ones matter to the person who is using it?
+
+* What is the use-case here that has to do with your own website? Really confused.
+* Your website could use these to syndicate with the right links is the only one I've heard. Also the human aspect of normal address books, going to look up peoples things. 
+* Isn't that just a page/window/screen of bookmarks of people's sites/icons per http://indiewebcamp.com/icon ?
+* I think that could be a starting point but sometimes I have more information on someone than is on their site, or they don't have an indiewebs ite.
+ditto.
+* So you want bookmarks with a description field you add to?
+* i often have contact info for people where i don't have their website (or for that matter don't even have a website).  am i just unusual that way?
+* ^ NO - this is important. All information really has to be optional (except perhaps some kind of human-friendly identifier)
+I for one would not feel comfortable storing SOMEONE ELSE'S PRIVATE INFORMATION on *my server*. **I don't want that level of responsibility**. So perhaps I can duck out of this then. -t
+** ^^ You already store this information in your phone, though? Also, maybe _that's_ where this could live?
+Local devices are totally different security context than ANY server. 
+TOTALLY different level of responsibility. Also why I don't trust any auto-sync cloud services (not to be compromised - which they are all the time).
+good point.
+* Ben says what if this all lived on your phone? Could we use it from there?
+** But also: what information _would_ you feel comfortable with? Simple following / followed list?
+* So if this is about storing all your addressbook info (other's info) on *your* server, then I suppose I'm not interested in this use-case for my website.
+* The reason I don't like storing data is because data decays and I don't want to have to *tend* yet another data source and keep it fresh --bear
+*  Again, does that also apply to friends lists?
+social conventions exist for this kind of information; we shouldn't just handwave these away.  for example, if you share a phone number, there's an expectation that you won't reshare it.  [although if you put a phone number into an iphone and it gets synced to icloud, it's shared that way]
+(and that's a reason I don't use iCloud and I don't trust it.)
+ditto.  (and the same for google)  although it's true that i'm at the mercy of whoever i share my info with.
+
+architectural question: does data exist on friends website and i retrieve it when i need it (perhaps caching it)? (YES)  
+
+or is the copy in my address book the definitive one? 
+
+No, becase then it gets out of date when your friends change their information.
+
+
+
+why not have a "people" post-type where you can save contacts as h-cards? publish it if you'd like, maybe a private feed? I think this is the idea Shane started with gotcha!
+
+when you go to tantek.com on your phone, it has action buttons: text me, IM me, email me.  (or it will in the future 
+* http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience
+** not yet live, currently building the pieces to get it working, and blogging as how it goes).  
+here: http://tantek.com/2014/067/b1/building-blocks-people-focused-mobile-communication
+* Known does that as well.  allows people to self-represent their email information.  Ben: still, it's onerous to parse this each time.
+
+maybe we should focus on an "indiecontactlist" instead of a full-fledged address books
+*  hcard with vendor-specific prefixes
+**  prefixes for what? what use-cases are you trying to solve? (there may already be solutions - don't jump to inventing new/vendor-specific things without first *documenting* the use-cases you think need solving)
+* agreed
+
+A+.
+
+== See Also ==
+* [[blogroll]]
+* [[h-card]]
+* [[nicknames-cache]]
+* [[xfn]]
+[[Category:2014]]

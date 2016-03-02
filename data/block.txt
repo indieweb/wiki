@@ -1,0 +1,85 @@
+http://indiewebcamp.com/block
+
+{{stub}}
+
+'''<dfn>Block</dfn>''' is a feature on many [[silos]] that provides the ability for one user to "block" or prevent interactions from another user.
+
+<dfn>Blocking</dfn> is similar in some ways to muting someone, but beyond not seeing content from that person:
+
+Blocking someone typically means:
+* they cannot [[follow]] you nor view your [[profile]] while logged in
+* they cannot [[favorite]], [[repost]], or [[reply]] to your [[posts]]
+* you don't see content from them in *any* context on the silo
+
+Good implementations of block (e.g. [[Flickr]]'s [https://www.flickr.com/help/contacts/?search=blocking#96 implementation of block])
+* remove any of your content from that person's collections (e.g. favorites collection)
+* remove any old comments from them on anything of yours
+
+== Brainstorming ==
+Building blocks in progress towards enabling indieweb block features:
+* http://microformats.org/wiki/block-list
+** http://microformats.org/wiki/block-list-brainstorming
+* Private posts and public post upgrading to enable private lists: [[private posts#Public_Page_Upgrading]]
+
+Modest minimal proposal:
+* '''use-cases:'''
+** block a specific abusive/noisy [[comment]] (like a delete)
+** block a specific abusive/noisy user
+* '''format:''' a set of URLs
+* '''behavior:''' block any URLs that are prefix-matched from that set. E.g. if "abuser.example.com" is in the set, then "abuser.example.com/?post=123" would be blocked. Use-cases thus:
+** block a specific comment by canonical [[permalink]]
+** block a specific user by their [[homepage]] or silo profile URL.
+
+Implementation discussions:
+* [[Bridgy]]: https://github.com/snarfed/bridgy/issues/473
+* A WebMention Endpoint: https://github.com/voxpelli/webpage-webmentions/issues/31
+
+== Silo Examples ==
+=== Facebook ===
+[[Facebook]] has a block feature. From their inline help on facebook.com (partially documented in [https://www.facebook.com/help/168009843260943 How Do I Block Someone]):
+
+<blockquote>
+You can block someone to unfriend them and prevent them from starting conversations with you or seeing things you post on your Timeline. People you block can still see and comment on stuff you share in groups, apps and other shared places.
+</blockquote>
+
+=== Flickr ===
+[[Flickr]]'s block features is viewed as the current best-of-breed and most well designed/thorough block feature.
+
+For details on what Flickr means by block, see:
+
+https://www.flickr.com/help/contacts/?search=blocking#96
+
+=== Twitter ===
+[[Twitter]]'s "block" feature is widely viewed as insufficient, and has been through a number of iterations, one of which was no more than a renamed "[[mute]]"[http://readwrite.com/2014/07/29/twitter-harassment-askcostolo-ignores] (which they later actually released as a "mute" feature itself, since that by itself was useful for other use-cases).
+
+Description from [https://support.twitter.com/articles/117063-blocking-users-on-twitter Blocking Users On Twitter]:
+
+<blockquote>
+“Blocked users cannot:
+
+* Add your Twitter account to their lists.
+* Have their @replies or mentions show in your mentions tab (although these Tweets may still appear in search).
+* Follow you.
+* See your profile picture on their profile page or in their timeline.
+* Tag you in a photo.”
+</blockquote>
+
+Note that this user-facing documentation does not mention the caveat about retweets detailed on the [https://dev.twitter.com/docs/api/1.1/post/blocks/create /post/blocks/create API documentation] (emphasis ours):
+
+<blockquote>
+“…the blocked user will not show in the authenticating users mentions or timeline ('''unless retweeted by another user''').”
+</blockquote>
+
+Twitter also has a support document covering [https://support.twitter.com/articles/15794-online-abuse# Online Abuse], recommending blocking offending users.
+
+==== External Tools ====
+
+* http://www.theblockbot.com/sign_up/connect.php
+* https://blocktogether.org
+
+== See Also ==
+* [[mute]]
+* [[report abuse]]
+* [[shun]]
+* [[spam]]
+* [[follow]]

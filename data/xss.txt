@@ -1,0 +1,62 @@
+http://indiewebcamp.com/xss
+
+'''<dfn>Cross-site scripting</dfn>''' (abbreviated <abbr>XSS</abbr>) is a [[security]] vulnerability that makes it possible for anyone to inject client-side [[JavaScript]] into web pages using URL query strings, comments, [[webmention]]s, etc.
+
+==XSS from webmentions==
+
+If you have implemented [[webmention]]s on your site, you should be aware of XSS attacks.
+
+I've put up a [https://checkmention.appspot.com little appengine service] that can send dubious webmentions to your site so you can test how the code handles them. The source is [https://github.com/kbsriram/checkmention on github] - please do add additional tests and patches.
+
+[https://github.com/voxpelli/node-webmention-testpinger node-webmention-testpinger] includes XSS test cases too.
+
+==Mitigations==
+
+OWASP has a [https://www.owasp.org/index.php/XSS_%28Cross_Site_Scripting%29_Prevention_Cheat_Sheet good summary] of preventative measures.
+
+===HTML sanitization===
+
+You should use a library that only allows whitelisted HTML tags and CSS properties.
+
+* [[Python]]: [https://github.com/jsocol/bleach bleach]
+* [[Ruby]]: [https://github.com/rgrove/sanitize Sanitize], [https://github.com/flavorjones/loofah Loofah] or [http://api.rubyonrails.org/classes/ActionView/Helpers/SanitizeHelper.html the built-in Rails helper]
+* [[Haskell]]: [https://github.com/yesodweb/haskell-xss-sanitize xss-sanitize] (automatically used by [https://github.com/myfreeweb/microformats2-parser microformats2-parser])
+
+===Additional browser-based mitigation===
+
+You may send a [[Content-Security-Policy]] HTTP header, which works as a whitelist for JavaScript/CSS/iframes/etc. If you have a CSP header that doesn't allow inline scripts and scripts from untrusted domains, the browser won't execute scripts injected via XSS.
+
+==Test cases for handling webmention-related code==
+
+If you prefer, this can be hosted somewhere, and used as the "source" for a webmention. Update the in-reply-to tag as appropriate, and ensure that any markup that you extract into your site remains "safe".
+
+
+'''verify xss tags are removed'''
+
+ <nowiki>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Markup test</title>
+  </head>
+  <body class="h-entry">
+    <div class="p-in-reply-to h-cite">
+          <a class="u-url" rel="in-reply-to" href="https://change.me.to/your/target/note.html">this note</a>
+    </div>
+
+    <p class="p-name entry-title p-summary summary e-content entry-content">
+      This is hosted on paste.debian.net, without <a rel="tag me" href="javascript:alert('xss-c')">a real tag</a>.
+    </p>
+    <a class="note-published u-url"
+       rel="bookmark" href="javascript:alert('xss-b');">
+	  <time class="dt-published published dt-updated updated" datetime="2013-10-13T13:06:41+00:00">13:06 13<sup>th</sup>October 2013</time>
+	</a>
+
+    <p class="p-author author h-card vcard">
+      <img class="u-logo logo u-photo photo" alt="Not an image" src="javascript:alert('xss-a');" />
+	  <a class="p-name fn" href="https://google.com">Not Google</a> 
+	  <a class="u-url url" href="https://google.com">Not Google</a>
+	</p>
+  </body>
+</html>
+ </nowiki>

@@ -1,0 +1,165 @@
+http://indiewebcamp.com/deployment
+
+{{stub}}
+
+'''<dfn>deployment</dfn>''' is the both the act (to <dfn>deploy</dfn>), process, and specific instances (a deployment) of updating (and sometimes [[install]]ing) software on a server, like a web server.
+
+This page is for collecting problem statements about deployment, especially indieweb deployment, both existing solutions and ideas for doing it better, in the hopes of coming up with a set of best practices.
+
+== Problem Statements ==
+* https://twitter.com/dakami/status/266459300480811008 : <blockquote class="twitter-tweet" data-in-reply-to="266457180377600001"><p>@ioerror release management is as much work as writing the code in the first place, and deserves much more respect.</p>&mdash; Dan Kaminsky (@dakami) November 8, 2012</blockquote>
+
+* http://tantek.com/2012/319/t1/release-updates-should-easy-do-revert : <blockquote>agree with @dakami https://twitter.com/dakami/status/266459300480811008. Also, release updates should be easy to apply and easy to revert. </blockquote>
+
+* http://tantek.com/2012/319/t2/distrust-updates-hard-revert-my-device-server-choice : <blockquote> Why I distrust updates: whether iOS or OSS, they're too hard to revert. It's my device/server, it should be my choice. </blockquote>
+
+* http://tantek.com/2012/320/t1/want-mvrm-minimum-viable-release-management :  <blockquote>https://devcenter.heroku.com/articles/multiple-environments too Heroku-specific; 12factor.net too heavyweight. want: MVRM minimum viable release management </blockquote>
+
+* http://indiewebcamp.com/irc/2012-11-15#t1353018966 : <blockquote>real world problems: installing, updating, reverting open source software for an indie web site is currently *too hard* (evidence: Wordpress installs of smart people getting hacked, regularly, to the point where some even revert to Tumblr domain hosting)</blockquote>
+
+== Goals ==
+How do you deploy your software (whatever it is, CMS etc., whatever language(s)) to your indieweb site and update it, revert it etc.?
+
+And how do you do it as efficiently as possible, and as easily / reliably as possible?
+
+* http://indiewebcamp.com/irc/2012-11-15#t1353019030: <blockquote>I want to run my own website, with some open source software behind it, and be able to maintain it *easily*, including doing updates when necessary and I want to, and having the option to easily revert in case such updates break something on my site.</blockquote>
+
+Want: '''<dfn>MVRM</dfn>: minimum viable release management'''
+
+* http://tantek.com/2012/320/t2/indieweb-software-easy-install-update-revert-mvrm : <blockquote>#indieweb software should be easy to install/update/revert portably across web hosting services. cc @maxwellsalz #MVRM <nowiki>[in-reply-to:</nowiki> https://twitter.com/maxwellsalz/status/269234446081875968]</blockquote>
+
+* http://indiewebcamp.com/irc/2012-11-15#t1353019897 : <blockquote>part of the indieweb way has to be maintaining low switching costs, and many switching options</blockquote>
+
+Any solution to the "how do I deploy software to my site" should address how to '''easily*''':
+# install software
+# update software
+# revert software (because updates do have problems)
+# portably across web hosting services (low switching costs)
+
+<nowiki>*</nowiki>Easily meaning each step should not require logging into a terminal and running a bunch of scripts, or having to remember arcane command line commands of whatever tools/scripts/services are popular this year.
+
+== IndieWeb Approaches ==
+Approaches actually used by IndieWeb community members. Please add yours!
+
+=== scp and dated renaming ===
+If your software is a single file, e.g. indieweb.php, you can use the "scp" command as follows.  
+
+This is my current approach with [http://tantek.com/w/Falcon Falcon] (the core code is just one file, falcon.php). - [[User:Tantek.com|Tantek]] 09:35, 3 December 2012 (PST)
+
+Install:
+* scp localfolder/indieweb.php yourserver
+* scp localfolder/.htaccess yourserver
+
+Upgrade:
+* scp yourserver/indieweb.php localfolder/indieweb-YYYY-MM-DD.php 
+** # where YYYY-MM-DD is yesterday's date
+* scp localfolder/indieweb.php yourserver
+
+Revert: (assuming you upgraded using the upgrade steps)
+* scp localfolder/indieweb-YYYY-MM-DD.php yourserver
+** # where YYYY-MM-DD is the most recent dated version before the latest upgrade
+
+Move to another server:
+* copy data files over
+* then same steps as Install.
+
+If changes are needed to the .htaccess file, use the same ISOdated renaming approach to archive the existing version on the server, and then install the new version. Or if simultaneous changes are needed (has yet to happen to me), archive both, then scp both new versions. Clearly this doesn't scale to software with many files.
+
+=== zip and ftp ===
+Zip and ftp can work for a "super simple php template site".
+
+Move to another server:
+* per http://indiewebcamp.com/irc/2012-11-15#t1353019950 [[User:Aaronparecki.com]]:<blockquote>case in point: eran sent me a .zip file of the oauth.net site, I dropped it onto my server and the oauth.net site was moved over in a matter of minutes</blockquote>
+
+To consider in comparison with other approaches: <blockquote>Can your site be 'rolled up' into a single file (.zip, .git, .phar, whatever) and deployed on a new host in under 5 minutes?[http://indiewebcamp.com/irc/2012-11-15#t1353020102]</blockquote>
+
+=== Git based deploy ===
+Git based deploy. Push the version of the code you wish to run to the server as another Git remote.
+
+You can do this on your own server by installing git on your server and pulling from git(hub) directly.
+
+Used by:
+* [[User:Aaronparecki.com]]: http://indiewebcamp.com/irc/2012-11-15#t1353022414
+** Testing before upgrading: "I run a copy of my site locally first so I see everything before I launch it"
+** Upgrade: I either do `git pull` from a shell on the server, but have also set up an [[admin]] page that can do the `git pull` itself from a web interface.
+*** sometimes: "when i'm doing other ad-hoc deploys of other sites I often `cp -R` the folder to a .bak folder so I can quickly revert if needed"
+** Debugging: "if there's an environment difference between my dev setup and production which causes an error, then I either debug live, or if it's going to take < 5 minutes I revert"
+** Revert: check out a previous revision from git, using the hash number, finding a previous hash value in the git history (`git log`). 
+*** if there's a .bak folder as noted in "Upgrade", delete the current deploy folder, then rename the .bak folder to current.
+* [[User:cweiske.de]]
+** Two git remotes: One for the pure code, one for deployment
+** Changes can be pushed in the "pure code" remote without causing a live deployment
+** Pushing code to the deployment remote invokes a post-receive hook that checks the code out to the domain's document root
+** In addition to checking out, an update script is run that updates feeds with the latest posts and renders menus around the blog posts contents
+
+==== Heroku git push ====
+[https://devcenter.heroku.com/articles/multiple-environments Use Heroku with git]
+* '''Fails point 4:''' the Heroku approach(es) binds you to Heroku(-like?) hosting, and is not portable to any random commodity web hosting service.
+** [https://github.com/progrium/dokku dokku] might make this less of an issue
+
+==== Fabric and git ====
+
+[http://www.fabfile.org/ Fabric] is a minimalist command-line tool for making ssh-based deployments easier.
+
+Used by:
+* [[User:kylewm.com]] uses a small fabfile script to commit and push changes from the local machine, git pull on the remote machine, and restart uwsgi
+
+Executing remote commands in a Python virtualenv:
+
+<code><pre>
+33 def restart():
+34     with cd("~/redwind"):
+35         with prefix("source venv/bin/activate"):
+36             run("pip install -r requirements.txt")
+37             run("uwsgi --reload /tmp/redwind.pid")
+38 
+</pre></code>
+
+== Possible Approaches ==
+Other approaches that people know of / have heard about but either there aren't any known indieweb community members using them, or they're used in a "work" context, and not in an indieweb context.
+
+=== Amazon Elastic Beanstalk ===
+Amazon Elastic Beanstalk. For Java applications, Elastic Beanstalk lets you upload from your browser the version you wish to run. To use a previous version, you simply upload an older WAR file.
+* '''Fails point 4.''' Similarly, binds you to Amazon's hosting.
+
+=== Hire a sysadmin ===
+"hire a sysadmin" is not a reasonable answer for the indieweb.[http://indiewebcamp.com/irc/2012-11-15#t1353019098]
+
+=== Git Tags ===
+Variant of Git based deploy.
+
+Used by [[User:Tommorris.org]] "at work":
+* simplest solution for tracking deploys in Git is to use `git tag`[http://indiewebcamp.com/irc/2012-11-15#t1353023854]
+** Note: the tags are one-to-one. so, if you tag commit A with the tag 'production', then later tag commit B with it, it'll be lost from the first one. hence the date-based releases.
+
+Upgrade/deploy:
+* git tag production
+* git tag release-2012-11-15
+** whatever is the current day YYYY-MM-DD
+** To see previous releases, pull up a list of all the tags, and all the releases are there with a date.
+** more than once a day: stick a sequential identifier afterwards, e.g. 2012-11-15-a and 2012-11-15-b etc.
+
+=== Load Balancers ===
+Used by geoloqi production[http://indiewebcamp.com/irc/2012-11-15#t1353023234]
+
+Upgrade:
+* "we spin up a new amazon server for the <nowiki>[upgraded]</nowiki> site and get everything running there, then switch the load balancer over when ready to deploy."
+Revert:
+* "reverting is then a matter of switching the load balancer back"
+
+== Solutions ==
+Solutions should provide at a minimum an explanation of the UI / commands needed to perform the operations noted in the [[deployment#Goals|Goals]] above.
+
+* ...
+
+== Resources ==
+Deployment related resources:
+* [http://en.wikipedia.org/wiki/Rolling_release Rolling release]
+** used by [http://en.wikipedia.org/wiki/Arch_Linux#.22Rolling_releases.22 Arch Linux]
+
+== Articles ==
+Articles about deployment challenges and real world failures.
+* 2014-04-17 Doug Seven: [http://dougseven.com/2014/04/17/knightmare-a-devops-cautionary-tale/ Knightmare: A DevOps Cautionary Tale]
+
+== See Also ==
+* [[install]]

@@ -1,0 +1,165 @@
+http://indiewebcamp.com/original-post-discovery
+
+{{stub}}
+
+'''<dfn>original post discovery</dfn>''' is a [[discovery]] algorithm for starting with a [[POSSE]] copy of a [[post]] and finding the original post.
+
+== Use Cases ==
+=== Reply to original ===
+First, as part of [[comment#Make_a_comment|How to make a comment]], it would be more indieweb-friendly if post authoring implementations:
+* automatically detected when a user is trying to reply to a POSSE'd copy (e.g. a tweet), 
+* auto-discovered the original post, and 
+* linked to the original post instead
+
+In question form:
+* How do I find an original post of a POSSE'd copy that I'm replying to?
+
+=== Thread original posts and POSSE copies ===
+Second, when POSSEing reply posts, it's useful to automatically:
+* markup your reply post with [[in-reply-to]] markup to the original post
+* when POSSEing your reply post to [[Twitter]], set the in-reply-to-status-id to the status-id of the POSSE'd tweet copy of the original post.
+* for more details see: [[comment#POSSE_a_comment|How to POSSE a comment]]
+
+== Algorithm ==
+How to discover an '''[[original post link|original post URL]]''' from a copy of that post at a '''POSSE permalink'''
+
+# retrieve the '''POSSE permalink'''
+# in the h-entry that represents the POSSE copy, look for a link with "u-url" and "u-uid" - use that href as the '''original post URL'''.
+# otherwise look for a rel=canonical link in the POSSE'd copy that links back to an original - use that as the '''original post URL'''.
+# otherwise look for a link with link text of "See Original" in the POSSE'd copy page that links back to an original - use that as the '''original post URL'''.
+# otherwise if a parenthetical [[permashortcitation|permashortlink citation]] is the last thing in the POSSE'd copy content, convert that to a URL, use that as the '''candidate URL'''
+# otherwise if a URL is the last thing in the POSSE'd copy content, use that as the '''candidate URL'''
+# retrieve the '''candidate URL''' and parse it for hyperlinks
+# iterate across hyperlinks with rel=syndication or u-syndication URLs ('''syndication URLs''')
+## if a '''syndication URL''' matches the '''POSSE permalink''', then the '''candidate URL''' is the '''original post URL'''.
+## else if a '''syndication URL''' has the same domain as the '''POSSE permalink'''
+### retrieve the '''syndication URL'''
+### if its redirect destination matches the '''POSSE permalink''', then the '''candidate URL''' is the '''original post URL'''. (implementations may check such URL's redirect destinations one at a time and should stop when they find a match in order to minimize HTTP requests)
+## end if
+# end iteration
+
+A parenthetical permashortlink citation looks something like:
+* (ttk.me t4Pc2) 
+The specific format of a parenthetical permashortlink citation is:
+# literal '('
+# domain name, likely [[short domain name]] (to avoid having Twitter auto-link it, as Twitter auto-links .com .net .org TLDs.
+# literal space ' '
+# id consisting of a-zA-Z0-9
+# literal ')'
+
+Convert a parenthetical permashortlink citation to URL by:
+* start with string "http://"
+* append the domain name from (2) above to the string
+* append a literal slash '/' to the string
+* append the id from (4) above to the string
+* the resulting string is a permashorturl
+
+== Implementations ==
+=== IndieWeb Examples ===
+==== Kartik Prabhu ====
+{{kartikprabhu}} offers a URL with form (and service) for finding the original posts on his site from any of his POSSE copies:
+* https://kartikprabhu.com/original-of
+
+=== Services ===
+* [http://waterpigs.co.uk/services/original-post Original Page Discovery testing tool]
+** some open source: https://gist.github.com/barnabywalters/6380386
+** The /services/original-post?url= endpoint has CORS turned on, and can be used by other sites
+
+* The '''[http://waterpigs.co.uk/extensions/weave Weave]''' browser extension partially implements OPD in javascript
+** Code on [https://github.com/barnabywalters/weave/blob/master/src/common/content.js github], OPD-specific parts will be packaged up separately when they’re more mature
+
+* [[p3k]] implements original post discovery.
+** See demonstration video: http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery
+** Live demo: http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery
+
+* [[Bridgy]] implements original post discovery on silo posts. [https://github.com/snarfed/activitystreams-unofficial/blob/e94d301a97e3a138e661468ff0ddda4ae75260e4/source.py#L173 Here's the code.] It has a couple variations:
+** It returns multiple candidate links instead of one.
+** It doesn't bother looking for microformats2 (etc) markup because the silos don't let you input it.
+
+== Algorithm Notes ==
+Use-cases that were used to add steps to the algorithm
+* '''"syndication URL has the same domain as the POSSE permalink"''' and substeps. From the time of posting of the original post (and its POSSE permalink) to when this algorithm is run on the POSSE permalink, it's possible that the POSSE destination has changed its permalinks in some way. The following two have been seen in practice and thus are handled by this step in the algorithm
+*# '''http/https differences.''' E.g. [[Twitter]] permalinks used to be "http:" but are now (as of 2012+?) canonically "https:". Any implementation that saved POSSE tweet permalinks before that change would likely publish/link to "http:" URLs which require a retrieval of their redirect destination for comparison.
+*# '''change of path.''' [[Silos]] have in the past changed implementation specifics about how their permalinks work, leaving redirects behind for the original paths. Silos may also allow users to alter part of the permalink of a post, e.g. editing the slug, after publishing, and still support the old URL either by tracking all past permalinks for a post, or perhaps by only requiring non-post-slug portions of the permalink for unique retrieval.
+
+== POSSE Post Discovery ==
+{{main|posse-post-discovery}}
+Some prefer not to include permalinks/citations in POSSEd copies for aesthetic (Twitter's length limit) or technical (Instagram's lack of posting API) reasons. Is it possible to do original-post-discovery on a syndicated copy that contains no permalink or citation? [[posse-post-discovery]]. (Spoiler: yes, with [[syndication]] links, described above.)
+
+
+== Brainstorming ==
+
+=== Backlink interpretation ===
+
+Implementing [[Backfeed]] has raised some [https://github.com/snarfed/bridgy/issues/51 additional subtleties] that aren't handled by this algorithm. In particular, [[Bridgy]] generally only backfeeds responses to a POSSE post, not the POSSE post itself, which is effectively a duplicate of the original post.
+
+However, many posts with backlinks aren't POSSE posts, and are worth backfeeding along with their responses. For example, [https://twitter.com/kevinmarks/status/636693654342533120 this tweet] from {{kevinmarks}}:
+
+<blockquote>
+@debcha @quinnnorton there, I fixed it: http://svgur.com/s/1c  - need to use area for that ratio.
+</blockquote>
+
+is a mention, not a POSSE, but it's to one of his domains, and it was posted right after the original svgur.com post, so it's hard to determine that it's a non-POSSE.
+
+Here are some possible heuristics for determining whether a backlink in a silo post is an original post link or not. These heuristics are all useful, but may not be enough for some use cases, e.g. [[Bridgy]]'s high volume backfeed across many users with many different POSSE patterns.
+
+[http://indiewebcamp.com/irc/2015-08-27#t1440707540861 Thanks to {{kevinmarks}} for helping work this out in IRC!]
+
+==== user's domain ====
+
+Is the candidate URL's domain in the silo user's profile, e.g. in the ''Website:'' field? (Ideally as a [[rel=me]] link, if supported by the silo.) If so, the candidate URL is more likely to be an original post URL.
+
+This seems to be fairly consistent in practice, e.g. judging by experience with [[Bridgy]]'s >2k users (as of Sept 2015).
+
+'''Counterexample''': [https://twitter.com/islayblog/status/642608209635708928 this tweet] from Armin Grewe. He has ''many'' web sites and domains, and didn't have <code>islay.org.uk</code> in his Twitter profile. He added it happily, but I expect many users are in a similar situation.
+
+<blockquote>
+Good morning with the larger version of the picture of Loch Drolsay and Glen Drolsay, Isle of Islay http://www.islay.org.uk/2015/09/12/loch-drolsay-and-glen-drolsay-isle-of-islay/
+</blockquote>
+
+[https://github.com/snarfed/bridgy/issues/470 Details in snarfed/bridgy#470].
+
+==== 24hr time window ====
+
+Is the silo post within 24 hrs of the candidate URL published date (per <code>h-entry</code> <code>dt-published</code>)? If so, the candidate URL is more likely to be an original post URL.
+
+'''Counterexample''': [https://plus.google.com/+RyanBarrett/posts/JhfYx7XDJMG This Google+ post] from {{snarfed}} published at 2014-11-15 08:49 is a POSSE of [https://snarfed.org/2014-11-14_thoughts-on-having-a-baby this original post] published at 2014-11-14 07:09, more than 25h beforehand.
+
+==== near the end ====
+
+Is the candidate URL "near" the end of the silo post, e.g. within four characters, or at the end after removing punctuation? If so, the candidate URL is more likely to be an original post URL.
+
+'''Counterexample''': [https://twitter.com/alohastone/status/639771864647135232 this tweet] from alohastone. The <code>goo.gl/fb/KyVKyo</code> link is the original post link, but a hashtag comes after it, so it's not "near" the end.
+
+<blockquote>
+Gebloggt:  Statik Selektah – Beautiful Life (feat. Action Bronson & Joey Bada$$) http://goo.gl/fb/KyVKyo  #musikvideos
+</blockquote>
+
+[https://github.com/acegiak/Semantic-Linkbacks/issues/26 Details in acegiak/Semantic-Linkbacks#26.]
+
+==== edit distance ====
+
+Compare the silo post's text and the original post's name, summary, and/or content, taking prefixes if they're meaningfully longer. (If the silo post has an ellipsis at or near the end, that's a strong hint to use a prefix.) The edit distance should be below a certain threshold, disregarding common differences like @-usernames in silo posts vs human names in original posts (e.g. [https://snarfed.org/2015-08-26_15313 this OP] vs [https://twitter.com/schnarfed/status/636656504662302721 this POSSE]).
+
+'''Counterexample''': [https://twitter.com/schnarfed/status/606627965796032512 this tweet] from {{snarfed}}.
+
+<blockquote>
+I want to let our kid learn from her mistakes, but my knee jerk reaction is always MY BABY IS HURTING! FIX IT! https://snarfed.org/2015-06-04_what-doesnt-kill-my-baby
+</blockquote>
+
+The text in the tweet doesn't show up anywhere in the original post, a longer article that starts with:
+
+<blockquote>
+Brooke used to have a painful head-butting habit. She’d be happily playing, then all of a sudden, she’d slam her head into my cheek…or the floor, or a toy, or anything else in range.
+</blockquote>
+
+== See Also ==
+* [[posse-post-discovery]]
+* [[discovery]]
+* [[original post link]]
+* [[posts]]
+* [[comments]]
+* [[POSSE]]
+* [[Bridgy]]
+* [[permashortlink]]
+* [[permashortcitation]]

@@ -1,0 +1,115 @@
+http://indiewebcamp.com/2013/HTML_is_your_Data
+
+'''<dfn>HTML is your data</dfn>''' was a brainstorming session during IndieWebCamp [[2013]].
+
+Notes archived from https://etherpad.mozilla.org/indiewebcamp-htmldata — probably need cleaning --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 10:31, 24 June 2013 (PDT)
+
+----
+
+HTML is your data
+
+2013-06-22 17:00-17:15
+#htmldata
+#indiewebcamp
+
+* Use cases for web data
+* What HTML can we use for them
+* What are the issues we run into?
+
+'''Use-case''': Feeds (what used to be RSS)
+* HTML: h-entry (individual posts, home pages as feeds)
+** Issue: last-modified. with RSS/Atom you can send if-modified-since and get back a 304 with no body, and not have to parse, or do any other tests
+
+'''Use-case''': authentication discovery
+* RelMeAuth / IndieAuth rel-me to an OAuth provider profile URL
+** Issue: providers dropping rel-me support (FB), or wrapping with their own URLs (Twitter tco)
+
+'''Use-case''': Read-it-later -> Pocket / Instapaper / Readability
+* HTML: hAtom / hNews - consumed by Readability
+** http://www.readability.com/developers/guidelines
+
+'''Use-case''': social-graph - identity clustering
+* rel-me symmetric link graph - supported by identengine.com (consumes)
+
+'''Use-case''': n-factor-auth
+* RelMeAuth with requiring multiple OAuth providers
+
+'''Use-case''': home page security (Aside: HTTPS vs HTTP)
+* https on your personal domain - WillNorris.com does this, is all https
+** SSL with SNI (extension to TLS which allows the client to specify which hostname they're trying to connect to, so the server can provide a certificate custom to that hostname). This is the only way we're going to have tons of secure personal sites on shared hosting (same IP address).
+*** cheap web hosting is typically shared hosting (share IP address with strangers)
+*** or you host multiple people on your domain, e.g. given.familyname.org
+*** issue: SNI doesn't work on <= IE8 or IE9/XP. Need IE9+ not on XP.
+*** issue: lack of support in client libraries, e.g. Haskell library only recently added support for SNI. Janrain hasn't updated their Haskell library yet. So can't log-in using any Janrain OpenID service.
+* support document for Persona has to be on https
+
+'''Use-case''': scientific paper citations
+* h-cite: http://microformats.org/wiki/h-cite
+
+'''Use-case''': streams of physical measurement data from new devices
+* trend: accept a REST API, and provide JSON
+* opportunity: this is how you should be providing a stream of data from devices
+* microformats2 library available for converting HTML with microformats to canonical JSON representation
+** https://github.com/indieweb/php-mf2
+
+
+Question:
+* How to return JSON version of your web page?
+** Example: add ".json" to any URL on aaronparecki.com
+* What about HTTP ACCEPT header? application/json - CONNEG
+**Do both?
+
+'''Use-case''': email address based discovery
+* from alice@example.com ->
+* WF: example.com/.well-known/webfinger/?resource=acct:alice@example.com
+** that returns JSON
+*** what does this tell you?
+*** rel=feed - URL
+*** rel=openid.server - URL
+** but it could return HTML+microformats
+* could eliminate with:
+** just put the rel values on example.com
+* could eliminate the well known URI with a new rel value
+** rel="rels" href="rels.html"
+*** rels.html has all the same rel/URL pairs as your WebFinger JSON
+
+'''Use-case''': backups from web applications
+
+'''Use-case''': exports from web sites/silos/application
+Examples:
+* Google Takeout - G+ export has HTML+microformats
+* Facebook export has HTML+microformats
+* Twitter archive has JSON that it renders clientside HTML+microformats
+
+'''Use-case''': import an export into your own site
+* i.e. transitioning from sharecropping to owningyourdata
+
+'''Use-case''': outlines
+* HTML: XOXO
+
+'''Use-case''': rating information
+* HTML: h-review
+
+'''Use-case''': self-tracking
+* http://aaronparecki.com/presentations/2013/06/19/1/low-friction-personal-data-collection
+** has markup examples of his own self-tracking data
+** sleep example: http://aaronparecki.com/metrics/2013/06/22/061515/
+** sleep example: http://aaronparecki.com/metrics/2013/06/22/061515/.json
+
+'''Use-case''': one endpoint for robot clients and human clients
+* ACCEPT: mime multipart
+** what would a browser do if you sent it a MIME multipart response?
+
+General Issues
+* Built-in HTML+microformats2 parsing?
+** '''PHP''' - use [https://github.com/indieweb/php-mf2 php-mf2] library
+** '''Ruby''' - use [https://github.com/G5/microformats2 microformats2 gem]
+** '''Node/JS''' - [http://microformat2-node.jit.su microformats.node][https://github.com/glennjones/microformat-node on GitHub]
+** '''Python''' - [http://bleeds.info Randall Leeds] - volunteers to write one!
+
+* Parsing speed at scale of HTML data
+** use a proxy like pin13.net
+
+* "But what if I don't want to display the data on my web page?"
+
+[[Category:2013]]

@@ -1,0 +1,71 @@
+http://indiewebcamp.com/wiki/backup
+
+You can help IndieWebCamp by downloading and keeping a backup of this wiki!
+
+As of 2014-05-10 the wiki and images are about 70mb.
+
+* Download [http://www.bittorrent.com/sync Bittorrent Sync]
+* Create a folder on your computer or server to store the files
+* Add a folder to btsync using this read-only secret: <code>BB3SRZEPU6B4EUMMD5XDWZBY2RDZSN33Q</code>
+* '''''(Optional)''''' Set the "Restore modified files to original version" option to true in the sync options window to revert any accidental local changes to the wiki back to the correct version.
+* '''''(Optional)''''' Set the "Search DHT network" option to true to enable trackerless distributed hash table lookups of peers.
+
+After adding the folder, your btsync client will begin downloading all the files!
+
+[[User:Rascul.io|rascul]] has a mirror at [http://indiewiki.rascul.io http://indiewiki.rascul.io]. Easy to mirror it with wget or rsync:
+: <code>wget -rm <nowiki>http://indiewiki.rascul.io</nowiki></code>
+: <code>rsync -avz rsync://indiewiki.rascul.io:/indiewiki .</code>
+
+[[User:kbsriram.com|KB]] has placed a [https://github.com/kbsriram/indiewebcamp-wiki-archive baseline archive at github] as of May11, 2014 and will update it ad-hoc. Scripts/cronjobs (being tested on a laptop that perambulates between cafes) is at https://gist.github.com/kbsriram/0ae713dfa46f3676e2b5
+
+== Archive Methods ==
+
+=== rsync ===
+<code>rsync -avz --delete --stats rsync://indieweb@indiewebcamp.com/indiewebcamp_wiki indiewebcamp</code>
+
+<table><tr><td width="50%">
+==== Pros ====
+* Supports incremental changes
+* Will properly delete local files when the remote files are deleted
+</td><td>
+==== Cons ====
+* Requires running a separate publicly-accessible daemon on the server
+</td></tr></table>
+
+----
+=== btsync ===
+<table><tr><td width="50%">
+==== Pros ====
+* Keeps archive copies in sync nearly instantly (updates every 5 minutes)
+</td><td>
+
+==== Cons ====
+* Proprietary sync protocol
+</td></tr></table>
+
+----
+=== wget ===
+<code>wget --execute robots=off --no-parent --wait=1 --mirror https://indiewebcamp.com/wiki/backup/data/</code>
+<table><tr><td width="50%">
+==== Pros ====
+* Works over HTTP
+* Supports incremental changes
+</td><td>
+==== Cons ====
+* Local files won't be deleted when deleted on the server
+</td></tr></table>
+
+----
+=== git ===
+<table><tr><td width="50%">
+==== Pros ====
+* Works over HTTP
+* Supports incremental additions and deletions
+* Git repo stores full history
+</td><td>
+==== Cons ====
+* Requires the server to take another step after exporting the wiki to text files, potentially more prone to errors
+</td></tr></table>
+
+
+__NOTOC__

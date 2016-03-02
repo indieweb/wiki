@@ -1,0 +1,199 @@
+http://indiewebcamp.com/edit
+
+{{stub}}
+
+An '''<dfn>edit</dfn>''' (AKA <dfn>diff</dfn>, <dfn>change</dfn>) is a special type of [[reply]] that indicates a set of suggested changes to the [[post]] it is replying to. A [[collection]] of (presumably related) suggested edits in open source is often called a <dfn>patch</dfn> or <dfn>pull request</dfn>.
+
+== Why ==
+Reasons why you should publish edit posts, and support having a [[reader]] show them. Each of these are use-cases of their own merit.
+
+=== Own Your Edits ===
+'''Why post your own edits'''
+
+E.g. edit a Wikipedia page by posting an edit on your own site, and notifying the original.
+
+# Find a [[Wikipedia]] page you want to edit
+# Make a local copy on your own site
+# Edit it on your own site
+# Publish an edit post on your own site
+# Notify the original page about your edit response by sending a [[webmention]] to [[Wikipedia]].
+# Wikipedia verifies the webmention and accepts the edit as being authored by your personal domain, like the User: domain accounts we already have here on IndieWebCamp (e.g. [[User:Tantek.com]]).
+
+This is very similar to the existing git model of making a pull request from your own fork of a repository, and having that pull request automatically accepted because a repo policy.
+
+==== Federated IndieWebCamp Edits ====
+While the above user scenario with Wikipedia is <em>hypothetical</em> and would require Wikipedia and thus MediaWiki to support receiving webmentions from edit posts, and understanding IndieWeb [[identity]], there is something we can do first to prove it can work.
+
+We can implement this scenario on IndieWebCamp's MediaWiki installation first:
+
+# Find a IndieWebCamp.com page you want to edit
+# Make a local copy on your own site of the wiki source, and make a note of the permalink of specific version of the page (and section if you're only editing that)
+# Edit the wiki source on your own site
+# Publish an edit post on your own site with
+#* the wiki source as <code>e-content</code>
+#** (might have to use <code>p-content</code> with anything resembling markup escaped instead of <code>e-content</code> so the edit post doesn't look weird on your own site. so more like a special [[note]] with whitespace preserved than a special [[article]])
+#* a <code>u-edit-of</code> hyperlink to the version of the page you're editing.
+# Notify the original page about your edit response by sending a [[webmention]] to IndieWebCamp.com (which already supports receiving webmentions, just doesn't do anything with them other than share with Loqi thus to IRC).
+# IndieWebCamp.com verifies the webmention and accepts the edit as being authored by your personal domain, like the User: domain accounts we already have here on IndieWebCamp
+
+And presto, you can edit IndieWebCamp.com without ever logging into it.
+
+=== Quick Typos Fixes From Friends ===
+'''Why support receiving edits from others to your posts?'''
+
+If someone you know and trust to edit your posts sends you an edit reply to your post, it would be nice to be able to automatically (or semi-automatically with a single "Accept" button click) to have those edits incorporated into your post, and somehow cite the edit post as having contributed.
+
+This would require that the edit operations themselves (insertions, deletions, replacements) be explicitly marked up in a way that was automatically machine processable.
+
+=== View Edits From Elsewhere ===
+'''Why show edit posts in your reader?'''
+
+By implementing the consumption and display of edit posts in your [[reader]], you can view edits made by your account on another site, or edits to a particular page, or even all edits to a wiki.
+
+E.g. if third party wiki [[commons]] (like Wikipedia) supported marking up their edit permalinks as edit posts, and in their streams of edits as well, it would be possible to follow/subscribe to them in an indie [[reader]] and see your edits on another site show up in the stream of posts in your reader.
+
+=== Lightweight Pull Request ===
+'''Why publish edits you would otherwise publish elsewhere?'''
+
+The idea was [http://indiewebcamp.com/irc/2014-11-17#t1416259705874 discussed] regarding the posting of git/code diffs in a [[post]] as a way to create a lightweight pull request.  The post could contain [[action]] tags to trigger some kind of diff handler to open and inspect diff in the correct repo using git.
+
+A Pull Request could be a published as:
+* [[collection]] of [[edit]] posts.
+
+== How ==
+We haven't quite figured out the "how" of a good way to markup edit posts.
+
+A good start seems to be to write an "edit" like a [[reply]], but with <code>class="u-edit-of"</code> instead of <code>class="u-in-reply-to"</code>
+
+The details of how to markup the diffs (deletions, insertions, replacements) of an edit are still being figured out.
+
+== IndieWeb Examples ==
+=== Kyle Mahan ===
+{{kylewm}} has posted an edit post on 2015-02-02:
+* https://kylewm.com/2015/02/edit-of-a-href-http-tantek-com-2015-033-t1-disable which uses:
+** "u-edit-of" on a link to the original
+** "e-diff" - presumably instead of "e-content"
+** other classes like "gu" (range of edit?), "gd" (deletion), "gi" (insertion)
+
+== Open Source Examples ==
+=== MediaWiki ===
+[[MediaWiki]], e.g. like on this wiki, has permalinks of individual edits:
+* http://indiewebcamp.com/wiki/index.php?title=edit&diff=prev&oldid=12023
+As well multiple places where streams of edit summaries are displayed:
+* Changes across the whole wiki: [[Special:RecentChanges]]
+* History of a particular page: http://indiewebcamp.com/wiki/index.php?title=edit&action=history
+* Contributions from a user: http://indiewebcamp.com/Special:Contributions/Tantek.com
+
+== Commons Examples ==
+=== Wikipedia ===
+[[Wikipedia]], an openly licensed [[commons]], being the biggest deployment of [[MediaWiki]], effectively has permalinks to <dfn>diffs</dfn> which show all the changes made in an edit. E.g.:
+* https://en.wikipedia.org/w/index.php?title=Webmention&diff=615221236&oldid=615219824
+
+== Silo Examples ==
+=== Facebook ===
+On [[Facebook]], edit posts can be some of the most popular posts, e.g. 
+* updated profile photo (perhaps most common)
+* changed relationship status to engaged to (person name)
+* changed relationship status to married to (person name)
+(specific permalinks needed)
+
+In each of these cases, such posts typically generate numerous [[responses]] (e.g. [[likes]] and [[comments]]), far more than the average on that person's other posts.
+
+Facebook also allows others to suggest changes to your profiles e.g.:
+* Suggested your city is (city name)
+
+=== GitHub ===
+[[GitHub]], a [[silo]], has permalinks to <dfn>pull requests</dfn> which are a collection of commits, or edit posts. E.g.:
+* https://github.com/kevinmarks/kevin-marks.com/pull/1/files
+as well as permalinks to individual commits (edit posts)
+* https://github.com/aaronpk/p3k-core/commit/78aea731f5bb2564cffe155c9ac9591ccc43cef4
+
+=== ThinkUp ===
+[[ThinkUp]], a tool that monitors [[twitter]] and [[facebook]] posts edits to people's biographies as coloured diffs. E.g.:
+* https://kevinmarks.thinkup.com/?u=kevinmarks&n=twitter&d=2015-05-25&s=bio_tracker
+* https://kevinmarks.thinkup.com/?u=kevinmarks&n=twitter&d=2015-05-11&s=bio_tracker
+[[File:thinkupeditexample.png]]
+
+== Brainstorming ==
+=== Edit a specific property ===
+Thoughts on how to publish an edit of a specific property.
+
+Below is an example of updating a photo property of an h-card as discussed [http://indiewebcamp.com/irc/2015-05-27#t1432750574351 on IRC 2015-05-27] and [https://gist.github.com/aaronpk/f598be72d7bad1a04eb5 iterated on github].
+
+Consumers of this post must act only on non-empty property values on the object embedded on the "p-update" property.
+
+<pre><div class="h-entry">
+  <a href="http://aaronparecki.com" class="u-author h-card">Aaron Parecki</a> updated 
+  <a href="http://aaronparecki.com" class="u-edit-of">his</a> profile photo
+  <div class="p-update h-card">
+    <img src="http://example.com/photo2.jpg" class="u-photo">
+  </div>
+  at <time datetime="2015-05-27T13:37-0700">13:37</time>
+</div></pre>
+
+<pre>{
+  "items": [
+    {
+      "type": [
+        "h-entry"
+      ],
+      "properties": {
+        "author": [
+          {
+            "type": [
+              "h-card"
+            ],
+            "properties": {
+              "name": [
+                "Aaron Parecki"
+              ],
+              "url": [
+                "http:\/\/aaronparecki.com"
+              ]
+            },
+            "value": "Aaron Parecki"
+          }
+        ],
+        "update": [
+          {
+            "type": [
+              "h-card"
+            ],
+            "properties": {
+              "photo": [
+                "http:\/\/example.com\/photo2.jpg"
+              ],
+              "name": [
+                ""
+              ]
+            },
+            "value": "http:\/\/example.com\/photo2.jpg"
+          }
+        ],
+        "edit-of": [
+          "http:\/\/aaronparecki.com"
+        ],
+        "name": [
+          "Aaron Parecki\r\nupdated his profile photo\r\n \r\nat 13:37"
+        ]
+      }
+    }
+  ],
+  "rels": {
+    
+  }
+}</pre>
+
+
+Similar to <code>p-update</code>
+* <code>p-delete</code> with embedded object with a property, or specific value of a property, indicating deletion granularity
+* <code>p-add</code> with embedded object with property with a value to add
+
+Related:
+* https://www.w3.org/wiki/Socialwg/Social_API/User_stories#User_profile_management
+
+== See Also ==
+* [[Special:RecentChanges]]
+* [[posts]]
+* [[wiki]]
+* [[wiki-page]]

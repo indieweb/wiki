@@ -1,0 +1,90 @@
+http://indiewebcamp.com/posts-elsewhere
+
+{{stub}}
+
+Several IndieWeb blogs have sections on their [[posts]] permalink pages that link to [[POSSE]] syndicated versions of their posts on [[silos]], and sometimes on commentary silos like Hacker News. This page here to document examples of such "posts elsewhere" user interfaces and suggested markup.
+
+__TOC__
+
+== Why ==
+See: [[syndication-link-use-cases]]
+
+== How to Markup ==
+On links to POSSE syndicated copies inside the h-entry of the original post:
+* '''<code>class=u-syndication</code>'''
+
+(stub, should be expanded to a full example)
+
+== IndieWeb Examples ==
+Indieweb sites where all (or most?) notes are automatically published with links to syndicated copies:
+=== Aaron Parecki ===
+{{aaronpk}} on '''aaronparecki.com''', e.g. 
+* http://aaronparecki.com/notes/2013/03/12/5/sxsw-sterling13 has a section: <blockquote>Share & Respond <br><ul><li>Reply on Twitter</li><li>Reply on App.net</li></ul></blockquote> where each of the list items links to the syndicated copy of the note on those silos, with <code>rel="syndication"</code>.
+=== Tantek ===
+{{t}} on '''tantek.com''' ([[notes]] since 2013-174), e.g. 
+* http://tantek.com/2013/174/t4/view-conversation-rel-syndication-posse-indiewebcamp and 
+* https://twitter.com/t/status/348702302288355328 
+have links to their POSSE'd tweets with: <ul><li>View on Twitter</li><li>View Conversation on Twitter</li></ul> respectively with rel="syndication".
+=== Tom Morris ===
+{{tommorris}} on '''tommorris.org''', e.g. 
+* http://tommorris.org/posts/8197 has a section: <blockquote>This post is syndicated to:<ol><li>Twitter</li><li>App.net</li></ol></blockquote> where each of the list items links to the syndicated copy of the note on those silos, with <code>rel="syndication"</code>.
+=== Barnaby Walters ===
+{{barnabywalters}} on '''waterpigs.co.uk''', e.g. 
+* http://waterpigs.co.uk/notes/1114/ has a section: <blockquote>Also Posted On: twitter.com</blockquote> where "twitter.com" links to the syndicated copy of the note on Twitter.
+
+That section is automatically generated from all the hostnames of URLs in the downstreamDuplicates list on that note (tack .json onto the end of the URL to see it ‘raw’), so on the occasions I post to facebook that domain is added too --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 02:41, 19 March 2013 (PDT)
+* The links to the syndicated copies have this markup on them:
+** <code>class="u-as-downstream-duplicate u-alternate"</code>
+=== Ben Werdmuller ===
+{{benwerd}} on '''werd.io''' (since 2013-174) [[notes]], e.g. 
+* http://werd.io/view/51c76e9fbed7de8a43b0aee3 has links to POSSE'd copies as: <blockquote>Also on: [twitter] [facebook]</blockquote> where the [] text are links to the copies on those [[silos]] with rel="syndication". 
+
+=== Kyle Mahan ===
+{{kylewm}} on '''kylewm.com''' (since at least 2015-08-04) [[notes]], e.g.
+* https://kylewm.com/2015/08/updated-woodwind-to-preselect-syndication-targets
+Shows a simple [[Twitter]] bird icon that is linked to the tweet POSSE copy.
+
+=== gRegor Morrill ===
+{{gRegor}} on gregorlove.com since 2014-06-25
+* http://gregorlove.com/2014/06/this-is-my-first-note/
+* <blockquote>Also on: example.com</blockquote> where ''example.com'' links to the syndicated copy.
+** The majority link to twitter.com, but others have also syndicated to facebook.com or thisismyjam.com
+
+=== Manual ===
+Indieweb sites where some (a few?) notes are manually published with links to syndicated copies:
+* '''tantek.com''', e.g. blog posts / [[articles]] like http://tantek.com/2013/073/b1/silos-vs-open-social-web has a section: <blockquote>[http://tantek.com/2013/073/b1/silos-vs-open-social-web#silos-vs-open-social-web-elsewhere Elsewhere]<br><ul><li>Twitter</li><li>Google+</li><li>Hacker News</li></ul></blockquote> where each of the list items links to a syndication of the blog post title and permalink on those silos. 
+** Update 2013-077: I'm considering changing the heading of this section from "Elsewhere" to "Syndication" which seems like the right use of the word in the more general sense as well - you can catch this episode also as syndicated on the following networks. - [[User:Tantek.com|Tantek]] 14:51, 18 March 2013 (PDT)
+** Update 2013-099: I'm keeping "Elsewhere" for now at least on this post as it's more general, and covers all the items in the list, whereas only the first two are actually intentional syndications by the author. - [[User:Tantek.com|Tantek]] 01:26, 10 April 2013 (PDT)
+** the links to the syndicated copies (Twitter, Google+) have this markup on them:
+*** <code>rel="syndication" class="u-syndication"</code>
+* ...
+
+== Brainstorming ==
+Some past analysis / experiments:
+
+When linking to POSSE syndicated copies of posts, we should mark up those links so they can be automatically discovered. This is useful for linking up POSSE'd copies of [[comment#Make_a_comment|comment posts]]. 
+
+Existing implementations on links to POSSE copies of posts:
+* Waterpigs.co.uk uses <code>class="u-as-downstream-duplicate u-alternate"</code>
+* Tantek.com uses <code>rel="syndication" class="u-syndication"</code>
+* aaronparecki.com uses <code>rel="syndication"</code>
+
+Proposals:
+* '''<code>[http://microformats.org/wiki/rel-syndication rel=syndication]</code>''' - indicates that the destination of the link is a syndication or a syndicated copy of the source of the link. While a syndicated copy may resemble an "alternate" (i.e. <code>rel="alternate"</code>), there is sufficient potential for inferiority (reliability, TOS, content abbreviation) in the syndicated copy that it should be explicitly indicated. Also, "syndication" implies that the author of the post deliberately intended for their post to be copied to the syndicated destination. The converse is of course the existing [[rel-canonical]] which could be used to link from a copy of a post back to the original.
+* '''<code>class=u-syndication</code>''' - similar semantic, but scoped to being from the immediately enclosing [[h-entry]] rather than the page, and thus can be present in more contexts than the rel value. It makes sense to use both on post permalink pages.
+
+== Elsewhere of this Translation ==
+'''Elsewhere of this Translation''' - a list of links to [[POSSE]] syndicated copies of a post which is a translation of another post.
+
+E.g. in French: "cette traduction ailleurs"
+
+Examples:
+* Cette traduction ailleurs : section in [http://christopheducamp.com/blog/le-premier-fil-de-discussion-federe-de-commentaires-indieweb#cette-traduction-ailleurs Le Premier Fil de Discussion Fédéré de Commentaires #Indieweb] ...
+
+== See Also ==
+* [[elsewhere]]
+* [[posts]]
+* [[comments]]
+* [[identity-elsewhere]]
+* [[syndication-link-use-cases]]
+* [[rel-syndication]]

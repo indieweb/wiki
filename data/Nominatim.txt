@@ -1,0 +1,33 @@
+http://indiewebcamp.com/Nominatim
+
+{{stub}}
+
+Nominatim ([http://nominatim.openstreetmap.org/ UI], [https://wiki.openstreetmap.org/wiki/Nominatim documentation] is a piece of open source software and a hosted instance based on [[OpenStreetMap]] data for geocoding and reverse geocoding, i.e. deriving coordinates from a physical address or vice versa.
+
+It is a useful service for implementing [[location]]-aware applications.
+
+'''IndieWebCamp Attendees using Nominatim'''
+* [[User:Tommorris.org|Tom Morris]]
+* [[User:WaterPigs.co.uk|Barnaby Walters]] to go from lat/long data to address data in [[notes]] with location data/“checkins”
+* …
+
+=== How to derive [[microformats2]] data from Nominatim responses ===
+
+Given response <var>data</var> from Nominatim:
+* let <var>adr</var> be the value of the <code>address</code> key in <var>data</var>
+* derive the following microformats2 h-adr/h-geo/h-card properties from <var>adr</var>:
+** '''street-address''' from <var>adr.road</var> or null
+** '''extended-address''' from <var>adr.suburb</var> or null
+** '''locality''' from <var>adr.hamlet</var> or <var>adr.village</var> or <var>adr.town</var> or <var>adr.city</var> or null
+** '''country-name''' from <var>adr.country</var> or null
+** '''postal-code''' from <var>adr.postcode</var> or null
+** '''country-code''' from <var>adr.country_code</var> or null
+** if <var>adr.country_code</var> is 'us':
+*** derive '''region''' from <var>adr.state</var> or <var>adr.county</var>
+*** otherwise: derive '''region''' from <var>adr.county</var> or <var>adr.state</var>
+
+== See Also ==
+* [[location]]
+* [[checkin]]
+* [[OpenStreetMap]]
+* [[h-adr]]

@@ -1,0 +1,38 @@
+http://indiewebcamp.com/2013/Hollywood/Persistent_Location_Tracking
+
+=== People ===
+* http://aaronparecki.com
+* http://rkn.la
+
+=== Code ===
+https://github.com/esripdx/Offline-Logger-iOS
+
+This app logs locations and step counts from an iOS 7 device, and sends it periodically via a POST request to a URL you define.
+
+A simple backend for this should accomplish the following:
+
+* Store the location and timestamp (and any other associated values like accuracy and speed)
+* Query by timestamp
+* Query by date range
+* Query by location
+* Location data should be returned with: latitude, longitude, timezone, locality, region and country
+
+Looking up the timezone for a location is relatively easy. See [https://github.com/Esri/Terraformer/tree/master/examples/timezone the timezone example of Terraformer] for a Node.js implementation, and [https://github.com/aaronpk/Timezone-API a PHP implementation].
+
+Unfortunately, building a reverse geocoder to convert latitude/longitude to a city/state/country is not trivial. It is definitely possible to run your own service for this. See [http://wiki.openstreetmap.org/wiki/Nominatim/Installation OpenStreeMap's Nominatim]. There are also a number of services available for doing reverse geocode queries, all with slightly different TOS and pricing.
+
+* http://www.factual.com/products/geopulse-context
+* http://www.mapquestapi.com/geocoding/#reverse
+* http://geocoder.ca/?premium_api=1
+* http://resources.arcgis.com/en/help/arcgis-rest-api/index.html#//02r30000000n000000
+* http://blog.programmableweb.com/2012/06/21/7-free-geocoding-apis-google-bing-yahoo-and-mapquest/
+
+
+=== Authentication ===
+
+Currently only token-based authentication is possible by including a token in the config URL. rknLA is working on adding HMAC auth to the app so that if there is a secret provided in the setup URL, it will sign the requests so it can be verified on the server without requiring HTTPS.
+
+Pull request adding HMAC support: https://github.com/esripdx/Offline-Logger-iOS/pull/2
+
+
+[[Category:2013/Hollywood]]

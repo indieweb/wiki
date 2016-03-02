@@ -1,0 +1,95 @@
+http://indiewebcamp.com/syndication_formats-fr
+
+Cette page migrera sur [[iwc:syndication formats-fr]]
+
+Le contenu hébergé sous votre domaine devrait être présenté comme marqué sémantiquement avec HTML+microformats. Si vous n'avez pas encore fait ça, faites-le maintenant !
+
+Voici un exemple de note marquée densément  
+
+http://public.waterpigs.co.uk/images/syndication/semantic-microblog.png
+
+et voici le code 
+
+<code><pre>
+<article class="note hentry h-entry">
+ <p class="author h-card">
+  <img class="u-logo u-photo" alt="Barnaby Walters" src="/img/photos/meRaglan100.jpg" />
+  <a class="p-name" href="http://waterpigs.co.uk">Barnaby Walters</a>
+  <a class="u-url" href="http://waterpigs.co.uk">waterpigs.co.uk</a>
+ </p>
+ <div class="entry-content p-name p-entry-content p-entry-summary">
+  <p>
+   <a class="h-card" rel="acquaintence met" href="http://adactio.com">Jeremy Keith</a> might be an idea to update <a class="auto-link" href="http://adactio.com/about/accessibility/">http://adactio.com/about/accessibility/</a>, Safari no longer uses <kbd>alt</kbd> for accesskeys
+  </p>
+ </div>
+ <small class="muted"><time class="published updated dt-published dt-updated" datetime="2012-09-22 18:42:16">22<sup>nd</sup> of September 2012 at 18:42:16</time></small>
+</article>
+</pre></code>
+
+Une fois que vous avez bien marqué votre data sous votre domaine, vous devriez la rendre disponible sous forme de [[feeds-fr|flux]], et vous voudrez probablement la [[syndication-models-fr|syndiquer]] vers des services tiers.
+
+Les services tiers obligeront inéluctablement à ce que votre data soit de moins bonne qualité que sous votre propre domaine (limite de longueur, pas de microformats, pas de marquage).  Par exemple, voici une représentation de l'exemple ci-dessus tel qu'il apparaît sur twitter :
+
+http://public.waterpigs.co.uk/images/syndication/nonsemantic-microblog.png
+
+Aucun microformat sur la version web, un lien tronqué, des références utilisateur spécifiques-au-réseau et pas de marquage <code>&lt;kbd&gt;</code> sur le alt.
+
+== Mettre en Forme le Contenu pour la Syndication ==
+
+=== Flux ===
+
+Quand vous syndiquez du contenu en utilisant des flux (atom, activitystrea.ms), utilisez de préférence le même / similaire marquage que vous faites sur le web. Ceci présente les avantages suivants : 
+
+* Les lecteurs de flux idiots reçoivent encore plein de liens utiles, images comme des tags, des embarquements de youtube qui fonctionnent etc.
+* Les lecteurs de flux intelligents reçoivent un paquet de data utiles, par ex. 
+
+=== Twitter ===
+
+Au moment de syndiquer du contenu vers Twitter, gardez à l'esprit ce qui suit : 
+
+* Non seulement la limite de 140 car. mais vous pourriez vouloir autoriser à ce que les caractères supplémentaires soient ajoutés au moment de retweeter
+* Aucun HTML n'est affiché, mais la plupart des clients analyseront automatiquement les liens images vers des images, les liens vidéo vers des lecteurs vidéo 
+* les #tags seront analysés en URLs tags spécifiques-à-twitter
+* les @noms seront analysés en références utilisateur spécifiques-à-twitter
+
+'''Détails Implémentation'''
+
+* J'écris mes notes en utilisant la mycro-syntaxe tweet, envoie la copie brute à twitter et rend la microsyntaxe dans des formats plus utiles (par ex. @nom -> <code>.h-card</code>, #tag vers <code>rel="tag"</code> url) --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 12:26, 22 September 2012 (PDT)
+
+== Troncage et Rétroliens ==
+
+La mise en forme exacte des rétroliens (voir [[POSSE-fr|POSSE]]) est variée par nature. L'utilisateur devrait pouvoir immédiatement discerner s'il y a ou non du contenu supplémentaire à voir s'il clique (cliquer pour voir du contenu dupliqué, pas amplifié est un [http://tantek.com/2011/010/b1/owning-your-data problème connu d'ergonomie].
+
+=== Syndiquer des Notes (AKA tweets) ===
+
+Si le contenu doit être tronqué pour la syndication, ajouter une ellipse et l'URL pour le reste du contenu, par ex. :
+
+<blockquote>Dear #ireality #ireality2012 speakers, what to do about those trying to revert to the past? eg undo teaching ... http://ttk.me/t4Kp1 </blockquote>
+
+Si l'ajout du permalien ''n'oblige pas''' à ce que le contenu soit tronqué, mettez-le entre parenthèses, par ex : 
+
+<blockquote>Built and released today: ~ THE TRUNCENATOR ~ github.com/indieweb/php-truncenator #indieweb (waterpigs.co.uk/notes/356)</blockquote>
+
+Une variante à cela est d'utiliser des URLs raccourcis à la Whistle et de séparer le domaine du chemin avec un espace, par ex. :
+
+<blockquote>If Twitter is for posting updates, why do "Updates from Twitter" use email? <nowiki>http://i.qkme.me/3r3ove.jpg</nowiki>  #philosoraptor (ttk.me t4LA1)</blockquote>
+
+L'avantage à cela est que Twitter n'emballe pas ça dans une URL t.co, la rendant plus facile à retrouver pour l'utilisateur <s>si</s> quand t.co tombe par terre. Aussi, elle fait 14 caractères de long, laissant 6 caractères en plus que vous devriez avoir avec une URL t.co de 20 caractères (qui ne pourra que probablement augmenter)
+
+=== Syndiquer des billets de blog ===
+
+Il existe un bon paquet de méthodes différentes à utiliser pour indiquer un billet de blog. La pus commune est le modèle Titre-deux points-lien, par ex. :
+
+<blockquote>I dream of BBSes: http://www.onebigfluke.com/2012/09/i-dream-of-bbses.html</blockquote>
+
+=== Les Personnes mettent en forme les RétroLiens comme Ceci ===
+
+* [[User:aaronparecki.com|Aaron Parecki]] (par ex. : [https://twitter.com/aaronpk/status/253697624283152384 note amplifiée] [https://twitter.com/aaronpk/status/253691505905127424 note répétée] [https://twitter.com/aaronpk/status/238664902485630978 billet de blog])
+* [[User:waterpigs.co.uk|Barnaby Walters]] (par ex : [https://twitter.com/BarnabyWalters/status/253915109867548672 note amplifiée][https://twitter.com/BarnabyWalters/status/253926123266789377 note répétée] [https://twitter.com/BarnabyWalters/status/222759094216425474 blog post])
+* [http://www.onebigfluke.com/ Brett Slatkin] (par ex.: [https://twitter.com/haxor/status/245607344409567232 billet de blog])
+* [[User:tantek.com|Tantek Çelik]] (par ex. : [https://twitter.com/t/status/243701671585271808 note amplifiée] [https://twitter.com/t/status/252921999104565250 note répétée] [https://twitter.com/t/status/251375984887083009 billet de blog])
+* …Ajoutez-vous si vous utilisez ce format
+
+== Outils ==
+
+* [https://github.com/indieweb/php-truncenator ~ THE TRUNCENATOR ~ (PHP)] est une fonction hautement-configurable pour produire un joli gargouillis de contenus et un rétro-lien à l'intérieur d'une limite donnée de caractère

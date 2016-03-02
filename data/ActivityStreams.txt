@@ -1,0 +1,139 @@
+http://indiewebcamp.com/ActivityStreams
+
+<span style="float:right">http://snarfed.org/activitystreams_logo.png</span>
+{{stub}}
+
+[http://activitystrea.ms ActivityStreams] (AS) is a standardization effort to define common types of objects and actions (verbs) taken on various social media sites. Quick reference to AS types and verbs:
+* [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md#object-types object types]
+* [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md#verbs verbs]
+
+== IndieWeb Examples ==
+=== Tantek ===
+Atom + ActivityStreams namespaced markup:
+
+{{t}} on tantek.com - discoverable Atom + AS object-type for notes, articles. Replies, RSVPs so far are just "notes" in the AS representation. Mostly I've done this as an attempt to at least *try* to use ActivityStreams before working on an alternative, and learn by trying in the hopes of creating a better alternative. - [[User:Tantek.com|Tantek]]
+* http://tantek.com/updates.atom - ATOM ActivityStream of home page updates
+
+== IndieWeb Support ==
+Additional indie web implementations:
+
+JSON ActivityStreams ([http://activitystrea.ms/specs/json/1.0/ latest spec])
+* [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] is a library and REST API that converts between [[Facebook]], [[Twitter]], [[Google+]], and [[Instagram]] and ActivityStreams (and also [[microformats2]] HTML, JSON, and Atom). It uses the [[silo]]s' APIs to fetch and also publish posts, comments, likes, retweets, etc. and supports Activity Streams ATOM as well as JSON format.
+
+* [[User:Sandeep.io|Sandeep Shetty]]: The [[RSSB]] stuff on [http://sandeep.io sandeep.io] is [http://indiewebcamp.com/irc/2013-06-11#t1370984352 lot like AS] and trivially [http://www.sandeep.io/50 maps to it] and was done as an exercise to understand AS:
+** Post: http://www.sandeep.io/31.as
+** Comment: http://www.sandeep.io/42.as
+** Like: http://www.sandeep.io/40.as
+** Repost: http://www.sandeep.io/36.as
+
+== Indieweb perspectives ==
+* Tantek: I'm looking to AS as a good place to mine previous research rather than adopt wholesale. When the AS wiki documents real world examples, and/or an object type makes sense for a post type I'm implementing with its own design/UI, then I'm considering adopting it. If there is no real world documentation of an object type or verb on the wiki, then I don't care that it's in a "spec" - it's theoretical and deserves to be dropped. [[User:Tantek.com|Tantek]] 13:24, 12 October 2012 (PDT)
+** See also: [http://tantek.com/w/Whistle#design my list of object types by shortcode].
+** Current explicit AS object types I'm using (in order of most often first) with respective shortcode/description
+*** '''note''' - 't' for plain text note
+*** '''article''' - 'b' for blog post
+* [[User:benwerd.com]]: I'm using ActivityStreams as a handy abstraction layer, not because I think anyone's necessarily reading it. All new content posted in idno has an AS object type; plugins can then observe post events based on that object type, intercept the object, and (eg) syndicate it to third-party sites. That way the syndication plugins don't have to be dependent on any specific content plugins.
+* [[User:snarfed.org|Ryan]] is currently focusing on connecting the IndieWeb to existing silos, and he uses ActivityStreams via [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] as a common backplane for each new IndieWeb use case.
+* ...
+
+== Use with microformats2 ==
+* [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] converts from ActivityStreams to [[microformats2]] JSON and HTML. See [https://github.com/snarfed/activitystreams-unofficial/blob/master/microformats2.py microformats2.py].
+* [[User:Tantek.com]]: One thought is to use [[microformats2]] root class names for object types as we publish them. I've been using "as-note" and "as-article" on my "h-entry" elements for some time (note related 2011 post about "as-*" classnames[https://plus.google.com/+PelleWessman/posts/VSiMYVKgDan]), but as of 13:27, 12 October 2012 (PDT) was considering switching to using '''h-as-note''' and '''h-as-article''' instead (as they're really indicating "subtypes" of an h-entry), and as of [http://tantek.com/2012/302/t2/added-classes-fsws-activitystreams-microformats2 2012-10-26 have done so] per the [[FSWS2012]]  session on ActivityStreams and microformats2[https://www.w3.org/2005/Incubator/federatedsocialweb/wiki/Federated_Social_Web_Summit_2012/notes#as-mf2]. [[User:Tantek.com|Tantek]] 09:13, 30 October 2012 (PDT)
+** I'll likely add "h-as-reply" and "h-as-rsvp" as I add those post types. Currently they're just styling hooks, though one could conceivably use them as part of a h-entry -> ActivityStreams(Atom or JSON) converter. - [[User:Tantek.com|Tantek]] 11:31, 9 May 2013 (PDT)
+*** In practice I found no need for "h-as-reply". They're just notes that I can display specially as replies if they happen to have a [[rel-in-reply-to]] link. [[User:Tantek.com|Tantek]] 09:03, 25 June 2013 (PDT)
+*** I'm leaning towards removing all h-as-* class names as they don't seem to have helped with anything, and less is more. UIs are also moving away from explicit post typing. [[User:Tantek.com|Tantek]] 12:44, 15 March 2015 (PDT)
+* [[User:Waterpigs.co.uk]]: I am publishing my notes and articles with '''h-as-note''' and '''h-as-article''', as well as using u-as-downstream-duplicate for downstream duplicate URIs ([http://waterpigs.co.uk/notes/848/ example]) ----
+* [[User:benwerd.com]]: I'm using "h-as-note" and "h-as-article" in [http://idno.co idno], with more to follow. I'm particularly interested in h-as-event in combination with [[webmention]] attendance reports.
+* [[User:jeena.net]]: I'm using "h-as-photo" in addition to h-entry for my photo entries.
+* ...
+
+See also: http://microformats.org/wiki/activity-streams#activity_object_brainstorm
+
+== Commons Examples ==
+=== Quitter se ===
+[http://quitter.se Quitter.se] is an install of [[GNU Social]]
+* http://quitter.se/api/statuses/user_timeline/115649.atom
+** Activity Streams 1.0 Atom / XML
+* http://quitter.se/api/statuses/user_timeline/115649.as
+** Activity Streams 1.0 JSON
+
+== FAQ ==
+=== How do you add discoverability of an ActivityStream ===
+''Q: What would the best practice be to add discoverability of an [[ActivityStream]] to an indie web site?''
+
+A: Check out the guide on [[How to set up your realtime feed]] for best practices and tips for publishing [[feeds]].
+
+== Issues ==
+=== Lack of selfdogfooding ===
+There appears a lack of [[selfdogfooding]] of ActivityStreams by the editors of the specification.
+* Please provide examples of selfdogfooding of ActivityStreams by the editors. This would be great to see.
+
+
+Past spec editor Will Norris said in [[irc]]: <blockquote>The fact that I am no longer involved is any actual AS implementation (either personally or at Google) is the main reason I try and stay out of current discussions.</blockquote>
+
+=== Lack of clients problem ===
+We never saw anyone even try to build a client.  So most of what we need or might want is sort of untested and will be until such a thing gets built.
+
+Until AS consuming clients are built that show different UIs for different types/verbs, we're not going to know how useful (or not) AS types/verbs/properties are. I.e with ATOM, you can look at your feed in some feed readers and immediately see what is being displayed where. There are no equivalent AS readers.
+
+This may be part of the larger problem of feed readers in general being abandoned.
+
+If no one is developing feed readers, why would anyone bother developing a new specialized AS feed reader?
+
+* [[User:Martin.atkins.me.uk]]: I actually implemented four different activity streams clients over the course of working on the spec, as part of trying to build a decentralized social web node application. The first was super-generic and aimed to support any verb and object type thrown at it while having nice renderings for the standard ones, but that was excessively complex. Later attempts included supporting only a small set of verbs but supporting any object type using the specified fallback behavior. In the last iteration I noted that the streams I was trying to read only contained "post" and "share" events anyway and focused on just rendering objects well. I'm sorry to say that by [http://martin.atkins.me.uk/leapf.org/ the final iteration of all of this] my collaborator convinced me that we could get better user experience by just going directly to proprietary APIs and just "know" that e.g. flickr items are always photos. If I were doing this over again for indie web, I'd focus on objects and forget about verbs.
+
+=== Too many object types and verbs ===
+While there is the generous presumption that the object types/verbs do reflect something in some product someone is shipping, there are specific concerns that the long list of '''33''' object types and '''78''' verbs is too many - from the official lists:
+* [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md#object-types object types]
+* [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md#verbs verbs]
+
+Specific concerns:
+* '''Ephemeral and/or experimental''': currently defined AS types/verbs are bigco-centric or silo-centric products that don't last long, are more experiments in practice rather than anything sustaining.
+* '''Lack of UI examples/screenshots for each object type and verb.''' Ideally each type/verb would have screenshots of specific web sites using those concepts in their UI, even if not in their markup. Without the screenshots of applications showing different UIs for object types or verbs, it's not clear each can be justified.
+** http://wiki.activitystrea.ms/w/browse/#view=ViewFolder&param=Object%20Types
+** http://wiki.activitystrea.ms/w/browse/#view=ViewFolder&param=Verbs
+
+=== Verbs vs just posts ===
+Are verbs even necessary? How far can we get with just using the implied post and object types as necessary?
+* One higher level problem is the concern about abstracting verbs being separate from posts. I prefer to see everything as just a different kind of a post.  I'm not sure that making verbs explicit is that helpful in practice. They're all posts really. [[User:Tantek.com|Tantek]] 13:24, 12 October 2012 (PDT)
+* Separating out activities and objects makes sense to me in contexts where an object is going to be acted upon regularly/frequently, e.g. a wiki-like oft-edited article. In such cases not only are there syndication/frequency issues (e.g. how many “Barnaby updated X Article” notes are people prepared to put up with) but also possible UI enhancements (e.g. building an edit history for an object based on update activities relating to it). --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:32, 12 October 2012 (PDT)
+** Note: Whilst I stand by this as a potential use for ActivityStreams, I decided the pain:value ratio was too great and am now storing article edit histories within the article, not in an activity meta-table --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 14:52, 17 November 2012 (PST)
+
+=== Activity vs h-entry ===
+Activities are an indirection, an additional object that contain triples, whereas when we markup h-entry with an h-card and a verb (like, repost, comment) we don't have that indirection. Put another way, AS implies an additional feed (a stream of activities), whereas most of us on the indieweb just have the posts feed. --[[User:Sandeep.io|Sandeep Shetty]]
+
+* ...
+
+== Origins ==
+* See http://martin.atkins.me.uk/activity-streams/ for how ActivityStreams started. <blockquote>The genesis of the idea that became Activity Streams was a desire to make a social web out of personal websites.</blockquote>
+
+* [[User:Martin.atkins.me.uk]]: Not sure who found/linked this but I guess this implies some interest in the "process" that went into Activity Streams as both example and counter-example. When I was mining some old hard drives I found [https://gist.github.com/apparentlymart/cdee3b4f2140ba587722 the proposal that kicked off the discussion that led to Activity Streams], which might also be of some historical interest. In particular it's interesting to note how "quaint" some of my object descriptions seem in the current context, which I think demonstrates the folly of trying to calcify social web culture -- a constantly moving target -- in specifications documents.
+
+== Design Considerations ==
+=== Different UI for different types verbs ===
+The point of every verb and object type in AS is to allow consuming applications to provide a different UI for different types of data and different actions (verbs). Every different object type and every different verb is supposedly there because *some* application somewhere wants to present the information (and a UI) somewhat differently than just a generic "post" of some text.
+
+* IMO, there is more to it than providing a different UI especially for verbs. Verbs give different signals to the reader (see [http://indiewebcamp.com/repost#Like_vs._Repost Like vs. Repost] and [http://indiewebcamp.com/repost#Quote_vs._Repost Quote vs. Repost]) -[[User:Sandeep.io|Sandeep Shetty]]
+
+=== Research for types and verbs ===
+Typically the types/verbs are modeled after something in some product someone is shipping. Some of these have been researched and documented on the ActivityStreams wiki:
+* http://wiki.activitystrea.ms/w/browse/#view=ViewFolder&param=Object%20Types
+* http://wiki.activitystrea.ms/w/browse/#view=ViewFolder&param=Verbs
+
+== Silo Activity Design Research ==
+=== Facebook Notes ===
+* Facebook allows users to specify an activity along with their status update: [[File:facebook-activity.png]]
+
+== See Also ==
+* [http://indiewebcamp.com/irc/2012-10-12#t1350067949 2012-10-12 #indiewebcamp IRC discussion] - basis of this page.
+* [http://wiki.diso-project.org/activity-streams-examples DiSo Wiki: original Activity Streams examples] (before separate ActivityStrea.ms site was created)
+* [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md Activity Streams Schema] on Github (where most of the activity takes place)
+** I raised [https://github.com/activitystreams/activity-schema/issues/created_by/barnabywalters some issues] on 2012-286 RE concerns over the AS schema --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:21, 12 October 2012 (PDT)
+
+=== Post Types ===
+Various [[post]] types:
+* [[articles]]
+* [[checkins]]
+* [[notes]]
+* [[photos]]
+* ...

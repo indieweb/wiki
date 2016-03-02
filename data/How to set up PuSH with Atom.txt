@@ -1,0 +1,125 @@
+http://indiewebcamp.com/How_to_set_up_PuSH_with_Atom
+
+'''<dfn>How to set up PuSH with Atom</dfn>''' is about setting up an [[Atom]] [[feed file]] for [[realtime]] publishing with PuSH 0.3 which has been superseded with [[How to publish and consume PubSubHubbub]] with PuSH 0.4 and HTML + [[h-feed]].
+
+== Set up the HTML Page ==
+First, you need to set up your HTML page to reference the Atom file. When subscribing from identi.ca, you'll be entering someone's web page address, not an Atom feed directly. 
+
+The main tag you need to add to the &lt;head&gt; section is this:
+
+<pre>
+<link rel="alternate" type="application/atom+xml" href="/updates.atom" />
+</pre>
+
+== Atom Feed ==
+Live examples:
+* http://tantek.com/updates.atom
+* http://aaronparecki.com/notes.atom
+
+=== Header ===
+You will need at least these elements as the basis of the Atom feed.
+<pre>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
+  <title>Tantek Çelik</title>
+  <link href="http://tantek.com/" rel="alternate" title="Tantek Çelik" type="text/html"/>
+  <link href="http://tantek.com/updates.atom" rel="self"/>
+  <link rel="hub" href="http://pubsubhubbub.appspot.com/"/>
+  <id>http://tantek.com/updates.atom</id>
+  <author>
+    <name>Tantek</name>
+    <uri>http://tantek.com/</uri>
+  </author>
+  <updated>2012-08-17T10:48:00-07:00</updated>
+</pre>
+
+For the author tag, you must include a name and URI, otherwise identi.ca won't recognize it as a valid feed.
+
+By linking to the pubsubhubbub.appspot.com hub, you'll be taking advantage of the free hub service Google provides. Anyone will be able to subscribe to your realtime content from that hub. Anecdotal evidence has also shown that Google will actually index content posted there as well, so you can end up having real-time results in Google by using their hub.
+
+=== Entries ===
+Entry elements must have at least the following tags: title, content, published, updated, link, and id. Here are two examples you can reference.
+
+<pre>
+  <entry>
+    <updated>2012-08-17T10:48:00-07:00</updated>
+    <published>2012-08-17T10:48:00-07:00</published>
+    <link href="http://tantek.com/2012/230/t1/tweetcc-cc-license-tweets-quote-embed-indieweb" rel="alternate" title=" use tweetcc.com to CC license tweets so others may quote/embed yours independent of Twitter's TOS. #indieweb " type="text/html"/>
+    <id>http://tantek.com/2012/230/t1/tweetcc-cc-license-tweets-quote-embed-indieweb</id>
+    <title type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+use tweetcc.com to CC license tweets so others may quote/embed yours independent of Twitter's TOS. #indieweb
+</div>
+    </title>
+    <content type="xhtml" xml:base="http://tantek.com/2012/" xml:space="preserve">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+use <a class="auto-link" href="http://tweetcc.com">tweetcc.com</a> to CC license tweets so others may quote/embed yours independent of Twitter's TOS. #indieweb
+</div>
+    </content>
+    <object-type xmlns="http://activitystrea.ms/spec/1.0/">http://activitystrea.ms/schema/1.0/note</object-type>
+  </entry>
+</pre>
+
+<pre>
+  <entry>
+    <title>Children, though they are good tax deductions, can be an expensive hobby.</title>
+    <content type="xhtml" xml:base="http://aaronparecki.com/2012/222/note/3/" xml:space="preserve"><div xmlns="http://www.w3.org/1999/xhtml"> Children, though they are good tax deductions, can be an expensive hobby. </div></content>
+    <published>2012-08-09T14:04:11-07:00</published>
+    <updated>2012-08-09T14:04:11-07:00</updated>
+    <link href="http://aaronparecki.com/2012/222/note/3" rel="alternate" type="text/html" title="Children, though they are good tax deductions, can be an expensive hobby." />
+    <id>http://aaronparecki.com/2012/222/note/3</id>
+    <object-type xmlns="http://activitystrea.ms/spec/1.0/">http://activitystrea.ms/schema/1.0/note</object-type>
+  </entry>
+</pre>
+
+As shown in these two examples, the <title> tag can be either plain text, or can have a <code>type="xhtml"</code> attribute.
+
+
+== Statusnet/identi.ca Integration Notes ==
+
+Statusnet/identi.ca (referred to as statusnet in this doc for brevity) is probably the most mature and most widely deployed OStatus implementation. If you're implementing any part of ostatus, you should aim for integration with statusnet.
+
+statusnet won't understand a <content> element of this format: 
+<pre><content type="html"><![CDATA[ <p>Example Content</p> ]]></content></pre>
+
+It must use xhtml, as such:
+<pre><content type="xhtml" xml:base="http://aaronparecki.com/2012/222/note/3/" xml:space="preserve">
+  <div xmlns="http://www.w3.org/1999/xhtml"><p>Example Content</p></div>
+</content></pre>
+
+The xhtml '''must''' be well-formed in order for statusnet and many feed readers to be able to successfully consume it. statusnet seems to be rather more picky compared to most feed readers, and won't give you useful error messages. If in doubt, validate!
+
+Another thing to watch out for is elements from the activitystreams spec, e.g. <code>activity:object-type</code> or <code>activity:verb</code>. The values of these elements '''must''' be complete, well formed URLs and '''not''' just the bit on the end (e.g. 'post', 'edit', 'article', 'note' etc)!
+
+Follow the examples above and examples in the wild that are known to be supported by statusnet instead of the examples in the activitystreams schema, which will not work with statusnet.
+
+== Testing ==
+You can subscribe to your Atom feed using [[Quitter.se]] (Previously: you can subscribe to your feed in <nowiki>http://identi.ca</nowiki>), or using a PubSubHubbub client. There is a great [http://push-bot.appspot.com/ PuSHBot] for testing which will send a message over Jabber when a feed is updated.
+
+== Checking Your Work ==
+There are a few ways to test if this worked.
+
+First you can use a feed validator to check for major errors such as XML errors or missing elements. [http://feedvalidator.org/ feedvalidator.org] does a pretty good job.
+
+Assuming you don't get many errors there, you can try subscribing to the feed in a traditional RSS reader, such as [http://www.vienna-rss.org/ Vienna]. 
+
+Try using the [http://push-bot.appspot.com/ PuSHBot] service to send Jabber messages to you when your feed is updated. You can use this easily if you have a Jabber account, and don't forget that Google Chat accounts are Jabber.
+
+# Add push-bot@appspot.com to your contact list.
+# Send it a subscription message by using the /subscribe command: /subscribe http://example.com/updates.atom
+# If all goes well, you should see a confirmation message like Subscribed to http://example.com/updates.atom
+
+Then you just need to send the publish message to the appspot hub. You can do this from cURL on the command line like this:
+
+<pre>
+$ curl -i -d hub.mode=publish -d hub.url=http://example.com/updates.atom https://pubsubhubbub.appspot.com/publish
+</pre>
+
+If it worked, you will get a <code>204 No Content</code> response.
+
+__NOTOC__
+[[Category:how]]
+
+== See Also ==
+* [[realtime]]
+* [[How to publish and consume PubSubHubbub]]

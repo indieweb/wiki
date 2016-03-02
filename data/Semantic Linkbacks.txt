@@ -1,0 +1,54 @@
+http://indiewebcamp.com/Semantic_Linkbacks
+
+'''<dfn>[https://github.com/pfefferle/wordpress-semantic-linkbacks Semantic Linkbacks]</dfn>''' is a [[WordPress]] plugin that upgrades the presentation of linkback notifications (like Trackback, Pingback, or Webmention*) from the ugly default pingback presentation of <samp>"[…] random text excerpt […]"</samp> to a much more meaningful and user-friendly display as [[comments]], [[reposts]], [[likes]], and [[favorites]], detected using [[microformats2]] markup from the source of the linkback.
+
+For explicit [[in-reply-to]] [[interactions]], the plugin also changes the WordPress comment type from "<code>webmention</code>" to "<code>comment</code>". Otherwise, it creates human readable whole sentences like "Alice liked this article on alice.example.com." with hyperlinks to the source author and permalink. 
+
+* Repository: https://github.com/pfefferle/wordpress-semantic-linkbacks
+* WordPress plugin directory: https://wordpress.org/plugins/semantic-linkbacks/
+
+== Comment Type Indicator ==
+For [[in-reply-to]] interactions, the plugin adds a "type" indicator in the comment metadata for the specific type of interaction:
+* [[reply]]
+* [[repost]]
+* [[like]]
+* [[favorite]]
+* [[rsvp]]
+* [[tag]]
+* [[mention]] - Defaults to mention if another type cannot be determined, e.g. "Alice mentioned this article on alice.example.com."
+
+This "type" indicator enables further interaction-specific presentation customization, such as showing likes/favorites and/or reposts as a [[facepile]].
+
+== Configuration == 
+
+No configurable options at this time.
+
+== Extensions ==
+
+If you want to write your own parser for additional markup(such RDFa or Schema.org) you have to hook up the `semantic_linkbacks_commentdata` filter and update the array-fields.
+
+The comment-array is a [http://codex.wordpress.org/get_comment#Return WordPress Comment] with some extra-fields. 
+
+All fields beginning with _ like:
+* `$commentdata['_canonical']` for the canonical source url
+* `$commentdata['_type']` for the comment type. The plugin currently supports the following types: `mention`(default), `reply`, `repost`, `lik        e`, `favorite`, 'tag', rsvp:yes, rsvp:no, rsvp:maybe, rsvp:invited, rsvp:tracking.
+* `$commentdata['_avatar']` for the author avatar
+     
+...are saved as comment metadata.
+
+== Semantic Comments ==
+
+The [https://github.com/dshanske/semantic-comments Semantic Comments] plugin is an attempt by {{gwg}} to use the type indicator of the Semantic Linkbacks plugin to display mentions as a [[facepile]].
+
+== Related Plugins ==
+
+=== Webmention Plugin ===
+<nowiki>*</nowiki>WordPress supports Pingback and Trackback by default; for Webmention support, you must install the separate [[Webmention Plugin]] which is very nicely complementary to the [[Semantic Linkbacks]] plugin.
+
+== See Also ==
+* [[WordPress]]
+* [[reply]]
+* [[repost]]
+* [[rsvp]]
+* [[like]]/[[favorite]]
+* [[webmention]]

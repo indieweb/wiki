@@ -1,0 +1,483 @@
+http://indiewebcamp.com/IndieMark
+
+'''<dfn>IndieMark</dfn>''' is a set of metrics for measuring the indieweb-ness of a site, and a step-by-step approach to incrementally adopting indieweb features on your site.
+
+IndieMark helps us as a community measure our progress both individually and collectively.
+
+Levels in general are ordered roughly by both immediate practicality to the indieweb site owner (somewhat by community interop), and somewhat by incremental difficulty.
+
+Levels within each axis are ordered by both incremental utility and difficulty so that each step should be a reasonable amount of incremental work, and when complete, provide some incremental functionality that you can both be proud of, and enjoy using yourself on a daily basis.
+__TOC__
+'''IndieMark Levels''' summary:
+# '''#ownyourdata '''#ownyouridentity'''
+# post '''[[notes]]''' and '''[[POSSE]]'''
+# post '''[[replies]]''' and '''send [[webmentions]]'''
+# '''receive & display [[comments]]'''
+# '''comments CRUD'''
+# ...
+# Profit!
+
+== draft levels ==
+=== Level 1 ===
+IndieMark Level 1 has the general theme of <strong>owning your own domain</strong>, for <strong>sign-in</strong>, and <strong>publishing posts</strong>
+
+Level 1 summary: the classic independent web + IndieAuth
+* have a <strong>personal web site</strong>
+* <strong>usable for sign-in</strong>
+* with at least a couple of <strong>searchable posts</strong>
+
+IndieMark level 1 captures the core minimum of what it means to be / have an indieweb site, based on classic blogs and independent sites, with modern indieweb identity added in.
+
+These (numbered items) are all requirements for IndieMark Level 1. Total of 1.0 points from:
+# 0.2 pts '''identity''' - #ownyouridentity
+#* '''[[personal-domain|Personal domain]]''' that you use as your primary identity on the web.
+#** Subdomain of a domain you own is ok, e.g. <kbd>foo.example.com</kbd>.
+# 0.2 pts '''authentication''' - #useyourownidentity
+#* '''Setup [[IndieAuth]]''', sign-in to http://indiewebcamp.com/, and create your user page, linking to your personal domain.
+#** [[rel-me]] links to your "other profiles" on the web (e.g. at [[silos]]) and have them link back.
+# 0.4 pts '''[[posts]]''' - #ownyourdata - '''Post some kind of original content''' on your own site, split into:
+#* 0.2 pts '''[[permalinks]]''' - multiple [[posts]] with permalinks for the content on your own site
+#** 0.1 point per permalink up to 0.2 points
+#* 0.2 pts '''[[h-entry]] markup''' of those posts
+#** 0.1 point per post with h-entry up to 0.2 points
+#** with e.g. p-name, p-content, dt-published, u-url properties
+#** [http://indiewebify.me/validate-h-entry/ Test your h-entry support!]
+# 0.2 pts '''<span id="level-1-search"><span id="level-0-search">[[search]]</span></span>''' - searchability is required for level 1. You must do all of these for the 0.2 pts:
+#* '''allow robots to index'''. Permissive or no robots.txt. Either don't have /robots.txt, or if you have one, it MUST allow search engines to index the abovementioned posts.
+#* '''post content in HTML'''. Your post content MUST be in the visible HTML of the page retrieved from your post permalink. No depending on [[Javascript]] to render your post content - if you can't <kbd>curl</kbd> it, it's not on the web.
+#* '''site-specific searchability'''. Be able to use "site:yoursite.example.com search-term" in [[Google]] and other search engines (that support site-specific searches) directly to find and display your posts in search results.
+#** '''Note:''' no actual search UI on your site is required for level 1. That's in level 2.
+
+Each of those four areas ([[identity]], [[authentication]], [[posts]], [[search]] - see each for how to and why details) helps fill out your Level 1 "ring". Completing all four completes your Level 1 ring and then you can claim IndieMark Level 1.
+
+=== Level 2 ===
+IndieMark Level 2 has the general theme of improving your personal identity, and <strong>posting multiple types of posts on your own site</strong>, one of which <em>should</em> be '''[[notes]]''' posted to your own site instead of Twitter (and [[POSSE]]ing to Twitter if you have an account there).
+
+Level 2 is based on all Level 1 requirements, plus:
+* '''[[h-card]]''' contact info and representative '''[[icon]]''' on home page. [http://indiewebify.me/validate-h-card/ Validate your h-card!]
+* post <strong>multiple types of [[posts]]</strong> on your own site, including <strong>auto-linked [[notes]]</strong> (e.g. instead of tweeting directly)
+* <strong>[[POSSE]] to [[silos]]</strong> that you used to use or where your friends still read stuff, and provide at least a <strong>link to those copies and/or simple [[web actions]]</strong> buttons to perform actions on your posts accordingly.
+* can <strong>navigate across posts</strong> on your site
+* have a <strong>UI for searching</strong> your posts (ok to use external search services)
+
+Achieving IndieMark Level 2 with your personal site demonstrates solid implementation of fundamentals that distinguish the indieweb from both "just blogging", and other similar/related efforts like [[FSW]].
+
+In principle it means you've enabled yourself to start posting on your own site <em>instead of</em> silos (declaring some level of independence), while still staying in touch with your friends, and providing just nice/rich enough of a user experience on your site to feel good about sending people there rather than to a silo profile.
+
+Level 2 is much more than just "I started a blog". That might have been good enough 10 years ago, but no longer. We've raised the bar on what it means to be an indie web site.
+
+1.0 points total from the axes below:
+
+==== Level 2 identity ====
+0.1 points
+* '''[[h-card]] contact info and [[icon]] of yourself''' on home page, suitable for others to add to their mobile device home screen.
+** <code>name</code>, <code>url</code>, and <code>photo</code> at a minimum. More info would be great. Ok to use a separate [[about]] page for more info as well.
+
+==== Level 2 posts ====
+0.2 points
+* multiple post types (2+) required
+
+0.1 for each post type you post to your own site from this list (up to 0.2 points total).<br/>I.e. <strong>Implement any two or more of:</strong>
+* [[notes]] - like tweets or status updates. You really SHOULD do notes as one of your post types.
+* [[articles]] - like a blog
+* [[replies]]
+* [[bookmarks]]
+* [[rsvp]]
+* [[checkins]] (indicating presence at a [[location]])
+* [[photos]]
+* [[videos]]
+* [[audio]]
+* [[event]]
+* [[comics]]
+This list is roughly ordered by the number of indieweb community members who have implemented each.
+
+See [[posts]] for a longer list of possible post types, that we may incrementally add to this set.
+
+In general, we're trying to require more than one person implement a post type "for real" (not just experiment or humor), before including it in the set above to qualify for IndieMark points.
+
+==== Level 2 syndication ====
+0.1 points
+# POSSE support multiple post types to applicable [[silos]] that you list as "other profiles" as part of '''authentication''', with either proper "u-url u-uid" links back to originals, and/or proper POSSE permashortlinks/permashortcitations back to originals, to enable [[original-post-discovery]].
+#* 0.1 more for each post type you [[POSSE]] to [[silos]] and to which you only [[POSSE]], that is never post directly to a silo (up to 0.2 points total)
+#** e.g. all your tweets (posts to [[Twitter]]) are <em>always</em> just POSSE copies of posts from your site, then you get 0.1 points for each post type that you POSSE from your site to tweets up to the max total POSSE points.
+
+If you are POSSEing to all of the following sites <em>on which you have accounts</em>, then you automatically get the full 0.1 POSSE points. We don't want this measure to incentivize creating additional silo accounts that you weren't already participating with. This also means, that if you're not on ANY of the following [[silos]], then you are excused from the POSSE requirement, and are automatically granted the full points for <strong>silo independence</strong> (which in practice is much harder to achieve, see and add yourself to [[silo-quits]] accordingly).
+* [[Twitter]] - for [[notes]]. optionally for blog posts / [[articles]] - e.g. post name, permalink
+* [[Facebook]] - indirectly through Twitter integration is fine
+* [[Flickr]] - if you have [[photo]] posts
+* [[Foursquare]] - if you have [[checkin]] posts
+* [[Tumblr]] - indirectly through Twitter integration is fine
+
+==== Level 2 posting UI ====
+0.1 points for minimal POSSE posting UI
+* minimal UI to '''cause POSSEing''' to happen semi-automatically (i.e. automatically compose POSSE content, post to [[silo]] via their API, or at least bring up a form where all you have to is click one button/link to complete the POSSE).
+
+==== Level 2 navigation ====
+0.1 points for 
+* simple linear previous/next [[navigation]] between posts
+
+==== Level 2 search ====
+0.1 points for
+* Search UI and results for your content using an external search provider UI (e.g. [[Google]]) to provide time ordered results
+** This is a very highly demanded end user feature of folks reading indieweb sites 
+
+==== Level 2 aggregation ====
+0.1 points for: aggregation / syndication in - showing/browsing others' content you link to on your site
+* autolinking of URLs, @-names
+* simple embeds of external resources (images, link previews), e.g. in [[notes]] posts
+
+==== Level 2 web actions ====
+0.1 points for [[web actions]]:
+* one or more hard-coded actions for your most used silo (e.g. Tweet actions) if any, [[webactions#Wrap_favorite_reply_retweet|with &lt;indie-action&gt; element wrappers for all actions]] in your UI - so others can override them with their browsers to [[reply]]/[[favorite]]/[[repost]] to your posts on their own site.
+
+=== Level 3 ===
+IndieMark Level 3 has the general theme of <strong>posting and sending [[replies]] from your own site</strong>, to both other sites, and to silos.
+
+Level 3 builds on all of Level 2, and adds the ability to post replies on and from your site, and everything that requires for a good user experience.
+
+'''Needs updating sync/merge with axis-specific Level 3 requirements.'''
+
+'''Very coarse overview here:'''
+
+* '''posts:''' publish [[reply]] posts and send [[webmentions]] (even manually) to the originals, having them show up as comments across the indieweb.
+* '''syndication:''' [[PuSH]] 0.4 support, and [[POSSE]] thread reply posts
+** [[POSSE]] copies of your replies to wherever you [[POSSE]] notes, and thread them with POSSE copies of originals with [[rel-syndication]] links to any POSSE replies from your replies
+** [[PubSubHubbub]] 0.4 support of your home page posts in HTML+h-entry
+** PubSubHubbub (PuSH) support for all posts.
+** Use your choice of feed format your PuSH hub supports:
+*** For now that's only [[Atom]]
+*** but when hubs support JSON or HTML+h-entry, then that's fine too, without Atom support.
+* '''[[search]]:''' show search results on your own site (results URLs with your domain), but wrapping an external search provider's results/UI on your own domain is ok
+
+* bonus: display [[reply-context]]
+
+TBD: [[rating]] or [[review]] of posts.
+
+=== Level 4 ===
+IndieMark Level 4 has the general theme of <strong>receiving and showing [[comments]]</strong>: receiving replies from other indieweb sites and displaying indieweb comments on your posts.
+* plus multiple responses, including '''[[rsvp]] posts!'''
+
+'''Needs updating sync/merge with axis-specific Level 4 requirements.'''
+
+Requirements:
+* posts: automatic [[webmentions]], publish multiple response types including [[RSVP]]s
+** automatically send webmentions for all links in all your posts
+** publish [[RSVP]] posts and send webmentions to indieweb events (as a required addition from Level 3)
+*** many indieweb community members have implemented [[rsvps]], even before receiving and showing comments
+*** very community-useful/friendly to be able to rsvp to indieweb event posts
+*** helps start everyone weaning off use of [[silos]] for events (e.g. [[Facebook]] events)
+** multiple response types, in addition to [[reply]] and [[RSVP]] posts, at least one more of
+*** [[like]] of [[favorite]]
+*** [[repost]]
+* handling responses: receive [[webmentions]] and display [[comments]] on every post type you publish, e.g.:
+** show [[comments]] on your [[notes]]/[[articles]]
+* aggregation: display full content rich [[reply-contexts]], use that info to do [[original-post-discovery]]
+** reply-contexts with author name, image, content summary (more than just URL of the thing you're replying to)
+** [[reply]] posts should [[original-post-discovery|reply to original posts]] instead of or at least in addition to ([[multireply]]) replying to POSSE copies of those posts, while still threading POSSE reply copies. See: [[comment#POSSE_a_comment|How to POSSE a reply]]
+* [[search]] on your own site with your own search backend - <em>better</em> than "just using Google", and just plain default MySQL full text search is insufficient, it fails for 3 letter or fewer words for example.
+
+* bonus: display multiple other types of replies, e.g.:
+** [[likes]]/[[favorites]] on all posts
+** [[reposts]] on all posts
+** [[rsvps]] on [[event]] posts
+
+* bonus: accept [[backfeed]] of comments, likes, etc. from [[silos]]. A few ways to do this:
+** [[Bridgy]]
+** server-side code, e.g. [[backfeed#WordPress_Plugins]]
+** roll your own!
+
+TBD
+
+=== Level 5 ===
+IndieMark Level 5 has the general theme of <strong>comments CRUD support</strong> - for replies from indieweb sites and updates to comments presentation on your posts in realtime.
+* plus: '''[[event]] posts that receive & show rsvps!'''
+
+(Perhaps make Level 5 about CRUD in general, e.g. beyond CRUD for comments, also [[POSSE#CRUD]], and [[reply-context]] CRUD - sending of webmentions down to replies so that replies may choose to update their displayed reply-context or potentially indicate that an original post was deleted).
+
+'''Needs updating sync/merge with axis-specific Level 5 requirements.'''
+
+'''Very coarse overview here:'''
+
+Level 5 requires all the optional stuff of previous levels:
+* rich reply-context
+* posting even more content types
+** [[event]] posts required - core use case of comments/receiving RSVPs and CRUD on those (e.g. updating an RSVP from maybe to yes or no).
+* receiving/displaying multiple types of comments/replies
+** receive and display [[rsvps]] required
+And:
+* indieweb comment CRUD - both posting and receiving
+
+Full comment CRUD is a major addition, since any comment CRUD at all is optional in previous levels. e.g.
+* support creating, updating, deleting your own reply posts and sending webmentions accordingly.
+* support receiving webmentions of comments that have been created, updated, deleted, and update your syndicated copies of them accordingly.
+
+TBD
+
+=== Level 6 ===
+'''Needs updating sync/merge with axis-specific Level 6 requirements.'''
+
+'''Very coarse overview here:'''
+
+Possibly integrated personal [[reader]] support?
+
+Can't figure out Level 6 without first figuring out Level 5. Etc. What Level 6 is we might not know yet, because we haven't figured out what matters to folks who [[selfdogfood]] above and beyond what's in the previous levels. So for now, let's just capture ideas for level 6 in the "idea capture" section.
+
+== draft axes ==
+IndieMark is a multidimensional rating/ranking system for evaluating the IndieWebness of a personal site.
+
+Thus there are different axes that one can advance along. This section documents each axis (or feature area) and what incremental improvements can be made to each (including how each contributes to what level).
+
+# posts - #ownyourdata - posting your own content ([[posts]]) with permalinks on your own site. '''Post *some* kind of content''' on your own site that you own and control
+#* [[h-entry]] posts of some sort (at least 2 posts, with p-name, e-content, dt-published, u-url)
+
+=== identity ===
+{{main|Getting Started}}
+
+#ownyouridentity
+* Level 1: '''Personal domain''' (subdomain foo.example.com ok) that you use as your primary identity on the web.
+* Level 2: '''[[h-card]] contact info''' and [[icon]] on home page, suitable for others to add to their mobile device home screen.
+
+Possible futures:
+* [[h-card]] contact info styled/scripted into '''people-focused [[communication]] links / buttons'''
+* '''expanded [[h-card]] contact info for authenticated users''' - support consuming [[IndieAuth]] (letting people sign-into your site with their site, and [[sign-in-use-cases#show_personal_info|show more contact info]] accordingly (e.g. some for all signed in users, more for friends, etc.) . E.g. see IndieWeb Examples:
+** http://ben.thatmustbe.me/ - supports [[IndieAuth]] sign-in and showing more "Elsewhere" contact methods to a white-list of domains as of 2014-08-13.
+* simple [[h-resume]] abbreviated bio/summary
+
+=== authentication ===
+{{main|IndieAuth}}
+
+#useyourownidentity
+* Level 1: '''Setup [[IndieAuth]]''' with 1+ [[RelMeAuth]] providers
+** [[rel-me]] links to your "other profiles" on the web (e.g. at [[silos]]) and have them link back.
+** sign-in to http://indiewebcamp.com/, and create your user page, linking to your personal domain.
+* Level 2: none defined so far.
+
+Possible futures:
+* native OAuth and/or 2-factor auth support on your own domain without depending on any outside providers.
+
+=== posts ===
+{{main|posts}}
+
+posting different types of content
+* Level 1: post 2+ posts of any kind with permalink pages
+* Level 2: post 2+ <em>kinds</em> of posts with permalink pages
+* Level 3: [[reply]] posts, post 6+ kinds of posts
+* Level 4: [[RSVP]] posts, post 3+ kinds of responses
+
+* [[articles]] - like a blog
+* [[notes]]
+* [[replies]]
+* [[rsvp]]
+* [[checkins]]
+* [[photos]]
+* [[event]]
+
+See [[posts]] for a longer list of possible post types, that we may incrementally add to this set.
+
+In general, we're trying to require more than one person implement a post type "for real" (not just experiment or humor), before including it in the set above to qualify for IndieMark points. E.g. [[comics]] does not qualify yet, since there's only one site/implementation supporting it.
+
+Possible futures:
+* Level 4: post all or 9 (whichever is fewer) kinds of posts. Or n (at least 1+?) more kinds of posts for each level.
+
+=== syndication ===
+syndicating your own content to other sites (e.g. [[silos]]) per [[POSSE]]
+* Level 1: no requirement
+* Level 2:
+*# POSSE all your supported post types to applicable [[silos]] that you list as "other profiles" with either proper "u-url u-uid" links back to originals, and/or proper POSSE permashortlinks/permashortcitations back to originals, to enable [[original-post-discovery]].
+*#* 0.1 more for each post type you [[POSSE]] to other sites. (max 0.2)
+*#* 0.1 more for each post type you only [[POSSE]] and never post directly to a silo. (max 0.2)
+*#* e.g. all your tweets (posts to [[Twitter]]) are <em>always</em> just POSSE copies of posts from your site, then you get 0.1 points for each post type that you POSSE from your site to tweets up to the max total POSSE points.
+*#* total max POSSE points: 0.4
+
+If you are POSSEing to all of the following sites <em>on which you have accounts</em>, then you automatically get the full 0.4 POSSE points. We don't want this measure to incentivize creating additional silo accounts that you weren't already participating with. This also means, that if you're not on ANY of the following [[silos]], then you are excused from the POSSE requirement, and are automatically granted the 0.3 points for <strong>silo independence</strong> (which in practice is much harder to achieve, see and add yourself to [[silo-quits]] accordingly).
+* [[Facebook]]
+* [[Flickr]]
+* [[Foursquare]]
+* [[Tumblr]]
+* [[Twitter]]
+
+
+Optional (because there is no current indieweb nor indieweb-to-indieweb use case for it)
+
+* Level 3: 
+*# support [[PuSH]] 0.4 for your home page posts
+*# [[POSSE]] thread reply posts to wherever you [[POSSE]] notes, e.g. [[Twitter#POSSE_Replies_to_Tweets|POSSE Replies to Tweets]]
+
+
+Possible additional granularity if needed
+* for each type of post
+* to more than one destination for each type of content 
+
+Under consideration:
+* Require POSSE permashortlinks/permashortcitations for all silos your site POSSEs to.
+
+Belongs in a different axis:
+* [[Backfeed]]! Whether with [[Bridgy]], [[backfeed#WordPress_Plugins]], or anything else.
+
+=== posting UI ===
+{{main|creating}}
+posting (post editing) UI
+* Level 1: no explicit requirement
+* Level 2: minimal UI to '''cause POSSEing''' to happen, otherwise can be as hacked up / command line / raw editing as is expedient
+* Level 3: UI for '''adding reply info''' (in-reply-to URL), possibly other replies (RSVPs), and POSSEing accordingly (as well as saving in-reply-to info alongside posts on your site).
+* Level 4: simple web UI for '''creating posts''' of different types
+* Level 5: '''[[micropub]] support''' for creating posts of different types, and use of others' micropub clients to post
+Possible futures: (don't know of anyone doing this)
+* Level 6: undo/edit/save/update/delete UI for posts (that then follow proper [[CRUD]] protocols)
+* Level 7: UI for editing comments/external content that comes in
+
+=== navigation ===
+{{main|navigation}}
+Provide a [[navigation]] UI to make your content browsable:
+* Level 1: no requirements.
+* Level 2: simple linear previous/next navigation across all posts by time order
+* Level 3: time period based archive pages
+* Level 4: [[tag]] based archive pages (paginated by time or amount) of your own content
+
+Possible futures: (brainstorms, don't know of anyone doing these)
+* geo (e.g. city/state/country specific) based archive pages
+* mentions of a person (person tags)
+
+=== search ===
+{{main|search}}
+Search UI and results for your content
+* Level 1: searchability ([[curlability]] and don't screw up with robots.txt or JS, be able to use site:yoursite.com in Google directly).
+* Level 2: Use an external search provider UI (e.g. [[Google]]) to provide time ordered results, but on their domain.
+** Very highly demanded end user feature of folks reading indieweb sites.
+* Level 3: Wrap an external search provider's results/UI on your own domain so the search results URLs are at least on your own site.
+* Level 4: Search on your own site with your own search backend - level 4 requirement because this is actually quite challenging to build, and build well (i.e. <em>better</em> than "just using Google", e.g. just MySQL full text search is insufficient, which fails for 3 letter or fewer words for example)
+* Level 5: Thoughts: some form of fast / client-side search (e.g. with http://lunrjs.com/ ) and/or advanced search operations (with AND OR - exclusions, Creative Commons license search etc.).
+** awaiting real world implementation examples that go beyond Level 4, perhaps using ideas from [[search]] page.
+
+=== aggregation ===
+aggregation / syndication in - showing/browsing others' content on your site
+* Level 1: no requirement
+* Level 2: simple embeds of external resources (images, link previews) in [[notes]] posts
+* Level 3: show [[reply-context]] - at least URL / username/source domain
+* Level 4: show rich [[reply-context]] - perhaps the simplest structured piece of information to bring in - [[h-card]] name/avatar of original post author, summary or ellipsing of original [[h-entry]] post content
+* Level 5:
+*# receive [[webmentions]] (optionally [[pingbacks]]) 
+*# show others' [[comments]] (per [[comments-presentation]]), as good as any normal/local comment
+
+Possible futures: (no one has implemented this yet, but people are actively working on it)
+* Level 6: reverse-syndication of silo-hosted comments/tags/favorites on your POSSE copies
+* Level 6: integrated personal aggregator of everyone you follow, built into your site so you can read/reply right there inline (similar to the logged-in Twitter home page, FB news feed, Tumblr dashboard)
+
+=== web actions ===
+{{main|web actions}}
+
+* Level 1: no requirement
+* Level 2: hard-coded actions (general fine/better) for your most used silo (e.g. Tweet actions) if any, with  &lt;indie-action&gt; tag wrappers for all actions in your UI - so others can override them with their browsers to [[reply]]/[[favorite]]/[[repost]] to your posts on their own site. (Shouldn't Level 3 and Level 2 be swapped here? The links seems a much lower bar than hard coded actions, which require much more coding? - GWG)
+* Level 3: View on other (POSSE) site [[rel-syndication]] links on posts (if there are any [[silos]] you actually use and thus POSSE out to)
+* Level 4: cross-site action button overrides - setup browser plugin so when you click [[reply]]/[[favorite]]/[[repost]] buttons on other site (e.g. [[silo]]) posts, it takes you to your own posting UI instead, with the in-reply-to URL and context pre-filled in.
+
+Possible futures: (no one has implemented this yet, but people are actively working on it)
+* Level 5 cross-site inline textarea/form overrides - setup browser plugin so that it appears you can simply use the inline textarea/form UI on other site (e.g. [[silo]]) posts / home page and it posts to your site transparently without you having to leave the page you're on.
+
+=== security ===
+{{main|https}}
+
+See the [[https]] for details of each level:
+# Don't do the wrong thing
+# Secure admin of your site 
+# Serve https optionally on all your pages
+# Lock icon or better when serving https 
+# Redirect everything to https
+# Correct ciphers, support forward secrecy
+
+TBI: These need to be integrated into the above overall Level descriptions and summaries.
+
+=== handling responses ===
+# accept webmentions, and at least store them somewhere (e.g. on a webmention proxy)
+# accept webmentions and display comments
+# display multiple types of [[responses]] ([[likes]], [[reposts]]) to your posts
+# display [[RSVP]]s to your event posts
+
+== idea capture ==
+I'm using this wiki page capturing the [http://indiewebcamp.com/irc/2012-07-06#t1341607091 general idea of IndieMark] first and then will flesh this out into one or more straw proposals for discussion. - [[User:Tantek.com|Tantek]]
+
+=== ideas ===
+* areas and then levels in each area
+
+* based on Diso 2.0 thinking which contains multiple dimensions of independence / self-reliance / robustness: http://tantek.com/2010/034/t2/diso-2-personal-domains-shortener-hatom-push-relmeauth
+
+=== design principles ===
+==== start at level 1 ====
+From the [[2013/UK/Indiemark]] session, it became clear that it made the most sense to:
+* '''start with Level 1''' as the first level to achieve:
+** it makes more sense to people to reach for Level 1 than reach for Level 0
+** 0 / Level 0 / makes sense as a starting point. You start at zero and build up from there.
+** as you build indiewebness and acquire fractional points, you go from 0 up towards 1:
+*** e.g. "My website has achieved IndieMark Level 0.3 - 0.3 points toward Level 1"
+** TO BE UPDATED (references to level elsewhere in this page still start at 0 when they should start at 1)
+
+=== levels ===
+* 0? 
+** implementing a feature/service via a 3rd party (content hosting, identity, search) (e.g. Tumblr, MyOpenID, Google)
+*** or should these count at all?
+** OR wrapping a white label service / 3rd party (content hosting, identity, search) feature in your own domain (e.g. Squarespace, Blogger, Tumblr domain hosting; [[OpenID]] delegation, GCS)
+*** should we avoid recommending this or distinguishing this at all? This is a bit of a diversion from truly being "indieweb", so perhaps we should avoid making it seem much (if any) better than direct 3rd party dependence.
+** OR measured by *any way* of making a simple set of features work with your own domain.
+* 1: (should be 1 perhaps) implementing a feature/service via a web host that doesn't have a content TOS and code/library (mediatemple, phpMyOpenID, search library)
+* 2: multiple post types, POSSE
+* 3: implementing the additional levels or parts of a level for each feature.
+** replies
+* 4
+** comments receiving & display
+* 5 - ideas welcome, just brainstorming for now, need to filter according to actual itches later.
+** private content? e.g.:
+*** private posts?
+*** private replies?
+*** private comment display?
+
+=== motivations ===
+* IndieMark helps us as a community measure our progress both individually and collectively.
+* one of the reasons I want to do this as a "mark" with areas/levels is that IMHO "SWAT0" was too hard and unsustainable - that is - I believe some implementations claimed to pass SWAT0, but that perhaps only Statusnet is still around?
+** it also prioritized the wrong things (IMHO) from an *indieweb* perspective (though it made sense from the FSW framing at the time perspective).
+** e.g. [[Cliqset]] is gone - and I think it was used to pass SWAT0
+** I don't even know if we have 3 implementations that can be used to pass SWAT0 any more.
+
+=== challenges ===
+* one of the challenges of any "*-mark" system is to figure out abstract levels that one technology can satisfy today and another could replace tomorrow. any ranking/mark system that depends on a specific technology tends to either look silly after a while, or unfortunately cause people to waste time implementing obsolete.
+
+== FAQ ==
+=== Not just a rank ===
+* Q: Why not just a "rank"?
+** A: Rank implies a serial order. Because there are several areas being measured, and you can be ahead or behind in any particular area, I thought "mark" was better, similar to the "[http://rng.io/ ringmark]" effort at W3C.
+** A: "Rank" is one-dimensional. IndieMark captures multiple dimensions (axes) along multiple features.
+
+=== What is omitted ===
+What is deliberately omitted from IndieMark?
+
+If something does not provide immediate benefit to the person doing it, then it's not part of IndieMark.
+
+That's not the only requirement, but it is a key requirement.
+
+Everything in every level of IndieMark has its own wiki page with a "Why" section explaining the immediate benefits.
+
+If you find something which doesn't clearly explain why, go ahead and add a "Why" section to the respective wiki page and a question about "How does this immediately benefit the site user?"
+
+== To Do ==
+Some note to self to dos to improve both this page and the underyling features/technology it depends on. - [[User:Tantek.com|Tantek]]
+* simplify Level 1 description to a simple list of one liners (linked to expanded description, how, why)
+* make sure there is a wiki page for each axis for each Level (2+)
+** each page should document the '''how-to''' and '''why''' for each level of each axis in more detail, as well as indieweb examples (all in one list, each example indicating to what "level" it has achieved and any other interesting aspects of its implementation).
+
+Goals:
+* IndieMark level descriptions should be short enough to be a simple list of one liners (perhaps with links) 
+** short enough to not require a separate summary.
+** longer descriptions should be provided on the page for each axis/feature, along with "How To" and "Why".
+** ok to develop the thinking behind each level here inline
+** as each level gains rough consensus, the thinking should be moved to separate pages
+* Users of indiemark should be able to click through to the page detailing an axis and easily find both
+** "what" detailed description of a feature
+** "how-to" - steps to implement the feature
+** "why" (is a why for a feature different from a why for why it is part of indiemark or at a particular level?)
+** "examples" of this I can go see to consider what personal variation I want on my own site. and then add my site to the list of example when I've implemented it.
+
+Other possible to dos:
+* Consider some red/yellow/green badges for IndieMark levels/features displayed by IndieWebify.me similar to https://coveralls.io/ (which is apparently motivating to see, want to get a higher % etc.)
+
+== See Also ==
+* [[Getting Started]]
+* [[friendly]]

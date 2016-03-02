@@ -1,0 +1,182 @@
+http://indiewebcamp.com/Why_web_sign-in
+
+= Why web sign-in =
+{{main|Web sign-in}}
+[[Web sign-in]] is a way to use your own domain to sign into other websites. It's much simpler to use and implement than previous methods of signing in with your own domain like [[OpenID]]. Using your own domain is safer than a 3rd party email service, and simpler than email on your own domain.
+
+== Why not OpenID ==
+<span id="Why_not_Open_ID">[[OpenID]]</span> was (is) a breakthrough technology that solved the real world use-case of allowing bloggers to use their own blog URLs to sign-in to other blogs to leave comments on those blogs. It quickly grew past that to become the most successful decentralized single-sign-on solution on the internet.
+
+However OpenID over time has faced a few critical issues.
+
+=== Why not OpenID on your own site ===
+To use your domain as your OpenID, you either have to delegate to an OpenID provider (easier), or setup OpenID directly on your domain (harder).
+
+See [[How to set up OpenID on your own domain]] for how to do this if you're interested in doing so
+
+==== Why not OpenID directly on your domain ====
+Setting up OpenID directly on your own domain is non-trivial.
+
+If you have WordPress, you can install (and maintain your installation of) the OpenID for WordPress plugin.
+
+For other CMS's?
+
+And if you don't, you have to install the OpenID libraries on your own site. This is difficult enough of a task as to be either impossible for typical users, or too complicated/annoying for even experienced developers.
+
+==== Why not OpenID delegation ====
+OpenID allows you to use your own domain as your identity through a process called delegation. This is much easier than directly supporting OpenID on your domain, but still challenging enough to be problematic in several ways:
+
+* '''new thing to customize''': editing the &lt;head> element is something that few users have ever done before
+* '''non-trivial''': to write/copy/pasting 2-4 &lt;link rel=... > tags and potentially a 5th &lt;meta> tag
+* '''fragile''': while making sure to change all instances of "username" to your actual username.
+* '''interoperability problems''': even if you get all the link/meta tags correct, there are still problems and differences between OpenID supporting/consuming sites that may prevent your OpenID delegation from working.
+* '''fallback complexity''' - nevermind trying to figure out how to setup XRD/XRDS to delegate to ''multiple'' OpenID providers so that in case one fails, the others might work, and hopefully the OpenID consuming site you're using is smart enough to support this.
+
+On the contrary, users with their own site:
+# '''already link to their other profiles'''. No need to add any new tags.
+# '''can trivially add '''<code>rel=me </code>''' to those hyperlinks to other profiles. Just one new attribute.
+# There is no step three. That's it for Web Sign-in delegation setup. And you get automatic fallback across profiles you've already linked to.
+ 
+=== Why not both OpenID and Web sign-in ===
+If you have the time and interest to do so, it's worth supporting OpenID for legacy support.
+
+E.g. IndieWebCamp.com uses [[IndieAuth]] which supports Web sign-in and <s>supports</s> used to support OpenID.
+
+=== Why not consume OpenID ===
+OpenID is ''hard'' to consume on your own website. If you're looking to do that, just use the [[indieauth.com]] service.
+
+Otherwise you have to either:
+* install/maintain an OpenID consuming plug-in in your CMS (e.g. WordPress)
+* integrate big/complex OpenID libraries. E.g. OpenID PHP libraries are huge in number of files and quite complex to try to understand and use. Web sign-in, rel-me, OAuth libraries are all ''much'' smaller and simpler''
+* figure out if "anyauth" (sp?) helps? what's the OpenID library story on Python or Ruby?
+
+Additional reasons why not OpenID - from [http://rasterweb.net/raster/2010/08/31/lanyrd/comment-page-1/#comment-12777 Simon Willison's comment] on 2010.08.31 RasterWeb! Lanyrd blog post:
+* '''[[Twitter]] sign-in works better''' (good reason to use Web Sign In and Twitter as a provider) : <blockquote><p> I wanted to build sites that already knew about you before you even signed in. I wanted to be able to pull in information about you and your relationships from other providers. I wanted to use your public, globally unique ID to share (non creepy) information about you with other sites.</p><p>Then I got bored of waiting. By plugging in to the Twitter ecosystem I get all of those advantages, but I can actually build something successful and popular today.</p></blockquote>
+* '''Too much engineering/UI/cognitive effort''': <blockquote>We did talk about building Lanyrd to be identity provider agnostic – accepting OpenID, Facebook and other things – but in the technology conference space it’s extremely rare to find a speaker who doesn’t have a Twitter account. The engineering and UI/cognitive effort involved in supporting multiple identity providers simply didn’t feel like a good investment of time.</blockquote>
+
+== Why not email ==
+There are various solutions for logging-in/[[discovery]] with your email address, e.g. from [[WebFinger]] to the latest, BrowserID/[[Persona]].
+
+Email addresses either use a 3rd party provider or your own domain. 
+
+Each is suboptimal for different reasons.
+
+By refuting both cases (in the following "Why" sections), we show that email addresses as a whole are suboptimal.
+* [[Why_web_sign-in#Why_not_3rd_party_provider_email|Why not 3rd party provider email]]
+* [[Why_web_sign-in#Why_not_personal_domain_email|Why not personal domain email]]
+
+Related "questions" which masquerade as rationalizations for email identity follow:
+* [[Why_web_sign-in#But_emails_are_widely_understood|But emails are widely understood]]
+* [[Why_web_sign-in#But_everyone_has_an_email_address|But everyone has an email address]]
+
+Similarly, "questions" which take the other tack of instead criticizing domain based identity follow those:
+* [[Why_web_sign-in#But_what_if_multiple_people_are_behind_the_same_domain|But what if multiple people are behind the same domain]]
+* [[Why_web_sign-in#But_a_domain_is_a_big_investment|But a domain is a big investment]]
+
+=== Why not 3rd party provider email ===
+
+tl;dr: 
+* encouraging or enabling users to use 3rd party provider email addresses is bad because you are '''encouraging users to sharecrop their identity'''.
+
+3rd party email providers are suboptimal for delegated login primarily because of the authority/control that the 3rd party asserts over your identity. E.g.:
+
+* '''Your identity can be revoked for violating some obscure 3rd party provider TOS provision'''. Such 3rd party TOS's are typically updated with you automatically agreeing to updates, and you never know when such an update will introduce conditions that you have already violated in the past, or may unknowingly violate in the future, not having had the chance to read through pages and pages of legalese (which no one actual does any way). This has already happened, see [[why]] for examples.
+* '''Griefers get your identity revoked''' by the 3rd party by claiming repeatedly/falsely that you've violated the TOS. E.g. griefers can complain that you've been sending them "bad" (by whatever TOS violating definition) emails/posts from the email address that you're using as your identity.
+* '''Crackers cause denial of service (DoS) on your identity.''' Bad actors attempting to hack into your email account may trigger some form of automatic shut off of ''all'' attempts to login to your email and/or use it as a delegated identity, thus denying you the ability to sign-in to other sites.
+* '''Spoofed emails can cause a DoS on your ability to send.''' (See Zeldman: [http://www.zeldman.com/2013/03/18/cloudtastrophe/ Cloudtastrophe]).
+
+All of these 3rd party email specific reasons are also vulnerabilities in / disadvantages to 3rd party single sign-on specific methods like Facebook Connect, Twitter sign-in, and any other sharecropped identity systems.
+
+=== Why not personal domain email ===
+tl:dr; 
+* '''if you have your own personal domain, just use it. no need to waste time/space with "hello@" etc.'''
+
+Email address at a personal domain do not suffer from the same ever-changing bespoke 3rd party TOS problem as 3rd party email addresses do.
+
+However, once you have your own domain, why not just use it?
+
+Problems with personal domain email addresses:
+
+* '''redundant''': why use "myusername@myusername.com" when "myusername.com" will do?
+* '''superfluous''': why use "me@myusername.com" when "myusername.com" will do?
+* '''moretyping''': even "m@myusername.com" is two more keystrokes than "myusername.com" - why bother?
+
+If you're using your own domain for email, then why not just trim the prefix with the @ and just use your domain to sign-in?
+
+=== But emails are widely understood ===
+AKA: "Vanity domains are a very small minority of nerds. Email addresses have the widest common understanding by the average internet user."
+
+Decades ago email addresses were a very small minority of nerds, fax machines had a wider common understanding.
+
+Email addresses are a more well established technology, just like fax numbers used to be before that, and home landline phone numbers before that. Each was subsequently eclipsed. 
+
+Email is simply the current such transitional legacy technology.
+
+=== But everyone has an email address ===
+AKA: The "but everyone has technology/custom X" fallacy.
+
+Everyone used to have home landline phone numbers. No longer true.
+
+It used to be very few people had cell phone numbers, now nearly everybody does, though some of us are moving on to only using wifi devices + hotspots - we are not numbers.
+
+"everyone has technology/custom X" is a good argument for supporting a technology for reasons of cultural backward compatibility, not for anything forward-looking.
+
+Also, this fallacy tends to go hand-in-hand with the [[antipatterns#mass_adoption|mass adoption anti-pattern]]. 
+
+If you start out to design for "everyone", you've already failed before you've started.
+
+=== But what if multiple people are behind the same domain ===
+"What if multiple people are behind the same domain?"
+
+What if multiple people are behind the same email? (already happens, e.g. with Amazon)
+
+What if multiple people are behind the same phone number? (used to be the common case with home and work numbers)
+
+People figure it out, this is not a domain-specific issue.
+
+This isn't a huge issue as each person can retain control over a sub-domin.
+
+=== But a domain is a big investment ===
+''A domain is a lot bigger investment''.
+
+Not true. Owning a domain name and independent web hosting is ''cheaper'' than owning a phone number (e.g. annual cost of cell phone service or landline service).
+
+From there on, it's just free software plus iteratively improving the usability/maintainability of such software. See: [[one-click-install]].
+* "Iteratively improving [...]"? This is only easily doable by a small fraction of all people - those with the technical competence to do so. It seems most people here are rather technically oriented, let's keep that in mind. The issue may be more about time and effort than money. Setting up a phone number (well, except for complicated paperwork in some countries) or an email address is a lot easier than setting up a domain with software.
+
+=== But some people do not know what a URL is ===
+''But some people do not know what a URL is.''
+
+This is either a misframing, or a misconception or both.
+
+Nearly every product in stores, every advertisement, film, TV station, and even many TV shows has and displays a URL. This has been true for years.
+
+People know what URLs are because they are constantly exposed to them and use them.
+
+They type them into browsers. Perhaps sometimes into the address bar 
+
+They may not know them as "URLs" per se, they may know them as "web addresses" (the NYT recommended non-technical term for "URL", [[web-sign-in]] uses "web address" in its documentation), or they may know them as just some-browser-internet-thing.
+
+What people call a URL is less important than their <em>exposure to</em>, <em>understanding of</em>, and <em>use of</em> URLs, which they do all the time, in their web browser.
+
+It doesn't matter whether they type them into the browser URL bar, into Google's search box, into Gmail's search box, or any other search box. (such confusion is a UI problem, not a URL understanding problem)
+
+They're typing in URLs, and they expect the right thing to happen - for the browser to go there (fortunately most search engines recognize URLs and provide a link to the site as the first result).
+
+== Why Not Phone Numbers ==
+
+Phone numbers no longer constitute a significant part of our identities. They are treated as disposable, impermanent identifiers, as demonstrated by the prevalence of “I got a new phone number, text me your numbers” posts on [[Facebook]].
+
+Phone numbers also have various usability problems including being difficult to memorise, less human-friendly than most domain names and hard (as well as expensive) to use internationally.
+
+Additionally, phone systems are typically government/monopoly controlled and have a long history of security/privacy concerns long before facebook and email privacy concerns were an issue.
+
+== See Also ==
+* [[Web sign-in]]
+* [[RelMeAuth]]
+* [[FAQ]]
+* [[IndieAuth]]
+* [[one-click-install]]
+* [http://microformats.org/wiki/web-sign-in Web sign-in]
+* [[Why]]
+* [[sign-in-use-cases|Web Sign-In Use Cases]]

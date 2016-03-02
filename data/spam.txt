@@ -1,0 +1,210 @@
+http://indiewebcamp.com/spam
+
+{{stub}}
+
+'''<dfn>spam</dfn>''' is unsolicited content, often transmitted via [[email]], submitted as blog [[comments]] or posted to [http://microformats.org/wiki/Special:RecentChanges popular wikis].
+
+Almost any type of data entry on the web could potentially be vulnerable to spammy content. Typically the most vulnerable are unprotected comments forms and endpoints consistent across domains due to [[monoculture]].
+
+== The Coming Spam Storm ==
+Spam has effectively destroyed earlier protocols of [[pingback]]/[[trackback]], and [[WordPress]] reblogs.
+* http://piedtype.com/2013/05/21/spammers-use-trackbacks-pingbacks-and-reblogs/ 
+
+As [[Webmention]] + [[h-entry]] [[replies]]/[[comments]]/[[likes]]/[[reposts]]/[[RSVPs]] adoption grows, the probability the spammers will adopt it also grows.
+
+It behooves us, the indieweb, to be pre-emptively thinking about how to fight spam.
+
+If you accept webmentions and alter your display in any way (showing cross-site comments, likes, reposts, RSVPs), then you are potentially vulnerable to being spammed.
+
+We have proposal for preventing Webmention spam:
+* '''[[Vouch]]'''
+
+Take a look at the [[Vouch]] extension to Webmention, try implementing it, interoperating with existing implementations, and report your experience.
+
+=== WordPress Spam ===
+[[WordPress]] is both a huge target and tool for spammers. The more popular WordPress has become, the more they've targeted it. By analyzing spammers tactics (and weaknesses) against WordPress, we may find clues that help us block them from the indieweb.
+
+==== Akismet ====
+
+[http://akismet.com/ Akismet], Automattic's flagship spam filtering service, is very popular with self-hosted WordPress users and enabled by default on WordPress.com blogs. The team [http://blog.akismet.com/category/monthly-roundup/ publishes statistics on their blog every month]. They're pretty thin - just global spam vs ham counts per day - but still interesting. Ham generally comprises just 1-5% of all comments.
+
+[http://blog.akismet.com/2014/12/01/november-stats-roundup/ During November 2014, Akismet saw 12.2B spam comments and 160M ham comments], with a success rate of 99.997%. Not bad.
+
+
+==== Comment Spam ====
+
+Comment spam is one of the most common forms of WordPress spam, if not the most common.
+
+Anecdotally, during the month of November 2014, https://snarfed.org/ received 796,990 POSTs to its comment form, <code>wp-comments-post.php</code>, vs just 2139 POSTs to <code>xmlrpc.php</code>. Of those, 9 comments and 3 trackbacks were ham. {{snarfed}} also uses XML-RPC to create and edit snarfed.org posts. So there was at least ~400x more comment form spam than pingback/trackback spam.
+
+
+==== Pingback Spam ====
+[[Pingback]] and [[trackback]] are well-known WordPress spam vectors, so much so that Akismet is about to shut off (or has already?) pingbacks. As cited above:
+* http://piedtype.com/2013/05/21/spammers-use-trackbacks-pingbacks-and-reblogs/ 
+
+Notably, the Akismet team commented:
+
+<blockquote>
+These days almost 100% of Trackbacks and Pingbacks are spam.
+</blockquote>
+ 
+
+==== Like Spam ====
+{{main|likespam}}
+WordPress introduced a WordPress-only feature called "WordPress Like" which is essentially their version of the [[Facebook]] "Like" button. Spammers create [[WordPress.com]] spam blogs and then "Like" other WordPress blogs in order to get links to their spam blogs. As such, WordPress users complain of most of their likes being "fake" or from spammers only.
+* http://piedtype.com/2013/05/02/spammers-like-wordpress-news-too/
+* http://piedtype.com/2013/04/20/why-i-turned-off-wordpress-like/
+
+Such likespam is a frequent occurrence on various silos as well, where spam account like various posts in order to get the authors to see who liked their posts, show them a spam message on their profile, and perhaps even get them to click a spam link in their profile. Instances of likespam are readily findable on:
+* [[Instagram]] - often with "get more followers" type messages
+* [[Twitter]]
+In both cases, even if you [[block]] the spam account, their "like" on your silo post remains. Though hidden from you (since you blocked them), viewers of your posts still see the spamlikes, and are thus still exposed to following them to see spam messages or links to spam sites in their profiles.
+
+This failure to remove spamlikes of [[block]]ed accounts from posts is sufficient reason to go [[silo-private]], since posts on silo [[private account]] can only be "liked" by those you explicitly give permission to, thus preventing all likespam on such accounts.
+
+Silo likespam is particularly bad for the indieweb when you automatically [[backfeed]] (e.g. using [[Bridgy]]) from your silo [[POSSE]] copies, and thus end up linking to the likespammers from your own site!
+
+==== Follower Spam ====
+As noted in:
+* http://onecoolsitebloggingtips.com/2013/04/09/wordpress-com-follower-management/
+* http://piedtype.com/2013/04/12/issues-wordpress-needs-to-address/
+
+As noted in the onecoolsitebloggingtips post, spam blogs have several weaknesses:
+* linking to non-existent Twitter/Facebook/WordPress.com profiles
+* linking to Twitter/Facebook/WordPress.com profiles not updated in months
+
+This implies that if we require [[rel-me]] symmetry link checks on any Twitter/Facebook/WordPress.com (and other?) sites that someone links to, we can filter out some of the spam.
+
+== Spam Prevention ==
+There are a great many techniques that can be utilized to prevent spam.
+
+Note: <em>Prevent</em>, not minimize. The goal here is make spam defense a <strong>zero maintenance</strong> feature. Partial solutions, going through moderation queues etc. still adds a maintenance tax, which no one wants.
+
+=== Degrees of Separation ===
+'''Note:''' The following is a brainstorm, does not reflect current implementations and probably needs work --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 16:21, 22 May 2013 (PDT)
+
+Typically I consider whitelists to be a negative thing for accepting general commentary — it seems elitist and similar to search bubbling (i.e. trapped in a bubble). However, whitelists are the most straightforward and probably most effective prevention measures.
+
+So, a more flexible whitelist-based approach might be implemented as follows:
+
+Initial setup:
+
+* I start with a whitelist of people — e.g. my address book (1st degree contacts)
+* My software crawls their websites and extracts [[XFN]] data and [[mentions]] of people (2nd degree contacts)
+* I associate each 2nd degree contact with their associated 1st degree contact, building a graph without actually adding the 2nd degree people to my address book
+* I periodically re-crawl the graph and update accordingly
+** perhaps subscribing to their feeds via [[pubsubhubbub]] and adding any mentioned people would be a good solution
+** Do we have a way of notifying interested parties that an XFN listing has been updated?
+* Whenever a new contact is added (or a 2nd degree contact is moved to 1st degree) their website is crawled for mentions to add to the graph
+
+Posting a note mentioning someone:
+
+# I post a note [[mention]]ing/[[in reply to]] someone not yet in my address book
+# Their website is crawled, any [[microformats]] are parsed and they are added as a 1st degree contact
+# Any future comments from them are accepted automatically as detailed below
+
+Receiving a comment from a 1st degree contact:
+
+# I post a note, and someone in my address book submits a comment
+# The comment is automatically approved as they are 1st degree contact
+# Any person they mention in that comment is added to the graph as 2nd degree contacts
+#* TODO: or 1st degree, as they’ve actively been included in the conversation?
+
+Receiving a comment from an unknown person:
+
+# I post a note
+# Someone I don’t know submits a comment, which is not displayed publicly
+# I receive a notification asking me to approve the person
+#* If I do so, they are added to my address book, their comment goes public and all future comments from them are accepted
+#* If I do not, they are added to a blacklist and any further comments from them are ignored
+
+=== Twitter follows follows ===
+In a turnabout of sorts, we can use existing [[silo]] connections as a potential spam filter as well.
+
+Here's you could use Twitter's social graph as a dynamic second degree whitelist:
+
+Note: when you visit someone's profile on [[Twitter]], if you're not already following them, it shows you which of the people you <em>are</em> following (your "follows"), are following them. This could be used in the following way:
+
+Algorithm:
+
+When your site A receives a comment from an indieweb site B:
+* Does B have a confirmed [[rel-me]] link to a [[Twitter]] profile Tb?
+* Does your Twitter Ta follow Tb? Yes? Accept the comment.
+* Do any of Ta's follows follow Tb? Yes? Accept the comment.
+
+=== Other ===
+Perhaps break these into separate sections if you're considering pursuing them:
+
+* Moderation — the most simple form of prevention. Don’t publicly display any 3rd party submitted data until you’ve manually approved it
+
+* [[captchas]] — images or challenges designed to flummox a machine but be trivial for a human to complete
+** For example “write the (obfuscated image) code in the box” or “enter the sum of 4 and 6”
+** Major UX issues ([http://uxmovement.com/forms/captchas-vs-spambots-why-the-checkbox-captcha-wins], [http://www.webdesignerdepot.com/2013/02/recaptchaing-the-importance-of-ux/])
+
+* Automated spam detection — use some learning algorithm/training data to decide whether or not it’s likely to be spam
+** Example service: [http://akismet.com/ akismet]
+** [[Pump.io]]'s spam filtering software: [https://github.com/e14n/activityspam e14n/activityspam]
+
+* Blacklisting — figure out from which IPs a lot of spam comes, blacklist them
+** Alternatively blacklist the domains that try to advertise themselves. This is what [[website-analytics#Piwik|Piwik]] does against [https://en.wikipedia.org/wiki/Referer_spam referer spam] using a public domain blacklist: [https://github.com/piwik/referrer-spam-blacklist piwik/referrer-spam-blacklist]
+
+* Whitelisting — the opposite of blacklisting. Have a predetermined list of people from which you will accept data
+
+* High barrier to entry — a little similar to a captcha: force the user to perform some task/satisfy some condition before allowing them to enter data.
+** An example being this very wiki — we have zero spam due to the need to log in using your own domain via [[indieauth]] (we've been lucky / under the radar - spammers have blogs and know how to link to spam profiles on other networks like [[Twitter]].
+
+* Payment via Hashcash
+
+=== Ineffective ===
+==== Expiring token in endpoint ====
+While an [[DDOS#Expiring_token_in_endpoint|expiring token in the endpoint]] may help mitigate [[DDOS]], based on recent experience it seems ineffective for preventing (or even minimizing?) spam.[http://indiewebcamp.com/irc/2015-04-20#t1429543722814] [http://aaronparecki.com/articles/2015/04/20/1/results-from-six-months-of-expiring-webmention-endpoints]
+
+=== Overcomplicated ===
+Webmentions could implement a [http://www.dkim.org/ DKIM] solution as e-mail has, as in: public keys in DNS record; messages have signed by private key additional headers.
+The issues are: complexity ( both in setup and in implementation ); dependency on the DNS system which is not always trivial; if it's optional only, it would not make enough difference.
+
+== Spam Detection ==
+In some cases it may be difficult to prevent spam, and thus the next best thing is to detect it quickly and delete it after the fact.
+
+Approaches:
+* 2016-03-01 [https://adactio.com/journal/10307 Spamduffing] - detecting multiple posts on a new account too quickly to likely be human, auto-deleting.
+
+== Spam Prevention Service Brainstorming ==
+
+A web service which, given a source and a target, returns a simple spam/ham/requires-moderation response.
+
+Sign up+crawl flow:
+* You sign up for anti-spam using indieauth
+* anti-spam builds a list of all the people in your social graph
+** crawls [[XFN]]
+** crawls+subscribes to feeds, continuously automatically adds people you link to, reducing maintenance
+** detects linked-to silos and crawls silo social graphs
+
+Webmention filtering flow:
+* When you receive a webmention, you pass the source and target URLs to an anti-spam endpoint, which returns “spam/ham/requires-moderation” based on whether you, or anyone you linked to, has linked to the source domain before
+** optionally also a bunch of other information e.g. how many degrees of separation between you, which of the people you’ve linked to also linked to them — this could be put to excellent use in a moderation UI
+* your publishing software processes or discards the webmention as required — it’s up to your software to handle moderation UI and flow.
+
+Spam reporting flow:
+* one way or another you’ve come across some spam
+* send a POST request to anti-spam.com/report or some such endpoint with the URL
+* that domain gets added to your personal blacklist
+** perhaps also either to a global anti-spam list, or maybe blacklists should be shared in the same way whitelists are, where if a domain is in your blacklist or the blacklist of anyone you’ve linked to, they get blocked.
+
+Possible other option: webmention proxy. You use anti-spam.com or whatever as your webmention endpoint, which forwards non-spam webmentions to your real endpoint, perhaps with some extra parameter indicating if it needs moderation. Requests would be signed, making it easy to determine that they are in fact from anti-spam
+
+== iMessage Spam ==
+Apparently iMessage is now being spammed, by spammers registering hotmail.com addresses as AppleIDs:
+
+Received 2013-11-30 11:14 PST
+
+[[File:imsg_spam.PNG|frameless]]
+
+== See also ==
+* [[comments]]
+* [[DDOS]]
+* [[webmention]]
+* [[comment]]
+* [[block]]
+* [[report abuse]]
+* [[Vouch]]

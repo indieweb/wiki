@@ -1,0 +1,97 @@
+http://indiewebcamp.com/Getting_Started_on_WordPress
+
+By using a [[WordPress]] blog on your own domain, you are already part of the IndieWeb; here is how to '''<dfn>get started with upgrading your IndieWeb support in WordPress</dfn>'''.
+
+== Setup rel=me ==
+First thing you need to do to participate with the IndieWeb community is to setup rel=me on your WordPress site so you can sign into the wiki with IndieAuth.
+
+You can setup rel=me in your WordPress blog without editing your theme by adding a custom text widget:
+* Go to <code>/wp-admin/widgets.php</code> on your site.
+* Scroll down and select <em>Text</em>, and choose a location to add the widget. 
+* When you add links to the body of the widget, make sure to include the <code>rel="me"</code> attribute on each one.
+
+You can '''test''' your rel=me setup with:
+* [http://indiewebify.me/validate-rel-me/ IndieWebify.Me Web Sign In validator]
+
+Doing this achieves [[indiemark#Level_1|IndieMark Level 1 authentication]], the first IndieMark goal after having your own domain.
+
+== Indieweb Plugin ==
+The [https://wordpress.org/plugins/indieweb/ Indieweb] Plugin can help you get set up to be a more active member of the indieweb. 
+
+The [https://wordpress.org/plugins/indieweb/ Indieweb Plugin] is a plugin that helps you install various Indieweb-themed plugins. It is designed for newcomers to quickly get up and running.
+* '''[https://wordpress.org/plugins/indieweb/installation/ Install the Indieweb Plugin]'''
+
+(Is this still true? 2016-01-04 {{snarfed}} noted in IRC: "that plugin is kinda deprecated. we now recommend that you install the webmention and semantic-linkbacks plugins individually instead")[https://indiewebcamp.com/irc/2016-01-04/line/1451951820293]
+
+== Send and receive responses with your site ==
+Send and receive [[comments]], [[likes]], [[reposts]], and other kinds of post [[responses]] using your own site!
+
+=== Required Plugins ===
+Required plugins make receiving indieweb comments and mentions work, recommended plugins further improve the experience.
+
+'''Stable, mature plugins:'''
+* '''[[Webmention Plugin]]''' - allows you to send and receive by adding [[webmention]] support to WordPress. Mentions show up as comments on your site. 
+* '''[[Semantic Linkbacks]]''' - makes indieweb comments look better on your site, recognizing them as being likes, replies, etc. and displaying appropriately.
+
+'''Alternative:'''
+* [https://github.com/petermolnar/wp-webmention-again wp-webmention-again] a async, WP Cron based webmention sender/receiver supporting reacji, but not doing any comment formatting
+
+Once you have these activated, you can setup [[Bridgy]] to connect your blog to responses from sites such as Facebook and Twitter too, allowing for a seamless experience.
+
+=== Optional Plugins ===
+
+* '''[[Post Kinds Plugin]]''' - adds support for responding to and interacting with other sites
+* '''[https://github.com/pfefferle/wordpress-webmention-for-comments Webmention for (Threaded) Comments]''' - Adds support for threaded comments for webmentions.
+
+== Syndicate your content to other sites ==
+Choose one of these different ways to display links for [[POSSE]]/syndicated versions of a post. They cannot both be used. Linking to the syndicated version of a post allows for [[bridgy]] to be able to discover the post as well as for end users to comment on those sites as a way of replying. 
+
+* '''[https://wordpress.org/plugins/syndication-links/ Syndication Links]''' - Adds fields to a post to allow manual entry of syndication links. Social, partial support for [[SNAP]], as well as Tumblr CrossPoster, WordPress CrossPoster, and Diaposter(for Diaspora). Also supports rel-me links for [[IndieAuth]].
+* '''[https://wordpress.org/plugins/bridgy-publish/ Bridgy Publish]''' - Supports syndication through Bridgy Publish. It pulls reactions (likes, comments etc.) to shared content from the silos back to the site with the original post, as a compatibility mechanism.
+* '''WordPress Syndication''' - automatically adds link to a post from a supported syndication plugin. Fully supports Social, partial support for [[SNAP]], and support for Bridgy Publish
+
+== Pull your content from other sites ==
+If POSSE is not an option or can't be done for various reasons (see [[Instagram]] for example), you probably still have the possibility if pulling content, automatically creating a "backup" on your site; doing [[PESOS]]. 
+
+Right now the most flexible way to do this on WordPress is the combination of  [https://wordpress.org/plugins/keyring/ Keyring], [https://wordpress.org/plugins/keyring-social-importers/ Keyring Social Importers], and [https://wordpress.org/plugins/keyring-reactions-importer/ Keyring Reactions Importer] plugins. These are a little harder to configure plugins, mainly targeting semi-power-users, but they can import from an impressive amount of services out of the box and it's straightforward to extend their functionality.
+
+== Publish to Your Site with alternative interfaces  ==
+
+* [http://wordpress.org/plugins/micropub Micropub for WordPress] - add support for the [[Micropub]] protocol to WordPress
+
+== Other functionalities ==
+* [https://github.com/pfefferle/wordpress-webactions Webactions] - Adds [[webactions]] markup to WordPress elements
+* [https://github.com/pfefferle/wordpress-indieweb-press-this Indieweb Press-This] - Adds Indieweb markup to the WordPress [https://codex.wordpress.org/Press_This Press-This] bookmarklets to allow you to respond on your site with one-click
+* [https://wordpress.org/plugins/hum/ Hum URL Shortener] - A personal URL shortener framework
+* [https://github.com/petermolnar/wp-shortslug wp-shortslug] - another URL shortener
+* [https://github.com/pfefferle/wordpress-indieauth Indieauth] - The plugin lets you login to the WordPress backend via [[IndieAuth]]. It uses the URL from the profile page to identify the blog user.
+
+For more information, see [[WordPress Plugins]]
+
+== Themes ==
+Some WordPress themes are compatible with [[microformats]].  The Indieweb uses [[microformats2]], the latest version, to mark up sites so that they can be interpreted by other sites when retrieved. Most parsers will fall back onto the older format if available.
+
+Formatting your site so other sites can consume the information allows for the communications Indieweb sites support. For example, a class of u-like-of added to a link to a site you liked to indicates that relationship.
+
+There is only one theme in the WordPress repository that is fully microformats2 compliant. That is [https://wordpress.org/themes/sempress Sempress]. 
+
+For existing themes, you can try out [https://github.com/pfefferle/wordpress-uf2 wordpress-uf2], a plugin that tries to add microformats after the fact. Mileage may vary, as a plugin cannot do all that is required.
+
+== Readers ==
+
+* [https://wordpress.org/plugins/blogroll2email/ blogroll2email] - oldschool feed to email reader using the blogroll feature of WordPress; supports RSS, Atom & [[microformats2]] feeds
+* [https://github.com/acegiak/WhisperFollow Whisperfollow] see [[Whisperfollow]]
+
+== FAQ ==
+; Why does the comment on my site not show the author's information?
+; Why does the comment show a link to bridgy.appspot.com instead of the social network?
+: Please ensure that you have both the Webmention plugin ''and'' the Semantic Linkbacks plugin installed.
+
+== See Also ==
+* [[WordPress]]
+* [[WordPress/Plugins]]
+* [[WordPress/Development]]
+* [[WordPress/Examples]]
+* [[WordPress/Security]]
+* [[WordPress/Data]]
+* [[IndieMark]]

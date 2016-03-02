@@ -1,0 +1,94 @@
+http://indiewebcamp.com/h-entry
+
+{{stub}}
+
+'''<dfn>[http://microformats.org/wiki/h-entry h-entry]</dfn>''' is the [[microformats2]] vocabulary for marking up blog [[posts]] on web sites. It can also be used to mark-up any other episodic or time series based content.
+
+== Why ==
+=== Why publish ===
+You should add h-entry markup to your [[homepage]] and [[permalinks]] because it is the simplest way to make those pages easily readable by consuming code like indieweb [[readers]], 
+
+Adding h-entry to your post pages enables post information [[discovery]] on your permalinks, which is useful for a variety of things, including:
+* [[reply]] context syndication
+* syndication of your [[replies]] from your site as comments on the permalinks of the sites that you reply to.
+
+Adding h-entry to your home page enables:
+* subscribing to your posts directly from your home page (no separate feed needed).
+* A building block for adding [[PuSH]] 0.4 support for real time subscribers of your updates
+
+=== Why consume ===
+By using a [[microformats2]] parser, and looking for h-entry items, your code will automatically get both h-entry and classic [[hAtom]] post information from people's post pages and home pages, which are published in total in combination by a double digit percentage of the web (thanks to [[WordPress]] default templates including such markup for 5+ years), and especially cutting edge IndieWeb sites.
+
+HTML on a page is historically more accurate than [[feed files]] (see that page for more details on why).
+
+Thus for the best user experience, your consuming code should first consume the h-entry (and by backward compat of such parsers, hAtom) of pages before looking at secondary side files.
+
+== How to ==
+=== How to publish ===
+Use h-entry to markup:
+* [[posts]], including:
+** [[notes]]
+** [[articles]]
+** [[comments]]
+** ... and all other post types
+
+h-entries will typically be used in two places: alone on [[post]] permalink pages and in plural on [[feed]] pages. On post permalink pages they should be a top-level microformat (not nested under anything). On feed pages they may also be children of a [[h-feed]] if you wish to add feed-level data like feed name, author.
+
+=== How to consume h-entry ===
+For how to consume feeds of multiple h-entry posts, see [[feed#How_To_Consume|How To Consume Feeds]].
+
+To consume a single h-entry:
+* look for the first h-entry on the page. If none are found, this page does not represent a post.
+
+For each h-entry, regardless of whether they’re being treated as a single post or part of a feed:
+* to find the author of the h-entry, use the [[authorship]] algorithm
+* to determine how to display the post as a comment, use the [[comment-presentation#How_to_display|comment presentation]] algorithm
+* to determine the published datetime:
+** if the h-entry has a <var>published</var> or <var>updated</var> property which is a valid datetime
+*** if the datetime is floating (i.e. has no timezone), use the [[datetime#implying_timezone_from_webmentions|implied timezone]] heuristic to determine the timezone
+** if the fixed published datetime is in the future, cap it to the present
+*** you may wish to preserve the source timezone in the derived time, and optionally also allow a small window within which “future” posts are accepted e.g. 10 minutes
+** if there was no datetime, let the published datetime of the post be the datetime it was first seen
+
+When notified of an update to a h-entry, either by [[webmention]] or [[PuSH]] or any other plumbing:
+* optionally archive current status of 
+* update the <var>updated</var> property to be the updated date of the post using the same datetime resolving process given above
+* re-apply the above per-h-entry algorithm, ignoring any updates to the <var>published</var>
+
+See also the processes documented on [[comment]] for handling incoming comments, updates and deletions.
+
+==== Issues ====
+===== move general processing =====
+Many of the processes documented on [[comment]] (e.g. deletion) can be applied equally to other cases of h-entry consumption (e.g. in a reader), and some of the detail given here applies to comments processing (e.g. datetime processing). Anything which is applicable to general h-entry processing should be moved here, leaving only anything ''specific'' to the comment use-case on [[comment]], and these algorithm referred to from there --[[User:Waterpigs.co.uk|Barnaby Walters]] 05:33, 9 June 2014 (PDT)
+===== bad hentry properties =====
+Some h-entrys encountered are missing a "content" property and have just the implied "p-name" property which end up with an inappropriate value for the name. These URLs were sent via pingback to [https://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified a blog post] on aaronparecki.com, and are [[hEntry]] posts rather than the microformats2 version.
+* [[WordPress]] classic [[microformats]] "hentry" markup:
+** http://raymondhlee.wordpress.com/2014/12/21/implementing-oauth2-with-spring-security/
+** http://curiouser.cheshireeng.com/2014/09/10/digression-using-oauth-2-0-at-wordpress-com/
+** http://blogmobile.itude.com/2014/04/08/checklist-for-building-an-api/
+** Analysis: Hypothesis: Perhaps the default WordPress core "hentry" with broken themes (that lack the rest of the hentry properties) is the source of the problem.
+** Proposed resolution: Perhaps classic microformats backcompat parsing should not get any implied properties, since no classic microformats authors ever expect implied properties to happen.
+
+*  …add issues with h-entry consumption to be resolved here.
+
+== IndieWeb Examples ==
+Pretty much everyone on the IndieWeb publishes [[h-entry]] because it is a fundamental building block for the richer UX of [[Webmentions]] of federating and displaying [[comments]], and showing higher fidelity [[reply-context]]s on reply pages as well.
+
+E.g. see people's personal sites linked from [[irc-people]].
+
+== What uses it ==
+Numerous [[projects]] and sites are parsing and consuming h-entry for various purposes, including:
+* [[reply-context]] - see in particular [[reply-context#IndieWeb_Examples|indieweb sites]] that show reply context information parsed from h-entry + [[h-card]]
+* [[comment-presentation]] - e.g. see [[comment-presentation#Current_Indiewebcamp_Practices|indieweb sites]] that show comments on posts syndicated in via parsing h-entry from others' reply posts.
+In short, [[h-entry]] is <em>the</em> key building block for the indieweb. It represents a unit of content, to be syndicated, for a variety of use-cases.
+
+== Requests ==
+Requests to add h-entry support. Both publishing and consuming code.
+=== Requested consuming code ===
+* Firefox reader functionality: https://bugzilla.mozilla.org/show_bug.cgi?id=543630
+
+== See Also ==
+* http://microformats.org/wiki/h-entry
+* [[microformats2]]
+* [[in-reply-to]]
+* [[datetime]]

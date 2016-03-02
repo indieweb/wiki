@@ -1,0 +1,80 @@
+http://indiewebcamp.com/App.net-fr
+
+Cette page a démarré sur [[iwc:App.net]] et migrera sur [[iwc:App.net-fr]]
+
+{{stub-fr}}
+
+'''<dfn>App.net</dfn>''' (ADN) est un silo de microblogging similaire à  [[Twitter-fr|Twitter]] pour poster des  [[notes-fr|notes]] allant jusqu'à 256[http://developers.app.net/docs/resources/post/#post-fields] caractères en longueur.
+
+Lors du lancement, App.net avait un modèle de paiement à l'utilisation. Depuis le lancement, ils ont ajouté une option d'enregistrement gratuite.
+
+App.net a une API propriétaire "flocon de neige" similaire à Twitter.
+
+App.net a promis un support pour différents standards web du web social ouvert mais n'en supporte, comme chacun sait, aucun à cette heure.
+
+== Comment faire ==
+
+=== Exporter vos données à partir d'ADN ===
+* inconnu
+
+=== POSSEr vers ADN ===
+Résumé : Installer une règle [[IFTTT-fr|IFTT]] pour extraire à partir du flux de votre site et poster vers ADN, puis sonder votre flux ADN pour retrouver les permaliens de syndication et mettre à jour vos posts originaux pour les lier avec [[rel-syndication-fr|rel-syndication]]
+
+Description POSSE vers flux ADN :
+* poster sur votre propre site
+* IFTTT sonde périodiquement votre flux Atom et le syndique vers ADN
+* Faire que votre site/serveur interroge périodiquement votre flux ADN (par ex. [https://alpha-api.app.net/feed/rss/users/49269/posts flux ADN de tommorris], dans le cas où cela aide à trouver le vôtre)
+* Déterminer quelle est l'URL ADN pour chaque permalien de post original en cherchant les éléments lien comme ceci :<br/><code>&lt;atom:link href="PERMALINK" type="text/html" rel="source" /></code><br/>où PERMALINK est l'URL permalien véritable http(s) vers votre post.
+* Mettre à jour les posts sur votre site pour lier vers la copie de syndication ADN avec [[rel-syndication-fr|rel-syndication]].
+
+Les membres de la communauté IndieWebCamp qui font ça : 
+* [[User:Tommorris.org]] utilise [[IFTTT-fr|IFTT]] pour syndiquer les copies ([[POSSE-fr|POSSE]]) de ses posts vers App.net. Très simplement, ceci se fait en ayant un [http://tommorris.org/posts.xml?syndication=app.net fil Atom personnalisé] qui publie le contenu du coprs de chaque entrée. IFTT re-publie cela ensuite sur app.net.
+** Le fait que ADN fournisse la capacité de régler le "from" d'un post, que Tom règle vers le permalien original de son post en utilisant rel="source" dans son flux comme noté au-dessus, par ex.
+*** Ce [https://alpha.app.net/tommorris/post/4656089 post ADN] lie avec du texte "from tommorris.org" vers l'[http://tommorris.org/posts/8198 article original]
+*** Ce [https://alpha.app.net/tommorris/post/4661001 post ADN ellipsé] qui lie similairement vers la [http://tommorris.org/posts/8199 note complète]
+*** Le [https://gist.github.com/tommorris/5364658 code utilisé pour sonder le flux app.net et la mise à jour des posts originaux dans Ferocity] pour faire un lien vers leurs copie ADN syndiquées avec rel=syndication.
+* ...
+
+Alternativement, si vous voulez payer pour disposer d'une clé API ADN, votre site peut envoyer directement une copie de vos posts vers ADN en utilisant leur API (au lieu d'utiliser et d'attendre que IFTT fasse ainsi, et puis sonder le permalien de syndication ADN après le fait).
+
+== Billets en rapport ==
+Les billets en rapport concernant app.net
+=== 2013 ===
+* http://aaronparecki.com/articles/2013/03/28/1/an-open-challenge-to-app-net (traduction à raffiner : [http://xtof.me/w/Open-challenge-pour-app.net Un Défi Ouvert pour App.Net])
+** http://aaronparecki.com/articles/2013/03/31/1/a-response-to-replies-i-received-on-my-post-an-open-challenge-to-app-net (traduction fra à raffiner : "[http://christopheducamp.com/w/Une-r%C3%A9ponse-aux-repliques-recues-sur-mon-post-Un-D%C3%A9fi-Ouvert-pour-App.net Une réponse aux répliques reçues sur mon post :Un défi ouvert pour App.net]")
+* ...
+=== 2012 ===
+* https://social-igniter.com/blog/2012/08/why-we-support-app-dot-net
+** http://daltoncaldwell.com/a-response-to-brennan-novak
+
+== Composants Open Source ==
+
+Faisant partie de la [http://daltoncaldwell.com/a-response-to-brennan-novak réponse de Dalton Caldwell] à [[User:Brennannovak.com]] concernant ses plans avec App.net, il soutenait un "Commitment to coordinate between internal and external parties to create and support open-source lightweight clients..."
+
+App.net est resté fidèle à son affirmation et a par conséquent vraiment open sourcé le coede pour les clients de messagerie privée Omega.app.net qui est construit sur la plateforme App.net. En outre, ADN a aussi posté sa documentation complète pour sa plateforme qui la rend bien plus facile à opérer pour les développeurs en dehors de l'écosystème pour constuire facilement / contribuer aux outils qui interfaceront avec elle d'une manière bien plus compatible indieweb.
+
+* [https://github.com/appdotnet/ohe Omega.app.net client]
+* [https://github.com/appdotnet/api-spec App.net Documentation]
+
+== Composants Compatibles IndieWeb ==
+
+App.net a une riche communauté de développeurs d'[https://directory.app.net/ apps] et spécifiquement d'[https://directory.app.net/apps/integrations/ intégrations] qui permettent des possibilités intéressantes d'intégration avec votre application indieweb. Voici celles qui sont les plus prometteuses à cette heure
+
+* [https://directory.app.net/app/118/customwebapps-pubsubhubbub-for-adn/ PubSubHubBub Integration Client]
+* [https://directory.app.net/app/178/appnetdav/ WebDAV file replication app]
+* [http://blog.app.net/2013/04/29/announcing-domain-verification/ Vérification de domaine] avec liens rel=me, faisant de App.net un fournisseur d'authentification supporté pour [[RelMeAuth-fr|RelMeAuth]] et [[IndieAuth-fr|IndieAuth]]
+* ...
+
+== Programme Incentive pour Développeurs ==
+
+À noter aussi qu'App.net offre un programme d'incentive pour les développeurs construisant des apps qui interagissent sur la plateforme App.net. Tous les mois les clients payant App.net sont interrogés pour voter sur la qualité des apps qu'ils utilisent. Les scores totaux des apps les mieux notées reçoivent alors un pourcentage relatif du pot mensuel de $30,000.  Plus à ce propos sur :
+
+* [http://blog.app.net/2012/09/27/announcing-the-app-net-developer-incentive-program/ Announcing Developer Incentive Program, Sept 27 2012]
+* [http://blog.app.net/2013/03/01/updates-to-the-app-net-developer-incentive-program/ Updates to Developer Incentive Program, March 1, 2013]
+
+Ceci semble une belle opportunité pour un développeur indieweb talentueux de construire une app de type "hub" qui fait tout le gros travail de tirer les web mentions, favoris, et la fédération de data entre les nœuds indie et les réseaux app.net. L'objectif final serait de permettre à toute personne sur App.net (ou d'autres réseaux App.net) de publier sans-couture et de répondre entre les réseaux une fois l'app authentifiée !
+
+== Voir aussi ==
+* [[silo-fr|silo]]
+* [[Twitter-fr|Twitter]]
+* [[note-fr|note]]

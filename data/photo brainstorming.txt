@@ -1,0 +1,63 @@
+http://indiewebcamp.com/photo_brainstorming
+
+'''<dfn>photo brainstorming</dfn>''' is a page where indieweb users who are working out how to publish [[photos]] on their own site can document design challenges, issues, brainstorm ideas and show examples of photography on the web that inspires them.
+
+== People Tagging ==
+[[User:benwerd.com|Ben Werdmuller]] wondered if you could tag people in photos by linking to their profiles using HTML imagemaps (!) and marking up the imagemap links with microformats. That might look something like:
+
+<code><img src="some_photo.jpg" alt="Tantek, Aaron and Amber!" usemap="#peeps" class="u-photo">
+
+<map name="peeps">
+
+<area shape="circle" coords="124,58,8" class="microcard h-card u-url" href="http://tantek.com" alt="Tantek Çelik">
+
+<area shape="rect" coords="0,0,82,126" class="microcard h-card u-url"  href="http://aaronparecki.com" alt="Aaron Parecki">
+
+<area shape="circle" coords="90,58,3" class="microcard h-card u-url" href="http://caseorganic.com" alt="Amber Case">
+
+</map></code>
+
+However, because the HTML syntax of imagemaps sits outside the actual image tag, it may be worth adding a microformat to the map itself.
+
+== POSSE ==
+[[POSSE]]ing photo posts makes sense certainly to photo [[silos]] like:
+* [[Flickr]]
+* [[Instagram]] (as much as you can fake a POSSE post to Instagram)
+* [[Wikimedia Commons]] (as a [[commons]] rather than a silo, it may make sense to start POSSEing here as a backup/distribution/CDN mechanism)
+
+In addition, it makes sense to consider POSSEing to generic silos, despite the fact that they will only retain a (likely) lower resolution copy of your photo:
+* [[Twitter]] - as a native Twitter photo tweet, using TwitterAPI <code>update_with_media</code>
+* [[Facebook]]
+
+[[Bridgy]] Publish may help with POSSEing pictures to Twitter and FB. This is currently on the Bridgy todo list:
+* https://github.com/snarfed/bridgy/issues/85
+
+=== Why POSSE rather than TwitterCard ===
+(Not sure if this belongs here or on [[Twitter]] page, but capturing as part of this for now.)
+Advantages to POSSEing actual photos to Twitter, rather than just a link to a photo post on your site with Twitter [[Cards]] metacrap markup:
+* Further distribute the use of Twitter kind of like a CDN for your photos
+* People see a larger version of the photo via a phototweet than a Twittercard
+* Usual avoid [[metacrap]] (silo-specific meta tags) advantage
+* Photo tweets appear inline in tweet list views (e.g. Twitter timeline / homepage) whereas twitter cards won't appear inline automatically (require twiddling open).
+* Photo tweets work immediately, whereas photo cards require that Twitter whitelist your domain for cards in general (and maybe in particular for photo cards?)
+* Using the TwitterAPI hides the proprietariness, whereas using twittercards means your own website has proprietary metacrap on it
+* Twittercards set a worse example (proprietary metacrap) for others that may view source
+
+== [[User:Tommorris.org|tommorris]] ==
+
+=== Motivations ===
+Hosting my own photos has been something I've been wanting to do for a while. This is partly because I'm unhappy with most of the silos I've used:
+
+* Instagram — fine for the odd snap, but I use it in private mode because there's no easy way of having privacy controls.
+* Facebook — fine for putting up photos of friends, but... it's Facebook and they creep me out.
+* [[Flickr]] — one word: [[Yahoo|Yahoo!]] It's been redesigned a couple of times now, not necessarily for the better.
+* Wikimedia Commons — I'm reasonably confident Commons will stick around, but am unhappy with some of the administrative politics (and deeply distrust some of the administrators), and it has a limited [http://commons.wikimedia.org/wiki/Commons:Scope scope]—hosting only "freely-licensed educational media content". Commons is a great place to host some but not all content I wish to post. Commons is also very rigid about copyright: it attempts to adhere to copyright in both the United States and in the country where the photograph was taken. Some photos taken in France, Belgium, Italy and (with obscure exceptions) the Netherlands which do not have [https://commons.wikimedia.org/wiki/Commons:Freedom_of_panorama freedom of panorama] cannot be hosted on Commons even though the images are legal in my country of citizenship, the United Kingdom.
+
+Ideally, I want to host my own photos and have some of them stored elsewhere. The ones I ''don't'' want to be public are probably best stored on Facebook.
+
+=== Photography on the web I find inspiring ===
+* [http://paulstamatiou.com/photos/ Paul Stamatiou's Photos] — good photography, enticing layout.
+* [http://www.urban75.org/photos/ Urban75] — Urban75 is an old-school staple of British independent web publishing. The layout is very 90s but the photography is pretty good, and the information architecture makes me want to explore it more.
+
+== See also ==
+* [[photo]]

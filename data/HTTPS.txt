@@ -1,0 +1,434 @@
+http://indiewebcamp.com/HTTPS
+
+'''<dfn>HTTPS</dfn>''' is an abbreviation for '''Hypertext Transfer Protocol Secure''', a protocol for secure communication, supported by web servers (like [[Apache]] & [[nginx]]) and browsers. HTTPS layers Hypertext Transfer Protocol (HTTP) on top of the SSL/TLS protocol.
+
+== Why ==
+Why?
+* '''Privacy by default.''' Tim Bray posted about serving his site via https (https://www.tbray.org/ongoing/When/201x/2012/12/02/HTTPS)
+** "This blog isn’t terribly controversial. But if only the “controversial” stuff is private, then privacy is itself suspicious. Thus, privacy should be on by default."
+** "Because I can; it’s the one small part of the Internet that I do have complete control of." (https://willnorris.com/2012/12/all-https-all-the-time)
+* '''Reduce political/religious/social persecution.''' If a reader's employer, school/university, family or religious community are monitoring their net usage, having HTTPS/SSL turned on means that they can't see which specific pages are being viewed on that site. This is a good (but far from perfect) security tool to protect against the "small adversaries"—political persecutors, homophobic family members, religious communities intolerant of criticism or free thought—from seeing what pages on a particular website someone is seeing.
+** [[User:Tommorris.org|tommorris]]: If I get cybersecurity wrong, some of my friends might not have homes.
+* '''Performance gains''' from using SPDY (https://thethemefoundry.com/blog/why-we-dont-use-a-cdn-spdy-ssl/)
+* '''Search rank.''' Google now rank https sites higher than equivalent non-https sites (http://googleonlinesecurity.blogspot.co.uk/2014/08/https-as-ranking-signal_6.html)
+* '''Publishing integrity.''' If your pages are being delivered via https then ISP's, or anyone in the middle, cannot inject content and headers into your site - e.g.
+** 2014-09-08 [http://arstechnica.com/tech-policy/2014/09/why-comcasts-javascript-ad-injections-threaten-security-net-neutrality/ Comcast Wi-Fi serving self-promotional ads via JavaScript injection] - thus injecting Comcast JS into pages on YOUR site when viewed by people on Comcast Wi-Fi. If your site [[HTTPS#Level_5_security|REQUIRES HTTPS (level 5 below)]] then it prevents this injection.
+* '''Reduce carrier level tracking'''
+** 2014-10-24 [http://arstechnica.com/security/2014/10/verizon-wireless-injects-identifiers-link-its-users-to-web-requests/ Verizon Wireless injects identifiers that link its users to Web requests] by adding an HTTP <code>X-UIDH</code> header to client device requests (all phone browser/app http requests including through tethering from a laptop, maybe mifis too). <br/>'''Test (try) these to see if your device/network is sending X-UIDH:'''
+*** http://uidh.crud.net/
+*** http://students.cs.uri.edu/~ben/test.php
+*** SECURE: https://students.cs.uri.edu/~ben/test.php
+**** SHOULD NOT be sending X-UIDH regardless
+** 2014-10-30 [http://www.propublica.org/article/somebodys-already-using-verizons-id-to-track-users Somebody’s Already Using Verizon’s ID to Track Users] - note AT&T was doing something similar, and has confirmed: <blockquote>AT&T's [...] acknowledges that it would be impossible to insert the identifier into web traffic if it were encrypted using HTTPS, but offers an easy solution – to instruct web servers to force phones to use an unencrypted connection.</blockquote> Thus to prevent carriers tracking your website viewers, your site must [[HTTPS#Level_5_security|REQUIRE HTTPS (level 5 below)]] (2015-01-15 verified with & without by {{aaronpk}} & {{benthatmust}}). However an HTTP request to your site (before redirection) will still send the header (thus carrier trackable).
+** 2015-01-14 [http://www.propublica.org/article/zombie-cookie-the-tracking-cookie-that-you-cant-kill Zombie Cookie: The Tracking Cookie That You Can’t Kill]
+* '''Comment authenticity.''' If you received a comment via an https website you can be more certain it's actually sent from the person
+* '''HTTP/2.''' The http/2 spec doesn’t actually require encryption, however major browser vendors have decided to only implement http/2 over TLS, i.e. <code>https://</code>. [http://http2.github.io/faq/#does-http2-require-encryption]
+* '''HTTPS is now required for a number of useful APIs'''. Chrome requires HTTPS for fullscreen, device motion and orientation APIs, getUserMedia, geolocation, service workers and more. See [https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts Secure Contexts on Mozilla.org] for details on APIs that require a "security context" (i.e. HTTPS or secure WebSockets).
+
+__TOC__
+
+== How to ==
+* [https://konklone.com/post/switch-to-https-now-for-free Switch to HTTPS now for free] outlines how to set up SSL on your personal site with [[StartSSL]] (note the guide primarily deals with using nginx as your server)
+** Dreamhost-specific instructions  for setting up the StartSSL certificate: http://wiki.dreamhost.com/Secure_Hosting#Option_4
+
+=== Obtain ===
+Buying or obtaining free SSL certificates <em>today</em>
+* [https://www.startssl.com/ startssl.com] offers free SSL certificates for single domains. If you verify your identity, they will also allow you to register free wildcard certs.
+* [https://www.namecheap.com/ssl-certificates/comodo.aspx namecheap.com] offers single-domain SSL certificates for $7.95/year and wildcard certificates for $85/year
+* GlobalSign offers [https://www.globalsign.com/ssl/ssl-open-source/ free wildcard certificates] (!) for open source projects.
+* [https://ssls.com/ ssls.com] has inexpensive SSL certificates from multiple providers. As of 2014/03/08, a PositiveSSL certificate was $4.99/yr when buying 5 years. They also provide [https://www.ssl.com/certificates/free *free* SSL certificates for 90 day periods].
+* [http://www.cacert.org/ CAcert] is a community-driven non-profit that provides free wildcard certificates. Unfortunately the root certificate is [http://wiki.cacert.org/InclusionStatus not included] in most operating systems or browsers by default. These certs are commonly used in the GNU community.
+* [https://letsencrypt.com Let’s Encrypt] is now in public beta. They provide free domain-validated certificates. They do not offer EV certs or wildcard certs. Certificates are obtained via the command line using the [https://github.com/letsencrypt/letsencrypt Let’s Encrypt client].
+* [https://aws.amazon.com/blogs/aws/new-aws-certificate-manager-deploy-ssltls-based-apps-on-aws/ Amazon Web Services] provides free SSL certificates that can be used with other Amazon services. There is no setup required other than clicking through the web interface.
+
+==== Validating Your Purchase ====
+SSL Certificate providers require some form of verification of you, your domain, and your ownership of your domain.
+
+'''CSR Generation — '''
+A Certificate Signing Request must be generated at your site. For example, on a hosting provider that uses Cpanel, the "SSL/TLS Manager" has a "Certificate Signing Requests" section.
+
+'''Approver Email — '''
+[http://ssls.com/ ssls.com] asks for an "Approver Email" from a list of administration email addresses and Domain Registration email addresses. Choose one that you use, and receive the Domain Control Validation email, which contains a link and a "validation code". Click the link and enter the code to verify that you own the domain.
+
+'''Certificate Email — " 
+[http://ssls.com/ ssls.com send the certificate to the "Administrator Email" that you specified during the purchase process. This certificate is used in the process below.
+
+==== Let’s Encrypt ====
+Alternatively you can use [https://letsencrypt.org Let’s Encrypt]. In order to obtain a certificate you need to use their client. Log into the machine hosting your website and install the client with git:
+
+<pre>git clone https://github.com/letsencrypt/letsencrypt
+cd letsencrypt
+./letsencrypt-auto --help</pre>
+
+There are several ways we can proceed, for this example we shall simply obtain the certificates. In order to authenticate, the client will run its own server. Any server already running will conflict so we need to temporarily stop it:
+
+<pre>sudo systemctl stop nginx # or equivalent command
+./letsencrypt-auto certonly --standalone --standalone-supported-challenges tls-sni-01</pre>
+
+The client will start and then ask you to enter a list of domains you wish to use the certificate for. You could, for example, enter <code>www.example.com,example.com</code>. Once the client has finished it will create the folder <code>/etc/letsencrypt/live/www.example.com</code> which will contain the files <code>cert.pem</code>, <code>chain.pem</code>, <code>fullchain.pem</code> and <code>privkey.pem</code>. You can then reference these files in your server’s config.
+
+=== Manage ===
+When you're done with your purchase, you'll have one or more files for each certificate:
+* The certificate itself, e.g. '''snarfed.org.ssl.crt'''.
+* The private key you used to generate the certificate, e.g. '''id_rsa-2048'''.
+* Optional: Your [http://en.wikipedia.org/wiki/Certificate_authority CA]'s intermediate cert, e.g. '''sub.class1.server.ca.pem'''.
+* Optional: Your CA's root, e.g. '''ca.pem'''. Hopefully you picked a CA whose root cert is distributed with most OSes/browsers; if so, you can ignore this. (If you didn't, you should reconsider!)
+
+All of these files are usually [http://en.wikipedia.org/wiki/X.509 X.509] format except the private key, which is RSA or other private key format.
+
+Command line <code>openssl</code> is your friend for inspecting and editing certificates. For example, to dump info about a cert:
+
+<pre>openssl x509 -text -in snarfed.org.ssl.crt</pre>
+
+If your CA provided an intermediate cert, you'll need to provide it to your web server along with your own cert. For servers that only accept a single file, you'll need to concatenate the certs, e.g.:
+
+<pre>cat snarfed.org.ssl.crt sub.class1.server.ca.pem > snarfed.org.unified.ssl.crt</pre>
+
+As another example, it seems like this command line should verify that a cert is valid:
+
+<pre>openssl verify -verbose -CAfile ca.pem snarfed.org.unified.ssl.crt</pre>
+
+...but [[User:snarfed.org]] gets this error:
+
+<pre>error 20 at 0 depth lookup:unable to get local issuer certificate</pre>
+
+You will get the "error 20" error above when openssl is unable to locate the root or intermediate certificates in your chain - if you are on Linux, or know where your OS stores the certificate list, you can run:
+
+<pre>openssl verify -verbose -CApath /etc/ssl/certs snarfed.org.unified.ssl.crt</pre>
+
+If you have gnutls command line tools installed, you can verify self-signed certs:
+
+<pre>certtool -e --infile snarfed.org.unified.ssl.crt</pre>
+
+
+=== Setup ===
+The IETF has a [http://datatracker.ietf.org/doc/draft-ietf-uta-tls-bcp/?include_text=1 document with recommendations for Secure Use of TLS and DTLS].
+
+Mozilla has a great tool to build the SSL Configuration for various tools: [https://mozilla.github.io/server-side-tls/ssl-config-generator/ Mozilla SSL Configuration Generator].
+
+==== Apache ====
+[[Apache]] is pretty easy. [https://www.insecure.ws/2013/10/11/ssltls-configuration-for-apache-mod_ssl/ Here's a good how-to post.] TL;DR: Put the certificate files somewhere your Apache user can read, then set the <code>SSLCertificate*</code> config directives, e.g.:
+
+<pre>
+SSLCertificateKeyFile /home/ryan/.ssh/id_rsa-2048
+SSLCertificateFile /home/ryan/www/snarfed.org.ssl.crt
+SSLCACertificateFile /home/ryan/www/sub.class1.server.ca.pem
+</pre>
+
+[[User:ShaneHudson.net]] - As well as the certificates and keys, it is also useful to have forward secrecy and HSTS. I used the following lines in httpd.conf, the articles I found them in are in the FAQs further below. This went from C to A+ on the SSL test.
+
+<pre>
+SSLProtocol all -SSLv2 -SSLv3
+    SSLHonorCipherOrder on
+    SSLCipherSuite "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS"
+    Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+</pre>
+
+==== App Engine ====
+If you're serving on Google [[AppEngine]]'s built-in <code>appspot.com</code> domain, you're already done! Just add <code>secure: always</code> (or <code>optional</code>) to the handler(s) in your <code>app.yaml</code> or other app config file, and you'll be able to access your app over https. [https://developers.google.com/appengine/docs/python/config/appconfig#Python_app_yaml_Secure_URLs Details here.]
+
+If you're using the java runtime on App Engine, add this stanza to your <code>web.xml</code> file.
+
+ <nowiki>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app 
+   ...> 
+
+  <security-constraint>
+    <web-resource-collection>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
+</nowiki>
+
+You may additionally want to send a [https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security HSTS header] to further improve security. In java, the easiest way from a servlet running on AppEngine is to add this header to all responses when running on the production server.
+
+ <nowiki>
+import com.google.appengine.api.utils.SystemProperty;
+
+...
+
+      if (SystemProperty.environment.value() ==
+          SystemProperty.Environment.Value.Production) {
+          // force ssl for six months.
+          response.addHeader("Strict-Transport-Security", "max-age=15768000");
+      }</nowiki>
+
+If you also deliver static content, you may want to enable the HSTS header here as well. An example stanza within your <code>appengine-web.xml</code> file might look like this.
+
+ <nowiki>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+...
+    <static-files>
+    <include path="/static/**" >
+      <http-header name="Strict-Transport-Security" value="max-age=15768000"/>
+...</nowiki>
+
+
+
+
+
+If you're on a custom domain, you can use either SNI or a VIP. [https://developers.google.com/appengine/docs/ssl Details here.] You'll need to [https://developers.google.com/appengine/docs/ssl#uploading_and_configuring_certificates upload your SSL cert files] to the Google Apps control panel for your domain, then add and configure SNI or VIP slots in App Engine.
+
+==== nginx ====
+We can setup nginx to listen on port 443 with our SSL sertificate quite easily:
+
+<pre>
+server {
+    listen 443 ssl;
+    server_name example.org;
+
+     ssl_certificate /path/to/unified.crt;
+     ssl_certificate_key /path/to/my-private-decrypted.key;
+
+     //usual nginx config here like location blocks
+}
+</pre>
+
+For more detailed nginx config instructions see the page on [[nginx]]
+
+=== Test ===
+==== Production ====
+[https://www.ssllabs.com/ssltest/ Qualys's SSL Server Test] is an easy way to test the SSL cert on your live site. See e.g. [https://www.ssllabs.com/ssltest/analyze.html?d=www.brid.gy&s=74.125.198.121 brid.gy's report card], or for comparison [https://www.ssllabs.com/ssltest/analyze.html?d=jonnybarnes.uk&hideResults=on jonnybarnes.uk] gets slightly different results.
+
+[https://shaaaaaaaaaaaaa.com shaaaaaaaaaaaaa.com] will check if your SSL Cert using SHA-1 or SHA-2 and explains why it's becoming more important.
+
+[https://securityheaders.io] will test your web server's security header hardness and offers reasons why. 
+
+You can use <code>openssl s_client</code> to debug connection issues, e.g.:
+
+<pre>openssl s_client -connect snarfed.org:443</pre>
+
+If your server uses SNI, you'll need to provide the hostname too:
+
+<pre>openssl s_client -servername www.brid.gy -connect www.brid.gy:443</pre>
+
+Here's an example of debugging a single SSL issue:
+
+* https://github.com/aaronpk/webmention.io/issues/14
+* https://github.com/snarfed/bridgy/issues/20
+* http://indiewebcamp.com/irc/2014-01-04#t1388872084
+
+Brand new StartSSL certificates may give an OCSP validation error for 6-24 hours after purchase. This seems to only affect Firefox and resolves itself when the certificate propagates to the validation server[https://forum.startcom.org/viewtopic.php?f=15&t=2654]. Firefox users can disable the check temporarily with Edit > Preferences > Advanced > Certificates > Validation, and uncheck "Use the Online Certificate Status Protocol"
+
+==== Local ====
+When developing a website locally, it may be useful to be able to test the site via https. For example, when writing an OAuth client, some providers will not redirect to a page that does not use https.
+
+The easiest way to do this is to temporarily redirect your site to your own localhost (just for yourself) and use your site's cert. Just add a line like this to your hosts file:
+
+<pre>127.0.0.1	snarfed.org</pre>
+
+This is obviously temporary, though. For a more permanent setup, you can either generate a self-signed SSL certificate for your testing domain (localhost, etc) or you can create your own SSL certificate authority and sign the certificate with that.
+
+To assist with this, [[User:aaronparecki.com|aaronpk]] has created an "IndieWebCamp" root authority that can sign certificates for domains ending in ".dev".
+
+* https://ssl.pin13.net/indiewebcamp/
+
+You can add a line to your hosts file for your test domain such as 
+
+<pre>127.0.0.1   mydomain.dev</pre>
+
+And then you can use the [https://ssl.pin13.net/indiewebcamp/ IndieWebCamp authority] to generate an SSL cert for it. There are instructions on the site for how to install it under [[Apache]] and [[nginx]].
+
+=== Renew ===
+A few things to be aware of when you need to renew your certificates.
+
+Because all of the browsers now share lists of certificates that are invalid and/or broken as part of [https://en.wikipedia.org/wiki/OCSP_stapling OCSP stapling] you should renew your certificate at least two days prior to it expiring and then update your server with the certificate at least a day before. This allows the various OCSP lists to update before you touch your server - if you do not you may get some customers whose browsers have an older list and your certificate will not pass their OCSP check, which is different than it being on the revocation list.
+
+== Tricks, tips, best practices ==
+
+* to avoid mixed content alerts, replace every http:// and https:// indbound ( your domain ) link to // prefix only. This is supported in all modern browsers and will automatically fall back to the protocol you're accessing the page on.
+
+== Posts about HTTPS ==
+* [https://www.howsmyssl.com/ Hows my SSL] is a tool that rates your own browsers security when dealing with HTTPS sites. Such as will your browser uses encryption schemes known to be weak. Further, check out [https://plus.google.com/app/basic/stream/z13rfxdois3ptbvba04chrnjfxa3iv1xi3c Kyle Isom's Google+ post] about better configuring Firefox.
+* [https://community.qualys.com/blogs/securitylabs/2013/08/05/configuring-apache-nginx-and-openssl-for-forward-secrecy Configuring Apache Nginx and OpenSSL for Forward-Secrecy] This page as exact instructions for how to enable forward-secrecy. This can boost test results from C to A.
+* [https://waterpigs.co.uk/articles/the-other-side-of-https-support/ The Other Side of HTTPS Support] covers adding HTTPS support for clients which aren’t bundled with all the required intermediate certificates.
+* [https://annevankesteren.nl/2014/09/tls-first-steps TLS: First Steps], [https://annevankesteren.nl/2014/09/tls-startssl TLS: issues with StartSSL], [https://annevankesteren.nl/2014/09/tls-dreamhost TLS: issues with Dreamhost], [https://annevankesteren.nl/2014/09/tls-hsts TLS: Deploy HSTS], [https://annevankesteren.nl/2014/09/tls-next-steps TLS: next steps] are a series of short articles by [https://annevankesteren.nl/ Anne van Kesteren] documenting his process setting up TLS on Dreamhost
+* {{rhiaro}} wrote about [http://rhiaro.co.uk/2015/12/https-terrible HTTPS on shared hosting with letsencrypt] (successful) and [http://rhiaro.co.uk/2015/12/https-what HTTPS with nginx reverse proxy to serve sites in multiple docker containers] (inconclusive/failed)
+* {{aaronpk}} wrote about a successful attempt at [http://aaronparecki.com/articles/2015/12/07/1/letsencrypt setting up https on nginx with letsencrypt]
+* …
+
+== IndieMark Levels ==
+Proposed [[IndieMark]] Levels of recommended support for HTTPS on your own website, as part of a security component
+
+
+=== Level 1 security ===
+Level 1 - '''Don't do the wrong thing'''. (what's the minimal "not wrong thing"?). Possible reasonable behaviors:
+* '''Refuse the connection''', because if you don't support SSL, generally you're not listening on port 443, so clients can't connect. Challenge: the user has no idea what is wrong, nor how to fix it (i.e. retry going to the site with "http:" instead).
+
+'''Why?'''
+* Avoid a misleading user experience.
+
+'''IndieWeb Examples'''
+* ... add yourself here with the date you verified Level 1!
+
+
+=== Level 2 security ===
+Level 2 - '''Secure admin of your site''' - support https for your login/admin UI/page(s) with a self-signed certificate.
+* Your admin page(s):
+*# MUST be available over https
+*# SHOULD redirect from http to https automatically, so you don't accidentally log-in in the clear over http (e.g. send your site login password in the clear)
+*# SHOULD include the [http://en.wikipedia.org/wiki/HTTP_cookie#Secure_cookie secure flag] ([http://php.net/manual/en/session.configuration.php#ini.session.cookie-secure PHP details]) when setting any login credential or session cookies, so such cookies aren't leaked over other (possibly non-admin) http requests (e.g. enable Firesheep style session cookie re-use attacks)
+
+'''Why?'''
+* '''Security for write-access to your site!''' Otherwise anyone can hack your CMS and post stuff as you. (e.g. using a tool like Firesheep to sniff your login session cookies, and re-use them to gain access to your admin pages.)
+
+'''How to'''
+# How to make your '''admin page(s) available over https:'''
+## install a self-signed certificate (see your [[webhosting]] provider for details)
+## navigate explicitly (e.g. by typing) to the <kbd>https://</kbd> version of your site.
+# How to redirect your admin UI '''from http to https automatically:'''
+## make Wordpress Admin use SSL: http://codex.wordpress.org/Administration_Over_SSL
+## make your own other software use SSL on Apache using .htaccess (derived from [http://codex.wordpress.org/Administration_Over_SSL#Rewrite_Rules_For_The_Insecure_Host that WP reference]), e.g. for your admin URL <samp>example.com/my-adm/</samp><blockquote style="white-space:pre;margin-left:-5em"><code style="background:none"># HTTPS-only my-adm<br/>RewriteCond %{THE_REQUEST} ^[A-Z]{3,9}\ /(.*)\ HTTP/ [NC]<br/>RewriteCond %{HTTPS} !=on [NC]<br/>RewriteRule ^/?(my-adm/) <nowiki>https://example.com%{REQUEST_URI}%{QUERY_STRING}</nowiki> [R=301,QSA,L]</code></blockquote> where: 
+### <samp>example.com</samp> is your personal domain, and
+### <samp>my-adm/</samp> is the path to your login / admin web UI.
+N.B. useful htaccess file checker: [http://htaccess.madewithlove.be htaccess checker] - let's you paste in your htaccess file and test URL flow through it using sample URLs.
+# How to '''secure your cookies''', e.g. in PHP:
+## set various session params before calling session_start() : <blockquote style="white-space:pre"><code style="background:none">ini_set("session.cookie_httponly", 1);<br/>ini_set("session.use_only_cookies", 1);<br/>ini_set("session.cookie_secure", 1);<br/>session_start();</code></blockquote>
+## clear your cookies in your browser, use your login flow to sign-into your website, then double check your cookies are secure, e.g. in Firefox:
+### choose '''Preferences...''' from the Firefox menu.
+### click '''Privacy''' tab
+### click '''Show Cookies...'''
+### enter your domain name into the dialog's search box
+### select the cookie your code set, e.g. "PHPSESSID"
+### The info below the list of cookies should say: <blockquote style="background:#efe">Send For: Encrypted connections only</blockquote> If it doesn't, or if it says something like <blockquote  style="background:#fee">Send For: Any type of connection</blockquote> then the cookie is not secure.
+
+
+Note: If you actually setup a real SSL cert for your whole domain and serve your admin interface from the same domain, you have actually achieved Level 3.
+
+'''IndieWeb Examples'''
+* {{t}} for tantek.com on his [[Falcon]] admin interface at https://tantek.com/falcon/ [http://tantek.com/2014/143/t1/setup-self-signed-ssl-certificate-site-admin since 2014-05-23], and redirect admin UI from http to https automatically plus secure session cookie since 2014-09-02.
+* ...
+* ... add yourself here with the date you reached Level 2!
+
+
+=== Level 3 security ===
+Level 3 - '''Serve https optionally on all your pages''' - provide your front-end over both http and https with a cert from a trusted CA, but not necessarily external content, thus you might still get mixed-content warnings sometimes.
+
+'''Why?'''
+* You can link from [[silo]] profiles to your site via https
+* You can start using (requiring!) your https URL for [[IndieAuth]] logins (e.g. into the wiki)
+* Your readers can securely access your site without a scary warning message pop-up.
+* [[privacy]] for your readers (what they are choosing to read)[http://www.tbray.org/ongoing/When/201x/2012/12/02/HTTPS]
+
+'''IndieWeb Examples'''
+* [[User:pauloppenheim.com|Paul Oppenheim]] on https://pauloppenheim.com/ (cert from dreamhost which uses comodo) since 2012-01.
+* Tim Bray on https://www.tbray.org/ [http://www.tbray.org/ongoing/When/201x/2012/12/02/HTTPS since 2012-12-02].
+* {{aaronpk}} on https://aaronparecki.com/ since 2013-11-10
+* [[User:Dunlaps.net|Darius Dunlap]] on https://dunlaps.net/darius [https://dunlaps.net/darius/2014/03/25/indieweb-update/ since 2014-03-07] (at [[2014/SF|IndieWebCampSF]]).
+** Level 2: previously, self-signed cert on his [[WordPress]] admin interface at https://dunlaps.net/darius/wp-login.php since YYYY-YY-YY.
+* {{gRegor}} on https://gregorlove.com since 2014-07-08
+* [[User:waterpigs.co.uk|Barnaby Walters]] on waterpigs.co.uk supports TLS using StartSSL, redirects automatically but still serves mixed passive content as of 2014-09-15 (was previously at L2 with self-signed cert)
+* ...
+* ... add yourself here with the date you reached Level 3!
+
+'''IndieWeb Examples''' with http to https redirects (that still need fixing of mixed content warnings) - we explicitly recommend '''not redirecting your http pages to https unless you've ensured you have no mixed-content warnings'''.
+* 2014-??-?? Indiewebcamp.com itself
+
+=== Level 4 security ===
+Level 4 - '''Lock icon or better when serving https''' - be sure there's at least a lock icon next to the https in the address bar. Serve everything (home page, permalinks, images etc.) over https when the user requests https. Eliminate mixed-content warnings (e.g. triangle with exclamation mark inside next to https in the URL bar).
+
+'''Why?'''
+* Avoid showing readers a warning message or triangle icon in the browser address bar
+* If you optionally allow http or https access to your site, and your https access *lacks* the mixed content warning, you're at least helping your https visitors.
+* Eliminating mixed-content warnings is important because those warnings are essentially making the https ineffective. The user has no idea how much of a page, it's images, scripts, or text created from scripts has come from an embedded http connection.
+* Avoid mixed http/https content which is blocked by default on Firefox & Chrome. See: https://blog.mozilla.org/security/2013/05/16/mixed-content-blocking-in-firefox-aurora/, https://code.google.com/p/chromium/issues/detail?id=81637
+
+'''IndieWeb Examples in rough order of implementation'''
+* 2014-12-31 {{kylewm}} on https://kylewm.com
+* ... (likely indiewebcamp.com once its mixed content warnings are fixed)
+
+
+'''FAQ:''' <br/>
+'''How do you ensure that external content is over https?''' E.g. if I have an avatar for a comment from {{t}} it will be over http since he uses http.
+* When you receive a webmention, download the image from the [[h-card]] and serve it from your own server.
+* Alternatively, use a separate https image proxy like https://github.com/atmos/camo (used by GitHub)
+* Unless it's a [[Twitter]] mention, in which case link to:
+** <code><nowiki>https://twitter.com/username/profile_image</nowiki></code>
+** See [[Twitter#Profile_Image_URLs]] for more on Twitter profile images.
+
+=== Level 5 security ===
+Level 5 - '''Redirect everything to https''' - send redirects from http -> https. I.e. your pages automatically always get at least a lock icon in the browser address bar (and no warnings).
+
+'''Why?'''
+* All your site URLs will be consistent.
+* Users will more likely get content that you intended to serve them
+* All the advantages to broader internet security of always serving https (documented in intro at top)
+
+'''IndieWeb Examples in rough order of implementation'''
+* 2014-??-?? [[User:snarfed.org|Ryan Barrett]] on https://snarfed.org/ (via HSTS header) 
+* 2014-05-23 [[User:kartikprabhu.com|Kartik Prabhu]] on https://kartikprabhu.com/ (via 301 redirect)
+* [[User:David.shanske.com|David Shanske]] on https://david.shanske.com/ since 2014-12-25.
+** At Level 3 from 2014-08-29
+** Was at Level 4 for a bit, but did not note date.
+** All posts, resources, including external user pics.
+** Caveat: There may be some older posts with embedded images from http that still give the mixed content warning. I think I have them all
+*** Dropped down to B...updated ciphers and added a custom DHE parameter. As of 2016-02-14 am back at A+.
+* ...
+* ...
+* ... add yourself here with the date you reached Level 4!
+
+'''Check the browser's address bar''' where your URL is displayed and make sure:
+# There's a lock icon before (in front of) the URL in the address bar
+# There's no warning triangle icon (in front of) the URL in the address bar
+
+'''Why is my site running so slowly?'''
+* I found that moving my https redirect into httpd instead of .htaccess, and explicitly setting it to go to www meant it would be faster and wouldn't go through multiple redirects. [http://stackoverflow.com/questions/14958544/mod-rewrite-directives-work-in-htaccess-but-ignored-in-httpd-conf This SO question] came in handy for getting httpd to redirect. ~ [[User:shanehudson.net|Shane Hudson]]
+
+'''Why am I only A not A+?'''
+* You need to enable HSTS. [https://raymii.org/s/tutorials/HTTP_Strict_Transport_Security_for_Apache_NGINX_and_Lighttpd.html This article] will help. ~ [[User:shanehudson.net|Shane Hudson]]
+
+=== Level 6 security ===
+Level 6 - '''Correct ciphers, support forward secrecy''', etc. per https://www.ssllabs.com/ssltest/ (all previous levels required, i.e. document method of http to https redirection)
+
+'''Why?'''
+* HTTPS is good, better with forward secrecy: http://news.netcraft.com/archives/2013/06/25/ssl-intercepted-today-decrypted-tomorrow.html
+* Some ciphers are not safe, some are slower than others and SSL breaches are dangerous: https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+
+'''IndieWeb Examples'''
+* [[User:Bear.im|Bear]] on https://bear.im since [https://bear.im/bearlog/2013/177/nginx-ssl-config-for-forward-secrecy since 2013-06-26] (http->https via 301 and [https://www.ssllabs.com/ssltest/analyze.html?d=bear.im A+ w/PFS from ssltest]). As of [https://shaaaaaaaaaaaaa.com/check/bear.im 2014-09-23 site certificate signed with SHA-2].
+* [[User:willnorris.com|Will Norris]] on https://willnorris.com/ (See https://www.ssllabs.com/ssltest/analyze.html?d=willnorris.com and note: http to https via 301 redirect) [https://willnorris.com/2013/11/improving-my-https-support since 2013-11-25]
+** Level 4 (all https all the time) before that [https://willnorris.com/2012/12/all-https-all-the-time since 2012-12-16]
+* [[User:Petermolnar.eu|Péter Molnár]] on https://petermolnar.eu/ (See https://www.ssllabs.com/ssltest/analyze.html?d=petermolnar.eu) since 2014-MM-DD.
+* [[User:jonnybarnes.uk|Jonny Barnes]] on https://jonnybarnes.uk/ (via 301 redirect, A+ on ssllabs: https://www.ssllabs.com/ssltest/analyze.html?d=jonnybarnes.uk&hideResults=on) since 2014-05-31
+* {{rascul}} on https://rascul.io (described at [[User:Rascul.io/ssl]], A+ on ssllabs: https://www.ssllabs.com/ssltest/analyze.html?d=rascul.io) since 2014-06
+* [[User:Retout.co.uk|Tim Retout]] on https://retout.co.uk/ (301 redirect + HSTS, A+ on ssllabs: https://www.ssllabs.com/ssltest/analyze.html?d=retout.co.uk&hideResults=on) since 2014-09-?? (or earlier)
+* 2014-09-06 [[User:Tommorris.org|tommorris.org]]
+** Embedded images are often still served on HTTP. Now A+ on SSL Labs!
+* [[User:shanehudson.net|Shane Hudson]] on https://www.shanehudson.net, 301 redirect and A+ on ssllabs. Jumped from no SSL to level 5 :D Since 2014-09-07
+* [[User:aralbalkan.com|Aral Balkan]] on aralbalkan.com - A+ rating since 2014-09-07. Previously: Level 4 since 2014-08-11.
+* [[User:marcus-povey.co.uk|Marcus Povey]] on marcus-povey.co.uk and mapkyca.com - A+, with 301 redirect and HSTS for many months on mapkyca.com and since 2015-06-19 on marcus-povey.co.uk
+* ...
+* ... add yourself here with the date you reached Level 5!
+
+== Criticism ==
+=== Legacy Software and SNI Support ===
+A server has an IP address. It used to be that each server would host one website (domain) in HTTP/1. Then HTTP/1.1 introduced the Host header which allowed a server to host multiple domains. However, the connection needs to be encrypted before the Host header can be sent. So which certificate should the server send initially? When the wrong one is chosen we get issues. The solution to this problem is called Server Name Indication. SNI is supported by all modern browsers and cryptography libraries. OpenSSL is one of the most popular and has supported SNI since 2010 for example. However, we can run into issues when older software tries to interact with your site: http://indiewebcamp.com/irc/2015-12-06/line/1449416119493
+=== General X509 Criticism ===
+* <span class="h-cite"><time class="dt-published">2014-04-09</time> <span class="p-author h-card">Sean Doig</span>: <cite class="p-name">[http://lorddoig.svbtle.com/heartbleed-should-bleed-x509-to-death Heartbleed should bleed X.509 to death]</cite>, <span class="p-url">http://lorddoig.svbtle.com/heartbleed-should-bleed-x509-to-death</span></span>
+
+=== Maintenance tax and site fragility ===
+Adding HTTPS to your site adds the extra maintenance tax of HTTPS certificate renewal (and updating).
+
+As a result, if you fail to do this, or get it wrong, your site goes down.
+
+Evidence:
+* https://twitter.com/kylewmahan/status/637351333436129280 <blockquote>Since getting into #indieweb stuff, I’ve seen way more sites go down because of an expired HTTPS cert than expired domain registration.</blockquote>
+
+Let’s Encrypt are trying to fix this by making updating TLS certificates an automated process via their [https://github.com/letsencrypt/letsencrypt Let’s Encrypt client].
+
+== Related ==
+* If you want to run ssh and https both on port 443 (so your ssh works even behind stingy "open" wifi or corp firewalls:
+** http://www.rutschle.net/tech/sslh.shtml (found by {{aaronpk}}, but no known indieweb users yet)
+
+== Sessions ==
+Sessions at IndieWebCamps about https:
+* 2014-03-07 [[2014/SF/https|IndieWebCampSF https]]
+
+
+== See Also ==
+* [[Apache]]
+* [[nginx]]

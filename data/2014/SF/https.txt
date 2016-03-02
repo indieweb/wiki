@@ -1,0 +1,59 @@
+http://indiewebcamp.com/2014/SF/https
+
+Archived from https://etherpad.mozilla.org/indiewebcamp-https
+----
+
+2014-03-07 [[2014/SF|IndieWebCampSF]]
+
+HTTPS session
+
+led by Willnorris.com
+
+[http://instagram.com/p/lQwHQwg9RS/ http://distilleryimage7.ak.instagram.com/48500fa0a65911e38b940efe71de0e9b_8.jpg]
+
+Let's not turn this into a discussion about the architecture of SSL signing being broken...
+* Free SSL certs from startssl.com
+* startssl provides free wildcard certs with extra identity verification
+* Namecheap provides cheap SSL certs ($5-$7/yr)
+* http://www.ssls.com/
+* http://indiewebcamp.com/https
+* https://www.ssllabs.com/ssltest/
+
+Issues with SNI
+* Some client libraries in some programming languages don't have support yet
+
+SPDY - huge performance improvements
+
+HTTP 2.0 won't put SSL requirements in the spec, but Mozilla and Google will both require SSL for SPDY. (http://www.mnot.net/blog/2014/01/04/strengthening_http_a_personal_view)
+
+Tantek asks: is there a recommendation for something I can do to make https not suck when they visit my site?
+
+Will: I'm ok saying Windows XP computers can't access my site. For an eCommerce site I would not say that.
+
+SSL in indiemark?
+* Level 1 - "don't do the wrong thing"
+** Why? Don't provide a bad user experience 
+** Example: https://waterpigs.co.uk/
+* Level 2 - support it for your admin pages with a self-signed cert
+** Why? Security, otherwise anyone can hack your CMS and post stuff as you. (e.g. firesheep) 
+** Example: https://dunlaps.net/darius/wp-login.php
+** How to make Wordpress use SSL: http://codex.wordpress.org/Administration_Over_SSL
+** Note: If you actually get a real SSL cert and serve your admin interface from the same domain, you are actually in Level 3.
+* Level 3 - provide your front-end over both https and http with a cert from a trusted CA
+** Why? 
+** Example: https://aaronparecki.com/ https://pauloppenheim.com/
+* Level 4 - serve everything over https and send redirects from http -> https
+** Example: https://snarfed.org/ (via HSTS header) https://willnorris.com/ (via 301 redirect)
+* Level 5 - use correct ciphers, etc (see https://www.ssllabs.com/ssltest/)
+** Example: https://willnorris.com/ (https://www.ssllabs.com/ssltest/analyze.html?d=willnorris.com)
+
+Why?
+* Tim Bray posted about serving his site via https (https://www.tbray.org/ongoing/When/201x/2012/12/02/HTTPS)
+** "This blog isn’t terribly controversial. But if only the “controversial” stuff is private, then privacy is itself suspicious. Thus, privacy should be on by default."
+** "Because I can; it’s the one small part of the Internet that I do have complete control of." (https://willnorris.com/2012/12/all-https-all-the-time)
+* If you received a comment via an https website you can be more certain it's actually sent from the person
+* Performance gains from using SPDY (https://thethemefoundry.com/blog/why-we-dont-use-a-cdn-spdy-ssl/)
+
+
+[[Category:2014]]
+[[Category:2014/SF]]

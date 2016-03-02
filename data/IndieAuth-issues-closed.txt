@@ -1,0 +1,24 @@
+http://indiewebcamp.com/IndieAuth-issues-closed
+
+This page exists to archive [[IndieAuth#Issues|IndieAuth issues]] that have been resolved.
+
+=== link rel me support ===
+Github Issue: https://github.com/aaronpk/IndieAuth/issues/15
+
+There have been a few people (e.g. cweiske in [[irc]]) that have wanted to use:
+* <code>&lt;link rel="me"></code>
+on their home page instead of a visible link to one of their other profiles (e.g. github).
+
+Reasons:
+* '''freedom of design''': "takes away part of my freedom to design my page as I like" (cweiske in irc)
+* '''no desire to promote any silos in any way''' (user in person at [[2013/osfw3c]] workshop).
+** User does not want to provide visible promotion of any [[silo]] (reason against a visible a href). 
+** User does not want to provide implied positive linkage to any silo (reason against even an invisible a href that a search engine would crawl, index, and likely use to grant some positive weighting to the a href destination).
+
+While link rel-me is less visible, and more prone to becoming out of date (or maliciously inserted without the owner realizing or without anyone viewing the site realizing), it is something we should consider if there are enough real-world examples of Indie Web site owners wanting to do [[RelMeAuth]] this way.
+
+Work-around: "could of course display:none it" ... "but that would be worse"
+
+=== Security ===
+* Care should be taken by the client to ensure that no token is re-used (at least within some reasonable time-frame) to prevent replay attacks.
+** The server will only accept one request to validate a token now, so this does not need to be done client-side. It also means clients cannot use these tokens as session tokens, they are more like OAuth 2's authorization code. [[User:Aaronparecki.com|Aaronparecki.com]] 09:08, 1 September 2013 (PDT)

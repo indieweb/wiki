@@ -1,0 +1,107 @@
+http://indiewebcamp.com/follow
+
+'''<dfn>follow</dfn>''' is a common button in [[silo]] UIs (like [[Twitter]]) that adds updates from that profile (typically a person) to the stream shown in an integrated [[reader]], and sometimes creates a '''<dfn>follow post</dfn>''' either in the [[follower]]'s stream ("… followed …" or "… is following …") thus visible to their followers, and/or in the [[notifications]] of the user being followed ("… followed you").
+
+The difference between '''following''' and '''[[friending]]''' is that to follow does not require an agreement between both parties where as friending does. Following is an asymmetrical relationship, where as friending is symmetrical.
+
+== Indieweb examples ==
+=== rhiaro ===
+{{rhiaro}} displays follows posts since 2015-04-27, see list at [http://rhiaro.co.uk/follows] (but they also show up mixed in with other post feeds). Marked up with <code>u-x-follow-of</code> on the URL of the person/site followed, for now.
+
+=== Ben Roberts ===
+{{ben_thatmustbeme}} creates follow posts since 2015-05-11, marked up with <code>u-follow-of</code> on the URL of the following. E.g.:
+* https://ben.thatmustbe.me/follow/2015/5/11/7/
+
+== Silo examples ==
+(stub section - please help expand!)
+
+=== Facebook ===
+[[Facebook]] has both ''following'' and ''friending'': <blockquote>"When you add someone as a friend, you automatically follow that person, and they automatically follow you. This means you may see each other's posts in News Feed. When you follow someone who you're not friends with, you'll see posts that they've shared publicly in your News Feed." - [https://www.facebook.com/help/255620881144653 Facebook help]. </blockquote> As a result, you can ''follow'' people you're not friends with who have allowed this in their privacy settings, and you can unfollow people you are friends with, so their content doesn't appear in your timeline, without unfriending them.
+
+* Facebook periodically shows new friend connections in the main feed, and so far as I can tell up-to-the-minute new friend information in the right sidebar.
+* It also has 'suggested follows/friends' and the ability to suggest a follow/friend to someone.
+
+Issues:
+* '''[[Facebook#Algorithmic_Filtering|Algorithmic filtering]]''' - you likely will not see all the posts of everyone you are following (note the "you may see each other's posts" - may not will). Facebook has an algorithm they use to show you only posts that they think you'll want to see from those you are following.
+{{main|Facebook#Algorithmic_Filtering}}
+
+=== Twitter === 
+
+* Twitter has only one-way following, but the API describes people you follow as 'friends'. ([https://dev.twitter.com/rest/reference/get/friends/ids Twitter API /friends])
+* Twitter pushes notifications to mobile apps when several people I follow all follow the same person and intersperses 'so-and-so followed blah' posts amongst tweets in a person's main timeline.
+
+== Brainstorming ==
+=== Follow posts ===
+Why create/publish "follow" posts that say 'A followed B' (or 'A unfollowed B').
+
+* {{rhiaro}}: As the community is currently small, I'm interested in seeing when people I follow follow someone new, in case I want to follow them as well. This might not work so well if I was following hundreds of people (silos curate this information for you for a reason..). 
+** I'd potentially be more interested in choosing whose follows I see myself (eg. by subscribing to a specific 'follows' feed by someone).
+** I'm not sure about posts for unfollows. Broadcasting unfollows could be rude/offensive/upsetting but if you unfollow someone for a specific reason (they are abusive, hostile, boring) it might be useful for me to know you've done this (and why).
+** I'm definitely interested in keeping track of when I follow/unfollow people and creating follow/unfollow posts with published dates seems like a good way to do this. Could also add a note about why I (un)followed them (lots of people I follow on Twitter are consistently interesting but I can't remember when/how I found them). 
+** If I follow someone then unfollow them later, I don't necessarily want the fact I ever followed them in the first place to be lost to the ether.
+
+=== Follow notifications ===
+Every silo gives you the option to be notified when someone follows you. Is anyone sending/expecting webmentions for this?
+
+Could this be done as:
+* someone visits  {site A}
+* {site A} has "follow" button ( potentially with local meaning, so for the currently visited resource, like a page, a tag collection page, etc. )
+* clicking on the follow button leads to indieauth
+* site B authenticates
+* {site A} detects webmention endpoint on {site B}
+* {site A} registers {site B} to be webmentioned an update occurs on that resource to the resouce
+* webmention should probably include an additional field, so it would be like 
+    source={source}&target={authed URL webmention endpoint}&type=notification
+?
+
+=== Following vs subscribing ===
+
+Following can be considered synonymous with ''subscribing'', for example via a [[reader]] to consume content from a website or feed. This makes sense on platforms where each person has only one feed (eg. Twitter). However it's worth noting that one person or site can have multiple feeds (different types of content, different topics etc) so it might be useful to differentiate between ''following a person'' and ''subscribing to a feed''. 
+
+=== Permanent Follow ===
+
+Performing a follow action on all platforms is a one time action done by clicking a button or entering your email address in a field and then clicking a button.
+
+* [[Twitter]] - follow
+* [[Instagram]] - follow
+* [[mailing list]] - input email, click subscribe
+* [[Facebook]] - add friend (person), like (page), follow (person or page which allows it, liking a page implicitly follows it)
+* some blogs - subscribe (via [[FeedBurner]] / [[Google Reader]] style service)
+
+If one is no longer interested in receiving updates from a source, they must perform an '''unfollow''' which is  another manual action.
+
+* Twitter - unfollow
+* Instagram - unfollow
+* mailing list - click on unsubscribe link in email, then confirm on webpage
+* Facebook - unfriend (person), unlike (page), unfollow (person or page which allows it)
+* some blogs - unsubscribe via web interface
+
+=== Temporary Follow ===
+
+There is the idea of a temporary follow, which is like a normal follow, but a temporary follow automatically expires after a certain amount of time or other condition is met.
+
+Blog comments on the WordPress platform have a rough implementation of this idea. Once one leaves a comment "follows" a thread, the WordPress platform asks "Would you like be notified of additions to this conversation?" upon selecting yes, the user is notified of follow up discussion. Aside from WordPress the only app that seems to be doing something in respect to cross platform notifications of updates to conversations is [http://branch.com]
+
+Some examples where this could be really useful are:
+
+* Notify people involved in a previous conversation X about new post Y that relates to X "Orignal poster has 
+* Temporarily follow everyone at an event for duration of the event, then expire a week after event is complete
+
+The first example starts to border on the territory of [[notifications]] in providing simple UI feedback to a user!
+
+=== Follow Webaction ===
+As "Follow" is a service specific [[webaction]] on [[silos]] like [[Twitter]] and [[Facebook]], and both have "Follow" button markup you can add/deploy on your own website, it makes sense to developer a "Follow" webaction to wrap whatever service-specific Follow button(s) you already have.
+
+Start with experimenting with [[SubToMe]] to learn and understand how that works, before designing a generic "Follow" webaction (markup, [[indie-config]] handler etc.)
+
+With an indie [[reader]] you can potentially follow any site. [[woodwind]] already has a subscribe endpoint that works with a URL, so a bookmarklet is easily made:
+  javascript:var w=window.open('https://reader.kylewm.com/subscribe?origin='+encodeURIComponent(location.href),'follow','scrollbars=1,status=0,resizable=1,location=0,toolbar=0,width=360,height=480');
+
+As a webaction, you don't necessarily want to subscribe to the page you are on - for example twitter supports follow on any user int he visible thread - the indie equivalent to this would be adding follow buttons to author urls in replies, comments and other webmention presentations.
+
+== See Also ==
+* [[unfollow]]
+* [[friend]]
+* [[follower]]
+* [[SubToMe]]
+* [[webaction]]

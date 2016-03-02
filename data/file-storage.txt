@@ -1,0 +1,102 @@
+http://indiewebcamp.com/file-storage
+
+{{stub}}
+
+'''<dfn>File Storage</dfn>''' is the practice of storing main (primary) site content in flat files in a filesystem.
+
+== Why ==
+Many indieweb [[projects]] are storing their data in flat files on the file system for reasons of simplicity and robustness.  
+
+See also the [[databases-antipattern]] for reasons why flat files for storage are growing in popularity compared to databases.
+
+== How ==
+These flat files typically are either:
+* [[Markdown]] with custom (per project) extensions for various metadata
+* HTML+[[microformats]] (e.g. [[hAtom]] and/or [[h-entry]])
+
+And contain either:
+* one post per flat file
+* time sharded: a set of posts per fixed time period per flat file
+
+== IndieWeb Examples ==
+IndieWeb community members that use file storage on their personal site.
+
+=== Tantek ===
+{{t}} on tantek.com uses flat files for primary storage of content:
+* [http://tantek.com/2010/001/t1/declaring-independence-building-it 2010-01-01]... present: [[Falcon]] which stores data in HTML+microformats flat files, 6 per year (1 per [[bim]]).  See [[Falcon#Storage_format|Falcon storage format]] for details.
+* [http://tantek.com/log/2002/08.html 2002-08]...[http://tantek.com/log/2008/08.html 2008-08] static site directly served from primary storage of flat files, up to 12 per year (1 per Gregorian month).
+
+=== Aaron Parecki ===
+{{aaronpk}} on [http://aaronparecki.com aaronparecki.com] uses [[p3k]] - one file per post, YAML extensions for meta info - since ~2011.
+
+=== Kevin Marks ===
+{{kevinmarks}} on [http://kevinmarks.com kevinmarks.com] stores posts formatted as HTML in [https://github.com/kevinmarks/kevin-marks.com GitHub] and deploys statically to Heroku.
+
+=== Bear ===
+[[User:Bear.im|Bear]] at https://bear.im/ uses [[Hakkan]] uses flat files for storage of all content:
+* posts - since 2003-12-18 stored as text with some textual/markdown/whatever markup, with one file per post, named year+day-of-year, key:value header for metadata and a json blob for connected resources
+* webmentions - stored as html in the same directory as the post
+* comments - stored as html in the same directory as the post
+* feeds and related
+
+=== Bret C. ===
+{{bret}} uses the following on bret.io:
+* Stores site content in git
+* Renders to html using [[jekyll]]/gh-pages
+Yaml headers (aka front-matter) with [[GitHub]] flavored [[Markdown]] mixed with liquid template include tags for post attachment metadata.  Yuuuuuck!  This is what jekyll sets you up with.  It has its ups and downs, but its a mix of 3 weird languages which really bothers me.
+
+=== Rascul ===
+{{rascul}} stores content for https://rascul.io in a [https://git.rascul.io/crash/content git repository] and uses [[crash]].
+
+=== Barnaby Walters ===
+Stores all canonical copies of [http://waterpigs.co.uk waterpigs.co.uk] site data in the filesystem and uses [[Taproot]] for publishing.
+
+* notes and articles as YAML files with HTML in (wants to change these to HTML+mf2 for browsability, standards support)
+* timestamped HTML archives (along with HTTP headers in *-headers.txt) in URL-mimicking folder structures
+* Sheet music in ABC files
+
+=== Mark87 ===
+Testing at [http://markmurfin.com/editor.php Editor] and [http://markmurfin.com/viewer.php Viewer]
+* Simple, working Editor saves simple articles as html files to the filesystem.
+* Viewer system loads the html files and can output them with different markup, css, adding h-data, etc.
+* Wants to save html files with microdata schema for super cool idea that I have
+
+=== Emma K. ===
+[[User:notenoughneon.com|Emma]] at http://notenoughneon.com using [[Neonblog]]. Posts are stored in html+mf2 files. The feed is dynamically generated from parsed microformats with an index persisted in JSON.
+
+=== ... add yourself ... ===
+
+=== ... many more [[Jekyll]] users ===
+
+=== Want to use file storage ===
+IndieWeb members that *want* to use File Storage on their personal site:
+* [[UserKartikprabhu.com|Kartik]] using [[Bundle]] wants to move away from [[MySQL]] to a HTML+mf2 based file storage for main content. Has played with YAML-based storage but does not like it. Article content is authored and stored in Django-style HTML templates anyway.
+* add yourself.
+
+== Other Independent Examples ==
+=== David Baron ===
+David Baron on http://dbaron.org/ uses flat HTML files, one per blog post, one for his blog index page, since 2002.
+
+== Intranet Examples ==
+=== XOXCO ===
+XOXCO uses flat [[markdown]] files as the storage for their internal wiki which they use and contribute to from [[Slack]]
+* https://medium.com/why-not/our-slack-wiki-e4f6d23a3495
+** http://aaronparecki.com/bookmarks/2015/05/21/3/wiki-slack-database
+
+== Flat file "CMS" systems in the wild ==
+
+* [http://www.getgrav.org/ Grav] is a PHP, YAML, Twig and Markdown Extra based storage project which looks promising.
+* [http://getkirby.com/ Kirby] is another.
+
+== Criticism ==
+=== Command Line Configuration ===
+The process of uploading and setting up flat file storage on shared [[hosting]] may require command line configuration such as:
+* <kbd>chmod -R 0777</kbd>[http://indiewebcamp.com/irc/2014-10-16/line/1413497857282]
+Any flat file storage solution should seek to minimize and eliminate any command line based configuration needs.
+
+== See Also ==
+* [[storage]]
+* [[database]]
+* [[database-antipattern]]
+* [[database-cache]]
+* [[projects]]

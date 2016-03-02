@@ -1,0 +1,41 @@
+http://indiewebcamp.com/link-preview-fr
+
+= Prévisualisation de lien =
+
+{{stub-fr}}
+
+une '''<dfn>prévisualisation de lien</dfn>''' est ce que les différents réseaux sociaux [[silos]] (par ex. [[Facebook]], [[Twitter]], [[Google+]]) affichent sous les notes et commentaires qui ont une ou plusieurs URLs, en extrayant l'information provenant de ces URLs de contenu et présentant un titre/résumé/photo pour ces URLs sous le commentaire/note posté(e).
+
+== support existant sur les silos ==
+* [[Facebook-fr|Facebook]] utilise OG:
+* [[Google+-fr|Google+]] utilise un assortiment de meta/schema/OG+
+* [[Twitter-fr|Twitter]] utilise son propre meta + OG AKA "Twitter Cards"
+* ... qui sera le suivant pour produire sa propre convention de prévisualisation de lien ?
+
+
+== standard simple de prévisualisation de lien ==
+hAtom est un bloc de construction utile pour ça par ex : 
+
+<code>&lt;body class="h-entry"></code> est un bon moyen simple de baseline pour marquer la data pour des prévisualisations de liens.
+
+Pour plus de détails vers le développement d'un standard simple de prévisualisation de lien, voir : 
+* http://microformats.org/wiki/link-preview-brainstorming
+
+== wishlist implémentation ==
+Il semble qu'une implémentation indieweb d'une fonctionnalité "prévisualisation de lien" devrait avoir : 
+
+# un moyen ouvert de '''marquer'''' l'info sur les pages que nous voulons placer à l'intérieur d'une prévisualisation (min. : name, summary, photo). Voir au-dessus "standard simple de prévisualisation de lien" above.
+# '''bibliothèque''' OSS qui retrouve une page et '''génère un marquage de prévisualisation embarqué'''. Une telle biblothèque devrait vous renvoyer le fragment de marquage avec la prévisualisation name/summary/photo - vous avez simplement besoin de stocker ça peu importe où vous stockez l'information dans vos posts, de façon à la retrouver de votre stock plutôt que d'une URL externe. Idéalement le fragement de marquage renvoyé supporterait le même format que dans #1 de façon à ce qu'il soit complètement réutilisable sans perte de fidélité.
+# Exercice pour chaque implémenteur indieweb : '''codez pour stocker/mettre en cache ce marquage embarquable''' dans vos magasins de données de posts personnels de manière à pouvoir le ré-afficher sans devoir re-demander l'URL externe (a l'avantage de snapshotter la prévisualisation à l'instant où vous avez posté dans le cas où l'URL externe du contenu change ou meurt).
+
+== approches indieweb  ==
+* [[User:Tantek.com|Tantek]] :  je suis en train de réfléchir à construire #3 dans mon IU de post sur mon site, ce qui veut dire, quand je prévisualise un post avant de le PuSHer et le distribuer, l'IU de prévisualisation du post retrouve le(s) prévisualisations de lien sur le serveur, puis me les affiche comme partie de la prévisualisation globale du post, avant que je ne presse le bouton "Publish". Quand je presse le bouton "Publish", la même logique qui produit une copie syndiquée vers Twitter (en appelant l'API Twitter), et puis sauvegarde le permalien de copie dans mon data store, peut aussi sauvegarder la prévisualisation du lien dans le même datastore. Le fait de simplement piggy-backer le même data store écrit à l'appel de fichier.
+* C'est semblable à une autre chose que j'ai sur ma liste d'implémentation depuis un moment, qui est une meilleure IU de citation. Spécifiquement, mon IU de publication détecte les URIs dans mon contenu, charge les prévisualisations, me permet de D&D vers des prévisualisations de liens, peut-être charge le contenu et me permet de choisir, D&D pour des citations --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:23, 7 March 2013 (PST)
+* …
+
+== Voir aussi ==
+* [[POSSE-fr|POSSE]]
+* [[silos-fr|silos]]
+* [[microformats]]
+
+[[Category:building-blocks-fr]]

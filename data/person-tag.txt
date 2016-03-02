@@ -1,0 +1,428 @@
+http://indiewebcamp.com/person-tag
+
+{{stub}}
+
+A '''<dfn>person tag</dfn>''' (AKA <dfn>people tag</dfn>) is a special kind of [[tag]] that refers to a specific person by URL rather than just a word or phrase, and is done as an explicit tag by the user, beyond just mentioning a person via hyperlink / h-card.
+
+== Example ==
+Here is a [https://kylewm.com/2015/12/demoing-person-tags-with simple real world example] of a note that's been person-tagged:
+<blockquote>
+{{kylewm}}<br/>
+Demoing person tags with<br/>
+👤 [http://snarfed.org/ Ryan Barrett] [http://tantek.com/ Tantek Çelik]<br/>
+December 3, 2015 9:42am PST 
+</blockquote>
+
+== Why ==
+By supporting people tags in [[posts]], you can more explicitly/automatically notify people via [[webmention]] to their [[homepage]] at their URL that you have explicitly tagged a post as being about them, e.g. a [[photo]] post where they're in the photo.
+
+== How to ==
+=== How to markup ===
+You can tag a post with a <em>person-tags</em> (as opposed to just a plain text tag) by using an h-card for the p-category element inside an h-entry, e.g. from the example above, here is markup just for the person-tags:
+
+<pre><nowiki>
+…
+👤
+<a class="u-category h-card" 
+   href="https://snarfed.org/">Ryan Barrett</a>
+<a class="u-category h-card" 
+   href="http://tantek.com/">Tantek Çelik</a>
+…
+</nowiki></pre>
+
+That will tag the current h-entry as being about Ryan Barrett of snarfed.org and Tantek Çelik of tantek.com.
+
+If the current h-entry has a "u-tag-of" link to another post, then it is a [[tag-reply]] that tags that <em>other</em> post as being about those people.
+
+==== With other profiles ====
+You can also provide links to a person's (multiple) other profiles to their person-tag h-card:
+
+<pre><nowiki>
+👤
+<span class="u-category h-card"> 
+  <a class="u-url p-name" 
+     href="http://tantek.com/">Tantek Çelik</a> 
+  (<a class="u-url" 
+      href="https://twitter.com/t">t</a>, 
+   <a class="u-url" 
+      href="https://www.facebook.com/tantek.celik">f</a>)
+</span> 
+</nowiki></pre>
+
+<blockquote>
+👤[http://tantek.com/ Tantek Çelik] ([http://twitter.com/t t], [http://www.facebook.com/tantek.celik f])
+</blockquote>
+
+Where the parenthetical <samp>(t, f)</samp> could/should be equivalent [[social media icon]]s for Twitter and Facebook without parentheses. E.g.:
+
+<blockquote>
+👤[http://tantek.com/ Tantek Çelik] [http://twitter.com/t https://plus.google.com/_/favicon?domain=twitter.com&.png] [http://www.facebook.com/tantek.celik https://plus.google.com/_/favicon?domain=facebook.com&.png]
+</blockquote>
+
+This method of marking up person-tags is useful for a couple of reasons:
+# Person-tagging people without their own websites
+# Providing silo profile URLs for the silos you want to POSSE to, e.g. using a service like [[Bridgy]].
+
+<div style="padding:1em; background:#FFE">
+TIP: You should only provide links to a person's (multiple) other profiles that they themselves link to from their personal site (or possibly if their known public other profile (e.g. Twitter) links to their personal site) or if their site and other profiles are linked from a reputable public source like Wikipedia. E.g. if a person does not link from their personal site to their Facebook profile, you should not link to them as if they are the same person.
+</div>
+
+=== How to parse ===
+If you receive a [[webmention]] to your [[homepage]], how do you know, that the intent was to tell you that you were tagged in a post?
+
+You parse the "u-category" on the link to your site to see that that link is "tag" of the containing [[h-entry]].
+
+That is, when you verify the webmention, if you see that the link to you is on a u-category inside an h-entry, that means you have been person-tagged in that h-entry.
+
+== IndieWeb Examples ==
+=== Kevin Marks ===
+{{kevinmarks}} has person-tags on his notes from [[events/2014-11-19-homebrew-website-club|Homebrew Website Club 2014-11-19]] (posted on that date). First known real-world use of publishing proposed person-tags using then proposed markup of <code>class='h-card p-category'</code>
+* http://www.kevinmarks.com/hwc2014-11-19.html
+
+More recent examples have [[hovercards]] support added for example [http://www.kevinmarks.com/indiewebcampsf2015am.html indiewebcamp sf 2015] - this is done dynamically using a js script calling [[unmung]]'s hovercard endpoint.
+
+=== Ben Roberts ===
+{{benthatmustbeme}} has person-tags on his site using [[Postly]] since 2015-04-30.  This is done through any micropub endpoint simply entering a URL as a category.  The [[micropub]] endpoint fetches the URL to check for an h-card and, if available, will tag with the name and url extracted from that h-card.  Support for receiving tags and being tagged added on 2015-05-03.
+* https://ben.thatmustbe.me/note/2015/4/1/4/
+* subsequently Ben used his person-tagging support in [[mobilepub]] to be player A in passing [[SWAT0]] at IndieWebCamp [[2015]].
+
+=== Jeena ===
+{{jeena}} has person-tags on his photos from [[events/2015-07-29-homebrew-website-club|Homebrew Website Club 2015-07-29]]
+* https://jeena.net/photos/164
+
+=== Kyle Mahan ===
+{{kylewm}} added support for person tags to Red Wind on 2015-11-17, where any person in the contact list can be tagged:
+* https://kylewm.com/2015/11/2008-kristen-kyle
+
+=== Ryan Barrett ===
+{{snarfed}} adds person-tag markup manually to some of his [[WordPress]] posts since 2015-11-18, e.g.
+* 2015-11-18 photo: [https://snarfed.org/2015-11-18_hwc_2 Celebrating Homebrew Website Club’s 2nd anniversary.]
+* as such used his manual person-tagging to be player A, one of two indieweb players, in passing [[SWAT0#Silo_SWAT0|Silo SWAT0]] at [[events/2015-11-18-homebrew-website-club|Homebrew Website Club SF 2015-11-18]]![https://indiewebcamp.com/irc/2015-11-18#t1447900697713]
+
+=== Bryn Wolf ===
+{{bwolf}} posts short notes with person-tags on her [[WordPress]] blog since 2015-12-03, e.g.
+* 2015-12-03 note: [http://loveiswhoweare.com/?p=552 Person-tag experiment]
+* 2015-12-03 note: [http://loveiswhoweare.com/?p=577 New person-tag test]
+Using two person-tags each with multiple other profiles.
+
+=== Tantek ===
+{{t}} posts photos (at least one so far) with person-tags on tantek.com using [[Falcon]] since 2015-12-05, e.g.:
+* 2015-12-05 photo: [http://tantek.com/2015/339/t2/w3c-social-web-working-group-mozilla W3C Social Web Working Group meeting]
+** [https://www.facebook.com/photo.php?fbid=10102003228929963 FB POSSE copy] including 3 person-tags from the original post, automatically via [[Bridgy]] Publish.
+
+
+=== Peter Molnar ===
+{{petermolnar}} added auto-person-tagging for his WordPress:
+* people are stored in a hand-filled taxonomy with name + url
+* these names are auto matched against the post content
+* once a name is found, depending on enabled settings, the plugin tries to
+** store the found matches as taxonomy for the post
+** webmention the url for the person
+** replace the match with a generated h-card for presentation ( will not modify the post )
+The plugin: [https://github.com/petermolnar/wp-peoplemention wp-peoplemention]. It's under heavy testing and supported plain-text much better, than HTML posts.
+
+== Tool Support ==
+=== Noterlive ===
+[[Noterlive]] generates person-tags by default by in the HTML markup using first proposed markup of <code>class='h-card p-category'</code>, so anyone else who uses Noterlive will get them too. Examples:
+* {{kevinmarks}} uses Noterlive on www.kevinmarks.com to publish collections of live tweets.
+* ...
+=== Mobilepub ===
+The micropub client [[Mobilepub]] has an interface for supporting person-tags on a post.
+
+=== OwnYourGram ===
+[[OwnYourGram]] translates person-tags on Instagram (of their @-names) into person-tags of people's personal sites (assuming they link them on their IG profiles), when posting to your site via micropub.
+
+== IndieWeb Interest ==
+=== Kyle Mahan ===
+{{kylewm}}: <blockquote>I'm interested in having "in this photo: list of names" type tags, but not so much tagging x/y coordinates</blockquote>
+
+=== Tantek ===
+{{t}} I am interested in helping solve this problem to escape the "50 person-tags limit" in [[Facebook]] photos (as documented below in [[#Silo_Examples]]). A group I am involved with posts group photos every week with more than 50 people and people get left out because of this limitation[https://www.facebook.com/NovemberProjectSF/photos/a.529728270497004.1073741955.276430682493432/529729277163570/?type=1&comment_id=530291480440683&offset=0&total_comments=4]. I don't want people to be left out.
+
+=== Ben Roberts ===
+{{benthatmustbeme}} I am interested in being able to tag people with co-ordinates as well.  I am working on adding the code needed to have a test implementation soon based on Tantek's ideas [http://indiewebcamp.com/irc/2014-11-19 in the chat]
+
+=== The Dod ===
+{{thedod}} Personally, I find tagging to be a dangerous habbit (especially today, when face recognition is becoming more and more available to governments and more common criminals). I may be old fashioned, but I believe that any person-tagging protocol should involve consent or "moderation" by the person being tagged. The protocol should require some way of ''privately'' informing the tag's target that there's a photo (perhaps of something that "happened in Vegas") and the target should confirm to the source (e.g. via clicking a link and posting a form with the picture and a ''"This is me and you can publish that this is me"'' checkbox).
+If it didn't happen (or if there's no way to reach the target), it should be considered '''bad manners''' to publish such a tag. At least IMHO.
+
+=== rhiaro ===
+{{rhiaro}} I agree that telling the world 'this person is here', eg. in a photo, checkin, article about someone should certainly have some kind of consent - the tagged person is alerted and can say yes or no to the tag being published with the post. Maybe just by rejecting a webmention.
+
+== Silo Examples ==
+The following [[silos]] support people tagging and are thus a good starting point for documenting people-tagging user experiences for recreation on indieweb sites.
+* [[Facebook]] - all post types, an explicit text mention is interpreted as a people tag, plus you can explicitly people tag areas of photo posts. '''Limitation:''' you can only tag up to 50 people in a photo on Facebook.[https://www.facebook.com/NovemberProjectSF/photos/a.529728270497004.1073741955.276430682493432/529729277163570/?type=1&comment_id=530291480440683&offset=0&total_comments=4]
+* [[Flickr]] - you can people tag a photo and optionally denote a rectangle of the photo that indicates that person.
+* [[Instagram]] - you can people tag a photo and optionally denote a point on the photo (from which the label of the person's name is hung).
+* [[Twitter]] - photos in tweets can be people-tagged - [https://blog.twitter.com/2014/photos-just-got-more-social see details].
+* [[Google+]] - photos can be people-tagged - [https://support.google.com/plus/answer/1304814 see details].
+* [[Foursquare]] - you can tage people in checkins
+
+=== Twitter ===
+
+A person tag in stream view:
+
+[[File:twitter-person-tag-in-stream.png|400px]]
+
+A person tag on the tweet permalink:
+
+[[File:twitter-person-tag-permalink.png|400px]]
+
+=== Swarm ===
+When writing a description/shout on a Swarm checkin, if you start typing the name of a person, the <span id="Foursquare">Foursquare</span> app Swarm will pop-up a UI to pick from friend's names matching what you've typed, which you can pick, or dismiss and keep typing text. 
+
+If you pick someone from that person-choose UI, Swarm adds a person-mention with orange background inline in your comment, AND adds a person tag in a little mini-face-pile at the bottom just above the (Cancel) (Checkin) buttons. The person-mentions are uneditable but each deletable as a whole name. If you delete a person-mention inline in the content, the respective person-tag icon below is also removed.
+
+[[File:foursquare-person-tag-checkin.png|400px]]
+
+Each person-tag icon has a little orange circle with white x on its lower right quadrant, and clicking that will remove the person-tag (but leave the person-mention intact).
+
+After the checkin is created, the person-mention still appears inline with the checkin note.
+
+[[File:foursquare-person-tag-permalink.png|400px]]
+
+== Brainstorming ==
+=== Plain text authoring ===
+A key challenge for person-tagging is how to easily enter person-tags in a simple text-only UI (e.g. [[SMS]], [[email]], HTML textarea etc.)
+
+Here are some thoughts on how to do plain text authoring in a repeatable, memorable, understandable, and human-editable way. - [[User:Tantek.com|Tantek]] 18:10, 15 November 2015 (PST)
+
+==== hashpersontags ====
+* '#' - is now known as the method by which to ''explicitly'' tag something ([[hashtag]]) with a term, above and beyond merely ''mentioning'' that term.
+* person-tags are basically URLs that represent people
+* if you merely link to someone e.g. "tantek.com" in text content, you are only ''mentioning'' them, you are not explicitly tagging them
+* it makes sense to try re-using the '#' prefix to mean "explicitly tag with this"
+* Thus: <code>#tantek.com</code> as plain text shorthand to mean explicitly (person)-tag with "tantek.com"
+
+==== multi-profile person-tags ====
+Until we can depend on publishing and consuming systems having [[rel-me]] caches (lazily grown) in general, publishers may want to explicitly publish multiple URLs per person. The u-category + h-card markup allows for this already, yet it would be nice to also have a plain text authoring solution that has a reasonably legible / re-editable fallback.
+
+Here are some ideas for plain text authoring for people and orgs/pages:
+* <kbd>#tantek.com(@t, Facebook/tantek.celik)</kbd>
+* <kbd>#starbucks.com(@starbucks, Facebook/Starbucks)</kbd>
+
+These would of course be turned into [[h-card]]s with <code>u-url</code> properties for each profile, using auto_link algorithms like:
+* tantek.com -> imply http -> http://tantek.com/
+* @t -> assume [[Twitter]] @-names -> https://twitter.com/t
+* Facebook/tantek.celik -> assume ".com" domain for a string with "/" (a path) -> http://facebook.com/tantek.celik -> whitelist https upgrade -> https://facebook.com/tantek.celik
+** Or fb/ or f/ possibly?
+
+For [[Facebook]] pages, consuming code may require the page id instead, that is, go from:
+* Facebook.com/Starbucks
+* view source (not logged in)
+* <code><meta property="al:android:url" content="fb://page/..."</code>
+* ... -> 22092443056
+* -> linking to Facebook.com/22092443056
+
+Q: How can consuming code tell the difference between a person and an org from such a hand-authored "person-tag"? Does it matter?
+* A: For some org references, consuming code can automatically determine that it's an org:
+** own domain: if the domain's [[representative h-card]] is an "org" h-card (that is "p-org" property == "p-name" property), then it's an org
+** Facebook: if there's <code>content="fb://page/</code> per the above notes, that presence of "page" means it's an org, not a person (which would have "profile" there instead").
+** Twitter: if the Twitter profile has a URL, then apply "own domain" test above.
+
+==== silo only person-tags ====
+What if person has no domain? Then:
+;Twitter
+: #@t
+;Facebook
+: #Facebook/tantek.celik
+;Both
+: #@t(Facebook/tantek.celik)
+
+In each of these cases, a [[nicknamescache]] could be used to auto-expand the parenthetical portion (of additional identities for person-tag (semi-)supporting silo destinations), as well as change a Twitter person-tag into one that is indieweb-primary with their Twitter profile inside the parentheses.
+
+==== in content vs separate UI ====
+There are two general approaches to authoring person-tags:
+# Enter the hashpersontag as described above inline in text content like: <blockquote>Selfie with #p1.example.com</blockquote> In this case this should be stored as is in the content source, and the person-tag markup for p1.example.com should be automatically generated, in the h-entry, outside the e-content. When auto-linked and presented on the web, the # should be removed, and the person tags should be collected and displayed at the end e.g.: <blockquote>Selfie with p1.example.com<br/>👤 p1.example.com</blockquote>
+# A separate UI for authoring person-tags, at a minimum a field, perhaps re-use an existing separate "tags" field, where you can author plain text person-tags just as the above. In this case this plain text set of tags could be stored directly in a separate property of the h-entry, like say <code>p-x-user-tags</code>, which was then used to automatically generate person-tag markup when presented on the web.
+
+==== minimal separate field UI ====
+Given the increased complexity of implementing proper [[#tweet_text|tweet text]] for inline content person-tags (option 1 above), it makes sense to first try implementing a separate UI first (as a text input field), since that should be simpler (less code to build a reasonably usable feature).
+
+An implementation strategy (if this is too specific for person-tag brainstorming I can move to [[Falcon]] page)
+* UI: input field that maps 1:1 into content storage, e.g. 
+* storage: perhaps a "p-x-user-tags" property inside the "h-entry", a space separated set of plain-text person-tags, no need for # prefix.
+* new [[CASSIS]] <code>auto_person_tag</code> function (takes string text to markup, and eventually an optional additional h-card contacts structure using [[jf2]]) that:
+** apply auto_link RE to discover them all
+** create u-category h-card tags automatically
+** anything non-just-space intervening:
+<pre>
+  if trim(intervening) == '(' then
+    repeat: parse alternate profiles
+     collect next link into alternates
+     if next text == ')' then exit repeat
+     else if next text != whitespace then collect as name
+     continue repeat
+    end repeat    
+  else if char 1 of intervening is alphanum, 
+    if first word is "facebook/" or "fb/" create facebook.com person-tag
+    else create plain p-category tag for it.
+  end if 
+  look up indieweb site, name in h-card contacts (if provided)
+  if not found, synthesize name:
+    if twitter, use @-name literally
+    else if FB, use "Facebook/alias" as name
+    else if has path, use "site(-com)/path" as name
+    else use indie domain as name
+  end if
+</pre>
+* presentation: in code that generates markup for a post
+** retrieve user-tags from storage (or already have it retrieved when storage was loaded)
+** use <code>auto_person_tag</code> to turn storage user-tags into HTML markup for output
+** prepend with "👤 " and append to output HTML for the post
+
+Person-tag presentation should be outside e-content but before before [[web actions]] buttons.
+<blockquote>👤 <nowiki><a class="u-category h-card" href="URL">name</a></nowiki> ...</blockquote>
+That should be enough for:
+* people seeing a post that it's person tagged
+* [[Bridgy]] to pick it up to [[POSSE]] person-tags to Facebook
+* but does nothing for Twitter POSSE copy (yet)
+** incrementally figure that out later
+** document simplest thing I could do to plain-text person-tag it
+* When auto-linking a URL, delete the # character before it
+
+=== Plain text presentation ===
+Since person-tags have a specific semantic above and beyond the plain text content of a post, and frankly there's no "#" equivalent for explicit-person tags (@-mention already means, ''mention'', not tag), it makes sense to design a way of presenting person-tags that is distinct from the plain text content, and (likely) different from what is easiest to type!
+
+Each of these brainstorms/examples is expected to be put on its own line, with a line-break before and/or after as needed if there is anything before or after respectively.
+
+==== plain plain text ====
+Most minimally, e.g. SMS, you would want something that is fully readable and ASCII-ish (no emoji). Thus:
+
+<blockquote>With: Person1givenname Person2givenname Person3givenname</blockquote>
+
+If space (character count) is not an issue, then use full names and punctuation like:
+
+<blockquote>With: Person Name1, Person Name2, and Person Name3</blockquote>
+
+==== plainish text ====
+Many modern systems / devices support Unicode sufficiently to support [[emoji]] as well, thus for those you could instead do:
+
+<blockquote>👤 Person1givenname Person2givenname Person3givenname</blockquote>
+again with more punctuation & content:
+<blockquote>👤 Person Name1, Person Name2, and Person Name3</blockquote>
+
+==== auto-linked text ====
+On systems which [[auto-link]] the text, it's slightly nicer to provide the people's domain names as well.
+
+<blockquote>👤 Person1givenname (p1.example.com), Person2givenname (p2.example.net), and Person3givenname (p3.example.org)</blockquote>
+
+Adding a parenthetical domain name after the person's name requires using commas to visually cluster names and domains, and it's assumed that that's friendlier than *only* providing domain names like:
+
+<blockquote>👤 p1.example.com p2.example.net p3.example.net</blockquote>
+Which is still another option if someone wishes to experiment with it.
+
+==== tweet text ====
+On [[Twitter]] we can do better for local users than use so much space with full names and domain names, and that is to use people's @-names instead (where available), and perhaps fallback to their plain domain names where they don't. E.g. if Person1 and Person3 have Twitter handles but Person2 does not:
+
+<blockquote>👤 @exampleperson p2.example.net @exampleorg</blockquote>
+
+Alternatively if Person2 does not have a domain then simply use their given name.
+
+<blockquote>👤 @exampleperson Person2givenname @exampleorg</blockquote>
+
+If there are more than three person-tags, I think it is best to use a "summary" approach like seen in summaries of person-tag lists on Facebook etc. For such summaries on Twitter it makes sense to give @-names preferential treatment over indieweb domains over people lacking both.
+
+E.g. if you had four person tags by following the above algorithm:
+
+<blockquote>👤 @exampleperson p2.example.net @exampleorg p4.example.edu</blockquote>
+
+You could abbreviate for Twitter like [[Facebook]] does in person-tag presentation summaries ("and n others")
+
+<blockquote>👤 @exampleperson @exampleorg and 2 others</blockquote>
+
+However tweets are not editable, whereas Facebook posts are, and thus presuming this is for POSSE purposes, it may make sense to omit the number, expecting that your post may acquire additional tags (typical, especially for photo posts) over time:
+
+<blockquote>👤 @exampleperson @exampleorg and others</blockquote>
+
+The phrase "and others" feels a bit awkward though without the number, perhaps due to seeing it too often with a number. Alternatively we could use the word "more" an ellpsis "…" or both "more …"
+
+<blockquote>👤 @exampleperson @exampleorg and more</blockquote>
+<blockquote>👤 @exampleperson @exampleorg …</blockquote>
+<blockquote>👤 @exampleperson @exampleorg and more …</blockquote>
+
+Of those options, I believe the shortest makes sense contextually on Twitter, thus:
+
+<blockquote>👤 @exampleperson @exampleorg …</blockquote>
+
+This keeps it nice and short and devoid of noisy punctuation when possible (all good things on Twitter's tweet-length limited medium).
+
+With any of these summarizing methods, it makes sense to include the [[original post link]] ''after'' the person-tag text, as people are used to seeing a way to get to the "more" or "…" information either by it being directly linked, or a visible (preferably linked) URL immediately following it. Thus
+
+<blockquote>👤 @exampleperson @exampleorg … (author.example.com/original-post)</blockquote>
+
+Where "author.example.com/original-post" is what is displayed in the text, yet it is fully hyperlinked to the original, that is, Twitter's normal behavior for hyperlinks in the plain text content.
+
+Related [[Bridgy]] Publish feature request:
+* photo post to Twitter POSSE [[person-tag]](s) as tweet text: https://github.com/snarfed/bridgy/issues/547
+
+==== tweet inline person-tags ====
+If an author can enter person-tags (e.g. per above "#" proposal) inline in content, there are additional considerations for the tweet text.
+
+When POSSEing to Twitter, it makes sense to indicate inline person-tags (e.g. with a 👤), and then not list those in the explicit list but rather provide a hint that some tags were already present in the content text, e.g. simple case:
+<blockquote>Selfie with 👤 p1.example.com</blockquote>
+
+with more than one in a row, omit intervening 👤 as it's obvious from context.
+
+e.g. authoring:
+<blockquote>Selfie with #p1.example.com #@exampleperson</blockquote>
+tweet text:
+<blockquote>Selfie with 👤 p1.example.com @exampleperson</blockquote>
+
+with many more:
+
+authoring:
+<blockquote>Selfie with #@exampleperson #p2.example.net #@exampleorg #p4.example.edu</blockquote>
+tweet text:
+<blockquote>Selfie with 👤 @exampleperson p2.example.net @exampleorg p4.example.edu</blockquote>
+
+Note that none of these examples include a separate line (near the bottom) starting with "👤" because all the person-tags are indicated inline (since they were authored that way).
+
+=== HTML imagemaps ===
+[[User:benwerd.com|Ben Werdmuller]] wondered if you could tag people in photos by linking to their profiles using HTML imagemaps (!) and marking up the imagemap links with microformats. That might look something like:
+
+<code>&lt;img src="some_photo.jpg" alt="Tantek, Aaron and Amber!" usemap="#peeps" class="u-photo"&gt;
+
+<map name="peeps">
+
+<area shape="circle" coords="124,58,8" class="microcard h-card u-url" href="http://tantek.com" alt="Tantek Çelik">
+
+<area shape="rect" coords="0,0,82,126" class="microcard h-card u-url"  href="http://aaronparecki.com" alt="Aaron Parecki">
+
+<area shape="circle" coords="90,58,3" class="microcard h-card u-url" href="http://caseorganic.com" alt="Amber Case">
+
+</map></code>
+
+However, because the HTML syntax of imagemaps sits outside the actual image tag, it may be worth adding a microformat to the map itself.
+
+: While this would work, and the parsing algorithm for Microformats2 added area tag support, the problem I hit was in mapping this in to micropub.  There are no fields to define coords or shape that would really fit.  It is essentially a set of embedded objects which micropub tries to avoid -  {{benthatmustbeme}}
+
+=== Basic Person Tagging example ===
+
+<pre><nowiki>
+<span class="h-entry">
+ <a class="p-author h-card" href="http://a.example.com/">Alice</a> 
+ tagged 
+ <a href="http://b.example.com/" class="u-category h-card">Bob Smith</a> and 
+ <a href="http://c.example.com/" class="u-category h-card">Cole Train</a> 
+  in 
+ <a class="u-tag-of u-in-reply-to" href="http://s.example.com/permalink47">
+  <img src="http://s.example.com/photo47.png" alt="a photo of Bob and Cole" /></a>
+</span>
+</nowiki></pre>
+
+== FAQ ==
+=== Should Twitter links be person-tags ===
+Q: Should twitter handle links be person tags?
+
+A: No. Tagging a person is different from mentioning them. Twitter @-mentions are not person-tags by default; absent any other information they are merely @-mentions, [[mentions]] as it were, not tags.[http://indiewebcamp.com/irc/2015-09-18/line/1442592038974][http://indiewebcamp.com/irc/2015-09-18/line/1442608694491]
+
+== SWAT0 ==
+People tagging was one of the steps of the [[SWAT0]] social web acid test developed / proposed in 2010.
+
+== See Also ==
+* [[tag]]
+* [[hashtag]]
+* [[tag-reply]]
+
+[[Category:building-blocks]]

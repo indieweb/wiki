@@ -1,0 +1,170 @@
+http://indiewebcamp.com/antipatterns
+
+As there are indieweb [[principles]] and [[building-blocks]], there are also the opposite, antipatterns which are anithetical to a diverse and growing indieweb.
+
+'''Inbox''' - got an antipattern you think needs documenting? add it here with a brief one sentence summary and maybe someone will start a page on it.
+* [[plumbing-first-antipattern]] - when web developers design something from protocols/formats up (including naming, e.g. "RSS-based Twitter"), rather than the UX/[[design]] down.
+** [[field-of-pipe-dreams-antipattern]] - perhaps a special case of the [[plumbing-first-antipattern]], the "field of pipe dreams" antipattern is a phrasal portmanteau (phrasemanteau?) that references the movie "Field of Dreams" and the common expression "Pipe dream" to encapsulate the hope or expression that "If you [only] build the plumbing (pipes), they (the developers, users, etc.) will come", a derivative of a quote from the movie, implying its unlikelihood by referencing "pipe dream", something that "will not likely work; a near impossibility", due to its focus on pipes/"[[plumbing]]".
+* [[single-page-antipattern]] - websites that load all content, transitions etc. on a single page (typically home page) via [[JavaScript]], [[JSON]], and XHR, making it so that there's little or no content you can actually curl, and no permalinks either. AKA "single page app", "single page site".
+** http://htmlcssjavascript.com/web/youre-so-smart-you-turned-javascript-into-xhtml/
+** as of 2014-10-27 Google ''still'' says [http://googlewebmastercentral.blogspot.com/2014/10/updating-our-technical-webmaster.html Make sure your web design adheres to the principles of progressive enhancement]
+** Ember.js and possibly other modern JS frameworks have a URL router, so that you can have both client-side rendering ''and'' real permalinks.
+** Leaving Angular.js - client-side JS pain in general: https://sourcegraph.com/blog/switching-from-angularjs-to-server-side-html
+* [[preload-antipattern]] - websites that show a "Loading..." screen before actually showing you content, like some sort of reminiscence of Flash sites of yore.
+* [[cargo-cult-antipattern]] - the tendency of many (most?) web developers to code by rote/tradition/fashion/trends rather than actually have a rational understanding of the technologies they use and how to analyze tradeoffs therein, sometimes revealed by purely emotional responses to having their tradition/fashion/habits questioned.
+* [[well-known]] - Well-known refers to designating a common URL on domains for data to be easily located
+
+== at some point ==
+Reasoning or justifying something by saying "at some point" does not lead to good (well-informed / accurate) conclusions.
+
+Many a spec/standard/protocol/format has been overdesigned or made prematurely complex due to  "at some point" reasoning - typically followed by a theoretical requirement framed as "someone will need to ..." or "we'll have to ...".
+
+It's flawed methodology that gets in your way if you're actually trying to build things that work today, can be incrementally improved, and sustainably grown.
+
+Alternative: resist the temptation to [[design]] for "at some point", and instead design for the very next thing that is annoying you the most (itching) about your own site. And then iterate. Only by doing so can you actually get to that "at some point" future, and when you get there, since you proceeded incrementally, there's a much better chance that you've arrived there with a minimum of wasted effort chasing down theoreticals that turned out to not be probable, or not matter.
+
+== easy urgent vs harder important ==
+It's been noted that for some sites and silos, [[PESOS]] appears to be easier to implement than [[POSSE]], with the excuse of: "do the easy thing now and fix it later".
+
+This is a trap in practice because the "fix it later" task starves due to distraction by too many "easy thing now" items which keep getting more attention due to their apparent easiness/urgency.  It's empty/hollow/unreliable reasoning/planning.
+
+The generalization of this effect is known more commonly as: <blockquote>urgent at the expense of the important</blockquote>
+
+More on this effect and approaches for avoiding this prioritization antipattern:
+* http://www.ascentadvising.com/?p=82
+* http://www.whitedovebooks.co.uk/2013/05/first-things-first/
+
+Exception:
+* In a community context (e.g. #indiewebcamp) it is worth investing some amount time in others' "urgent" items (especially if you can help quickly), with the expectation that later when you have something *important* to you and ask about it - the likelihood of reciprocation is greater.
+* Also contributing to a community culture of helpfulness scales well with the size of the community - as more and more people help each other quickly more and more, each of us gets our important things done faster.
+
+The "easy urgent vs harder important" antipattern is somewhat related to the above "at some point" antipattern but is not the same.
+
+The "at some point" antipattern is about things that are harder and appear to *theoretically* be important but are actually unimportant in practice.
+
+== databases for storage ==
+{{main|databases-antipattern}}
+
+For any content you care about it, don't put the primary copy in a database.
+
+Databases are all a pain to maintain (i.e. highly human-time inefficient - see also DBA tax), and more fragile than the file system.
+
+A DBA tax includes the (often regular) hassles of: setting up a database, setting up/doing tables, setting up username/login that is database specific, altering tables, dealing with username/login that is database specific, exporting, importing, special backups.
+
+All extra crap (thus tax) compared to "just" using the file system.
+
+All databases have a DBA tax.
+
+Common content management systems (e.g. [[WordPress]], [[Drupal]], [[MediaWiki]] etc.) use databases for primary storage of content, and thus saddle their users with a continuous DBA tax just to maintain their site.
+
+Experience and evidence shows DBA tax exists as well. People lose things (and have them corrupted) in databases all the time, far more often than in file systems. This is because databases always require extra "magic" for backups etc. 
+
+E.g. search the web for people complaining about having to backup their [[WordPress]] databases before upgrading their WordPress install.
+
+See the [[databases-antipattern]] article for more details about specific problems with using databases for storage like:
+* Uninspectability
+* Platform trap
+* Premature optimization
+As well as alternatives to use instead and an FAQ.
+
+== design for silos or enterprise ==
+Designing explicitly for [[silos]] or the [[enterprise]] (not Star Trek) is an anti-pattern.
+
+Some quotes from [[IRC]] (feel free to structure this section into a more general explanation)
+
+<blockquote>"what pisses me of even more is that all the silo ppl asking for it... will not end up using it.<br/>like we saw with [[activitystreams]] as well.<br/>but they'll just end up complicating stuff. <br/>it's telling that the [[webfinger]] spec has hypothetical examples of "possibilities" "</blockquote>
+
+<blockquote>"sandeepshetty - your analysis is correct. thus, just ignore the silo people as they won't actually ship / interoperate anything anyway. <br/>they might as well just be making a bunch of noise on a mailing list. oh wait."</blockquote>
+
+<blockquote>"enterprise is fairly ignorable. once the open web adopts something the enterprise eventually begrudgingly adopts it too. <br/>no need to actually include enterprise in any early (any at all?) standards discussions. <br/>though if you can honeypot them into their own standards committees, it can help reduce the amount of noise/distraction they cause elsewhere. e.g. WS-Deathstar"</blockquote>
+
+=== WS-Deathstar ===
+For reference: '''<dfn>WS-Deathstar</dfn>''' [http://www.flickr.com/photos/psd/1428661128/][http://javathehutt.blogspot.com/2006/04/ws-deathstar-and-complexity-tradeoff.html][http://david.heinemeierhansson.com/arc/2006_03.html][http://web.archive.org/web/20130702000557/http://www.oreillymaker.com/link/2728/ws-deathstar/][http://www.flickr.com/photos/psd/2217422218/], e.g.:
+
+[http://www.flickr.com/photos/psd/1428661128/ http://farm2.staticflickr.com/1219/1428661128_7b85fb5578.jpg]<br/>
+[http://www.flickr.com/photos/psd/2217422218/ http://farm3.staticflickr.com/2299/2217422218_63a7fbee63_o.png]
+
+Totally unrelated to http://deathstar.ws/ (oh if only there were some relation other than Star Wars overlap)
+
+Definitely related: [[Fatberg]]
+
+==== WS-FAQ ====
+===== What is WS =====
+* What is WS?
+** Uppercase "Web Services *" - see http://en.wikipedia.org/wiki/List_of_web_service_specifications
+
+== mass adoption ==
+The methodology of attempting to [[design]] directly for "mass adoption" or "mainstream adoption" is an antipattern and will likely be an obstacle to actually designing something useful, especially for yourself (vis-a-vis [[self-dogfooding]]).
+
+AKA the "design for everyone" anti-pattern.
+
+The appeal of design for "mass adoption" (and/or having that mindset) is the illusion that it is actually possible to do so successfully and quickly get everyone to use whatever it is you're building.
+
+Designing for "mass adoption" is one of the traps that many past federated/social web efforts fell into.
+
+It's a form of distraction: instead of designing/building what's immediately useful to you, the creator, you end up ratholing on what "everyone" or "the average person" seemingly wants, which is purely hypothetical, because you don't actually know what everyone or the average person wants - you're just making guesses and assumptions.  The problem with designing for something so theoretical is that you will never know if you're on the right track or not. Design for yourself and get immediate rapid feedback which you can use to quickly iterate, try experiments, change things around, continuously incrementally improve things etc.
+
+What's perhaps worse is that even if you find this theoretical "average person" who is willing to try out your service, you will then get distracted by all their random support requests rather than actually creating something with a cohesive vision. Note: it's not that hard to acquire a bunch of seemingly average person users (up to 50k+!), and they don't mean anything. See:
+* 2006-05-12: Josh Kopelman: <cite>[http://redeye.firstround.com/2006/05/53651.html 53,651]</cite>
+* 2006-05-12: Brad Feld: <cite>[http://www.feld.com/wp/archives/2006/05/web-20-the-first-25000-users-are-irrelevant.html Web 2.0: The First 25,000 Users Are Irrelevant]</cite>
+* 2006-05-12: Paul Kedrosky: <cite>[http://paul.kedrosky.com/archives/2006/05/the_first_25000.html Crossing the Crunch Chasm]</cite>
+
+It's also bad to transition to designing for mass adoption rather than yourself and actual users, as as soon as you do so, you begin turning your creation into crap, and start down an inevitable downslide (early adopters leaving etc.). It's a huge fallacy that silos and open source projects fall into (due to the apparent appeal.) 
+
+Designing for mass adoption is one reason why [[silo]] user experiences in general get worse over time. Which is also an opportunity for you, as a [[creator]] and contributor to the indieweb, to not just match but do <em>better</em> than the silos with the user experience on your own site.
+
+It can also be a vulnerability, e.g. if "this will only be useful once everyone adopts it", you're likely building something that is vulnerable to either never being useful, or becoming useless when adoption fades.
+
+== invisible metadata ==
+Invisible metadata is the general antipattern of storing information that is user-relevant in places users won't see (i.e. users aren't expected to "View Source" on every page).
+
+The problem is that absent an immediate visible feedback loop on such data, it has numerous problems:
+* accidental false data
+** errors, e.g. [[2014-01-28-nixon-photo-on-sotu-result]]
+* deliberate false data - data not specific or unrelated to the page
+** spam - often advertising a [[silo]] site as a whole rather than having to do with the specific page.
+* invisible data gets out of sync with visible data on the page
+** AKA rotten data
+
+The use case for invisible metadata is to make data available to computers but not visible to people. For example, [[User:Snarfed.org]] and others would like to make their [[h-card]]'s photo available to webmention consumers, so that e.g. they appear in [[comments-presentation]], but not visible on their home pages. See also [[h-card#Issues]].
+
+Examples of encouragements to use invisible metadata:
+* <code>&lt;meta&gt;</code> tags in HTML, used by:
+** [[Facebook]]'s [[OGP]]
+** [[Twitter]]'s [[Twitter Cards]]
+
+See also: [http://microformats.org/wiki/invisible-data-considered-harmful invisible data considered harmful]
+
+== monoculture ==
+The '''<dfn>monoculture</dfn>''' antipattern is best described as, if only everyone would install and run this one open source project then we will be good.
+{{main|monoculture}}
+Examples:
+* '''Mobile WebKit''': web designers that only design their mobile web content for the WebKit browser, including only using -webkit-* CSS properties
+* '''[https://buddycloud.org/wiki/Main_Page BuddyCloud]''' "is an open source, distributed social network"
+** No one particular project should be considered a "distributed social network"
+* '''[[Diaspora]]''' to some degree emphasized interop with other Diaspora instances, though it did support several open standards, and thus made progress towards open interop rather than single-project-interop.
+* '''[[projects#Tent.io|Tent.io]]''' has been pitched as a single project distributed social network solution.
+* ...
+
+Antidote:
+* Encourage monoculture projects to support indieweb [[building-blocks]] and become indieweb [[friendly]].
+* Encourage participants in monoculture projects to join [[IRC]] and signup on the [[Guest List]] to attend the next IndieWebCamp. By engaging these projects productively, perhaps we can help improve them and their cross-project interop.
+
+== object oriented programming ==
+{{main|object-oriented-programming-antipattern}}
+
+== sidefile antipattern ==
+{{main|sidefile-antipattern}}
+
+== nagging ==
+{{main|nagging}}
+
+== YASNS ==
+{{main|YASNS}}
+
+== See also ==
+* [[architecture astronomy]]
+* [[principles]]
+* [[building-blocks]]
+* [[friendly]]
+* [[projects]]

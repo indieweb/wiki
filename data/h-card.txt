@@ -1,0 +1,53 @@
+http://indiewebcamp.com/h-card
+
+{{stub}}
+
+'''<dfn>[http://microformats.org/wiki/h-card hCard]</dfn>''' is the [[microformats2]] vocabulary for marking up people, organizations, and venues on web sites.
+
+== Why ==
+Each IndieWeb site should have an hCard on the [[homepage]], preferably containing at least '''name''', '''url''' and '''photo''' (or '''logo''') properties — just these three cover most hCard usage on the IndieWeb, for example, putting a name and face to comments or URLs.
+
+Having a minimal hCard on your index page allows [[Gravatar]]-like lookups based on [[Why_web_sign-in#Why_not_emaildomain instead of email address]].
+
+[[Telegraph]] uses your home page h-card to grab your profile icon and name after you log in.[https://indiewebcamp.com/irc/2016-01-05/line/1452020782123]
+
+== How ==
+You can make a simple [[h-card]] that does the above with two elements and one classname, for example:
+
+<pre>
+<a class="h-card" href="http://waterpigs.co.uk">
+<img src="/photo.png" alt="" /> Barnaby Walters</a>
+</pre>
+
+== Validators ==
+
+You can check your homepage hCard for completeness and common mistakes using these validators:
+* [http://indiewebify.me/validate-h-card/ indiewebify.me hCard] ([https://github.com/indieweb/indiewebify-me/issues/33 checks bare minimum for indieweb])
+* [http://pin13.net/mf2/ pin13.net mf2 parser] (raw parsed JSON)
+
+== Issues ==
+
+From a pure user features perspective, and assuming no [[antipatterns#invisible_metadata|invisible metadata]], how are the following accomplished (that is, with hCard)?
+
+* I'd like to show some personal profile information (for example, name) on my posts, but not my picture. I may want to show additional profile information on another page, for example. '''/about'''. That may include my picture, or it may not (including [[icon]]).
+
+* When I [[comment]], [[like]], [[repost]], or [[rsvp]] to someone else's post, and they render that response ([[comments-presentation]]), I'd like to let them show my additional profile information, including my picture, if they choose. ''[[authorship]] handles some of this, but maybe not all, for example, the case where I don't show my picture anywhere on my site.''
+
+* Similarly, when I log into a site like this wiki with [[IndieAuth]] (etc.), I'd like the site to be able to discover my additional profile information, including my picture, to show on my profile page, activity, or other appropriate places. ''[http://microformats.org/wiki/representative-hcard-parsing representative-hcard-parsing] gets close, but not all the way. [[#Brainstorming]] below is a straw man extension that could help.''
+
+From an hCard specific viewpoint, here are some additional issues / questions:
+* Some people (e.g. [[User:David.shanske.com|GWG]], [[User:kartikprabhu.com| Kartik]], [[User:Snarfed.org]], [[User:Mowens.com]], {{gRegor}}) would like a way to include both a minimal hCard on a page *and* a link to a "complete" hCard with more information, for example, contact details or photo. [[authorship]] and [http://microformats.org/wiki/representative-hcard-parsing representative-hcard-parsing] are both related but slightly different, and both currently only use the inline hCard if it's available. The inline hCard could include a link to the expanded hCard.
+
+* Along the same lines, some people (e.g. [[User:Snarfed.org]], [[User:Mowens.com]], {{gRegor}}) would like to make some parts of their hCard invisible everywhere, but still available to programmatic consumers. Examples include rel-me links to some silos, public encryption key. Related: [[antipatterns#invisible_metadata]]
+** On my site currently, my author hCard on each post is invisible because I do not feel the need to display my photo, URL, and name on every post. This would be different if it was a multiple-author site. {{gRegor}}
+
+== Brainstorming ==
+
+One possible solution for the [[#Issues|partial plus complete hCard issue]] is to include a rel-me link to the full hCard and *not* mark up the partial profile information on the home page as an hCard. The [http://microformats.org/wiki/representative-hcard-parsing representative-hcard-parsing] algorithm would then follow the rel-me link and use its full data. It doesn't seem ideal, but it'd work.
+
+One problem with this is that the home page usually has many rel-me links, for example, to silos, and we don't yet have a way to denote the "canonical" one. {{gRegor}}, [[User:Mowens.com]], and others have proposed using u-uid and/or a new rel-canonical property for this.
+
+== See Also ==
+
+* [[microformats]]
+* [[h-entry]]

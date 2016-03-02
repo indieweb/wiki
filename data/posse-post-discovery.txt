@@ -1,0 +1,144 @@
+http://indiewebcamp.com/posse-post-discovery
+
+'''<dfn>POSSE-Post-Discovery</dfn>''' is a way to find the canonical version of a post when a syndicated copy does not contain a link to the original.
+
+== Motivation ==
+
+Some silos make it difficult or unpleasant to include a permalink or citation in POSSE'd copies.
+ 
+* Instagram lacks a posting API, so content must be PESOS copied (e.g., via OwnYourGram). Users can manually go back and add a caption containing the permalink, but it is not possible to do automatically. [https://github.com/snarfed/bridgy/issues/125#issuecomment-40111690]
+
+* Twitter:
+** Links/citations eat into the length limit.
+** Difficult to indicate that some links are for shared content and some are original-post links. Note: [[Permashortcitation]]s mitigate this.
+** Some users prefer to leave them off for aesthetic reasons (e.g., [[User:werd.io]] seems to have discontinued them?)
+
+Primary use case: allow Bridgy to backfeed comments from POSSE and PESOS copies. Bridgy will have the syndicated URL and the author's root domain (from a silo profile page). 
+
+This would also support [[original-post-discovery]] on older silo content that was backfilled to a personal domain.
+
+== Algorithm ==
+[[Discovery]] algorithm:
+* Fetch the author's url (e.g., from their silo profile)
+* Look for <code><link rel="feed" type="text/html"></code> ([[h-feed#rel_feed]]). If found, consider this their unfiltered h-feed. If not, use the current page.
+* For each h-entry on the current page... (Ideally this page would be an h-feed, but if not just use top-level h-entries).
+** Follow its u-url permalink to find its post permalink page.
+** Look for [[rel-syndication]] and u-syndication links on the current page. If the syndicated post is among them, then ''this'' is the original.
+** Note: this is HTTP-request-intensive. To save time on the next lookup, store other discovered relationships for future lookup.
+
+== Bridgy ==
+
+As of 2014-04-26, [[Bridgy]] uses posse-post-discovery to backfeed replies/reposts/likes of link-less syndicated content.
+
+In the example below, [https://twitter.com/kyle_wm/status/459719371284172802 @kyle_wm shared] an article from @dangillmor.
+
+[[File:kwm-linkless-tweet.png|500px]]
+
+Bridgy would typically consider the linked article at wp.me to be the original, but after searching kylewm.com, it also found [http://kylewm.com/share/2014/04/25/1 the original repost on kylewm.com], and sent back likes, replies, and retweets.
+
+[[File:kwm-original-post-with-ppd-comments.png|500px]]
+
+== Set up your site ==
+
+If you publish rel-syndication links to syndicated content, your site may already support posse-post-discovery (Yay, standards!). 
+
+Publishers need to do the following things:
+
+* Make sure your silo profile URL points to your indieweb site.
+* Make sure your indieweb site has '''<code>[[h-entry]]</code>''' markup on your posts
+* Optionally wrap an '''<code>[[h-feed]]</code>''' around the entries you want posse-post-discovery to see
+** If this is not the same page as your profile URL, include a &lt;link rel="feed"&gt; that points to the page with your primary h-feed.
+* Include '''[[rel-syndication]]''' and/or '''<code>[[u-syndication]]</code>''' links on post [[permalink]] pages.
+
+== Tradeoffs ==
+
+The community is currently split on whether/how often to include [[permashortlink]]s/[[permashortcitation]]s in POSSE posts. We haven't counted explicitly, but anecdotally it seems like maybe half of us do regularly, and half of us don't.
+
+Pro:
+* Backlinks can improve readers' experience
+** Author's site will usually provide richer content than the silo copy (better formatting, indieweb replies, replies from other silos)
+* Particularly on social media sites like [[POSSE_to_Facebook#See_Original|Facebook]] that allow backlinks to be included unobtrusively.
+* Backlinks/citations make original post discovery ''much'' easier. Indieweb replies to the syndicated content will have a better chance of finding the original and replying directly.
+
+Con:
+* Often confusing or irritating to silo users who see the POSSE post.
+*Distracts from actual content.
+* Individual personal preference and aesthetic choices.
+
+People who include backlinks:
+
+* {{tantek}} 
+** POSSE to FB: always includes backlinks
+** POSSE to Twitter: includes [[permashortcitation]] if content fits, [[permashortlink]] if content is truncated
+* {{kylewm}} 
+** FB: always
+** Twitter: if the content is truncated
+* {{aaronpk}}
+** POSSE TO FB: always include backlinks as a "See Original" link that appears next to "Like", not in the content of the post
+** POSSE to Twitter: includes [[permashortlink]] if content is truncated, but often crafts shorter versions of POSSE tweets to avoid abrupt truncating
+
+People who do not include backlinks:
+
+* {{benwerd}}
+* {{snarfed}}
+* {{kylewm}} on Twitter if the content is not truncated
+* {{aaronpk}} if the content is not truncated.
+* [[Known]] users, by default.
+
+== Open Questions ==
+
+* What's the best way to discover unfiltered h-feed from an author's homepage? Current solution of following &lt;link rel="feed"&gt; is pretty ad hoc. Need more examples in the wild.
+** Tantek suggested rel=alternate as an ... alternate.
+
+== Historical Alternatives ==
+
+These were other proposals for supporting original-post-discovery. For the most part they were simpler from the discover's point of view, but required new protocols or hacked existing protocols. 
+
+=== Query endpoint === 
+
+Create a new link-rel type and a new endpoint, perhaps <link rel="original-post-discovery" href="..."> where domains could provide a query endpoint. The query endpoint would take one GET parameter ?syndication=[URL] and redirect to the original post (if found). See [https://github.com/snarfed/bridgy/issues/125#issuecomment-40212687 Proof of concept implementation].
+
+* Pros
+** Simple implementation from Bridgy's point-of-view.
+** Endpoint can be cached per domain, and from then on, Bridgy can construct the query URL as a webmention target without additional HTTP requests.
+** Allows sites to "claim" their POSSEd content even when it doesn't have a permalink
+* Cons
+** Requires addition to existing standards
+** and for every user to individually provide this new endpoint
+
+=== Send webmentions with the silo url as target ===
+
+Bridgy could deliver webmentions to the root domain if no permalink is found, filling in target= with the syndicated, rather than original, url.
+
+Sites could reject these mentions, or choose to look up the post permalink URL based on the syndicated URL. This is not entirely unlike receiving a mention to a shortened link.
+
+* Pros
+** Similarly simple implementation in Bridgy
+** Abuses existing standard instead of creating a new one (or is this a con?) 
+* Cons
+** Requires support on client-side
+** Less explicit than the query endpoint discovery mechanism
+** Bridgy would be sending a lot of doomed webmentions to domains that don't support receiving target=silo-url
+
+=== Mechanism for sites to inform Bridgy ===
+
+When creating new entries, sites would POST to a well-known Bridgy endpoint with parameters ?original=...&syndication=... Bridgy would store these relationships so it could query them later. 
+
+* Like "query endpoint", this is also a new protocol.
+* Unlike "query endpoint", would require Bridgy to store more data
+
+=== "Hidden" permalinks ===
+
+Facebook provides for a custom action that can be included with each post. This has been used to discretely include a [[See Original|POSSE_to_Facebook#See_Original]] link at the bottom of POSSEd posts.
+
+Is it possible to include this metadata in other silos? Some suggestions:
+
+* encode permalink in Twitter "location" (lat/long).
+* include watermark in Instagram photos as a watermark/barcode/steganographically encoded image.
+** unlikelihood of bridgy OCR'ing images
+** would require a custom instgram-wrapper application to include the watermark. (although at that point, the wrapper just include the post permalink in the caption)
+
+== See Also ==
+* [[original-post-discovery]]
+* [[discovery]]
+* [[feed_discovery]]

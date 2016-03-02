@@ -1,0 +1,212 @@
+http://indiewebcamp.com/comments-presentation-fr
+
+''Cette page a démarré sur [[comments-presentation]]''
+
+= Présentation de Commentaires =
+Expansion d'une section de la page sur les [[comment-fr|commentaires]] de [[posts-fr|posts]] pour savoir comment afficher les commentaires reçus.
+
+Comment les commentaires sont/devraient être présentés, ce qu'ils devraient être, et qui fait quoi.
+
+== Comment faire ==
+=== Comment afficher ===
+But : afficher les commentaires reçus en haute fidélité, au moins aussi bien designé que les commentaires "nativement" affichés sur les billets de blogs et les posts de [[silo-fr]] (par ex. les réponses sur les posts de [[Twitter-fr|Twitter]], les commentaires sur les posts de [[Facebook-fr|Facebook]], les photos [[Flickr-fr|Flickr]]/[[Instagram-fr|Instagram]] photos, etc. - voir [[#Silos-fr|Silos]] en dessous pour une analyse de leurs pratiques).
+
+En suivant [[comment-fr#Accepter_un_commentaire|Accepter un commentaire]], votre système devrait déjà être : 
+* En train de tendre l'oreille vers les [[webmention-fr|webmention]] sur votre serveur (faites que votre logiciel de serveur le supporte)
+
+Et quand votre serveur reçoit une URL webmention :
+* parse le '''[[h-entry-fr|h-entry]]''' sur cette URL (n'utiliser uniquement que le premier h-entry s'il y en a plus d'un, sérieusement, c'est supposé être un permalien) - utilisez un parseur [[microformats2-fr|microformats2]] pour faire ça.
+* si son hyperlien vers le post original manque de marquage [[in-reply-to-fr|in-reply-to]], alors ajoutez)le à la section "Articles en rapport" ou "Mentions" dans le [[posts-fr#sections du pied de page|pied de page du post]], sinon continuez :
+* '''recevez l'information du commentateur à afficher'''
+** si le h-entry a un '''p-author''', utiliser sa '''h-card''' :
+** autrement prendre le premier [[#premier-rel-author-fr|*]] lien '''rel-author''' sur la page, retrouver l'URL qu'il pointe, et utiliser la '''h-card''' représentative :
+*** '''logo/photo'''
+*** '''name'''
+*** '''url''' (du profil du commentateur)
+* '''recevez le texte du commentaire à afficher'''
+
+** si le h-entry a un '''p-summary''', utiliser cela (utile pour les posts plus longs où seulement une partie du post est le commentaire)
+** autrement s'il a un '''e-content''', utiliser ça (vous pourriez désirer filtrer quelque HTML)
+** autrement s'il a un '''p-name''', utiliser cela 
+** si le texte du commentaire est trop long (votre site, votre jugement), abrégez-le avec quelque code intelligent d'ellipse (par ex. voir [[Twitter-fr#POSSEr une note abrégée vers twitter|POSSEr une note abrégée vers Twitter]] pour quelque idée) et fournissez un lien "Voir plus" vers le permalien.
+
+* utiliser son '''dt-published''' pour l'horaire du post.
+** en outre, son '''dt-updated''' pourrait être utilisé pour une annotation "modifié : datetime"
+* utiliser son '''u-url''' pour le permalien
+* utiliser son '''p-geo''' / p-latitude / p-longitude pour le lieu - vous pouvez avoir besoin d'utiliser un service pour traduire cela en quelque chose de compréhensible par les humains /ville/état/nom de pays.
+** (Problèmes : peut-être [[h-entry-fr|h-entry]] pourrait utiliser une propriété [[p-location-fr|p-location]] similaire au [[h-event-fr|h-event]] qui permettrait l'embarquement d'une [[h-adr-fr|h-adr]] avec de l'information d'adresse structurée.)
+
+
+* '''recevoir plus d'information de commentaire à afficher'''
+** utiliser le h-entry '''dt-published''' pour l'heure de la réponse
+*** en outre, son '''dt-updated''' pourrait être utilisé pour une annotation "edited: datetime" dans votre affichage
+** utiliser son '''u-url''' pour le permalien (hyperlie l'heure de réponse vers le permalien)
+* '''brainstorm optionnel sur le lieu''' - parce que peu de gens ont implémenté l'info de localisation dans les réponses postées
+** utiliser le h-entry '''p-geo''' / p-latitude / p-longitude pour le lieu - vous pouvez avoir besoin d'utiliser un service pour traduire ça dans un nom lisible par les humains voisinage / ville / état / nom du pays peut-être avec un hyperlien vers une carte, ou une agrégation sur votre site de tous les posts (et commentaires) près de cet endroit.
+*** (problématique : peutêtre que  [[h-entry-fr|h-entry]] pourrait utiliser une propriété [[p-location-fr|p-location]] similaire à [[h-event-fr|h-event]] qui permettrait l'embarquement d'une [[h-adr-fr|h-adr]] avec de l'information d'adresse structurée)
+
+Avec cette information, un affichage suffisamment riche devrait être possible dans une seciton "Comments" dans le pied de page du permalien du post original. Ajoutez-cela pour chaque commentaire : 
+* [[webaction-fr|webaction]] bouton/lien like/favorite/props 
+Et vous avez nous l'espérons reçu un affichage de commentaire de fidélité similaire à tout ce qu'on les [[silos-fr|silos]].
+
+Note : certains de ces points ont été implémentés !
+* [[Storytlr-fr|Storytlr]] reçoit les posts de commentaires via [[pingback-fr|pingback]], puis parse le contenu du post et l'information de l'auteur  à partir du [[h-entry-fr|h-entry]] et de la [[h-card-fr|h-card]] sur la page, et affiche alors : 
+** l'auteur du commentaire à partir des h-card / name, photo, propriétés url
+** contenus du post de commentaire à partir de h-entry / content, published, propriétés url
+** par ex. : http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html
+* ... quelle implémentation sera la suivante ?
+
+Problématiques :
+* '''<span id="first-rel-author">"*first" rel-author</span>''' est suffisamment bien parce que a) il n'y a pas beaucoup de blogs multi-auteurs, comparativement parlant, et plus important b) ceci retrouve un post *réponse*, et ceux-ci sont toujours écrits par une personne unique, aussi il ne devrait y avoir qu'un auteur unique sur *cette* page-là. Véritables contre-exemples du vrai monde bienvenus.
+
+=== Comment marquer===
+
+Le post dont les commentaires sont en réponse à devrait être un h-entry de top-niveau, et les commentaires attenants devraient être marqués comme des h-entries imbriquées sous la propriété comment. Par exemple : 
+
+<pre><nowiki>
+<div class="h-entry">
+ <h1 class="p-name">L'entrée Principale</div>
+ <p class="p-author h-card">Jean Dupont</p>
+ <p class="e-content">Blah blah blah blah</p>
+ 
+ <h2>Commentaires</h2>
+ 
+ <div class="p-comment h-entry">
+  <p class="p-author h-card">Jeanne Blogs</p>
+  <p class="p-summary">Ha ha ha superble article Jean</p>
+ </div>
+ • 
+ •
+ •
+</div>
+</nowiki></pre>
+
+Voir : http://microformats.org/wiki/comment-brainstorming#microformats2_p-comment_h-entry
+
+En outre, parce que les commentaires affichés sont sur la page avec l'URL qui sont "in-reply-to", vous pouvez ajouter une propriété vide  u-in-reply-to qui deviendra automatiquement le permalien au moment d'être parsé du fait des règles de canonisation des URL absolues par ex. ceci à l'intérieur de chaque commentaire affiché : 
+
+<code><nowiki><a href="" class="u-in-reply-to"></a></nowiki></code>
+
+ou
+
+<code><nowiki><span class="u-in-reply-to"></span></nowiki></code>
+
+Pourquoi voudriez-vous faire ça ? Voir :  http://microformats.org/wiki/comment-brainstorming#Use_case_for_same_page_u-in-reply-to
+
+=== Comment effacer ===
+{{main-fr|deleted#Handling}}
+Comment effacer les commentaires reçus provenant d'autres sites.
+
+Si une [[reply-fr|réponse]]/commentaire de post indieweb est [[deleted-fr|effacée]], ce site de l'utilisateur s'attend à recevoir une autre webmention en rapport.
+
+Si au moment de tenter de retrouver l'URL permalien de réponse, votre serveur reçoit un 410 GONE, alors votre serveur s'attend à effacer la copie existante syndiquée de ce commentaire.
+
+Voir [[deleted#Handling|handling deleted posts]] pouru les détaisl.
+
+== Pratiques Actuelles Indiewebcamp ==
+Automatiquement 
+* '''[[User:Eschnou.com|Laurent Eschenauer]] utilisant [[Storytlr]]''' : affiche les posts de commentaires provenant de l'IndieWeb marqués avec  [[h-entry-fr|h-entry]] et reçus via [[pingback-fr|pingback]], et les commentaires postés localement sur ses posts, dans une section intégrée "Comments" triée par le temps, par ex. :
+** http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html
+* '''[[User:Aaronparecki.com|Aaron Parecki]] utilisant [[p3k-fr|p3k]]'''
+** http://aaronparecki.com/notes/2013/05/21/1/xkcd
+* '''[[User:Sandeep.io|Sandeep Shetty]]''' utilisant '''[[Projects#Converspace|Converspace]]'''
+** http://www.sandeep.io/64
+* '''[[User:WaterPigs.co.uk|Barnaby Walters]]''' utilisant [[Taproot-fr|Taproot]] et un marquage utilisant  .p-comment.h-entry ([http://waterpigs.co.uk/notes/4QgMZN/ exemple])
+* '''[[User:Werd.io|Ben Werdmuller]]''' utilisant [[idno-fr|idno]] ([http://werd.io/view/51d5097fbed7ded0633a5956#comments exemple])
+
+Manuellement :
+Liste de liens dans une section de [[posts-fr#Sections_pied_de page|pied de page d'un post]] :
+* [[User:Tommorris.org|Tom Morris]] ajoute parfois des lien+favicons à une section “this post is discussed further at” ([http://tommorris.org/posts/2506 exemple récent]).
+* [[User:tantek.com|Tantek]] maintient parfois une liste de citation de posts qui lie vers un de ses billets, par ex. http://tantek.com/2013/073/b1/silos-vs-open-social-web#silos-vs-open-social-web-comments
+
+=== Pratiques anciennes ===
+* [[User:tantek.com|Tantek]] avait l'habitude de maintenir des listes de liens vers ses posts de noms de personnes liés vers les permaliens de commentaires :
+** 2002 : [http://tantek.com/log/2002/12.html#L20021216t2238 liste dans la ligne avec drapeaux pour représenter les langues des commentaires]
+** 2003 : [http://tantek.com/log/2003/12.html#L20031215t0830 liste dans la ligne avec quelques annotations texte].
+** 2005 : [http://tantek.com/log/2005/10.html#d02t1813 bloc liste avec relances vers commentaires]
+
+== Silos ==
+En général les blogs silos existants affichent les commentaires des posts (soir par ordre chronologique ou ordre chronologique inversé) avec les détails suivants : 
+* '''logo/photo commentateur'''
+* '''nom du commentateur'''
+** '''hyperlé vers le profil du commentateur'''
+* '''texte complet''' du commentaire
+* '''date/heure''' du commentaire
+** souvent en temps relatif plutôt qu'un datetime absolu
+*** bien que les raisons though see reasons why [http://aaronparecki.com/articles/2012/08/23/1/you-should-not-be-displaying-relative-dates you should not be displaying relative dates]
+** '''hyperlinked to comment permalink'''
+* '''commenter location''' (variable granularity) at time of comment writing
+** '''hyperlinked''' to silo aggregation of activity at that location
+* '''like/favorite button''' (to like or favorite the comment/@-reply)
+
+=== Tumblr ===
+[[Tumblr-fr|Tumblr]] groupe différents types de réponse dans un flux générique "notes", en bas de chaque post ([http://www.kungfugrippe.com/post/47159818629/something-something-syncing#notes exemple]). Il affiche : 
+* Le nom d'utilisateur de l'auteur
+* La photo du profil de l'utilisateur
+
+=== Twitter ===
+[[Twitter-fr|Twitter]] affiche tous les tweets qui sont à la fois en-réponse-à un tweet particulier ET contiennent le @nom des tweeters originaux sous la métadonnée du tweet par ordre chronologique. Il fournit une boîte de "réponse" au-dessus (?) du flux de réponse ([https://twitter.com/wilto/status/322028394944532480 exemple]). Les tweets ont : 
+** Le nom des auteurs
+** Le @nom de l'auteur
+** La photo de profil des auteurs
+** Un chronodatage relatif
+** Le contenu du tweet
+** Un paquet d'actions (survol)
+
+=== Facebook ===
+[[Facebook-fr|Facebook]] traite les commentaires comme complètement secondaires aux posts "complets", les montrant par ordre chronologique sous la barre d'action du post. Facebook n'affiche que les derniers commentaires ~4 commentaires s'il y en a plus, et affiche une boîte laisser-un-commentaire en-dessous. Ils ont : 
+** Le nom de l'auteur
+** La photo de profil de l'auteur
+** Le contenu du commentaire
+** Un chronodatage relatif
+** 'via mobile' si applicable
+** Bouton j'aime w/ compteurs j'aime
+
+== Spécifications existantes pour affichage ==
+Inclus ici pour des objectifs historiques - critique des spécifications existantes pour affichage.
+
+Résumé : les spécifications existantes n'en disent pas beaucoup ou fournissent un mauvais conseil pour ce qu'il y a à afficher en réponse à la réception d'une webmention.
+
+'''[[webMention-fr|webmention]]''' (la spécification) ne dit pas quoi faire avec les webmentions reçues et vérifiées avec succès.
+
+'''[[Pingback-fr|pingback]]''' (la spécification) est très vague et parfois contradictoire. Elle dit des choses comme : 
+* "include this information on her site"
+** could mean the link, the comment post, a portion thereof?
+* "Bob's blogging system then includes a link back to Alice's post on his original post."
+** implying that perhaps ''only'' links show-up from pingbacks
+* "Reader's <nowiki>[sic]</nowiki> of Bob's article can follow this link to Alice's post to read her opinion."
+** implying that readers can't see Alice's opinion on Bob's article, and have to follow the link to Alice's post to read it. seems a bit inconvenient, and not how comment presentation works on typical blogs, or [[silo]] posts.
+* the "Conformance Requirements" do not mention any requirement for displaying pingback links or content therefrom on the original post
+* in the "Example", it says: <blockquote><p>"Bob's blog also retrieves other data required from the content of Alice's new post, such as the '''page title''', an '''extract of the page content surrounding the link''' to Bob's post, any attributes indicating '''which language the page is in''', and '''so forth'''.</p><p>"Finally, Bob's post records the pingback in its database, and regenerates the static pages referring to Bob's post so that they '''mention the pingback.'''"</p>'''emphasis''' added.</blockquote>
+** This is vague but provides some additional display guidance which is unfortunately not very well thought out and leaves much to be desired:
+*** ''page title'' - this is odd as typical comments displayed on post pages don't have titles, just comment text.
+*** ''extract of the page content surrounding the link'' - in practice this is unreadable and unfriendly. It doesn't look at all like a comment and usually has both leading and trailing ellipses making you wonder what the broader context of the comment is.
+*** ''which language the page is in'' - this could be useful for marking up the display of the comment with a <code>lang</code> attribute, and the link to the comment permalink with the <code>hreflang</code> attribute.
+
+En pratique : 
+
+Les affichages Pingback sont presque toujours inutiles, par ex. 
+* https://blog.mozilla.org/blog/2013/04/10/gearing-up-for-the-next-chapter/
+
+Problèmes démontrés : 
+* "Pingback from" est du jargon - ne fournit aucune valeur à l'utilisteur - juste du bruit
+* le titre du commentaire du billet de blog est inutile car il fournit un résumé du billet de blog original
+* le résumé de texte [...] ... [...] est presque illisible sans plus de contexte, et ne montre même pas quelle phrase est liée au billet de blog original
+** dans le premier pingback, inclure même le premier paragraphe complet du post de commentaire aurait été mieux. Et si ce n'étati pas un commentaire alors ce devrait être juste une liste d'articles en rapport (date, auteur, nom du post lié, tous marqués avec [[h-cite-fr|h-cite]]), plutôt que d'inclure des résumés cryptiques et brisés.
+* le design général visuel est très daté et tombé loin derrière les designs modernes de présentation de commentaires.
+
+== FAQ ==
+=== Pourquoi utiliser p-summary quand je peux tronquer e-content ===
+''Q : Je suppose si je peux saisir le e-content et si je pense qu'il est trop long, que je pourrais tout aussi bien le tronquer moi-même. Pourquoi aurais-je besoin du p-summary ?''
+
+R : Parce que le p-summary est probabelement (ou même sans doute) explicitement réalisé par l'auteur/éditeurs pour être une version tronquée avec plus de sens du e-content que ce que vous pourriez automatiquement tronquer par vous-même.
+
+== Discussion ==
+* Les posts longs où seulement une partie de ceux-ci sont en réponse à un autre post et une grosse tranche est une tangente devraient ne pas être publiés comme une réponse/commentaire et à la place devraient publiées comme une "mention". Notons cela ici parce cela est pris en considération dans la section du dessus "Comment afficher > recevoir le texte du commentaire à afficher" et cela pourrait envoyer à tort le message que des posts (tangentiels) comme ceux-ci devraient être enrichis en marquage avec in-reply-to.  (Voir [http://indiewebcamp.com/irc/2013-07-07/line/1373241638])
+
+
+== Voir Aussi ==
+* [[comment-fr|commentaire]]
+* [[webmention-fr|webmention]]
+* [[h-entry-fr|h-entry]]
+* [[h-card-fr|h-card]]

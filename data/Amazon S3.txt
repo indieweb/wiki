@@ -1,0 +1,62 @@
+http://indiewebcamp.com/Amazon_S3
+
+{{stub}}
+
+'''<dfn>Amazon S3</dfn>''' is a file [[hosting]] service from [[Amazon]]. 
+
+== IndieWeb Examples ==
+=== [http://lionzan.me lionzan.me] ===
+Leonardo Zangrando hosts his website on S3.
+
+These are the notes that I took while creating my S3 Jekyll Indieweb site.
+
+* Create account AWS
+* Create account AS3 in AWS
+* Create bucket in AS3 and initialise CloudFront for website delivery via AWS - instructions here https://github.com/laurilehmijoki/s3_website#how-to-use-cloudfront-to-deliver-your-blog
+* Install Jekyll on local - instructions here http://jekyllrb.com/docs/home/
+* Write a post and commit (?) - from terminal, in blog local folder type command  $ jekyll build
+* Upload blog to AWS - in terminal in blog local folder type command  $ s3_website push
+
+Other sources
+* Other instructions for deployment on GitHub here http://jekyllbootstrap.com/ - not tried
+* for tutorial check also http://www.andrewmunsell.com/tutorials/jekyll-by-example/#why-jekyll - used to install jekyll on AWS S3, but now apparently the tutorial is $15 :(
+* check also blogging framework http://octopress.org/ - installed a GitHub version, but still not working, site doesn't build (dunno why)
+* http://yeswejekyll.com/ very interesting, with links to different templates by http://foundation.zurb.com/
+* http://klepas.org/jekyll-a-static-site-generator/
+
+=== [https://dateedge.com Date Edge] ===
+
+Date Edge is a straighteedge dating website made by {{veganstraightedge}} and [https://twitter.com/bookis Bookis]. It uses S3 for serving assets (images now, audio/videos later) and [[Cloudfront]] as a [[CDN]]. They pay $0.12 per GB transferred up to 10 TB. The first 1 GB transferred is free. For the month of 2014-05, they transferred 27.941 GB and paid $3.35 USD.
+
+=== Use local copy or rsync to S3 ===
+
+[[User:t37.net|Frédéric de Villamil]] is hosting a static website on S3 using plain html pages.
+
+This setup allows to sync the pages using your operating system file manager using drag and drop or local rsync:
+
+- Create an account on AWS
+– Create bucket in AS3 and initialise Cloudfront for website delivery via AWS
+- If you don't have it done yet, setup your domain on Amazon Route53.
+- Install [https://code.google.com/p/s3fuse/ S3 Fuse] on your system. It was tested sucessfully on Mac OS, Linux and FreeBSD.
+- Create a directory to mount the remote file system (the S3 bucket) on the local machine.
+- Mount the remote file system locally.
+- Locally copy the files from your work directory to the remote one. Uing rxync here avoids you to transfer the whole files each time.
+
+This setup is quite slow because Fuse is slow, but it was made for someone not really tech savvy who had to update the HTML and push the files on S3. Since that person already had to learn HTML, it was decided to make the process easier by allowing the local copy
+
+== Considerations ==
+
+* If your site has modest traffic then you will have a low hosting bill. There is no minimum cost per month.
+* Amazon is responsible for keeping the hardware and software running, and Amazon probably has more resources for fixing problems than you do :-)
+* Content on S3 is stored redundantly.
+* It is very difficult to serve custom HTTP status codes (e.g. 301 redirects): you must create a dummy file at the appropriate URL and then use Amazon’s web-based management system to set up the status.
+* It is not possible to perform advanced URL rewriting on the server.
+* You cannot run your own software (e.g. PHP or Perl scripts) server-side.
+
+== See Also ==
+* [[Amazon]]
+* [[hosting]]
+* [[Jekyll]]
+* [http://esham.io/2011/06/building-and-hosting-a-static-site Building and hosting a static site with Jekyll and Amazon S3 on Mac OS X]
+* http://aws.amazon.com/s3/
+* [http://docs.aws.amazon.com/AmazonS3/latest/dev/WebsiteHosting.html AWS walkthrough on setting up a static site on S3]

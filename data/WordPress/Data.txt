@@ -1,0 +1,191 @@
+http://indiewebcamp.com/WordPress/Data
+
+In order to ensure interoperability between Indieweb WordPress plugins, as much as possible, the same data structures should be used. 
+
+= Metadata =
+
+[[WordPress]] allows for for metadata to be attached to various objects.
+
+By default, WordPress includes a metadata table for post types(posts, pages, etc), comments, and users. 
+
+WordPress contains a [http://codex.wordpress.org/Metadata_API Metadata API] that it uses to handle metadata. Metadata can also be created for other object types, but is not part of a default installation.
+
+== Microformats data ==
+
+Proposal by {{snarfed}}: store a post's top-level [[microformats2]] string properties in post metadata with the property names as the keys, prefixed by <code>mf2_</code>. [https://github.com/snarfed/wordpress-micropub wordpress-micropub] [https://github.com/snarfed/wordpress-micropub/commit/bee68ff3c7de91173f9cf8ecddef580478fa9dec does this now].
+
+For example, this RSVP snippet:
+
+<code>&lt;data class="p-rsvp" value="yes">I'm in!&lt;/data></code>
+
+would be stored in post meta with the key <code>mf2_rsvp</code> and value <code>yes</code>.
+
+For mf2 properties with multiple values, just store multiple values for the post meta key. WordPress supports this with e.g. <code>add_post_meta</code>.
+
+Use code like this to get multiple post meta values in a single database query:
+
+<pre>
+$query = new WP_Query(array('meta_query' => array(array(
+  'key' => 'meta_key',
+  'value' => array('mf2_name', 'mf2_content', ...),
+  'compare' => 'IN'))));
+</pre>
+
+=== use uf2 instead of mf2 ===
+{{t}} minor revision of {{snarfed}}'s proposal - same but use "uf2" instead of "mf2" because the "u" looks closer to a µ for "micro":
+
+Store a post's top-level [[microformats2]] string properties in post metadata with the property names as the keys, prefixed by <code>uf2_</code>. For example, this RSVP snippet:
+
+<code>&lt;data class="p-rsvp" value="yes">I'm in!&lt;/data></code>
+
+would be stored in post meta with the key <code>uf2_rsvp</code> and value <code>yes</code>.
+
+For uf2 properties with multiple values, just store multiple values for the post meta key. WordPress supports this with e.g. <code>add_post_meta</code>.
+
+Use code like this to get multiple post meta values in a single database query:
+
+<pre>
+$query = new WP_Query(array('meta_query' => array(array(
+  'key' => 'meta_key',
+  'value' => array('uf2_name', 'uf2_content', ...),
+  'compare' => 'IN'))));
+</pre>
+
+==== why mf2 is better than uf2 ====
+Per {{snarfed}}'s follow-up in IRC:
+* mf2 is seen in existing code much more often than uf2 
+** e.g.  php-mf2, mf2py, mf2util, etc
+* mf2 is more obvious (and maybe less clever)
+
+== Location ==
+
+WordPress currently provides a [http://codex.wordpress.org/Geodata Geodata] data structure. 
+
+* geo_latitude REQUIRED
+    (float) decimal degrees -90 to 90 (negative values are in the southern hemisphere). 
+
+*geo_longitude REQUIRED
+   (float) decimal degrees -180 to 180 (negative values are in the western hemisphere). 
+* geo_altitude OPTIONAL
+   (int) Not part of the WordPress standard
+*geo_public OPTIONAL
+   (int) is the geodata public (1) or private (0)? If value is missing, assume public. 
+
+* geo_address OPTIONAL
+     (string) freeform textual description of coordinates. 
+    "221B Baker St, Westminster, London NW1 6XE, UK", 
+    "Pasadena, CA", "Soho, NYC", "Idaho", etc. 
+    Accuracy level and language is arbitrary. 
+
+As an enhancement for geo_address, which is freeform text, {{gwg}} is implementing mf2_adr in his Simple Location plugin, which is an h-adr stored to allow for structured data. geo_address will remain as the "Display Name" If blank, a name will be generated from the h-adr components. 
+
+* street-address - house/apartment number, floor, street name
+* extended-address - additional street details/boro/neighborhood/etc
+* locality - city/town/village
+* region - state/county/province
+* postal-code
+* country-name 
+* country-code
+
+As of WordPress 4.4, metadatas is allowed to attach to a taxonomy term. Therefore, {{gwg}} is planning to update the above to declare a venue as a taxonomy term, and address fields as taxonomy term meta attached to them.
+
+== User ==
+
+WordPress supports user metadata. As part of the revamping of the Indieweb plugin, metadata reflecting rel-me and reflecting h-card properties were added to the user profile.
+
+However, the rel-me silo URLs were not prefaced with mf2_ as using just the sitename...e.g. twitter instead of mf2_twitter allows for cross compatibility with other plugins that store this data.
+
+== Comment ==
+
+[[Webmention Plugin]] adds an additional comment type of 'webmention' to comments.
+
+[[Semantic Linkbacks]] stores extra information in the comment metadata.
+
+
+*semantic_linkbacks_canonical - the canonical source url
+*semantic_linkbacks_avatar - the author avatar URL
+*semantic_linkbacks_type - the comment type. The plugin currently supports the following types: 
+** mention(default)
+** reply
+** repost
+** like
+** favorite
+** tag
+** rsvp:yes, rsvp:no, rsvp:maybe, rsvp:invited, rsvp:tracking.
+
+= Taxonomies =
+
+A taxonomy called 'kind' is currently used for the [[Post Kinds Plugin]]. This is meant to indicate the [[post kind]]
+
+Current post kinds are all lowercase. List appears below:
+
+* article
+* note
+* reply
+* repost
+* like
+* favorite
+* bookmark
+* photo
+* tag 
+* rsvp
+* listen
+* watch
+* play
+* checkin
+* wish
+
+Many can be disabled by sites not using them
+
+Considering the following additions:
+
+* weather
+* exercise
+
+== Post Kinds Plugin ==
+
+In response to {{snarfed}}'s proposal to organize using mf2_ as a key prefix, {{gwg}} changed to using 'mf2_cite' as a key instead of 'response'. All fields are optional(See Below)
+
+* mf2_cite
+** ['url'] - The URL the post is responding to.
+** ['name'] - The title of same
+** ['author'] - The URL of an h-card (if external)
+** ['published'] - URL publish date in ISO8601 with timezone offset
+** ['updated'] - URL updated date in ISO8601 with timezone offset
+** ['publication'] -  The name of the site, or for citing articles in publications with more than one author.
+** ['content'] - the content or partial content of the work itself.
+** ['card']['name'] = Author Name / Artist Name
+** ['card']['photo'] = Author photo
+* mf2_in-reply-to, mf2_like-of, mf2_repost-of are now supported as URL properties. Any details are still stored in mf2_cite.
+* mf2_dt-start and mf2_dt-end to indicate duration
+* mf2_duration is deprecated in the interface, but will still be used in lieu of dt-end minus dt-start if set.
+
+=== Future Data Plans ===
+
+* All properties to support either multi-dimensional or not, in order to allow for multi-replies and other multiple property situations
+
+=== Deprecated ===
+
+The Post Kinds Plugin, prior to Version 1.2.0,used the following array of metadata using the key 'response' to store details on what a post is responding to. 
+All fields are optional.
+
+* response['url'] - The URL the post is responding to.
+* response['title'] - The title of same
+* response['author'] - The author name
+* response['icon'] - The author icon/image/avatar
+* response['published'] - URL publish date in ISO8601 with timezone offset
+* response['content'] - Content or a Citation...to allow for an excerpt for context.
+
+== Syndication ==
+
+{{gwg}}'s Syndication Links plugin uses a single data field with the key 'syndication_urls' with URLs separated by newlines for syndication URLs to be marked up for syndication. Entry is a textbox with one URL per line. This means there is no requirement that WordPress know about a service to add a link to it.
+
+It also supports reading from mf2_syndication if it exists per the standardization proposal.
+
+The plugin formerly stored an array of URLs of various syndication services under the metadata key 'synlinks'. This is now deprecated.
+
+= Themes =
+
+Both {{gwg}}'s mf2_s fork and {{pfefferle}}'s SemPress theme register theme support for 'microformats2'. This allows both themes to tell plugins and other functions that they support the microformats2 standard and to act appropriately.
+
+This usually means workarounds such as adding in microformats by the plugin can and should be disabled if this is set.

@@ -1,0 +1,366 @@
+http://indiewebcamp.com/Vouch
+
+<!-- 
+
+By editing and/or contributing to this specification, you agree to make your contributions available under the http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0. 
+
+-->
+{{stub}}
+
+The '''<dfn>Vouch</dfn>''' protocol is an anti-[[spam]] extension to [[Webmention]]. <dfn>Webmention with Vouch</dfn> depends on understanding [[Webmention]]. Please read that first.
+
+;Status
+:This is a '''Living Specification''' yet mature enough to encourage [[#IndieWeb_Examples|implementations]] and [[#Issues|feedback]].
+;Latest Published Version
+:https://indiewebcamp.com/Vouch
+;Participate
+:[[#Issues|feedback]]
+:[[IRC]]: [irc://irc.freenode.net/indiewebcamp #indiewebcamp on Freenode]
+;Editors
+:[http://aaronparecki.com Aaron Parecki]
+:[http://tantek.com Tantek Çelik]
+;Authors
+:Other contributors: [https://indiewebcamp.com/wiki/index.php?title=Vouch&action=history revision history]
+;License
+:<small>Per [http://creativecommons.org/publicdomain/zero/1.0/ CC0], to the extent possible under law, the editor(s) and contributors have waived all copyright and related or neighboring rights to this work. In addition, as of {{CURRENTYEAR}}-{{CURRENTMONTH}}-{{CURRENTDAY2}}, the editor(s) and contributors (2015-04-07 onward) have made this specification available under the [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0].</small>
+
+
+__TOC__
+== Summary ==
+* If A is sending a [[webmention]] to B 
+** (who don't know each other, i.e. B has never linked to A), 
+* A sends along a third parameter, "vouch=C", 
+** where C is a URL to a page that has a link to A's domain (thus "vouching" for A), 
+** and C's site is a domain that B approves of (e.g. has linked to in the past).
+
+By doing so, A is telling B: 
+* please accept my webmention, 
+* because C, 
+** who you approve of, 
+** vouches for me.
+
+== Why ==
+You should implement receiving Webmention with Vouch in order to automatically block all automated [[spam]].
+
+You should send webmentions with vouches to increase the chance that your webmention comments will be accepted. As more and more sites implement Webmention with Vouch, plain webmentions may be blocked more frequently.
+ 
+== How To ==
+For how to implement receiving Webmention with Vouch, see the [[#Flow_Chart]] and summary description underneath it.
+
+=== Flow Chart ===
+[http://indiewebcamp.com/File:2014-285-webmention-vouch-flowchart.jpg <img src="http://indiewebcamp.com/images/thumb/5/59/2014-285-webmention-vouch-flowchart.jpg/720px-2014-285-webmention-vouch-flowchart.jpg" style="max-width:100%" alt=""/>]
+<!-- [[File:2014-285-webmention-vouch-drawing.png|720px]] -->
+
+Summary description of Webmention with vouch flowchart from 2014-285 [[2014/Cambridge|IndieWebCamp Cambridge]].
+
+Webmention support only:
+* start: receive webmention
+* are <code>source</code> and <code>target</code> valid URLs?
+** no: return <code>400</code>
+* approve <code>source</code>?
+** no: return <code>400</code>
+* does my site accept webmentions for <code>target</code> AND does <code>source</code> link to <code>target</code>?
+** no: return <code>400</code>
+* <code>200</code> accept webmention
+
+
+Webmention with Vouch support:
+* start: receive webmention
+* are <code>source</code> and <code>target</code> (and <code>vouch</code> if present) valid URLs?
+** no: return <code>400</code>
+* approve <code>source</code>?
+** no: has <code>vouch</code> param?
+*** no: return <code>449</code>
+** approve <code>vouch</code>?
+*** no: return <code>400</code>
+** does <code>vouch</code> link to <code>source</code>'s domain?
+*** no: 400
+* does my site accept webmentions for <code>target</code> AND does <code>source</code> link to <code>target</code>?
+** no: return <code>400</code>
+* <code>200</code> accept webmention
+
+
+Webmention with Vouch support with async network traffic:
+* start: receive webmention
+* are <code>source</code> and <code>target</code> (and <code>vouch</code> if present) valid URLs?
+** no: return <code>400</code>
+* approve <code>source</code>?
+** no: has <code>vouch</code> param?
+*** no: return <code>449</code>
+** approve <code>vouch</code>?
+*** no: return <code>400</code>
+** start async process to check webmention with vouch links
+** return <code>202</code>
+* start async process to check only webmention source and target links
+* return <code>202</code>
+
+
+Async process to check webmention links:
+* does my site accept webmentions for <code>target</code> AND does <code>source</code> link to <code>target</code>?
+** no: status <code>400</code>
+* is there a vouch to check?
+** no: status <code>200</code> accept webmention
+* does <code>vouch</code> link to <code>source</code>'s domain?
+** no: status <code>400</code>
+* status <code>200</code> accept webmention
+
+
+Webmention with Vouch testing support (not in flow diagram) with async network traffic:
+* start: receive webmention
+* are <code>source</code> and <code>target</code> (and <code>vouch</code> if present) valid URLs?
+** no: return <code>400</code>
+* has <code>vouch</code> param?
+** approve <code>vouch</code>?
+*** no: return <code>400</code>
+* approve <code>source</code>?
+** no: has <code>vouch</code> param?
+*** no: return <code>449</code> or 
+**** warning: might not accept this unvouched in the near future.
+* start async process to check webmention with vouch links
+* return <code>202</code>
+
+== Protocol ==
+Vouch protocol description. How a webmention with vouch is sent, received, processed, accepted, rejected.
+
+* A sends a [[webmention]] with to B (who don't know each other, e.g. B has never linked to A), and A sends along a third parameter, "vouch=C", in addition to "source=A" and "target=B".
+* B syntax checks A, B are valid URLs
+* B checks if they approve A's domain
+* if so, they're done and they accept the webmention. Otherwise:
+* B syntax checks C is a valid URL
+* B checks if they approve C's domain
+* B checks that the page C has a link to A's domain
+* B checks that the page A has a link to B
+* if all checks passed, B accepts the webmention
+
+If any checks fail, B returns 400.
+
+== IndieWeb Examples ==
+IndieWeb Examples of receiving and sending Webmention with Vouch, in order of implementation.
+=== Aaron Parecki ===
+{{aaronpk}} uses [[p3k]] to support '''receiving''' Webmention with Vouch testing (unvouched warning option) on aaronparecki.com since 2014-10-17. E.g.:
+* http://aaronparecki.com/replies/2014/10/17/1/vouch has a comment from Ben Roberts with publicly displayed "(vouched for by waterpigs.co.uk)" text where the waterpigs.co.uk text links to a specific vouch URL.
+
+=== Ben Roberts ===
+Ben Roberts uses [[Postly]] on ben.thatmustbe.me to support '''sending''' and '''receiving''' Webmention with Vouch as of 2014-10-17. E.g.:
+* sent: https://ben.thatmustbe.me/note/2014/10/17/5/
+** in reply to: http://aaronparecki.com/replies/2014/10/17/1/vouch
+** vouch: https://waterpigs.co.uk/notes/4VUFr4/
+* received: https://ben.thatmustbe.me/post/2014/10/16/1/totp_and_you
+** comment: https://kylewm.com/reply/2014/10/17/1/this-explanation-makes-me-think-totp with publicly displayed "Vouched" text that links to a specific vouch URL.
+** vouch: https://kartikprabhu.com/notes/steel-countertop-kylewm
+
+*Implementation details for sending a vouch: [[Postly#Searching_for_a_domain_to_use_for_a_vouch]]
+
+=== gRegor Morrill ===
+{{gRegor}} uses [[ProcessWire]] on gregorlove.com to support '''sending''' and '''receiving''' Webmention with Vouch as of 2015-11-29.
+* sent: http://gregorlove.com/2015/11/testing-webmention-with-vouch-fingers/
+** in reply to: http://aaronparecki.com/notes/2014/10/17/1/p3k
+** vouch: http://aaronparecki.com/events/2014/06/28/1/indiewebcamp-2014
+*** since Aaron has already linked to me, that URL is used
+* also sent: http://gregorlove.com/2015/11/another-webmention-with-vouch-test/
+** in reply to: http://aaronparecki.com/notes/2014/10/17/1/p3k
+** third-party domain vouch: https://indiewebcamp.com/irc-people
+*** simulating as if Aaron had ''not'' linked to me before
+* received: https://ben.thatmustbe.me/note/2015/11/30/1/
+** as comment on: https://gregorlove.com/2015/11/testing-webmention-with-vouch-fingers/
+** vouch: https://indiewebcamp.com/irc-people
+*** Received vouch is not displayed publicly yet.
+
+== Design Considerations ==
+=== Easy For Receiver Implementation ===
+In general a key goal with "vouch" is something that is <em>easy</em> for the <em>receiver</em> to process, and instead put more burden on the sender.
+
+=== Shift Burden To Sender ===
+Typical protocols susceptible to (abused by, made nearly useless by) spam (e.g. SMTP, Pingback, Trackback) make it very easy for the sender to send, and thus put all the burden of dealing with filtering undesired senders on the receiver.
+
+Vouch pushes the (potentially cognitively challenging) work of 2nd degree discovery onto the <em>sender</em> of the webmention, and instead makes it easy for the receiver to implement.
+
+=== Zero moderation ===
+Another key goal is to build a system with zero moderation tax, at least to deal with automated spam systems.
+
+== FAQ ==
+(in progress)
+
+=== Is vouch saying you know me from ===
+Q: Is a vouch saying "you may know me from…" ?
+
+A: Not quite. No assertion of "may" nor "know". Just a "here's someone's {C} (perma)link, you {B} have linked to {some URL at C's personal domain}, where {C} links to me {some URL at A's personal domain}"
+
+=== Do I vouch for my friends ===
+Q: Do I vouch for my friends?
+
+A: No, no assertion of friendship is implied or used by vouch. 
+
+=== What is HTTP 449 ===
+Q: What is the HTTP 449 status code?
+
+A: HTTP 449 is a status code used by Microsoft to mean "Retry With"[https://msdn.microsoft.com/en-us/library/dd891478.aspx]
+
+=== Why not HTTP 401 ===
+Q: Why not use the HTTP 401 status code?
+
+A: HTTP 401 requires that the response include a "WWW-Authenticate" header, and says that the client can retry the request with authentication. Since Vouch does not involve authentication of any kind, this is not an appropriate response code to use.
+
+=== Why not HTTP 403 ===
+Q: Why not use the HTTP 403 status code?
+
+A: While there may be future uses of 403 in Vouch, currently the meanings of 403 do not map to anything in vouch.
+
+From https://en.wikipedia.org/wiki/HTTP_403
+
+<blockquote>A 403 response generally indicates one of two conditions:
+* Authentication was provided, but the authenticated user is not permitted to perform the requested operation.
+* The operation is forbidden to all users. For example, requests for a directory listing return code 403 when directory listing has been disabled.
+</blockquote>
+
+Vouch is not about authentication, thus the first makes no sense. Nor would vouch be indicating that an operation is forbidden to all users, thus the second does not apply either.
+
+
+* Alternatively from {{benthatmustbeme}}
+From http://tools.ietf.org/html/rfc7231#section-6.5.3
+
+ The 403 (Forbidden) status code indicates that the server understood
+ the request but refuses to authorize it.  A server that wishes to
+ make public why the request has been forbidden can describe that
+ reason in the response payload (if any).
+ 
+ If authentication credentials were provided in the request, the
+ server considers them insufficient to grant access.  The client
+ SHOULD NOT automatically repeat the request with the same
+ credentials.  The client MAY repeat the request with new or different
+ credentials.  However, a request might be forbidden for reasons
+ unrelated to the credentials.
+
+
+While this could work for this purpose, 403 implies that the server will not take any action.  There is no actual requirement that webmentions that are not vouched be dismissed.  It is perfectly acceptable to put unvouched webmentions in to a moderation queue for example.  The response only indicates that it would be better to reply with vouch.
+
+=== How can a sender find a vouch link ===
+Q: How can the sender find such a vouch link?
+
+A: How do people in general explain how they know each other? We can push this question off to arbitrary social sidebands of choice, the way people share links informally in all sorts of ways.
+
+In addition, since such social questions are of interest beyond commenting (as evidence by [[Facebook]] and other silos showing how many friends in common you have and who they are), there's likely to be one or more aggregators that surface this information in some queryable way.
+
+If A is already a reader of B's content (which A should be, since A is sending them a comment on one of B's permalinks), then A should already be somewhat familiar with who B links to (or can quickly check B's home page or recent posts for people). A should also be relatively familiar with who links to A (hint: A's recent incoming webmentions, or recent HTTP referers [sic]).
+
+Thus with a quick look at B's home page (or recent posts) A should be able to trivially recognize oh hey there's someone (C) that sent A webmention recently, and go pull that out of A's queue/history of recent webmentions, and use that as a vouch URL.
+
+Someone might also setup a service like say socialsearchme.com where you can put in your personal site, and see who has linked to you (most recently, most frequently), who you've linked to, the overlap, as well as how many and who you have in common.
+
+In which case, as a user (A), after commenting (and presumably having their "normal" webmention rejected), they could check a hypothetical service like socialsearchme.com for themselves, see that they'd linked to B, and then see how many (if any) people they have in common, especially, if there are any people that B has linked to that link to A, and if so, presto, that's a "vouch" URL.
+
+This manual human step of checking, i.e. "Hey how do we know each other" adds to the strength of the social tie between the commenter and the post author.
+
+=== How do I verify a vouch ===
+Q: How do I know if the vouch I received is legit. i.e. do I have to verify that there is a link between sender and voucher?
+
+A: As the receiver, you have to do two (relatively) simple checks.
+
+First, regarding: "don't I have to verify that there is a link between sender and voucher" - in one direction only, that vouch URL links to sender's personal domain. That's the easy check. 
+
+The second, potentially more challenging check, is you have to verify that you approve the vouch's site/domain (e.g. perhaps a link from your [[blogroll]], or a whitelist, or your [[Twitter]] followings, [[nicknames cache]], outbound link cache (i.e. a cache of every domain you've linked to), etc. take your pick).
+
+=== Must I trust voucher knows source ===
+Q: But can anyone can send me a webmention with voucher = someone that I've linked to, should I just trust that they know the source?
+
+A: No notion of "trust" needed. Just links. You MUST verify that the vouch (presumably a permalink at the vouch's site) links to the source's site. 
+
+Continued: "or do I go fishing in your friendslist to verify it?" No. There is no need to crawl anywhere from the vouch URL.
+
+=== Why does Twitter not worry ===
+Q: Why don't people worry about this for [[Twitter?]]"
+
+A: They do. :) See Twitter silo mentions of my Twitter profile: https://twitter.com/search?f=realtime&q=%40t&src=typd with plenty of spam.
+
+=== Must I always send a vouch ===
+Q: If I want to send a webmention to a colleague for the first time, I have to somehow...
+
+A: Not necessarily. The Vouch protocol is a backwards compatible extension to Webmention. E.g.:
+# You send a webmention as if you would today. 
+# Perhaps the receiver is already a fan of yours (secretly, in their private whitelist, nicknames cache, etc.) and thus your webmention is accepted without any additional work.
+
+=== Can a vouch apply to shared membership ===
+Q: Can a vouch can apply to a shared membership too? E.g. [[irc-people]] or [[next-hwc]], or [http://xoxofest.com/ XOXO]?
+
+A: A vouch URL could be for example [[User:Kevinmarks.com]], which obviously links to the domain(s) (known.)kevinmarks.com, and thus vouches for any permalinks at those domains. Then the receiver of the webmention has to decide, do I approve of indiewebcamp.com (e.g. have linked to it before, likely yes), ok I'll accept that site as a vouch, and the specific vouch URL, and thus the webmention.
+
+=== Is the vouch a sponsor ===
+Q: Is the vouch is a sponsor?
+
+A: No, the vouch is not a "sponsor" or any other new term. The vouch (C) is <em>just</em> a (perma)link, which directly links to A's domain, and which B is likely to approve (e.g. has linked to C's domain previously).
+
+=== Does vouch make all webmentions manual ===
+Q: Does vouch make the whole webmention sending manual? No auto-sending webmentions?
+
+A: It does not. For example it is likely your code can programmatically itself test http://indiewebcamp.com/irc-people and use it as a default vouch.
+
+From there, you can decide how much intermediate UI you want to show, "The comment you sent is awaiting some form of vouching that they link to that links to you" with a URL field to enter. Plenty of opportunity to crawl, cache, innovate there.
+
+=== Does vouch make it too hard to send webmentions ===
+Q: Does this make it too much work to send webmentions?
+
+A: Maybe. We won't know until we attempt to implement Webmention with Vouch and see what roadblocks we run into.
+
+== In Progress ==
+Vouch was braindumped into IRC: http://indiewebcamp.com/irc/2014-09-28 (and following days).
+
+This page is in progress documentation of that IRC braindump, with follow-ups.
+* Current log processing cursor: http://indiewebcamp.com/irc/2014-09-28#t1411947675795
+* Draw user flow, protocol flow diagrams, and relations between them (upload sketches)
+
+<!--
+== Whiteboard Flowchart ==
+Photo of original receive webmention implementation flowchart drawn on the whiteboard at [[2014/Cambridge|IndieWebCamp Cambridge 2014]]:
+
+[[File:2014-285-webmention-vouch-flowchart.jpg|720px]]
+-->
+
+== Issues ==
+* feel free to add a new issue here as its own subection: === Issue short name ===
+
+== Old Notes ==
+If Aaron's blog supports receiving vouch webmentions, and Barnaby's blog supports sending vouch webmentions, then this is how they interact:
+
+Presuppose that Aaron's blog has a friends page, or some public XFN list (following)
+Presuppose that Barnaby already has a private list of sites that link back to his own site (including URLs to prove that the link back)
+
+=== Vouch Selection ===
+# User Aaron posts a blog post on his blog
+# User Barnaby writes post on his blog that links to Aaron's post.
+# After publishing the post (i.e. it has a URL), Barnaby's server notices this link as part of the publishing process
+# Barnaby's server does webmention discovery on Aaron's post to find its webmention endpoint (if not found, process stops)
+# Barnaby checks his own list of followers to see if Aaron is listed.
+#* If so, Barnaby proceed to '''Sending''' with <code>vouch</code> set to the link stored with this entry.
+# Barnaby's server checks Aaron's home page for a list of friends (and optionally any non-nofollow links).
+# Barnaby checks if Aaron's list already contains his site.
+#* If so, Barnaby stores this link in his private list and proceed to '''Sending''' with <code>vouch</code> set to permalink to the page on Aaron's site that contained this entry.
+# Barnaby compares Aaron's list to his own list of followers.
+# If Barnaby finds a match between the lists, he proceeds to '''Sending''' using the URL stored with the match in his list as the <code>vouch</code> value.
+# If Barnaby has not found any relation, he proceeds to '''Sending''' without a <code>vouch</code> value.
+
+=== Sending ===
+# Barnaby's server sends a webmention to Aaron's post's webmention endpoint with 
+#* <code>source</code> set to Barnaby's post's permalink
+#* <code>target</code> set to Aaron's post's permalink.
+#* <code>vouch</code> (if any) set to permalink of a page that links to Barnaby's site, that Aaron will see as an acceptable source.
+
+=== Receiving ===
+# Aaron's server receives the webmention
+# Aaron's server verifies that <code>target</code> (after following redirects) in the webmention is a valid permalink on Aaron's blog (if not, processing stops)
+# Aaron's server verifies that the <code>source</code> (when retrieved, after following redirects) in the webmention contains a hyperlink to the <code>target</code> (if not, processing stops)
+# Aaron's server checks for the existance of a <code>vouch</code> value.  (if not, webmentions is marked for moderation and processing stops or proceeds to further spam filtering methods)
+# Aaron's server checks that the base site of <code>vouch</code> is either his own site, or a site in his friends list. (if not, webmentions is marked for moderation and processing stops or proceeds to further spam filtering methods)
+
+== to do ==
+To be written up here in this wiki page from that braindump
+* clean up vouch protocol flow summary
+* vouch protocol flow details
+* vouch FAQ
+
+To be drawn and posted:
+* vouch user-flow diagram
+* vouch protocol-flow diagram
+
+== See Also ==
+* [[webmention]]
+* [[spam]]

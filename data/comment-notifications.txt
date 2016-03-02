@@ -1,0 +1,65 @@
+http://indiewebcamp.com/comment-notifications
+
+== Scenario ==
+
+# [[User:Aaronparecki.com|aaronpk]] created a new post [http://aaronparecki.com/notes/2013/05/21/1/xkcd]
+# [[User:Eschnou.com|eschnou]] created a reply post [http://eschnou.com/entry/aaronpareckicom-duh-i-actually-never-realized-there-was-hover-text-in-xk-62-24947.html] and:
+## and sent a [[pingback]] to aaronpk's server
+## aaronpk's server pulled in the reply below the original post showing the note
+# [[User:Waterpigs.co.uk|barnabywalters]] replied to eschnou [http://waterpigs.co.uk/notes/1469/] and:
+## sent a [[pingback]] to eschnou's server
+## eschnou's server pulled in the reply below the original post
+
+The missing piece is that aaronpk was interested in getting notifications of follow-up posts to eschnou's reply, and now has no idea that barnaby commented on the thread without .
+
+=== Option 1. Subscribing to comments ===
+
+aaronpk's site can subscribe to the comment feed on eschnou's post 
+* This assumes eschnou publishes follow-up comments as [[h-entry]]s
+
+For aaronpk's site to be notified of all conversations in the thread, it would subscribe to the comments feed of any URL that sent a [[webmention]]
+
+=== Option 2. Webmention ===
+
+When barnaby created his post [http://waterpigs.co.uk/notes/1469/] he could have recognized he was replying to a post that had an "in-reply-to" URL, and sent webmentions to both.
+* This would only work if barnaby also published the in-reply-to URL of eschnou's post so that aaron's site could parse it out.
+
+My guess is this would quickly get out of hand and require much more careful markup to make work properly. [[User:Aaronparecki.com|Aaronparecki.com]] 14:54, 29 May 2013 (PDT)
+
+An alternative would be for eschnou to re-ping aaronpk since the reply has been 'updated' (in this case, new comments added). Up to aaronpk to parse it and discover there are replies (marked as comments) and to display them as threaded conversation.
+--[[User:Eschnou.com|Eschnou.com]] 00:59, 30 May 2013 (PDT)
+
+=== Option 3. Conversation Threading ===
+
+[[App.net]] has the concept of "threads", where each post can be part of a conversation thread. 
+* If a post is a parent, the thread ID is the same as the post ID [https://gist.github.com/aaronpk/88f125bfd4440823987c#file-3868598-json-L94]
+* If a post is a reply, the thread ID is the top post that started the thread [https://gist.github.com/aaronpk/3de3983da526276e6060#file-5190901-json-L97]
+
+This concept could be used for IndieWeb comments as well.
+
+In the example above, if both eschnou and barnaby's posts linked to the post on aaronparecki.com as the "parent" or "conversation starter", all future posts in the thread would also use the same URL on aaronparecki.com to be a part of that conversation.
+
+http://eschnou.com/entry/aaronpareckicom-duh-i-actually-never-realized-there-was-hover-text-in-xk-62-24947.html
+<pre>
+<p>In reply to <a href="http://aaronparecki.com/notes/2013/05/21/1/xkcd" class="u-in-reply-to u-thread">aaronparecki.com</a></p>
+</pre>
+
+http://waterpigs.co.uk/notes/1469/
+<pre>
+<a class="u-url" rel="in-reply-to" href="http://eschnou.com/entry/aaronpareckicom-duh-i-actually-never-realized-there-was-hover-text-in-xk-62-24947.html">
+	<time class="dt-published" datetime="2013-05-29T22:01:13+02:00">1 hour ago</time>
+</a>
+
+<a href="http://aaronparecki.com/notes/2013/05/21/1/xkcd" class="u-thread">view conversation</a>
+</pre>
+
+In order to handle notifications of updates, anybody that added a post to the conversation would simply send a webmention to aaronparecki.com as before.
+
+Anybody who wanted to get updates on the conversation could subscribe to the URL on aaronparecki.com, and aaron's server would send notifications of updates. This could use a mechanism similiar to [[PubSubHubbub]], but would not require it since polling the URL would work as well (just like with PuSH).
+
+
+== Related ==
+* The Salmon protocol has a way of sending comments upstream. Might want to take a look at it and see if webmention could support something like it.
+* [[comment]]
+* [[webmention]]
+* [[feed]]

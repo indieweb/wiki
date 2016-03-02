@@ -1,0 +1,190 @@
+http://indiewebcamp.com/note-fr
+
+''Cette note a démarré sur [[note]]''
+= note =
+Une <dfn>note</dfn> est un [[post-fr|post]] généralement court, en plein-texte et écrit/posté rapidement.
+
+Afficher une note individuelle (tweet/mises à jour de statut) est un "pattern" commun.
+
+== Exemples documentés ==
+* [[User:waterpigs.co.uk|Barnaby Walters]] dispose d'une collection de screenshots annotés [http://photos.waterpigs.co.uk/photos/tags-note/list ici], incluant des exemples provenant de : 
+** Facebook (Web UI)
+** Twitter (Web, Mac App)
+** waterpigs.co.uk
+** aaronparecki.com
+** tantek.com
+
+== Aspects communs ==
+Il existe certains élements d'UI communs à la plupart des implémentations. Ceux-ci comprennent : 
+
+* Les photos de profil (souvent avec des coins arrondis)
+* Le Nom Complet (souvent en gras)
+* Les URLs auto-liées, les noms d'utilisateurs et les #tags
+* Les dates (parfois relatives, presque toujours avec l'option de voir la vraie date)
+
+=== Auto-lien et embarquement ===
+Différents sites/solutions auto-liens et/ou auto-embarquent les URLs et d'autres choses liées dans les notes.
+
+recommandations :
+* URLs auto-link directement
+** même mieux : si l'URL est celle d'une personne connue, utilisez son nom comme le texte du lien et inclure peut-être une petite icône de son visage avant son nom.
+* auto-lier les @-noms vers les profils Twitter
+** même mieux : auto-lier les @-noms vers des sites indieweb d'individus et montrer son nom complet au lieu d'afficher son pseudo Twitter. Bien évidemment conserver les @-noms dans le contenu de la note au moment de la POSSEr vers Twitter.
+* URLs GIF/JPG/PNG auto-embarquées avec  &lt;img src>, hyperliées vers l'original
+* URLs MOV/OGV auto-embarquées avec &lt;video src>, hyperliées vers l'original
+* URLs Youtube auto-embarquées avec l'équivalent Youtube &lt;iframe src> embarqué (algorithmiquement convertible)
+Vous pouvez utiliser la fonction <code>auto_link</code> de  [[CASSIS-fr|CASSIS]] pour produire automatiquement tout ce qui est au-dessus (exception faite des améliorations pour être encore mieux) en un morceau de plein-texte.
+
+évitez : 
+* URLs auto-link à travers des raccourcisseurs URLs (SVP ne brisez pas le web)
+* mettre la pagaille dans l'embarquement d'image/video avec du texte en plus (par ex. le nom/titre provenant de la destination)
+
+Comparez par exemple : 
+* '''belle note originale''': http://tantek.com/2013/054/t2/future-dystopia-beijing-blade-runner
+** avec des URLs images auto-liées et auto-embarquéewith dans le contexte de leur situation
+* '''pire gestion par Twitter de la copie POSSÉe''' : https://twitter.com/t/status/305570846796312577
+** emballage des liens par le raccourcisseur URL
+** embarquement de l'image maladroit - après tout le contenu texte tweeté
+** image embarquée plus petite
+** texte supplémentaire non désiré
+** nom de site externe
+** boutons d'interface-utilisateur entre le texte du tweet et l'image embarquée
+
+=== Aspects Moins Communs ===
+* nom d'utilisateur/pseudo - tout comme le nom complet, il y a souvent un pseudo/alias spécifique au silo
+* URL vers sa page d'accueil indieweb
+* outil/application pour poster
+* lieu du post - aka geo
+
+
+==== Geo ====
+[[Geo-fr|Géo]]/poster l'endroit dans les notes est parfois rare et pas très bien réalisé. Néanmoins, il y a des questions, cas d'usages et des exemples.
+
+Questions :
+* Quel est le but de poster une note/tweet avec une information sur l'endroit (ce n'est pas un checkin) 
+**Qu'est-ce que cela m'apporte (en tant qu'utilisateur émetteur la postant ?)
+** Et qu'est-ce que cela apporte aux personnes qui lisent mes tweets/notes ?
+** Pourquoi est-ce que c'est intéressant/utile pour toute le monde ?
+
+En rapport mais différent : les [[checkins-fr|checkins]], [[photos-fr|photos]] avec un endroit.
+
+Les cas d'utilisation pour poster une information de lieu geo dans des notes 
+* '''aide par un fournisseur service spécifique à l'endroit'''
+** https://twitter.com/aaronpk/status/320597741485051904
+*** "posée là parce que je voulais que @O2IRL sache que j'étais en Irlande"
+* '''meetup dans une ville loin du domicile''' - exprimant spécifiquement qu'on est dans la même ville (non-domicile)
+** https://twitter.com/aaronpk/status/311161906809421824
+* '''explicite je ne suis pas à la maison''' - indication d'être dans une ville différente du domicile
+**  https://twitter.com/aaronpk/status/316667682877497344 parce que je n'étais pas en ville
+* '''"help!"''' si vous avez des problèmes - la géolocalisation de la note serait utile.
+** peu commun mais cas d'usage urgent.
+** bien que dans une situation d'urgence d'appel à l'aide, il est plus rapide de saisir simplement où vous êtes pour une information de géolocalisation que d'attendre la confirmation de l'information de géoloc, etc.
+*** parce que l'information geo est si souvent "invisible" - elle requiert des étapes supplémentaires dans l'UI pour la faire fonctionner = temps supplémentaire = ne convient pas en cas d'urgence.
+*** pire - les terminaux reçoivent tout le temps une information géoloc erronée - et le fait que cette information soit fausse en situation d'urgence serait tout particulièrement mauvais
+** basiquement, le manque de confiance dans les terminaux de geoloc = ne va pas l'utiliser en cas d'urgence
+* si vous '''ne savez pas où vous êtes et avez besoin d'aide''', alors quelque information geo (même sujette à erreur) peuvent être mieux que rien
+** mais à cette heure nous parlons vraiment d'un cas isolé.
+
+Problèmes :
+* '''précision artificielle''' - Sur Twitter en particulier, les noms des liens de villes comme "Paris, Paris" <nowiki>[sic]</nowiki> vers une Google map avec une lat/long à 8 décimales de précision !
+** par ex. https://twitter.com/aaronpk/status/276466935372341248 <blockquote>I didn't mean "x,y" I meant "Paris" - aaronpk on [[IRC]]</blockquote>
+
+
+
+== Espace-blanc ==
+Les implémentations de [[silos-fr|silos]] affichent pour la plupart de l'espace-blanc dans leurs interfaces de publication.  Par ex :
+=== Facebook ===
+Les mises à jour de statuts sur [[Facebook-fr|Facebook]] sont des notes (pas de titres de post) qui préservent les caractères d'espace séquentiel et les sauts de ligne.
+=== Google ===
+Les posts [[Google+]] sont similaires, juste des notes (pas de titre de post) qui préservent aussi les caractères d'espace séquentiel et les sauts de ligne.
+=== Twitter ===
+[[Twitter]] a désomais plusieurs implémentations qui préservent les caractères espace-blanc dans la présentation : 
+* '''Twitter.com''' (le ~2013-03-13)[http://news.cnet.com/8301-1023_3-57574167-93/twitter-adds-line-breaks-and-gets-hit-with-the-ugly-stick/][http://mashable.com/2013/03/13/twitter-line-breaks/][http://www.digitaltrends.com/social-media/twitter-linebreaks/][http://smallbiztrends.com/2013/03/twitter-line-breaks.html][http://techcrunch.com/2013/03/14/what-are-twitter-line-breaks-good-for/]
+** par ex. https://twitter.com/hotdogsladies/status/4809602603
+** basé sur un test ( [[User:Tantek.com|Tantek]] 18:13, 15 April 2013 (PDT) ), au moment de poster vers Twitter.com, le serveur de Twitter
+*** préserve les sauts de lignes simples
+*** préserve plusieurs espaces entre les mots
+*** préserve l'état de l'art d'une ligne
+*** mais réduit plusieurs sauts de ligne en un maximum d'une ligne blanche entre les lignes.
+* '''client IOS Twitter''' (précédemment : Tweetie)
+
+Encodage - analyse du tweet au-dessus :
+* Voir la Source :  Les sauts de ligne sont encodés sous <code>&amp;#10;</code> entités de caractères, sans aucun saut de ligne visible dans le code.
+* Visualiser la Source de la Sélection (FF) et Inspecter l'Element (FF, Safari) : Les sauts de ligne semblent être de simples caractères "retour chariot" (<code>\r</code>, ASCII 13), montrant des sauts de ligne visibles dans le code.
+* Dans tous les cas, la présentation visuelle des caractères espace-blanc est construite en utilisant CSS : <blockquote style="white-space:pre"><code><nowiki>.js-tweet-text {
+    white-space: pre-wrap;
+}</nowiki></code></blockquote>
+
+=== Réflexion Indieweb  ===
+Du fait des attentes posées par les implémentations des [[silos-fr|silos]] dominants, toute IU de publication/composition de note devrait préserver les sauts de ligne, les lignes blanches et plusieurs espaces blancs au moment d'écrire/publier, afficher/présenter et idéalement au moment de la syndication [[POSSE-fr|POSSE]].
+
+Tout spécialement à cette heure ou même Twitter a répondu à ces attentes cohérentes à partir de son UI de publication, il y a là un solide argument pour que l'utilisateur migrant de Twitter vers une UI de publication de note indiveweb s'attende à ce que l'espace-blanc, les sauts de ligne "fonctionnent tout simplement".
+
+Bien évidemment, les implémentations indieweb devraient préserver l'espace-blanc dans les UI de publication pour le stockage afin d'afficher les allers-retours. Puis dans la présentation, elles pourraient faire soit : 
+* a. '''&lt;br/> substitutions''' - les implémentations indieweb pourraient (en existe-t-il à cette heure ?) automatiquement insérer des balises <code>&lt;br></code> pour les espaces-blancs sauts-de-lignes (équivalent aux URLs auto-liées dans les notes). Mais ceci ne gérerait pas plusieurs caractères d'espacements séquentiels.
+* b. '''white-space:pre-wrap''' - Alternativement (voie préférée), les implémentations indieweb devraient utiliser <code>white-space:pre-wrap</code> similaire à ce que fait Twitter.
+
+Par conséquent  b. white-space:pre-wrap semble être le choix logique pour les implémentations indieweb.
+
+=== Implémentations Indieweb  ===
+* '''tantek.com''' les [[notes-fr|notes]] [[Falcon]] en date du 2013-105 (supportées rétroactivement dans le stockage et le style jusqu'au  2013-001) préserve les espaces-blancs, les présentent, et les [[POSSE-fr|POSSE]]nt vers [[Twitter-fr|Twitter]] qui préserve ensuite l'espace-blanc au moment de la copier vers [[Facebook-fr|Facebook]], par ex. :
+** Post original : http://tantek.com/2013/105/t1/thoughts-boston-finished-deadline-whitespace-falcon
+** Tweet POSSÉ avec sauts de ligne : https://twitter.com/t/status/323994155690909699
+** Copie du Tweet vers FB aves les sauts de lignes : https://www.facebook.com/tantek.celik/posts/10100581192582203
+* ...
+
+=== Cas d'Usages ===
+Il existe quelques cas d'usages intéressants pour préserver les espaces-blanc, en particulier les sauts de lignes.
+
+Au delà des cas d'usages évidents pour la poésie, les paragraphes et listes, il y a par exemple, les jeux d'échecs (et déplacements !)
+
+* https://twitter.com/alapapa/status/312053522755641344
+
+Ceci nous conduit au cas d'usage du '''spectateur indieweb dans les parties d'[http://fr.wikipedia.org/wiki/%C3%89checs_par_correspondance échecs par correspondance]'''. Ce qui veut dire, deux joueurs pourraient jouer une partie d'échecs en postant simplement leurs déplacements sur leurs propres sites indieweb comme réponses à chacun des déplacements de l'autre partie.
+
+Peut-être que les déplacements de pièces d'échecs (et le tableau de bord résultant) pourraient être postés sur un type spécial de [[post-fr|post]] [[note-fr|note]] (un game-move ou game-turn ?) et puis être [[POSSE]]s vers Twitter avec l'espace-blanc restant intact.
+
+Si le déplacement est une réponse à un déplacement d'un autre site indieweb, alors outre l'utilisation de [[webmention-fr|webmention]] pour la notification d'achèvement du déplacement, la réponse POSSÉe pourrait aussi indiquer avec le id-in-reply-to-status de Twitter le tweet POSSÉ du précédent déplacement. Voir [[comment-fr#POSSEr_un_commentaire|Comment POSSEr un commentaire]]/[[in-reply-to-fr|in-reply-to]]/[[rel-syndication-fr|rel-syndication]] pour les détails sur la façon de faire ça.
+
+De tels posts publics de déplacements permettraient ainsi à quiconque de rejoindre une partie et tenter de jouer un prochain déplacement en postant un déplacement de pièce. Le joueur du précédent déplacement recevrait alors plusieurs webmentions et pourrait décider quel déplacement (ou plusieurs) à répondre en retour.
+
+
+== Sous-types ==
+Parce que les notes sont un type de post de contenu omniprésent (grâce à [[Twitter-fr|Twitter]]), il n'est pas suprenant que les sous-types de notes sont en train d'évoluer pour représenter une structure supplémentaire ou certains types d'information. Documentons-les au fur et à mesure qu'ils émergent.
+
+=== Suivi de Forme Santé  ===
+Tags : fitbit, podomètre, activité physique
+
+Défis 
+Bien trop de bazar  (AKA "high friction data collection") http://aaronparecki.com/articles/2012/10/28/1/low-friction-personal-data-collection (traduction en cours sur [http://xtof.me/w/Collecte_de_Données_Personnelles_et_Faible_Friction Collecte de Données et Faible Friction])
+
+==== Suivi de pas ====
+
+Syntaxe: nombre-de-pas #steps tout-ce-que-vous-voudrez-en-plus
+
+Exemples :
+
+* http://waterpigs.co.uk/notes?tagged=steps
+
+==== Suivi IMC ====
+
+Syntaxe : nombre #bmi
+
+Exemples:
+
+* http://evan.status.net/tag/bmi
+
+=== Picoformats ===
+Les '''<dfn>picoformats</dfn>''' sont l'effort le plus large pour structure brièvement et rapidement l'information sous une forme de plein-texte pure.
+* Voir http://microformats.org/wiki/picoformats pour en savoir plus.
+
+== Modèles en Rapport ==
+
+* [[patterns/note-list|Modèles d'affichage de liste de notes]]
+* [[patterns/note-post|Modèles d'UI de post de note]]
+
+== Voir aussi ==
+* [[posts-fr|posts]]
+* [[articles-fr|articles]]
+* [[photos-fr|photos]]
+* [[Semantics Of Article-Note Distinction-fr|Distinction Sémantique d'Article-Note]]

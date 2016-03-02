@@ -1,0 +1,44 @@
+http://indiewebcamp.com/plaintext
+
+{{stub}}
+
+* Displaying HTML content from external sites (feeds, webmention, etc.) posses a security risk.
+* Prefer plaintext. What does this mean though? Stirpping HTML? Encoding it?
+* Whats the right way to [[sanitize]] external content?
+* Converting to plaintext mean loss of context (links, microformats, etc.). how do we deal with this?
+** Here is an example of loss of context
+*** Original post: http://waterpigs.co.uk/notes/1337/
+*** After sending the webmention, here is what it looks like: http://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html
+*** Here is what it looks like on Twitter: https://twitter.com/BarnabyWalters/status/326620669167161344
+** To me ([[User:Sandeep.io|sandeepshetty]]) this is not acceptable. This is why I prefer syndicating Markdown (or a similar replacement) over HTML to Twitter and will also consider doing the same with (hidden) p-* properties of h-entry on http://sandeep.io.
+*** See [http://www.sandeep.io/48 Microformats Plaintext Strategy]
+** Apart from markdown, machinetags could also be used to provide context.
+* Almost all social networks (tiwtter, facebook, google+) support only plaintext content as opposed to blogs that primarily used HTML.
+
+== Tips ==
+* If you are expecting plaintext always encode it while displaying (using something like [http://php.net/htmlentities htmlentities]?)
+
+
+== Experiments ==
+=== Machine tags based repost ===
+[[User:Sandeep.io|sandeepshetty]] is currently experimenting with machinetags for providing context to reposts. The idea is to provide a rich repost UX to a post that has machinetags (that are generated from a reposting interface that picks up microformats from the original post).
+
+'''The idea is to convert post content like this''':
+<pre>
+#repost:url=http://werd.io/view/51aee6c2bed7de0916753f55
+#repost:content="Understanding pump.io: [http://slid.es/evanp/understanding-pumpio](http://slid.es/evanp/understanding-pumpio) Convinced this is an [important idea](https://e14n.com/evan/note/XAkJtSFCQCWgLtxHMvhcCQ), and an important project - and [the software kicks ass](http://pump.io/)."
+#repost:published="3h"
+#repost:author="Ben Werdmuller"
+#repost:author_url=http://werd.io/profile/benwerd
+#repost:author_photo=http://werd.io/file/51a7f328bed7de2c06dc5ad8
+</pre>
+
+'''into something like this''':
+[[File:machine-tag-repost.png]]
+
+Live implementation: http://www.sandeep.io/36
+
+'''NOTE''': This has evolved into [[RSSB]].
+
+== See Also ==
+* [[sanitize]]

@@ -1,0 +1,35 @@
+http://indiewebcamp.com/deleted-404-discussion
+
+{{stub}}
+
+This is an issue about [[deleted]].
+
+Issue summary:  404 should be a valid response code for delete.
+
+Reasons why we MUST NOT treat 404 as a delete:
+* '''Vagueness.''' 404 is vague and could mean any number of things (including a delete). Given its vagueness and the destructive nature of delete, it is better not to interpret it as a delete, because it very well might not mean a delete.
+* '''Server error.''' A server mistake or proxy misconfiguration could cause 404s for URLs (happens all the time), and if that were to somehow cause deletes across the web that would be a very bad thing.
+* '''Simpler design.''' A simpler protocol is better, and one way to do something is simpler than two. We already have 410 which, meaning "[http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5 permanently unavailable]" (RFC2616 10.4.5), in otherwords, deleted. No need to confuse publishers/consumers with another way of doing deletes (whether 404 or something else).
+
+Longer discussion:
+* Issue specific: IMO, 404 should also be considered as deletion. There might be situations (change of domain ownership due to acquisition or post-exipry purchase or sale of domain) where the new owner of the domain might not support 410 for older URLs. Webmention 0.2 had 404 for deletion and I'll also add 410 based on this page. &mdash; [[User:Www.sandeep.io|Www.sandeep.io]] 03:31, 26 June 2013 (PDT)
+** Since delete is a destructive action we must err on the side of caution and NOT allow for weak delete semantics (which is what a 404 would be at best). There is a non-trivial chance that a server mistake will cause 404s for URLs (happens all the time), and if that were to somehow cause deletes across the web that would be a very bad thing. [[User:Tantek.com|Tantek]] 17:40, 26 June 2013 (PDT). Another case of this: if your site is in front of a load balancer or a proxy, and a misconfiguration in the proxy causes everything to return 404s. Do you really want every site downstream to delete all your content?
+*** [[User:Www.sandeep.io|Www.sandeep.io]] 16:16, 27 June 2013 (PDT): My [http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5 understanding] is that a '''404 can be used for a delete''' when
+**** the server wants to be vague (does not wish to reveal exactly why the request has been refused)
+***** That very section 10.4.5 of RFC2616 says SHOULD for 410 for "permanently unavailable" (a deleted by any other name is still a deleted), vs. an offhand reference to "commonly used" (which is weaker than a SHOULD, especially absent any citations for that "commonly") for "does not wish to reveal". That very citation of 10.4.5 refutes this argument. Nevermind the lack of real-world use-cases.
+**** doesn't want to maintain any data about deleted entries (because of which it cannot know through some internally configurable mechanism, that an old resource is permanently unavailable).
+***** Not a new argument. The downside/likelihood of server mistake misinterpretation outweighs any assertion about "doesn't want to maintain". If a server can maintain a comment, it can maintain simple "deleted" boilerplate in that comment instead. There is no extra maintenance, hence "doesn't want" has no rational basis.
+**** an undo might be allowed and the delete might not be permanent ([http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.11 If the server does not know, or has no facility to determine, whether or not the condition is permanent, the status code 404 (Not Found) SHOULD be used instead]).
+***** In practice it's much better to implement "undo" as Gmail does - on the author's side, with a timeout.
+*** [[User:Www.sandeep.io|Www.sandeep.io]] 16:16, 27 June 2013 (PDT): Examples where 404 and 410 are treated the same:  (are in general irrelevant, since most consumers of them are too generic to care)
+**** [https://support.google.com/webmasters/answer/2409439?hl=en "Currently Google treats 410s (Gone) the same as 404s (Not found)"]
+***** Because Google doesn't care - makes no difference in their UI.
+**** [http://diveintohtml5.info/offline.html "The cache manifest returned an HTTP error 404 (Page Not Found) or 410 (Permanently Gone)."]
+***** Again, makes no difference just for that specific cache manifest use-case.
+*** There might also be situations where a webmention plugin is written for a platform that doesn't support sending 410 on deletes. For example, Wordpress doesn't store data about posts that are deleted so it cannot know when to send a 410. Some (dated) discussion about this [http://wordpress.org/support/topic/feature-request-410-deleted-message-instead-of-404-not-found here]. There is a [http://wordpress.org/plugins/wp-410/ plugin] that records the URL of pages you delete and then sends 410 reponses for those URLs. There might be perfectly valid situations in which you will not want to store data about deleted posts or a platform might not allow sending 410. --[[User:Www.sandeep.io|Www.sandeep.io]] 16:16, 27 June 2013 (PDT)
+**** Lack of *existing* tool support is not an excuse against any *new* protocol/format - it's simply a reason to upgrade those tools. WordPress doesn't support most of the IndieWebCamp [[building-blocks]] out of the box either. It's going to take work to upgrade WordPress, that's why community members are writing/upgrading plugins to do so. That shouldn't stop us from raising the bar with richer features/protocols that are more well defined to help with quality of implementation and data.
+** The cases of "change of domain ownership due to acquisition or post-expiry purchase or sale of domain" are inapplicable because they apply on a slow timescale. The point of this delete protocol is nearly real-time - the server with the deleted content sends a webmention to the downstream copies (places where the comment has been syndicated into) and then returns a 410 GONE when that server requests the comment permalink nearly immediately. This operation is not expected to occur on a time scale of weeks / months between the webmention and the the request for the deleted item (which would be the only reasonably expected case where "change of domain ownership" would affect it). [[User:Tantek.com|Tantek]] 17:40, 26 June 2013 (PDT)
+*** Agreed. It was a bad example. [[User:Www.sandeep.io|Www.sandeep.io]] 16:16, 27 June 2013 (PDT)
+
+== See Also ==
+* [[deleted]]

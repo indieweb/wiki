@@ -1,0 +1,496 @@
+http://indiewebcamp.com/store
+
+A '''<dfn>store</dfn>''' (or <dfn>marketplace</dfn>) is a service for [[installing]] applications on a device, typically a [[mobile]] client device, but also on web servers, typically remotely.
+
+== Goal ==
+As the number of IndieWeb related apps grow, so will the job of choosing which apps you want to install and what is compatible with your server. The goal is to create an easy to browse "App Store" like experience for an indieweb site, both for installing apps on that site, and for publishing app stores themselves on indieweb sites.
+
+== App Store Examples ==
+=== Client ===
+There are proprietary client app stores for installing proprietary clients:
+* [https://itunes.apple.com/us/genre/ios/id36?mt=8 Apple App Store]
+* [https://play.google.com/store Google Play Store]
+* [https://www.ouya.tv/games/ OUYA store]
+And at least one open web based app store for installing web apps:
+* [https://marketplace.firefox.com/ Firefox Marketplace]
+
+These stores enable mobile devices to install '''client-side''' proprietary apps that usually upload data to remote web services or [silos].
+=== Server ===
+In its first many iterations and use cases The Indie App Store will likely not be installing "native" apps on a mobile device, but rather '''server-side apps''' on a cloud server, laptop, Raspberry Pi, or personal computer. The goal is to make the setup process as easy as modern client-side app stores. Current examples:
+
+* [https://cldstr.com/ Cloudstore], operated by [[Upon2020.com|Johannes Ernst]] already does this for user-owned, or shared virtual servers. It is currently in beta, but registration is open to the public.
+
+== App Store Specifications ==
+=== W3C Manifest for web application ===
+The '''[https://w3c.github.io/manifest/ W3C Manifest for web application]''' is in actively open development. It supersedes "Open Web App Manifest".
+
+=== Open Web App Manifest ===
+'''[https://developer.mozilla.org/en-US/Apps/Build/Manifest Open Web App Manifest]''' is implemented in:
+* Firefox OS 1.0-1.1 (to present)
+
+== Advantages ==
+The goal of making an open data format that is shareable from app store to App Store has multiple advantages, the benefits of doing so will differ depending on what type of person is interacting with this data and in what way. The three types of entities in the app eco system to benefit from this will be stores, developers, and users.
+
+==== App Stores (Platforms) ====
+
+It will require much less work gathering & organizing information (media assets) of the various apps they allow to be installed on their platform. Should a given platforms app store reach scale beyond 50 or so apps, they won't need to create an entire new platform or CMS that allows developers to easily submit their app. This is especially if much of the app store code itself is open source, and perhaps static HTML, CSS, JS interface that is served to the end user.
+
+==== App Developers ====
+
+To app developers, this is helpful because, they won't need to waste time creating multiple sets of logos, assets, different length summaries, screenshots, etc... in order to submit apps to multiple platforms / app stores. The developer creates one JSON manifest file or a [[microformats]] marked up HTML page that multiple platforms then consume to generate their app stores.
+
+==== App Users ====
+
+The end user will benefit from a more seamless user experience from device to device or platform to platform where the marketing media and app information will more likely be identical and up to date.
+
+== Key Features ==
+
+There are numerous aspects that make '''app stores''' the most successful method of software distribution to come along, this section provides a list of the functionality that we should aim to incorporate into the Indie App Store.
+
+==== Rating & Feedback ====
+
+Most app stores have a method of rating apps & leaving comments that are publicly viewable. This user feedback is essential to the health of an app store and the larger software eco system as it provides app developers with feedback to improve their software, and enables users to make the best choice they can when installing software.
+
+==== Free and Paid Downloads ====
+
+Despite the Indie App Store being aimed at primarily Free & open source software, it is not impossible to envision people wanting to sell apps that the end user must purchase. Creating methods of securing software purchases (licensing, install keys, etc...) are out of scope of this project, it is worth exploring integration of simple "fixed" or "pay what you want" [[payment]] methods that pay money directly to developers or platform providers.
+
+==== Updating Apps ====
+
+The updating of apps for the end user is via a single interface is a considerably better user experience than browsing to each individual app and clicking update. Additionally, by moving this aspect of software distribution to an Indie App store would remove much work from developers of apps.
+
+This is also an aspect of the IndieWeb that can really shine- by allowing updates of app data to be polled from a project (apps) website whereby the data is marked up in [microformats]. This way the data does not have to be manually passed around and will always be up to date.
+
+==== Bundles ====
+
+In following the UNIX philosophy of "have one small application / component do one thing really well, it might make sense to explore the idea of '''bundles''' which are something that would allow multiple "apps" to be installed together, such as [Bridgy] + [Idno] which allow for a more robust POSSE / PESSO / Webmention integration. Of course this would be tricky and require apps to use similar data exchange standards, but consider how UNIX system write email to disk and multiple apps can then access it later!
+
+==== Accessories ====
+
+Quite common in existing app eco systems are '''Accessories''' things like themes, plugins, add-ons or in app purchases. Often app developers need to create their own miniature theme or plugin store within their app to facilitate this process. 
+
+Perhaps some of this process can be handled by Indie App Store by using a standardized manifest & install process similar to the main app installer.
+
+==== Migration ====
+
+It would be a greater good for the user of such a store to have access to a [[one click migration]] feature. This would allow the user to be free from the store and/or from the [[web Hosting]] provider.
+
+== Development ==
+
+To make progress on the store concept, there are three crucial aspects, Apps (projects, that will be listed in the store), Platforms (that support installing of said Apps), and the App Store codebase itself that needs to be developed and iterated upon.
+
+==== Apps ====
+
+The following apps / projects have expressed interest in creating data in the shared format for this purpose
+
+* [https://mailpile.is Mailpile]
+* [[Taproot]]
+* [[Idno]]
+* [[Bridgy]]
+* [https://owncloud.org ownCloud]
+* [http://litewrite.net Litewrite]
+
+==== Platforms ====
+
+The following platforms have voiced an interested in working towards a shared app data format & perhaps installer store experience.
+
+* [[Indie Box]]
+* [https://arkos.io ArkOS]
+* [http://cozy.io Cozy]
+* [[Sandstorm]]
+* [http://cloudfleet.io CloudFleet]
+* [https://owncloud.org ownCloud]
+
+==== Development Stages ====
+
+Developing the Indie App Store will undoubtedly be a long and challenging process involving outreach to existing projects, development of new software (installer clients), and many parties working towards a unified standard of data. It makes most sense to iterate on this incrementally through the following steps:
+
+* App Download & Install instructions for humans
+* App Download & Install instructions for machines
+* Tools that enable machines to processes these instructions and install apps
+* Expand upon these tools from platform to platform (Raspberry Pi, Ubuntu, smart phones, etc...)
+* Develop original "installer" clients for different operating systems
+
+== Store, Requirements & Instructions ==
+
+It seems there are 3 discreet aspects of app information that are needed for the entire install chain process of displaying and installing apps from an app store, the '''Store''', '''Requirement''', and '''Instructions''' for a given platform.
+
+1. '''Store''' - info (name, logo, description, screenshots, website) that is visible in the GUI to the end user
+
+2. '''Requirements''' - and other technical things that a platform consumes to determine if it can do something with said app
+
+3. '''Instructions''' - this is the technical instruction set that a give platform consumes, this is unique from platform to platform (IndieBox, ArkOS, MacOS, Jolla phone, etc...). Some of these platforms already have app stores of their own, some more walled & closed than others.
+
+The following are values that an '''App Store''' SHOULD have discoverable or recorded in the apps manifest.
+
+* Name
+* Logo
+* Screenshots
+* URL
+* Short Summary
+* Summary
+* Content
+* Categories
+* Version
+* Cost
+* Developers
+* Platforms
+* Protocols
+* Code Language
+* Dependencies
+
+==== Vocabularies ====
+Vocabularies related to describing a Web App:
+* [http://microformats.org/wiki/h-product h-product] - microformat
+* [https://github.com/edumbill/doap/wiki DOAP] - "Description of a Project"
+** Looking at that git repo I cannot find simple examples, list of properties, or examples in the wild --[[User:Waterpigs.co.uk|Barnaby Walters]] 08:41, 11 June 2014 (PDT)
+*** see https://github.com/edumbill/doap/tree/master/examples
+*** list of properties: http://usefulinc.com/ns/doap - all the rdf:about names.
+**** <tt>anon-root</tt>
+**** <tt>ArchRepository</tt>
+**** <tt>ArchRepository</tt>
+**** <tt>audience</tt>
+**** <tt>BazaarBranch</tt>
+**** <tt>BKRepository</tt>
+**** <tt>BKRepository</tt>
+**** <tt>blog</tt>
+**** <tt>browse</tt>
+**** <tt>bug-database</tt>
+**** <tt>category</tt>
+**** <tt>created</tt>
+**** <tt>CVSRepository</tt>
+**** <tt>CVSRepository</tt>
+**** <tt>DarcsRepository</tt>
+**** <tt>description</tt>
+**** <tt>developer</tt>
+**** <tt>documenter</tt>
+**** <tt>download-mirror</tt>
+**** <tt>download-page</tt>
+**** <tt>file-release</tt>
+**** <tt>GitRepository</tt>
+**** <tt>helper</tt>
+**** <tt>HgRepository</tt>
+**** <tt>homepage</tt>
+**** <tt>implements</tt>
+**** <tt>language</tt>
+**** <tt>license</tt>
+**** <tt>location</tt>
+**** <tt>mailing-list</tt>
+**** <tt>maintainer</tt>
+**** <tt>module</tt>
+**** <tt>name</tt>
+**** <tt>old-homepage</tt>
+**** <tt>os</tt>
+**** <tt>platform</tt>
+**** <tt>programming-language</tt>
+**** <tt>Project</tt>
+**** <tt>release</tt>
+**** <tt>repository</tt>
+**** <tt>Repository</tt>
+**** <tt>revision</tt>
+**** <tt>screenshots</tt>
+**** <tt>service-endpoint</tt>
+**** <tt>shortdesc</tt>
+**** <tt>Specification</tt>
+**** <tt>SVNRepository</tt>
+**** <tt>tester</tt>
+**** <tt>translator</tt>
+**** <tt>vendor</tt>
+**** <tt>Version</tt>
+**** <tt>wiki</tt>
+** examples in the wild:
+*** http://pear.php.net/package/OpenDocument/doap (as all pear packages have a doap file)
+
+=== Examples ===
+
+The following are examples of some of these install manifest files by various projects creating these sort app store / installer experiences on user controlled hardware.
+
+=== Store ===
+
+The w3c and Google agreed on the following [https://w3c.github.io/manifest/ manifest standard] which we will adhere to for all the values that exist.
+
+<pre>
+{
+  "name": "Super Racer 2000",
+  "icons": [{
+        "src": "icon/lowres",
+        "sizes": "64x64",
+        "type": "image/webp"
+      }, {
+        "src": "icon/hd_small",
+        "sizes": "64x64"
+      }, {
+        "src": "icon/hd_hi",
+        "sizes": "128x128",
+        "density": "2"
+      }],
+  "start_url": "/start.html",
+  "display": "fullscreen",
+  "orientation": "landscape"
+}
+</pre>
+
+There is also the competing [https://developer.mozilla.org/en-US/Apps/Build/Manifest#Example_manifest FireFox OS manifest] which is oddly a bit different than the w3c standard. It is worth noting the FF OS manifest has a lot of documentation for various other features like language support. Hopefully this will get adopted by the w3c.
+
+<pre>
+{
+  "name": "My App",
+  "description": "My elevator pitch goes here",
+  "launch_path": "/index.html",
+  "icons": {
+    "128": "/img/icon-128.png"
+  },
+  "developer": {
+    "name": "Your name or organization",
+    "url": "http://your-homepage-here.org"
+  },
+  "default_locale": "en"
+}
+</pre>
+
+
+Since both the FireFox OS and w3c manifests are missing things that a "store" like experience demands, as well as server side dependencies and licenses.  Indie App store will forge on and add additional values as needed, then hopefully this can be adopted by the w3c at a later date!
+
+'''PrismBreak''' - [https://prism-break.org] is an open source directory of open source applications geared towards privacy, encryption. The following JSON snippet is how they render their static HTML site, it was a lose starting point for the app manifest idea that is becoming the store concept. This is very much '''Store''' data.
+
+<pre>
+  {
+    "description": "A modern, fast web-mail client with user-friendly encryption and privacy features",
+    "license_url": "https://raw.github.com/pagekite/Mailpile/master/LICENSE-2.0.txt",
+    "logo": "mailpile.png",
+    "notes": "",
+    "privacy_url": "",
+    "source_url": "https://github.com/pagekite/mailpile",
+    "name": "Mailpile",
+    "tos_url": "",
+    "url": "https://mailpile.is",
+    "wikipedia_url": "https://wikipedia.org/wiki/Mailpile",
+    "protocols": [
+      "GPG",
+      "SSL/TLS",
+      "Tor",
+      "XMPP"
+    ],
+    "categories": [
+      {
+        "name": "BSD",
+        "subcategories": [
+          "Email Clients"
+        ]
+      },
+      {
+        "name": "GNU/Linux",
+        "subcategories": [
+          "Email Clients"
+        ]
+      },
+      {
+        "name": "OS X",
+        "subcategories": [
+          "Email Clients"
+        ]
+      },
+      {
+        "name": "Windows",
+        "subcategories": [
+          "Email Clients"
+        ]
+      }
+    ],
+    "slug": "mailpile"
+  }
+</pre>
+
+
+==== OUYA store ====
+Example of https://devs.ouya.tv/api/v1/apps/com.SmithereensGames.AcidTrip
+
+<pre>
+{
+    "app": {
+        "uuid": "ae95483b-2421-4706-bffe-1903376362b2",
+        "title": "Acid Trip",
+        "supportEmailAddress": "little.jacka33@gmail.com",
+        "supportPhone": null,
+        "website": "jacksonasmith.wordpress.com",
+        "mainImageFullUrl": "https:\/\/devs-ouya-tv-prod.s3.amazonaws.com\/apps\/08c0336f-7792-47ae-885d-cff339631f15\/com.SmithereensGames.AcidTrip\/ae95483b-2421-4706-bffe-1903376362b2\/ouya_icon.png",
+        "founder": true,
+        "apkFileSize": 43262213,
+        "firstPublishedAt": "2013-07-31T14:10:33Z",
+        "publishedAt": "2013-08-12T17:43:29Z",
+        "versionNumber": "1.1",
+        "likeCount": 143,
+        "overview": "Released in August 2013 by Smithereens Games.",
+        "filepickerScreenshots": [
+            "https:\/\/www.filepicker.io\/api\/file\/uc4tkXdoTIKFYcDn023B",
+            "https:\/\/www.filepicker.io\/api\/file\/ocDdzJuoTCPVtekfIjCA",
+            "https:\/\/www.filepicker.io\/api\/file\/tJOXL7XTRVWWea0dxu5k",
+            "https:\/\/www.filepicker.io\/api\/file\/GOSVEqSeTMWgp5ReT2wO"
+        ],
+        "contentRating": "Everyone",
+        "latestVersion": "ae95483b-2421-4706-bffe-1903376362b2",
+        "md5sum": null,
+        "publicSize": null,
+        "nativeSize": null,
+        "ratingAverage": 3.6,
+        "ratingCount": 262,
+        "developer": "Smithereens Games",
+        "description": "Acid Trip is an intense ride through a twisting and turning colorful tube. Challenge your friends and family to see who can get the highest score possible. Your speed slowly increases throughout playing, do your best to get the highest score possible.",
+        "premium": false,
+        "videoUrl": null,
+        "promotedProduct": null,
+        "primaryProduct": null
+    }
+}
+</pre>
+
+=== Requirements ===
+
+Here is an example of the current plugin metadata structure that [https://arkos.io arkOS] is using as taken from their [https://github.com/cznweb/genesis/blob/master/plugins/wordpress/__init__.py github repo]
+
+<pre>
+# Plugin metadata
+NAME = 'WordPress'
+TYPE = 'webapp'
+ICON = 'gen-earth'
+DESCRIPTION = 'Open-source CMS and blogging platform'
+LONG_DESCRIPTION = ('WordPress started as just a blogging system, '
+    'but has evolved to be used as full content management system '
+    'and so much more through the thousands of plugins, widgets, '
+    'and themes, WordPress is limited only by your imagination. '
+    '(And tech chops.)')
+CATEGORIES = [
+    {
+        "primary": "Websites",
+        "secondary": ["Blogs", "Websites", "CMS"]
+    }
+]
+VERSION = '3.8.1-1'
+
+AUTHOR = 'arkOS'
+HOMEPAGE = 'http://arkos.io'
+APP_AUTHOR = "Automattic"
+APP_HOMEPAGE = "https://wordpress.org"
+LOGO = True
+
+SERVICES = [
+    {
+        "name": "MariaDB",
+        "binary": "mysqld",
+        "ports": []
+    },
+    {
+        "name": "PHP FastCGI",
+        "binary": "php-fpm",
+        "ports": []
+    }
+]
+
+# Plugin parameters
+MODULES = ['main']
+PLATFORMS = ['any']
+DEPENDENCIES = {
+    "any": [
+        {
+            "type": "app",
+            "name": "MariaDB",
+            "package": "mariadb",
+            "binary": "mysqld"
+        },
+        {
+            "type": "app",
+            "name": "nginx",
+            "package": "nginx",
+            "binary": "nginx"
+        },
+        {
+            "type": "app",
+            "name": "php",
+            "package": "php",
+            "binary": None
+        },
+        {
+            "type": "app",
+            "name": "PHP FastCGI",
+            "package": "php-fpm",
+            "binary": "php-fpm"
+        },
+        {
+            "type": "app",
+            "name": "PHP xCache",
+            "package": "php-xcache",
+            "binary": None
+        },
+        {
+            "type": "plugin",
+            "name": "MariaDB",
+            "package": "db-mariadb"
+        },
+        {
+            "type": "plugin",
+            "name": "PHP",
+            "package": "php"
+        }
+    ]
+}
+GENERATION = 1
+
+# Webapp metadata
+WA_PLUGIN = 'WordPress'
+DPATH = 'https://wordpress.org/wordpress-3.8.1.tar.gz'
+DBENGINE = 'MariaDB'
+PHP = True
+NOMULTI = True
+SSL = True
+</pre>
+
+=== Instructions ===
+
+The [[Indie Box Project]] aims to make an easy to install great Free software / Indie applications on a user owned piece of hardware. Here is [https://github.com/indieboxproject/indie-owncloud an example] of their '''Instruction''' set for installing [ownCloud] on a RaspberyPi.
+
+<pre>
+{
+  "siteid" : "s0070",
+  "hostname" : "owncloud-test",
+  "appconfigs" : [
+    {
+      "appconfigid" : "a0071",
+      "context" : "",
+      "appid" : "indie-owncloud",
+      "customizationpoints" : {
+        "indie-owncloud" : {
+          "adminlogin" : {
+            "value" : "specialadmin"
+          },
+          "adminpass" : {
+            "value" : "specialpass"
+          }
+        }
+      }
+    }
+  ]
+}
+</pre>
+
+And here is their example of more [https://github.com/indieboxproject/indie-owncloud/blob/master/indie-box-manifest.json complex full Instruction set] for the same application.
+
+== Interface Guidelines ==
+
+Platform creators will most likely want the App Store experience of installing things to be as branded and cohesive to the rest of their user experience as possible- this only makes sense, and is in fact a better user experience.
+
+That said, creating a serious of user flows and '''interface guidelines''' seems helpful as to this end goal, once a user learns the flows and processes (which are modeled after Apple's iOS & Google's Play app stores) users will be easily able to perform the action they are trying to.
+
+[[File:Indie_App_Store_Index.png|200px|Indie App Store Index]]
+
+== Ideas ==
+
+Random assorted ideas that could be used for different aspects of the Store idea.
+
+* Mac OS, build a GUI later on top of [http://brew.sh Homebrew]
+* [[User:Werd.io|Ben Werdmuller]] wrote [http://benwerd.com/2009/10/12/danger-in-the-cloud-a-proposal/ a lengthy piece] about this idea in 2009
+
+== See Also ==
+* [[install]]
+* [[mobile]]
+* [[icon]]
+* [[manifest]]

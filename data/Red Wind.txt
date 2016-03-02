@@ -1,0 +1,117 @@
+http://indiewebcamp.com/Red_Wind
+
+<span style="float:right;height:128px;font-size:128px;margin:48px 0 -64px">🍃</span>
+
+''Red Wind is on development hiatus, as the primary developer has migrated to, and is spending most of his time on, [[Known]].''
+
+'''<dfn>Red Wind</dfn>''' ([https://github.com/kylewm/redwind source code]) is {{kylewm}}'s IndieWeb-ready blog software written in Python and running on Flask. It is intended to be clean, lightweight, and amenable to experimentation. Red Wind is open source, but because of its experimental nature tends to change for no apparent reason and be at times unstable. Tests and documentation are sparse right now, but I'm working on improving that.
+
+== IndieWeb Examples ==
+* {{kylewm}} on https://kylewm.com
+* [[User:Dubiousdod.org]] on https://dubiousdod.org/indie
+* [[User:Zachdonovan.net]] on https://zachdonovan.net/
+* [[User:Lancey.space]] on http://lancey.space/
+
+== Features ==
+* send and receives webmentions
+* send PuSH notifications for new posts
+* syndicates to [[Facebook]] and [[Twitter]] via their snowflake APIs
+* backfeeds comments via [[Bridgy]]
+* reply/like/share context automatically fetched after posting
+* optional geo-[[location]] information for posts.
+* support for asynchronous background tasks (reverse geocode, process webmentions, send webmentions, etc.)
+* storage via SQLAlchemy plus a backing DB
+* http request caching[https://twitter.com/kylewmahan/status/646552503786471424]
+
+The name comes from Raymond Chandler's short story of the same name, about the Santa Ana winds that drive everyone crazy :)
+
+== Datastore ==
+
+I've gone back and forth a few times between database and flat files. I eventually abandoned files as the "immediate" source of content for the site for a few reasons detailed below. But mainly, using a database means I have to write and maintain less code.
+
+Worth mentioning that while I think [[database-antipattern]] makes good points against relying only on a database for long term storage, it goes too far in calling it an antipattern. A couple of alternate titles: "databases and longevity" "database tradeoffs", "You might not need a database"
+
+=== Fragmentation ===
+
+I was storing three files for each post (one json, one markdown, one rendered html), plus separate json files for each mention and each reply-context. For about 6500 posts, this took up ~90mb, compared to ~9mb in SQLite. 90mb is not huge by any means, but it is not an insignificant amount to transfer around and back up.
+
+{{tantek}} handles this problem elegantly in [[Falcon]] by grouping posts together into h-feeds and time-sharding into two-month blocks. 
+
+=== Indexing ===
+
+I handled the problem of loading files by tag or type by keeping a large json index in the root of the flat filestore. The index contained the published date, post type, tags, and path for each post in tree. It could be quickly regenerated at any time by traversing the file tree, but it still felt "icky" to have to keep all this post data stored in two separate places, and to load a giant (664k) json object for any feed.
+
+=== Caching ===
+
+I did not want to think about caching recently accessed files in memory and am happy for now to leave that sort of logic up to a smart database.
+
+=== Longevity ===
+
+Planning to have an option to export to HTML+mf2 much like [[Falcon]]'s bim format (but with contexts and comments included). This feels like a good balance between the advantages of using a DB for immediate storage and HTML for longevity.
+
+== Contacts ==
+
+Red Wind has basic support for referring to other people by name.
+
+When entering a new person in the contact list, I put their URL in the first field and click "Fetch Profile". If they publish an h-card on their site, it will try to extract their name, photo, and twitter/facebook usernames and fill the rest of the fields automatically.
+
+[[File:kylewm-addressbook-2014-07-07.png|none|thumb|500px|Entering a new address]]
+
+Contacts have one or more @nickname ([http://indiewebcamp.com/p3k#Local_Nicknames modelled on p3k]), usually the person's IRC or Twitter handle. Previously I used a MediaWiki-like syntax to refer to people <nowiki>[[Ben Werdmüller|Ben]]</nowiki>, and I believe this is still supported.
+
+=== POSSE ===
+
+When POSSEing to twitter, names are translated to the appropriate @-username. I tried [http://indiewebcamp.com/POSSE_to_Facebook#Mention_Tagging pretty hard] to do the same for Facebook, but their API made it difficult. Long story short, you have to apply for elevated permissions and use the Actions & Objects API whose future seems uncertain.
+
+An original note tagging three people
+
+[[File:kylewm-reply-tagging-people-2014-07-07.png|none|thumb|500px|Original post with mentions]]
+
+The POSSE copy with their Twitter usernames
+
+[[File:kylewm-twitter-tagged-people.png|none|thumb|500px|POSSEd copy with twitter usernames]]
+
+=== Storage format === 
+
+Contacts are stored in the database with one or more associated Nicks.
+
+<code><pre>
+
+class Nick(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    contact_id = db.Column(db.Integer, db.ForeignKey('contact.id'), index=True)
+    name = db.Column(db.String(128), unique=True)
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(256))
+    nicks = db.relationship('Nick', backref='contact',
+                            cascade='all,delete-orphan')
+    image = db.Column(db.String(512))
+    url = db.Column(db.String(512))
+    social = db.Column(JsonType)
+
+</pre></code>
+
+== Screenshots ==
+[[Posting interfaces]] and more:
+
+Interface for posting a reply as of 2014-03-24
+
+[[File:kwm-posting-interface-2014-03-24.png|none|thumb|500px|Original posting interface]]
+
+The interface for posting replies has been simplified quite a bit, with AJAXy status update stuff removed as of 2014-04-29
+
+[[File:kwm-posting-interface-2014-04-29.png|none|thumb|500px|Everything happens in a on an async queue now, so no more live updates]]
+
+2014-07, moved logic out of templates to support switchable themes, added new theme based on [http://www.getskeleton.com/ Skeleton]
+
+[[File:kylewm-redesign-2014-07-05.png|none|thumb|500px|Skeleton-based redesign]]
+
+The sidebar reorients for small screens
+
+[[File:kylewm-redesign-mobile-2014-07-05.png|none|thumb|500px|Redesign on a small screen]]
+
+Interface for posting new notes, with clickable list of recent tags
+
+[[File:kylewm-tag-speedbar-2014-07-15.gif]]

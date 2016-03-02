@@ -1,0 +1,108 @@
+http://indiewebcamp.com/User%3AGregorlove.com/sandbox
+
+<!--
+<includeonly>
+
+<div style="padding: 1em 0; margin: 1em 0; border-bottom: 1px solid #ccc; clear: both;" class="h-event vevent">
+
+	<div style="display: inline-block; border: 1px solid #ccc; border-radius: 7px; width: 100px; height: 100px; font-family: Helvetica, Arial, sans-serif; vertical-align: top; text-align: center;">
+		<p style="font-size: 2.7em; font-weight: bold; margin: 10px 0 5px; line-height: 1;"> {{{{{|safesubst:}}}#time:d|{{{event_date}}}}} </p>
+		<p style="font-size: 1.2em; margin: 0; color: #666;"> {{{{{|safesubst:}}}#time:F|{{{event_date}}}}} </p>
+		<p style="font-size: 1.2em; margin: 0; color: #666;"> {{{{{|safesubst:}}}#time:Y|{{{event_date}}}}} </p>
+	</div>
+
+	<div style="display: inline-block; border: 0px dotted #eee; vertical-align: top; margin-left: 1em; max-width: 550px;">
+
+		<p style="margin-top: 0;"> <strong class="p-name summary">{{{event_name}}}</strong> </p>
+
+		<p> When: <span class="dt-start"><span class="value" title="{{{{{|safesubst:}}}#time:F j, Y|{{{event_date}}}}}">{{{event_date}}}</span> <span class="value" title="{{{event_start_time}}}">{{{event_start_time}}}{{#if: {{{event_utc_offset}}}|<span style="display: none;">{{{event_utc_offset}}}</span> }}</span>–<span class="dt-end">{{{event_end_time}}}{{#if: {{{event_utc_offset}}}|<span style="display: none;">{{{event_utc_offset}}}</span> }}</span></span> ({{#if: {{{event_utc_offset}}}|{{{event_utc_offset}}} <abbr>UTC</abbr>|local time}}) </p>
+
+		<p> Where: <span class="p-location location">{{{event_location1}}}</span>{{#if: {{{event_location2|}}}|, <span class="p-location location">{{{event_location2}}}</span>}}{{#if: {{{event_location3|}}}|, <span class="p-location location">{{{event_location3}}}</span>}}{{#if: {{{event_location4|}}}|, <span class="p-location location">{{{event_location4}}}</span>}}{{#if: {{{event_location5|}}}|, <span class="p-location location">{{{event_location5}}}</span>}}{{#if: {{{event_location6|}}}|, <span class="p-location location">{{{event_location6}}}</span>}}{{#if: {{{event_location7|}}}|, <span class="p-location location">{{{event_location7}}}</span>}}{{#if: {{{event_location8|}}}|, <span class="p-location location">{{{event_location8}}}</span>}}{{#if: {{{event_location9|}}}|, <span class="p-location location">{{{event_location9}}}</span>}}{{#if: {{{event_location10|}}}|, <span class="p-location location">{{{event_location10}}}</span>}} </p>
+
+		<p class="p-description"> {{{event_description}}} </p>
+
+	</div>
+
+</div></includeonly>
+-->
+<!--
+== Determining ==
+How to determine authorship of a post on a page - AKA the Authorship [[discovery]] algorithm / processing model for implementations.
+
+To determine authorship of a post on page '''A''':
+
+# Parse the [[h-entry]] for the post on page '''A'''. If no h-entry is found, then there's no post to find authorship for; abort.
+# If the h-entry has a p-author, use that and its [[h-card]] to determine the author of the post.
+# Otherwise, look for a top-level [[h-feed]] with author property and use that
+# Otherwise, if the page is a post permalink page (AKA the post's page) 
+## If the page has a [[rel-author]] link, continue with [[#rel-author parsing]] below
+## Otherwise, if there's an [[h-card]] on page '''A''' with u-url == rel-author URL, use that h-card for the author.
+# Otherwise, no deterministic author can be found. Implementations are encouraged to document additional heuristics below for consideration for incorporation in to the authorship algorithm.
+
+=== rel-author parsing ===
+# Fetch the rel-author page '''B''' and parse it for microformats2
+## If there's an [[h-card]] with a u-url == u-uid == page '''B''''s URL, use that h-card for the author.
+## Otherwise, if there's an [[h-card]] with u-url for which there's also a rel-me URL on page '''B''' (perhaps the same hyperlink element as the u-url, though not required to be), use that h-card for the author.
+
+
+= Suggested wiki CSS tweak =
+
+== Level 2 heading ==
+
+=== Level 3 heading ===
+I think this stands out too much from other headings. Recommend the below styling:
+
+<h3 style="font-size: 135%; font-weight: normal;"> Level 3 heading </h3>
+This suggested style is font-size: 135% instead of 132%, and font-weight: normal.
+-->
+
+= Latest concepts =
+==== 2016 ====
+===== February =====
+<div style="margin-left: 2em;"><p style="margin-top: 0;"> '''24:''' <strong class="p-name summary">Homebrew Website Club meetup</strong><br />When: <span class="dt-start">2016-02-24</span> <span class="value" title="18:30">18:30</span>–<span class="dt-end">19:30</span> (local time)<br />Where: <span class="p-location location">Portland</span>, <span class="p-location location">San Francisco</span>, <span class="p-location location">Chicago</span> </p>
+<p class="p-description"> Are you building your own website? Indie reader? Personal publishing web app? Or some other digital magic-cloud proxy? If so, come on by and join a gathering of people with likeminded interests. Bring your friends that want to start a personal web site. Exchange information, swap ideas, talk shop, help work on a project... </p></div>
+
+===== March =====
+<div style="margin-left: 2em;"><p style="margin-top: 0;"> '''14–15:''' <strong class="p-name summary">IndieWebCamp MIT</strong><br />When: <span class="dt-start">2016-03-14</span> through 2016-03-15<br />Where: <span class="p-location location">MIT, Cambridge, MA.</span></p>
+<p class="p-description"></p></div>
+
+= MediaWiki datetime functions =
+[https://www.mediawiki.org/wiki/Help:Extension:ParserFunctions#.23time #time function]: {{#time: F j | 2016-06-04}}
+
+= Testing date display =
+<div style="display: inline-block; border: 1px solid #ccc; border-radius: 7px; width: 100px; height: 100px; font-family: Helvetica, Arial, sans-serif; vertical-align: top; text-align: center;">
+		<p style="font-size: 1.2em; margin: 15px 0 0; color: #666;"> 2014-05 </p>
+		<p style="font-size: 2.7em; font-weight: bold; margin: 0; line-height: 1;"> 21 </p>
+	</div>
+
+= One-day-event template testing =
+Instructions on [[Template:one-day-event]]
+
+== One-day-event with no UTC offset ==
+
+{{one-day-event
+| event_name = [[2014-05-21-homebrew-website-club|Homebrew Website Club meetup]]
+| event_date = 2014-05-21
+| event_start_time=18:30
+| event_end_time = 19:30
+| event_utc_offset =
+| event_location1 = Portland
+| event_location2 = San Francisco
+| event_location3 = Chicago
+| event_description = Are you building your own website? Indie reader? Personal publishing web app? Or some other digital magic-cloud proxy? If so, come on by and join a gathering of people with likeminded interests. Bring your friends that want to start a personal web site. Exchange information, swap ideas, talk shop, help work on a project...
+}}
+
+== One-day-event with UTC offset ==
+
+{{one-day-event
+| event_name = [[An Event in Chicago]]
+| event_date = 2014-06-01
+| event_start_time=12:30
+| event_end_time = 19:30
+| event_utc_offset =-06:00
+| event_location1 = Chicago
+| event_description = Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ultrices rhoncus arcu, sed pellentesque tellus interdum at. Aenean sed orci sed ipsum sollicitudin accumsan quis ut nibh. Nam tincidunt rhoncus quam, at egestas purus iaculis eget. Morbi vehicula nisl ante, eu sodales neque gravida quis. In malesuada sapien nunc, non rutrum enim hendrerit sed. Proin eros est, blandit ut imperdiet et, cursus eu libero. Nulla sit amet neque sit amet purus rhoncus ornare.
+}}
+
+== Feedback ==
+Bugs, improvements?

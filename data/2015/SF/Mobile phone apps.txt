@@ -1,0 +1,55 @@
+http://indiewebcamp.com/2015/SF/Mobile_phone_apps
+
+{{snarfed}}, {{kylewm}}, and {{wavis}} spent most of the session cataloguing and analyzing the high level options for the mobile posting app we'd like. {{benwerd}} and {{erinjo}} also contributed.
+
+Of the options below...
+* {{snarfed}} votes for [[#MobilePub|extending MobilePub]]
+* {{kylewm}} votes for [[#Pure_native_apps|Pure native apps]]
+* {{wavis}} votes for ...?
+* {{ben_thatmustbeme}} votes for...?
+* {{benwerd}} votes for [[#MobilePub|extending MobilePub]] ''and'' [[#Known|building a Known app]]
+* {{erinjo}} votes for ...?
+
+
+===  Build from scratch ===
+
+==== Pure mobile webapp ====
+
+This is [https://snarfed.org/posting-to-the-indieweb-from-your-phone described in detail here]. In short, it'd be a pure web app that uses mobile web technologies to run offline, sync with your site when you're online, and otherwise look and feel like a native app. We'd write it in HTML5/JS/CSS, and it would work with any site that supports [[h-feed]] and [[micropub]].
+
+Pros: write once run anywhere, web first, etc.
+
+Cons: bad/missing support for some media features (resizing large images, transcoding audio and video, etc.), and generally weak support in browsers that are tuned for consumption, not creation. (This is why {{benwerd}} et al largely abandoned this approach for [[Known]].)
+
+==== Pure native apps ====
+
+These would be native apps on as many platforms as we choose to implement - [[Android]], [[iOS]], [[FirefoxOS]], etc.
+
+Pros: good support for device features (capturing pictures, video, etc), native look and feel
+
+Cons: lots of development work
+
+==== Write once run anywhere wrapper ====
+
+Many of these exist: Cordova/PhoneGap, JavaFX, React Native, etc. The promise is that you write the app once, in HTML5 or Java or whatever, and you get native look and feel and access to APIs, device features, etc.
+
+The reality, of course, is mixed...but they're still definitely worth a look.
+
+
+=== Extend an existing app ===
+
+==== MobilePub ====
+
+{{benthatmustbeme}} is extremely prolific, and one of his projects, [[MobilePub]], already does much of what we need. It's a full featured posting app that speaks micropub, supports media and other post types, etc. It's based on Cordova/PhoneGap.
+
+The main features we'd want to add are offline support*, h-feed fetching, editing/updating existing posts, etc.
+
+* Update: already has at least some offline support, queueing posts when offline.
+
+==== Known ====
+
+We suspect that the vast majority of current IndieWeb users are evenly split between [[Known]] and [[WordPress]]. Anecdotally, based on [https://snarfed.org/2014-11-06_happy-1000th-bridgy Bridgy stats], {{snarfed}} thinks their combined share is ~98-99%. The remaining ~1% use a variety of other options, some homegrown, some larger projects like [[Drupal]] and [[ProcessWire]].
+
+WordPress has its own [https://apps.wordpress.org/ first-class offline-first mobile apps], and Known has a web-based posting UI that works well on mobile. We could just extend that with [http://caniuse.com/#feat=offline-apps app cache], [http://www.w3.org/TR/webstorage/#storage localStorage] for offline usage, and [[h-feed]] fetching and synching with [http://caniuse.com/#feat=webworkers Web]/[http://caniuse.com/#feat=serviceworkers Service Workers]. Combined with WordPress's existing apps, that would get us good offline-first clients for almost all of the current IndieWeb.
+
+{{benwerd}} wants to build a Known-specific mobile app that would also cover site creation and administration. As the goals of this differ slightly from a multi-platform indieweb app, he thinks both this and [[#MobilePub|extending MobilePub]] should coexist, so they can test and develop features according to their differing priorities, and is happy to commit to Known compatibility with MobilePub.

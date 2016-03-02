@@ -1,0 +1,40 @@
+http://indiewebcamp.com/WordPress_hentry_problem
+
+{{stub}}
+
+'''<dfn>WordPress hentry problem</dfn>''' is an improper use of classic microformats that cannot easily be changed due to backward compatibility issues.
+
+hentry is designed for episodic or datestamped content on the web. WordPress indiscriminately puts it on everything. And because it is on all entries, it has become popular as a styling element, which means on many themes, removing this or changing its application results in a change in the visual appearance of the entire site.
+
+Ulrich Pogson proposed changing application of hentry with a WordPress ticket(https://core.trac.wordpress.org/ticket/28482).
+
+{{gwg}} attempted an alternate solution going forward by opening another ticket(https://core.trac.wordpress.org/ticket/32336). The comments included, "hentry shouldn't have been used for styles, but it has been for years, and therefore it won't be going anywhere." This led to a third ticket(https://core.trac.wordpress.org/ticket/32348) which requested hentry be removed from bundled themes as a styling element. This was agreed going forward, but not on existing themes.
+
+The Twenty-Sixteen theme released concurrently with WordPress 4.4 on 2015-12-07 does this. It is also correctly uses hfeed only on single pages as opposed to all pages, and action for which the original source is still unknown.
+
+hentry is also close to be adjusted in the Automattic sponsored starter theme, _s(pronounced Underscores) which is the basis for many new themes. See Pull Request(https://github.com/Automattic/_s/pull/860).  The related hfeed issue is already merged into the theme. 
+
+The current open ticket for including Microformats 2 into WordPress core in all places where WordPress automatically adds markup. However, there was a request for it to be added with the classic microformats retained. For some areas, this is not an issue. But if h-entry is applied identically to hentry, it would propogate the same issue as before.
+
+
+=== IndieWeb Examples ===
+
+{{snarfed}} avoids this kind of problem on his WordPress site by using the [https://github.com/pfefferle/wordpress-uf2 wordpress-uf2] plugin and putting this in his theme's header.php file:
+
+<pre>
+<?php
+/* Remove the microformats1 hfeed class from the post element
+ * because it interferes with php-mf2's microformats2 parsing.
+ * http://microformats.org/wiki/microformats2-parsing-issues#mixture_of_microformats2_and_classic_microformats_classnames_on_different_elements
+ */
+ob_start();
+include TEMPLATEPATH . '/header.php';
+$header = ob_get_contents();
+ob_end_clean();
+$header = str_replace('class="hfeed site"', 'class="site"', $header);
+if (!is_singular()) {
+  $header = str_replace('<hgroup>', '<hgroup class="p-name">', $header);
+}
+echo $header;
+?>
+</pre>

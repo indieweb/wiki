@@ -1,0 +1,245 @@
+http://indiewebcamp.com/Twitter-fr
+
+''Cette page a démarré sur <cite rel="canonical" >[[Twitter]]</cite>''
+
+= Twitter =
+Twitter.com est un [[silo-fr|silo]] populaire d'hébergement de contenu très connu pour ses notes de texte en moins de 140 caractères.
+
+== Recommandations ==
+=== licenciez vos tweets en CC ===
+Utilisez le site http://www.tweetcc.com/ pour licencier vos tweets en Creative Commons. [http://tantek.com/2012/230/t1/tweetcc-cc-license-tweets-quote-embed-indieweb]
+
+Ceci permet à toute autre personne qui désire :
+* copier
+* citer
+* syndiquer 
+Etc. vos tweets de faire ainsi, selon les termes de la licence CC (par ex. CC-BY, paternité) et ce en toute indépendance des Conditions Générales d'Utilisation de Twitter, et par conséquent indépendamment des obligations de Twitter, par ex leurs instructions d'affichage.
+
+
+==== Syndication inversée sur réponses-at ====
+Selon le modèle [[POSSE-fr|POSSE]], vous pouvez désirer de syndiquer-en-retour les réponses-@ reçues sur Twitter vers les copies des tweets de votre post sous forme de "commentaires" revenant à l'intérieur de votre propre page-permalien sur votre site. En utilisant TweetCC, vous pouvez vérifier si ces réponses-@ qui vous sont adressées sont sous licence CC et puis les incorporer en utilisant la licence CC, ce qui vous permet de les afficher comme bon vous semble dans le design de votre site, au lieu d'être contraint à suivre les instructions d'affichage de Twitter sur votre site / dans le design des permaliens de vos billets.
+
+
+== Portage sur l'IndieWeb ==
+=== Défis ===
+* porter le contenu et maintenir les redirections URL
+** pas possible actuellement de rediriger les permaliens de Twitter vers votre propre site. AFAIK. [[User:Tantek.com|Tantek]] 14:33, 17 November 2012 (PST)
+* porter les @-réponses
+** Twitter a une API pour recevoir les @-replies sur un tweet particulier.
+*** Est-ce que ça fonctionne ? [http://stackoverflow.com/questions/2693553/replies-to-a-particular-tweet-twitter-api stackoverflow] suggère autre chose. Je n'y suis pas parvenu. --[[IndieWebCamp:User:Waterpigs.co.uk|Waterpigs.co.uk]] 14:39, 17 November 2012 (PST)
+* porter les retweets
+** Twitter a un [https://dev.twitter.com/docs/api/1/get/statuses/retweets/:id API endpoint] pour recevoir les retweets d'un tweet spécifique.
+*** Les premiers 100 retweets de tout tweet particulier peuvent être récupérés via l'API
+* porter les favoris
+** Twitter dispose à priori d'une API pour recevoir les favoris d'un tweet particulier.
+*** Je n'ai pu trouver quelque référence vers quelque moyen de recevoir le comptage de favoris d'un tweet particulier --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 14:47, 17 November 2012 (PST)
+* API limitée aux 3 200 tweets les plus récents
+** Les personnes en Europe sont autorisées légalement à récupérer leur historique complète sur twitter, mais twitter ne facilite pas la tâche (obligation de passer par un fax !). Voir : [http://marks.dk/how-to-get-more-than-3200-tweets-from-twitter-if-you-live-in-a-country-in-the-eu-that-is How to get more than 3200 tweets from twitter]
+
+=== Comment faire ===
+==== Télécharger tous vos tweets ====
+# Aller sur : https://twitter.com/settings/account 
+# près du bas de la page, il pourrait y avoir une section "Votre Archive Twitter"
+# Vous voyez le bouton (Demander votre archive) ? Cliquez dessus.
+# Attendez un certain temps qu'un lien vers votre archive apparaisse dans votre email associé au compte.
+
+L'archive Twitter est construite de fichiers JSON mensuels. Elle peut être utilisée comme un moyen de [[PESOS-fr|PESOS]]er une historique complète Twitter, même si POSSE est le moyen recommandé de faire ça.
+
+Les trucs les plus intéressants dans l'archive JSON twitter sont : 
+* des URLs à la fois longues et raccourcis
+* les "nouveaux" sont aussi écrits en manière classique, facilitant ainsi la republication en mode PESOS.
+* toute information en rapport exigée pour reconstruire une conversation
+
+Après avoir téléchargé votre archive, vous pouvez la mettre à jour en utilisant un Gem Ruby appelé [https://github.com/DeMarko/grailbird_updater GrailbirdUpdater].
+
+== Comment faire  ==
+=== POSSE vers Twitter ===
+En bref, vous devez utiliser l'API [[snowflake]] pour [[POSSE-fr|POSSE]]r des posts sur Twitter.
+
+==== POSSE vers Twitter en général ====
+Il existe des moyens particulièrement élégants de POSSEr des [[notes-fr|notes]] et [[articles-fr|articles]] vers Twitter qui sont documentés dans les sections suivantes. Voici quelques lignes de conduite pour POSSEr vers Twitter.
+
+Compte tenu des limites de Twitter :
+* 140 caractères de contenu
+* les liens sont raccourcis en t.co à l'intérieur de liens de 20 (ou 21) caractères pour http (ou https)
+* références uniquement à utiliseur local (@-nom) 
+* références uniquement au tag local (#croisillon)
+
+Au moment de POSSEr vers Twitter : 
+# fournir un permalien (ou une ID-perma-raccourci pour s'adapter complètement à vos notes) vers votre original à la fin de la copie syndiquée
+# abréger les notes / noms d'article pour rentrer dans les limites
+# inclure les croisillons comme partie du contenu abrégé (même s'ils vont au-delà des points de suspension de l'horizon) pour accroître la syndication basée sur la découverte/opération de recherche de votre contenu
+#* par ex : comme le [http://aaronparecki.com/notes/2012/09/09/3/indieweb fait aaronparecki.com]
+# traduire les références des personnes/sites indieweb dans leurs équivalents nom d'utilisateur local sur Twitter @-nom
+
+Les sections ci-dessous contiennent les détails sur la façon de faire ça spécifiquement pour les [[notes-fr|notes]] et [[articles-fr|articles]].
+
+
+==== POSSEr les Notes sur Twitter ====
+Pour les notes, vous pouvez POSSEr jusqu'à 140 caractères de votre note sur Twitter.
+
+===== POSSEr une note complète sur twitter =====
+Pour les notes qui rentrent entièrement dans un tweet (*y compris id-perma-raccourci), vous ''devriez''' inclure un id-perma-raccourci de votre post à la fin de votre tweet. Exemples :
+* https://twitter.com/t/status/130570474261458944
+a le perma-raccourci)citation d'un id-perma-raccourci dans une citation classique entre parenthèses :
+* <samp>(ttk.me t4Ec3)</samp>
+qui peut être développé facilement (voir la page en rapport [[original-post-discovery-fr|découverte-post-original]]) en défaisant les parenthèses et en assemblant les deux morceaux avec un slash "/" :
+* <code>ttk.me/t4Ec3</code>
+qui résout (redirige) vers le post original :
+* http://tantek.com/2011/303/t3/settled-falcon-perma-short-link-in-text-cite-design 
+
+Vous ne ''devriez PAS'' inclure un post a<em>lien</em> perma-raccourci  à la fin des copies tweet de notes qui incluent la note ''complète''. 
+
+Il y a une convention non débattue sur Twitter qu'un lien dans un tweet (tout spécialement à la ''fin'' d'un tweet) devrait fournir plus d'informations. 
+
+Avoir un lien-perma-raccourci actif à la fin de votre tweet quand tout ce que vous offrez est le même contenu *exact* est une mauvaise UX pour vos amis qui vous suivent sur Twitter. 
+
+Notez les plaintes ([https://twitter.com/zeldman/status/24154348602793984][https://twitter.com/sgalineau/status/24171771997462528]([http://tantek.com/2011/009/t2/ttk-me-permashortlinks-originals-twitter-copy réponse]), [https://twitter.com/zeldman/status/24213884298592256]([http://tantek.com/2011/009/t3/value-searching-finding-past-tweets-self-hosting réponse]), [https://twitter.com/zeldman/status/24224559787941888][https://twitter.com/zeldman/status/24521588359569409]) et questions[https://twitter.com/tigerchops/status/306879654227218432] ayant été soulevées au fil du temps en réponse à un lien apparent qui "duplique" ou porte "le même" contenu.
+
+L'objectif général de POSSE est que vous preniez soin de vos amis qui vous lisent sur Twitter (ou sur les autres silos), aussi vous devriez prendre soin aussi de leur UX. Ne fournissez que des permaliens-raccourcis comme partie de vos tweets POSSÉs quand ils font un lien vers un post original avec plus de contenu que dans la copie du tweet POSSÉ.
+
+===== POSSEr note abrégée vers twitter =====
+Si votre note (avec id-perma-raccourci) excède 140 caractères, vous devriez abréger votre note à 119 (118) caractères (par ex. en utilisant  la fonction [[CASSIS]] <code>ellipsize_to_word</code>), et placer ensuite un post URL perma-raccourci à la fin. Raccourcissez à 119 (118) caractères (ou plus court) parce que cela prend 1 caractère pour l'espace avant l'URL, et puis ensuite Twitter raccourcit votre URL avec t.co en 20 caractères. 21 caractères pour les nouvelles URLs <em>https</em>. 
+
+Vous pouvez vouloir placer un caractère points de suspension à la fin de votre note POSSÉe vers Twitter avant votre lien-perma-raccourci. Assurez-vous aussi de laisser de la place pour les points de suspension : au lieu de laisser juste 1 caractère pour un espace avant votre lien-perma-raccourci, gardez 4 caractères pour "... ", ou 3 caractères pour "… " (entité caractère ellipse). Idéalement, élidez à une limite de ponctuation (comme un point pour la fin de phrase ou une virgule - la fonction citée au-dessus de CASSIS produit aussi cela).
+Exemples (qui font des liens vers les posts originaux après avoir élidé avec "... ")
+* https://twitter.com/t/status/134793377291046912 - élidé après "(" parenthèse gauche
+* https://twitter.com/t/status/228953522123706368 - élidé après "," virgule
+* https://twitter.com/aaronpk/status/365476652911837185 - élidé sur une limite de mot
+* ...
+
+Exception, si votre tweet abrégé a un caractère ":" (deux points) à la fin, pas besoin d'une ellipse, fournissez simplement un espace " " et votre lien-perma-raccourci.
+Exemples avec une coupure après un ":"  
+* https://twitter.com/t/status/184008333571801089 - original tronqué sur un ":" avant plus de texte.
+* https://twitter.com/t/status/179636269096247297 - original tronqué sur u ":" juste avant une URL.
+* ...
+
+Les membres de la communauté IndieWebCamp qui font aussi cela : 
+* [[User:Aaronparecki.com]] (par ex. [http://aaronparecki.com/notes/2013/08/08/1/dream note 2013], [https://twitter.com/aaronpk/status/365476652911837185  tweet POSSÉ])
+* [[User:Tantek.com]]  (par ex. [http://tantek.com/2011/303/t3/settled-falcon-perma-short-link-in-text-cite-design 2011 post note], [https://twitter.com/t/status/130570474261458944 tweet POSSÉ]) posts d'explication :
+** 2010-126: http://tantek.com/2010/126/t4/permashortlink-microsyntax-citation-syndication-discoverable-falcon-diso-2
+** 2010-145: http://tantek.com/2010/145/t1/algorithmic-permashortlinks-diso-2-interview-ownyourdata
+** 2010-146: [http://www.monkinetic.com/2010/05/26/tantek-celik-diso-20-brass-tacks Tantek Celik on DiSo 2.0: Down to Brass Tacks]
+* [[User:Tommorris.org]]  (par ex. (citation de note post, tweet POSSÉ))
+* [[User:Waterpigs.co.uk]]  (par ex. (citation de note post, tweet POSSÉ))
+* ... ajoutez-vous (par ordre alphabétique) si vous faites tourner ça
+
+
+===== POSSEr des Notes vers Pseudocode Twitter =====
+Ceci est un pseudocode basé sur le package [https://github.com/barnabywalters/php-helpers/blob/master/BarnabyWalters/Posse/Helpers.php php-helpers] de  [http://waterpigs.co.uk Barnaby Walters]’, spécifiquement BarnabyWalters\Posse\Helpers class.
+
+Supposons que vous démarrez avec quelque marquage HTML représentant le contenu de la note ($text), l'URI canonique pour faire un lien retour à partir du tweet syndiqué ($url) et une url optionnelle in-reply-to associée à la note ($inReplyTo).
+
+# Convertissez tout HTML dans $text en syntaxe plein-texte ala twitter, ou diminuez-la
+# Tronquez $text de manière à ce qu'une fois toutes les URLs contenues dedans soient remplacées par des URLs de la longueur du t.co actuel (21 ATOW) il reste suffisamment de caractères pour contenir l'URI canonique avec des crochets autours, ou précédés et une ellipse si une césure arrive
+# Trim $text
+# Ajoutez un espace et $url, entouré de crochets si aucune césure ne se passe ou précédé d'une ellipse si une césure arrive
+# Créez une hashtable représentant le corps du POST de la requête à envoyer ($tweet)
+# Réglez $tweet['status'] en $text
+# Vérifiez pour voir si $inReplyTo est l'URI d'un tweet (voir [https://github.com/barnabywalters/php-helpers/blob/master/BarnabyWalters/Posse/Helpers.php#L58 ligne 58])
+#* Si c'est bon, prenez l'ID
+#* Réglez  $tweet['in_reply_to_status_id'] vers l'ID
+# Envoyez une requête de POST authentifiée vers le endpoint pertinent de l'API avec les contenus du $tweet comme sous forme de body url-encodé
+
+==== POSSEr des Articles vers Twitter ====
+Similaire à POSSEr une note, vous pouvez POSSEr un article vers twitter, mais au lieu des premiers 140 caractères du post, vous devriez POSSER les premiers 140 caractère du nom de l'entrée (titre) de l'article, suivi optionnellement d'un caractère ":" (à moins que le titre de l'entrée ne se termine avec la ponctuation), puis un espace " ", puis le lien-perma-raccourci vers votre post original. 
+Exemples : 
+* https://twitter.com/t/status/21599383183 (pas de signe "deux points" entre le titre tweeté et le permalien du post de blog)
+* https://twitter.com/t/status/24915461441 (le titre de l'entrée se finit avec la ponctuation, pas de ":" requis)
+* https://twitter.com/t/status/10572648543162368 (deux points entre le titre tweeté et le permalien du post de blog)
+* ...
+
+Les membres de la communauté IndieWebCamp qui font cela : 
+* [[User:Aaronparecki.com]] (par ex. (post citation d'article, tweet POSSÉ))
+* [[User:Tantek.com]] (par ex. (post citation d'article, tweet POSSÉ))
+* [[User:Tommorris.org]] (par ex. (post citation d'article, tweet POSSÉ))
+* [[User:Waterpigs.co.uk]] (par ex. (post citation d'article, tweet POSSÉ))
+* [[User:T37.net]] (par ex. (post citation d'article, tweet POSSÉ))
+* ... ajoutez-vous (par ordre alphabétique), si vous faites fonctionner ça
+
+
+==== Réponses POSSÉes sur Twitter ====
+Équivalent à POSSEr une note vers Twitter, au moment de POSSEr une réponse vers un tweet, vous réglez aussi le champ  <code>in_reply_to_status_id</code> dans l'appel API vers l'URL du tweet à laquelle votre note répond, pour ouvrir l'UI de discussion et la présentation sur twitter.com.
+
+Exemples, par ex. les membres de la communauté IndieWebCamp qui font aussi cela : 
+* [[User:Waterpigs.co.uk]] avec [[Taproot-fr|Taproot]] (par ex. (citation de post réponse, tweet POSSÉ))
+* [[User:Aaronparecki.com]] avec [[p3k-fr|p3k]] (par ex. (citation de post réponse, tweet POSSÉ))
+* [[User:Tantek.com]] avec [[Falcon-fr|Falcon]] (par ex. [http://tantek.com/2013/132/t2/been-t-since-day-joined-2006 reply post], [https://twitter.com/t/status/333649785062060034 tweet POSSÉ ])
+* [[User:Tommorris.org]] avec [[Ferocity-fr|Ferocity]] (par ex. [http://tommorris.org/posts/8350 reply post], [https://twitter.com/tommorris/status/343394303252516864 tweet])
+
+
+==== POSSEr des réponses à des tweets ====
+Au moment de poster un commentaire qui est une réponse à un autre post indieweb, le tweet POSSÉ de votre commentaire devrait tenter de régler le <code>in_reply_to_status_id</code> vers le tweet POSSÉ du post Indieweb auquel vous répondez.
+
+C'est semblable à la manière de '''POSSEr les Réponses sur Twitter''', mais avec une étape supplémentaire pour découvrir le tweet POSSÉ du post original : 
+* Vous pouvez découvrir le tweet POSSÉ d'un post indieweb en cherchant un hyperlien [[rel-syndication-fr|rel-syndication]] à partir du post indieweb vers un tweet. 
+* Pour plus de détails, voir :  [[comment-fr#POSSEr_un_commentaire|Comment POSSEr un commentaire]]
+
+Voir aussi : [[in-reply-to-fr|in-reply-to]], [[comments-fr|commentaires]].
+
+
+
+==== POSSEr des reposts de Tweets ====
+Au moment de poster un [[repost-fr|repost]] d'un tweet, le comportement correct devrait être de produire un retweet natif (sur Twitter) du tweet que vous repostez sur votre propre site.
+
+==== POSSEr des Reposts sur Twitter ====
+Quand vous faites un [[repost-fr|repost]] d'un post indieweb : 
+* cherchez un hyperlien [[rel-syndication-fr|rel-syndication]] sur la page du post permalien vers twitter.com
+* si un tel hyperlien [[rel-syndication-fr|rel-syndication]] existe avec un href liant vers une URL de tweet 
+* alors
+** faire un retweet natif de cette URL tweet sur Twitter lui-même
+* end if
+
+==== POSSEr des Favoris de Tweets ====
+Au moment de poster un [[favorite-fr|favori]] d'un tweet, le comportement correct de POSSE devrait être de mettre nativement en favori (sur Twitter) le tweet que vous avez mis en favori sur votre propre site.
+
+==== POSSEr des Favoris sur Twitter ====
+Quand vous postez un [[favorite-fr|favori]] d'un post indieweb :
+* cherchez un hyperlien [[rel-syndication-fr|rel-syndication]] sur la page permalien du post indieweb vers twitter.com
+* si un tel hyperlien [[rel-syndication-fr|rel-syndication]] existe avec un href liant vers une URL de tweet
+* alors
+** mettez nativement en favori cette URL de tweet sur Twitter lui-même
+* end if
+
+=== ... ===
+* ...
+
+== client iOS ==
+
+''Voir l'article complet : [[Twitter-API-fr|API-Twitter]]''
+
+Le client IOS Twitter a une option pour utiliser une racine API différente, "intended for a Twitter proxy server"
+
+Il peut être théoriquement possible de ré-implémenter l'API Twitter sur votre propre site pour régler votre propre site comme un "Twitter proxy server" et par conséquent utiliser le client Twitter comme un client pour poster directement sur votre propre site (et peut-être le lire tout aussi bien).
+
+== Prolbèmes ==
+=== Downtime ===
+Live : http://downrightnow.com/twitter
+
+Les plus récents en premier :
+* 2013-08-28 [https://twitter.com/veen/status/372842227195580419 Twitter a connu des problèmes de DNS] donnant lieu à des images manquantes det du html brut durant un certain nombre d'heures. C'est probablement du aux problèmes de DNS en rapport avec les [http://www.vice.com/read/the-syrian-electronic-army-talks-about-yesterdays-hacks hacks de l'armée syrienne].  Le site était presque impossible à utiliser dans sa forme brute html. [[File:Screen_Shot_2013-08-28_at_5.12.26_PM.png]]  
+* 2012-06-21 [http://gigaom.com/2012/06/21/twitter-outage-thursday-morning-frustrate-users/ Twitter was down: sporadic outages persist Thursday morning]
+* 2010-11-04 "Twitter server is down or being upgraded." [http://www.flickr.com/photos/tantek/5322875194/ http://farm6.staticflickr.com/5210/5322875194_908d728816_z.jpg]
+* 2009-09-16 "Twitter is over capacity" (AKA failwhale) [http://www.flickr.com/photos/factoryjoe/3927590515/ http://farm3.staticflickr.com/2571/3927590515_dcdac9ed95.jpg]
+
+=== Email Identity Removal ===
+Ce screenshot du 2013-05-17 semble démontrer une interaction étrange et une vulnérabilité sur Twitter : 
+
+[[File:2013-05-17-twitter-com-new-email-warning.png]]
+
+Le screenshot montre une page de profil connectée sur Twitter (http://twitter.com/t) avec une boîte d'alerte orange sous la barre d'outils noire globale qui dit : <blockquote>New email address required. Twitter has removed the email address from your account, by request of the email owner.<br/>Please [https://twitter.com/settings/account?change_email=true enter a new email address] where you can be reached. [https://support.twitter.com/articles/82050-i-m-having-trouble-confirming-my-email Learn more  ›]</blockquote> 
+
+Les hyperliens sont présentés conformes à l'original. Pas d'avertissement équivalent sur la page équivalente sur m.twitter.com au moment d'être connecté (par ex. sur un service mobile).
+
+Ce n'est pas clair comment cela a pu se passer, comment l'adresse a été révoquée, comment éviter qu'elle soit révoquée à l'avenir, etc.
+
+Semble être une menace/vulnérabilité d'[[identity-fr|identité]].
+
+Posts en rapport 
+* http://tantek.com/2013/137/t3/scary-twitter-warning-removed-email-from-account
+* http://tantek.com/2013/137/b1/ux-learn-more-links-warning-boxes-three-things
+
+== Voir aussi ==
+* [[silos-fr|silos]]
+* [[notes-fr|notes]]
+* [[POSSE-fr|POSSE]]

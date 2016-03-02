@@ -1,0 +1,72 @@
+http://indiewebcamp.com/webmention-implementation-details
+
+= Webmention =
+
+''Main article: [[Webmention]]''.
+
+== Implementation Details ==
+There are some interesting implementation details regarding receiving webmentions. E.g. when to follow redirects and when not to.
+
+=== endpoint discovery ===
+In step 4 in the [[Webmention#Protocol_Summary|protocol summary]], when performing webmention endpoint discovery, implementations MUST check for the <code>webmention</code> and SHOULD check for <code><nowiki>http://webmention.org/</nowiki></code> (for backward compatiblity) as rel values which may be present among a space separated set of rel values inside a rel attribute.
+
+Also note that endpoints may be advertised in both <code>&lt;link></code> and <code>&lt;a></code> elements. Supporting <code>&lt;a></code> is important for sites like [[WordPress#WordPress.com_hosting_service|WordPress.com]] that [http://en.support.wordpress.com/code/#html-tags don't allow link elements at all].
+
+=== must follow redirects ===
+In steps 7 and 8 in the [[Webmention#Protocol_Summary|protocol summary]], implementations MUST follow redirects of the target and source URLs.
+
+=== checking target validity ===
+In step 7 in the [[Webmention#Protocol_Summary|protocol summary]], when the webmention receiver checks the <code>target</code> URL for validity, follow any HTTP redirects and use the resulting URL when checking for validity.
+
+For example, if your posts visibly show permashortlinks for others to copy/cite/link to and someone sends a webmention to a shortlink, be sure to resolve any redirects before checking if it’s on your site, or matching it up to a post on your site.
+
+The webmention receiver should then check if the <code>target</code> is valid and supported. A valid target is one that is recognized by the receiver. 
+
+In simple cases, this is just a check that the target URL exists on the receiver's domain. The meaning of "valid" can be extended to also include:
+* mentions of pages that don't exist on your site (in case you want to track possible lost URLs)
+* mentions of POSSE URLs
+
+==== use cases ====
+* Webmention proxy servers such as [[webmention.io]] and [https://webmention.herokuapp.com/ webmention.herokuapp.com] are able to accept webmentions for other people's sites
+* Enables indieweb-[[friendly]] silos to send [[backfeed]] webmentions for comments and responses to the original post of a POSSE copy on that silo.
+** i.e. if you POSSE to a silo, you should accept webmentions where the target is your POSSE copy
+** This requires indieweb-friendly silos send webmentions to the original site's webmention endpoint, so the silo will need to know that one of its posts is a POSSE copy
+
+
+You should also support receiving webmentions where the <code>target</code> is one of your POSSE copies.
+
+=== verifying source links to target ===
+In step 8 in the [[Webmention#Protocol_Summary|protocol summary]], as the webmention receiver, to verify the <code>source</code> URL:
+* retrieve it following redirects,
+* when checking the resultant HTML, look for the <code>target</code> URL as '''literally provided in the webmention request''' (i.e. NOT redirects from <code>target</code>)
+
+For example, if you get a webmention with <code>source=http://short.me/t100 target=http://example.com/notes/5</code>:
+* Fetch <code>source=http://short.me/t100</code> following any redirects until you get an HTML document
+* Search the resulting HTML for <code>a</code> elements with a href value of '''exactly''' <code>http://example.com/notes/5</code>, as given in the <code>target</code> parameter
+
+=== sync or async response status code ===
+Webmention receivers can choose to verify the webmention synchronously (process immediately) or asynchronously (add it to a queue for processing later). High level difference:
+
+Synchronously:
+* upon successful verification the receiver MUST return a '''HTTP 200 Success''' response
+
+Asynchronously:
+* receiver MUST return '''HTTP 202 Accepted'''.
+
+See the [[Webmention-brainstorming|brainstorming section]] for some additional thinking on this.
+
+=== types of mentions ===
+In addition to just a link (mention) there are several special types of mentions, each which have markup for detection and specific implementation recommendations:
+* [[reply]] (via [[in-reply-to]]) 
+** [[RSVP]] a special kind of reply to an event, indicating where or not attending (or maybe/interested)
+* [[like]]
+* [[repost]]
+
+=== accessing endpoints in the browser ===
+Some implementations now display a page that briefly explains webmentions when the webmention endpoint is accessed in a browser.
+
+* {{aaronpk}} at https://aaronparecki.com/webmention.php
+* [[User:kylewm.com|Kyle Mahan]] at https://kylewm.com/webmention
+* [[User:WaterPigs.co.uk|Barnaby Walters]] at [http://waterpigs.co.uk/mentions/webmention/ waterpigs.co.uk/mentions/webmention], containing a link to the wiki (more friendly than the spec), along with a short description and a form for easy webmention sending.
+* [[User:kodfabrik.se|Pelle Wessman]] at https://webmention.herokuapp.com/api/webmention
+* add yours...

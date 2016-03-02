@@ -1,0 +1,227 @@
+http://indiewebcamp.com/post-type-discovery
+
+'''<dfn>Post Type Discovery</dfn>''' specifies an algorithm for determining the type of a post by what properties it has and potentially what value(s) they have, which helps avoid the need for explicit post types that are being abandoned by modern post [[creation]] UIs.
+
+;Status
+:This is an '''Editor's Draft''' yet mature enough to encourage [[#Implementations|implementations]] and [[#Feedback|feedback]] therefrom!
+;Participate
+:Wiki ([[#Feedback|Feedback]], [[#Issues|Open issues]])
+:[[IRC]]: [irc://irc.freenode.net/indiewebcamp #indiewebcamp on Freenode]
+;Editor
+:{{t}}
+;License
+:<small>Per [http://creativecommons.org/publicdomain/zero/1.0/ CC0], to the extent possible under law, the editor(s) and contributors have waived all copyright and related or neighboring rights to this work. In addition, as of {{CURRENTYEAR}}-{{CURRENTMONTH}}-{{CURRENTDAY2}}, the editor(s) and contributors (2015-04-07 onward) have made this specification available under the [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0].</small>
+
+__TOC__
+
+== Use cases ==
+Both [[creation]] user interfaces, and post presentation designs are evolving to directly use the presence or absence of specific properties (and their values) directly, rather than depending on any kind of explicit "post type", thus why bother discovering a post type in the first place? This section documents the (few) use-case(s) that is/are known to date.
+
+=== Synthesizing explicit type formats ===
+There are existing formats that require explicit post types (e.g. [[ActivityStreams]]), and code that consumes them expects explicit post types. Post type discovery enabling automatic synthesizing of such formats from posts that merely have a set of content related properties.
+
+== Algorithm ==
+The Post Type Discovery algorithm ("the algorithm") discovers the type of a post given a data structure representing a post with a flat set of properties (e.g. Activity Streams (1.0 or 2.0) JSON, or JSON output from parsing [microformats2]), each with one or more values, by following these steps until reaching the first "it is a(n) ... post" statement at which point the "..." is the discovered post type.
+
+# If the post has an "rsvp" property with a valid value, <br/>Then it is an RSVP post.
+# If the post has an "in-reply-to" property with a valid URL, <br/>Then it is a reply post.
+# If the post has a "repost-of" property with a valid URL, <br/>Then it is a repost (AKA "share") post.
+# If the post has a "like-of" property with a valid URL, <br/>Then it is a like (AKA "favorite") post.
+# If the post has a "video" property with a valid URL, <br/>Then it is a video post. 
+# If the post has a "photo" property with a valid URL, <br/>Then it is a photo post. 
+# If the post has a "content" property with a non-empty value, <br/>Then use its first non-empty value as the content
+# Else if the post has a "summary" property with a non-empty value, <br/>Then use its first non-empty value as the content
+# Else it is a note post.
+# If the post has no "name" property <br/>&nbsp;&nbsp;or has a "name" property with an empty string value (or no value) <br/>Then it is a note post.
+# Take the first non-empty value of the "name" property
+# Trim all leading/trailing whitespace
+# Collapse all sequences of internal whitespace to a single space (0x20) character each
+# Do the same with the content
+# If this processed "name" property value is NOT a prefix of the processed content, <br/>Then it is an article post.
+# It is a note post.
+
+Quoted property names in the algorithm are defined in [h-entry].
+
+== Methodology ==
+There are two important aspects to the methodology of the Post Type Discovery algorithm: scope (why is something explicitly in the algorithm), and order (why is something where it is in the algorithm).
+
+;Scope
+:The algorithm could attempt to cover innumerable potential hypothetical post types, or take an evidence based approach, focusing on real world publishing practices. This specification does the latter, specifically by placing a minimum bar of documented real world publishing practices of different visually apparent post types on the open web at recent (< 1 year old) permalinks, each with at least three independent implementations that have converged on what properties (and potentially values thereof) they have to imply their visually apparent post types. As a result of being evidence based, it is likely this specification will expand over time as more apparent post types are published by more convergent implementations.
+
+;Order
+:The algorithm must also specify an order (e.g. of precedence) that various properties (and their values) imply various post types. The algorithm is ordered by post types that are in general "richer" in terms of content as well as show greater cognitive effort by the author.
+
+== Other Types Under Consideration ==
+Other types are being considered and will be included in the future iterations of the algorithm based on convergence of publishing patterns and critical mass of adoption thereof.
+* [[delete]]
+* [[event]]
+* [[checkin]]
+* [[bookmark]]
+* [[quotation]]
+* [[audio]]
+* [[jam]]
+* [[invitation]]
+* [[tag-of]]
+
+== Examples ==
+=== Like post ===
+Here is an example [[h-entry]] post from [http://www.w3.org/TR/activitystreams-vocabulary/#dfn-like Activity Streams 2.0 Vocabulary examples]:
+<pre><div class="h-entry p-name">
+  <span class="p-author h-card">Sally</span>
+  liked
+  <a class="u-like-of"
+    href="http://example.org/notes/1">
+    http://example.org/notes/1
+  </a>
+</div></pre>
+
+Following the algorithm, the step "If the post has a "like-of" property with a valid URL" is satisfied and thus the algorithm returns that the post is a "[[like]]" post.
+
+Given this semantic, an implementation can generate (or process as if generated and consumed) the following AS2 JSON, in particular the <code>"@type": "Like"</code> in this output is what is determined by this algorithm:
+<pre>{
+  "@type": "Like",
+  "actor": {
+    "@type": "Person",
+    "displayName": "Sally"
+  },
+  "object": "http://example.org/notes/1"
+}</pre>
+
+
+== Next steps ==
+This section is for the editor, and may provide hints at updates to come for this specification.
+* figure out workflow between this document and [https://www.w3.org/wiki/Post-type-discovery W3C copy], for how to best do all the below:
+* fix redlinks in W3C copy
+* resolve trivial open issues
+* copy non-trivial open issues to W3C Social Web WG github
+* copy closed issues to separate page on IndieWebCamp
+* add to [[#FAQ]] questions from Evan and answers provided inline in [http://socialwg.indiewebcamp.com/irc/social/2015-10-06#t1444155351373 2015-10-06 #social IRC]
+* add explicit JSON examples based on both parsed [[microformats2]] output, and [[ActivityStreams2]]
+* add example how to infer from a W3C Activity Streams post similar to h-entry properties
+** awaiting any real world publishing examples of Activity Streams without explicit types
+* add example how to generate a W3C Activity Streams post from h-entry properties
+** have added one, will add more based on requests for specific examples
+** Some notes at [http://rhiaro.co.uk/2015/05/generating Generating an ActivityStream]
+* Publish a W3C working draft
+* update: [http://www.w3.org/Social/track/issues/4 ISSUE-4: Do we rely on explicit typing or support implicit typing based on explicit property names?]
+
+== Feedback ==
+Feel free to leave feedback about the draft here, please sign your name with <nowiki>~~~~</nowiki>!
+
+As described here, many people have gradually shifted from choosing an explicit post type up front to combining individual parts (photos, location, person tags) and discovering post type after the fact. The IndieWeb community discovers and analyzes new real world post types, catalogues them here on the wiki, and then adds them to this algorithm.
+
+This is great in general, but sometimes tricky. Post type boundaries are often fuzzy and overlap in the real world - [[quotation#Instead_use|quotations are a good example]] - and algorithms and code aren't good at fuzziness and uncertainty. Given this, we should keep in mind that that post type discovery is high level and sometimes imprecise and not expect too much of it beyond that.
+
+-[[User:Snarfed.org|Snarfed.org]]
+
+== Issues ==
+Open issues on this specification are documented here.
+=== Challenges from summaries ===
+* Some of the entries on http://aaronparecki.com/articles have just a name, or a name and "featured" image, but no content or summary. Maybe the only way to tell this is an article is to go look at the canonical URL.
+** Example permalinks of this? [[User:Tantek.com|Tantek]] 22:15, 29 September 2015 (PDT)
+*** That is the example. The point is the h-feed contains partial information from the article, but the article permalinks have the full info. http://pin13.net/mf2/?url=http%3A%2F%2Faaronparecki.com%2Farticles <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 08:26, 30 September 2015 (PDT)
+=== note detection name content details ===
+* The article vs. note check currently says to check if name is a prefix of content, but this fails the common auto-generated "name" case, where the name contains everything in the post including the content. I have had better luck checking name.contains(content) instead of content.startswith(name) [[User:Kylewm.com|Kylewm.com]] 21:24, 29 September 2015 (PDT)
+** Note with an implied "name" that contains the "content": https://shanehudson.net/2015/09/24/2042
+** What if we made it an OR? That is "name.contains(content) OR content.startswith(name)" means this is a note? [[User:Tantek.com|Tantek]] 22:15, 29 September 2015 (PDT)
+*** I can't think of anyone who gives their notes an explicit title that is a prefix of the content. The markup would be odd <nowiki><div class="e-content"><span class="p-name">This is note</span> with a title that is a prefix</div></nowiki>. I don't feel too strongly about it, but if we can't come up with any real-world examples, it's probably not worth complicating the spec with content.startswith(name)
+**** It was more anticipatory, as those of us doing name==content on notes start truncating the name for HTML title element readability, e.g. dropping leading URLs. [[User:Tantek.com|Tantek]] 14:00, 16 February 2016 (PST)
+=== How to handle new types ===
+* The post type discovery algorithm needs some way for new types to be discovered. For example I am publishing bike rides, runs, and food consumption on my site right now, and it would be better to have a way to add these types as a possible result of the algorithm without having to change the core algorithm.
+=== Entry only or events too ===
+* Is this limited in scope to "h-entry" only? Are "h-event" always "event"s and never replies, invites, etc.? [[User:Kylewm.com|Kylewm.com]] 09:21, 28 October 2015 (PDT)
+** Quite right, the top level microformat object can help with post type discovery. Will look into real world examples and detection steps. [[User:Tantek.com|Tantek]] 16:26, 16 February 2016 (PST)
+=== Feature request type invitation ===
+* Add "invitee" property implies post type "invite"? Above or below "rsvp"? [[User:Kylewm.com|Kylewm.com]] 09:21, 28 October 2015 (PDT)
+=== Feature consideration checkin ===
+Since [https://github.com/idno/Known/issues/1227 Known had to coordinate with client software to make this explicit], written to be inserted into the current algorithm
+* if there is a u-photo property, then it is a photo (any venue information is info about the photo)
+* if there is u-location to a venue h-card with name plus street-address and/or geo lat+long then is a checkin (any note/content is a "shout" or comment about the checkin)
+* ...
+* if there is a content and/or name that "match" then it is a note
+* ...
+* if there is a "location" property (but no content nor name) then it is a checkin
+
+In summary:
+* photo -> photo
+* named location with adr street-address and/or geo lat+long -> checkin
+* ...
+* content~=name -> note
+* ...
+* location geo lat+long or adr -> checkin
+
+== Resolved ==
+=== Summary vs content details ===
+* In an h-feed, an entry may have a name and summary but no content. In this case it is an article, but step 6 would have already classified it as a note since there is no content. Perhaps update this step to read "If the post has no "content" property and no "summary" property"?
+** Steps 6 and following have been updated to use "summary" as a fallback for "content". [[User:Tantek.com|Tantek]] 21:02, 29 September 2015 (PDT)
+=== Note as fallback ===
+* It appears that a post with no content and no name would be classified as a note. Would it be better for a possible result of this algorithm to be "unknown"? 
+** No. By having the known fallback of a note post, implementation for both publishing and consuming code is more predictable, and reliable. [[User:Tantek.com|Tantek]] 21:40, 29 September 2015 (PDT)
+=== Empty comments ===
+* For example, when determining the post type of a comment, I may not want to display anything if the content and name are empty since it would just look like an empty post.
+** What you display is up to you (outside the scope of this specification), and "post type" should only be one aspect of what you use to decide what to display or present. [[User:Tantek.com|Tantek]] 21:40, 29 September 2015 (PDT)
+=== Feature Request video ===
+* There are several examples of people publishing [[video]] posts. Can we add "If the post has a "video" property with a valid URL, then it is a video post." before checking for the "photo" property? (Video posts often have a photo property as a fallback for consumers that don't understand video posts and to show a thumbnail of the video in a feed)
+** There is only one recent example of people publishing [[video]] posts with <code>u-video</code> (Ben Roberts), one person no longer publishing (last was 2+ years ago), and no other examples with <code>u-video</code>.[https://indiewebcamp.com/video#Indieweb_Support] One < three - thus [[video]] stays as "under consideration" for now. [[User:Tantek.com|Tantek]] 22:08, 29 September 2015 (PDT)
+=== Theoretical objection to AS2 compat ===
+* Specific to http://microformats.org/ vocabulary, while incorrectly suggests support of  http://www.w3.org/TR/activitystreams-vocabulary/ For example as:Like '''does NOT''' recommend using 'like-of' property (which doesn't even exist in AS2.0 Vocabulary) instead it uses generic 'object' property. [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 14:04, 6 October 2015 (PDT)
+** The algorithm shows how to discover a "like" post via the 'like-of' property. Once that discovery has occurred, the implementation can treat it as an AS2 as:Like. [[User:Tantek.com|Tantek]] 11:24, 6 October 2015 (PDT)
+*** AS2.0 Vocabulary does NOT define 'like-of' property and uses generic 'object' instead. This algorithm will not work on data following [http://www.w3.org/TR/activitystreams-vocabulary/#dfn-like '''canonical''' example of as:Like in JSON-LD serialization]. AS2.0 specs editor warns in both spec to consider Microformats HTML only informative and that they don't represent recommended modeling. Also current state of Microformat vocabulary doesn't allow using it in JSON-LD serialization, which includes 'like-of' property defined in it. Based on above, claiming compatibility of this draft with ActivityStreams 2.0 looks very misleading! [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 14:04, 6 October 2015 (PDT)
+**** Closing as theoretical only, not a problem in practice. No implementations have had any problems with this. You may reopen if you implement it, or other implementers may re-open if they have the same problem. [[User:Tantek.com|Tantek]] 14:00, 16 February 2016 (PST)
+
+== FAQ ==
+=== What about a photo reply ===
+Q: What about a reply that includes a photo?
+
+A: It's a reply.
+
+Q2: Should that show up as a "photo" post?
+
+A2: It should show up as a "reply" and not be in a user's published feed of their photos. The user-centric design here is to treat replies separately, because in practice, when users post replies to others' posts, and include a photo, the photos typically assume the context of that other post, and would look odd outside of it (e.g. in a generic "photos" feed). In addition, by not including reply photos in a user's feed of their photos, it gives the user the freedom to reply to other posts with whatever they wish, including photos, and not have those reply-specific photos pollute their streams of "their stuff" that their followers subscribe to.
+
+A2a: From a presentation perspective, a reply should primarily be displayed as a reply first, and then adapt accordingly to whatever other properties it may have.
+
+=== Is a video tag sufficient ===
+Q: Is a video tag sufficient to imply a video post?
+
+A: No, video tags can be used for additional content e.g. inside an article. Only relying on video tag markup would lead to false positives. E.g. http://cweiske.de/tagebuch/kdenlive-lower-third.htm has a video tag but is an article, not a video post.[https://indiewebcamp.com/irc/2015-12-13#t1450078670442]
+
+== Implementations ==
+Implementations, in progress, partial, or complete, of Post Type Discovery.
+=== Granary ===
+[https://github.com/snarfed/granary/ Granary] synthesizes [[ActivityStreams]], [[microformats2]], and [[Atom]] from various input feeds and sources, and as such has some code that can be considered in progress or even a partial implementation of Post Type Discovery:
+* Live public demo site: https://granary-demo.appspot.com/ 
+* Issue(s) related to implementing Post Type Discovery: [https://github.com/snarfed/granary/issues/41 #41]
+
+=== p3k ===
+[[p3k]] (a CMS) implements Post Type Discovery internally within its [[micropub]] endpoint to automatically add posts to various collections. E.g.: if this post is a reply, it goes in the "replies" collection. if it's an RSVP, it goes in the "rsvps" and "replies" collections.
+* Live example: http://aaronparecki.com/
+
+=== mf2util ===
+[[mf2util]] exposes a function for <code>post_type_discovery</code> that takes an h-entry and returns "like", "reply", "note", "article", etc.
+* Live demo: https://kylewm.com/services/mf2util
+
+== Normative References ==
+* [Activity Streams 2.0] - http://www.w3.org/TR/activitystreams-core/
+** for canonical Activity Streams 2.0 JSON
+* [Activity Vocabulary] - http://www.w3.org/TR/activitystreams-vocabulary/
+** for Activity Streams 2.0 vocabulary terms
+* [h-entry] - http://microformats.org/wiki/h-entry
+** for definitions of property names used in the algorithm
+* [microformats2] - [http://microformats.org/wiki/microformats2-parsing microformats2 parsing]
+** for canonical microformats2 JSON output
+
+== Informative References ==
+* [Activity Streams 1.0]
+** for canonical Activity Streams 1.0 JSON
+* [[RSVP]]
+* [[reply]]
+* [[repost]]
+* [[like]]
+* [[photo]]
+* [[article]]
+* [[note]]
+
+== See Also ==
+* [[posts]] - specifically [[posts#Inferring_post_kinds_from_properties]] for prior work on implied post types.
+* [http://rhiaro.co.uk/2015/09/post-type Post type discovery] (my implementation pre-this-page) [[User:Rhiaro.co.uk|Rhiaro.co.uk]] 10:05, 30 September 2015 (PDT)

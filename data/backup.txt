@@ -1,0 +1,43 @@
+http://indiewebcamp.com/backup
+
+{{stub}}
+
+A '''<dfn>backup</dfn>''' of an indieweb site should have everything necessary to redeploy it on a new [[webhost]]. Typical backups include static files and database exports.
+
+== Platform Examples ==
+=== Indie Box ===
+The [[Indie Box]] Project has defined a [http://indieboxproject.org/wiki/Backup_File_Format general-purpose backup file format] that supports multiple web apps installed at the same hostname (aka site), and multiple sites backed to the same zip file, with full meta-data.
+
+=== [[Jekyll]] ===
+Manage your all the files necessary to build your [[jekyll]] site in a [[git]] repository (or another distributed SCM system if you prefer).  Make clones to all of your devices and create mirrors on free git hosting services like [[Github]] or [[Bitbucket]].  The key to this strategy is setting up a working environment on a number of different computers.  Every time you revisit these different environments to make a post to the site, you are making a distributed backup of your website (through the pull, add, commit, push workflow).  You must also back up any configuration or automation files of your web server (in the same or separate repo), unless you use a jekyll specific web server that mimics [[github-pages]] and does not require additional configuration.  You can also look into setting up special git mirror remotes so that pushing changes to your build/web server pushes out multiple copies to multiple locations.
+
+== kbs notes backup ==
+
+Just a quick pointer to a couple of things on managing backups in
+general (not specific to indieweb.) This polemic by jwz is a
+useful read - http://www.jwz.org/doc/backups.html
+
+My personal preference is to have a local copy of anything before
+publishing it (and I don't publish much either.) I also like to have a
+local backup of my gmail, photos from my phone, shared facebook photos
+from select people and content from a few other
+silos. http://kbsriram.com/2014/05/sailing-through-my-online-life.html
+for some thoughts on why and what I try to preserve.
+
+My solution is rather crude - I try to keep two hard-drives with
+monthly snapshots (rather than a "latest" backup) with something like
+
+ <nowiki>
+nohup rsync -aP --link-dest=/Volumes/Backup/macbook-home-2014-01-01 /Users/kbs /Volumes/Backup/macbook-home-2014-02-01</nowiki>
+
+It also creates an encrypted tarball of critical folders to dropbox
+and gdrive at this time. A little app on my phone also uploads photos
+to dropbox, and my laptop periodically moves them into my personal
+photo folders so these are also backed up eventually.
+
+Every two-three years (I've managed to do this for about 10 years now)
+I re-copy these two hard drives to new media, and leave the old media
+in one or other of my friends place.
+
+== See Also ==
+* [[security]]

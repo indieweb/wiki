@@ -1,0 +1,29 @@
+http://indiewebcamp.com/ruby_parser
+
+{{stub}}
+The '''<dfn>ruby parser</dfn>''' is shorthand for the (only?) [[Ruby]] [[microformats2]] parser https://github.com/G5/microformats2.
+
+== Issues ==
+The following are critical real-world issues in the ruby parser that have blocked, prevented, or greatly slowed adoption.
+
+Anyone coding indieweb support in ruby is strongly encouraged to prioritize fixing these issues!
+
+=== Blocking ===
+==== Nested parsing unsupported ====
+* https://github.com/G5/microformats2/issues/31
+The parser does not cope well with nested h-* structures which are a key [[building block]] on the indieweb (e.g. an [[h-entry]] with a p-author that is an [[h-card]], or nested [[h-cite]]s inside an h-entry). 
+
+Nested objects are seemingly ignored and their properties are added directly to the parent object which causes unexpected and often breaking false positives[http://indiewebcamp.com/irc/2015-01-16#t1421440375261]
+
+==== No entities found when tested by Feedbin developer ====
+On 2015-01-15, Tantek submitted an issue to [[Feedbin]] suggesting h-feed support. The primary developer was unable to parse h-feeds using the <code>collection.entries</code> field[https://github.com/feedbin/feedbin/issues/132#issuecomment-70029877]. Have not confirmed whether this is a documentation bug or an actual bug.
+
+=== Annoying ===
+==== Convenience methods add confusion ====
+* Convenience methods for accessing the mf2 data using native methods can be confusing. Things like a method "content" returning the first element in the "content" array and "contents" which returns the array, which then makes things really weird when the property is "published" because you have to use "publisheds"
+*  if you don't like those design decisions you can just use the raw data structure by doing parsed.to_hash but that isn't well documented [http://indiewebcamp.com/irc/2015-01-16#t1421440885773]
+
+== See Also ==
+* [[Ruby]]
+* [[microformats2]]
+* http://microformats.org/wiki/microformats2-parsing

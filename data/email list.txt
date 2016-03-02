@@ -1,0 +1,108 @@
+http://indiewebcamp.com/email_list
+
+{{stub}}
+
+An '''<dfn>email list</dfn>''' is a group of [[email]] addresses used for broadcast (e.g. announcements), deliberate collaboration (e.g. W3C mailing lists), or any other purpose based on some form of explicit group identity.
+
+== IndieWeb Examples ==
+There are very few real-world IndieWeb examples of using your own site to publish your emails (perhaps even first on your own site), including to email lists.
+
+=== Nick Doty ===
+{{npdoty}} occasionally publishes emails on bcc.npdoty.name that he also sends to mailing lists since [http://bcc.npdoty.name/Last-call-and-usage-notification 2009-08-07], e.g.:
+* http://bcc.npdoty.name/Last-call-and-usage-notification
+** public list archive copy: http://lists.w3.org/Archives/Public/public-geolocation/2009Aug/0004.html
+* http://bcc.npdoty.name/because-you-can-is-reason-enough-to-do-something
+** *not* be a public list per: https://calmail.berkeley.edu/manage/list/listinfo/noise@ischool.berkeley.edu
+
+=== Aaron Parecki ===
+{{aaronpk}} occasionally publishes emails to lists by first posting them as replies on his site, and manually copying the contents to the email list. The copy sent to the list contains an "originally posted at" link back to the original. e.g.:
+* http://aaronparecki.com/replies/2015/07/29/2/w3c
+** public list archive copy: https://lists.w3.org/Archives/Public/public-socialweb/2015Jul/0090.html
+* http://aaronparecki.com/replies/2015/07/29/1/w3c
+** public list archive copy: https://lists.w3.org/Archives/Public/public-socialweb/2015Jul/0088.html
+
+== IndieWeb thoughts ==
+Ideas and brainstorming about how indieweb sites could make use of or otherwise displace email list usage.
+
+=== POSSE to an email list ===
+Since an [[email]] is similar to an [[article]] or [[note]], it makes sense to write and post list emails first on your own site, and then send a copy (thus [[POSSE]]) to the appropriate mailing list(s) that you're a member of.
+
+Your server could send emails for you as follows:
+* when there's a new post published to your site
+* automatically check some conditions (rules?) to see if the post should be sent to any mailing list(s)
+** alternatively have an option in your publishing UI to explicitly POSSE to one or more lists
+* to send a post as an email:
+** '''Content-Type:''' <samp>text/plain; charset=UTF-8</samp>
+** '''From:''' use whatever email address you used to sign-up for the list(s)
+** '''To:''' see previous steps to determine email list(s) to send to
+** '''Archived-At:''' <samp>&lt;http://mysite.example.com/permalink&gt;</samp> (yes in angle brackets like that)
+** '''Subject:''' 
+*** Use the post <code>name</code> (e.g. from an [[article]])
+*** if no post name, use the start of the post <code>summary</code> or <code>content</code>, ellipsing to fit into 70 characters.
+*** if the post is a [[note]] of 70 characters or less, put the entirety of its <code>content</code> into the subject followed by [EOM].
+** '''Body:''' use the plain text version of the post <code>content</code>, including any whitespace of course
+*** Append a permalink to the original post at end of the message body on its own line with a blank line before it. Perhaps (parenthesize) the permalink, or precede it with a text label (on its own immediately previous line) like:
+**** "Permalink:"
+**** "Originally posted at:"
+**** "Sent from:"
+**** or perhaps even: "Sent from mysite.example.com. You should follow me there. Permalink:"
+
+==== Bridgy POSSE to email ====
+Get [[Bridgy]] Publish to support to POSSEing to email, so that you could potentially post all email you write to your site first, and use Bridgy to send them to their email address destinations second.
+
+Github issue:
+* https://github.com/snarfed/bridgy/issues/257
+
+=== Bridgy webmentions for replies ===
+When you [[POSSE]] a post to an email list (especially public), it would be great if [[Bridgy]] was subscribed to the mailing list and sent [[webmentions]] for replies to your POSSE copy.
+
+Setup:
+* Ask Bridgy to subscribe to the mailing lists that you POSSE to.
+* Configure Bridgy to recognize emails from your email address and then it should be able to autodetect your site/permalink from your emails, and thus detect replies to those emails and so-on.
+
+Github issue:
+* https://github.com/snarfed/bridgy/issues/257
+
+==== public archive permalinks ====
+Each email (including replies) on a public list typically has its own permalink URL, that can be useful in some regard for post->POSSE->email->reply->backfeed->post.
+
+If the public email list archive permalinks had sufficiently good [[microformats2]]/[[h-entry]]/[[in-reply-to]] markup, then Bridgy could use those directly as the "source" in the webmention, without having to create/host permalink stubs to send as the webmention source.
+
+=== Bridgy publishing of replies to email ===
+You could also publish on your own site a "reply" to a public email list archive message permalink, and include a reply-context from that permalink on your post permalink.
+
+Then it would great if you could use [[Bridgy]] publish to send your post as an email from you on your behalf to the list of the email that you were replying to! (including "Original post:" permalink footer etc.)
+
+Setup:
+* Ask Bridgy to watch your posts - or submit your posts manually to a Bridgy form to POSSE them
+* Tell Bridgy what your email address is to use to send as (have some way of verifying this so Bridgy doesn't become a email spoofing enabler?)
+
+It would be interesting if we could replace this particular email use case (public lists) with web publishing instead, and treat legacy email list as just another [[silo]]/transport mechanism.
+
+Github issue:
+* https://github.com/snarfed/bridgy/issues/257
+
+=== Improve Public Email Archive Markup ===
+* get [[w3c]] to improve their email archive markup including adding [[h-entry]]
+** it would make it easier for our existing code to retrieve and display [[reply-contexts]] for posts in-reply-to emails on those lists.
+
+== Service Providers ==
+There are several (typically free) email list services.
+* [[Google Groups]]
+* [[Yahoo Groups]]
+* ...
+
+== Criticism ==
+Email lists share a lot of the same criticisms as email, but in especially:
+=== Bad for more than two people ===
+Lists scale extremely badly to conversations with more than two people, as lists are quickly overwhelmed with many (most?) participants feeling a need to reply to every thread in the list.
+=== Bad for collaboration ===
+It is also appallingly bad for collaboration ([[wiki]]s or version control systems are much better for this). See:
+* http://microformats.org/wiki/wiki-better-than-email
+=== Maintenance difficulty ===
+While there is open source software like Mailman to run an email list on your own server, it is quite archaic, not well maintained, and difficult to work with and maintain.
+
+== See Also ==
+* https://en.wikipedia.org/wiki/Electronic_mailing_list
+* [[email]]
+* [[messaging]]

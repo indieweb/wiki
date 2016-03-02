@@ -1,0 +1,103 @@
+http://indiewebcamp.com/p3k-fr
+
+''Cette page a démarré sur [[p3k]]''
+
+{{stub-fr}}
+= p3k =
+
+'''p3k''' (prononcer "peek") est le nom du logiciel qui fait tourner [http://aaronparecki.com aaronparecki.com] et [http://caseorganic.com caseorganic.com]
+
+== Fonctionnalités ==
+* Marquage [http://microformats.org/wiki/microformats-2-fr Microformats 2]  - sur les notes, réponses et articles
+* Représentation JSON de chaque post créé en parsant les microformats HTML
+** HTML : http://aaronparecki.com/notes/2013/03/31/1/indieweb
+** JSON : http://aaronparecki.com/notes/2013/03/31/1/indieweb.json
+*  magasin de data backé par Git, aucun contenu n'est stocké dans une database
+* Les posts sont écrits sous des fichiers markdown
+* Support natif du [[hashtag-fr|hashtag]]  (par ex. http://aaronparecki.com/tag/indieweb)
+
+=== Support IndieWeb ===
+
+* [[POSSE-fr|POSSE]] - Le contenu a son origine sur son site et est syndiqué vers Twitter.
+* [[pingback-fr|pingback]] et [[webmention-fr|webmention]] - envoyé au moment de poster du nouveau contenu
+* [[original-post-discovery-fr|découverte du post original]] pour lier proprement les réponses face à une URL syndiquée
+ 		 	
+=== Screenshots ===
+* [http://aaronparecki.com/notes/2012/09/09/3/indieweb UI pour poster]
+* [http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery Découverte de Post Original Post]
+
+=== Open Source ===
+Bien que la totalité de la pile p3k ne soit pas open source, j'ai open-sourcé bon nombre des composants. J'ai choisi de fournir des composants de la pile plutôt que la totalité du truc parce qu'en réalité, personne ne voudra utiliser exactement le même workflow que celui que j'ai construit. Au lieu de cela, les composants de mon site peuvent être réutilisés par d'autres, chacun à sa façon.
+
+* [https://github.com/indieweb/php-mf2 php-mf2] - un parseur PHP Microformats 2
+* [https://github.com/indieweb/mention-client mention-client] - un client PHP pour envoyer les [[webmentions-fr|webmentions]] et les [[pingbacks-fr|pingbacks]]
+* [https://github.com/aaronpk/Timezone-API Timezone-API] - une API pour trouver le fuseau horaire pour une latitude et longitude
+
+Je suis en train de travailler pour modulariser plus de composants du p3k, aussi cela grandira au fil du temps.
+
+=== Notes brouillon ===
+Tout ce qui est au-dessous sont des notes de brouillon, ne les prenez pas trop sérieusement à cette heure.
+
+==== Pourquoi ? ====
+
+* les systèmes actuels (mediawiki) sont trop lourds pour la majorité des choses que je veux faire 
+** Mal : 
+*** mw n'a pas support des posts chronologiques
+*** la syntaxe est irrégulière, l'écriture d'extensions est étrange et a beaucoup de dépendances
+** Bien : 
+*** très rapide à éditer à partir du web
+*** conserve toute l'historique de version de tous les contenus
+*** facile à installer sur beaucoup de plates-formes d'hébergement
+
+==== Quoi ? ====
+
+* le marquage étendu ajoute un peu de syntaxe mediawiki au langage markdown, et ajoute le support 'macro' au markdown
+* source plein-texte, tout le contenu est stocké sous forme de fichiers pour une portabilité facile
+* syntaxe facile et structure pour écrire de nouvelles macros
+* git backend pour le versionnage, post-receive hooks pour l'automatisme
+* flux xml syndiqués vers google avec pubsubhubbub
+* Contenu JSON disponible pour les pages, généré-côté-serveur en faisant tourner la page HTML à travers un parseur microformats2 
+** actuellement implémenté pour les notes individuelles, les réponses et les articles
+** todo pour les listes de posts.
+
+=== Contenu ===
+
+==== Actuel ====
+
+* articles : des posts et graphiques plus longs, posts chronodatés
+* notes (mises à jour de statuts/états) : syndiquées vers twitter
+* réponses : réponses rapides aux autres notes des personnes
+
+==== Planning ====
+* photos : intégrer quelque part l'archiveur flickr ?
+* checkins : sur les lieux, événements, avec les personnes. mieux : taguer tout contenu avec les personnes, lieu, événement.
+* sommeil : importation à partir de Jawbone
+
+=== Plans à venir ===
+
+* API REST pour intragir avec le filesystem et git
+* utiliser l'app Wordpress iOS pour poster en implémentant l'API metaweblog
+* afficher les pingbacks et commentaires sur twitter sur les posts originaux
+
+=== Composants de mon site ===
+
+tags : #indieweb
+
+* pagination permaliées
+* structure URL permalien
+** inspiré par Tantek
+** /category/year/month/day/index-slug
+* types de contenus et représentations à une-lettre
+** tout est un nom
+** s'affiche et s'entend bien en une phrase
+** approprié pour la navigation
+** note, article, réponse, checkin, photo, code
+* zones horaires
+* marquage geo
+* syntaxe macro et publication
+* auto-raccourcisseur de texte pour Twitter
+* sitemap, choix de priorités de page
+* why not Jekyll, why I wrote my own framework
+* syntaxe markdown étendue : http://aaronparecki.com/2012/245/article/1/some-enhancements-to-markdown
+
+__NOTOC__

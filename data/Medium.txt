@@ -1,0 +1,112 @@
+http://indiewebcamp.com/Medium
+
+{{stub}}
+
+'''<dfn>[http://medium.com Medium]</dfn>''' is an [[article]] hosting [[silo]].
+
+== Features ==
+Medium provides the following features:
+
+* [[signup]] &amp; [[login]] with [[Twitter]] sign-in
+** indieweb equivalent: [[signin]] via [[RelMeAuth]] or [[IndieAuth]]
+* [[post]] an [[article]]
+* [[recommend]] (their equivalent of [[like]]) an article that you've just read
+* add an article to a curated publication (requires approval from the publication owner)
+* ...
+* [[profile]] page (equivalent of indieweb [[homepage]]) configuration including
+** [[icon]] (from Twitter)
+** name (from Twitter)
+** plain text bio (from Twitter)
+** ...
+* Custom domain support announced on 2015-03-12, in "...very limited beta" [https://medium.com/the-story/custom-domains-for-publications-8cb161d9651]
+* API announced on [https://medium.com/the-story/medium-s-publishing-api-31b9f05fada1 2015-10-07], including an [https://github.com/Medium/medium-wordpress-plugin official cross-post plugin] for [[WordPress]] and an [[IFTTT]] channel
+* ...
+
+== POSSE ==
+It is possible to automatically (via [[IFTTT]]) and manually POSSE articles to Medium.
+
+=== Automatic POSSE ===
+From: https://medium.com/@saul/creating-medium-stories-via-rss-c2ac93d08288
+
+* Create and sign into your Medium and [[IFTTT]] accounts
+* Make sure you have a valid [[RSS]] (or possibly [[Atom]] per IFTTT's feed channel which allows it) feed containing accepted markup.
+** [https://medium.com/developers/accepted-markup-for-medium-s-publishing-api-a4367010924e Accepted markup for Medium’s Publishing API]
+** h1, h2, p, blockquote, figure (img, figcaption), b, strong, i, em, a href, hr (section break)
+* Go to the [https://ifttt.com/medium Medium Channel on IFTTT], click Connect.
+* Go to the [https://ifttt.com/recipes/331247-create-a-medium-story-from-an-rss-feed RSS-to-Medium recipe] and click the gray Advanced Settings link underneath the blue Add button.
+* Put your feed URL into field "Paste a Feed URL here".
+* Click Add button
+
+Updates occur every 15 minutes
+
+=== Manual POSSE ===
+# Publish on your own site. Copy the permanent link's URL. 
+# Click on your avatar in the top right corner.
+# Click on Import story.
+# Paste in the URL.
+# Edit the post on Medium if it took in a footer or put content in the wrong place (a header into the Medium title, for example).
+# Add a link somewhere in your Medium post pointing to your article to show where you originally published it.
+
+=== WP Plugin ===
+Medium has released a [https://wordpress.org/plugins/medium/ plugin for Wordpress] that will syndicate a post on your blog, to Medium, when publishing. It does not update the version on Medium if you make changes on your blog.
+
+Request entered on the [https://wordpress.org/support/topic/good-first-effort-but-will-probably-not-use-it-for-now?replies=6#post-7936953 plugin support page] to include rel="syndication" and "class="u-syndication" on the link added on your self-hosted post back to Medium.
+
+=== IndieWeb Examples ===
+====Jeremy Keith====
+{{adactio}} is using Medium's API to  automatically post copies of articles to Medium: [https://adactio.com/journal/9694 Syndicating to Medium].
+==== Shane Becker ====
+Shane Becker is manually POSSEing his articles to Medium [http://iamshane.com/articles/2013/8/8/1/json-ld-is-an-uneeded-spec since at least 2013-08-08] (maybe longer) e.g.:
+* http://iamshane.com/articles/2013/8/8/1/json-ld-is-an-uneeded-spec
+** POSSE copy: https://medium.com/indieweb-thoughts/70d1ab49bfbb
+==== Kevin Marks ====
+{{kevinmarks}} is manually POSSEing his articles to Medium [https://medium.com/@kevinmarks/fragmentions-41ef2be9953f since 2014-04-21], e.g.:
+* http://www.kevinmarks.com/fragmentions.html (2014-04-17)
+** POSSE copy: https://medium.com/@kevinmarks/fragmentions-41ef2be9953f
+==== Eric Meyer ====
+[[User:Meyerweb.com|Eric Meyer]] manually POSSE’d a blogpost to Medium on 2015-07-29:
+* http://meyerweb.com/eric/thoughts/2015/07/07/undoing-oncutoncopyonpaste-falsities/ (2015-07-07)
+** POSSE copy: https://medium.com/@meyerweb/undoing-oncut-oncopy-onpaste-falsities-5e337cc443
+
+He described his problems with the process in a follow up post that was first published on Medium and then manually [[PESOS|PESOSed]] back to his own blog, 2015-07-30:
+* https://medium.com/@meyerweb/medium-trials-30cb485a92e7
+** PESOS copy: http://meyerweb.com/eric/thoughts/2015/07/30/medium-trials/
+
+==== David Mead ====
+[[User:davidjohnmead.com|David Mead]] used the WP plugin to POSSE a blogpost to Medium on 2016-01-24:
+* http://davidjohnmead.com/blog/2016/01/24/is-the-openwebindieweb-still-for-anoraks/
+** POSSE copy: https://medium.com/@davidmead/is-the-openweb-indieweb-still-for-anoraks-b1377a90594d
+
+=== Other Examples ===
+Examples from people who have not specifically joined the IndieWeb.
+==== Peter Gasston ====
+[http://www.broken-links.com Peter Gasston] started “[https://twitter.com/stopsatgreen/status/629633630491553796 experimenting with x-posting to Medium]” on 2015-08-07:
+* https://medium.com/@stopsatgreen/exploring-url-discovery-with-the-physical-web-85f9be9e7246
+** POSSE copy: http://www.broken-links.com/2015/08/06/exploring-url-discovery-with-the-physical-web/
+
+== Issues ==
+=== buggy rel-canonical implementation ===
+If you set the rel-canonical for a post on Medium using their API, it both fails to do so correctly, and then resets (via JS?) the rel=canonical link to a medium.com URL, not what you set it to.
+
+* Details: https://github.com/Medium/medium-api-docs/issues/19 
+
+== Criticism ==
+TO DO: cluster these by primary area of criticism and add subheads!
+* 2010-07-10 http://iamshane.com/articles/2010/11/7/1/no-more-sharecropping
+** POSSEd to Medium: https://medium.com/indieweb-thoughts/9d0e36524dbf
+* https://medium.com/surveillance-state/19a5db211e47 (currently 404s - anyone have an archive?)
+* 2013-07-08 <cite>The Problem With Medium: A Shiny Content Farm is Still a Content Farm</cite> https://medium.com/writers-on-writing/336300490cbb
+* 2013-07-10 https://twitter.com/t/status/355069622325747713
+* 2014-05-30 [http://indiewebcamp.com/irc/2014-05-30/line/1401478311 Medium doesn't support footnotes]
+* 2014-06-09 Medium does not appear to show the full published date in the visible content. Instead there is a [[The-Open-Graph-protocol|Open Graph Protocol]] meta element: <code>meta property="article:published_time" content="2014-01-16T08:59:18.300Z"</code>
+** Example: https://medium.com/binary-times/use-your-own-product-or-die-ba3e2d738a55
+** It appears that the year is displayed depending how recent the article is. A 2013 article linked above includes the year in the visible content, but as of this writing (2014-06), the example link only shows "Jan 16," because it is recently published, in the current year.
+* 2014-07-23 Medium rolls out [https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0 New Editor Features], marginalia comments are full of disappointment and criticism
+** "We wanted to be writers. you made us into designers." [https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0#1e9e-1fcb08f06651]
+* [https://twitter.com/JosephRooks/status/601546783630741504 2015-05-21 @JosephRooks]:<blockquote>@kevinmarks @ev the other key difference is that #IndieWeb isn't BSing people about "openness" to create phony feel-goodsies.</blockquote>
+* 2015-07-25 Avdi Grimm <cite>[http://devblog.avdi.org/2015/07/27/dear-medium-please-stop-hurting-the-web/ Dear Medium: Please stop hurting the web]</cite>
+* 2015-09-01 Peter Gasston <cite>[http://www.broken-links.com/2015/09/01/feeling-like-an-unwelcome-guest-on-medium-com/ Feeling Like An Unwelcome Guest on medium.com]</cite>
+
+== See Also ==
+* [[article]]
+* [[silos]]

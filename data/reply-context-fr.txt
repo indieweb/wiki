@@ -1,0 +1,136 @@
+http://indiewebcamp.com/reply-context-fr
+
+''Cette page a démarré sur [[reply-context]]''
+
+Sur un post de [[reply-fr|réponse]], il existe une pratique commune (pratique établie probablement par [[Twitter-fr|Twitter]] sur les permaliens du tweet) d'afficher le contexte, à savoir à quel post le post répond-t-il, en incluant un lien vers ce post original avec [[rel-in-reply-to-fr|rel-in-reply-to]].
+
+== Pourquoi ==
+Pourquoi afficher les contextes de réponse ?
+
+* Ils fournissent aux lecteurs le contexte de ce qui est en train d'être répondu. Une meilleure expérience utilisateur à travers une compréhension accrue provenant du contexte fourni.
+* Stocker un contexte de réponse garantit que votre copie de votre contenu est toujours la plus à jour. La nature toute particulière d'une réponse est ce qui fait un peu sens hors du contexte, et si vous ne stockez pas et n'affichez pas ce contexte alors la copie canonique est '''moins valable''' que toutes les copies syndiquées ailleurs et affichées par l'article faisant référence à la réponse.
+* Stocker un contexte de réponse gèle le contenu auquel vous répondez dans le temps, ce qui signifie que s'il disparaît ou s'il est modifié, vous disposez encore d'une copie du contenu de l'original auquel vous avez répondu.
+** Prenons, pour exemple (inventé), une réponse étant d'accord avec un article anti-guerre. Un mois plus tard, le domaine auquel il a été répondu se fait racheter par une organisation pro-guerre et toute le contenu du site est modifié pour refléter ces position. En stockant un contexte de réponse vous protégez votre position des incompréhensions.
+
+== Marquage ==
+
+'''Comment devraient être marqués les contextes de réponse ?'''
+
+Pour la cohérence avec le [[Comment-presentation-fr#Comment_marquer|marquage de commentaire]], les contextes de réponse devraient être marqués avec .p-in-reply-to.h-entry de manière à ce que ce soit une propriété microformat imbriquée du parent ([http://waterpigs.co.uk/notes/4QfGbM/ exemple]). Comme ceci : 
+
+<pre><nowiki>
+<div class="h-entry">
+ <div class="p-in-reply-to h-entry">
+  <p class="p-author h-card">Emilie Dupont</p>
+  <p class="p-summary">Blah blah blah blah</p>
+ </div>
+ 
+ <p class="p-author h-card">Jean Blogs</p>
+ <p class="e-content">Ha ha ha trop raison Emilie</p>
+</div>
+</nowiki></pre>
+
+
+'''Pourquoi marquer les contextes de réponses ?'''
+
+* Permet aux lecteurs de flux/visualisateurs de conversations/autres consommateurs de microformats de fournir une meilleure UX, par ex. un lecteur de lfux peut parser une réponse avec un contexte de réponse marqué et d'utiliser cette data pour présenter à quoi la réponse est un commentaire sans devoir faire une autre requête, ou comme une prévisualisation temporaire pendant que le contenu original est en train de se charger.
+
+== Exemples IndieWeb ==
+Par ordre de déploiement :
+
+=== Aaron Parecki ===
+Sur aaronparecki.com:
+
+Le contexte de réponse avec le texte du post original (auto-lié), dt-published (lié vers le permalien du post original post permalink), author name/photo/URL :
+
+[[File:example-reply-showing-context-aaronpk.png|link=http://aaronparecki.com/replies/2013/04/19/2/indieweb]]
+
+[[File:example-reply-to-photo-showing-context.png]]
+
+* http://aaronparecki.com/replies/2013/04/25/1/indieweb-qs
+Exemples IndieWeb d'affichage de [[multiple-reply-fr|réponse à plusieurs]] autres posts
+* http://aaronparecki.com/replies/2013/04/21/1/
+* http://aaronparecki.com/replies/2012/12/05/15/leweb
+
+=== Barnaby Walters ===
+Sur waterpigs.co.uk :
+
+Le contexte de réponse avec le post original (@-names auto-linked), dt-published (affichés comme dates/heures relatives, et liées vers le pemalien du post original), author name/photo (les deux liés vers l'URL de l'auteur)
+
+[[File:waterpigs-notes-1424.png|link=http://waterpigs.co.uk/notes/1424/]]
+
+=== Sandeep Shetty ===
+Sur sandeep.io :
+
+Le contexte de réponse avec le texte du post original (utilisant la convention de citation cohérente sur toute la largeur du site pour citer un contenu externe), l'auteur, le nom de l'auteur (lié à l'URL de l'auteur) et un lien vers le permalien du post original. J'avais l'habitude de présenter aussi  dt-published et la photo de l'auteur (similaire à ce contexte  http://indiewebcamp.com/File:sandeep.io-like-example.png) mais l'ai [http://www.sandeep.io/56 redesigné] pour [http://www.sandeep.io/90 accentuer le contenu].
+
+[[File:converspace-reply-context.png|link=http://www.sandeep.io/32]]
+
+=== Tantek ===
+Sur tantek.com :
+
+Contexte de réponse avec le permalien du post original affiché et lié :
+
+[[File:example-reply-showing-url-context-tantek.png|link=http://tantek.com/2013/190/t6/oauth-traded-evil-user-pass-dev-complexity-app-keys-tos]]
+
+Exemples IndieWeb d'affichage de [[multiple-reply-fr|réponse à plusieurs]] autres posts
+* http://tantek.com/2013/157/t3/pdf2013-third-rail-coffee-during-pdf13-break
+* http://tantek.com/2013/132/t2/been-t-since-day-joined-2006
+
+(photos d'écrans demandées)
+
+=== Ben Werdmuller ===
+Exemple sur werd.io, utilisant la présentation du contexte de réponse de [[idno-fr|idno]] :
+
+Le contexte de réponse est présenté avec une flèche/icône "reply", suivi par le texte "Replied to a post on ", puis le domaine du post original, par ex. "bret.io", et pour finir un signe deux-points ":", où "a post on {domain}:" est hyperlié vers l'URL du post original. Cette fonctionnalité a été lancée le 24 juin 2013.
+
+[[File:Screen_Shot_2013-07-23_at_3.10.29_PM.png|link=http://werd.io/view/51c921fcbed7de745b274ae6]]
+
+Plusieurs contextes de réponses sont aussi possibles :
+
+[[File:idno_multiple_reply_contexts.png|link=http://werd.io/view/51f01e17bed7de2b1d060400]]
+
+
+=== Bret.io ===
+Sur bret.io :
+
+Le contexte de réponse est présenté avec une flèche/icône "reply", suivi du texte "Replied to a post on ", puis le domaine du post original, par ex "werd.io", et pour finri un signe deux-points ":", où "a post on {domain}:" est hyperlié vers l'URL du post original.
+
+Cette présentation du contexte de réponse a été modélisée après idno comme un moyen de faire que quelque chose fonctionne rapoidement. Vraiment en développement.
+
+[[File:brert.png|link=http://bret.io/2013/06/24/t4/]]
+
+== Exemples de Flux de Silos  ==
+=== page d'accueil de Twitter ===
+Démarré le 2013-06-03 (et terminé avant le 2013-07-23) il semble que [[Twitter-fr|Twitter]] (pour quelque sous-ensemble d'utilisateurs) a présenter les contextes de réponses pour les  réponses-@ même quand les réponses étaient affichées "dans la ligne" dans un flux !
+
+[[File:twitter-home-in-stream-reply-context.png]]
+
+Si le tweet étant répondu est lui-même une réponse à un autre tweet qui est le début d'un fil de discussion, tous les trois sont présentés :
+
+Extrait de 2013-06-03..2013-06-05 :
+[[File:twitter-home-in-stream-reply-context-tweets.png]]
+
+En date du 2013-06-06 (et se terminant aux alentours du 2013-07-23) il y a eu une ellipse verticlae et un lien "View conversation" qui va vers le permalien du tweet du démarrage du fil de discussion :
+[[File:twitter-home-in-stream-reply-context-tweets-2013-157.png]]<br/>
+"[https://twitter.com/neb/status/342430698080174082 View conversation]" - copie live dans l'exemple des screenshots.
+
+Twitter écrase un contexte-de réponse de fil vers le début du fil de discussio, un lien "View n more tweets", le tweet qui est répondu, et pour finir la réponse-@ en elle-même : 
+
+[[File:twitter-home-in-stream-reply-context-thread.png]]
+
+"[https://twitter.com/mjacksonw/status/342301180820611072 View 3 more tweets]" va vers le permalien du début du fil, il ne l'épanche pas. Cela semble un comportement raisonnable.
+
+En date du 2013-05-27, Twitter utilise l'UI du contexte de réponse dans les <s>notifications</s> email spam :
+
+[[File:twitter-email-reply-context.png]]
+
+* Je trouve que les changements constants dans la directivité du temps sur twitter.com prêtent à confusion. First swapping from feed -> permalink page, now there are mini reversed feeds *within* the main feed — is it just me or is it not always obvious (especially in long conversations) which direction the conversation is moving in? --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 09:22, 5 June 2013 (PDT)
+
+== Voir aussi ==
+
+* [[in-reply-to-fr|in-reply-to]]
+* [[rel-in-reply-to-fr|rel-in-reply-to]]
+* [[reply-fr|réponse]]
+* [[comment-fr|commentaire]]
+* [[multiple-reply-fr|multiple-reply]]

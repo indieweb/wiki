@@ -1,0 +1,28 @@
+http://indiewebcamp.com/LiteSpeed
+
+{{stub}}
+
+'''<dfn>[http://www.litespeedtech.com/ LiteSpeed]</dfn>''' (AKA <dfn>LightSpeed</dfn>) [HTTPD] is  [[Apache]] drop-in replacement commercial web server software.
+
+There is a LiteSpeed Open Source Edition called [[OpenLiteSpeed]].
+== Issues ==
+=== htaccess DefaultType text html causes text plain ===
+If you have a directive in your .htaccess like:
+
+<code>DefaultType text/html</code>
+
+LiteSpeed somehow screws up and sends .html files as Content-Type 'text/plain' which makes no sense whatsoever.
+
+The result is that compliant browsers (e.g. Firefox) will render the .html return as plain text source instead of rendering it as HTML.
+
+The workaround is to remove the directive, or comment it out, e.g.:
+
+<code>#DefaultType text/html #commented out due to LiteSpeed bug</code>
+
+And then to test it, be sure to do a <strong><em>Shift</em> command/ctrl-R</strong> to force reload the page.
+
+== See Also ==
+* [[Apache]]
+* [[nginx]]
+* [[OpenLiteSpeed]]
+* [[htaccess]]

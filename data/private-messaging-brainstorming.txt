@@ -1,0 +1,58 @@
+http://indiewebcamp.com/private-messaging-brainstorming
+
+[[File:private-messaging-brainstorming-flow.png|700px]]
+
+In this diagram, these server names are shortened for brevity:
+* '''alice'''.example.org
+* '''pm.alice'''.example.uk
+* '''bob'''.example.com
+* '''pm.bob'''.example.net
+
+== Possible implementations ==
+
+(rel=pm is a placeholder for a better rel value. deliberately chose this terrible two-letter value so this doesn't stick)
+
+There is an implied initial step of creating the private message which ultimately means pm.alice.example.uk needs to have the message.
+
+1. alice.example.org fetches bob.example.com and looks for rel=pm, and discovers "pm.bob.example.net"
+
+2. alice.example.org sends some POST request that contains the message ID and sender (alice.example.org) to pm.bob.example.net. pm.bob.example.net fetches alice.example.org looking for rel=pm, and discovers "pm.alice.example.uk". 
+
+3. pm.bob.example.net sends a request to pm.alice.example.uk to check if this message request is legit.
+
+4. pm.bob.example.net generates a token and sends a request to pm.alice.example.uk asking the server to deliver the message (the POST request contains the message ID and destination pm.bob.example.net, as well as the new token.
+
+5. pm.alice.example.uk looks up the message and sees it was sent to "bob.example.com", goes and fetches the home page looking for rel=pm, and discovers "pm.bob.example.net" which matches the request to deliver the message.
+
+6. pm.alice.example.uk sends the message in a POST request to pm.bob.example.net along with the secret that was included in step 4.
+
+Step 2 is critical, this is how bob's server knows it's actually "alice.example.org" that sent the message. Effectively this is equivalent to bob's server requesting the message from alice's home page.
+
+=== Requirements ===
+==== alice.example.org ====
+Needs to have a link tag with rel=pm pointing to pm.alice.example.uk
+
+==== bob.example.com ====
+Needs to have a link tag with rel=pm pointing to pm.bob.exmaple.net
+
+==== pm.bob.example.net ====
+
+* Accepts a POST request with a message ID and sender.
+* Parses alice.example.org for the rel link.
+* Generates a token and sends a POST request to pm.alice.example.uk requesting delivery of the message.
+* Accepts a POST request with the message contents and secret, and verifies the token matches the one generated previously.
+
+==== pm.alice.example.uk ====
+* Accepts a POST request with a message ID, delivery destination and token. (Verifies the message ID is valid first.)
+* Parses bob.example.com for the rel link and verifies this matches the request.
+* Sends the message contents and token to pm.bob.example.net.
+
+== Alternate Example ==
+The diagram below is functionally equivalent to the above diagram, but is phrased in terms of "auth code" and "token", where the message only comes to play at the last step. One advantage of this is steps 1-4 establish the token, and then it can be used repeatedly to send multiple messages in a row.
+
+[[File:private-message-brainstorming-token.png|700px]]
+
+== See Also ==
+IRC logs from the discussion that started this page:
+
+* https://indiewebcamp.com/irc/2015-08-11

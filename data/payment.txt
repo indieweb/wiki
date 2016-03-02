@@ -1,0 +1,104 @@
+http://indiewebcamp.com/payment
+
+{{stub}}
+
+'''<dfn>payment</dfn>''' in the context of the indieweb refers to a feature on an indie web site that provides a way for the visitor to that website to pay (currency, gift card credit, etc.) the person represented by that indie web site.
+
+== How ==
+There are several tutorials on how to create links / URLs for various payment services to put on your web site:
+
+Currency:
+* [https://github.com/gittip/gttp.co Gittip] for small recurring (weekly) donations
+** Gifts are anonymous and made from an escrow account
+** Fees: $0.30 + 2.9% fee each time your account is refilled.
+* [http://developers.flattr.net/feed/ Flattr] for one-time or recurring (monthly) micro-donations
+** Gifts can be anonymous
+** Fees: 10% on all the money you receive
+** Encourages both [http://developers.flattr.net/button/ buttons] and [http://developers.flattr.net/feed/ rel-payment]
+* [[PayPal]]
+** [https://www.paypal.com/cgi-bin/webscr?cmd=_donate-intro-outside  PayPal donate link] - 
+*** Fees: free with linked bank account, $0.30 + 2.9% for credit/debit.
+** [[PayPal.Me]] - create a simple-looking paypal.me/yournamehere link to share for people to pay you from their PayPal accounts
+* [[Square Cash]]
+** Requires linking your debit card to your account to receive or send money. Can optionally link a credit card to your account.
+** Fees:
+*** Personal account: none for debit card payments. 3% for credit card payments.
+*** Business account: 2.75% is automatically deducted from any payment accepted with Cash for Business.
+** Creates a simple-looking cash.me/$username URL to share for people to pay you. An amount can be pre-selected by adding it to the URL, e.g. cash.me/$username/10.
+* [https://developer.venmo.com/docs/payment-links Venmo]
+** Fees: free with linked bank account and some debit, 3% for credit
+
+Gift card(s):
+* [http://jonathanstark.com/card/#give-a-coffee Starbucks Gift Card]
+
+Once you have a payment URL e.g. pay.example.com/username/usd/5, link to it with [http://microformats.org/wiki/rel-payment rel=payment], e.g.
+
+<code>&lt;a href="https://pay.example.com/username/usd/5" rel="payment">Donate $5 to me&lt;/a></code>
+
+== Why ==
+So anyone who visits your website can easily pay you (for whatever) in the ways you prefer to be paid, similar to how communication links help people communicate with you in the ways you prefer[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience].
+
+== IndieWeb Examples ==
+Specific rel=payment links:
+* {{aaronpk}} uses rel=payment to link to Venmo and Gittip on his home page.
+*  [[User:Kodfabrik.se|Pelle Wessman]] uses Jekyll [https://github.com/voxpelli/voxpelli.github.com/blob/29b056bf6114481cf3fe32acdeb55f5ad8d938cb/_layouts/default.html#L14 to add] Flattr rel=payment links to each blog post on [http://voxpelli.com/ voxpelli.com]
+* {{bret}} has links to a bitcoin addresses hosted on [http://coinbase.com coinbase] a a tip jar.  I had a dogecoin address that was hosted on dogevault but dogecoin shut down after getting hacked.
+
+Overall /payment page:
+* ... none so far
+
+Overall /payment page with /payment/nn support for auto-filling $ amounts
+* ... none so far
+
+== Other independent examples ==
+=== Podcast Examples ===
+Quite a few podcasters include rel-payment metadata – mostly in their podcast feeds but also on their blog pages. This as podcatchers has started using the data to automate donations.
+
+Notable examples:
+* The [http://5by5.tv/ 5by5] network uses it in their feeds
+* Big german podcaster [http://metaebene.me/ Tim Pritlove] uses it across all of his podcasts, both web pages and feeds
+
+== Implementations ==
+=== Publishing Software ===
+'''Plugins''' exist for some open source publishing software:
+* [https://wordpress.org/plugins/flattr/ WordPress Flattr plugin] – adds rel-payment links to frontpage, blog post pages and feeds
+
+=== Tools ===
+* [https://addons.mozilla.org/firefox/addon/relpayment/ Rel-Payment Firefox Addon] – shows a clickable icon in the address bar when a payment link is detected for a page
+* Many podcatchers, like Instacast and gPodder, rely on rel-payment data in feeds for their integration with Flattr for eg. enabling automatic donations for listened episodes
+
+=== Services ===
+* [https://www.gittip.com/ Gittip] – publishes rel-payment links on their profile pages
+* [https://flattr.com/ Flattr] – publishes rel-payment links on their profile pages as well as on pages for each thing one can donate to. Also heavily uses rel-payment data in their open source [https://flattr.com/extension browser add-ons].
+* [https://cash.me Square Cash] - allows you to collect payment, e.g. https://cash.me/$aaronpk. An amount can be pre-selected by adding it to the URL, e.g. https://cash.me/$aaronpk/10
+
+== Brainstorming ==
+=== Payment page ===
+Just like having a <kbd>/[[contact]]</kbd> page, your indieweb site should have a <kbd>/payment</kbd> page with icons linked to various ways to pay you.
+
+Interested:
+* {{t}} - one of my top [[Falcon#Payment_Links|Falcon Itches: Payment Links]]
+* ...
+
+=== Payment page with amount ===
+Just like [[PayPal.me]] and [[Square Cash]] cash.me, your Payment page should allow a subdirectory component for a dollar amount, which it would then build into the specific payment method links:
+* <kbd>/payment/10</kbd> - to pay you $10
+Alternatively this might read better as just "pay" (also less typing), e.g.
+* <kbd>/pay/10</kbd>
+
+Note: this could be handled fully serverside.
+
+Note 2: take a look at the [[PayPal.me]] and [[Square Cash]] cash.me UIs, which I *think* let you edit the amount and add a reason. Those may be good enhancements to consider for such pre-filled out payment subpage URLs. Then again if the payment service provides a final opportunity to edit amount/reason, then having that on your own site may see redundant.
+
+
+
+== Articles ==
+Articles about various forms of payment from an independence perspective:
+* 2005-03-17 [https://snarfed.org/privacy_through_prepaid_credit_cards privacy through prepaid credit cards]
+* 2014-07-23 [http://aaronparecki.com/replies/2014/07/23/1/] Quick comparison of Square Cash and Venmo for splitting checks
+
+== See Also ==
+* http://microformats.org/wiki/rel-payment
+* http://relpayment.com/
+* [[homepage]]
+* [[icon]]

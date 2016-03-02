@@ -1,0 +1,145 @@
+http://indiewebcamp.com/Flickr
+
+{{pagelogo|https://pbs.twimg.com/profile_images/530137407572561920/hE5ieIjF_200x200.jpeg}}
+{{stub}}
+
+'''<dfn>[http://flickr.com Flickr]</dfn>''' is a [[silo]] for storing and organizing [[photos]] and short (max 90sec) & small (max 150MB) [[videos]].
+
+== Features ==
+Summary of Flickr's features:
+* account creation / management like typical silos
+* [[photo]] and [[video]] posts
+** [[favorite]] and [[comment]] on those posts
+* [[post by email]]
+* ...
+* ... lots more features
+
+Details of some specific features are provided in sections below.
+
+== POSSE to Flickr ==
+=== How to POSSE ===
+You can POSSE the following to Flickr:
+* [[photo]]s
+* [[video]]s
+* [[reply]] posts as comments on Flickr photos/videos (including POSSE reply-threading, when you reply to an indie photo/video that has a Flickr POSSE copy).
+* [[like]] posts as favorites on Flickr photos/videos (including POSSE favoriting, when you like an indie photo/video that has a Flickr POSSE copy).
+
+==== Bridgy Publish POSSE ====
+You can use [[Bridgy]] Publish to POSSE to Flickr [https://github.com/snarfed/bridgy/issues/432 since 2015-11-15] the following kinds of [[posts]]:
+* photos, comments, and favorites. Photos may include [[tags]] (supported [https://github.com/snarfed/granary/commit/235faa2adf36c5e0546929ed4bfc3584dd8f52f6 since 2016-01-08]) and/or [[person-tag|people tags]].
+
+Limitations:
+* No video posts
+** Feature request: [https://github.com/snarfed/bridgy/issues/574 Bridgy Publish to Flickr: detect u-video and post video #574]
+* Lack of plain text hashtag support
+** Feature request: [https://github.com/snarfed/bridgy/issues/604 Bridgy Publish to Flickr: detect hashtags and set Flickr tags #604]
+
+=== Backfeed from ===
+If you POSSE to Flickr, you should [[backfeed]] all the responses to your Flickr POSSE copies. E.g.
+* Flickr favorite -> [[like]]
+* Flickr comment -> [[reply]]
+
+==== Bridgy Backfeed ====
+You can use Bridgy to backfeed from Flickr POSSE copies (e.g. favorites & comments) back to their originals [https://github.com/snarfed/bridgy/issues/225 since 2015-09-17]. 
+
+=== IndieWeb Examples ===
+The following have gotten POSSE to Flickr working:
+==== Ben Werdmuller ====
+{{benwerd}} with [[Known]] on werd.io [http://werd.io/2014/homebrew-website-club-noir-at-mattervc-photo-by-museyapp-indieweb since at least 2014-07-17] (fairly certain there are much earlier examples, thus leaving benwerd at top of list)
+* original photo post: http://werd.io/2014/homebrew-website-club-noir-at-mattervc-photo-by-museyapp-indieweb
+* POSSE Copy: https://www.flickr.com/photos/benwerd/14671472684/
+==== Jeremy Keith ====
+{{adactio}} with [[ACME]] on adactio.com [https://adactio.com/notes/7021 since 2014-07-08], e.g.
+* original photo post: https://adactio.com/notes/7021
+* POSSE Copy: https://www.flickr.com/photos/adactio/14604446101
+==== Peter Molnar ====
+{{petermolnar}} on [https://petermonar.eu http://petermonar.eu]
+
+==== atomicules ====
+[[User:atomicules.co.uk|atomicules]] using [[Jekyll]] combined with [http://atomicules.co.uk:8080/jekyll-indieweb/home custom deploy/syndication scripts] on atomicules.co.uk since 2015-08-15
+* original photo post: http://atomicules.co.uk/2015/08/15/Always-drink-irresponsibly.html
+* Flickr POSSE copy: https://www.flickr.com/photos/91098778@N00/20609426091
+
+==== Tantek ====
+{{t}} using [[Falcon]] to automatically POSSE via Bridgy Publish [http://tantek.com/2016/032/t1/mothership-bowl-second-breakfast since 2016-032] (manually since 2016-016, including all photos+videos from 2016-01) from tantek.com
+* original photo post: http://tantek.com/2016/032/t1/mothership-bowl-second-breakfast
+** automatic Flickr POSSE copy: https://www.flickr.com/photos/tantek/24140238323/
+*** all hashtags in original made it through to Flickr POSSE copy via <code>p-category</code> and Bridgy Publish support
+* original photo post: http://tantek.com/2016/001/t1/gregorian-january-lego-calendar
+** manual Flickr POSSE copy: https://www.flickr.com/photos/tantek/23803704613/
+** plain text tags were manually added to the POSSE copy after manual (via web UI) Bridgy Publish POSSEing of the photo
+
+__TOC__
+
+== Privacy ==
+=== Location data has different privacy settings from the photos ===
+Photos on Flickr have a privacy setting for seeing the photo itself, and a separate privacy setting for viewing the location of the photo. For example it is possible to set a photo to public, but have the location only visible to "Friends and Family".
+
+=== Geofencing ===
+Flickr allows you to configure one or more geofences around locations such as "home" or "work", and any time photos are uploaded that fall into that area, the geo privacy will be set automatically.[http://blog.flickr.net/2011/08/30/introducing-geofences-on-flickr/]
+
+== Export from ==
+There are various tools for exporting your photos, comments, tags, and favorites from Flickr. Please document such tools here.
+
+=== Using Flickr's Camera Roll ===
+This method exports the photos only, no meta information like tags and albums. Open https://www.flickr.com/cameraroll and you should see all of your photos. You can click-and-drag to select multiple photos. At the bottom of the page will be options for the selected photos. Click "Download" and you will be prompted to save a zip file of the selected photos. If you select a large amount of photos, it may automatically break them into separate zip files. I exported 841 photos on 2016-02-23 and it made two zip files. {{gRegor}}
+
+=== {{aaronpk}}'s Flickr Archiver ===
+https://github.com/aaronpk/Flickr-Archiver
+
+== Feeds ==
+Flickr has numerous [[feeds]] to views of content that can be used to [[PESOS]] content from Flickr, or to backup recent content.
+
+=== tag feeds ===
+Flickr has publicly readable feeds of tagged photos: (e.g. photos tagged with "indiewebcamp")
+* http://api.flickr.com/services/feeds/photos_public.gne?tags=indiewebcamp&lang=en-us&format=atom
+
+=== user feeds ===
+Flickr's feeds related to a specific user by opaque userid in the URL are also public, e.g. for userid 39039882@N00 (user: http://flickr.com/tantek ) :
+
+photo/video posts from a user: 
+* http://api.flickr.com/services/feeds/photos_public.gne?id=39039882@N00&lang=en-us&format=atom
+favorites of a user: 
+* http://api.flickr.com/services/feeds/photos_faves.gne?nsid=39039882@N00&lang=en-us&format=atom
+photos of a user: (people tagged)
+* http://api.flickr.com/services/feeds/profile_photos.gne?nsid=39039882@N00&lang=en-us&format=atom
+
+=== activity feed ===
+Flickr has a (totally undocumented?) feed of activity for the logged in user, where activity is anything you would normally be notified about in notifications (faves, comments, replies to photos you have replied on). To limit content to only photos in your own stream, add &activity_view=photostream
+
+* https://api.flickr.com/services/feeds/activity/all?user_id=me
+* https://api.flickr.com/services/feeds/activity/all?user_id=me&activity_view=photostream
+
+These require you to be logged in and redirect to a "secret" URL and may include activity on non-public photos.
+
+
+== Criticism ==
+* [http://blog.flickr.net/en/2015/05/07/flickr-camera-roll/ version 4.0 of the Flickr smartphone app] now auto-syncs every picture and video by default, without asking, which raises serious privacy issues
+
+* Photo embed code requires Javascript (for the slideshow player) to even display any image. ( see http://indiewebcamp.com/irc/2015-03-22#t1427012080693 )
+
+== Issues ==
+=== PESOS unreliability ===
+There has been some experience with a [[PESOS]] approach not working well with Flickr:
+* [https://twitter.com/anomalily/status/518830141502685185 2014-10-05 @anomalily] <blockquote>Whoa, leveling up in the #indieweb world: about to switch from PESOS to POSSE for @flickr because PESOS is failing me</blockquote>
+
+Recommendation: [[POSSE]] to Flickr instead of PESOS.
+
+=== Downtime ===
+* [https://www.flickr.com/help/forum/en-us/72157652568890216/page4/ "Upload failures"] a.k.a. untested impact of new features
+
+* 2007-02-19 Flickr massage: [http://www.flickr.com/photos/tantek/420426227/ http://farm1.staticflickr.com/186/420426227_dda4d24789_o.png]
+
+=== Two Pages About You ===
+Users on Flickr have two pages "about" them:
+* /photos/username (also often works at just /username) - no link to your website, but shows your stream of recent photo [[posts]], and has a [[rel-me]] link to your /people/username page:
+* /people/username - has [[rel-me]] support for linking back to your website. Shows a few recent photo thumbnails, recent photos of your, your recent favorites.
+
+No other service splits your profile identity like this. Typical [[silos]] all have integrated profile pages that show <em>both</em> your latest posts and your profile information like your website.
+
+Because of this, and because Flickr encourages linking to the /photos/username page, getting rel=me to work with Flickr is a bit more out-of-the-way work, but still doable.
+
+== See Also ==
+* [[silos]]
+* [[photos]]
+* [[videos]]

@@ -1,0 +1,117 @@
+http://indiewebcamp.com/2014-05-06-iiw-indiebox
+
+= IndieBox IIW Session =
+
+Notes taken by [[User:werd.io|Ben Werdmüller]] at [[2014-05-06-iiw|IIW on 2014-05-06]] on https://etherpad.mozilla.org/iiw - archived here.
+
+Word document (per [http://iiw.idcommons.net/Note_Form IIW convention]): copy paste this into a Terminal window: 
+* <kbd><nowiki>echo "http://indiewebcamp.com/2014-05-06-iiw-indiebox" | textutil -stdin -output iiw-2014-05-06-indiebox.rtf -convert rtf</nowiki></kbd>
+
+[http://indieboxproject.org/blog/public-presentations/ Slides used]
+----
+
+* [[Indie Box]] - [[User:Upon2020.com| Johannes Ernst]]
+
+Realized that we all made a big mistake back in the day - we let other people use our data.
+
+Indie Box is an effort that allows us to control our data.
+
+Where's our data? Not in the hands of the people - in Facebook, Flickr, Google, YouTube, Dropbox, plus various governments. We need to take our data back home!
+
+Indie Box One is a personal cloud server that you place in your home.
+
+[http://igg.me/at/indie-box-one Crowdfunding is live] as of a few minutes ago. There will be lots of different kinds  of hardware, but this is the first one - you take your own server and  put your own personal data on that. If your data is your own, you  control it. You unplug the server, nobody can access it at all!
+
+Indie Box One (so, there will be many different kinds) has an energy  efficient process. Designed to be the first box in from the web - it  sits on the wire between your home network and the outside world. It can  see everything that happens. In most cases, that would be a privacy  violation - except, it's your box! You could run ad blockers on it, Tor  if you were so inclined, site blocking for your kids, prevent your IoT  devices from phoning home ...
+
+What does it actually do?
+* Runs a firewall, NAT, DHCP, and runs web apps internally and/or externally
+* Auto-administration
+* All code on Indie Box One is FOSS - free and open source software
+
+An actual screenshot. Indie Box includes WordPress, Idno / Known, Mailpile, Mediagoblin, Owncloud, Selfoss, Shaarli
+
+(Audience didn't understand what Idno was at all. Uh oh.)
+
+Johannes has found himself bookmarking more stuff on the web now that he does it in his private space on his own server, rather than, eg, [[Delicious]]
+
+Indie Box also comes with an app store, so you install and get new applications on it
+
+Automatic software upgrades
+* OS, middleware, apps
+* all configuration, db migrations, etc
+* Scheduled offsite backups
+* Hardware monitoring
+
+Audience  didn't like that it was online & the first box in from the  Internet. Johannes pointing out that it doesn't _have_ to sit there -  it's also a DHCP client.
+
+Because  the box is a DNS server itself, it works, but if you get your DNS from  somewhere else, configuration is a little more complicated. But it can  do both.
+
+There are two hard drives in Indie Box One. They're mirrored, to help mitigate against hard drive failure.
+
+Johannes  looked at operating systems for a long time. In the Linux world, there  are two "free" distros left: Debian and Arch. Johannes didn't want to  tie it to some other company's strategy that wasn't necessarily entirely  transparent. Chosen also because it has excellent ARM support - while  Indie Box One is x86 based, the software platform works well on ARM, and  probably in a year or two Indie Box will be based on ARM.
+
+Audience  is worried that automatic updates are a vector for hackers. Johannes  points out that, essentially, you're damned if you do and damned if you  don't: you'll be hacked if you don't update, too. 
+
+Audience  asking if the concept is to create a warehouse for your data that  bypasses many of the security issues in the wild - "is this just a small  cloud for our data? Is that it?" Johannes explaining that, eg, for  intra-family communications, there is added security by ensuring that  communications never leave your home. You're almost always going via a  large siloed provider. If you have your own server, you have this  possibility.
+
+Johannes:  "what we're trying to do here is turn the Internet inside out. We're  trying to put the Internet the way it was, where everyone has their own  server."
+
+This  is particularly interesting wrt the Internet of Things: Johannes has a  number of sensor devices in his own home, that right now go via, eg,  Heroku. He has a front door sensor that goes via Heroku to let him know  that his front door is opening. This makes no sense. Indie Box could  fill that role.
+
+Aaron  Parecki pointing out that Philips also does this for their connected  lightbulbs, ensuring that you have a connected architecture in your  home. However, Johannes points out that you end up with multiple  base-stations for different providers (although, the audience points out  that they are using an open standard to communicate). Indie Box  provides a central point in the home.
+
+Audience  asking if there's anything about this product that would enhance the  user's relationship with third-party services. eg, discussing Spambox,  which provides proactive email filtering via IMAP. It'd be cool to run  something like that in Indie Box, to intercept IMAP communications and  filter out spam.
+
+Johannes  says that WordPress and Idno will be preconfigured "the indieweb way" -  so your content is syndicated to third-party services. This is one way  in which your relationship with third-party services is enhanced.
+
+Audience  asking about where this relates to the PATRIOT Act! Apparently the laws  are very strong about possession of data, where possession is defined  as on your body or in your home. The cloud doesn't count. Therefore you  have stronger data ownership / privacy protections against the PATRIOT  Act with Indie Box than with a cloud service. Johannes would like people  to check on the platform and audit it for security & privacy.
+
+Audience  asking, if you have 10,000 Indie Boxes, who pays for the electricity?  What's the business model? Johannes discusses the app store, and the  possibilities to act as a marketplace for third-party apps.
+
+Johannes  says that more integrations need to be done. He still needs to port  much of his store code from Cloudstore, taking into account things like  changing IP addresses (that are less likely to occur on servers in the  cloud).
+
+Johannes  is keen to ensure that there is no lock-in, because otherwise you don't  have full control & ownership. But on the other hand, lock-in is  sort of required to run a business (ish). So Johannes is giving a  percentage:
+
+A percentage of the purchase price of the box goes towards the operating costs of the infrastructure that keeps the box running (updates, etc)
+
+App  store model - indiebox runs the marketplace, handles the billing,  software authors get paid and removes hassle from the users.
+
+Audience question  - concerned with apps, what privacy agreement you sign, what is  stopping apps running on the box from selling data? Do we end up in a  sitaution where old data is stuck in the box like old LPs? Are there any  protections from malicious apps shipping data elsewhere? 
+
+j12t:  if there are 100,000 apps on the app store then there's bound to be  mailcious apps, there's no magic. What happens if indiebox implodes and  you want to migrate off? Already exists software to migrate one indiebox  to another. Even if indiebox goes away, all the open source projects  still exist and you can run them elsewhere.
+
+It's not up to any single entity to make this successful. This can be a barn-raising effort.
+
+The  Indie Computing Corporation is going to be an uncorporation: no  management, none of the trappings of a typical corporation. It's  intended to be a vessel for projects like this. It's open entry; if you  want to participate, come in and help. If there's money, you can get  paid. You have code? Put it on! You want to help make dynamic DNS  better? Come talk to me.
+
+Audience worry: Heartbleed was from open source so open source must be bad.
+There's nothing we can do at indiebox that would have stopped heartbleed.
+"Open source coders even with their good intentions don't have the resources...."
+
+Audience answer: Heartbleed is a success story. There was a problem, it was fixed.
+
+j12t: One reason we have an app store ecosystem is to provide money back into the ecosystem for open source apps.
+
+"No more Big-Sites-With-Lots-Of-Secrets-For-Sale - This is how we unbreak the Internet." - Brian Behlendorf
+
+Johannes: "If you have an IDP app, we can include it."
+Aaron: "I have one!"
+Johannes: "Of course you do! I want it! -- This is how it works."
+
+https://www.indiegogo.com/projects/indie-box-let-s-bring-our-data-home < Johannes encouraging donations.
+
+Audience  question about using Indie Box One in medical IT. Pointing out that  it's probably more secure than many places for data. (Same audience  member asked about using the apps with smartphones. Potential for  interesting use cases involving hospital-hosted data accessed by staff  on handheld devices throughout an institution.)    
+
+Audience  concern about app security, and how you ensure that apps on the box are  secure and aren't bad actors with your data. Johannes says it's too  early to comprehensively tackle this - it's important to get something  running first. Hinted at some sort of signing/app store verified thing. But he also points out that Linux namespaces may offer some interesting possibilities.
+
+Johannes:  '"We cannot put all of our eggs in one basket, unless we can watch that  basket really well," as Mark Twain said. I am much more comfortable  with a Linux box that is mine than anyone else's system.' Intends to  seed the ecosystem with technical early adopters, and will work up to an  easy-to-use device that is suitable for very non-technical users.
+
+If  everything the organization does is transparent, it's very difficult to  defraud the public. Johannes is making the Indie Computing Corporation  open and uncorporation-ey in order to help people feel secure with the  product.
+
+Johannes:  email is difficult (he agrees that it's irredeemably broken). But there  are possibilities when more people are running boxes that use the same  open protocols as Indie Box. You don't have to use email protocols when  you know that something else is available and usable. You can eliminate  third parties from communications loops, enhancing security and adding  new features in the process.
+
+Notetaking ends from benwerd - now going to host [[2014-05-06-iiw-intro-indieweb|a session introducing the indieweb]].
+
+== See Also ==
+* [[Indie Box]]

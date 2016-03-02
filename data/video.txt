@@ -1,0 +1,207 @@
+http://indiewebcamp.com/video
+
+<span style="float:right;height:128px;font-size:128px;margin:0 0 -64px">🎥</span>
+
+{{stub}}
+
+'''<dfn>video</dfn>''' is a type of [[post]] where the primary content is a video file (recorded movie, animation etc.) typically with audio, and has [[#IndieWeb_Examples|growing support on the indie web]]. Video posts are supported by [[#Silo_Examples|several silos]].
+
+See also:
+* [[videos about the indieweb]]
+
+== Why ==
+Video posts are quite popular on general silos like [[Facebook]], media silos [[Flickr]] & [[Instagram]], and obviously video-specific silos such as [[Vimeo]], [[Vine]], & [[YouTube]].
+
+Post (even short) videos on [[own your data|your own site]] instead for all the usual [[reasons]].
+
+== How ==
+=== How to markup ===
+Use an [[h-entry]] as always, and then an HTML5 <code>&lt;video&gt;</code> element with class name <code>u-video</code> and <code>src</code> attribute of the URL of the video file, e.g.
+
+<pre><nowiki>
+<video class="u-video" src="http://ben.example.com/camcorder.mp4" controls="controls">
+alternate text content - like a transcript
+</video>
+</nowiki></pre>
+
+Alternatively (with poster frame and fallback img tag)
+<pre><nowiki>
+<video class="u-featured" controls poster="http://ben.example.com/camcorder.png">
+<source class="u-video" src="http://ben.example.com/camcorder.mp4">
+<img src="http://ben.example.com/camcorder.png" class="u-photo" />
+</video>
+</nowiki></pre>
+
+Alternatively
+<pre><nowiki>
+<video controls="controls">
+<source class="u-video" src="http://ben.example.com/camcorder.webm" >
+<source class="u-video" src="http://ben.example.com/camcorder.mp4" >
+alternate text content - like a transcript
+</video>
+</nowiki></pre>
+
+=== How to POSSE ===
+To [[POSSE]] video, you may want to consider the following destinations:
+* Twitter: 
+** see https://dev.twitter.com/rest/public/uploading-media#videorecs
+** {{kylewm}} has used curl to publish a video to Twitter via [[silo.pub]]
+* Facebook: (need API docs link for posting video to FB!)
+* Flickr: (need API docs link for posting video to Flickr!)
+
+[[Bridgy]] [https://brid.gy/about#publish Publish] supports POSSEing video posts [https://github.com/snarfed/bridgy/issues/572 to Twitter], [https://github.com/snarfed/bridgy/issues/573 Facebook], [https://github.com/snarfed/bridgy/issues/574 and Flickr].
+
+__TOC__
+
+== IndieWeb Examples ==
+The following indie web sites have video posts.
+
+=== Aaron Parecki ===
+{{aaronpk}} uses [[p3k]] to post recorded video with sound since 2014-09-10, e.g.:
+* http://aaronparecki.com/notes/2015/07/21/4/travel-pdx
+** markup: <code>&lt;video&gt;</code> tag with <code>&lt;source class="u-video"&gt;</code> markup.
+
+Previously, video support was limited to autolinking mp4 files and animated GIFs since 2013-04-25, e.g.:
+* http://aaronparecki.com/notes/2013/08/10/2/indieweb - screencast of doing a reply in the browser UI
+* http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery - MP4 recording of laptop screen demonstrating [[original-post-discovery]].
+
+The video files themselves appear to have one-off named (undated) permalinks at the same domain, and are only shown/visible/posted within the context of short [[notes]] posts.
+
+=== Shane Becker ===
+{{veganstraightedge}} uses [[Dark Matter]] to manually [[PESOS]] video posts from [[Vine]] and [[YouTube]] to http://veganstraightedge.com/videos as of 2013-07-07 (though older posts were ported over then), e.g. newest post appears to be from 2013-05-31:
+* http://veganstraightedge.com/videos/2013/05/31/backyard-squirrel-buddy
+** markup:
+*** <code>&lt;video&gt;</code> tag with '''<code>u-featured</code>''' intending to communicate the <code>poster</code> attribute
+*** <code>&lt;source&gt;</code> tag inside that element with '''<code>u-video</code>''' with the <code>src=</code> attribute with the video URL.
+*** <code>&lt;img&gt;</code> tag also inside the video element, with '''<code>u-photo</code>''' as fallback content.
+
+The video files themselves use datestamped indieweb subdomain URLs of the form:
+* assets.veganstraightedge.com/videos/YYYY/M(M)/D(D)/file-name.mp4
+
+=== Ben Werdmuller ===
+{{benwerd}} uses [[Idno]] to post recorded video, as well as video recorded at the point of upload using a phone, since 2013-08-16. (Previously he'd been uploading to [[YouTube]].) e.g.:
+* <nowiki>http://werd.io/view/520ed6b7bed7de4914317083</nowiki>
+** 2015-12-12 link appears to be 404 - content may have been removed.
+* NEED ANOTHER video post permalink for werd.io!
+
+Each video has a link to the file itself, in case it cannot be played in an embedded state in the browser.
+
+=== Ben Roberts ===
+{{benthatmustbeme}} uses [[Postly]] to post video since 2015-01-09. 
+* https://ben.thatmustbe.me/video/2015/1/9/9/
+** markup: <code>&lt;source&gt;</code> tag with <code>u-video</code>
+
+=== Tantek ===
+{{t}} uses [[Falcon]] to post video [http://tantek.com/2015/346/t3/world-of-laughter-tears-hopes-fears since 2015-12-12].
+* http://tantek.com/2015/346/t3/world-of-laughter-tears-hopes-fears (added a poster frame after the fact)
+** markup: <code>&lt;video&gt;</code> tag with <code>u-video</code>
+** manual POSSE: https://twitter.com/t/status/676580070698258432
+* Posted with [[poster frame]]: http://tantek.com/2015/360/t2/best-starwars-speak-droid
+** manual POSSE: https://twitter.com/t/status/680897393814994944
+
+Temporarily (24h) the markup used an extra "u-photo" in addition to u-video as a hack to test whether [[Bridgy]] Publish's photo support would work for POSSEing video to Twitter and Facebook (which did not work, hence Bridgy issues [https://github.com/snarfed/bridgy/issues/572 573] and [https://github.com/snarfed/bridgy/issues/573 573] were filed).
+
+=== Kyle Mahan ===
+{{kylewm}} uses [[Red Wind]] to post video [https://kylewm.com/2015/12/war-on-pens-video-test since 2015-12-13].
+* https://kylewm.com/2015/12/war-on-pens-video-test
+** markup: <code>&lt;video&gt;</code> tag with <code>u-video</code>
+** POSSE tweet: https://twitter.com/kylewmahan/status/676118863772188672
+
+=== Christian Weiske ===
+{{cweiske}} uses <tt><video class="u-featured"></tt> and <tt><source class="u-video"></tt> - e.g. http://cweiske.de/tagebuch/murmelbahn.htm
+
+== Services Examples ==
+=== Pestagram ===
+[[pestagram]] translates [[instagram]] video posts into indieweb video posts since 2015-08-18, e.g.
+* [http://www.pestagram.com/user/326193259 Danielle McDonald's videos]
+** markup uses: <code>&lt;video&gt;</code> tag and '''<code>u-video</code>'''!
+
+=== Unmung ===
+[[unmung]] turns video podcast feeds into h-feed with video posts, e.g.:
+* [http://www.unmung.com/feed?feed=http%3A%2F%2Ffeeds.twit.tv%2Ftwig_video_hd.xml TWiG]
+** markup uses: <code>&lt;video&gt;</code> tag and '''<code>u-video</code>'''!
+
+== Proto video examples ==
+Examples resembling but not quite video posts.
+=== Barnaby Walters ===
+[[User:Waterpigs.co.uk|Barnaby Walters]] uses [[Taproot]] to post very short silent looping videos in the form of animated GIFs on his site since 2012-12-18, e.g.:
+* http://waterpigs.co.uk/notes/707/
+** video file itself originally hosted on dropbox, moved to self hosted 2013-08-16 after discussion in IRC 
+** (could use domain routing of video.waterpigs.co.uk URLs to hide/abstract the backend storage provider).
+* http://waterpigs.co.uk/notes/4REFKL/ - feeding geese
+* http://waterpigs.co.uk/notes/4RRNfk/ - screencast of using the [[webaction]] toolbelt.
+
+The video files themselves in general appear to have one-off named (undated) permalinks at the same domain, and are only shown/visible/posted within the context of short [[notes]] posts.
+
+There is no explicit markup to indicate a video post, or that the img gifs are animated.
+
+== Brainstorming ==
+A simplest-case Indieweb video system might work like the following:
+
+* Provide a file upload form, where the file input might have an <code>accept="video/*;capture=camcorder"</code> attribute (the capture=camcorder attribute allows the device's camera to be used, where one exists)
+* Videos can then be uploaded via both desktop & mobile browsers
+* The uploaded file is stored in a location that can be made accessible to site visitors
+* HTML5 video tags are used to display the video on the page.
+
+The size implications of video files created by modern devices (see below) may mean that some video files cannot be uploaded; this is particularly true from mobile connections, or where the user's web server configuration cannot be altered (the default is often very low). It's possible to detect the size of files to be uploaded using [[Javascript]], and perhaps warn the user about files that might be too large.
+
+=== Animated images / GIFs ===
+
+Some animated image files may be considered to have movie-like properties. These can be uploaded like standard images.
+
+== Silo Examples ==
+The following [[silos]] support video [[posts]] (with limits)
+* [[Facebook]] (length/size limit?)
+* [[Flickr]] (90 seconds and 150MB limits.)
+* [[Instagram]] (15 seconds)
+* [[Twitter]] might be some information here: https://dev.twitter.com/rest/public/uploading-media#videorecs
+* [[Vine]] (6 seconds)
+* [[YouTube]] (limit depends on account, initially 15 minutes)
+
+== Reference ==
+=== Video formats and compatibility ===
+Video formats have two components: the ''codec'', which is how the media content is encoded (typically separately for both video & audio), and the ''wrapper'', which can be thought of as a file envelope that the video sits in. By far the most common video format is h.264 MP4 (video encoded using the h.264 codec and saved in an MP4 envelope file). This is also referred to as AVC, or MPEG-4 Part 10.
+
+=== Recording devices ===
+Typically, devices save at a vastly higher bitrate than is strictly necessary, in order to make their cameras seem like they take footage at the best possible quality. This has a number of adverse effects when it comes to actually ''using'' that footage: the files are often too big to send, and you can't simply upload a video file as-is and expect users to be able to stream it. A 5 minute iPhone video can easily clock in at 1gb in size. (The iPhone will then tell you you've got to wait for wifi to upload it.)
+
+Most consumer devices record h.264 MP4 video; however, a vast array of incompatible video codecs and envelope formats exists, particularly when professional video equipment is taken into consideration. .3gp video is commonly created by older devices.
+
+=== Web support ===
+To make matters worse, supported video formats vary by browser. While many browsers support h.264 MP4, this is patent encumbered. As a result, some use the WebM envelope format with VP8 video and Vorbis audio streams. Firefox now delegates to the operating system for MP4 support, but there's no guarantee that this exists.
+
+Web video often doesn't truly stream: it's simply downloaded progressively to the browser, which can begin playing it before the download is complete. Real streaming servers are available, which can adapt the bitrate of the stream to match the recipient's bandwidth.
+
+To truly support HTML5 web video, platforms should think about:
+
+* Supporting both WebM and h.264/MP4
+* Transcode videos to a smaller bitrate for use with HTTP progressive downloads on the web (or consider a real media streaming server)
+
+However, uploading a video file from your device and serving it from your web server is often sufficient.
+
+If you choose to compress the file further, it's worth considering whether to transcode manually, using one of the many available applications across all platforms, or to integrate an open source encoder like [[FFMPEG]] or [[Handbrake]] on the server so as to generate friendly streaming versions once your video has been uploaded.
+
+If you are accepting videos from third parties, you may wish to consider the legal implications. YouTube, for example, always archives the exact file that was uploaded, even though it serves a transcoded version to visitors. That way it can prove that it was not the originator of any copyright violations.
+
+[[Werd.io|Ben Werdmuller]] works on [http://latakoo.com latakoo], a service that provides apps to compress the video ''before'' upload (making for faster uploads from, eg, mobile devices and shared Internet), but it should be noted that this is a paid service that does not explicitly provide Indieweb support. (It does, however, have an API.)
+
+There is certainly scope for an indie video app that records video, modifies it in the app, and uploads it to the location of the user's choice (or even makes it available for the user to download and re-upload).
+
+== FAQ ==
+=== Open realtime video ===
+Q: Are there any non proprietary ways to do realtime video on the web?
+
+A: Yes! [[WebRTC]]
+
+=== Is an embed a video post ===
+Q: Is an iframe embed, like of a [[YouTube]] or [[Vimeo]], a video post?
+
+A: No. With just an iframe, you have no video file to point to. u-video is for the actual video file, not a script that does something to do something, nor an iframe that loads something to load something. Also, video posts should be your video, something you recorded, or animated yourself.
+
+== See Also ==
+* [[poster frame]]
+* [[audio]]
+* [[posts]]
+* [[photos]]
+* [[videos about the indieweb]]
+* [https://developer.mozilla.org/en-US/docs/Web/HTML/Using_HTML5_audio_and_video Using HTML5 audio and video]

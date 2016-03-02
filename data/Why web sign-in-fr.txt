@@ -1,0 +1,116 @@
+http://indiewebcamp.com/Why_web_sign-in-fr
+
+''Cette page a démarré sur [[why web sign-in]]''
+= Pourquoi une Connexion Web =
+
+La [http://microformats.org/wiki/web-sign-in-fr Connexion Web] est un moyen d'utiliser votre propre domaine pour vous connecter sur d'autres sites web. Elle est bien plus simple à utiliser et implémenter que les précédentes méthodes de connexion avec votre propre domaine comme [[OpenID-fr|OpenID]]. Utiliser votre propre domaine est plus sûr qu'un service e-mail tiers, et plus simple que l'e-mail sur votre propre domaine. 
+
+== Pourquoi pas Open ID ==
+[[OpenID-fr|OpenID]] fût (demeure) une technologie de rupture qui a résolu le cas d'usage du vrai monde en permettant aux blogueurs d'utiliser leurs propres URLs de blog pour se connecter à d'autres blogs afin de laisser des commentaires sur ces blogs. Elle a grandi rapidement pour devenir la solution la plus réussie de connexion sur l'internet.
+
+Néanmoins OpenID a rencontré au fil du temps quelques problèmes critiques.
+
+=== Pourquoi pas OpenID sur votre propre site ===
+Pour utiliser votre domaine comme votre OpenID ? vous devez soit déléguer à un fournisseur OpenID (le plus facile), ou installer directement OpenID sur votre domaine (plus dur).
+
+Si ça vous intéresse, voir [[How to set up OpenID on your own domain-fr|Comment installer OpenID sur votre propre domaine]] pour savoir comment faire ça.
+
+==== Pourquoi pas OpenID directement sur votre propre domaine ====
+Installer OpenID directement sur votre propre domaine n'est pas trivial.
+
+Si vous disposez de WordPress, vous pouvez installer (et maintenir votre installation) avec l'extension OpenID pour WordPress.
+
+Pour d'autres Systèmes de Gestion de Contenu ?
+
+Et si vous ne l'avez pas, vous devez installer les bibliothèques OpenID sur votre propre site. C'est suffisamment difficile comme tâche pour ne pas dire impossible pour les utilisateurs moyens, ou trop compliqué/ennuyeux même pour les développeurs expérimentés.
+
+==== Pourquoi pas une délégation OpenID ====
+
+OpenID vous permet d'utiliser votre propre domaine comme votre identité à travers un processus appelé délégation. C'est bien plus aisé que de supporter directement OpenID sur votre domaine, mais encore suffisamment problématique pour plusieurs raisons : 
+
+* '''nouveau truc à personnaliser''' : éditer l'élément &lt;head> est quelque chose que peu d'utilisateurs ont déjà fait auparavant
+* '''non-trivial''' : écrire/copier.coller 2-4 lignes &lt;link rel=... > et potentiellement une cinquième ligne &lt;meta>
+* '''fragile''' : tout en s'assurant de changer toutes les instances de "nom-utilisateur" vers votre véritable nom d'utilisateur.
+* '''problèmes d'inter-opérabilité''' : même si vous avez correctement placé tout le marquage link/meta, il reste encore des problèmes et différences entre les sites supportant/consommant OpenID qui peuvent empêcher votre délégation OpenID de fonctionner.
+* '''complexité du plan B ''' - ce n'est pas grave d'essayer d'imaginer comment régler XRD/XRDS pour déléguer vers plusieurs fournisseurs OpenID de manière à ce que dans le cas où l'un échoue, les autres pourraient fonctionner. Et, nous l'espérons, le site consommant OpenID que vous utilisez sera suffisamment intelligent pour supporter cela.
+
+À contrario, les utilisateurs avec leurs propres sites : 
+# '''relient déjà vers leurs autres profils'''. Nul besoin d'ajouter quelque marquage.
+# '''peuvent trivialement ajouter '''<code>rel=me </code>''' à ces hyperliens vers d'autres profils. Un nouvel attribut seulement.
+# Pas d'étape 3. C'est tout pour l'installation d'une délégation de Connexion Web. Et vous avez suffisamment de plans B sur l'ensemble des profils que vous avez déjà reliés.
+ 
+=== Pourquoi pas OpenID et la Connexion Web ===
+Si vous avez le temps et l'intérêt de faire ainsi, cela vaut la peine de supporter OpenID pour supporter l'héritage.
+
+par ex. IndieWebCamp.com utilise [[IndieAuth-fr|IndieAuth]] qui supporte OpenID et la Connexion Web.
+
+=== Pourquoi ne pas consommer OpenID ===
+OpenID est ''dur'' à consommer sur votre propre site web. Si vous cherchez à faire ça, utilisez simplement le service [[IndieAuth-fr|IndieAuth]].
+
+Autrement, vous devez soit :
+* installer/maintenir une extension consommant OpenID dans votre CMS (par ex. WordPress)
+* intégrer de grosses librairies complexes OpenID. Par ex. les librairies PHP OpenID sont énormes en nombre de fichiers et vraiment complexes à essayer de comprendre et utiliser. Les librairies Connexion Web, rel-me, OAuth sont toutes ''bien plus petites et plus simples''
+* imaginer si "anyauth" (sp?) aide ? quelle est l'historique de la librairie OpenID sur Python ou Ruby ?
+
+== Pourquoi pas l'e-mail ==
+Il existe différentes solutions pour se connecter/[[discovery-fr|être découvert]] avec votre adresse e-mail, par exemple [[WebFinger-fr|WebFinger]] jusqu'à la dernière, BrowserID/[[Persona-fr|Persona]].
+
+Les adresses e-mail utilisent soit un fournisseur tiers ou votre propre domaine.
+
+Chacune de ces solutions est sous-optimale pour différentes raisons.
+
+=== Pourquoi pas un fournisseur tiers d'e-mail ===
+
+Les fournisseurs tiers d'e-mail sont sous-optimaux pour la connexion déléguée essentiellement du fait de l'autorité/contrôle que la partie tiers revendique  par ex. sur votre identité.
+
+* '''Votre identité peut être révoquée pour la violation de quelque <abbr title="conditions générales d'utilisation">C.G.U.</abbr> de fournisseur tiers'''. De telles CGUs sont généralement mises à jour avec votre accord automatique, et vous ne savez jamais quand une telle mise à jour introduira des conditions que vous avez déjà violées dans le passé, ou que vous violerez sans le savoir dans le futur, n'ayant pas eu la chance de lire les centaines de pages de mentions légales (ce que personne ne fait). Ceci s'est déjà déroulé, voir [[why-fr|pourquoi]] pour des exemples.
+* '''Les Griefers voient leur identité révoquée''' par la partie tiers qui se plaint à tort/de façon répétée que vous avez violé les C.G.U. par ex les plaignants peuvent se plaindre que vous leur avez expédié des emails/posts "mauvais" (par n'importe laquelle des définitions de violation de CGU) à partir de l'adresse email que vous utilisez pour votre identité.
+* '''Les attaquants provoquent des attaques par déni de service ([https://fr.wikipedia.org/wiki/Attaque_par_d%C3%A9ni_de_service DoS]) de votre identité.''' Les mauvais acteurs tentant de pirater votre compte de messagerie peuvent tirer partie de quelque forme de fermeture automatique de ''toutes'' les tentatives de connexion sur votre email et/ou l'utiliser comme une identité déléguée, vous interdisant par conséquent de vous connecter sur d'autres sites.
+* '''Les e-mails spoofés peuvent provoquer un DoS de votre capacité à expédier.''' (Voir Zeldman : [http://www.zeldman.com/2013/03/18/cloudtastrophe/ Cloudtastrophe]).
+
+Toutes ces raisons spécifiques à l'email en tant que partie tiers sont aussi des vulnérabilités / inconvénients des méthodes spécifiques d'enregistrement uniques tiers comme Facebook Connect, Twitter sign-in, etc.
+
+=== Pourquoi pas un e-mail personnel de domaine ===
+L'adresse email sur un domaine personnel ne souffre pas des mêmes problèmes de CGV comme le font les adresses email fournies par des tiers.
+
+Néanmoins, une fois que vous avez votre propre domaine, pourquoi ne pas simplement l'utiliser ?
+
+Les problèmes avec les adresses email à domaine personnel :
+
+* '''redondant''': pourquoi utiliser "monnomutilisateur@monnomutilisateur.com" quand "monnomutilisateur.com" le fera ?
+* '''superflu''': pourquoi utiliser "monnomutilisateur@monnomutilisateur.com" quand "monnomutilisateur.com" le fera ?
+* '''plus de clavier''': même "m@monnomutilisateur.com" fait deux touches en plus que "monnomutilisateur.com" - pourquoi s'ennuyer ?
+
+Si vous utilisez votre propre domaine pour l'e-mail, alors pourquoi ne pas supprimer le préfixe avec le @ et simplement utiliser votre domaine pour vous connecter ?
+
+=== Mais les e-mails sont très largement compris ===
+Formulé aussi : "Les domaines personnels sont le lot d'une toute petite minorité de nerds. Les adresses email ont la compréhension commune la plus large par l'utilisateur internet moyen".
+
+Il y a des dizaines d'années, les adresses email étaient le lot d'une toute petite minorité de nerds, les machines fax avaient une bien plus grande compréhension.
+
+Les adresses email sont une technologie bien plus établie, tout comme l'étaient les numéros de fax utilisés alors, et les numéros de téléphone fixes avant ça. Chacun s'est éclipsé successivement.
+
+L'e-mail est simplement la technologie en cours subissant une telle transition.
+
+=== Et si plusieurs personnes sont derrière le même domaine  ===
+"Et si plusieurs personnes sont derrière le même domaine?"
+
+Et si plusieurs personnes sont derrière le même e-mail ? (cela s'est déjà produit, par ex. avec Amazon)
+
+Et si plusieurs personnes ont le même numéro de téléphone (utilisé communément dans le cas d'un foyer et de numéros professionnels)
+
+Les personnes gèrent, ce n'est pas un problème spécifique au domaine.
+
+=== Mais un domaine est un gros investissement ===
+''Un domaine n'est pas un très gros investissement''.
+
+Pas vrai. Détenir un nom de domaine et un hébergement web indépendant est ''meilleur marché'' que de détenir un numéro de téléphone (par exemple le coût annuel d'un téléphone mobile ou d'un service d'opérateur fixe.)
+
+À partir de là, c'est simplement du logiciel gratuit plus des améliorations itératives à améliorer l'utilisabilité/maintenance d'un tel logiciel : voir [[one-click-install]].
+
+== Voir aussi ==
+* [[FAQ-fr|FAQ]]
+* [[IndieAuth-fr|IndieAuth]]
+* [[one-click-install-fr|installation en un clic]]
+* [http://microformats.org/wiki/web-sign-in-fr Connexion Web]
+* [[Why-fr|Pourquoi]]

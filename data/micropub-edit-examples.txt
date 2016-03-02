@@ -1,0 +1,160 @@
+http://indiewebcamp.com/micropub-edit-examples
+
+== Create an Object ==
+* Some properties have a single value, some have multiple values, e.g.
+** name: Hello World
+** category: foo, bar
+
+Requires:
+* Specify all the properties and values in the request
+
+=== A ===
+
+* action=create
+* name=Hello World
+* content=post content here
+* category[]=foo&category[]=bar
+
+=== B ===
+
+Follow the example of 'h' and 'q', use single-letter control parameters. 'a' is the action, 'u' is the url to edit. Maybe 's' would replace mp-syndicate-to?
+
+* a=create
+* name=Hello World
+* content=post content here
+* category[]=foo&category[]=bar
+
+== Add a Value ==
+* Adding a new property to an object, e.g. 
+** adding "syndication" when there were previously no other values for syndication
+* Adding a new value to an existing property, e.g.
+** adding an additional "category" property to the list
+
+These two can be considered the same operation if you "auto-create" the property when the first value is added to it.
+
+Requires:
+* Specify the existing object to edit
+* Specify the list of new properties and values to add 
+
+=== A ===
+
+* url=http://example.com/post/100
+* action=add
+* property=syndication
+* value=http://twitter.com/status...
+
+=== A (alternate) ===
+
+* url=http://example.com/post/100
+* action=add
+* syndication=http://twitter.com/status...
+
+=== B ===
+
+* u=http://example.com/post/100
+* a=add
+* syndication=http://twitter.com/status...
+
+=== JSON Patch ===
+Applied to the microformats [[jf2]] representation of the object.
+
+<pre>
+POST /micropub
+Content-type: application/json
+
+{
+  "url": "http://example.com/post/100",
+  "patch": [
+    { "op": "add", "path": "/syndication/-", "value": "http://twitter.com/status..." }
+  ]
+}
+</pre>
+
+Note that the JSON Patch spec requires that when appending values to an array, the array already exist. If the post does not already have a "syndication" property, the operation will fail. This means in order to support JSON Patch, a micropub endpoint would have to relax this requirement, or silently create all known vocabulary properties.
+
+== Replace a Value ==
+* Replace all values of a property with new values, e.g.
+** replacing the content of a post
+
+Requires:
+* Specify the existing object to edit
+* Specify the existing property and new value
+
+=== A ===
+* url=http://example.com/post/100
+* action=replace
+* property=content
+* value=new post content here
+
+=== A (alternate) ===
+* url=http://example.com/post/100
+* action=update
+* title=new post title here
+* content=new post content here
+
+=== B ===
+* u=http://example.com/post/100
+* a=update
+* title=new post title here
+* content=new post content here
+
+== Delete a Value ==
+* Delete a value from a list, e.g.
+** deleting a specific tag but keeping all the others
+
+Requires:
+* Specify the existing object to edit
+* Specify the property to delete from
+* Specify the value to delete
+
+=== A ===
+* url=http://example.com/post/100
+* action=remove
+* property=category
+* value=foo
+
+
+=== A (alternate) ===
+
+* url=http://example.com/post/100
+* action=remove
+* category=foo
+
+=== B ===
+
+* u=http://example.com/post/100
+* a=remove
+* category=foo
+
+
+== Delete a Property ==
+* Delete all values for a property, e.g.
+** deleting all person-tags
+
+Requires:
+* Specify the existing object to edit
+* Specify the property to delete
+
+=== A ===
+* url=http://example.com/post/100
+* action=clear
+* property=category
+
+=== B ===
+* u=http://example.com/post/100
+* a=clear
+* category=
+
+== Delete an Object ==
+* Delete an entire object including all values
+
+Requires:
+* Specify the existing object to delete
+
+=== A ===
+* url=http://example.com/post/100
+* action=delete
+
+=== B ===
+* u=http://example.com/post/100
+* a=delete

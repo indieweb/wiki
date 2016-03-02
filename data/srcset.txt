@@ -1,0 +1,65 @@
+http://indiewebcamp.com/srcset
+
+{{stub}}
+
+'''<dfn>srcset</dfn>''' is an HTML &lt;img&gt; tag extension, an implementation of [[responsive_images]].
+
+= Flavours =
+
+* A useful article on flavours: [https://www.smashingmagazine.com/2014/05/responsive-images-done-right-guide-picture-srcset/ Responsive Images Done Right: A Guide To And srcset]
+
+== simple pixel density approach ==
+
+<code><pre>
+<img 
+  srcset="image_standard.jpg 1x, imaget_dense.jpg 2x"  
+  src="image_standard.jpg" 
+  alt="An image" />
+</pre></code>
+
+This implementation triggers the upgrade to a larger image when the device pixel ratio (the pixel density) is over 2x; therefore it's usually triggered on retina displays or on mobile phones with very large resolution.
+
+== simple image pixel size approach ==
+
+<code><pre>
+<img 
+  src="img-360x540.jpg" 
+  alt="img" 
+  srcset="img-240x360.jpg 360w, img-360x540.jpg 540w, img-653x980.jpg 980w, img-853x1280.jpg 1280w" 
+  sizes="(min-width: 960px) 50vw, 100vw"
+/>
+</pre></code>
+
+In this implementation the image size closest (from smaller) to the viewport width in pixels will be used. 
+The "sizes" part is an optional addition, a media query. In this very case it means that if the viewport resolution if below 960px, the picture is set to fill in the whole viewport (this is either triggered by CSS media queries, javascript, etc), so the image size should be decided based on this. In case the screen resolution is over 960px, the image will only occupy halt of the viewport (again triggered by something else, responsive design, javascript, etc. ) therefore this should be taken in count when the browser is selecting the image to display.
+
+==  complex &lt;picture&gt; approach ==
+
+The &lt;picture&gt; element allows the user to specify various sources for an image which can be combined with the simple approaches described above. This approach is mostly used when the displayed image is required to change according to the circumstances. For example: a header background image, that contains graphics which graphics should always be shown, therefore the image is cropped when certain resolution criteria are met. 
+
+The complexity can easily reach levels like this:
+
+<code><pre>
+<picture>
+   <source media="(min-width: 36em)"
+      srcset="large.jpg  1024w,
+         medium.jpg 640w,
+         small.jpg  320w"
+      sizes="33.3vw" />
+   <source srcset="cropped-large.jpg 2x,
+         cropped-small.jpg 1x" />
+   <img src="small.jpg" alt="A rad wolf" />
+</picture>
+</pre></code>
+
+( The example is from the afromentioned article above ).
+
+There are no known indieweb examples for this implementation yet.
+
+= Helpers and polyfills =
+
+* [http://scottjehl.github.io/picturefill/ picturefill.js] for older browsers
+
+= Real world examples =
+* [https://wordpress.org/ Wordpress] has added [https://make.wordpress.org/core/2015/11/10/responsive-images-in-wordpress-4-4/ native support] for the srcset and sizes attribute with version 4.4 (December 8th 2015)
+* [[User:Petermolnar.eu]] had been using srcset since the first draft, but the flavour changed during the times. Right now he's settled with the "simple image pixel size approach".

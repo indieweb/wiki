@@ -1,0 +1,86 @@
+http://indiewebcamp.com/responses
+
+{{stub}}
+
+A '''<dfn>response</dfn>''' is a post that is a reaction to another URL. Some examples of response post types are [[reply]] (comment), [[like]] (favorite), [[repost]] (reshare), mention, [[RSVP]], [[invitation]].
+
+<div style="background:#ffe;padding:1em">Note: the term '''[[interactions]]''' is also used to refer to the full set of things people to do with / to a post. This page mostly captures historical debate.</div>
+
+== Examples ==
+For an example of different responses in action see http://www.sandeep.io/39
+
+== Brainstorming ==
+* As per [http://indiewebcamp.com/irc/2013-06-23#t1371999634 feedback] by [[User:Tantek.com]], we should use rels in addition to u-like, etc. (used in [[RSSB]]) for responses.
+** Based on the discussion/brainstorming below, and the apparent difficult it poses, I'm no longer convinced that it's worth it to have rels in addition to u-like etc. [[User:Tantek.com|Tantek]] 17:10, 9 August 2013 (PDT)
+
+=== naming rel values ===
+* See http://microformats.org/wiki/rel-faq#What_does_a_rel_value_really_mean.3F and http://microformats.org/wiki/existing-rel-values for better understanding rels
+* Suggestions by [[User:Waterpigs.co.uk]] for coming up with rel values
+** "destination is a rel-name of source”
+** "destination is source’s rel-name"
+
+=== object of action ===
+Using likes as the example for specific brainstorming:
+* [http://indiewebcamp.com/irc/2013-06-23#t1372000192 rel="like-of"]
+* [http://indiewebcamp.com/irc/2013-06-23#t1372001867 rel="object-of-like"]
+** Coming up with a good name for the "object of a like" is actually a problem of coming up with a name for objects of [http://en.wikipedia.org/wiki/Monotransitive_verb monotransitive verbs] (which is what almost all responses are). The object-of-verb seems to be a good template for naming these objects.  &mdash;[[User:Sandeep.io]]
+* rel="liked-thing" can be used to label the thing that was liked. It's simpler, reads better and is in [https://encrypted.google.com/search?q=%22liked%20thing%22 common usage] &mdash; [[User:Www.sandeep.io|Www.sandeep.io]] 16:33, 26 June 2013 (PDT)
+** The "common usage" is a misconception. The search only shows use as a label, not as a relation, which is a key aspect of rel values. Despite that "evidence" being inapplicable, as a brainstorm suggestion we should still consider rel="liked-thing" relative to the others. "Thing" has a bad history in semantic labeling - usually a sign of a very bad ontology/taxonomy. However we should consider other "liked-*" possibilities [[User:Tantek.com|Tantek]] 17:23, 26 June 2013 (PDT)
+*** My bad. By common usage I meant everyday usage by regular people (without a semantic bent) to refer to the thing we are trying so hard to find a name for. -[[User:Www.sandeep.io|Www.sandeep.io]] 17:07, 27 June 2013 (PDT)
+** I specifically chose '''thing''' (over object, post, etc.), to allow for "liking" anything (e.g., app website, tool website, company website, profile page, etc.). -[[User:Www.sandeep.io|Www.sandeep.io]] 17:07, 27 June 2013 (PDT)
+** Use of thing by other: http://schema.org/Thing -[[User:Www.sandeep.io|Www.sandeep.io]] 12:01, 30 June 2013 (PDT)
+*** Schema is a good example of a VERY BAD object hieararchy (part of that bad history I mentioned). So much extra overdesigned and miscategorized crap in the 150+ objects in schema.org (e.g. different types of businesses that should just all be tags on a simple organization object like hCard). Schema is like a brainfart from a bad 1990s summer intern project. There's no evidence that Google even does anything with their Thing. - [[User:Tantek.com|Tantek]] 18:32, 30 June 2013 (PDT)
+* I would be tempted to use rel="liked" on its own - after all, we're parsing the linked-to page for microformats, so should be aware of what kind of object it is in its own right. This also gives us the benefit of being able to "like" anything with a URI. (Although I'm certain I'm missing an important use case here.) [[User:werd.io|Ben]] 17:30, 26 June 2013 (PD)
+** Ben, I had [http://indiewebcamp.com/irc/2013-06-23#t1372000431 suggested this] but it implies [http://indiewebcamp.com/irc/2013-06-23#t1372000474 past tense] --[[User:Www.sandeep.io|Www.sandeep.io]] 17:07, 27 June 2013 (PDT)
+* rel="liked-object" - similar, but what makes the destination an object?
+* rel="liked-post" - this seems to have the advantages of "liked-thing" but without the disadvantages, and is more specific - the thing you're linking to *is* a post. Or are there non-post examples? (none so far).
+* rel="liked-item" - We could also consider "liked-item" - inspired by [http://microformats.org/wiki/h-item h-item] -[[User:Www.sandeep.io|Www.sandeep.io]] 12:01, 30 June 2013 (PDT)
+** "liked-item" sounds a bit better than "liked-thing" or "liked-object". It's shorter too. - [[User:Tantek.com|Tantek]] 18:32, 30 June 2013 (PDT)
+* rel="like-target" - inspired by the terms "link target address" or "target of the hyperlink" and an attempt at a rel name that avoids the past tense of the verb.  -[[User:Www.sandeep.io|Www.sandeep.io]] 17:09, 4 July 2013 (PDT)
+** this also gives us the symmetrical rel="like-source" for the opposite direction. -[[User:Www.sandeep.io|Www.sandeep.io]] 09:15, 24 July 2013 (PDT)
+
+Others:
+* rel="object-of-reply" (as an alternative / replacement for [[rel-in-reply-to]] which we can still support consuming for backward compat, since that rel value came from Atom originally - I think? citation needed. [[User:Tantek.com|Tantek]] 07:49, 25 June 2013 (PDT)).
+** This is also good enough for special replies like RSVPs (so no rel="object-of-rsvp").
+** If an action is a special kind of "reply" we don't need a new rel value for it. [[User:Tantek.com|Tantek]] 08:04, 25 June 2013 (PDT)
+* rel="object-of-favorite" - how or is this any different from "like"? Fhere's some anecdotal evidence that users consider "likes" (as props/compliments) different from "favorites" (special, collecting, curating). Though I don't know of any systems that have both. - [[User:Tantek.com|Tantek]] 08:31, 25 June 2013 (PDT)
+* rel="object-of-repost"
+* ...
+
+Unnecessary:
+* rel="object-of-mention" - all links are implicit mentions, so there's no need / use-case for marking them explicitly as such. [[User:Tantek.com|Tantek]] 08:04, 25 June 2013 (PDT)
+** This was specified in [http://sandeep.shetty.in/2013/06/really-simple-social-blogging.html RSSB] as well. One problem that I had while implementing RSSB was that I was calling this type of response a "mention" (in code and database) which sounds weird as a type of mention. I might be renaming this type of mention to "link" in [[Converspace]]. Based on this maybe rename that and say rel="object-of-link" is unnecessary as it makes is really obvious. -[[User:Www.sandeep.io|Www.sandeep.io]] 17:07, 27 June 2013 (PDT)
+
+=== response collections ===
+Original posts may have a section (e.g. [[posts#Footer_sections|in the footer]]) that displays an aggregation or list of responses, and then link back to each response. These links could have rel values themselves (not sure why - need a use-case for this) as inverses of the "object-of-*" values above. Ironically, these are easier, typically working as specific past present conjugation of the "*" term in the first place. E.g.
+
+Likes:
+* rel="liking". Links from a post to each individual "like" post can simply link to what the destination is, a liking of the current page.
+** Why not rel="like" - because that could be easily misinterpreted as the destination page being something that is a "like" of the person represented by the current page.
+
+Favorites:
+* rel="favoriting". Links from a post to each individual "favorite" post can simply link to what the destination is, a favoriting of the current page.
+** Why not rel="favorite" - because that could be easily misinterpreted as the destination page being something that is a "favorite" of the person represented by the current page.
+
+Not sure if it is worth further exploring response collections rels until there's a use case for marking them up explicitly.
+
+Activity Streams has an [http://activitystrea.ms/specs/json/replies/1.0/ extensions]  specially for this. One use-case might be to show these counts in feeds of followers as an indicator of popularity and might also be used for curating/filtering/sorting. &mdash;[[User:Www.sandeep.io|Www.sandeep.io]] 16:38, 26 June 2013 (PDT)
+
+== Related Posts ==
+* <span class="h-cite"><time class="dt-published">2009-04-17</time> <span class="p-author h-card">Mark Pilgrim</span>: <a class="u-url p-name" href="http://blog.whatwg.org/the-road-to-html-5-link-relations">The Road to HTML 5: Link Relations</a> <blockquote>Link relations are a way to explain why you're pointing to another page. They finish the sentence "I'm pointing to this other page because..."</blockquote><blockquote><p>... [http://lists.whatwg.org/htdig.cgi/whatwg-whatwg.org/2006-July/006892.html people typo the "rev" attribute more often than they intentionally use it], which suggests that the world would be better off if validators could flag it as non-conforming.</p><p>The decision to drop the rev attribute seems especially controversial. The same question flares up again and again on the working group's mailing list: "what happened to the rev attribute?" But in the face of almost-universal misunderstanding (among people who try to use it) and apathy (among everyone else), no one has ever made a convincing case for keeping it that didn't boil down to "I wish the world were different." Hey, so do I, man. So do I.</p></blockquote></span>
+
+* [http://indiewebcamp.com/irc/2013-06-24#t1372079022 Some pointer to previous discussion about this in the foaf-protocols community]
+** read through some of this - seemed like a lot of overly complicated stuff, and some missing the forest for the trees problems too. - [[User:Tantek.com|Tantek]]
+
+== Origins ==
+This page was necessitated by [[RSSB]] introducing more types of responses than just comments which share common characteristics. See http://www.sandeep.io/79.
+
+== See Also ==
+* [[posts]]
+** [[reply]]
+** [[like]]
+** [[favorite]]
+** [[rsvp]]
+** [[repost]]
+** [[invitation]]
+* [[ActivityStreams]]

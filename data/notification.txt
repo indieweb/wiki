@@ -1,0 +1,207 @@
+http://indiewebcamp.com/notification
+
+{{stub}}
+<span style="float:right;height:128px;font-size:128px;margin:16px 0 -64px">⚠</span>
+'''<dfn>notifications</dfn>''' in the context of the IndieWeb refer to all forms and ways that an independent web site can receive a message indicating something of interest (server notifications), and potentially relay that information (preferably in realtime) to one or more devices used by the owner of that site (client notifications).
+
+For <span id="Server_Notifications">server notifications</span>, we use [[webmention]] and [[PuSH]].
+
+== Why ==
+There are numerous <span id="Use_Cases">use cases</span> for notifications, this is meant to capture a few that are currently real world and pervasive.
+
+=== Individual ===
+* text messages from contacts - your site receives [[indie-messaging]] from another site
+* calendar reminders - your site noticing your upcoming [[event]]s and [[RSVP]]s and sending you an event reminder with details inline and URL for more info / comment / option to change RSVP.
+* alarms
+* social web notifications - every kind of [[webmention]] you could receive
+** [[follow]] - someone has started [[follow]]ing your [[homepage]] and sent a [[webmention]] accordingly
+** [[like]] - someone liked or [[favorite]]d one of your [[posts]] or homepage
+** [[comment]] - someone commented on one of your posts
+** [[repost]] - someone reposted one of your posts
+** [[mention]] - someone wrote a post that mentioned you (via linking to your homepage, perhaps even marked it up as an h-card)
+** follow-up comment - someone commented on something you commented on, or liked.
+** [[person-tag]] - someone person-tagged you in a [[post]], especially a [[photo]]
+
+=== Public-like ===
+* Amber Alert text messages
+* Weather alerts per http://www.nws.noaa.gov/com/weatherreadynation/wea.html
+* Sports scores (realtime, e.g. World Cup goals)
+
+== Why not ==
+<span id="Beware_of">Beware of</span> real world problems occurring in notification systems elsewhere:
+=== Too Many Notifications ===
+Receiving too many notifications makes them not want to use a client:
+
+* E.g.: 2014-10-03 https://twitter.com/freebsdgirl/status/518146125036290048 <blockquote>Once again, not checking notifications. Using web, not client. Too many notifications. Will check later.</blockquote>
+
+AKA alarm fatigue:
+* http://en.wikipedia.org/wiki/Alarm_fatigue
+* http://www.npr.org/blogs/health/2014/01/24/265702152/silencing-many-hospital-alarms-leads-to-better-health-care
+
+=== Anxiety And Fear ===
+[[mobile]] notifications can cause anxiety and fear:
+* 2011-08-26 <cite>[http://thedailyadventuresofhannah.blogspot.co.uk/2011/08/blackberry-red-light-of-doom.html Blackberry Red Light of Doom]</cite> <blockquote>Basically, whenever I see the red light flash on my Blackberry, I do '''panic''' a little bit inside and I dont know why! I get this '''strange gut feeling'''. It's not like my phone has turned evil and is trying to take over the world, it is simply telling me that I have a [[text]], [[email]], BBM, [[facebook]] notification....(could be anything really, Blackberries really can do everything)</blockquote> '''Emphasis''' and Wikilinks added.
+
+=== Distraction ===
+When attempting to focus one's attention on specific projects or goals, being deluged with unrelated notifications can be very distracting. Every notification system needs facilities to get specific notifications to be quiet, temporarily or permanently. The lack of said modes may reflect a software vendor's desire for you to engage more with their service rather than respecting your time and resources.
+
+== Design Options == 
+
+For the plaintext representation, displaying the author name is not particularly useful, since people often put random junk into the "name" field. A compromise would be to show the author as "Author Name (url)" in plaintext form.
+
+=== Like or Repost ===
+
+* article: {author} liked "{Article name}" {target url}
+* note: {author} liked "{Target post text truncated...}" {target url}
+* photo with caption: {author} liked your photo "{Target post text truncated...}" {target url}
+* photo no caption: {author} liked your photo {target url}
+* {author}, {author}, and 4 others liked (your photo/video) "{Target post text truncated...}" {target url}
+* {author} liked a post that linked to "{article name}" {target url}
+
+
+=== RSVP ===
+
+* {author} RSVPd yes to {target event name} {target url}
+* {author} and {author} RSVPd no to {target event name} {target url}
+* {author}, {author} and 4 others RSVPd yes to {target event name} {target url}
+
+
+=== Invite ===
+
+* {invitee} was invited to {target event name} {target url}
+* {invitee} and {invitee} were invited to {target event name} {target url}
+* {invitee}, {invitee} and 4 others were invited to {target event name} {target url}
+
+=== Generic Mention ===
+
+* {author} linked to {target url}: "Source post text truncated..." {source url}
+* {author} and {author} linked to {target url}
+* {author} posted "Source post text truncated..." {source url} that linked to {target url}, {target url} and {target url}
+
+=== Reply ===
+
+(not clustered)
+
+* {author} commented on {target url}: "Source post text truncated..." {source url}
+
+=== Clustering ===
+
+In environments with lots of notifications or notification bursts, you may want to cluster notifications together. Here's a description of that feature and the algorithm that [[webmention.io]] uses: [https://snarfed.org/clustering-notifications Clustering notifications].
+
+== Push Notifications ==
+{{main|push notification}}
+
+"Push notifications", also known as "<span id="Client_Notifications">client notifications</span>", are notifications that show up on one or more of your client devices without you having to explicitly request them (hence "push").
+
+=== How to ===
+No replicable indieweb solutions to Push Notifications yet. See the main [[push notification]] page for projects and brainstorming.
+
+=== IndieWeb Push Notification Examples ===
+* {{aaronpk}}'s site aaronparecki.com receives [[webmentions]] and then sends them to his own IRC channel, which then sends a push notification to his phone when his IRC status is "AFK" status. The notification sends just the two URLs (source, target), and the type of webmention, e.g. [[reply]], [[like]], etc. [[mention-app]] (see Projects below) is his eventual goal.
+
+== Platform Examples ==
+Examples of notification user interface presentation from [[platforms]] (e.g. operating systems)
+
+=== iOS 7 ===
+This iOS 7 "recent items" notifications example shows 2-3 different kinds of notifications from two apps, a [[favorite]], several [[likes]], and a [[reply]].
+<span style="float:right">[[File:2014-361-ios-recent-notifications.jpg|320px]]</span>
+
+=== Twitter iOS app ===
+<img src="https://twitter.com/twitter/profile_image" style="max-height:1.5em"/> [[Twitter]] iOS App:
+<blockquote style="width:20em">'''Twitter''' 58m ago<br/>@fraying favorited:<br/>text first design is a form of <br/>universal design: listenable, more <br/>accessible. also a path to progre...</blockquote>
+=== Instagram iOS app ===
+<img src="https://twitter.com/instagram/profile_image" style="max-height:1.5em"/> [[Instagram]] iOS App:
+<blockquote style="width:20em">'''Instagram''' 8m ago <br/>cristyle__ liked your photo.<br/><br/><hr/><br/>...<br/><br/><hr/><br/>lucianteo said: "You're burping <br/>hashtags."<br/><br/><hr/></blockquote>
+
+<br style="clear:both"/>
+----
+
+=== Android ===
+[[ File:Twitter_Android_notification.png|300px]]
+
+
+Note clustering is limited to grouping and showing a count, actual text of notifications is not intelligently collapsed at all, e.g. notification text repeats the account that "Favourited":
+
+[http://known.kevinmarks.com/2015/twitter-is-worse-at-notification-collapsing-than-aaronpk https://d167tapqdyj68f.cloudfront.net/known.kevinmarks.com/8/9/5/3/895343de1edfff8ebf94127fef38de20.file?ext=.png]
+
+=== Analysis of design differences ===
+Note the differences:
+* "@username" vs. "username"
+* "[[favorited]]:" vs. "[[liked]]" (no colon) vs. "said:"
+* (linebreak) (unquoted 99 chars of tweet ...) vs. "your photo." vs. (inline quoted reply)
+
+Some presentations of some notifications like these "recent items" begin to look like "[[cards]]".
+
+== Silo Examples ==
+These are examples from various [[silo]]s's websites:
+
+=== Google+ ===
+All of a [[Google+]] users own notifications are available from [https://plus.google.com/notifications/all] and can be sorted by "Your posts" or "Other people's posts".  This stream is time sensitive and after all have been read for enough time your notifications box appears empty 
+
+(screenshot needed)
+
+=== Facebook ===
+All notifications are available once logged in from:
+* https://www.facebook.com/notifications (shorter: fb.com/notifications )
+Some of these entries have no permalink and only link to referenced post.  The also appear to be time sensitive and cannot be recovered after a certain amount of time. 
+
+[[File:facebooknotifications.jpg|800px]]
+
+This screenshot shows Facebook's current notifications UI after browsing to the "Show All Notifications Page" and expanding the notifications menu bar.   Clicking on any notification brings up the post that is being discussed, but there is no known way to get to a post with this exact content"
+
+: "<User> added a new photo" will link directly to a the photo
+: "<User> updated her status" will link to the actual status update
+
+Also on the far right are activity from friends on facebook which has some of the same properties though seems to have more post content included in them.
+
+==== Facebook feed files ====
+Facebook notifications are also available as feed files!
+* RSS: Right-click the blue "RSS" text on top left of fb.com/notifications page (e.g. see above screenshot, the line where it says "Get notifications via:") for the URL. It will look something like:
+** <kbd><nowiki>https://www.facebook.com/feeds/notifications.php?id=214611&viewer=214611&key=AlphaNumericKey001&format=rss20</nowiki></kbd> where AlphaNumericKey001 is some key specific to you, security through obscurity as it were.
+* JSON: change the "format=rss20" to "format=json" in the RSS URL and you'll get a JSON feed file instead with roughly [[Atom]] semantics.
+
+=== Instagram ===
+[[Instagram]]'s native apps (iOS, Android) UI (when logged in) has a heart inside a talk bubble icon button at the bottom, which when clicked, presents recent notifications/activity (likes, comments, following, person-taggings) of you and your posts (photos, videos). The "YOU" tab is highlighted in blue by default:
+
+(need screenshot of "YOU" notifications/activity)
+
+If you then tap the "FOLLOWING" tab at the top, it becomes highlighted in blue and shows similar notifications/activity by and for those you follow (for the most part that is, it doesn't show you when people follow the people you are following). 
+
+[[File:2015-023-instagram-like-clustering.jpg]]
+
+=== LinkedIn ===
+All notifications are available for a limited amount of time and contain different content than posts
+* '''URL and screenshot needed!'''
+
+=== Twitter ===
+[[Twitter]] shows notifications for the logged in user at:
+* https://twitter.com/i/notifications
+* https://twitter.com/i/notifications?filter=following - particularly useful
+Including the following types of [[responses]]:
+* [[mentions]] of your username
+* [[favorite]]s of your tweets, e.g.
+** "Christophe Ducamp and IndieWebCamp favorited your Tweet "
+* [[favorite]]s of tweets you're mentioned in, e.g.
+** "Kevin Marks favorited a Tweet you were mentioned in "
+* [[repost]]s of your tweets, e.g.
+** "IndieWebCamp and dietrich ayala retweeted you "
+* [[repost]]s of tweets you're mentioned in, e.g.
+** "Kevin Marks retweeted a Tweet you were mentioned in "
+
+As illustrated in this screenshot (from {{t}} logged in as @t)
+
+[[File:2015-08-13-Twitter-notifications.png]]
+
+See also: [[mentions#Twitter|mentions silo examples: Twitter]].
+
+=== GitHub ===
+
+GitHub shows a blue dot above the notifications icon (a bell) to indicate there are unread notifications.
+
+Notices are divided by project. Each entry shows the title of the issue/PR and an icon indicating what type of action it is (new issue, comment, pull request, PR merged, issue closed). Note/Criticism: there is very rarely enough context on this page to triage notifications &mdash; you almost always have to click through to the issue itself to see what it's referring to.
+
+[[File:2016-02-10-GitHub-notifications.png|800px]]
+
+== See Also ==
+* [[webmentions]]
+* [[growl]]

@@ -1,0 +1,606 @@
+http://indiewebcamp.com/Twitter
+
+{{pagelogo|https://pbs.twimg.com/profile_images/530553072594874368/7f9QErOD_200x200.png}}
+'''<dfn>Twitter</dfn>''' (also known as <dfn>Twitter.com</dfn>) is a popular content hosting [[silo]] most well known for 140 character text [[notes]].
+
+== Data Export ==
+=== Download all your tweets ===
+__TOC__
+# Go to: https://twitter.com/settings/account 
+# near the bottom of the page there may be a "Your Twitter archive" section
+# See the (Request your archive) button? Click it. 
+# Wait some amount of time for a link to your archive to show up in your email associated with the account.
+
+The Twitter archive is made of per month JSON files. It can be used as a way to [[PESOS]] a whole Twitter history, even though POSSE is the recommended way to do it. 
+
+The most interesting things in the JSON twitter archive are:
+* both long and shortened URLs
+* "new" RTs are also written the classic Way, making easy to republish them in a PESOS way.
+* every related information needed to rebuild a conversation
+
+After you download your archive, you can update in using a Ruby Gem called [https://github.com/DeMarko/grailbird_updater GrailbirdUpdater].
+
+=== Download Direct Messages ===
+* You can use [http://www.jwz.org/blog/2014/01/psa-back-up-your-shit/ this method] to download DMs from Twitter. It is complicated to set up and involves registering a new Twitter application. It can only archive about a year's worth of DMs.
+
+=== Backup using t command line tool ===
+See: https://github.com/sferik/t#using-t-for-backup
+
+You can also export your lists with the "t" command line tool:
+;List all your lists, in long format
+:t lists -l
+;List all the members of a list, in long format
+:t list members -l following-`date "+%Y-%m-%d"`
+
+== Porting to the IndieWeb ==
+=== Implementations ===
+[http://www.freedom.io/ freedom.io] ([https://github.com/snarfed/freedom source]) can copy all of your tweets to [[WordPress]], [[Tumblr]], [[Blogger]], creating a new blog post for each, with the original dates and with replies and retweets (yours and others') included as comments.
+
+It's rough and unpolished. [[User:Snarfed.org|Ryan]] eventually plans to polish it up and advertise it more widely.
+
+=== Challenges ===
+* porting over content and maintaining URL redirects
+** not currently possible to redirect Twitter permalinks to your own site AFAIK. [[User:Tantek.com|Tantek]] 14:33, 17 November 2012 (PST)
+* porting over @-replies
+** Twitter has *no* API for getting @-replies to a particular tweet. You can do it with lots of extra work, though. [[Bridgy]] does this; [http://indiewebcamp.com/backfeed#Twitter details and example code here].
+* porting over retweets
+** Twitter has an [https://dev.twitter.com/docs/api/1/get/statuses/retweets/:id API endpoint] for getting retweets of a particular tweet.
+*** The first 100 retweets of any particular tweet can be fetched via the API
+* porting over favorites
+** Twitter has *no* direct API for getting favorites of a particular tweet. You can get them as they happen from the streaming API, or you can screen scrape, but neither are ideal. [[Bridgy]] has example code for both.
+* API limited to most recent 3,200 tweets
+** People in Europe are legally entitled to their entire twitter history, but twitter make it very difficult to get at it (requiring a fax machine!). See: [http://marks.dk/how-to-get-more-than-3200-tweets-from-twitter-if-you-live-in-a-country-in-the-eu-that-is How to get more than 3200 tweets from twitter]
+* equivalent user interface
+** "twitter's editor is hard to beat though, like auto-expanding twitter handles and telling you how many characters you have left (with accounting for URL-shortening)"
+*** Re: "how many characters you have left (with accounting for URL-shortening)" - there's [[CASSIS]] functions for that:
+**** <code>[https://github.com/tantek/cassis/blob/master/cassis.js#L1186 tw_text_proxy($t)]</code> - given plain text for a note, it returns a string with character count that Twitter would give it, e.g. after t.co-wrapping URLs. Useful for length estimations, and doing truncation/ellipsing computations.
+***** e.g. <code>140-strlen(tw_text_proxy($t))</code> gives you # of characters left
+**** <code>[https://github.com/tantek/cassis/blob/master/cassis.js#L1255 note_length_check($note, $maxlen, $username)]</code> - given a string $note (e.g. the output from tw_text_proxy() above), a $maxlen (e.g. 140), and a $username (e.g. "@indiewebcamp"), it returns result codes (roughly based on / reusing from HTTP)
+***** 200 - $note exactly fits $maxlen characters when retweeted (if $username was provided)
+***** 206 - $note fits $maxlen and has room to spare even when retweeted (if $username provided)
+***** 207 - $note fits $maxlen with room to spare, but a retweet would get truncated (if $username provided)
+***** 208 - $note exactly fits $maxlen and a retweet would be over and get truncated
+***** 413 - (entity too large) $note is over $maxlen
+
+== POSSE to Twitter ==
+While Twitter is still around and you still have friends on Twitter that you want to interact with, you should post your [[note]]s on your own site, and automatically syndicate them to Twitter ([[POSSE]] them) so your friends see and can interact with those copies. This section details how.
+
+In short, you have to either use:
+* Twitter's [[snowflake]] API
+* [[Bridgy]] Publish proxy
+* [[silo.pub]] proxy
+to POSSE posts to Twitter. There are people in the IndieWeb community doing each of these.
+
+=== POSSE to Twitter in general ===
+There are particularly good ways to POSSE [[notes]] and [[articles]] to Twitter which are documented in latter sections. Here are some general guidelines for POSSEing to Twitter.
+
+Given Twitter's limitations:
+* 140 characters of content
+* links are t.co'd into 20 (or 21) characters for http (or https) links)
+* local user (@-name) references only
+* local tag (#hashtag) references only
+
+When POSSEing to Twitter:
+# provide a permalink (or perma-short-ID for entirely fitting notes) to your original at the end of the syndicated copy
+# abbreviate notes / article names to fit
+# include hashtags as part of that abbreviated content (even if they're beyond the ellipsis horizon) to increase syndication based discovery/searchability of your content
+#* e.g.: as [http://aaronparecki.com/notes/2012/09/09/3/indieweb aaronparecki.com does]
+# translate indiewebsite people references into their Twitter local user @-name equivalents
+
+Once POSSE is successful:
+* construct a URL (https) for the POSSE copy tweet and link to it from the original post using [[rel-syndication]]
+
+The sections below contain details on how to do some of this for [[notes]] and [[articles]] in particular.
+
+=== POSSE Notes to Twitter ===
+For notes, you can POSSE out up to 140* characters of your note to Twitter.
+
+==== POSSE entire note to twitter ====
+For notes that fit entirely within a tweet (*including [[permashortcitation]]), you ''should'' include a post [[permashortcitation]] at the end of your tweet. Examples:
+* https://twitter.com/t/status/130570474261458944
+has the permashortcitation of a permashortid in a classical parenthetical citation:
+* <samp>(ttk.me t4Ec3)</samp>
+which is easily expanded (see related: [[original-post-discovery]]) by unparenthesizing and joining the two pieces with a forward slash "/":
+* <code>ttk.me/t4Ec3</code>
+which resolves (redirects) to the original post:
+* http://tantek.com/2011/303/t3/settled-falcon-perma-short-link-in-text-cite-design
+
+==== Why permashortcitation ====
+{{main|permashortcitation}}
+
+You should use a permashortcitation instead of a permashort<em>link</em> at the end of tweet copies of notes that include the entire text of a [[note]] post, especially if your site lacks any additional content / UI as compared to Twitter (e.g. [[reply-context]]s, [[comments-presentation]], [[likes]], [[reposts]])
+
+There's an unspoken convention on Twitter that a link in a tweet (especially at the ''end'' of a tweet) should provide more information. 
+
+Having an active permashortlink at the end of your tweet when all you provide on your own site is the *exact* same content is bad UX for your friends that follow you on Twitter. 
+
+Note the complaints ([https://twitter.com/zeldman/status/24154348602793984][https://twitter.com/sgalineau/status/24171771997462528]([http://tantek.com/2011/009/t2/ttk-me-permashortlinks-originals-twitter-copy response]), [https://twitter.com/zeldman/status/24213884298592256]([http://tantek.com/2011/009/t3/value-searching-finding-past-tweets-self-hosting response]), [https://twitter.com/zeldman/status/24224559787941888][https://twitter.com/zeldman/status/24521588359569409]) and questions[https://twitter.com/tigerchops/status/306879654227218432] over time that have been raised in response to apparent linking to "duplicate" or "the same" content.
+
+The whole point of POSSE is that you still care about your friends on Twitter (or other silos) reading you, so you should care about their UX also. 
+
+Only provide permashortlinks as part of your POSSE tweets when they link to an the original post <em>with more content</em> than in the POSSE tweet copy. Otherwise use permashortcitations so that your original posts are still automatically discoverable using the [[original-post-discovery]] algorithm.
+
+==== POSSE abbr note to twitter ====
+If your note (with permashortid) exceeds 140 characters, you should abbreviate your note to 117 (116) characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 117 (116) characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into 22 characters (23 characters for new <em>https</em> URLs). 
+
+When shortening to 117 (116) characters, you must count <em>other</em> http (https) URLs within that as 22 (23) characters (excepting schemeless pathless ccTLDs). You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace http (https) URLs in a string with 22 (23) character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
+
+You may want to put an ellipsis character at the end of your POSSEd note to Twitter before your perma(short)link. Be sure to leave room for the ellipsis too: instead of just 1 character for a space before your permashortlink, save 4 characters for "... ", or 2 characters for "… " (ellipsis entity character). Note Twitter now counts characters in a sensible fashion, they count codepoints in Unicode NFC: https://dev.twitter.com/docs/counting-characters. Ideally elide at a punctuation boundary (like sentence terminator or a comma - the above-mentioned CASSIS function does this too).
+Examples (which link to original posts after eliding with "... ")
+* https://twitter.com/t/status/134793377291046912 - elided after "(" left parenthesis
+* https://twitter.com/t/status/228953522123706368 - elided after "," comma
+* https://twitter.com/aaronpk/status/365476652911837185 - elided at a word boundary
+* ...
+
+Exception, if your abbreviated tweet already has a ":" (colon) character at the end, no need for an ellipsis, simply append a space " " and your permashortlink.
+Examples which truncate after a ":"
+* https://twitter.com/t/status/184008333571801089 - truncated at ":" before more text
+* https://twitter.com/t/status/179636269096247297 - truncated at ":" right before a URL
+* ...
+
+Continuing that ":" reasoning, you may also instead of an ellipsis character, use some text like "More: " or "More at:" but that likely also requires a different shortening approach, perhaps to a sentence boundary. If you're unable to shorten to a sentence boundary (e.g. a very long sentence) then you need to shorten at a word boundary and then use <em>both</em> an ellipsis character and more text, e.g.: "… More: {link}" to be consistent with this "More:" approach. The disadvantage of "More:" approach is that it requires more shortening to include the additional "More: " text.
+
+IndieWebCamp community members who are doing this:
+* {{aaronpk}} automatically using [[p3k]] (e.g. [http://aaronparecki.com/notes/2013/08/08/1/dream 2013 note post], [https://twitter.com/aaronpk/status/365476652911837185 POSSE tweet])
+* {{t}} automatically using [[Falcon]]  (e.g. [http://tantek.com/2011/303/t3/settled-falcon-perma-short-link-in-text-cite-design 2011 note post], [https://twitter.com/t/status/130570474261458944 POSSE tweet]) Explanatory posts:
+** 2010-126: http://tantek.com/2010/126/t4/permashortlink-microsyntax-citation-syndication-discoverable-falcon-diso-2
+** 2010-145: http://tantek.com/2010/145/t1/algorithmic-permashortlinks-diso-2-interview-ownyourdata
+** 2010-146: [http://www.monkinetic.com/2010/05/26/tantek-celik-diso-20-brass-tacks Tantek Celik on DiSo 2.0: Down to Brass Tacks]
+* {{tommorris}}  (e.g. (citation of note post, POSSE tweet))
+* {{barnabywalters}}  (e.g. (citation of note post, POSSE tweet))
+* {{kartikprabhu}} e.g.
+** [https://kartikprabhu.com/notes/user-story-tommorris 2015-122 like] post with [[quotation]], and  [https://twitter.com/kartik_prabhu/status/594636445064830977 manual POSSE note copy] (using " more: {link}" technique)
+* ... add yourself (alphabetically) if you have this working
+
+==== POSSE Notes to Twitter Pseudocode ====
+This is pseudocode based on [http://waterpigs.co.uk Barnaby Walters]’ [https://github.com/barnabywalters/php-helpers/blob/master/BarnabyWalters/Posse/Helpers.php php-helpers] package, specifically BarnabyWalters\Posse\Helpers class.
+
+Assume that to start with you have some HTML markup representing the content of the note ($text), the canonical URI to link back to from the syndicated tweet ($url) and an optional in-reply-to url associated with the note ($inReplyTo).
+
+# Convert any HTML in $text to twitter-like plaintext syntax, or strip it
+# Truncate $text such that, once all URLs contained within it are replaced with URLs of the current t.co length (21 ATOW) there are enough characters left to contain the canonical URI with brackets around, or preceded by and ellipsis if any truncation has occurred
+# Trim $text
+# Append a space and $url, surrounded with brackets if no truncation has occurred or preceded by an ellipsis if truncation has occurred
+# Create a hashtable representing the body of the POST request to send ($tweet)
+# Set $tweet['status'] to $text
+# Check to see if $inReplyTo is the URI of a tweet (see [https://github.com/barnabywalters/php-helpers/blob/master/BarnabyWalters/Posse/Helpers.php#L58 line 58])
+#* If it is, grab the ID
+#* Set $tweet['in_reply_to_status_id'] to the ID
+# Send an authenticated POST request to the relevant API endpoint with the contents of $tweet as a urlenoded body
+
+==== POSSE note with photos to Twitter ====
+If your note has photos, e.g. [[auto-embed]]ded JPG/PNG etc. URLs, consider POSSEing those photos (first four if any, per Twitter photo-attachment limitations) as image uploads associated with your POSSEd text note.[http://indiewebcamp.com/irc/2015-03-20/line/1426873564102]
+
+IndieWebCamp community members who are doing this: 
+* {{jeena}} e.g. https://jeena.net/photos/156
+** POSSE tweet with photo: https://twitter.com/jeena/status/619928034179706880
+* {{aaronpk}} since 2014-05-06
+** http://aaronparecki.com/notes/2014/05/06/3/iiw-indieweb
+** https://twitter.com/aaronpk/status/463747044260065280
+
+=== POSSE Articles to Twitter ===
+Similar to POSSEing a note, you can POSSE an article to Twitter, but instead of the first 140 characters of the post, you should POSSE the first 140 characters of the entry name (title) of the article, followed by optionally a ":" character (unless the entry title already ends with punctuation), then a space " ", then the perma(short)link to your original post. Examples: 
+* https://twitter.com/t/status/21599383183 (no colon between tweeted title and blog post permalink)
+* https://twitter.com/t/status/24915461441 (entry title ends with punctuation, no ":" needed)
+* https://twitter.com/t/status/10572648543162368 (colon between tweeted title and blog post permalink)
+* ...
+
+IndieWebCamp community members who are doing this:
+* [[User:Aaronparecki.com]] (e.g. (citation of article post, POSSE tweet))
+* [[User:Tantek.com]] (e.g. (citation of article post, POSSE tweet))
+* [[User:Tommorris.org]] (e.g. (citation of article post, POSSE tweet))
+* [[User:Waterpigs.co.uk]] (e.g. (citation of article post, POSSE tweet))
+* [[User:T37.net]] (e.g. (citation of article post, POSSE tweet))
+* ... add yourself (alphabetically) if you have this working
+
+=== POSSE Replies to Tweets ===
+Similar to POSSEing a note to Twitter, when POSSEing a reply to a tweet, you also set the <code>in_reply_to_status_id</code> field in the API call to the URL of the tweet that your note is in reply to, to enable the threading UI and presentation on Twitter.com.
+
+You can use this regular expression to extract tweet IDs from tweet URLs:
+
+<code>/https?:\/\/twitter.com\/[a-zA-Z0-9_]{1,20}\/status\/([0-9]*)/</code>
+
+Examples, i.e. IndieWebCamp community members who are doing this:
+* [[User:Waterpigs.co.uk]] with [[Taproot]] ([http://waterpigs.co.uk/notes/4SFEn4/ example])
+* [[User:Aaronparecki.com]] with [[p3k]] ([http://aaronparecki.com/replies/2013/09/26/2/indieauth example])
+* [[User:Tantek.com]] with [[Falcon]] (e.g. [http://tantek.com/2013/132/t2/been-t-since-day-joined-2006 reply post], [https://twitter.com/t/status/333649785062060034 POSSE tweet])
+* [[User:Tommorris.org]] with [[Ferocity]] (e.g. [http://tommorris.org/posts/8350 reply post], [https://twitter.com/tommorris/status/343394303252516864 tweet])
+* [[User:Snarfed.org]] with [[WordPress]] via [[Bridgy]] ([https://snarfed.org/responses#replies snarfed.org/responses#replies])
+
+=== POSSE Replies to Twitter ===
+==== original has POSSE tweet ====
+If the original indieweb post that you're replying to has a POSSE tweet copy:
+
+When posting a comment which is a reply to another indieweb post, the POSSE tweet of your comment should attempt to set the <code>in_reply_to_status_id</code> to the POSSE tweet of the indieweb post you're replying to.
+
+This is similar to how you '''POSSE Replies to Tweets''' but with one extra step to discover the POSSE tweet of the original post:
+* You can discover the POSSE tweet of an indieweb post by look for a [[rel-syndication]] hyperlink from the indieweb post to a tweet.
+* For more details, see: '''[[comment#POSSE_a_reply|How to POSSE a reply]]'''
+
+See also: [[in-reply-to]], [[comments]].
+
+==== original lacks POSSE tweet ====
+If the indieweb post (or other URL) has no equivalent POSSE tweet and is not a tweet URL itself, then there are two possibilities, depending on whether your reply is "self-contained" enough to be meaningful without the context of what you're replying to.
+
+'''Replies that do need the context of the original to make sense:'''
+* Start your POSSE tweet with the '''@-name''' of the author of the indieweb post.
+** E.g. use a [[nicknames-cache]] to automatically determine the @-name from the original post's domain name.
+* Use common reply phrasing like "'''re: '''"
+* Followed by the '''permashortlink''' of the original indieweb post
+* '''linebreak''' - optional, but takes no more characters than a space, and helps separate the "re:" phrasing from your actual reply content
+* your '''reply content''' as much as will fit per previous ellipsing analysis
+* '''permashortlink''' to the rest of your reply, or permashortcitation
+
+IndieWeb Examples of replies to indie web posts without POSSE tweet (with POSSE reply copy nested):
+* http://tantek.com/2015/162/t2/indieweb-ui-ux-sketch-build
+** https://twitter.com/t/status/609195768545566720
+* http://tantek.com/2015/162/t3/reply-three-deep
+** https://twitter.com/t/status/609225184390713344
+
+IndieWeb Examples of replies to silo posts/comments without POSSE tweet (with POSSE reply copies nested):
+* http://tantek.com/2015/260/t3/donated-books-goodwill
+** Twitter: https://twitter.com/t/status/644705364961796097
+** Facebook (into the in-reply-to context) https://www.facebook.com/tantek.celik/posts/10101883746673363?comment_id=10101883803689103&reply_comment_id=10101890274751043
+
+'''If your reply is meaningfully "self-contained" enough to be relevant to your Twitter readers:'''
+* write your reply in a such that you can reference the indieweb in-reply-to URL as a reference inline
+* end with your permashortlink or permashortcitation as you would for your POSSE notes.
+
+IndieWeb Examples of this:
+* http://tantek.com/2015/159/t2/of-the-indieweb-because-silos-die
+** https://twitter.com/t/status/608157213488578560
+
+Another alternative for meaningfully self-contained replies is to include the non-Twitter in-reply-to URL as the last thing before your permashortlink in the POSSE tweet copy of your reply so Twitter can potentially show context of the in-reply-to URL in the POSSE tweet copy of your reply.
+* IndieWeb reply example: https://jeena.net/notes/97
+** POSSE tweet copy: https://twitter.com/jeena/status/436675022443511808
+
+Lastly, another option is to not POSSE replies to indieweb posts which themselves lack POSSE copies. IndieWeb community members have also found joy out of site-to-site replies that never hit Twitter, and thus reflect another level of independence.
+
+=== POSSE Reposts of Tweets ===
+When posting a [[repost]] of a tweet, the proper POSSE behavior should be to do a native retweet (on Twitter) of the tweet that you're reposting on your own site.
+
+Examples of reposts of tweets:
+* [[User:Snarfed.org]] with [[WordPress]] via [[Bridgy]] ([https://snarfed.org/responses#retweets snarfed.org/responses#retweets])
+* {{kylewm}}: https://kylewm.com/share/2014/05/22/1
+
+If you repost a retweet, the proper POSSE behavior is to do a native retweet of that retweet permalink (not the original tweet permalink).
+
+Example repost of a retweet:
+* {{kylewm}}: https://kylewm.com/2015/06/repost-of-detlef-kreuz-rt-tarr11-i-want-indieweb
+** POSSE retweet permalink: https://twitter.com/kylewmahan/status/615185116214628352
+
+=== POSSE Reposts to Twitter ===
+When you do a [[repost]] of an indieweb post:
+* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to twitter.com
+* if there is such a [[rel-syndication]] hyperlink with href linking to a tweet URL
+* then
+** do a native retweet of that tweet URL on Twitter itself
+* else
+** consider [[2014/reposts#Reposting_a_post_that_lacks_a_POSSE_tweet|How to POSSE a repost of a post that lacks a POSSE tweet itself]]
+* end if
+
+=== POSSE Favorites of Tweets ===
+When posting a [[favorite]] of a tweet, the proper POSSE behavior should be to natively favorite (on Twitter) the tweet that you're favoriting on your own site.
+
+Examples:
+* [[User:Snarfed.org]] with [[WordPress]] via [[Bridgy]] ([https://snarfed.org/responses#likes snarfed.org/responses#likes])
+
+=== POSSE Favorites to Twitter ===
+When you post a [[favorite]] of an indieweb post:
+* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a tweet
+* if there is such a [[rel-syndication]] hyperlink with href linking to a tweet URL
+* then
+** natively favorite that tweet URL on Twitter itself
+* end if
+
+=== Reverse Syndicating At-Replies ===
+Per the [[POSSE]] model, you may want to reverse-syndicate @-replies on Twitter to the tweet-copies of your post as "comments" back into your post permalink page on your own site. 
+
+You can use the [[Bridgy]] backfeed service to automatically receive [[Webmention]]s when people @-reply to your tweet copies.
+
+=== Reverse Syndicating Other Responses ===
+Using the [[Bridgy]] backfeed service, you can also automatically receive Webmentions when people on Twitter like or retweet your tweet copies. When you receive these webmentions, display them as [[likes]] and [[reposts]] on the permalink of your content on your own site.
+
+== Features ==
+Twitter provides the following features currently:
+
+* [[signup]] &amp; [[login]] with a email address, user chosen username, password, and optional [[2FA]] (two-factor authentication) via SMS or Twitter Mobile Native App.
+** indieweb equivalent: [[signin]] via [[RelMeAuth]] or [[IndieAuth]], TBI multi-factor [[IndieAuth]]
+* [[follow]], [[mute]][https://support.twitter.com/articles/20171399], and [[unfollow]][https://support.twitter.com/articles/15355-how-to-unfollow-users-on-twitter]
+* [[reader]] UI with an integrated UI to:
+* [[post]] a [[note]] or [[reply]] (optionally attaching 1-4 [[photos]] optionally [[people-tagged]]) at a [[permalink]] with:
+** [[create]] tweet UI with
+*** [[character count]] display, live while entering text - actually characters <em>remaining</em> since Twitter has a 140 character per tweet limitation
+*** [[deduplication]] by disallowing exact same tweet text to be posted on same day.
+** [[autolink]]ing of URLs, @-names, #-[[hashtags]] in note/reply
+** [[link-preview]] of (only one, the first) URLs in note/reply, including [[autoembed]]ding of [[YouTube]] and other whitelisted media hosting sites. See [[Twitter Cards]] for details.
+** [[retweets]] count
+** [[favorites]] count
+** [[comments-display]] (@-replies to it)
+** [[location]] (per user privacy preferences)
+*** [[venue]] via [[Foursquare]] integration[https://support.twitter.com/articles/122236-adding-your-location-to-a-tweet][https://twitter.com/twitter/status/580049522170011648]
+** [[reply-context]] of in-reply-to tweets up through the start of the thread 
+** author buttons: Delete post, [[Pin]] post to top of profile
+** [[web actions]] for others to Reply, Retweet, Favorite
+** [[citation]] UI to share tweet via email, or copy/paste as a blockquote
+* [[repost]] (called "retweet" on Twitter) and unretweet others' tweets
+* [[quote tweet]] - a [[reply]] variant available in their "retweet" UI that displays the [[reply-context]] of the entirety of the original tweet below the reply text. [https://blog.twitter.com/2015/tweettip-3-ways-to-tap-into-cultural-moments-on-twitter since 2015-04-06][http://techcrunch.com/2015/04/06/retweetception/]
+* [[like]] (called "favorite" on Twitter) and unfavorite any tweet
+* post a mixed [[collection]] at a permalink of [[notes]] and [[replies]] (what Twitter calls [https://blog.twitter.com/2013/introducing-custom-timelines custom timelines])
+* direct [[message]] 
+** to anyone who is [[following]] you
+*** and those who [http://www.cnet.com/news/twitter-upgrading-direct-messaging-feature/ opt-in to anyone]
+** view or delete your previous private messages sent and received as conversations per person
+** show count of unread [[message]]s
+* [[search]] over
+** all [[posts]] on Twitter
+*** only posts from those you follow
+*** only posts with media (e.g. [[photo]] or [[video]] even if just auto-embedded)
+*** only "top" posts ("top" undefined, some attempt at relevancy subset)
+*** only posts with [[location]] info that are "near you" ("nearness" undefined)
+** authors (people) of posts
+* [[notification]]s (see Twitter [https://support.twitter.com/articles/20169398-activity-and-notifications notification viewer] details) of when others
+** [[reply]] to your posts
+** [[favorite]] your posts
+** [[repost]] your posts
+** [[mention]] you in their posts
+** [[people-tag]] you in their posts
+** [[follow]] you
+*** and ability to [[block]][https://support.twitter.com/articles/117063-blocking-users-on-twitter] them
+*** and optionally [[report_abuse#Twitter|report abuse]] (e.g. as [[spam]][https://support.twitter.com/articles/64986-how-to-report-spam-on-twitter])
+* [[profile]] page (equivalent of indieweb [[homepage]]) configuration including
+** header image
+** [[icon]]
+** name (as displayed next to tweets)
+** 160 character bio
+** location (plain text field)
+** website (supports [[rel-me]])
+** [[joined]] - month and year
+** [[birthday]] ([https://blog.twitter.com/2015/hbd-celebrate-your-birthday-on-twitter as of 2015-07-06]) - day and month, and optionally year visible to Public, followers, people you follow, follow each other, or only yourself.
+** photos and videos embed ("n photos and videos", 6 thumbnails)
+** [[who to follow]] - shown when you view your own profile with:
+*** 3 suggested users to follow, and links to:
+*** [[popular accounts]]
+*** [[find friends]]
+** [[followers you know]] - shown when other logged in users view your profile
+** [[trends]] - location specific or global service-wide trending topics
+** [[verified]] profiles for some users
+* [[settings]] - lots of account settings, including:
+** [[Facebook]] connection to [[POSSE]] tweets to there
+** [[private account]] - toggle all posts public, or all private, then requiring approval for every follow request
+** ... add more setting descriptions here.
+* lists - manage multiple lists of Twitter users:
+** viewing a list stream shows only tweets from those users
+** can be private or public
+** . . .
+* [[API]] for developers including
+** [[Twitter Cards]]
+** [[Sign in with Twitter]]
+** ... and more
+
+=== 2006 original ===
+At launch, Twitter provided the roughly following features:
+
+* [[signup]] &amp; [[login]] with a email address, user chosen username, password
+** indieweb equivalent: [[signin]] via [[RelMeAuth]] or [[IndieAuth]], TBI multi-factor [[IndieAuth]]
+* [[follow]] and [[unfollow]][https://support.twitter.com/articles/15355-how-to-unfollow-users-on-twitter]
+* [[reader]] UI with an integrated UI to:
+* [[post]] a [[note]] at a [[permalink]]
+* [[profile]] page (equivalent of indieweb [[homepage]]) configuration including
+** [[icon]]
+** name (as displayed next to tweets)
+** location (plain text field)
+** 160 character bio
+
+This list may be incomplete/imprecise and was done from ~8 year old memory. Please update if you have documentation of specifics!
+
+=== Embedding Tweets ===
+Twitter offers copy/paste embed markup on its site that allows one to embed the appearance/text of a tweet in one's own page, as well as [[oEmbed]] option. As both the oEmbed and the embed markup include the text of the tweet in a blockquote, if Twitter shut down, this could continue to display the text minus the appearance.
+
+=== Photo Attribution ===
+When a Twitter user includes a link to someone else's photo on Twitter, the Twitter website shows the photographer's name and Twitter account under the photo.
+
+[[File:twitter-photo-attribution.png]]
+
+(Note: the attribution only appears in-stream, not on the Tweet permalink)
+
+=== 2006-11-14 additions ===
+On [https://blog.twitter.com/2006/six-more-twitter-updates 2006-11-14 Twitter introduced several features]:
+* [[web actions]] on Tweets (then called "Twitter updates" / "Twitters") 
+** [[favorite]] button (Twitter's equivalent of [[like]]) and unfavorite any tweet
+** [[delete]] post - author-only button
+* direct [[message]] anyone who is following you and
+** view or delete your previous private messages sent and received as conversations per person
+** show count of unread [[message]]s (likely added at same time, but may have been a later enhancement)
+* [[search]] over
+** authors (people) of posts
+
+=== Replacing ===
+If you recreate these features on your own site, including [[POSSE]] support to Twitter for each, then you no longer have any need to directly use Twitter.
+
+To fully replace your usage of Twitter you must also support (roughly ordered by importance, expected frequency of usage)
+# import your pre-indieweb tweets to your own domain (accessible via your own site navigation, search, archives).
+# on a tweet permalink: (e.g. that you navigated to from a link elsewhere)
+#* click "Reply", "Retweet", or "Favorite" and have the action go to your site instead (which then POSSE's it back to Twitter).
+# on a Twitter profile page (e.g. that you navigated to from a link elsewhere)
+#* click "Follow" or "Unfollow" and have the action take place on your site instead (which your site could POSSE sync to Twitter as well)
+# expanded [[search]] for all the use-cases that you currently use Twitter search for. This is likely different for different people and is thus open to some interpretation. Here are some specifics to support [[search]] to replace your usage of Twitter. Support search of:
+#* all [[posts]] of from everyone who has posts on your site (just you if you're the only author)
+#** only posts from those you follow in your [[reader]] (or just your posts if you lack a reader)
+#** only posts with media (e.g. [[photo]] or [[video]] even if just auto-embedded)
+#** only "top" posts (make up your own meaning of "top" as Twitter's is undefined)
+#** only posts with [[location]] info that are "near you" (make up your own meaning as Twitter's is undefined)
+#* authors (people) of posts on your site (just yourself if you only show posts written by you)
+
+
+The end result is that all your interactions with Twitter and Tweets via your own site need to be <em>at least</em> as seamless as Twitter's UI (so you'll use your own UI instead).
+
+=== Clients ===
+Twitter has several clients that all have a fairly complete implementation of the above features:
+* web: http://twitter.com/
+* mobile web: http://m.twitter.com/
+* native [[app]]s on MacOS (e.g. TweetDeck), and [[mobile]] platforms iOS &amp; Android
+* SMS - you can sign-up for Twitter and do most actions via SMS. See [http://microformats.org/wiki/twitter-syntax Twitter SMS syntax research].
+
+== iOS client ==
+
+''See full article: [[Twitter-API]]''
+
+The Twitter iOS client has an option to use a different API root, "intended for a Twitter proxy server"
+
+It may be theoretically possible to re-implement enough of the Twitter API on your own site to set your own site as a "Twitter proxy server" and thus use the Twitter client as a client to post directly to your own site (and perhaps read from it as well).
+
+== Criticism ==
+Bad or failing behavior on the part of Twitter. Roughly sorted by most problematic / frequently so first.
+
+=== Poor handling of abuse ===
+As very well documented in:
+* 2014-08-12 <cite>[http://rhrealitycheck.org/article/2014/08/12/twitterfail-twitters-refusal-handle-online-stalkers-abusers-haters/ #TwitterFail: Twitter’s Refusal to Handle Online Stalkers, Abusers, and Haters]</cite>
+
+Twitter's UX now makes it easier to post abusive content, than protect oneself from the same.
+
+=== Broken Without JS ===
+Some of Twitter's [[#Features]] are now (as of 2015-01-08 or before) broken or completely non-functional when JavaScript fails to load or is disabled.
+
+* '''[[follow]] button on profile broken.''' (Follow) button does nothing on profile pages, e.g. https://twitter.com/upcomingorg
+
+=== Dogfooding Fail ===
+In a piece [http://eggsbacon.co.nz/twitter_mau Does Twitter's exec team even use Twitter?] (April 2015), a web developer ([https://twitter.com/sidawson @sidawson]) found that 7 of 11 top Twitter executives tweet less than once a day, and most did not use the service before working at Twitter.
+
+=== Downtime ===
+Live: http://downrightnow.com/twitter
+
+Most recent first:
+* 2013-08-28 [https://twitter.com/veen/status/372842227195580419 Twitter was experiencing DNS issues] resulting in missing images and raw html for a number of hours.  This is likely due to DNS issues related to the [http://www.vice.com/read/the-syrian-electronic-army-talks-about-yesterdays-hacks syrian army hacks].  The site was nearly impossible to use in its raw html form. [[File:Screen_Shot_2013-08-28_at_5.12.26_PM.png|250px]]  
+* 2012-06-21 [http://gigaom.com/2012/06/21/twitter-outage-thursday-morning-frustrate-users/ Twitter was down: sporadic outages persist Thursday morning]
+* 2010-11-04 "Twitter server is down or being upgraded." [http://www.flickr.com/photos/tantek/5322875194/ http://farm6.staticflickr.com/5210/5322875194_908d728816_z.jpg]
+* 2009-09-16 "Twitter is over capacity" (AKA failwhale) [http://www.flickr.com/photos/factoryjoe/3927590515/ http://farm3.staticflickr.com/2571/3927590515_dcdac9ed95.jpg]
+
+=== spammy cross-posting to facebook ===
+This may be a side effect of both Twitter and Facebook doing arbitrary photo cropping (FB likes square images, Twitter likes 16:9 wide ones, both often crop rather than fit to space with background).
+Kevin Marks posted [https://twitter.com/kevinmarks/status/486657353744281600a screenshot of Facebook to twitter].
+[[File:fbupcomingclone0.png|600px]]
+
+When this was [https://www.facebook.com/kevinmarks/posts/10154414550240425 replicated to facebook by Twitter's app] it looked like this:
+
+[[File:fbupcomingclone.png|600px]]
+
+cropping the screenshot and requiring a clickthrough back to twitter to make it readable, with explicit text added by Twitter when cross-posting: <blockquote>Get the whole picture - <strong>and other photos from Kevin Marks</strong></blockquote> <strong>Emphasis</strong> added - which implies deliberate behavior of a spammy sort (using your cross-post to advertise broader use of Twitter than just that one permalink).
+
+
+=== Developer Relations ===
+Twitter built their entire business on top of the developer community. Almost all Twitter features were originally from Twitter clients, such as Retweets and Hashtags. Closing sections of their API and RSS feeds has made the developer community lose trust in Twitter.
+* 2015-03-15 Sarah Kessler / FastCompany: <cite>[http://www.fastcompany.com/3043716/sxsw/twitter-only-gave-meerkat-2-hours-notice-before-cutting-access-to-the-social-graph Twitter Only Gave Meerkat 2 Hours Notice Before Cutting Access To The Social Graph]</cite> via [https://twitter.com/waxpancake/status/577634498193461248]
+* 2014-11-24 Marco Arment: <cite>[http://www.marco.org/2014/11/24/twitter-california-knife New Twitter search API won’t be available to third-party clients]</cite>
+* 2014-10-20 Marco Arment: <cite>[http://www.marco.org/2014/10/20/wsj-twitter-peace-offering Twitter’s “peace offering” to developers is meaningless]</cite>
+
+<div><p>Twitter to Offer New Tools for App Developers <br/><img src="https://pbs.twimg.com/media/B0cWScpCYAAgN2m.jpg" width="200" /></p>&mdash; Joël Franusic (@jf) <a href="https://twitter.com/jf/status/524412388745818113">October 21, 2014</a></div>
+
+=== Lack of Communities ===
+
+* [https://alexgaynor.net/2014/oct/30/i-hope-twitter-goes-away/ Alex Gaynor discusses his problems with twitter], which mostly center around the inability to define and interact within a self-moderating community, unlike most other social media (and IRC).
+
+<blockquote>
+Twitter has no mechanisms for <nowiki>[defining a community]</nowiki>. Every user floats by themselves, interacting with who they please. This denies us the ability to build communities, to set social norms, and to enforce them. Twitter has absolutely no way for me to share with others that someone isn't a person I want in my communities
+</blockquote>
+
+=== Lack of usernames ===
+Per https://twitter.com/webster/status/697984790323007488 the suggested usernames have become seemingly random long strings of letters and numbers:
+
+https://pbs.twimg.com/media/Ca-9ZNSVIAE6hEm.png
+
+== Issues ==
+Correctable issues with Twitter.
+=== Email Identity Removal ===
+This 2013-05-17 screenshot seems to demonstrate an odd interaction and vulnerability on Twitter:
+
+[[File:2013-05-17-twitter-com-new-email-warning.png]]
+
+Screenshot shows a logged in Twitter profile page (http://twitter.com/t) with a yellow warning box just below the global black toolbar that says: <blockquote>New email address required. Twitter has removed the email address from your account, by request of the email owner.<br/>Please [https://twitter.com/settings/account?change_email=true enter a new email address] where you can be reached. [https://support.twitter.com/articles/82050-i-m-having-trouble-confirming-my-email Learn more  ›]</blockquote> 
+
+Hyperlinks as present in original.  No such warning on m.twitter.com equivalent page when logged in (i.e. on a mobile device).
+
+It's not clear how this happened, how the email address was revoked, how to avoid having it revoked in the future etc.
+
+Appears to be an [[identity]] threat/vulnerability.
+
+Related posts:
+* http://tantek.com/2013/137/t3/scary-twitter-warning-removed-email-from-account
+* http://tantek.com/2013/137/b1/ux-learn-more-links-warning-boxes-three-things
+
+== History ==
+=== Early User Interface ===
+Twitter's early user interface (circa 2006, before 2006-11-14 since no favorites) was quite simple and minimal:
+
+[[File:7-changing-user-interface-twitter.png|400px]]
+
+Retrieved from: [https://web.archive.org/web/20140803000643/http://caseorganic.com/presentations/2013/10/19/1/files/slides/]
+
+==== Features ====
+* Simplicity
+* Easy to navigate, one click from your stream to someone's profile
+* Could opt to see all @-replies, even if you only followed one side of it.<blockquote>In the early days, half of how I found new interesting people to follow was catching half a conversation and checking out who the other person was.--  {{gRegor}} on [http://indiewebcamp.com/irc/2014-07-02#t1404327330 IRC ]</blockquote>
+
+=== Lots of UI revisions ===
+Look for #newtwitter and #newnewtwitter 
+
+=== UI 2011 ===
+Circa 2011 styling of Twitter stream and tweet permalink:
+
+[http://www.dafont.com/forum/read/33869/what-font-does-twitter-use http://www.dafont.com/forum/attach/orig/8/4/84660.png]
+
+Ignore the red borders / boxes - those were there to indicate/ask a question about those items.
+
+Showing Arial (presumably on Microsoft Windows) for tweet text in a stream, and Georgia for tweet text on a tweet permalink page.
+
+=== UI 2014-04 ===
+As of 2014-04, Twitter has yet another UI revision, this time nearly cloning [[Facebook]] profile pages' look & feel:
+
+https://twitter.com/genmon/status/459257786875265025/photo/1
+
+[https://twitter.com/genmon/status/459257786875265025 https://pbs.twimg.com/media/Bl-chggIMAAGyBZ.png]
+
+Facebook on the left, new Twitter UI on the right.
+
+If you don't see the image inline above (e.g. only see the text Bl-chggIMAAGyBZ.png) then click on the Twitter link to see it on their site.
+
+== Additional Resources ==
+=== Profile Image URLs ===
+Programmatically, the official way to get a Twitter user's profile image is to use the
+<code>profile_image_url</code> and <code>profile_image_url_https</code> fields returned by the [https://dev.twitter.com/docs/api/1.1/get/users/show users/show] v1.1 API call. [https://dev.twitter.com/docs/user-profile-images-and-banners More details.]
+
+Unfortunately, those fields are absolute URLs for the *current* profile image, and usually break when the user changes their profile image.
+
+Unofficial alternatives: these both 302 redirect to the current profile picture. Replace <code>username</code> with the Twitter username without the @.
+* <code><nowiki>https://twitter.com/username/profile_image?size=original</nowiki></code>
+* <code><nowiki>http://avatars.io/twitter/username</nowiki></code>
+
+If you omit <code>?size=original</code> from the former, or replace it with <code>?size=normal</code>, you get a 48x48 image instead of the original size.
+
+Twitter profile images can also be found by choosing "View Image" on context menu on a profile, those URLs may end with:
+* _normal.png - 48px square
+* _200x200.png - 200px square
+* _400x400.png - 400px square
+* or no "_" and just .png - actual uploaded size
+You can change any of the above suffixes to any others in order to get a few different sizes.
+
+== Defunct ==
+=== Tweetcc ===
+As of 2015-12-15, <span id="CC_license_your_tweets">Tweetcc</span>(.)com redirects to a spam blog on [[Wordpress.com]].
+
+''Note, tweetcc's creators decided to take it down in July 2013."[https://twitter.com/Malarkey/status/361844728922259457]
+
+'''We're looking into having tweetcc restored.'''[http://indiewebcamp.com/irc/2013-10-21/line/1382391670]
+
+You used to be able to use the site <nowiki>http://www.tweetcc.com/</nowiki> to Creative Commons license your tweets.[http://tantek.com/2012/230/t1/tweetcc-cc-license-tweets-quote-embed-indieweb]
+
+This allows anyone else wanting to:
+* copy
+* quote
+* syndicate
+Etc. your tweets to do so, per that CC license (e.g. CC-BY, attributing you) independent of Twitter's TOS, and thus independent of any Twitter requirements, e.g. their display "guidelines".
+
+== See Also ==
+* [[silos]]
+* [[notes]]
+* [[POSSE]]

@@ -1,0 +1,101 @@
+http://indiewebcamp.com/PBWorks
+
+{{stub}}
+
+'''<dfn>[http://pbworks.com/ PBWorks]</dfn>''' is a [[wiki]] content-hosting [[silo]] that was originally called "PBWiki".
+
+== How to Archive ==
+PBworks does not provide any tools for exporting a usable archive of a wiki. It is possible to archive an entire PBworks wiki, including the history of each page, as a set of static HTML files using [[wget]]. Below are the steps involved to make it work, as well as [[nginx]] config for serving the archived site.
+
+This method will result in an archive of the PBworks site with all original URLs intact, including page revision URLs.
+
+=== Create links to all pages ===
+Since PBworks does not have a page that lists all pages, you'll need to ensure all wiki pages are linked from the home page. One way to do this is to create a page called "AllPages" and link to all of your wiki pages from there. Note: This is not necessary if you are sure that every page on your wiki is linked to from some other page.
+
+=== Create a mirror with wget ===
+Create a full mirror of all the HTML pages using [[wget]]. The following wget command will download all pages linked from the home page, including linked CSS and JS files.
+
+PBworks hosts a number of static assets on a different domain, vs1.pbworks.com. By default, wget doesn't cross to other domains to download assets there, so it has to be explicitly enabled. 
+
+<pre>
+wget --mirror --page-requisites --convert-links -e robots=off -P . --domains=wiki.oauth.net,vs1.pbworks.com --span-hosts http://wiki.oauth.net/
+</pre>
+
+This will create two folders in the current directory, "wiki.oauth.net" and "vs1.pbworks.com". If you have hot-linked any images from other domains, such as Flickr, you'll want to include those domains in the list when you run the command.
+
+After downloading the initial archive, you can test for which Flickr hosts are referenced by running this command on the resulting files:
+
+<pre>
+cd wiki.oauth.net
+grep -hRo farm[[:digit:]].static.flickr.com . | sort | uniq
+</pre>
+
+The result will be a list such as:
+<pre>
+farm1.static.flickr.com
+farm2.static.flickr.com
+farm3.static.flickr.com
+farm4.static.flickr.com
+</pre>
+
+Then you can re-run the wget command and include those subdomains in the list:
+
+<pre>
+wget --mirror --page-requisites --convert-links -e robots=off -P . --domains=wiki.oauth.net,vs1.pbworks.com,farm1.static.flickr.com,farm2.static.flickr.com,farm3.static.flickr.com,farm4.static.flickr.com --span-hosts http://wiki.oauth.net/
+</pre>
+
+After wget finishes downloading all the files, it rewrites the HTML in each file to point img and links to the relative location of the other domains on disk. This way viewing a page that previously hot-linked to a flickr image will actually view the local file, since it changed the src attribute to reference the local file.
+
+To prepare to serve the archive from nginx, the last step is to rearrange your folder structure slightly. You'll want to move the other domains into your primary domain's folder. In this example, you would execute the following commands:
+
+<pre>
+mv vs1.pbworks.com wiki.oauth.net/
+mv farm1.static.flickr.com wiki.oauth.net/
+mv farm2.static.flickr.com wiki.oauth.net/
+mv farm3.static.flickr.com wiki.oauth.net/
+mv farm4.static.flickr.com wiki.oauth.net/
+</pre>
+
+This will work because the src attribute of an image that previously pointed to <code><nowiki>http://farm1.static.flickr.com/img.png</nowiki></code> will be rewritten as <code>../farm1.static.flickr.com/img.png</code>. When viewed in a browser from a page such as <code>/index.html</code>, the browser will attempt to go up one folder which will fail, and will instead resolve to <code>/farm1.static.flickr.com/img.png</code>. 
+
+=== Configure nginx to serve the archive ===
+
+You'll want to make a new server directive in your nginx config to serve this archive folder. There are a few tricks required in order for this to work properly. Below is the full config I used in this case.
+
+<pre>
+server {
+  listen 80;
+  server_name wiki.oauth.net;
+
+  root /web/sites/wiki.oauth.net;
+  index index.html;
+
+  rewrite ^/$ /w/page/FrontPage permanent;
+    
+  try_files $uri$is_args$args =404;
+  default_type text/html;
+  
+  location ^~ /theme_image {
+    try_files $uri$is_args$args =404;
+    default_type image/png;
+  }
+}
+</pre>
+
+The tricks required for this are explained below.
+
+* <code>rewrite ^/$ /w/page/FrontPage permanent;</code> PBworks does not actually serve a page from the root, so you need to redirect your root domain to the "FrontPage" page.
+* <code>try_files $uri$is_args$args =404;</code> Because the history pages are saved on disk with "?" and "&" characters in the filename, you need to force nginx to actually look for a file on disk that matches the full request URI including "?" instead of parsing the query string.
+* <code>default_type text/html;</code> Tells nginx to default to html content-type for unknown files, since most of your files will be named things like "FrontPage" with no extension on disk.
+* <code>location ^~ /theme_image</code> This config block tells nginx to send the image/png content-type for paths that match <code>/theme_image</code>. This for the images that make up the borders of the page, since PBworks serves all of them from a php script named <code>/theme_image.php</code> with query string parameters to select the proper image.
+
+== Criticism ==
+=== Cannot edit without JS ===
+If you have JS turned off or disabled like with the NoScript extension, the "Edit" button doesn't work (it doesn't do anything).
+
+=== No page that lists all pages ===
+There is no list of all wiki pages by default except in the sidebar loaded in via [[Javascript]]. This means making an [[archive]] of the site using a tool like [[wget]] will not find all the pages. To compensate for this, you can create a wiki page called AllPages or similar, and add a link to every page from that page. Then wget will follow those links since they appear in the HTML and will actually download every page.
+
+== See Also ==
+* [[wiki]]
+* [[silos]]

@@ -1,0 +1,200 @@
+http://indiewebcamp.com/webactions-fr
+
+''cette page a démarré sur [[webactions]]''
+
+= web actions =
+Une '''<dfn>web action</dfn>''' est l'interface et l'expérience-utilisateur de prendre une action discrète spécifique, sur le web, d'un site web à un autre site ou applicaiton.[http://tantek.com/2011/220/b1/web-actions-a-new-building-block]
+
+Le concept de "web actions" a été initialement présenté pour saisir à la fois l'émergence de ce nouveau tpe d'interaction web (par exemple la diffusion de boutons "Blog this, Digg, Read later, Follow, Like, Share, Tweet, +1" sur les pages [http://tantek.com/2011/220/b1/web-actions-a-new-building-block]), et un recadrage centré-utilisateur des notions précédentes orientées-développeurs de "[[web intents-fr|web intents]]".
+
+Lors de l'IndieWebCamp 2011, tant les [[Standardizing_Web_Intents|discussions]] et l'[[2011/Demos#web_intents_user_experience|effort UX]] ont démontré que le terme "web intents" prêtait trop à confusion et se montrait trop abstrait pour faire efficacement une recherche et un design orientés utilisateur. Le terme "web action" se base sur le fait que du point de vue de l'utilisateur, ils pensent qu'ils font une '''action''' quand ils cliquent sur ces boutons. Quand le terme a été essayé avec d'autres pour créer des designs/UX dans l'espace, il a semblé fonctionner bien mieux pour conduire à la compréhension.
+
+Plus récemment, les "web actions" ont été présentées et discutées à OSBridge 2012 :
+* http://tantek.com/presentations/2012/06/osb12-web-actions/
+
+- [[User:Tantek|Tantek]]
+
+== Cas d'Usages ==
+Voilà les deux cas d'usages qui peuvent être valables pour explorer plus en profondeur les webactions :
+
+1. Fournir les boutons habituels d'IU de [[Twitter-fr|Twitter]], de manière à ce que les [[notes-fr|notes]] sur votre propre site soient ressenties comme "au moins aussi utiles" que des copies syndiquées de tweet. Ceci s'applique pour le scénario où un lecteur de vos tweets clique un permalien sur la copie du tweet, navigue en arrière vers l'original sur votre propre site (peut-être pour lire plus ou mieux voir l'image / vidéo embarquée), le lecteur peut encore "mettre en favori/répondre/retweeter/tweeter" etc. votre note (tous les verbes/boutons qui agiront sur la copie tweet de cette note-là.)
+
+Il y a eu quelques exigences à cela en réponse au [[POSSE-fr|POSSE]]ing vers Twitter :
+<blockquote><p>Oops, the page I clicked thru to doesn't amplify the tweet, it simply repeats it. Bad UX. But there's more.[https://twitter.com/zeldman/status/24224559787941888]</p><p>If I want to reply to t's tweet, I can't do it from his site. I have to back-button back to Twitter. Lotta clicks.[https://twitter.com/zeldman/status/24224682530050048]</p>(and my ([[User:Tantek.com|Tantek]]) followup: http://tantek.com/2011/009/t4/falcon-needs-reply-buttons-fave-rt-coming, referenced in the broader post: http://tantek.com/2011/010/b1/owning-your-data)</blockquote> 
+
+2. Fournir une IU pour les utilisateurs indieweb afin de commenter / faire-un-lien-blog vos notes articles sur leurs propres sites.
+
+En concevant, développant pour ces deux cas particuliers d'utilisation, cela peut nous fournir un espace-design suffisamment contraint pour que nous puissions parvenir à de simples guidelines d'usages pour les webactions qui produisent une bonne expérience sur les posts indieweb.
+
+== Brainstorming ==
+=== marquage action ===
+La présentation OSBridge OSBridge "Web Actions" du 2012-06-28 [http://tantek.com/presentations/2012/06/osb12-web-actions/#slide15 proposait] le marquage <code>&lt;action></code> comme suit :
+
+<pre><nowiki>
+  <action do="post" with="permalink">
+   <a href=twitter>..</a>
+   <a href=pinterest>...</a>
+   ...
+  </action>
+</nowiki></pre>
+
+
+=== action do verbes ===
+Où :
+* '''<code>do</code>''' prend un verbe (pourrait permettre plusieurs verbes) - nous pouvons créer un répertoire commun de verbes comme le  [http://microformats.org/wiki/existing-rel-values répertoire rel]. Quelques verbes possibles communs (tirés d'une analyse dans "[http://tantek.com/2011/220/b1/web-actions-a-new-building-block#web-action-motivations Web Action Motivations and Clusters]") - bien que ceux-ci devraient être itérés selon les itérations de design d'expérience-utilisateur (noms, combien en particulier, quel sens spécifique).
+** '''<code>post</code>''' - plus spécifique que "share", plus général que "comment", ou "tweet"/"reply", même si ceux-ci pourraient s'afficher dans l'IU où un lecteur s'attend à une expérience approchante à Twitter.
+** '''<code>repost</code>''' - généralisation d'un "retweet" de Twitter, un "reblog" de Tumblr ("retumbl?"),  Pinterest "repin"
+** '''<code>props</code>''' - généralisation d'un "favori" de Twitter, d'un "j'aime" de Facebook, d'un "+1" de GooglePlus. Alternativement, pourrait être tranché dans des verbes distincts pour "favori" et "j'aime", ou se spécialiser plus : "coeur" ("j'aime d'instagram), "star" (le favori de Flickr et le "favori" de Twitter). Il n'est pas clair de savoir quelle approche (générale ou spécifique) est la meilleure. Les personnes assignent vraiment différents sens à favori vs "j'aime". (il y a une photo sur flic.kr/tantek avec une conversation à ce sujet mais je ne peux la retrouver à cette heure)
+* '''<code>with</code>''' prend une URL qui représente un objet direct pour le verbe à agir sur
+
+
+Voir aussi : [[webactions-verbs-brainstorming]]
+
+=== action fallbacks ===
+Dans l'élément <code>&lt;action></code> l'éditeur peut placer un marquage codé dans le dur pour les actions web existantes spécifiques aux fournisseurs qui fonctionneraient alors comme elles le font aujourd'hui.
+
+=== quels boutons silos ===
+Vous devriez ajouter des boutons spécifiques-fournisseurs / spécifiques-silos seulement pour les silos vers lesquels votre site [[POSSE-fr|POSSE]].
+
+Bon nombre de designs / UX que nous produisons sur l'indieweb sont dictés par faire la bonne chose pour que nos amis le lisent et utilisent notre contenu.
+
+Par exemple : un de vos amis qui lit vos posts à partir d'un silo vient à cliquer sur le permalien-raccourci vers votre post, puis lit le post complet sur votre site, puis veut répondre / mettre en favori / aimer / reposter, et devrait pouvoir cliquer sur ces boutons placés juste là sur votre site, plutôt que d'avoir à cliquer en arrière pour retourner vers le silo, et chercher et cliquer là sur un bouton. (par ex. cette plainte du vrai monde provenant de [https://twitter.com/zeldman/status/24224682530050048 @zeldman re: having to click back to Twitter to reply].)
+
+De tels boutons aident aussi votre site et vos permaliens à devenir un meilleur remplacement (et plus complet) pour les UIs-silo que vos amis ont l'habitude d'utiliser en interaction.
+
+Nous devrions encourager nos amis à interagir plus avec nos propres sites qu'avec les silos.
+
+=== recours conditionnels ===
+Fournissez un marquage codé dans le dur pour les actions web spéciiques au silo <em>seulement</em> si le referer HTTP (sic) montre que l'utilisateur est venu à partir de ce silo.
+
+Nul besoin de diriger le trafic vers des [[silos-fr|silos]] qui ne venait pas d'eux.
+
+Nul besoin de polluer votre interface utilisateur (cf [[NASCAR problem|problème NASCAR]]) avec des boutons de silos à moins que votre utilisateur ne soit venu de ce silo et apprécierait même de s'attendre à ces boutons de silos.
+
+L'objectif général de démarrer là-dessus est de supporter (fournir une meilleure expérience) les lecteurs qui proviennent des silos que vous avez [[POSSE]]s. Faites-leur sentir qu'ils sont chez eux (même <em>plus</em> à l'aise) sur votre propre site, que ce qu'ils font sur le silo dont ils proviennent.
+
+=== clientside conditionals ===
+La présentation conditionnelle de boutons silos pourraient même être produites dans un javascript côté client, parce que les agents utilisateurs non-JS ne soucient certainement pas des boutons-silos (le marquage <code>&lt;action&gt;</code> devrait être suffisant pour n'importe quel crawler, etc. pour inférer une sémantique générale d'UI).
+
+Par ex. côté serveur, toujours fournir un lien [[rel-syndication-fr|rel-syndication]] ("Voir sur ..nom-silo..") vers les copies [[POSSE-fr|POSSÉ]]es des posts, parce qu'ils sont utilise pour la [[original-post-discovery-fr|découverte du post original]] et POSSEr le fil de discussion (par ex. les tweets de discussion POSSEs) et tous les autres [[syndication-link-use-cases|cas-d'utilisation-de-lien-de-syndication]].
+
+Puis dans le JS côté client, remplacez le lien ("Voir sur ..nom-silo..") avec des boutons de web actions (en utilisant des tags <code>&lt;action&gt;</code>), avec des recours respectifs spécifiques aux silos à l'intérieur (peut-être conditionnellement par referrer comme indiqué au-dessus).
+
+Peut-être envisager de conserver (au lieu de remplacer) le lien visible ("Voir sur ..nom-silo..") (en plus des actions web) si vous pensez que la copie POSSe du silo de votre post fournit suffisamment de valeur additionnelle pour compenser le coût du fouillis de l'UI et de diriger vos lecteurs vers un silo.
+
+Plus d'avantages d'ajouter dynamiquement des boutons de silos dans le JS côté client : 
+* '''taille de page'''. omettre tout le marquage de bouton silo dans le HTML qui est renvoyé réduit la taille de la page résultante ce qui présente de nombreux avantages, de la performance à une meilleure pertinence de recherche (le marquage du bouton silo dilue la pertinence sémantique des termes/titres/marquage dans la page).
+* '''performance générale'''. vérifier dans le JS si la page semble être restituée via une connexion "lente" (néanmoins vous voulez définir "lent", et utiliser quelque technique que vous voudrez), et oui alors ne chargez en aucun cas les scripts de tiers (qui briserait bien plus gravement la performance de la page que toute valeur qu'elle ajouterait).
+* '''privauté potentielle'''. Votre JS côté client pourrait aussi décider (par ex en se basant sur un cookie) de ne pas charger les scripts tiers pour des raisons de vie-privée / ne pas traquer.
+
+=== minimum silo buttons ===
+Is there a minimal recommended silo button set for each [[silo]] that indieweb sites choose to [[POSSE]] to?
+
+E.g.:
+* [[Twitter]]
+** favorite(?) - as evidenced by users actually favoriting POSSE tweets ([[User:Tantek.com|Tantek]])
+** retweet(?) - similarly by users actually retweeting POSSE tweet ([[User:Tantek.com|Tantek]])
+** reply[https://twitter.com/zeldman/status/24224682530050048]
+* [[Facebook]]
+** Like - as evidenced by users liking things far more often than doing anything else with them on FB.
+* ...
+
+To be clear, this is not advocating for adding any more silo-specific buttons than you already have for whatever reasons you decided. Help figure out what are minimum sensible sets of silo-buttons for each silo and contribute to the above lists.
+
+=== variance de bouton silo ===
+Il est attendu que les sites indieweb se comporteront probablement avec des ensembles légèrement différents de balises actions et de boutons silos à l'intérieur, basés sur :
+* les préférences personnelles pour UI/UX
+* quels que soient les silos que nous choisissons pour POSSEr (déjà une préférence personnelle)
+
+== Verbes ==
+
+Nous avons besoin d'un registre de verbes communs à utiliser avec les actions web. Ceci devrait être construit par une recherche dans le vrai monde des usages et un brainstorming au-dessus de cela : 
+
+* [[webactions-verbs-research]]
+* [[webactions-verbs-brainstorming]]
+
+== Exemples de marquage d'Action dans la jungle ==
+Les exemples de sites web dans le vrai monde utilisant le marquage <code>&lt;action></code>. Quand cette page sera trop grande (disons plus de 10 sites), nous pourrons la migrer vers [[webactions-examples-in-wild-fr|webactions-examples-in-wild-fr]]
+
+* '''Indienews''' comments pages, e.g.
+** http://news.indiewebcamp.com/post/shawfactor.com/2013/08/06/thoughts-on-extending-webmentions/
+** have <code>&lt;action inline></code> elements with <code>reply</code> verbs enabling in-context commenting ([http://waterpigs.co.uk/notes/4RRNLz/ demo])
+* '''Waterpigs.co.uk''' notes, par ex. http://waterpigs.co.uk/notes/1123/
+** <code>&lt;action></code> tags avec verbes : <code>post</code>, <code>reply</code>, <code>bookmark</code>
+* '''Eschnou.com''' (tous les posts ?), par ex. http://eschnou.com/entry/on-silos-vs-an-open-social-web-indieweb---by-t-62-24891.html
+** <code>&lt;action></code> tags avec verbes : <code>post</code>
+* '''Tantek.com''' blog posts (articles), par ex. http://tantek.com/2013/073/b1/silos-vs-open-social-web#silos-vs-open-social-web-elsewhere
+** <code>&lt;action></code> tags avec verbe : <code>post</code> avec action Tweet action dans chacun des articles de post
+* ... ici votre site avec les marqueurs <code>&lt;action></code>.
+
+== Web Action Support Navigateur ==
+Si vous installez un navigateur (ou une extension navigateur) qui implémente la balise action, vous pouvez cliquer sur des boutons action sur d'autres sites (par ex. ceux que vous avez listés dans les exemples dans la jungle ci-dessus), et puis faire en sorte que les actions dirigent vers votre propre site.
+
+Implémentations actuelles :
+
+=== Web Action Hero Toolbelt ===
+* L'extension [https://github.com/barnabywalters/web-action-hero-toolbelt web action hero toolbelt] inter-navigateurs vous permet d'utiliser les web actions directement dans Firefox, Safari, Chrome ou Opera.
+
+== Website Action URL Support ==
+{{main-fr|Web Action URL APIs}}
+
+Support IndieWeb en particulier :
+
+* [[User:Aaronparecki.com|Aaron Parecki]] a une URL endpoint pour poster de nouvelles notes/réponses qu'il force twitter à utiliser pour ça.
+* [[User:Waterpigs.co.uk|Barnaby Walters]] a une API URL pour créer de nouvelles notes, qui accepte plusieurs params de chaînes de requêtes, inReplyTo, texte et tags.
+* ...
+
+== Abandonner les Boutons Sociaux ==
+@IA toujours aussi perspicace a écrit un post expliquant pourquoi nous devrions envisager de laisser tomber les boutons sociaux (peut-être actuellement l'ensemble d'icônes web de webactions les plus diffusées)
+* http://informationarchitects.net/blog/sweep-the-sleaze/
+
+Relances :
+* http://www.netmagazine.com/news/drop-social-media-buttons-call-121990
+* http://www.netmagazine.com/features/big-question-should-we-drop-social-media-buttons
+
+=== Problèmes de Privauté  ===
+Les boutons sociaux utilisés par une variété de silos viennent souvent avec des cookies de suivi, signifiant que les services de réseaux sociaux sont alertés du fait que des lecteurs connectés ont lu le contenu même s'ils n'ont fait auxune action (partage, retwee, +lien/fav). Selon la nature du contenu sur votre site, ceci peut être une brèche de vos standards éthiques et des standards raisonnables pour la vie privée. Par exemple, les visites vers les sites de sexe, santé et politique peuvent ensuite mener les organisations de suivi de cookies à tirer des inférences non voulues et indésirables qui brisent l'intimité des utilisateurs.
+
+En 2010, le développeur britanninque Mischa Tuffield remarquait que les cookies de suivi sur Facebook et Google étaient utilisées sur le site web NHS Choices, qui est utilisé par les personnes pour rechercher des conditions de santé. Voir [http://mmt.me.uk/blog/2010/11/21/nhs-and-tracking/ ici].
+
+Wikipedia a rejeté l'introduction de boutons de partages sociaux en partie sur le terrain de l'atteinte à la vie privée ([https://en.wikipedia.org/wiki/Wikipedia:Perennial_proposals#Share_pages_on_Facebook.2C_Twitter_etc. Wikipedia:Perennial proposals]).
+
+== Abandonner les connexions délégués (Drop Delegated Logins) ==
+Bien que les connexions déléguées ne soient pas nécessairement vues comme une webaction, elles sont au moins superficiellement équivalentes, en ce sens où elles contiennent généralement un bouton avec une marque de site social particulier. MailChimp a décidé de les laisser tomber, lisez pourquoi : 
+* http://blog.mailchimp.com/social-login-buttons-arent-worth-it/
+
+== Candidats du Vrai-Monde pour les Actions Web ==
+
+Ajoutez des liens vers/impressions-écrans d'IUs de sites web existants qu'une web actions pourrait remplacer
+
+* [http://photos.waterpigs.co.uk/p/mn Cognition Blog Post Response CTA]
+* … ajoutez en plus ici, migrer vers une page distincte s'il y en a trop
+
+== URLs déléguées ==
+L'action web "delegate URLs" sont des URLs qui présentent une IU configurable pour exécuter une action, qui peut être personnalisée avec des paramètres dans l'URL. C'est une forme de callback URL mais présentant une IU pour aider à exécuter une action au lieu de l'exécuter automatiquement sans intervention de l'utilisateur.
+
+
+Le modèle de web action delegate URL est la pratique du logiciel permettant à un utilisateur de régler ces URLs personnalisées comme déléguées pour certaines actions dans une application, probablement avec des gardiens de place de gabarit URL qui sont auto-remplis selon le contexte de la délégation.
+
+Exemple : [https://github.com/barnabywalters/IndieWeb-Reply-Browser-Extension IndieWeb Reply Extension (Github)]
+
+== Evénements ==
+Notes de session provenant d'événements où les actions web ont été discutées : 
+
+* Notes de session tirées de [[How_the_Indie_Web_Hooks_into_Hosted_Communities]] @ [[2011|IWC 2011]]
+* Notes de session tirées de  [[Standardizing_Web_Intents]] @ [[2011|IWC 2011]]
+* Notes de Démo [[2011/Demos#web_intents_user_experience]] @ [[2011|IWC 2011]]
+* 2011-09-10 BarCampBrighton6 session http://lanyrd.com/2011/bcb6/shgxk/
+* 2011-09-18 session WordCampPDX session
+* 2012-06-28 [http://tantek.com/presentations/2012/06/osb12-web-actions/ Web Actions] session lors d'OSBridge
+
+== Articles ==
+* 2011-220 [http://tantek.com/2011/220/b1/web-actions-a-new-building-block Web Actions: Identifying A New Building Block For The Web] par [[User:Tantek.com|Tantek]]
+* 2012-09-26 [http://waterpigs.co.uk/articles/web-actions post on Web Actions] de [[User:waterpigs.co.uk|Barnaby Walters]]
+
+== Voir aussi ==
+* Une liste des [[Web Action URL APIs-fr|URL APIs Web Action]] actuellement disponibles
+* https://wiki.mozilla.org/WebActions
+* Le [http://tagboard.com/webactions tagboard #webactions]
+
+[[Category:building-blocks-fr]]

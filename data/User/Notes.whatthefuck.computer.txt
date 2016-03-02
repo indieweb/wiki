@@ -1,0 +1,82 @@
+http://indiewebcamp.com/User%3ANotes.whatthefuck.computer
+
+== About Me ==
+
+I am Ryan Rix. I exist in various places. I have a pile of domains that I am trying to slim down, and am building tools to make my statically-generated website indieweb compatible. 
+
+I have a very [http://doc.rix.si/cce/cce.html <s>goofy</s> interesting computing setup] that leads me down a path of supporting mostly statically generated tooling and libre software that I run and control, but I am also a huge proponent of using [https://matrix.org Matrix.org] as a decentralized data layer to communicate with smarter, personally controlled pieces of software. I am exploring the intersection of ideas like Matrix and the IndieWeb.
+
+Currently my meatbody exists in Oakland, California. [http://whatthefuck.computer/ My homepage] has a real biography that you can read, along with a pile of 'rel=me' to other places I am me at.
+
+== Projects ==
+
+=== Domain Cleanup and 2016 website redesign ===
+
+The goal at the end of this is to have two domains:
+
+==== A portfolio/project hosting site (whatthefuck.computer) ====
+
+This site replaces [http://doc.rix.si doc.rix.si] my current project portfolio/todolist site with basically the same things but nicer looking.
+
+* Rewrite [http://whatthefuck.computer/blog wtf.comp/blog] URLs to [http://notes.whatthefuck.computer notes.wtf.comp] pages
+* Rewrite [http://doc.rix.si/ doc.rix.si] pages to [http://whatthefuck.computer wtf.comp] pages.
+
+This page will progressively enhance supporting text-only www browsers like EWW and fancy graphical www browsers like Chrome and Firefox with some sparkly CSS and JavaScripts in a way that doesn't make me frustrated when using it.
+
+==== My miniblog (notes.whatthefuck.computer) ====
+
+* Move all of my blog posts under here and use mfblog or whatever I end up calling it to generate it.
+** Support regenerating the index without regenerating every single blog page
+** See how stupid an idea it is to implement a micropub listener in elnode to wire up OwnYourGram and OwnYourResponses to it.
+*** It might be easier to set up a thing that consumes micropub and exposes them as RSS, as we can then [http://orgmode.org/manual/RSS-Feeds.html automate the org-mode half of it]
+* Set up an emacs on shell01 running [http://fort.kickass.systems:10082/cgit/personal/rrix/pub/sico.el.git/ sico] s
+** Sico capture templates for easy to use h-entry types
+*** text posts
+*** u-photos and u-videos that can just get fed an Matrix photo (or a string like "last photo") and push it in to my blog
+
+=== mfblog.el ===
+
+[http://fort.kickass.systems:10082/cgit/personal/rrix/pub/mfblog.git/ mfblog.el] is an uninspiringly named static-site generator for [[Emacs]] [[Org-mode]]. It's pretty much entirely tailored to my usecases, and I am planning to refactor it in to a more generic engine a la [https://github.com/kelvinh/org-page org-page] below.
+
+Basically generate an index of posts, each is a heading in a single Org-mode file, pull metadata and generate pages annotated with [http://microformats.org/ microformats].
+
+==== Functions ====
+
+* Copy static files (favicon, js, css)
+* Generate an index
+** List of post titles with permalinks to them
+** [[h-card]] for [[IndieAuth]] &c
+* Generate post pages
+** HTML title
+** Clean <title> (don't use the HTML)
+** Post HTML
+** Support all IndieWeb post types possible
+*** h-entry
+**** support for u-photo, u-video, u-audio based on org-mode attachments
+**** support for u-in-reply-to, u-repost-of, u-like-of based on org-mode property table
+**** support for p-comment, p-rsvp based on org-mode property table
+*** h-review
+*** h-event can be inferred if a post has an [http://orgmode.org/manual/Timestamps.html Active Timestamp]
+* Generate post RSS Feeds
+** Takes a list of Org-mode tags, and generates an RSS feed for posts tagged with each tag (longform.rss, attach.rss, photos.rss, main.rss)
+* Syndicate an entry with bridgy
+** Automatically republish the entry with the rel=syndication links included.
+
+== Edit the IWC wiki with Emacs ==
+
+You can use [https://github.com/hexmode/mediawiki-el/blob/master/mediawiki.el mediawiki.el] to edit the IWC wiki with a bit of work. Since the site uses [[IndieAuth]], there is no Username/Password combination, you can't just say "Hey mediawiki.el log in for me".
+
+Log in with your favorite graphical www browser and use a web inspector to grab the ''indiewebcamp_session'' cookie, then put this dope as frick elisp in a scratch buffer and evaluate it.
+
+<pre>
+(add-to-list 'mediawiki-site-alist '("IndieWebCamp"
+                                   "https://indiewebcamp.com/wiki/"
+                                   "nil"
+                                   "nil"
+                                   ""
+				   "Main Page")
+(setq mediawiki-site "IndieWebCamp")
+(url-cookie-store "indiewebcamp_session" "<YOUR COOKIE VALUE>" nil "indiewebcamp.com" "/" t)
+</pre>
+
+This will work until the session cookie is invalidated with a browser logout. It's, uh, janky, but it works.

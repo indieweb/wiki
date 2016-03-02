@@ -1,0 +1,141 @@
+http://indiewebcamp.com/WordPress/Plugins
+
+The WordPress.org repository has over 30,000 plugins. There are more outside of the official repository. While not all plugins are expressly designed for Indieweb, some can be used regardless with little to no adjustment.
+
+=== [[Webmention]] Support ===
+[[File:semantic-linkbacks.png|100px|right]]
+[[Webmention]]s are also part of the core IndieWeb [[building-blocks]]. They let you send and receive replies, likes, etc. directly from your site.
+
+To add webmention support to your WordPress site, install the [[Webmention Plugin]]
+
+To further enhance webmentions:
+* Try combining the [[Webmention Plugin]] ([http://andysylvester.com/2014/01/27/working-with-webmention-video/ video available]) and [[Semantic Linkbacks]] plugins. This adds support for richer  [[comments]] (including the [[likes]], [[reposts]], [[favorites]], [[RSVPs]] and classic [[mentions]].
+* Or the "[https://github.com/pfefferle/wordpress-webmention-for-comments Webmentions for Comments]" plugin to enable webmentions support for threaded comments.
+* You can optionally install the [https://github.com/pfefferle/wordpress-webmention-form webmentions forms] plugin (requires FTP) to receive webmentions directly from the [http://adactio.com/journal/6469/ comments section] of your blog.
+
+==== alternatives ====
+[https://github.com/petermolnar/wp-webmention-again wp-webmention-again] provides an alternative webmention sender/receiver, using WP Cron for both, but it's yet to see a stable release.
+
+=== Kinds of Posts ===
+
+WordPress supports several different ways of organizing data. To support different kinds of posts, you can try the [https://wordpress.org/plugins/indieweb-post-kinds/ Indieweb Post Kinds] plugin.  
+
+The Post Kinds adds a taxonomy to the post type in Wordpress allow for posts to be classified as a reply/like/repost etc. This allows archives to be generated for these kinds of posts as well as support to add the appropriate markup.
+
+=== Publishing to Your Site ===
+
+[http://wordpress.org/plugins/micropub Micropub for WordPress] implements a [[Micropub]] server endpoint.
+
+[https://github.com/dshanske/indie-webactions Indie-WebActions] implements webactions and a basic posting UI.
+
+=== [[POSSE]] Plugins ===
+
+Along with [[personal-domain]]s, <span id="POSS">[[POSSE]]</span> is one of the cornerstones of the IndieWeb. In short, instead of posting to social network [[silos]], you post to your own site and then copy to the silos.
+
+You can [[POSSE]] manually, but most people automate it. WordPress has many plugins that do this. A few of the most popular are:
+* [https://wordpress.org/plugins/bridgy-publish/ Bridgy publish]
+* [http://jetpack.me/support/publicize/ Jetpack Publicize]
+* [http://wordpress.org/plugins/social/ Social] (Twitter/Facebook)
+* [http://www.nextscripts.com/social-networks-auto-poster-for-wordpress/ NextScripts SNAP]
+* [http://wordpress.org/plugins/social/ Mailchimp Social]
+* [http://ifttt.com/ IFTTT] (If This, Then That) Details about this [http://techlifeweb.com/using-wordpress-for-indieweb/#posse here].
+
+Other plugins that can be used to POSSE:
+* [https://wordpress.org/plugins/tumblr-crosspostr/ Tumblr Crosspostr] (Tumblr only, supports [[rel-syndication]])
+* [https://wordpress.org/plugins/Diasposter/ Diasposter] (Diaspora* only, supports [[rel-syndication]])
+* [https://wordpress.org/plugins/wp-crosspost/ WP-Crosspost] (WordPress-to-WordPress only, supports [[rel-syndication]])
+* [https://wordpress.org/plugins/medium/ Medium] - Official Medium Plugin. Might be worth trying.
+If you POSSE, it's good practice to include [[rel-syndication]] links on your WordPress posts. 
+
+The [https://wordpress.org/plugins/syndication-links/ Syndication Links] plugin is designed to support manual entry of [[rel-syndication]] links. It is extensible to add support for plugins and has support from Tumblr Crosspostr, Diaposter, and WP-Crosspost, as well as having integrated support courtesy of the below plugin for Social, SNAP, and Bridgy Publish.
+
+Alternatively, you can try the [http://wordpress.org/plugins/relsyndication/ rel-syndication plugin] for that(Currently only supports the Social plugin, the [https://github.com/jihaisse/wordpress-syndication GitHub mainline] has minimal support of Tumblr, Twitter and Facebook for NextScripts SNAP ).
+ 
+Also, if you are writing status updates that will be duplicated in the content share boxes in your edit post screen, there is some handy code [http://davidpeach.co.uk/autofill-share-fields-for-status-posts/ here] to autofill those share fields to save copy/pasting them from the content WYSIWYG.
+
+If you also want to go the other direction and pull your social network posts and data back to WordPress, there are [[PESOS]] plugins too. To start, try [http://www.enthropia.com/labs/wp-lifestream/ Lifestream].
+
+=== [[PESOS]] Plugins ===
+
+In case [[POSSE]] is not available - for example, due to API limitations like in case of Instagram - there is always the option to pull in your data from other hosts. 
+
+* [https://wordpress.org/plugins/keyring-social-importers/ Keyring Social Importers] - an impressive importer with auto-import functionality and with an easily extendable setup on top of the [https://wordpress.org/plugins/keyring/ Keyring] plugin. Currently supporter networks: 
+** Delicious
+** Flickr
+** Foursquare
+** Instagram
+** Instapaper
+** TripIt
+** Twitter
+** ... and anything you can build on top of this and the [https://wordpress.org/plugins/keyring/ Keyring] plugin, for example, [https://github.com/petermolnar/keyring 500px is added as a service to Keyring in a github repository].
+* [https://wordpress.org/plugins/dsgnwrks-twitter-importer/ DsgnWrks Instagram Importer] - for Instagram
+* [https://wordpress.org/plugins/dsgnwrks-twitter-importer/ DsgnWrks Twitter Importer] - for Twitter
+
+=== IndieAuth ===
+Install the '''[http://wordpress.org/plugins/syndication-links/ Syndication Links]''' plugin to add rel-me links to your WordPress site!
+
+In order to use your own domain name to sign into other websites, you will want to add support for [[IndieAuth]]. This requires the appropriate [[rel-me]] link(s) appear on your homepage, and '''Syndication Links''' helps you do that.
+
+Once you have rel-me links set up, head over to [https://indieauth.com/ indieauth.com] and sign in to test that you've set things up appropriately!
+
+==== Alternatives ====
+If you don't want to add a plugin, you can follow the instructions for [http://en.support.wordpress.com/add-social-media-buttons-to-your-sidebar-or-footer/ adding social media buttons] or the documentation for [http://codex.wordpress.org/WordPress_Widgets#Using_Text_Widgets using text widgets]. You can also add [[rel-me]] links to a custom menu by enabling the Link Relationships under Screen Options on the custom menu page.
+
+More details for setting up rel-me links can be found at https://indieauth.com/setup.
+
+The [http://wordpress.org/plugins/indieauth-links/ IndieAuth-Links] plugin is another option, though as of 2015-12-03 the plugin has not been updated for two years and is only confirmed compatible up to WordPress version 3.7.11.
+
+If you want to support Indieauth for logging into your own site, [http://wordpress.org/plugins/indieauth/ IndieAuth for Wordpress] which allows users to sign in with their domain instead of a username and password.
+
+=== [[backfeed]] ===
+Even if you're POSSEing or you're adding manual syndication urls ( for example, with [https://wordpress.org/plugins/syndication-links/ Syndication Links] plugin ) you probably want to pull comments and likes on the social network posts back to your site. This is called [[backfeed]]. 
+
+Some of the POSSE plugins have built-in functionality to do this for some networks.
+
+'''Other options:'''
+
+* [[Bridgy]] - another option is [[Bridgy]], a service that automatically sends [[webmention]]s for activity on your POSSEd posts inside [[silos]] (before starting to use Bridgy, make sure you first install the webmention and semantic-linkbacks plugins described below).
+* [https://wordpress.org/plugins/keyring-reactions-importer/ Keyring Reactions Importer] - a generic, extendable plugin in early stage, on top of the [https://wordpress.org/plugins/keyring Keyring] plugin. It can auto-imports reactions for every post with syndicated links ( see readme of the plugin ) by polling, based on chained scheduled wp-cron events, so it may become heavy. Currently supported networks:
+** Facebook - comments & likes
+** Flickr - favorites & comments
+** 500px - likes, favorites, comments - requires [https://github.com/petermolnar/keyring/blob/master/includes/services/extended/500px.php an additional worker for Keyring] )
+** Instagram - comments & likes
+** ... and anything you add
+
+=== Reader / follower plugins ===
+
+* [https://github.com/petermolnar/blogroll2email/ blogrol2email] - a combined [[RSS]] and [[microformats]] reader that uses the (slightly forgotten and abandoned) [https://en.support.wordpress.com/blogroll/ Blogroll] section of WordPress as source and PHP Mf2 parser from [[User:Waterpigs.co.uk]].
+
+=== Other Indieweb Plugins ===
+
+Here are a few more plugins you might want to try. Many require FTP or other more technical setup.
+
+* [http://wordpress.org/plugins/hum/ URL Shortener: WP-Hum]
+* [https://github.com/pfefferle/wordpress-webactions WebActions]
+* [https://gist.github.com/pfefferle/1724438 blavatars (icons)]
+* [https://snarfed.org/indieweb-press-this-bookmarklets-for-wordpress IndieWeb reply, repost, like, and RSVP bookmarklets]
+* [https://wordpress.org/plugins/simple-location Simple Location]
+* [https://github.com/dshanske/semantic-comments Semantic Comments]
+
+=== Plugins that May Be of Interest to Indieweb Users ===
+
+* [http://wordpress.org/plugins/browserid/ BrowserID/Persona]
+* [http://wordpress.org/plugins/pubsubhubbub/ PubSubHubbub]
+* [https://github.com/pfefferle/wordpress-hashtags Hashtags]
+* [https://github.com/jihaisse/custom-feed-url Custom feed URL]
+* [[WhisperFollow| Whisperfollow for feed aggregation]]
+* [https://wordpress.org/plugins/activitystream-extension/ ActivityStreams]
+
+=== Past or old tech plugins ===
+* [http://wordpress.org/plugins/openid/ OpenID]
+* [https://github.com/pfefferle/ostatus-for-wordpress OStatus]
+* [https://github.com/pfefferle/salmon Salmon]
+
+
+=== Criticisms ===
+
+Many Indieweb Plugins are developed on Github and not pushed or maintained in the official Wordpress.org repository.
+
+While the Indieweb Plugin allows Github repositories to be downloaded and installed, the Indieweb plugin does not support update notifications. 
+
+To encourage adoption, more Indieweb plugins should be pushed and regularly updated through the usual means by which WordPress plugins are installed.

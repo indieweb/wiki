@@ -1,0 +1,59 @@
+http://indiewebcamp.com/2014-05-06-iiw-indieauth
+
+'''<dfn>IndieAuth IIW</dfn>''' was a session at the [[events/2014-05-06-iiw|2014-05-06 IIW]] conference
+
+[https://aaronparecki.com/notes/2014/05/06/6/indieauth-iiw-indieweb https://aaronparecki.com/notes/2014/05/06/6/files/photo.jpg]
+
+== Posts ==
+Posts about the 2014-05-06 IndieAuth IIW session.
+* {{aaronpk}} http://aaronparecki.com/notes/2014/05/06/6/indieauth-iiw-indieweb
+* {{kevinmarks}} http://www.kevinmarks.com/iiw2014-05-06.html#IndieAuth
+
+__TOC__
+== Notes ==
+Notes taken by [[User:werd.io|Ben Werdmülller]] at [[2014-05-06-iiw|IIW on 2014-05-06]] on https://etherpad.mozilla.org/iiw - archived below.
+
+Word document (per [http://iiw.idcommons.net/Note_Form IIW convention]): copy paste this into a Terminal window: 
+* <kbd><nowiki>echo "http://indiewebcamp.com/2014-05-06-iiw-indieauth" | textutil -stdin -output iiw-2014-05-06-indieauth.rtf -convert rtf</nowiki></kbd>
+
+----
+
+[[User:aaronparecki.com|Aaron Parecki]] on [[IndieAuth]]
+
+If you have signed into the indiewebcamp.com wiki, then you've already used IndieAuth. In this session, Aaron will get into the guts of it.
+
+[[RelMeAuth]]: Your site <----> Multiple silos
+
+[[Your domain]] is the identifier for the thing you're logging into; you're delegating the actual authentication to a third-party service (e.g. a service)
+
+E.g., aaronparecki.com logs in using RelMeAuth using Aaron's [[GitHub]] account (github.com/aaronpk) to actually do the authentication.
+
+Aaron apologizes for a slightly confusing indieauth.com site. 
+
+Initially, he wanted to write authentication for the indiewebcamp.com wiki. [[MediaWiki]] has a very convoluted codebase, and he was dreading diving into it. He knew that for every new authentication method he had to add, he'd have to do it all again. So instead he decided to write the integration code once, using indieauth.com as an integration point, and write all of the other authentication integrations for indieauth.com, which had a much cleaner codebase (as he was starting from scratch).
+
+The integration mechanism is OAuth-like.
+
+There is some discussion between Justin Richer at MITRE and Aaron Parecki about whether the indiewebcamp.com authentication mechanism is effectively siloed authentication. Aaron defended on the basis that OAuth 2.0 explicitly featured the ability to separate the auth service from identity. (It's a tactical decision to have a proprietary link between indiewebcamp.com and indieauth.com, although it's a little more exposed because the communication happens over HTTP. Justin notes that it would be better to use existing authentication protocols that are designed for security.)
+
+Aaron discusses using IndieAuth with [[micropub]], an API for using third-party apps to post to indieweb sites. The micropub-compatible app needs to be able to log into your personal site.
+
+[[OwnYourGram]].com: you log in via IndieAuth, authorize the app, and it reads your [[Instagram]] feed and autoposts it to your indieweb site using micropub.
+
+* [me] -> (rel) -> [authorization endpoint]
+* [me] -> (rel) -> [token endpoint]
+* [me] -> (rel) -> [resource server, micropub]
+
+Aaron took authorization & token endpoints from [[OAuth]] / [[OpenID]] connect; micropub is new.
+
+A question came up about why this uses HTML vs using a .well-known address. The answer is that it's easier to code on a wider variety of platforms.
+
+A further issue was brought up re: OAuth separating authorization and token endpoints, which is not something that is actually supported in OAuth. Aaron points out that you _can_ have them on separate servers, as long as they are tightly coupled - as is the case here.
+
+Aaron: "avoid crypto". He likes the idea of signed tokens, but nobody can agree on the signing mechanism. Conversations tend to disappear down unproductive rabbitholes .....
+
+Aaron discussed the OAuth workflow and how it relates to IndieAuth. IndieAuth assumes clients that have a web presence. It can be an internal part of the indieweb site, or it can be an adjacent service that the site delegates to.
+
+---
+
+Also see Kevin Marks' live notes: http://www.kevinmarks.com/iiw2014-05-06.html#IndieAuth

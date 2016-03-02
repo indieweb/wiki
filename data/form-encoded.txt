@@ -1,0 +1,43 @@
+http://indiewebcamp.com/form-encoded
+
+{{ stub }} 
+
+'''<dfn>Form-encoded</dfn>''' (shorthand for the content type: <dfn><code>application/x-www-form-urlencoded</code></dfn> ) is used with [[webmention]] and [[Micropub]] for receiving text fields in HTTP POST requests.
+
+== Issues ==
+=== Issues with Arrays ===
+
+There appears to be some inconsistencies with how different parsers interpret arrays in form-encoded requests.  Lets document those here.
+
+[[PHP]]'s ''parse_str'' parses properties ending in [] into an array. Otherwise, properties are single-valued (i.e. only the last value of a multi-valued property is retained).
+
+<code><pre>
+php > parse_str("property=abc&property=def", &$result);
+php > var_dump($result);
+array(1) {
+  ["property"]=>
+  string(3) "def"
+}
+php > parse_str("property[]=abc&property[]=def", &$result);
+php > var_dump($result);
+array(1) {
+  ["property"]=>
+  array(2) {
+    [0]=>
+    string(3) "abc"
+    [1]=>
+    string(3) "def"
+  }
+}
+
+</pre></code>
+
+[[Python]]'s ''parse_qs'' method treats all properties as possibly multi-valued. It treats [] just like any other character
+<code><pre>
+>>> parse_qs("property=abc&property=def")
+{'property': ['abc', 'def']}
+</pre></code>
+
+== See Also ==
+* [[Micropub]]
+* [[webmention]]

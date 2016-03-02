@@ -1,0 +1,104 @@
+http://indiewebcamp.com/API
+
+{{stub}}
+
+'''<dfn><abbr>API</abbr></dfn>''' is an abbreviation for Application Programming Interface. APIs typically implement a specific [[protocol]] and accept/return data in a variety of [[formats]].
+
+== Criticism ==
+=== DRY Violation ===
+Most APIs provide information that is already present on web pages. Thus there are two unnecessary duplications happening.
+
+==== secondary URLs ====
+1. A secondary (API-specific) URL for the same (or similar) information
+
+APIs are nearly always created in a whole parallel URLiverse for reaching the same exact content. URLs that start with "api." and then have paths similar to (but often subtly different from) the equivalent HTML / web pages.
+
+[[RSS]] (and other legacy [[feed]] formats) are a common example of the problem of "side files" or content duplicated from HTML pages, but often with less information (and sometimes [http://tantek.com/2013/272/t2/atom-inefficient-required-artificial-precision requiring more bytes] to [http://tantek.com/2013/272/t1/exceeded-monthly-bandwidth-culprit-atom say it]!), at completely separate URLs.
+
+Related: API duplicitousness is now often accompanied by "native" App duplicitousness - i.e. when content-centric sites duplicate their content into a "native" mobile app and then prompt you to download it when you access their "mobile" site or access their site from a mobile device
+* 2013-02-02 <cite>[http://tommorris.org/posts/8070  No, I'm not going to download your bullshit app]</cite>
+
+Using content-negotiation (AKA conneg), a site could provide, at the <em>same URLs</em>, data in other formats consumed by machines like JSON. This article makes this clear:
+* 2013-11-29 <cite>[http://ruben.verborgh.org/blog/2013/11/29/the-lie-of-the-api/ The lie of the API]</cite>
+
+However, conneg as recommended in that article, and any form of offering data from a page in a completely different format is a DRY violation of another sort, and also unnecessary (has been for almost 10 years). Which brings us to our second unnecessary duplication:
+
+==== secondary formats ====
+2. A duplicate version of same information, just in a different format
+
+This DRY violation means more work for the publisher, and more fragility too.
+
+On the contrary, the better approach is to simply use your website as your API (AKA "HTML is my API"), which you can do so by marking up the data on your pages that you want machines to also see with [[microformats]].
+
+Posts about "Your Website is Your API":
+* 2013-01-30 [http://tantek.com/2013/030/t1/html-my-api-xml-died-microformats-live-give-json recent HTML is my API summary], twitter threads[https://twitter.com/bryanrieger/status/296623217190240256][https://twitter.com/t/status/296665391210565632]
+* 2009-02-01 <cite>[http://www.jenitennison.com/blog/node/100 Your Website is Your API: Quick Wins for Government Data]</cite>
+* 2006-10-22 blog post <cite>[http://allinthehead.com/retro/301/can-your-website-be-your-api Can Your Website be Your API?]</cite> about [http://allinthehead.com/presentations/2006/mf-website-api.pdf presentation]
+* 2004-09-28 presentation: <cite>[http://tantek.com/presentations/20040928sdforumws/semantic-xhtml.html Can your website be your API?]
+
+=== API Key ===
+Typical services require user of an API key to call their API. No such key is needed to access web pages over HTTP and thus this is seen as a hoop for developers to jump through.
+
+See related post:
+* http://tommorris.org/posts/2452
+
+=== TOS requirements ===
+Typical services require agreement to a terms of service (TOS) before they give you an API key you can use to call the API.
+
+This TOS requirement typically comes with call frequency or usage limitations, and is often used as a hook for business development (bizdev).
+
+See related post:
+* http://tantek.com/2013/190/t4/api-proprietary-tos-bizdev-open-html-http-indieweb ([https://twitter.com/t/status/354760839141658625 tweet])
+
+=== Snowflake APIs ===
+{{main|snowflake}}
+Typical sites ([[silos]]) and services create their own unique API because they think their service is special (when typically there are numerous others like it). Thus they are called "snowflake" APIs. 
+
+This uniqueness means every time you want to code for a new service, you have to spend the time to learn their particular snowflake API.
+
+A better approach would be for new services to adopt standard APIs ([[social standards]]) so they would "just work" with existing code that supports those standards.
+
+=== Complexity ===
+Because the consumption of APIs are intended for computer programmers rather than the wider public, API developers frequently increase the level of complexity of consuming the content.
+
+While decreasing in popularity as of the time of writing (2013-11), there are still a wide variety of services that require the use of overly complicated standard protocols like [https://en.wikipedia.org/wiki/SOAP SOAP].
+
+=== Fragility ===
+{{main|snowflakiness}}
+APIs are fragile for several reasons:
+# Site providers break their APIs all the time in version changes. [[Twitter]] has a long history of this.
+# APIs are ephemeral. They don't survive archiving or archives. In contrast [[microformats]] are part of the HTML and thus as long as you can get some HTML for something you parse it for microformats and get all the information that way.
+See [[snowflakiness]] as a term for referring to the inherent fragility of snowflake APIs.
+
+== FAQ ==
+=== Why are APIs so popular ===
+Q: Why are APIs so popular? E.g. If you can say that your startup offers an (REST/JSON) API then many people start listening, seems to be kind of a prestige thing.
+
+A: Because of '''[http://en.wikipedia.org/wiki/Cargo_cult_programming#Cargo_cult_software_engineering cargo cult development]'''. Everyone looks at [[Twitter]] and says "Oh, Twitter are doing it, therefore we need to do it".
+
+A2: Some startups have a misplaced desire to slap a nasty TOS and lots of weird requirements on building something on top of what they're doing. More: http://tommorris.org/posts/2452
+
+=== Are RESTful APIs actually RESTful ===
+Q: Do so-called RESTful APIs actually conform to the principles of REST?
+
+A: In practice no, in several ways:
+* They fail to adhere to the principle of one-URI-per-thing. See "[[#secondary_URLs|secondary URLs]]" above.
+* E.g. if you have “api” as part of your API URL, you are failing to be RESTful
+
+One important point of REST is that the method a user navigates around a website matches the method by which they navigate around the site API.
+
+== Sessions ==
+API Related IndieWebCamp sessions:
+
+=== 2012 ===
+At [[2012/UK|IndieWebCampUK 2012]]:
+* [[2012/UK/Hosted API|Hosted API]]
+
+=== 2013 ===
+At [[2013|IndieWebCamp 2013]]:
+* [[2013/API All the Things|API All the Things]]
+
+== See Also ==
+* [[proprietary]]
+* [[platform]]
+* [[Twitter-API]]

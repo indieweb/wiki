@@ -1,0 +1,42 @@
+http://indiewebcamp.com/2013/UK/Webactions_Implementation
+
+{{stub}}
+
+Notes from etherpad https://etherpad.mozilla.org/indiewebcamp-webactions
+
+An [[2013/UK|IndieWebCampUK 2013]] hack session.
+
+== Webactions Implementation (Day 2) ==
+
+[http://www.flickr.com/photos/aaronpk/9701659258/in/set-72157635446544162 http://farm8.staticflickr.com/7420/9701659258_ecdf647707_n.jpg]
+[http://www.flickr.com/photos/aaronpk/9701663386/in/set-72157635446544162 http://farm3.staticflickr.com/2849/9701663386_093476589d_n.jpg]
+
+WebActions hack session
+* http://indiewebcamp.com/webactions
+* http://tantek.com/2011/220/b1/web-actions-a-new-building-block
+* http://tantek.com/2012/152/b1/citation-ui-focus-enabling-design#action-clusters
+-----
+Possible design principle: "If in doubt, mimic the UI of the platform you're POSSEing to".
+If we are going to adapt to the culture of the platform that the user is arriving from (source platform), it is not enough to adopt the symbols/verbs used on the source platform without implementing the semantics/behaviour of the source platform *exactly*. 
+
+e.g., if we choose to adopt the symbol of ‘favourite’ from Twitter, it must behave *exactly* like a Twitter favourite. Otherwise, it will confuse and it would be better that we adopt/implement our own culture.
+"Post" is almost too technical a term. "Share" was more human, but has been diluted by Android overuse (every app claims to "Share").
+
+"Publish" may be a more general user-friendly term for "Post".
+----
+Where to get Tweet Action images - ok to reference the static version on Twitter because that uses their CDN.
+----
+Aside:
+While  talking through how web actions are implemented on his site, Tantek ran  into an issue with the display of the tweet button...
+
+It looks like there could be a couple of different reasons for the issue:
+* patchy network
+* adblock plugin
+It  seems that the JavaScript is overwriting the original DOM before  getting a successful response from Twitter, so the tweet button is not  displayed. A possible solution might be to wait until getting a  successful response from Twitter before overwriting the DOM node.
+
+We should have a chat with Ben while he's here.
+
+I  remember struggling with generating Twitter button dynamically. Ended  up removing generated markup, appending div to DOM and finally calling  twttr.widgets.load();
+
+
+[[Category:2013/UK]]

@@ -1,0 +1,102 @@
+http://indiewebcamp.com/code
+
+{{stub}}
+
+'''<dfn>code</dfn>''' in the context of the indieweb, refers to source code, code files, typically in a revision control system, like [[Git]], hosted on an indieweb site. Code is also often hosted on the [[GitHub]] silo.
+
+== Source Code hosting ==
+=== IndieWeb Examples ===
+==== Christian Weiske ====
+[[User:Cweiske.de|Christian Weiske]] uses [[GitWeb]] to post his source code at http://git.cweiske.de/ since 2007
+* POSSE copy: https://github.com/cweiske, pushed onto github via a dedicated user: https://github.com/cweiske-mirror?tab=activity
+
+===== Mirror setup =====
+On indieweb server:
+
+<pre>
+$ git init --bare project.git
+$ cd project.git
+$ git remote add github git@github.com:cweiske/project.git
+$ git config remote.github.mirror true
+</pre>
+
+On Github, add the [https://github.com/cweiske-mirror?tab=activity mirror user] as collaborator for the project.
+Now test it:
+
+<pre>
+$ cd /path/to/project.git
+$ git push github
+</pre>
+
+If that works, the post-receive hook can be setup:
+
+<pre>
+$ printf '#!/bin/sh\ngit push --quiet github\n' > hooks/post-receive
+$ chmod +x hooks/post-receive
+</pre>
+
+This force-pushes the code got github, which means any changes on github that are not on my server get overwritten. Thus cannot use the merge button on github, but have to merge manually.
+
+==== Tantek ====
+[[User:Tantek.com|Tantek Çelik]] manually hosts the latest live version of [[CASSIS]] at: http://tantek.com/cassis.js (without revision control) and manually POSSEs it to https://github.com/tantek/cassis/blob/master/cassis.js (with revision history) since YYYY-MM-DD.
+
+==== Aaron Parecki====
+[[User:Aaronparecki.com|Aaron Parecki]] uses a [[GitLab]] instance to host some private repositories on aaronparecki.com since YYYY-MM-DD. 
+* Some of these projects are shared with a few other people who are able to log in and contribute. 
+* All Aaron's public code is on [[GitHub]], because it makes it easier to share and get contributions from others.
+
+==== Ray Schulz  ====
+[[User:rascul.io|Ray Schulz]] uses [[cgit]] for the web interface and [[gitolite]] for the backend of http://git.rascul.io/ since YYYY-MM-DD.
+
+=== Software ===
+Software you can use to host your own [[Git]] repository:
+* [[GitWeb]] - https://git.wiki.kernel.org/index.php/Gitweb
+* [[GitLab]] - https://www.gitlab.com/
+* [[GitPHP]] - http://www.gitphp.org/
+
+== Source code embedding ==
+Some blog/CMS systems do not support syntax highlighting of source code, so users <tt>embed</tt> highlighted code from pastebins like [[gist.github.com]] or [[phorkie]].
+
+Pastebin sites often provide JavaScript embed code to make it as easy as possible to embed code in own HTML documents.
+
+=== Differences between pastebin views and embeds ===
+It can be necessary to have different markup for embedded source code and the source code display in the pastebin tool.
+
+
+==== Pastebin software ====
+[[File:phorkie_paste.png|thumb]]
+Use case: Work with and modify the paste. Single files have edit and "raw" view buttons, maybe more.
+File names are important and are shown before the code itself.
+
+Example: http://p.cweiske.de/160
+
+
+==== Embeds ====
+Use case: Show a bit of colorful source code, but don't get in the way. No edit buttons.
+File names are unimportant, so show them after the code.
+
+Example: http://cweiske.de/tagebuch/phorkie-0.5.0.htm#embed
+
+[[File:phorkie_embed.png]]
+
+== See Also ==
+* [[posts]]
+* [[git]]
+* [[GitHub]]
+* [[issue tracker]]
+
+== Brainstorming ==
+=== Cross-site fork buttons ===
+[[User:Cweiske.de|Cweiske.de]] 13:00, 20 March 2014 (PDT)
+
+Instead of the usual "fork me on github" buttons, projects should use a more general "fork me" button.
+
+It should fork the code onto the user's preferred git server instead of a silo.
+The button could either work like [[subtome]], showing a list of services that support remote forking, or simply use a custom protocol like "web+fork://" that web sites can register itself as HTML5 [[protocol handler]].
+
+The URL syntax could be like the [https://en.wikipedia.org/wiki/Feed_URI_scheme#Syntax feed uri syntax]:
+
+<pre>web+fork:https://example.org/project.htm</pre>
+
+The linked URL could be the homepage of the project, with embedded [http://joeyh.name/rfc/rel-vcs/ rel-vcs] links that provide the <tt>git://</tt> or <tt>http://</tt> URLs to the git repository. Or it could be the git repository URL itself.
+[https://sourceforge.net/p/phorkie/ phorkie] supports remote forking via rel-vcs since version 0.3.1. See the [http://cweiske.de/tagebuch/phorkie-0.3.1.htm blog post] for a description of the process.

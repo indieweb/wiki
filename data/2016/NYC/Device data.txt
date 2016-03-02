@@ -1,0 +1,106 @@
+http://indiewebcamp.com/2016/NYC/Device_data
+
+'''Device Data Portability''' session from [[2016/NYC|IndieWebCamp NYC 2016]]
+
+== Problem Statement ==
+The problem: data getting stuck on our mobile/portable devices, data portability challenges
+
+The question: How can we best use our mobile devices, perhaps with our own websites, to keep control of our own data, and avoid having it get stuck in any particular device?
+
+== IndieWeb Examples ==
+Concrete recent examples:
+* Tom Morris's experience with transferring data from Android to iOS phone: https://tommorris.org/posts/9408
+** WhatsApp
+** Contacts (stored on SIM)
+*** some contacts came without email address, or without notes, using Apple's Move to iOS app
+** Photos
+** Music
+** There's an Android App to help with this, but it is very fragile and say crashes after downloading 5GB of your photos.
+   
+* Tantek's experience with iOS9.2 breaking wifi on his iPod 5 Touch, and having his data stuck in the backup of his iPod
+** http://tantek.com/2016/020/t3/ipod-touch-ios9-wifi-stopped-working
+ 
+== What data ==
+What data?
+
+What data do you care about?
+* Photos/Videos
+* Notes
+* Txt messages / iMessage / SMS / MMS / WhatsApp messages
+* Contacts
+* Auth tokens?
+* Wifi logins/2FA tokens
+* Starbucks cards
+* Maps.me My Places
+
+
+== Cloud Problems ==
+=== Why not iCloud? ===
+Why not sync everything to [[iCloud]]?
+
+iCloud depends on Apple's authentication/identity system AppleID, which is notoriously unreliable.
+* http://tantek.com/2015/333/t1/appleid-failure-today-ipod-touch-ios9
+* http://tantek.com/2015/327/t1/appleid-broken-currently
+
+iCloud itself is unreliable, deletes data
+* See Jeffrey Zeldman's many blog posts about this 
+
+Mat Honan incident:
+* http://www.theverge.com/2012/8/6/3224597/mat-honan-hacked-apple-icloud-google-twitter
+* http://www.wired.com/2012/08/mat-honan-data-recovery/
+
+
+== Solutions  ==
+Possible solutions / approaches:
+
+1. Give up on some of it (resign yourself to losing your iMessage history)
+
+2. Write apps for multiple platforms
+
+3. Document solutions
+
+For notes, use Gmail drafts instead of iOS Notes application. The premise of Evernote is this.
+
+For photos & videos, on iOS / Mac - use MacOS "Image Capture" to download the photos. Sync all to a service.
+
+For iMessage/messages/SMS/MMS, use Facebook Messenger.
+
+For 2FA, use Authy not Google Authenticator. Store backup password on paper. Alternatively, 1Password.
+
+For contacts, don't store on SIM, use CardDAV sync (to what server or service?)
+
+For Starbucks cards, take a screenshot of the app when you bring up the "Pay" screen with the QRCode-like
+
+Sync to all the clouds!
+GWG: I sync to all the clouds I can sync to for free.
+
+[https://owncloud.org/ Owncloud]:
+* Handles at least files (a la Dropbox) and Contacts
+* mlncn syncs to Owncloud on MayFirst.org (a community, membership $100/year)
+* you can also install Owncloud on your own server
+* Mobile clients for Android (including F-Droid), iOS, Blackberry, and Amazon
+
+BitTorrent Sync for photos and files.
+
+== Really Challenging Problems ==
+=== iMessage ===
+iMessage - especially when you have them across various devices.
+
+=== After your device is offline ===
+==== offline iOS device ====
+photos & videos: use Image Capture on a mac to copy down the images
+
+Notes: ??? There's no Notes Capture - why not? (because iOS Notes app stores notes in an SQLite database (maybe even coredata), whereas photos & videos are just "in the file system" and so Image Capture was easier to write.
+
+Similar with Contacts, and Calendar.
+
+Sync to iTunes will download: ???
+
+
+== Ideally ==
+I'd like my device to auto-sync everything with my personal site that I control. -t
+* possibly use Owncloud to do this?
+
+Your site as your own personal cloud for all your devices.
+
+Mobilepub/Quill with offline support could do this for notes - to a site that supports micropub.

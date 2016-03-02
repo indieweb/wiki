@@ -1,0 +1,45 @@
+http://indiewebcamp.com/Heroku
+
+{{ stub }}
+<dfn>Heroku</dfn> is a platform as a service (PaaS) that supports Ruby, Java, Node.js, Scala, Clojure, Python, PHP and others. Heroku has a free tier that is an easy way to run non-PHP applications without a full VPS or dedicated server.
+
+== Costs ==
+
+<strike>A 512MB dyno (approximately equivalent to a small VPS instance) is $0.05 / hour or about $36 / month, but Heroku credits each app with enough free hours to run 1 dyno for 1 month.</strike> Heroku's pricing model has changed, effective 2015-07-01[https://blog.heroku.com/archives/2015/5/7/new-dyno-types-public-beta]. Free tier apps are limited to 18 hours/day uptime, with a new "hobbyist" tier for $7 per application per a month. The new $7 tier has the advantage over the old free tier that it is not put to sleep when inactive.
+
+[[Postgres]] storage is free up to 10k rows, and $9 a month up to 10M.
+
+== Trade Offs == 
+
+Apps running on only one dyno will be spun down if they have not accessed for about an hour. This generally means that there is some latency the first time you access an app while it starts up. The amount of time depends on dependencies etc.
+
+Heroku uses an ephemeral file system. Apps can read any files from the file system at any time. Apps can write files to the file system. But any files written to the the file system since the last `git push` can not be expected to exist after the app's dyno is spun down and then back up again. [[File-storage]] is instead encouraged to be done on an asset host (like [[S3]]) or in the app's git repo.
+
+* {{kevinmarks}} gets around this by storing post content in the source repository.
+* {{veganstraightedge}} uses the database to store content and S3 to store assets.
+
+Apps can't "shell out" once they're up and running. They can do basically anything on the shell at boot time, but not after they're booted up.
+
+== Custom Domains ==
+
+Because [[DNS]] CNAME-records can point to a heroku proxy DNS name rather than hardcoding an IP address, and CNAME cannot generally apply to a root domain name, Heroku recommends the use of subdomains exclusively (e.g., www.), or a DNS provider that supports special root-level CNAME or ALIAS records.[https://devcenter.heroku.com/articles/apex-domains][https://status.heroku.com/incidents/156]
+
+See also:
+
+* https://devcenter.heroku.com/articles/apex-domains
+* http://support.dnsimple.com/articles/domain-apex-heroku
+* https://dnsimple.com/services-heroku
+
+
+Amazon works around this issue by using A-records with a short TTL value, and updating them dynamically when IP addresses change.
+
+== IndieWeb Examples ==
+
+* {{veganstraightedge}} hosts http://veganstraightedge.com on Heroku ([[Ruby]])
+** {{darkmatter}} has a "Deploy to Heroku" button as of 2014-09-24
+* {{kevinmarks}} hosts http://kevinmarks.com on Heroku ([[node.js]])
+* {{bret}} uses Heroku to run [[GitPub]]
+
+== See Also ==
+* [[Paas]]
+* [[web hosting]]

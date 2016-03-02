@@ -1,0 +1,78 @@
+http://indiewebcamp.com/SubToMe
+
+{{stub}}
+
+<dfn>'''[http://subtome.com SubToMe]'''</dfn> is a button that content publishers can put on their sites which enables users to subscribe to their feed in whatever [[reader]] they choose — sort of a universal follow button.
+
+== Why ==
+If my personal site has both a Twitter "Follow" button and a feed, it’s currently orders of magnitude easier to follow me on Twitter than to add my feed to a reader or any kind.
+
+SubToMe aims at make following open web feeds (whether [[h-feed]], [[Atom]], or [[RSS]]) as easy as following a Twitter profile.
+
+It does that by storing the subscriber's preferred subscriptions in his browser's LocalStorage, so that it does not promote service X or Y which may disappear while still making things as easy to use for the subscriber.
+
+[https://www.subtome.com/publishers.html Adding a button] to your site is quite easy and can be fully customized. 
+
+See '''How''' below for code to copy & paste!
+
+== How ==
+=== example follow button with Woodwind default reader ===
+This example creates a button, that when clicked subscribes the user to the site "example.com" with [[Woodwind]] as a suggested default.
+
+It specifies the following:
+* data-subtome-resource - the site URL
+* data-subtome-feeds - the feed URL for the site ( for Woodwind, which understands mf2, you don't need and RSS/Atom feed )
+* data-subtome-suggested-service-name - this is what specifys Woodwind as a service
+* data-subtome-suggested-service-url - Woodwind internal URL specifying the resource to subscribe for
+
+Code example (assuming <code><nowiki>https://example.com/</nowiki></code> is your home page with an h-feed):
+<code><pre style="white-space:pre-wrap">
+    <a onclick="(function(btn){var z=document.createElement('script');document.subtomeBtn=btn;z.src='https://www.subtome.com/load.js';document.body.appendChild(z);})(this)" 
+       value="Subscribe" 
+       data-subtome-resource="https://example.com/" 
+       data-subtome-feeds="https://example.com/" 
+       data-subtome-suggested-service-name="Woodwind" 
+       data-subtome-suggested-service-url="http://woodwind.xyz/subscribe?origin={feed}"
+       href="#" 
+       title="subscribe to https://example.com/">Follow</a>
+</pre></code>
+
+For details in the button configuration please see [http://docs.subtome.com/publishers subtome.com/publishers].
+
+== Indieweb Examples ==
+IndieWeb community members currently using SubToMe buttons on their personal sites:
+
+* [http://blog.superfeedr.com/ Superfeedr Blog]. The buttons have been put at the end of each blog post.
+* {{kylewm}}'s https://kylewm.com has a "Subscribe" link at the bottom of each h-feed. 
+* {{bret}} includes after the recent posts block in the pre-footer.
+* {{voxpelli}} includes it at the bottom of his blog's front page
+* {{petermolnar}} main feed button below main menu; per category feed button on all category subpages
+* {{cweiske}} has a follow button at the top of the [http://cweiske.de/tagebuch/ index] and each [http://cweiske.de/tagebuch/tag/php tag page].
+* add yourself here
+
+IndieWeb community members using feed readers with SubToMe support:
+
+* {{cweiske}} using [[tt-rss|TinyTinyRSS]] with the [http://cweiske.de/tagebuch/tt-rss-subtome.htm tt-rss-subtome] plugin.
+* {{kylewm}} added a SubToMe provider for [[Woodwind]] on [https://reader.kylewm.com]. The provider is activated just by visiting the site.
+
+== Demo ==
+SubToMe can be tried as a subscriber out on the project homepage: [http://subtome.com SubToMe].
+Many feed readers already implement it, but you can also pick your favorite subscription tool on the [https://www.subtome.com/store.html SubToMe store].
+
+== FAQ ==
+=== Is SubToMe another service to depend on ===
+Q: Is SubToMe another service to depend on?
+
+A: SubToMe is just a convenient "domain" used to obtain a 'namespace' in the subscriber's browser when storing their preferred reader. You can host its open source code yourself on your site!
+
+SubToMe is only static (HTML + JS + CSS) and can actually be served from any HTTP server. 
+
+* but should not, because then you lose the shared configuration across all sites
+
+The only constraint is the use of https for security purposes. The code is available [https://github.com/superfeedr/subtome as open source on github].
+
+== See Also ==
+* [[follow]]
+* [[webaction]]
+* [[feed]]
+* [[indie-config]]

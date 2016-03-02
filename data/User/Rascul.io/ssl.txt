@@ -1,0 +1,91 @@
+http://indiewebcamp.com/User%3ARascul.io/ssl
+
+Here I will describe my SSL setup for https://rascul.io.
+
+== Basics ==
+https://rascul.io runs on [[Nginx]] with a certificate from https://startssl.com. I have received high scores from [https://ssllabs.com SSL Labs] which can be viewed at https://www.ssllabs.com/ssltest/analyze.html?d=rascul.io.
+
+== Configuration ==
+
+=== Nginx Configuration ===
+Below is my SSL/HTTPS related configuration found in the http block of nginx.conf for https://rascul.io. More information about them might be found at http://nginx.org/en/docs/http/ngx_http_ssl_module.html.
+
+ http {
+     # Prefer server ciphers over client ciphers, which hopefully will make use of
+     # the stronger ciphers I've selected over potentially weaker ciphers the
+     # browser might specify.
+     ssl_prefer_server_ciphers on;
+     
+     # This list of ciphers is the strongest available that I've been able to come
+     # up with which support forward secrecy and are compatible with as many clients
+     # as possible.
+     ssl_ciphers kECDHe+AES:EECDH+AESGCM:EECDH+AES256:ECDHE-RSA-AES128-SHA:DHE-RSA-AES128-SHA:DES-CBC3-SHA;
+     
+     # SSLv3 is required in order to support Java6 with this configuration.
+     # But we don't want SSL at all because of poodle.
+     # All other clients should be using TLS.
+     ssl_protocols TLSv1.2 TLSv1.1 TLSv1;
+     
+     # Share the session cache between all worker processes.
+     ssl_session_cache shared:SSL:10m;
+     
+     # Sessions last for 10 minutes (default is five minutes).
+     ssl_session_timeout 10m;
+     
+     # File containing DH Parameters, used for ECHDE ciphers. To create the file: 
+     # openssl dhparam -outform pem -out dhparam4096.pem 4096
+     ssl_dhparam /etc/ssl/dhparam4096.pem;
+ }
+
+=== Host Specific Configuration ===
+This is the host specific configuration, I keep it in the file /etc/nginx/sites-available/rascul.io and it is symlinked to /etc/nginx/sites-enables/rascul.io. Only the SSL/HTTPS related directives are included here.
+
+ server {
+     # Apply these directives to HTTP on port 80. Basically all I'm doing here is
+     # forcing the connection to HTTPS on port 443.
+     listen 80;
+     
+     # rascul.io will never support a www subdomain.
+     server_name rascul.io;
+     
+     # A 301 redirect to force https.
+     return 301 https://$host$request_uri;   
+ }
+ 
+ server {
+     # Support connections with SSL and SPDY.
+     listen 443 ssl spdy;
+     
+     # Once again, rascul.io will never support a www subdomain.
+     server_name rascul.io;
+     
+     # Use HSTS to specify rascul.io should be connected to via HTTPS only.
+     add_header Strict-Transport-Security "max-age=31536000";
+     
+     # Announce SPDY support (check spdy at https://spdycheck.org)
+     add_header Alternate-Protocol 443:npn-spdy/3,443:npn-spdy/2;
+     
+     # Compress SPDY headers
+     spdy_headers_comp 6;
+     
+     # Enable SSL for this server.
+     ssl on;
+     
+     # Certificate chain. The format is described in the nginx documentation:
+     # http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_certificate
+     ssl_certificate /etc/ssl/rascul.io/ssl-unified.crt;
+     
+     # Specify the private key for rascul.io. Remember to ensure permissions and 
+     # ownership of the private key are restrictive.
+     ssl_certificate_key /etc/ssl/rascul.io/ssl.key;
+     
+     # Enable stapling of OSCP responses by the server.
+     ssl_stapling on;
+     
+     # Verify OSCP responses.
+     ssl_stapling_verify on;
+     
+     # Trusted CA certificates used for OSCP. Once again, refer to nginx docs:
+     # http://nginx.org/en/docs/http/ngx_http_ssl_module.html#ssl_trusted_certificate
+     ssl_trusted_certificate /etc/ssl/rascul.io/trustchain.crt;
+ }

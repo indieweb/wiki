@@ -1,0 +1,110 @@
+http://indiewebcamp.com/WordPress/Security
+
+<span class="p-summary">One of the most important things for new users to do is to properly secure their Wordpress installation.</span>
+
+=== Usernames ===
+Account names like "admin" or "administrator" are popular targets for brute-force login attempts, and should not be used as a username. It is also crucial that you install a plugin that enforces strong password security and one that hampers brute force attempts (See login security plugins below).
+
+=== Default Settings ===
+
+Disable registration of new users.
+
+=== Themes ===
+
+The safest place to download free themes is the [https://wordpress.org.themes/ official Wordpress Theme Directory]. A [https://web.archive.org/web/20131204234741/http://premium.wpmudev.org/blog/why-you-should-never-search-for-free-wordpress-themes-in-google-or-anywhere-else/ 2011 study] found that almost every other source in the top 10 Google results contained malicious code (a [https://premium.wpmudev.org/blog/free-wordpress-themes-ultimate-guide/ 2014 update] says the situation has improved but still recommends caution).
+
+=== Login Security Plugins ===
+
+There are many options in this area...
+
+* [http://wordpress.org/plugins/wp-fail2ban/ WP Fail2Ban] logs all login attempts, whether successful or not, to the syslog of the server using LOG_AUTH. If you have server level access, you can act on these logs using Fail2Ban or other software to block IP addresses.
+* [http://wordpress.org/plugins/indieauth/ IndieAuth for Wordpress] allows users to sign in with their domain instead of a username and password.
+* [https://wordpress.org/plugins/better-wp-security/ iThemes Security] is a pretty fully-featured security plugin that provides fail2ban, strong password enforcement, changing the login URL, and many other critical features. 
+
+=== Spam/Comment Protection ===
+
+Some individuals may prefer to disable local commenting in favor of only allowing commenting through webmentions. If local commenting is enabled, there should be some form of protection installed.
+
+* [http://wordpress.org/plugins/akismet/ Akismet] is a spam protection service by Automattic, the company that runs Wordpress.com and is thus a major contributor/sponsor of the Wordpress open source project. It is free for personal use.
+* Combined together, the [http://wordpress.org/plugins/webmention webmention] and [http://wordpress.org/plugins/semantic-linkbacks semantic-linkbacks] plugins let you accept comments as [[webmention]]s from other web sites. They also let you [[backfeed]] comments, likes, etc. from social networks by using [[Bridgy]] (see further notes below).
+
+=== Automatic Upgrades ===
+
+Since Version 3.7, Wordpress supports [http://codex.wordpress.org/Configuring_Automatic_Background_Updates automatic background updates] to alleviate this issue. By default, automatic updates for minor releases and translations are enabled. There are configurable settings to allow major release updates, and updates for specific plugins. 
+`
+The Core Automatic Update functionality can also be used to push critical security updates to popular plugins. This was used in April of 2014 when the popular JetPack plugin was discovered to have a critical vulnerability and the developers requested the security update be pushed via the system to all users who had not expressly disabled all updates.
+
+=== nginx ruleset ===
+
+Some rules that can help you prevent common WordPress exploits; useful when combined with fail2ban for banning IP addresses acting weird.
+
+  ## Block SQL injections
+  location ~* union.*select.*\( { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* union.*all.*select.* { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* concat.*\( { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  
+  ## Block common exploits
+  location ~* (<|%3C).*script.*(>|%3E) { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* base64_(en|de)code\(.*\) { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* (%24&x) { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* (%0|%A|%B|%C|%D|%E|%F|127\.0) { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* \.\.\/  { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* ~$ { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* proc/self/environ { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* /\.(htaccess|htpasswd|svn) { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  
+  ## Block file injections
+  location ~* [a-zA-Z0-9_]=(\.\.//?)+ { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* [a-zA-Z0-9_]=/([a-z0-9_.]//?)+ { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  
+  ## wordpress security
+  location ~* wp-config.php { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* wp-admin/includes { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* wp-app\.log { access_log /var/log/nginx-blocked.log blocked; deny all; }
+  location ~* (licence|readme|license)\.(html|txt) { access_log /var/log/nginx-blocked.log blocked; deny all; }
+
+For detailed instruction on setting this up with fail2ban please see the blog entry [https://petermolnar.eu/linux-tech-coding/secure-wordpress-with-nginx-and-fail2ban How to make WordPress secure with nginx and fail2ban].
+
+== Criticism ==
+WordPress (and often many popular plugins) frequently has security vulnerabilities that are found and exploited in a "zero day" fashion.
+
+Security vulnerabilities are found in many popular pieces of software, as their deployment makes them attractive targets. While there is currently limited options within the core of Wordpress, there are many security plugins that offer protection for Wordpress blogs.
+
+However, one of the most common vectors for Wordpress are poorly or insecurely written 3rd party plugins. So, audit plugins yourself or community audited (well reviewed) plugins. 
+
+=== Maintenance Vulnerability ===
+
+Independents (quite tech smart and capable) who had their WordPress blog(s) hacked due to being unable to keep up with security updates / maintenance (too much of a hassle/chore/tax on their time). 
+* Clay Shirky:
+** https://plus.google.com/u/0/+AdeOshineye/posts/6zUWbNKbWrM
+* Dan Brickley
+** Dan Brickley mentioned WordPress as one of a few open source CMS installs of which at least one was [https://plus.google.com/u/0/105037104815911535953/posts/BEVAUoWCaP4 hacked and then his home page overwritten with spam link spam], forcing him to throw them all away and go with a simple static home page. He specifically mentions "must've left an update too late".
+* [[User:Michaelw.net|Michael.net]]:
+** WordPress seems to have a non trivial security hole every 6 months and I never have the time to tend to my WP install. The last major problem resulted in my blog being infested with malware and my site blacklisted by google.  WordPress is like Windows.  It's probably not really less secure than the alternatives but its popularity is such that it makes an attractive target.  Most WordPress blogs are configured to ping an [http://codex.wordpress.org/Update_Services update service] so hackers have no trouble finding targets.  Any IndieWeb solution needs to think about automatic updates and defense in depth security. -- [[User:Michaelw.net|Michael.net]]
+* ...
+
+=== Plugin Vulnerabilities ===
+* 2015-04-07 WP-Super-Cache zeroday XSS: <cite>[http://arstechnica.com/security/2015/04/as-many-as-1-million-sites-imperiled-by-dangerous-bug-in-wordpress-plugin/ As many as 1 million sites imperiled by dangerous bug in WordPress plugin]</cite>
+
+== Forensics ==
+Notes on various forensics you can perform / check to see for some known intrusions:
+
+=== wordpress admin css extra files ===
+If your <kbd>/wp-admin/css/colors/midnight/</kbd> directory has files like:
+* index.htm
+* aol.php
+* gmail.php
+Then your WordPress install has likely been compromised.
+
+The midnight directory normally just houses css files for one of the admin themes.
+
+== Notes about Attacks ==
+You may have noticed that some of the mitigation strategies include forms of security by obfuscation. Those include changing the login URL, hiding the admin user account, and changing the admin account's default userId (1). 
+
+Against a determined attacker, they will not be effective. There is no substitute for security patches, strong passwords, and mitigating brute force attacks. 
+
+However, most WordPress attackers are bots, so obfuscation will reduce the amount of annoying emails your security plugins send you and generally help filter out a lot of noise. 
+
+== Further Reading ==
+
+* Tips and tricks on WP front-end security at [https://css-tricks.com/ CSS-Tricks]: [https://css-tricks.com/introduction-to-wordpress-front-end-security-escaping-the-things/ Introduction to WordPress Front End Security: Escaping the Things] and [https://css-tricks.com/wordpress-front-end-security-csrf-and-nonces/ WordPress Front End Security: CSRF and Nonces]

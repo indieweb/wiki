@@ -1,0 +1,330 @@
+http://indiewebcamp.com/WordPress-fr
+
+<span style="float:right;padding-left:1em;background:#fff"><img style="width:150px;display:inline-block;" src="http://s.w.org/about/images/logos/wordpress-logo-notext-rgb.png" /></span>
+
+
+''Cette page a démarré sur [[WordPress]]''
+
+
+'''<dfn>WordPress</dfn>''' est un logiciel de blog open source tout comme un service d'hébergement de blog.
+* '''WordPress logiciel open source''', disponible sur http://wordpress.org
+* '''[http://wordpress.com WordPress.com]''' service d'hébergement de blog (silo)
+
+== Logiciel WordPress ==
+L'un des nombreux [[Projects-fr|projets]] indieweb, [http://wordpress.org WordPress] est un logiciel web que vous pouvez utiliser pour créer un site web ou un blog magnifique.
+
+Il existe plusieurs [[#Extensions|extensions]] WordPress que vous pouvez utiliser sur un site WordPress afin d'y ajouter des fonctionnalités IndieWeb significatives.
+
+Les estimations sont que Wordpress motorise 20% des sites pour lesquels le serveur de gestion de contenu est identifiable.
+
+Si vous vous intéressez à monter dans le train IndieWeb, et que vous avez choisi WordPress comme votre outil de choix, génial ! Voici des instructions étape par étape, pour une approche [[IndieMark]].
+
+Au fur et à mesure que vous complétez chaque étape, essayez de connecter votre site sur [http://indiewebify.me/ indiewebify.me]. Cela vous donnera un feedback immédiat, vous confirmant si ça fonctionne. Dans le cas inverse, cela vous aidera à réparer.
+
+<div style="clear:right">__TOC__</div>
+
+== Démarrer avec Wordpress ==
+Nous supposerons que vous disposez déjà de votre propre [[personal-domain-fr|domaine personnel]]. 
+Après ça, vous aurez besoin d'[[web-hosting-fr|hébergement web]]. 
+Il existe plein de bonnes options. 
+[http://wpengine.com/ WPEngine] est l'un des meilleurs tant pour les débutants que pour les hackers avancés. 
+Le [[#Service d'hébergement WordPress.com]] est solide et facile à utiliser, mais vous limite à des extensions et des thèmes pré-approuvés.
+
+=== Sécurité et Protection contre le Spam===
+
+L'une des choses les plus importantes à faire pour les nouveaux utilisateurs est de sécuriser proprement leur installation WordPress.
+
+==== Noms d'utilisateur ====
+
+Les noms de compte comme "admin" ou "administrator" sont des cibles populaires pour des tentatives de connexion brute-force, et ne devraient pas être utilisés comme nom d'utilisateur.
+
+==== Paramétrages par défaut ====
+
+Désactiver l'enregistrement de nouveaux utilisateurs.
+
+==== Plugins de sécurité de connexion====
+
+Il existe beaucoup d'options dans ce domaine...
+
+* [http://wordpress.org/plugins/wp-fail2ban/ WP Fail2Ban] connecte toutes les tentatives de connexion, qu'elles soient réussies ou non, au syslog du serveur en utilisant LOG_AUTH. Si vous avez un accès serveur, vous pouvez agir sur ces logs en utilisant Fail2Ban ou tout autre logiciel pour bloquer les adresses IP.
+* [http://wordpress.org/plugins/indieauth/ IndieAuth pour Wordpress] permet aux utilisateurs de se connecter avec leur domaine au lieu d'un nom d'utilisateur et d'un mot de passe. (Voir les détails plus complets en-dessous.)
+
+==== Protection Spam/Commentaire ====
+
+Quelques personnes peuvent préférer désactiver le commentaire local pour n'autoriser le commentaire que par webmentions. 
+Si le commentaire local est autorisé, il devrait y avoir quelque forme de protection installée.
+
+* [http://wordpress.org/plugins/akismet/ Akismet] est un service de protection contre le spam fourni par Automattic, la société qui fait tourner Wordpress.com et qui est par conséquent un contributeur/sponsor majeur du projet open source Wordpress. Il est gratuit pour un usage personnel.
+* Combinés ensemble, les extensions [http://wordpress.org/plugins/webmention webmention] et [http://wordpress.org/plugins/semantic-linkbacks semantic-linkbacks] vous permettent d'accepter les commentaires sous forme de [[webmention-fr|webmention]]s provenant d'autres sites web. Elles vous permettent aussi de [[backfeed-fr|backfeed]]er les commentaires, likes, etc. en provenance des réseaux sociaux en utilisant [[Bridgy]] (voir notes plus bas).<br />
+
+'''Attention''': N'utilisez pas l'[http://wordpress.org/plugins/indieweb/ extension indieweb] ! 
+(Au moins pas maintenant.) C'est un vieux package démodé des extensions webmention et semantic-linkbacks, rien de plus.
+
+== Ajouter les Support/Éléments Indieweb à un Site Wordpress ==
+Voici les étapes pour ajouter un support IndieWeb à un site WordPress.
+
+Voir aussi les articles que les blogueurs ont écrit sur le réglage de leurs sites avec le support IndieWeb : 
+* 2014-08-30 http://techlifeweb.com/using-wordpress-for-indieweb/
+
+=== [[IndieAuth-fr|IndieAuth]] ===
+Une fois votre WordPress réglé, vous voudrez installer [[IndieAuth]]. 
+Si ce n'est pas fait, installez [http://wordpress.org/plugins/indieauth/ IndieAuth pour Wordpress] ce qui permet aux utilisateurs de se connecter avec leur domaine au lieu d'un nom d'utilisateur et d'un mot de passe. 
+
+Ensuite, vous devrez ajouter les liens appropriés [[rel-me-fr|rel-me]] à votre page d'accueil. 
+L'extension [http://wordpress.org/plugins/indieauth-links/ IndieAuth-Links] facilite ça, mais vous pouvez aussi utiliser les [http://en.support.wordpress.com/add-social-media-buttons-to-your-sidebar-or-footer/ Social Media Buttons] ou un [http://codex.wordpress.org/WordPress_Widgets#Using_Text_Widgets Widget Texte] 
+pour ajouter le(s) lien(s) demandé(s) [[rel-me-fr|rel-me]]. Le détail peut être trouvé sur [https://indieauth.com/setup indieauth.com/setup]. Une fois que c'est fait, allez sur [https://indieauth.com/ indieauth.com] et connectez-vous pour tester que vous avez bien tout réglé ! 
+
+* Réparez-moi : Cette section combine l'ajout de lien rel-me pour satisfaire indieauth.com (par ex. pour se connecter sur le wiki) avec l'extension ''IndieAuth for Wordpress'' qui vous permet de vous 
+connecter sur votre prorpes site avec indieauth. La dernière est une étape bien plus avancée et devrait être migrée sur une autre section (et la distinction a besoin probablement d'être clarifiée) 
+[[User:Kylewm.com|Kylewm.com]] 15:52, 12 September 2014 (PDT)
+
+=== [[microformats-fr|microformats]] ===
+Puis, vous ajouterez le support [[microformats-fr|microformats]]. Essayez le [http://wordpress.org/themes/sempress thème SemPress], c'est le meilleur moyen de le faire. Si vous ne voulez pas abandonner votre thème actuel, 
+essayez l'[https://github.com/pfefferle/wordpress-uf2 extension wordpress-uf2] (requiert FTP).
+
+=== [[POSSE-fr|POSSE]] ===
+Avec vos [[personal-domain-fr|domaines personnels]]s, [[POSSE-fr|POSSE]] est l'une des pierre angulaires de l'IndieWeb. 
+En résumé, au lieu de poster vers les [[silos-fr|silos]] de réseaux sociaux, vous postez sur votre propre site et puis 
+copiez vers les silos.
+
+Vous pouvez [[POSSE-fr|POSSE]]r manuellement, mais la plupart des personnes l'automatisent. WordPress a beaucoup de plugins qui font ça. Parmi les plus connus : 
+* [http://jetpack.me/support/publicize/ Jetpack Publicize]
+* [http://wordpress.org/plugins/social/ Social] (Twitter/Facebook)
+* [http://www.nextscripts.com/social-networks-auto-poster-for-wordpress/ NextScripts SNAP]
+* [http://wordpress.org/plugins/social/ Mailchimp Social]
+* [http://ifttt.com/ IFTTT] (If This, Then That) Détails à ce propos [http://techlifeweb.com/using-wordpress-for-indieweb/#posse ici].
+
+D'autres extensions qui peuvent être utilisées pour POSSEr :
+* [https://wordpress.org/plugins/tumblr-crosspostr/ Tumblr Crosspostr] (Tumblr seulement)
+
+Si vous POSSEz, une bonne pratique est d'ajouter des liens [[rel-syndication-fr|rel-syndication]] à vos posts WordPress. Essayez l'[http://wordpress.org/plugins/relsyndication/ extension rel-syndication] pour ça 
+(À cette heure ne supporte que le plugin Social, la [https://github.com/jihaisse/wordpress-syndication mainline GitHub] a un support minimal de Tumblr, Twitter et Facebook pour l'extension NextScripts SNAP.)
+
+Si vous voulez aussi aller dans l'autre direction et ramener vos posts de réseaux sociaux et vos data vers WordPress, il existe aussi les extensions [[PESOS-fr|PESOS]]. 
+Pour commencer, essayez [http://www.enthropia.com/labs/wp-lifestream/ Lifestream].
+
+=== [[backfeed-fr|backfeed]] ===
+Une fois que vous POSSEz, vous pourriez vouloir ramener les commentaires et likes sur les posts de réseaux de sociaux sur votre site. 
+Ceci s'appelle le [[backfeed-fr|backfeed]]. Beaucoup d'extensions POSSE au-dessus font ça ; regardez [[backfeed-fr#Extensions_WordPress]] pour les détails.
+
+Une autre option est [[Bridgy-fr|Bridgy]], un service qui envoie automatiquement des [[webmention-fr|webmention]]s pour l'activité sur vos posts POSSÉs dans les [[silos-fr|silos]] 
+(avant de commencer à utiliser Bridgy, assurez-vous d'abord d'installer les extensions webmention et semantic-linkbacks décrites ci-dessous).
+
+Ce qui nous ramène à ... 
+
+=== [[webmention-fr|webmention]] ===
+[[File:semantic-linkbacks.png|100px|right]]
+Les [[webMention-fr|webmention]]s font aussi partie des [[building-blocks-fr|blocs de construction]]-clés de l'IndieWeb. 
+Ils vous permettent d'envoyer et de recevoir des réponses, likes, etc. directement à partir de votre propre site.
+
+Essayez de combiner les extensions [http://wordpress.org/plugins/webmention webmention] ([http://andysylvester.com/2014/01/27/working-with-webmention-video/ vidéo disponible]) et 
+[http://wordpress.org/plugins/semantic-linkbacks semantic-linkbacks], qui supportent les [[comments-fr|commentaires]] (y compris [[reply-context-fr|contexte de réponse]]), 
+les [[likes-fr|likes]], [[reposts-fr|reposts]], [[favorites-fr|favoris]], [[RSVP-fr|RSVP]]s et les [[mentions-fr|mentions]] classiques.
+
+('''Attention''': N'utilisez pas l'[http://wordpress.org/plugins/indieweb/ extension indieweb] ! Au moins à cette heure. C'est un pack vieilli, déprécié d'assemblage des extensions webmention et semantic-linkbacks, rien de plus.)
+
+Pour que l'extension webmention fonctionne, allez sur la page Réglages => Discussion dans votre tableau de bord admin WordPress, et activez les boîtes à cocher "Autoriser les liens de notifications depuis les autres sites (notifications par pings et rétroliens)" et "Autoriser les visiteurs à publier des commentaires sur les derniers articles".
+
+Installez aussi l'extension [https://github.com/pfefferle/wordpress-webmention-form webmentions forms] (requiert FTP) pour recevoir les WebMentions directement à partir de la [http://adactio.com/journal/6469/ section commentaires] de votre blog.
+
+=== Plus de blocs de constructions ===
+Si vous êtes arrivé là, bravo ! Vous êtes désormais un membre IndieWeb ! Voici quelques extensions que vous pourriez essayer. Bon nombre d'entre elles nécessitent FTP ou d'autres réglages plus techniques :
+
+* [http://wordpress.org/plugins/hum/ Raccourcisseur d'URL : WP-Hum]
+* [https://github.com/pfefferle/wordpress-webactions WebActions]
+* [https://gist.github.com/pfefferle/1724438 blavatars (icons)]
+* [http://wordpress.org/plugins/indieauth/ IndieAuth]
+* [https://snarfed.org/indieweb-press-this-bookmarklets-for-wordpress bookmarklets IndieWeb reply, repost, like, et RSVP]
+* [https://github.com/dshanske/indieweb-taxonomy Taxonomie Indieweb] - Ajouter une taxonomie au type de post dans WordPress permet aux posts d'être classifés sous réponse/vie/repost etc. Ceci permet aux archives d'être générées pour ces types de posts tou comme le support du marquage approprié.
+
+=== Extensions optionnelles ===
+* [http://wordpress.org/plugins/browserid/ BrowserID/Persona]
+* [http://wordpress.org/plugins/pubsubhubbub/ PubSubHubbub]
+* [https://github.com/pfefferle/wordpress-hashtags Hashtags]
+* [https://github.com/jihaisse/custom-feed-url Custom feed URL]
+* [[WhisperFollow| Whisperfollow pour l'agrégation de flux]]
+
+=== Extensions avec vieille technologie ===
+* [http://wordpress.org/plugins/openid/ OpenID]
+* [https://github.com/pfefferle/ostatus-for-wordpress OStatus]
+* [https://github.com/pfefferle/salmon Salmon]
+
+=== Thèmes ===
+Quelques thèmes qui supportent les [[microformats-fr|microformats]] ou d'autres sémantiques.
+
+* [https://github.com/pfefferle/SemPress SemPress] supporte les microformats, microformats2 et schema.org (thème)
+* [http://p2theme.com/ P2] est un thème de microblog pour WordPress qui pourrait être adpatable pour les ''indiewebsters''.
+
+Plutôt qu'un thème, [https://github.com/pfefferle/wordpress-uf2 uf2] est une extension qui tente d'ajouter la data microformats2 à un thème existant, bien que l'auteur admette que ce soit très limité et recommande d'utiliser un thème qui supporte nativement les microformats.
+
+== Personnes utilisant WordPress ==
+Les personnes qui utilisent WordPress sur leurs sites primaires ou d'autres sites.
+
+=== Exemples IndieWeb ===
+En particulier, les membres (semi-)actifs de la communauté IndieWeb utilisant WordPress sur leurs propres sites, par conséquent vous pourriez les retrouver sur [[IRC]] pour les interroger sur leur expérience (ou pour de l'aide).
+
+* [[User:Ozten.com|Austin King]] (2013) sur [http://ozten.com/psto/ ozten.com/psto/]
+* [[User:Notizblog.org|Matthias Pfefferle]] sur [http://notizblog.org notizblog.org] avec :
+** [http://wordpress.org/plugins/indieauth/ IndieAuth]
+** [https://github.com/pfefferle/wordpress-webmention WebMentions] ([[selfdogfooding]])
+** [https://github.com/pfefferle/wordpress-semantic-linkbacks Semantic Linkbacks] ([[selfdogfooding]])
+* [[User:snarfed.org|Ryan Barrett]] (2014 SF) sur [http://snarfed.org snarfed.org]
+* [[User:david.shanske.com|David Shanske]] (2014, NYC) sur [http://david.shanske.com david.shanske.com]
+* [[User:petermolnar.eu|Peter Molnar]] sur [https://petermolnar.eu petermolnar.eu] avec
+** [https://github.com/indieweb/wordpress-indieweb WordPress-Indiweb]
+** [http://www.nextscripts.com/social-networks-auto-poster-for-wordpress/ Social Networks Auto Poster] pour POSSEr
+** et la [https://github.com/petermolnar/wordpress-syndication version augmentée] de [https://github.com/jihaisse/wordpress-syndication rel-syndication pour wordpress]
+** une [https://github.com/petermolnar/wp-post-formats version augmentée] de [https://github.com/crowdfavorite/wp-post-formats wp-post-formats]
+* [[User:ShaneHudson.net|Shane Hudson]] (2013 UK) sur [http://shanehudson.net shanehudson.net]
+** Actuellement (Jan 2014) en utilisant built dans les formats de post pour ajouter des signets/liens privatifs, expérimentant à rendre ceux-ci publics (tout comme une app pour poster plus facilement), tout comme le POSSE de tweets et je l'espère des photos, ect.
+* [http://upon2020.com/ Johannes Ernst] (2013) sur [http://upon2020.com/blog/ upon2020.com/blog] (totalité des posts) et [http://upon2020.com/banter/ upon2020.com/banter] (short banter) à la fois avec 
+** [http://wordpress.org/plugins/social/ Social] plugin pour POSSEr vers Twitter et Facebook
+* [[User:Acegiak.net|Acegiak]] sur [http://Acegiak.net Acegiak.net]
+**[[Whisperfollow]] pour agréger et répondre aux flux
+**[http://github.com/dshanske/indieweb-taxonomy IndieWeb Taxonomy] pour les types de post
+**Thème [[Sempress]]
+**Modifié le [https://wordpress.org/plugins/microblog-poster/ microblog poster] pour POSSEr
+* [[User:AndySylvester.com|Andy Sylvester]] sur [http://andysylvester.com andysylvester.com]
+* [[User:David.Shanske.com|David Shanske]] on [https://david.shanske.com david.shanske.com]
+** Thème enfant de [https://github.com/dshanske/mf2_bootstrap mf2_bootstrap] encore en développement en live 
+** [https://github.com/dshanske/indieweb-taxonomy Indieweb Taxonomy] pour ajouter du contexte aux types de post
+** H-Card Widget plugin(code release en attente) pour ajouter une h-card complète à la barre latérale
+** [https://github.com/dshanske/semantic-comments Semantic Comments] pour ajouter des commentaires/mentions plus riches avec un [[facepile]]
+** [https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/ Social Network Auto Poster] pour POSSEr
+
+=== Autres indépendants l'utilisant sur leur site primaire ===
+* [http://mediajunkie.com/ Christian Crumlish] 
+* [http://singpolyma.net Stephen Paul Weber]
+* [[User:Colintedford.com|Colin Tedford]] sur [http://colintedford.com colintedford.com] depuis 2007 (veut basculer vers quelque chose de plus statique mais ça prendra un moment).
+* [[User:techlifeweb.com | Scott Kingery]] posts longs [http://techlifeweb.com techlifeweb.com] plus  billets sociaux, liens rapides et checkins sur [http://techlifeweb.com/social techlifeweb.com/social]
+* [http://boffosocko.com/ Chris Aldrich] 
+* ...
+
+=== Utilisant sur l'un de leurs sites ===
+Les personnes utilisant WordPress sur un site secondaire.
+* [[User:Aaronpk|Aaron Parecki]] sur [http://aaron.pk/bookmarks/ Bookmarks]
+** [[File:aaronpk-bookmarks.png|300px|right]]
+* [[User:Erin_Jo_Richey|Erin Jo Richey]] sur [http://flatfrogblog.com/ Flat Frog Blog]
+* [[User:Christopheducamp.com|Christophe Ducamp]] sur [http://christopheducamp.com/b christopheducamp.com/b]
+** Raccourcisseur URL via WP-Hum - activé depuis juillet 2012, ex. http://xtof.me/blog/b/405 
+** Test de [[POSSE-fr|POSSE]] en cours [http://xtof.me/blog/test-indieweb-parvenir-a-posser-un-article-vers-twitter/#wp-extensions-posse research in progress] avec 2 extensions activées simultanément
+*** [http://jetpack.me/support/publicize/Publicize (JetPack module)] :  [http://christopheducamp.com/blog/test-indieweb-parvenir-a-posser-un-article-vers-twitter/#jetpack-publicize-exemple example w UI]
+*** [http://aaroncollegeman.com/sharepress/ SharePress] (FB pages broadcasting et twitter. [http://xtof.me/blog/test-sharepress-posse/ exemple w UI]). schedule POSSE. Short-url restreinte à  bit.ly. 
+* [[User:Crystalbeasley|Crystal Beasley]] sur [http://skinnywhitegirl.com/blog/ skinnywhitegirl.com/blog/]
+** A migré son domaine primaire/[[identity]] sur Crystalbeasley.com qui est généré statiquement.
+
+=== Exemples passés  ===
+Les indépendants qui avaient l'habitude d'utiliser WordPress sur leurs propres sites mais ont migré (ou le site a arrêté de fonctionner)
+* [[User:Willnorris.com|Will Norris]] sur [http://willnorris.com willnorris.com] (2005 - [https://willnorris.com/2014/07/one-step-forward-two-steps-back July 2014]) avec :
+** URL Shortener via WP-Hum ([[selfdogfooding-fr|selfdogfooding]])
+* [https://josephboyle.net Joseph Boyle] (par terre en date du 2013-10-25)
+
+== Développement ==
+
+Several projects are actively under development for use in Wordpress. Plugins/themes considered complete enough for widespread use  will appear on this page. 
+
+For brainstorming on development of Indieweb themes/plugins for Wordpress and discussion of common conventions to ensure interoperability, see [[WordPress/Development|WordPress Development]].
+
+== Critiques ==
+Les problèmes et critiques d'utiliser WordPress d'une perspective IndieWeb.
+
+=== Problèmes de sécurité ===
+WordPress (and often many popular plugins) frequently has security vulnerabilities that are found and exploited in a "zero day" fashion.
+
+Mitigation:
+
+Security vulnerabilities are found in many popular pieces of software, as their deployment makes them attractive targets. While there is currently limited options within the core of Wordpress, there are many security plugins that offer protection for Wordpress blogs.
+
+===Vulnérabilité de maintenance ===
+Independents (quite tech smart and capable) who had their WordPress blog(s) hacked due to being unable to keep up with security updates / maintenance (too much of a hassle/chore/tax on their time). 
+* Clay Shirky:
+** https://plus.google.com/u/0/+AdeOshineye/posts/6zUWbNKbWrM
+* Dan Brickley
+** Dan Brickley mentioned WordPress as one of a few open source CMS installs of which at least one was [https://plus.google.com/u/0/105037104815911535953/posts/BEVAUoWCaP4 hacked and then his home page overwritten with spam link spam], forcing him to throw them all away and go with a simple static home page. He specifically mentions "must've left an update too late".
+* [[User:Michaelw.net|Michael.net]]:
+** WordPress seems to have a non trivial security hole every 6 months and I never have the time to tend to my WP install. The last major problem resulted in my blog being infested with malware and my site blacklisted by google.  WordPress is like Windows.  It's probably not really less secure than the alternatives but its popularity is such that it makes an attractive target.  Most WordPress blogs are configured to ping an [http://codex.wordpress.org/Update_Services update service] so hackers have no trouble finding targets.  Any IndieWeb solution needs to think about automatic updates and defense in depth security. -- [[User:Michaelw.net|Michael.net]]
+* ...
+
+Mitigation:
+
+However, since Version 3.7, Wordpress supports [http://codex.wordpress.org/Configuring_Automatic_Background_Updates|automatic background updates] to alleviate this issue. By default, automatic updates for minor releases and translations are enabled. There are configurable settings to allow major release updates, and updates for specific plugins. 
+
+The Core Automatic Update functionality can also be used to push critical security updates to popular plugins. This was used in April of 2014 when the popular JetPack plugin was discovered to have a critical vulnerability and the developers requested the security update be pushed via the system to all users who had not expressly disabled all updates. 
+
+=== Fatal Error memory exhausted ===
+WordPress seems to run out of memory on servers sometimes, and give a message like:
+
+* e.g. on http://yottabytes.info/?p=10497 (on 2014-06-08 15:28 EDT): <blockquote> Fatal error: Allowed memory size of 41943040 bytes exhausted (tried to allocate 32 bytes) in /home/johnkrol/public_html/wp-includes/post.php on line 1961</blockquote>
+
+=== Pages can not have numeric slugs ===
+WordPress does not allow numeric page slugs, making it difficult to set up pages representing a year, such as <code>/event/2014/</code>. This is frustrating if you need to set up a series of annually recurring pages (not blog posts) without using a plugin. [https://core.trac.wordpress.org/ticket/11917]
+
+== Migrations ailleurs ==
+Il y a une tendance des personnes migrant de WordPress pour différentes raisons (par ex. les problèmes notés au-dessus). Elles semblent basculer vers l'une des trois options, une indieweb, et deux silos.
+
+* générateur de site statique ou tout autre [[project-fr|project]] IndieWeb.
+* silo : service d'hébergement WordPress.com (voir en-dessous)
+* autres silos : par ex. [[Tumblr-fr|Tumblr]] (d'autres ?)
+
+=== Migration vers un autre projet ===
+(ébauche)
+
+Beaucoup de gens avec des sites personnels qui ont gardé leurs sites perso et leur hébergeur, mais ont migré de WordPress vers une autre solution, par ex. typiquement un générateur de site statique :
+* 2013-11-10 Julie Pagano vers [[Middleman]] (http://middlemanapp.com/) : http://juliepagano.com/blog/2013/11/10/site-redesign-using-middleman/
+Beaucoup d'autres ont migré vers Jekyll ou sont dans le processus de faire ainsi, par ex : 
+* Crystal Beasley - selon une conversation récente (2013-11) sur IRC
+* d'autres à portée de main ...
+
+Et quelques-un qui ont migré vers leurs propres projets IndieWeb, par ex. 
+* [[User:Aaronparecki.com|Aaron Parecki]] a migré de WordPress pour son blog vers l'utilisation de [[p3k-fr|p3k]] pour poster des [[articles-fr|articles]] sur Aaronparecki.com
+
+=== Migration vers le service WordPress ===
+(stub)
+
+Je sais qu'il y a des types qui ont fait ça mais j'ai un problème pour me souvenir de qui en particulier.
+=== Migré vers Tumblr ===
+(stub)
+
+Les types qui étaient sur WordPress et qui ont migré vers Tumblr
+* Micki Krimmel
+* ...
+
+== Service d'hébergement WordPress.com ==
+WordPress.com est un service d'hébergement de blog avec des fonctionnalités impressionnantes d'import/export. Voir les détails : 
+* http://techcrunch.com/2013/03/26/wordpress-com-has-imported-15m-posts-in-the-last-30-days-remains-a-top-safe-haven-for-nomad-bloggers/
+
+
+=== Thèmes hébergés ===
+WordPress.com fournit des thèmes pour modifier le HTML/CSS/JS et l'apparence générale d'un site d'utilisateur. Bien que les utilisateurs puissent payer pour une fonctionnalité d'écrire une CSS personnalisée, ils ne peuvent pas modifier le marquage du thème. Ce qui signifie parmi d'autres choses, qu'un utilisateur ne peut pas spécifier quelque marquage dans un post à affichier sur une page de permalien et pas dans le post quand cela fait partie d'un feed. Par exemple, 
+
+* https://veganstraightedge.wordpress.com/2010/11/7/no-more-sharecropping
+* "Initialement publié sous : http://sbb.me/b48f1"
+
+If you could detect "in the feed vs permalink page", you could use <code>rel="canonical"</code> on the attribution link '''from''' the syndicated copy on wordpress.com back '''to''' the original on iamshane.com. But because rel-canonical is page scoped, you shouldn't use it on a link in a post when that post is a part of the feed. To work around this, you can use <code>class="u-url u-uid"</code> on the attribution link.
+
+=== POSSE ===
+Il est possible de [[POSSE-fr|POSSE]]r manuellement des [[articles-fr|articles]] vers Wordpress.com.
+==== Exemples POSSE IndieWeb ====
+===== Shane Becker =====
+Shane Becker POSSE manuellement ses articles vers Wordpress.com.
+* http://iamshane.com/articles/2010/11/7/1/no-more-sharecropping
+** copie POSSÉe : https://veganstraightedge.wordpress.com/2010/11/7/no-more-sharecropping
+
+=== webmention ===
+WordPress.com n'a pas le support intégré des [[webmention-fr|webmention]]s, mais [[Bridgy]] peut envoyer, recevoir et afficher les webmentions pour les blogs WordPress.com. Vous pouvez aussi recevoir des webmentions avec [[webmention.io]] et peut-être [https://webmention.herokuapp.com/ webmention.herokuapp.com].
+
+=== Problème cURL ===
+Le 2014-05-06 il a été [http://indiewebcamp.com/irc/2014-05-06/line/1399412640 rapporté] que indiewebify.me renvoyait un résultat vide en tantant de vérifier gabrielscheer.com. Ce domaine est hébergé sur wordpress.com et il semble que wordpress.com bloque quelques requêtes cURL basées sur User-Agent. Au minimum, il apparaît que wordpress.com bloque les requêtes cURL avec User-Agent Guzzle.
+
+Ce problème a été précédemment rapporté sur Github le 2013-05-19 [https://github.com/guzzle/guzzle/issues/325]
+
+==== Exemples ====
+
+* curl -i -H 'User-agent: Guzzle' http://gabrielscheer.com/ -- fails
+* curl -i -H 'User-agent: indiewebify.me' http://gabrielscheer.com/ -- works
+* curl -i -H 'User-agent: curl' http://gabrielscheer.com/ -- works
+
+== Voir aussi ==
+* [[projects-fr|projets]]
+* [[silos-fr|silos]]
+* [[blogs-fr|blogs]]

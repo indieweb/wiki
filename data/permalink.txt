@@ -1,0 +1,78 @@
+http://indiewebcamp.com/permalink
+
+{{stub}}
+
+A '''<dfn>permalink</dfn>''' is a URL which typically represents and retrieves a single [[post]] (also explicitly called a <i>post permalink</i>).
+
+== Why ==
+You should maintain permalinks to your posts so links to them keep working. This is the intent of "Cool URIs [sic] don't change"[http://www.w3.org/Provider/Style/URI.html].
+
+== How ==
+
+=== Design ===
+{{main|URL design}}
+Most [[projects]] have a very deliberate permalink URL design.
+
+
+== IndieWeb Examples ==
+=== Barnaby Walters ===
+{{barnabywalters}} uses [[Taproot]] running on waterpigs.co.uk:
+* Articles
+** <code><nowiki>http://waterpigs.co.uk/articles/getting-started-with-microformats2/</nowiki></code>
+* Notes
+** . . .
+
+=== gRegor Morrill ===
+{{gRegor}} using [[ProcessWire]] on gregorlove.com:
+* Permalinks begin with the year and month <code>/YYYY/MM/</code> followed by the [[slug]]
+** http://gregorlove.com/2015/07/100-words-027/
+
+== Project Examples ==
+=== WordPress ===
+[[WordPress]] (open source) supports the following permalink structures:
+
+* Day and name
+** <code><nowiki>http://example.com/2014/03/27/sample-post/</nowiki></code>
+* Month and name
+** <code><nowiki>http://example.com/2014/03/sample-post/</nowiki></code>
+* Numeric
+** <code><nowiki>http://example.com/archives/123/</nowiki></code>
+* Post name
+** <code><nowiki>http://example.com/sample-post/</nowiki></code>
+* Custom structure
+** Using a combination of [http://codex.wordpress.org/Using_Permalinks#Structure_Tags WordPress structure tags]
+
+== Coping with loss of ==
+Permalinks [[site-deaths|die every year]]. If you're able to export your content you can rehost it on your own site, but the problem of dead permalinks remains. There are approaches to making dead permalinks at least discoverable, e.g. by searching for the text of a permalink URL in a web search engine.
+
+=== archive page with old permalinks in cleartext ===
+One approach is to publish an archive page that provides cleartext URLs (but not hyperlinked) of your dead permalinks, along with their new locations, e.g.:
+* [http://jonudell.net/udell/2002-2006-index.html Jon Udell's 2002-2006 index] of his blog posts that were originally published at <samp>weblog.infoworld.com/udell</samp>.
+
+=== new URLs with old permalinks in path ===
+Another approach is to create new pages with URLs that have the old permalinks as part of their path, and then also link to those new URLs from an archive page using link text of the old domain and path . E.g.:
+* [http://microformats.org/wiki/tr.im#equivalents microformats tr.im equivalents] for shortlinks at the now defunct <samp>tr.im</samp> link shortener. E.g.:
+** [http://microformats.org/wiki/tr.im/ufprs microformats.org/wiki/tr.im/ufprs] for the dead link <samp>tr.im/ufprs</samp>
+
+== Changing Permalinks to posts ==
+
+When restructuring the permalink design on an indiewebsite, it is recommended to send an HTTP 301 permanent redirect response from the older permanlink to the newer one (see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Response_codes ).
+
+Such a redesign can affect other aspects of an indiewebsite some of which are documented below
+
+* If [[comments]] and [[responses]] to a post are identified using the post permalink, then these should be updated to point to the new permalink.
+
+* [[Posts]] on other websites might still link to the old permalink and might send [[webmentions]] to it. The webmention receiving code should suitably recognize these as webmentions to the new permanlink.
+
+* [[Bridgy]] using [[posse-post-discovery]] might resend some [[backfeed]] webmentions to the new permalink. These should be suitably de-dupped.
+
+== See also ==
+* [[permashortlinks]]
+* [[IndieArchive]]
+* [[posts]]
+** [[notes]]
+** [[articles]]
+* [[short-domains]]
+* [[slug]]
+
+[[Category:building-blocks]]

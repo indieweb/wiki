@@ -1,0 +1,146 @@
+http://indiewebcamp.com/OpenID
+
+{{stub}}
+
+'''<dfn>[https://en.wikipedia.org/wiki/OpenID OpenID]</dfn>''' is a method of using an HTTP URL as an identity for signing into websites. OpenID has been superseded by [[web-sign-in]] / [[indieauth]].
+
+<div style="background:#ffe; padding:1em; font-weight:bold">
+* See: [[How_to_set_up_web_sign-in_on_your_own_domain#Setup_Instructions|How to setup web sign-in on your own domain]]
+</div>
+
+== Setup ==
+To use indieauth.com as an OpenID delegate for the OpenID identifier of your site, add the following two link tags to the HTML (inside the <code>&lt;head&gt;</code> element) of your website, replacing "aaronparecki.com" with your domain of course.
+
+<pre>
+<link rel="openid.delegate" href="http://aaronparecki.com/" />
+<link rel="openid.server" href="https://indieauth.com/openid" />
+</pre>
+__TOC__
+
+== IndieWeb Examples ==
+Examples of IndieWeb sites which act as their own OpenID provider, without relying on delegation to another provider
+* [[User:cweiske.de|cweiske.de]] on http://cweiske.de/
+* ... add yourself
+
+Examples of IndieWeb sites which consume (allow login via) OpenID in particular (beyond using IndieAuth or any silo logins like Twitter, Facebook, Google+).
+* http://p.cweiske.de/
+* http://indieauth.id.cweiske.de/ via [[indieauth-openid]]
+* ... add yourself
+
+== Additional Examples ==
+Additional examples of sites either natively providing OpenID or consuming it, maintained by IndieWeb participants:
+* [[User:cweiske.de]] uses OpenID as backend login method for several TYPO3 instances
+* ...
+
+== FAQ ==
+=== Why does indieauth.com not consume OpenID? ===
+Why doesn't [[indieauth.com]] support OpenID as an authentication mechanism?
+
+IndieAuth.com used to support OpenID, but there were a lot of problems with getting really weird errors back from OpenID providers inconsistently, and there seemed to be some issue with the omniauth OpenID plugin.
+
+IndieAuth.com can now be used as an OpenID provider (and thus delegate), however.
+
+You can use [[indieauth-openid]] if you want to sign in to IndieAuth sites with OpenID.
+
+== Shutdowns ==
+AKA <span id="Abandonment">Abandonment</span>. The following sites used to provide or accept (consume) OpenID as an identifier to log-in but no longer do. Most recent first:
+
+=== 2015 ===
+* 2015-04-20 '''Google OpenID 2.0''' shut down. See the [https://developers.google.com/accounts/docs/OpenID#shutdown-timetable Google OpenID Shutdown Timetable].
+
+Sometime in 2015:
+* [http://status.net/ Status.net]
+** Redirects to e14n.com, no OpenID available <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 21:33, 31 May 2015 (PDT)
+
+Precise date unknown, verified 2015-07-19:
+* SixApart's Vox.com old OpenID signup URL: www.vox.com/signup stopped working likely when Vox Media publishing site repurposed the vox.com domain, but implemented their own OpenID sign-in (see Consuming Sites).
+* [[Gitorious]]
+** "Gitorious is being acquired by GitLab and gitorious.org will shut down end of May." <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 21:33, 31 May 2015 (PDT)
+** 2015-07-19 OpenID login URL no longer has any UI: gitorious.org/login?method=openid [[User:Tantek.com|Tantek]] 18:42, 19 July 2015 (PDT)
+
+=== 2014 ===
+* 2014-06 Typepad dropped support for logging in with OpenID (consumer) but Typepad blogs and profiles can still be used to log in elsewhere (provider). This was not announced but is evident from [https://www.typepad.com/secure/services/signin the signin page].
+
+* 2014-02-01 '''myOpenID''' OpenID provider shutting down, site already doesn’t load as of 2013-09-04. No public notification yet, email quoted [http://waterpigs.co.uk/notes/4RsEr7/ here] and [http://p.cweiske.de/54 here in full]
+** 2013-07-25 http://meta.stackoverflow.com/questions/190442/myopenid-no-longer-supported-add-alternative-login-method-to-your-account
+* 2014-01-07 '''[[Disqus]]''' OpenID consumer "no longer supports Open ID"[https://twitter.com/disqushelp/status/420628751357988864]
+
+Sometime in 2014:
+* [http://slashdot.org/ Slashdot]
+** Seems to have been removed - <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 16:22, 31 May 2014 (PDT)
+* [https://hootsuite.com/login HootSuite]
+** [[:File:2014-05-31-hootsuite-dropping-openid-support.png|"HootSuite will remove support for OpenID in 2014"]]
+
+=== 2013 ===
+* 2013-10-29 '''SourceForge.net''' is [https://sourceforge.net/p/forge/site-support/5733/ considering phasing out OpenID login]
+** Also removed the OpenID option from their default login (you have to know and use the "?openid" URL parameter to get it).[http://cweiske.de/tagebuch/sourceforge-openid.htm]
+** 2015-07-19 no longer true, SourceForge OpenID URL from cweiske now 404s. [[User:Tantek.com|Tantek]] 18:42, 19 July 2015 (PDT)
+
+=== 2012 ===
+* 2012-08-23 Disqus help said: "OpenID is no longer supported in Disqus 2012, although it's still available with Disqus Classic"[https://twitter.com/disqushelp/status/238710464748584960]
+* ...
+
+=== 2011 ===
+
+=== 2010 ===
+* 2010-09-27 '''[[PBWorks]]''' dropped OpenID consuming support
+** https://www.pingidentity.com/blogs/pingtalk/2010/09/Another-one-bites-the-OpenID-dust.html
+* ...
+
+== Criticism ==
+=== Poor Usability In Practice ===
+See:
+* 2009-04-06 {{chrismessina}} <cite>[http://factoryjoe.com/blog/2009/04/06/does-openid-need-to-be-hard/ Does OpenID need to be hard?]</cite> 
+and articles it links to.  Explores many of the apparent usability problems with OpenID deployments (perhaps dark patterns at work). This doesn't mean that OpenID must have poor usability, just that no good examples have been deployed in practice (or end up descending into a [[NASCAR]] nightmare).
+
+=== Consumption Complexity ===
+Contrast easy [[Twitter]]/[[PuSH]]/[[OAuth]] APIs + examples with huge/complex OpenID PHP libraries.
+* Over a dozen classes with dozens of methods total in http://openidenabled.com/php-openid/
+** That's the 1.x libs (nevermind 2.x) and samples just for consuming OpenIDs. 
+
+The barrier to entry for OpenID support is far too high for independent developers.
+
+- [http://tantek.com/2010/032/t4/huge-complex-openid-php-libraries Tantek, 2010-02-01]
+
+OpenID also has a lot of unnecessary bloat as a spec: [[wikipedia:i-name|i-names]] (XRI-based), [[wikipedia:Yadis|Yadis]] and [[wikipedia:Light-Weight Identity|LID]]. Ignoring all this cruft could create a much simpler OpenID that just uses URLs on the web, thus making it simpler to implement ("[http://tommorris.org/posts/170 ReallyOpenID]").
+
+=== Neglected Libraries and Plugins ===
+As of 2015-05-16:
+* All [[Ruby]] gems obsolete[https://plus.google.com/+JoshuaMcGeekiest/posts/UKhAmcx4pNT]
+* [[WordPress]] OpenID plugin "is no longer supported and incompatible with the current version of WordPress."[https://plus.google.com/+JoshuaMcGeekiest/posts/UKhAmcx4pNT]
+* Only '''one''' working [[PHP]] library, "and all they offer is an example server 'to give you an idea of how to write your own implementation.'"
+
+== Consuming Sites ==
+List of websites that still consume OpenID:
+* [https://www.dreamwidth.org Dreamwidth]
+** 2015-08-03 verified. [[User:Kylewm.com|Kylewm.com]] 08:26, 3 August 2015 (PDT)
+** Works sporadically with indieauth bridge. Sometimes returns "Can't verify OpenID: naive_verify_failed_return: Direct contact invalidated ID provider response."
+* [http://opensourcebridge.org/sign_in Open Source Bridge]
+** 2015-07-19 verified. [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
+* [http://openstreetmap.org/ OpenStreetMap]
+** 2015-07-19 verified. [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
+* [http://stackoverflow.com/ Stack overflow]
+** 2015-07-~~ WordPress OpenID plugin verified to work per {{snarfed}} in IRC.
+** Note: issues likely due to [https://github.com/aaronpk/IndieAuth.com/issues/99 IndieAuth OpenID provider vs Stack Overflow OpenID consumer]
+*** Seems to have intermittent errors <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 21:21, 31 May 2015 (PDT)
+*** 2015-07-19 failed with "Message signature was incorrect." [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
+** Note: Others are also "[http://meta.stackexchange.com/questions/217613/unable-to-login-with-my-personal-openid-server-message-signature-was-incorrect Unable to login with my personal OpenID server (“Message signature was incorrect.”)]" (uses "SimpleID" OpenID provider software)
+* [https://www.blogger.com/comment.g?blogID=3200930&postID=4882130443289561852 Blogger comments] still allow OpenID, and work with the IndieAuth bridge
+* [http://ask.puppetlabs.com/questions/ Puppetlabs Q&A]
+** 2015-07-20 verified {{cweiske}}
+* http://vox.com/
+** 2015-07-20 verified {{cweiske}}
+** 2015-07-19 failed with "Sorry, there was a problem authenticating you with OpenId. Error: invalid_credentials" (maybe an IndieAuth provider issue?) [[User:Tantek.com|Tantek]] 23:15, 19 July 2015 (PDT)
+* ... any other OpenID consuming sites still functioning?
+
+Problematic consuming sites (if problems continue, and if no one can verify OpenID consuming actually works, these should be moved to Shutdowns above, with reason noted "neglect").
+* [http://cufp.org/ CUFP (Commercial Users of Functional Programming)]
+** 2015-07-19 has no OpenID login UI or any login UI for that matter. [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
+* [https://nostarch.com/user?destination=node%2F14 No Starch Press]
+** 2015-07-19 Failed with "OpenID sign-in failed." [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
+
+== See Also ==
+* [[RelMeAuth]]
+* [[IndieAuth]]
+* [[How to set up OpenID on your own domain]]
+* [[Why_web_sign-in#Why_not_OpenID|Why not OpenID]]

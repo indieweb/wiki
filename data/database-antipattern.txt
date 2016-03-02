@@ -1,0 +1,222 @@
+http://indiewebcamp.com/database-antipattern
+
+The '''<dfn>database antipattern</dfn>''' is the use of a [[database]] for <strong>primary long-term storage</strong> of [[posts]] and other personal content (like on an indieweb site), and is an anti-pattern due to the additional maintenance costs, uninspectability, platform-dependence, and long-term fragility of databases and their storage files, as documented with specific examples below.
+
+Is this your first time on IndieWebCamp.com?
+* See our '''[[Main Page|home page]]''' and '''[[principles]]''' for an overview of what we're about.
+
+Do you have a personal site or want one? start here:
+* '''[[Getting Started]]'''
+
+== community split ==
+The indieweb community is nearly evenly split about the database-antipattern, as measured by what [[projects]] we use on our live sites:
+* [[file-storage]] projects
+** [[Jekyll]](multiple), [[Apache]](i.e. plain HTML files, multiple), [[p3k]](multiple), [[Bumble]], [[Bundle]](articles), [[crash]], [[Falcon]], [[Hakkan]], [[Neonblog]], [[Taproot]]
+* [[database]] projects
+** [[WordPress]](multiple, with plugins), [[Known]](multiple), [[Bundle]](notes), [[Indie.js]], [[Nucleus]], [[Postly]], [[ProcessWire]], [[Publify]], [[Red Wind]]
+
+Split experience too: while there are significant experiences (documented below) with the database-antipattern, it is by no means a universally agreed upon aspect of indieweb sites or the indiewebcamp community. A few have even noted their complete [[PostgreSQL#IndieWeb_Examples|lack of first-hand negative experience]].
+
+= databases for storage =
+__TOC__
+Using databases for the primary storage of content on your personal site is considered by some in the community to be an [[antipattern]].
+
+Common content management systems (e.g. [[WordPress]], [[Drupal]], [[MediaWiki]], etc.) use databases for primary storage of content. Most often [[MySQL]], sometimes others like [[MongoDB]].
+
+Databases are all a pain to maintain (i.e. highly human-time inefficient - see DBA tax below), and more fragile[http://www.flickr.com/photos/tantek/5331910087/] than the file system.
+
+For any content you care about, don't put the primary copy in a database.
+
+=== DBA tax ===
+(this likely deserves its own canonical definitional article)
+
+The term '''<dfn>DBA tax</dfn>''' has been introduced to quickly reference the extra overhead you as a person incur by depending on any system that uses a database for primary storage. If you maintain any such system, you have to spend some amount of your time being a database administrator (DBA), hence that time spent is referred to as the DBA tax that you are incurring.
+
+In particular, a database is yet another space of things.
+
+Everyone already deals with a file system. Why deal with yet another space?
+
+The following are aspects of the DBA tax - hassles of:
+* setting up a database
+* setting up tables
+* setting up username/login that is database specific
+* altering tables
+* dealing with username/login that is database specific (often gets in the way of things, e.g. password reset on MediaWiki)[http://microformats.org/wiki/admin-to-do#wiki_problems]
+* exporting/importing
+* backups (separate from the backups you're already doing of the file system, because database files can themselves become corrupted internally - as what happened with [[Magnolia]]).
+* underlying data store requiring manual upgrades when updating database software
+
+All extra crap (thus tax) compared to "just" using the file system.
+
+All databases have a DBA tax.
+
+Experience and evidence shows DBA tax exists as well. People lose things (and have them corrupted) in databases all the time, far more often than in file systems. This is because databases always require extra "magic" for backups etc. 
+
+E.g. search the web for people complaining about having to backup their [[WordPress]] databases before upgrading their WordPress install.
+
+=== Uninspectability ===
+Even in databases that use only a single file (e.g. SQLite?), that "one file" is still uninspectable, as opposed to simple HTML you can always look at in a browser.
+
+There are many reasons why an uninspectable/random/binary magic file format is fragile, whereas HTML is an inspectable file format that many tools can read/write, including a simple text editor. In particular:
+* '''one implementation.''' magic database formats typically only work with one implementation. In contrast, HTML is a well documented format that supported by numerous tools (1:1 like text editors, and higher level tools) which makes it much more robust/reliable than any database file format. Similar problems occur with proprietary binary formats in general.
+
+=== Platform trap ===
+Most databases tend to be biased/tied to a particular programming language (or operating system) as well - more unnecessary constraints - trapping you into a particular platform (language or OS).
+
+In contrast, every language / OS has flat file APIs. Nearly all have DOM Document APIs as well.
+
+=== Fragile ===
+Databases are known to be fragile in exceptional situations, e.g. high traffic load, server hard restart. Real world example: [[MySQL]] and [[Rackspace]]:
+==== MySQL hard reset ====
+<blockquote>... Bad news: MySQL barfed all over the table holding my posts. ... [https://twitter.com/christi3k/status/448270028484263936]</blockquote>
+<blockquote>And I'm pretty sure that happened when Rackspace hard reset my machine due to swapping.[https://twitter.com/christi3k/status/448270919341858816]</blockquote>
+
+Note: apparently [[Postgres]] doesn't have that problem.
+
+==== DB connection loss ====
+Often (but not always) database server software runs on a separate machine and/or process than the web server, and thus it's possible for the connection between the two to go down, for who knows what reasons, e.g. [[Keybase#2014-10-02_DB_connection_lost|2014-10-02 Keybase DB connection lost]]: <blockquote>@aaronpk @KeybaseIO Yeah we lost the DB connection in our Web process so all queries were failing. Weird, first time we've seen that bug.</blockquote>
+Maintaining / checking / restoring this "connection" is yet another source of DBA tax.
+
+This is apparently a frequent occurrence:
+* Google [https://www.google.com/search?q=%22Database+Connection+Lost%22 "Database+Connection+Lost"]
+* Google [https://www.google.com/search?q=%22Database+Error%22+%22Error+establishing+a+database+connection%22+-fix+-wordpress+-website+-login+-help+-account+-join+-atg+-scary+-problems+-mining "Database Error" "Error establishing a database connection"] for actual sites that are down and indexed as such.
+** Specific example found during another Google search: http://krispysbytes.org/tag/publish-once-syndicate-everywhere/ - page returns <blockquote style="white-space:pre-wrap"><nowiki><!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Database Error</title>
+
+</head>
+<body>
+	<h1>Error establishing a database connection</h1>
+</body>
+</html>
+</nowiki></blockquote>
+So much so that [https://www.google.com/search?q=%22WordPress+fatal+error+–+database+connection+lost%22 phishers use it] as a way to trick [[WordPress]] users into submitting their username/pw:
+* [http://www.ardnet.co.uk/wordpress-phishing-warning/ WordPress Phishing Warning], [http://www.rechnerhaus.de/en/wordpress-phishing-warning]
+
+=== Caching ok ===
+{{main|database-cache}}
+Databases are useful for caching/performance needs for high volume sites. Examples:
+
+* aggregations (e.g. all of your [[posts]] with a specific [[tag]]) can be cached.
+* full-text search index
+* geo-search index
+
+In both search use-cases the DBs should be a cache/query store, the real data should still be in flat files (e.g. .md, HTML, etc.) to ensure long-term durability.
+
+=== Premature Optimization ===
+Even though databases are fine for rebuildable caches, that's still solving an optimization problem.
+
+Any design that depends on databases is optimizing prematurely - before you have any idea what the performance characteristics of the system are.
+
+=== Alternatives ===
+Rather than using a database for storage, use open well established formats like [[markdown]] or HTML + [[microformats]], and if you really like <em>how</em> databases let you access them, instead build a database-like API on top (of said markdown or HTML + microformats files).
+* See [[file-storage]] for details on specific approaches.
+
+With HTML+microformats2 + a [[microformats2]] parser, we already have a database-like API that gives you data back from HTML.
+
+It's likely that eventually we'll come up with something resembling a database / storage API on top of an HTML+microformats2 file.
+* What do mean by a storage /database API on top of an HTML file?
+** Something where you can get back structured data and potentially write structured data. E.g. the phpmf2 [[microformat2]] parser/API, perhaps even based on [[micropub]].
+
+=== FAQ ===
+==== Why discuss storage plumbing ====
+Q: Whenever people advocate or deep dive into specific backend tools here, we often say, "that's plumbing, we prefer to focus on end-user use-cases" (and maybe interop) here, but why do we make an exception for database vs [[flat files]], which we dive into, even though it's still plumbing?
+
+A: Summary: when the choice of plumbing <strong>strongly impacts the UX</strong>, then it is worth documenting problems, issues, advantages, disadvantages, and tradeoffs among choices in plumbing. By the same measure, any criticism not tied to UX should be moved to the specific technology impacted, rather than technology area or approach.
+
+
+Specifically, UX impact on users and general usage is the focus. UX that only affects developers approaches a plumbing debate which is not necessarily productive.
+
+Negative UX impacts from this use of databases tend to be in two categories:
+# fragility = your website goes down / away / corrupted or, loses functionality, has unreliable functionality = very bad UX
+# DBA tax = maintaining your website consumes more of your otherwise free time (also impacts your UX of using your website since it is more demanding for non-content oriented tasks).
+
+
+Examples of UX impact:
+* Comment posting failure[https://twitter.com/adactio/status/417080794931159040]
+** Due to MySQL UTF-8 problem.[https://twitter.com/kartik_prabhu/status/417178161978167296]
+
+==== Should I never use a database ====
+Q: What, you mean, never use a database ever? That's crazy! How on earth could you build (some big service) without a database?
+* A: There are instances where the benefits to using a database offset the additional costs of using a database (e.g. large services for large numbers of users). There are also instances where the costs are mitigated or reduced (e.g. caching only). 
+
+This page is specifically about the problems and undue burdens that database usage causes people that maintain their own indieweb sites, and documentation their real-world personal frustrations and issues with databases. 
+
+This doesn't mean that you should '''never''' use a database: judge technology in a sensible way. 
+
+Some popular database systems are overkill for some use cases around personal publishing. If you are trying to build a large scale, multi-user system, this page might not apply to you. 
+
+If you are building a personal publishing platform, or archiving content you’ve spent hours/days/years creating, then there are actual tradeoffs (in terms of complexity, management etc.) that you need to think about.
+
+==== SQLite tax avoidance ====
+Q: Is SQLite a way to avoid the DBA tax?
+* A: No. It's still yet another space of stuff and one space of stuff is easier to maintain / keep track of than two spaces of stuff. It also still has the "one implementation" fragility of its magic file format.
+
+==== How are database file formats random ====
+Q: How are database file formats random?
+* A: One way is that they're random over time - the implementation changes, the format changes typically in lockstep. If you're lucky you may be able to import/export across versions or different versions of the implementation may corrupt different versions of the file format. Hence database file formats are both semi-random (unpredictable future), and frankly, potentially randomizing (corrupting).
+
+==== MySQL portability ====
+Q: Isn't MySQL pretty portable?
+* A: No. That's actually a huge misconception. It might be portable if all you have is very small amounts of short data all in ASCII7. Change any of those and you're likely to experience invisible corruption when moving MySQL data from one instance to another.
+
+Examples:
+* MySQL upgrades can blow away databases, and then fail to reimport. Citation: 
+** 2005-03-09 Eric Meyer: [http://meyerweb.com/eric/thoughts/2005/03/09/stuck/ Stuck] <blockquote>I upgraded my local copy of MySQL, and it blew away my WordPress database.  So I mysqldumped the database from meyerweb.com, copied it down to my hard drive, and tried to mysqlimport it.  And tried, and tried, and tried, until eventually my eyes started bleeding.  No dice.</blockquote>
+* MySQL installs can break when migrating between laptops. Citation: 
+** 2012-04-27 Eric Meyer https://twitter.com/meyerweb/status/195940443060572160 <blockquote>Apparently when I migrated laptops, the MySQL install broke and must be fixed. Thus begins another afternoon of me screaming at my machine.</blockquote>
+* MySQL upgrades can silently corrupt content, e.g. when "porting" - e.g. UTF8/encoding problems. Just search for MySQL UTF8. Eric Meyer has written a few blog posts about it (e.g. 2009-11-19 [http://meyerweb.com/eric/thoughts/2009/11/19/correcting-corrupted-characters/ Correcting Corrupted Characters], and he was just doing WordPress to WordPress migrations, and worse yet - he got LOTS of *wrong* advice from those in the "MySQL community"). And the corruption is often invisible, especially if most of your content is just ASCII7. You don't notice it until long after the original where you ported from is gone and you can't do any attempt at reporting.
+** I find this example misleading/disingenuous. MySQL itself does not "corrupt content all the time when porting." The common scenario I have come across is the default character encoding of a mysql database is latin1 at the time it was set up, then UTF-8 data was inserted at a later time. When the data is queried later, and latin1 encoding is still specified (e.g. the default), then the UTF-8 data will be displayed in latin1 encoding. And obviously most UTF-8 characters do not map to latin1, so "garbage" characters are displayed. This is not a unique situation to MySQL, though, or really an example of it doing anything improperly. If you save UTF-8 characters in a latin1-encoded text file, you would experience the same garbage character problem. I believe the moral of the story with this example is to always use UTF-8 from the start. — [[User:Gregorlove.com|gRegor]] ([[User talk:Gregorlove.com|talk]]) 11:58, 21 April 2014 (PDT)
+*** gRegor - Eric Meyer is a very intelligent person and has still had numerous problems over the years with MySQL upgrades and migrations. I've made the language more specific than "all the time" and added citations if you want to learn more about the details. [[User:Tantek.com|Tantek]] 12:07, 21 April 2014 (PDT)
+
+Follow-up:
+Q: Isn't MySQL trivial to port via: mysqldump ... | scp | mysql ?
+* A: No, not trivial. Although this is often the most reliable way to migrate data between different MySQL versions, it is still easy to encounter UTF8 corruptions unless you are extremely careful about UTF8 settings on both ends. Don't forget the --skip-extended-insert flag otherwise if you have really large tables they will break when the target DB has a smaller max query size!
+
+==== PaaS Compatibility ====
+Q: Flat-file storage prevents you from using [[Heroku]], Google [[AppEngine]], or other [[PaaS]]'s. Is that a different kind of "Platform trap"?
+
+A:Yes. If you can't easily scp/rsync files to/from your host or PaaS, then any files created there are "trapped" as well.
+
+==== Database with export ====
+Q: Would using a database with an export to HTML w/ microformats (or other durable format) files mitigate these concerns?
+
+A: It could mitigate those concerns to the extent that you trust your code to be able to ''import'' from those files as well as export to those files any time you create/save user content in your databases. And at that point (where you have dependable code to import/export from/to flat files), consider directly using the flat files, and only using an intermediate database for caching purposes (if you need that, the section on "databases for caching").
+
+==== Still not convinced ====
+Q: Still not convinced that databases for storage are an anti-pattern or about the DBA tax.
+* A: For those still not convinced, it's left as an exercise to lose enough data in random/binary file formats over the years until it's painful enough that you decide to stop using such things for anything you care about. If you don't think it's a pain, the only likely way to learn that it is is by doing it for years. Go ahead and try to make databases for primary storage work if you like, and report back on how well your data is doing in a few years (like 10).
+
+==== Isn't flat-files a form of database? ====
+Q: This page seems to be advocating flat file storage. But that is just a form of database. This is so hypocritical.
+* A: Yes, it is a database, albeit a different sort of database. One that is portable, has broad cross-platform support, that you're already backing up. Why do you need two databases with twice the hassle?
+
+You may also feel free to consider this page to be titled "the big, overly complicated databases with non-trivial maintenance antipattern". 
+
+Finally, this wiki is itself hosted on MediaWiki, which stores data in MySQL. So there's that - as an issue of practicality, it may be less costly (time etc.) for some use-cases to re-use existing solutions with a database and bear the DBA tax, than attempt to write your own solution (see [[wiki-page]] for work in progress on that use-case in particular).
+
+==== How is this related to the indieweb? ====
+Q: I don't understand how this anti pattern is related to the indieweb?
+* A: In one word: [[longevity]]. Part of the reason we are frustrated with [[silos]] are their inevitable [[site-deaths]] and loss of content and permalinks, thus one of the indieweb [[principles]] is building for the long web [[longevity]]. And as soon as you start thinking & designing for longevity you realize longevity of your ''content'' and ''data'' (including [[permalinks]]) is critical, and when you design for that, you find that databases are ''bad'' for longevity and thus their common use as primary long-term storage is an antipattern.
+
+==== Does a dynamic site need a databases ====
+"Q: Does this mean I can’t have a dynamic site without a database?"
+
+A: Not at all! Not using a database as the primary storage for your content doesn’t mean you have to use [[web hosting#Static domain hosting|static hosting]]. Your dynamic web application can read data out of the filesystem just as it would an opaque database, without all the disadvantages mentioned above. [[Falcon]] is one real world indieweb example of flat file storage based dynamic post content server.
+
+== Articles ==
+Related articles:
+* <span class="h-cite"><time class="dt-published">2014-07-11</time> <span class="p-author h-card">Bob Mesibov</span>: <cite class="p-name">[http://thelinuxrain.com/articles/software-is-not-data Software is not data]</cite></span> (Ed. and thus in particular, database software is not data) <blockquote>Spreadsheets and databases are complex programs written to enable users to do marvellous things with data, but only if the data are kept within those applications. That trade-off isn't widely appreciated.</blockquote>
+* [http://lucumr.pocoo.org/2013/11/17/my-favorite-database/ My Favorite Database is the Network]
+
+== See Also ==
+* [[database]]
+* [[file-storage]]
+* [[MySQL]]
+* [[MongoDB]]
+* [[Postgres]]
+* [[database-cache]]
+* [[antipatterns]]
+* [[projects]]

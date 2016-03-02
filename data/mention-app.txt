@@ -1,0 +1,149 @@
+http://indiewebcamp.com/mention-app
+
+{{stub}}
+
+A '''<dfn>mention-app</dfn>''' is a [[mobile]] app to handle mobile [[notifications]] of [[webmentions]] of a person's website.
+
+This is a collection of notes for creating a mention-app. Feel free to add notes or suggestions. [[User:Aaronparecki.com|Aaron]] is working on the server and iOS implementation, but would love help with an Android version.
+
+== App UI ==
+
+Design goals:
+* No registration
+* Should be able to open the app and start using immediately
+* As few options as possible
+
+Main interface:
+
+http://farm4.staticflickr.com/3787/13420116275_cd99e24b5b_o.png
+
+== App Functionality ==
+=== Setup ===
+# On first launch, app generates a UUID and registers itself with the server
+# App registers for an APNS token and sends to the server along with the UUID
+# When the user enters a feed URL, app sends the feed URL to the server
+# After the feed URL is saved, (or after the app is launched a second time), fetches the feed URL status and displays in the status box
+# Fetches the "system news" URL and displays the result in the news box
+
+=== Future Launches ===
+* The next time the app launches, it should fetch the "system news" URL and display the results in the box
+* The app should register for push notifications and send its push token to the server on each launch
+
+=== Launched via Push Notification ===
+When the user launches the app by opening a push notification, the app should look for a "url" property in the payload of the push, and immediately launch a native system browser to that URL
+
+== DB Schema ==
+=== devices ===
+<pre>
+CREATE TABLE `devices` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(255) DEFAULT NULL,
+  `apns_production_token` varchar(255) DEFAULT '',
+  `apns_sandbox_token` varchar(255) DEFAULT NULL,
+  `gcm_token` varchar(255) DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `date_last_read` datetime DEFAULT NULL,
+  `last_read_entry` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `uuid` (`uuid`)
+)
+</pre>
+
+=== subscriptions ===
+<pre>
+CREATE TABLE `subscriptions` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `device_id` int(11) DEFAULT NULL,
+  `url` varchar(255) DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `date_last_fetched` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `device_id` (`device_id`),
+  KEY `url` (`url`)
+)
+</pre>
+
+=== entries ===
+<pre>
+CREATE TABLE `entries` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `subscription_id` int(11) DEFAULT NULL,
+  `text` text,
+  `url` varchar(255) DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `date_sent` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `subscription` (`subscription_id`,`url`)
+)
+</pre>
+
+=== news ===
+<pre>
+CREATE TABLE `news` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `featured` tinyint(1) DEFAULT '0',
+  `text` text,
+  `url` varchar(255) DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `featured` (`featured`,`date_created`)
+)
+</pre>
+
+== API Methods ==
+=== register device ===
+* uuid
+
+=== set push token ===
+* uuid
+* apns_production_token OR apns_sandbox_token OR gcm_token
+
+=== set subscription ===
+* uuid
+* url
+
+=== check subscription status ===
+* uuid
+
+=== fetch latest news item ===
+* uuid
+
+=== verify PuSH subscription ===
+called by the [[PuSH]] hub to verify this server's subscription to the PuSH feed
+* hub.challenge
+
+=== handle PuSH notification ===
+* ??
+
+== Cron Job ==
+A cron job should run periodically to fetch subscription URLs in case they are not [[PuSH]]-enabled.
+
+== h-feed parsing ==
+The parser will look for a list of [[h-entry]]s in the [[mentions feed]].
+
+What to look for in a mentions h-feed:
+
+Summary: '''The h-entrys in a mentions feed should have identical data to the actual h-entrys that <em>are</em> the mentions (i.e. the data from parsing the [[h-entry]] at the permalink of the source). '''
+
+Details:
+
+In order to avoid sending repeated notifications for the same mentions, the unique identifier used for de-duplication will be:
+* the uid of the h-entry if present
+* the url of the h-entry if present
+* if no uid or url is present on the h-entry, the entry is considered invalid and no notification should be sent. this error should be reported back to the user in the logs.
+
+== notification UI brainstorming ==
+The text of the notification will be the result of the [[comments-presentation]] algorithm, using the [https://github.com/indieweb/php-comments php-comments] library.
+
+Opening the push notification will launch a browser to a URL determined by:
+* the u-url property of the h-entry if present
+* if no u-url property on the h-entry, look for a u-in-reply-to property and use its value (e.g. even if it has an h-cite object on the u-in-reply-to property, the url of the h-cite should automatically be returned for the "value" of the u-in-reply-to)
+
+== See Also ==
+* [[webmention]]
+* [[notifications]]
+
+== Currently Available Solutions ==
+
+* [[Pushover]]
+* [[Pushbullet]]

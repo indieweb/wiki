@@ -1,0 +1,133 @@
+http://indiewebcamp.com/indie-config
+
+{{stub}}
+
+'''<dfn>indie-config</dfn>''' is a method of using protocol handlers and postmessage to setup your indie website to both notify the browser that it can handle [[webactions]] and then do so.
+
+indie-config was introduced, discussed, prototyped, and demonstrated at [[2014/UK|IndieWebCampUK 2014]]
+
+== Why ==
+By setting up indie-config on your personal site, you can then click on [[web action]] links or buttons on others sites (e.g. "Reply", "Favorite" etc.) and have those actions automatically activate <em>your</em> site's [[posting interface]] to.
+
+By adding loading indie-config to your post permalinks (and anywhere else you have [[webactions]]), you empower indieweb users that have indie-config setup on their sites to quickly like, repost, and reply to your posts using their own site!
+
+Indie-config is the first working prototype of how a browser can be aware of the tools you want to use to perform actions on the web. As use-cases gets proven and flows mature it hopefully gets superseded by better suited methods built right into the browsers themselves.
+
+== How to publish ==
+How to setup indie-config on your personal site:
+
+=== Create the configuration page ===
+Create a page on your site that only you will need to access. This might be a page such as "config.html". This page should contain the following [[Javascript]]:
+
+<pre>
+<script>
+(function() {
+  if (window.parent !== window) {
+    window.parent.postMessage(JSON.stringify({
+      // The endpoint you use to write replies
+      reply: 'https://aaronparecki.com/note.php?reply_to={url}'
+    }), '*');
+  }
+}());
+</script>
+</pre>
+
+Replace the URL above with the URL to your own posting interface.
+
+
+=== Register the web action protocol ===
+On your home page, find somewhere to add this code to be displayed only to you when you are signed in to your own site.
+
+<pre>
+<script>
+window.navigator.registerProtocolHandler('web+action', 'https://aaronparecki.com/config.html?handler=%s', 'Aaron Parecki');
+</script>
+</pre>
+
+Note that you will want to replace the URLs (<code>https://aaronparecki.com/config.html</code>) and my name (<code>'Aaron Parecki'</code>) with your own information. You should replace the URL with the page you made in the previous step. The text you add as the third parameter will be shown in the browser prompt, so it makes sense to use your name or possibly the name of your site's software.
+
+
+=== Turn it on ===
+Now when you visit your home page, you will see a prompt asking whether your site should be allowed to handle "web+action://" links.
+
+[[File:web-action-permission-prompt.png]]
+
+Click "Add Application" (or the equivalent for your browser) and your website is now registered in your browser or operating system.
+
+=== Example ===
+* Video: http://aaronparecki.com/notes/2014/09/10/1/webactions
+
+== How to consume ==
+You need an indie-config loader, like [https://github.com/voxpelli/voxpelli.github.com/blob/master/js/indieconfig.js indieconfig.js], and a [[webactions]] shim, like [https://github.com/voxpelli/voxpelli.github.com/blob/master/js/webaction.js webaction.js].
+
+You then load them both in the head of your site:
+
+<pre>
+<script type="text/javascript" src="/path/to/indieconfig.js"></script>
+<script type="text/javascript" src="/path/to/webaction.js"></script>
+</pre>
+
+And then everything is done! You might want to add some styling on the <code>.indieconfig-loading</code> class to indicate that a webaction is waiting for the indie-config to load.
+
+The example scripts linked to above, from [[User:Voxpelli.com|Pelle]]'s blog http://voxpelli.com/, loads the indie-config on the first webactions interaction after the page has loaded and uses a 3 second timeout before it gives up and fallbacks to redirecting to the <code>href</code> of the first <code>&lt;a></code> found within the webactions tag. The timeout means that those not using indie-config will get redirected after that amount of time. Pelle replaces the icon used in his webaction presentation with an animation to communicate this to the user.
+
+__TOC__
+== FAQ ==
+=== Ok to registerProtocol handler every time ===
+Q: Is it ok to run that register protocol thing every time I load my home page?
+
+A: Yes it is ok.  If you run the registerProtocolHandler() on the same page that's already registered nothing will happen – it will know that everything is registered as it should.
+
+=== Using custom handler for replies instead of configuration ===
+Q: Why does the custom handler send back configuration information instead of just handling replies directly? (i.e., web+action://permalink would be handled by with <nowiki>http://example.com/reply?u=permalink</nowiki>)
+
+A: This does not provide a fallback if there is no handler registered. There would be a &lt;a href="web+action://permalink">Reply&lt;/a> link on the page that would go nowhere
+
+=== isProtocolHandlerRegistered ===
+Q: Couldn't you use isProtocolHandlerRegistered to check if a handler is registered, and only use the custom protocol if it is?
+
+A: That function [https://bugzilla.mozilla.org/show_bug.cgi?id=440620 doesn't exist!] And it would be a potential privacy leak, e.g., allowing sites to see which apps you have installed on your phone by checking facebook:, twitter:, etc..
+
+== IndieWeb Examples ==
+
+=== [[User:Voxpelli.com|Pelle Wessman]] ===
+
+Pelle publishes JavaScript on http://voxpelli.com that queries a user's registered web+action handler the first time an indie-action is clicked. If an appropriate action handler is found, his "Reply" and "Post" links will use it instead of the default.
+
+<strike>Uses the [http://x-tags.org/ X-Tags] library to configure &lt;indie-action> tags through the use of a simple [https://github.com/voxpelli/indie-action-component proof-of-concept web component].</strike>
+
+=== [[User:waterpigs.co.uk|Barnaby Walters]] ===
+
+Collaborated with Pelle at [[2014/UK|IndieWebCamp UK 2014]] where they demonstrated links on voxpelli.com directing to a reply link on waterpigs.co.uk. Barnaby has a static page on his site for registering a web+action handler: https://waterpigs.co.uk/indie-config.html
+
+=== [[User:kylewm.com|Kyle Mahan]] ===
+
+* Registers indie-config handlers for reply, repost, favorite, and like actions using https://kylewm.com/test/indieconfig.html.
+
+* 2014-02-05. added voxpelli's indieconfig.js and webaction.js, so "Reply" and "Like" links should work for anyone who has indie-config handlers.
+
+=== [[User:Unicyclic.com_mal|Malcolm Blaney]] ===
+
+* Added a modified version of voxpelli's indieconfig.js to [http://dobrado.net dobrado], which queries a user's registered web+action handler when a settings link is clicked. The returned config is then stored in local storage.
+
+* Extended indie-config to look for a status option and performs a request using CORS if found. (See Brainstorming)
+
+== Brainstorming ==
+
+=== Return Route ===
+It would be nice to have an extra argument for a URL to return to after the action has been completed. This way we can complete everything in one window. No pop-up required.
+
+=== Status Option ===
+[[User:Unicyclic.com_mal|Malcolm]] added a status option to his implementation on 2015-10-22.
+
+The idea is that indie-config can perform a request back to the user's site via CORS, which will return the state of the target. It should provide the state of all actions known to the user's site for that user and target url combination. It should provide the state as JSON, ie { "like": true, "follow": true } or some other combination. It can omit false values as that is implied.
+
+When the calling site receives this information, it can mark up the display of each action however it likes. This could just be adding a class name like "highlight" to the action, or changing the text of a link from "follow" to "following".
+
+* In general I think this is an interesting approach. It could be a bit more in your face if one asks for a status before the user has done any action on the site, as then the user might be asked questions about allowing the site access before it has even interacted with the site  --[[User:Kodfabrik.se|Kodfabrik.se]] 00:52, 22 October 2015 (PDT)
+* It would be good to allow eg. <code>{ "follow-status": "http://example.com/follow-status" }</code> for each standard indie-config value, either instead of or in addition to, as at least follow status might be something only an [[indie-reader]] knows whereas the like status might be something the indie-reader knows nothing about  --[[User:Kodfabrik.se|Kodfabrik.se]] 00:52, 22 October 2015 (PDT)
+* It might perhaps be useful to allow querying the status for multiple URL:s at once, that way one can show the status of all [[webactions]] in a feed by just making a few calls --[[User:Kodfabrik.se|Kodfabrik.se]] 01:41, 22 October 2015 (PDT)
+* I've added support for "action-status" (ie "follow-status", "like-status" etc.) but I only use the generic fallback option "status" myself. I also allow multiple urls to be queried using the format url[]=target1&url[]=target2...etc. The JSON response should now be returned as: { "target1": { "like": true }, "target2": { "reply": true } } for example. Targets with no status information can be omitted, as well as actions where the state is false. --[[User:Unicyclic.com_mal|Malcolm]] 27 October 2015
+
+== See Also ==
+* [[webactions]]

@@ -1,0 +1,74 @@
+http://indiewebcamp.com/phone
+
+{{stub}}
+
+'''<dfn>phone</dfn>''' in the context of the indieweb refers to using your own personal site to supplant or replace the typical functionality of a "phone", in particular making an audio (and sometimes video) call between two or more people, perhaps with them starting from your personal site.
+
+A phone or phoning in general refers to the UI, UX and infrastructure involved with such audio(video) calls.
+
+== IndieWeb Examples ==
+=== Sam Machin ===
+Sam Machin on sammachin.com is using [[WebRTC]] on his personal site (as of 2013-09-?? or earlier) for a way for people to call him which then connects through his server to ring his actual physical phone depending on what country he's in which his server determines from his [[Foursquare]] [[checkins]].
+
+He demonstrated this working at IndieWebCamp [[2013/UK|2013 UK]] during the [[2013/UK/demos#Sam_Machin|Opening Demo Session]].
+
+=== Ben Werdmuller ===
+[[User:Werd.io|Ben Werdmuller]] on werd.io has [[icons]] for contacting him (since 2013-12-04) including icons (PDA, phone receiver, camera) with <code>sms:</code>, <code>tel:</code>, and <code>facetime:</code> URLs which if tapped when on a mobile browser will create a txt message, initiate a phone call, or start a FaceTime AV connection respectively from the user to Ben.
+
+=== Barnaby Walters ===
+[[User:WaterPigs.co.uk|Barnaby Walters]] on waterpigs.co.uk has a SIP address link which, as of 2013-12-14, if the user’s browser supports [[WebRTC]], gets progressively enhanced into a “Call Me” button using [[Phono]] which initiates a call in-browser.
+
+=== Michiel de Jong ===
+[[User:Michielbdejong.com|Michiel de Jong]] on michielbdejong.com has a "leave a private message" textarea which becomes a "Call me" button after an ajax call checks first to see if he is currently online. This then leads to a simplewebrtc instance (the software that powers talky.io). It was put together during IndieWebCamp SF 2014 and still in very early stages.
+
+== Brainstorming ==
+UI goal: have a “Call Me” button on my [[homepage]] which initiates a call with me regardless of location, carrier etc. — provided I want to receive the call. No long number memorization or complex international dialing codes required, ever. No requirement for the caller to install any software other than a modern web browser.
+
+Infrastructure goal: to use open, free standards over data connections as much as possible, only falling back to interacting with actual GSM/landline phones for social back compatibility.
+
+How this could be implemented:
+
+* [[Tropo]] app with SIP address, local numbers for whatever countries you can get them for. This is a catch-all endpoint which forwards calls to the next item…
+* A SIP account on a free server or maybe self-hosted SIP. This is what you log in to SIP clients with to receive calls.
+* A phono.com API key and js library which acts as a [[WebRTC]] to SIP bridge
+
+On your homepage:
+* detect current user has WebRTC support. If they do:
+** Show a “call me” button which starts a phono.com WebRTC->SIP call to your Tropo SIP address
+** Tropo app forwards the call to your actual SIP address
+** your SIP client rings and you choose whether or not to accept the call
+* if no WebRTC support:
+** Figure out the closest local number you have for your Tropo app to the current user using approximate IP geolocation
+** Determine if any dialing codes need to be used to dial that number from the user’s location
+** Show a tel: link to the derived number, and a sip: link direct to the Tropo app SIP address
+** If either are clicked on a mobile device, a call will be made to your Tropo account, which forwards and rings as above
+
+A phono.com session can also be used to receive calls direct in the browser — so when you logged in, your site would store the temporary SIP address for that session and add it to the list of addresses your Tropo app forwards calls to.
+
+To be determined:
+* how best to authenticate people? let anyone call you without knowing who they are, or use [[Web Sign-In]] or [[Persona]] to authenticate people?
+* how to signal away/busy/not accepting calls status?
+* …
+
+== Criticism ==
+=== Cell use seen as surveillance permission ===
+[https://twitter.com/bradheath/status/694933918705913856 https://pbs.twimg.com/media/CaTmt37WwAAZXVe.png]
+
+As argued in a legal document by a (presumably US) government representative.
+
+== Sessions ==
+IndieWebCamp sessions about phones, phone UI, etc.:
+
+=== 2013 ===
+At IndieWebCamp [[2013/UK|2013 UK]]:
+* [[2013/UK/demos#Sam_Machin|Opening Demo Session: Sam Machin]] showed how he set up his personal site for a way for people to call him via [[WebRTC]] which then connected through his server to ring his actual physical phone.
+
+=== 2011 ===
+* [[2011/Own Your Phone Number]]
+
+== See Also ==
+* [[communication]]
+* [[homepage]]
+* [[icon]]
+* [[messaging]]
+* [[WebRTC]]

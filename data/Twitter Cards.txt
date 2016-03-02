@@ -1,0 +1,68 @@
+http://indiewebcamp.com/Twitter_Cards
+
+{{stub}}
+
+'''<dfn>[https://dev.twitter.com/docs/cards Twitter Cards]</dfn>''' are [[Twitter]]'s use of [[OGP]] and their own proprietary <code>&lt;meta&gt;</code> tags to provide [[link-preview]] information as part of tweets with links.
+
+The standard alternative to Twitter Cards is [[microformats]], in particular, use the following on the <code>&lt;body&gt;</code> tag:
+* [[h-entry]] for information about the page (page name, summary, content, permalink, date published etc.), and optionally for special types of [[posts]]
+** <code>u-photo</code> for [[photo]] posts
+** <code>u-audio</code> for [[audio]] posts
+** <code>u-video</code> for [[video]] posts
+* [[h-card]] for author information (or use [[rel-author]] to link to your home page or contact page with an [[h-card]])
+* [[h-product]] for product information
+
+== User-Agent ==
+When fetching card metadata, Twitter sends a User-Agent header containing "Twitterbot" (followed by some version number or other information). To avoid [[metacrap]], dynamic websites can choose to conditionally enable Twitter card metadata based on this User-Agent string.
+
+== Card Types ==
+Twitter has a particular twitter-specific set of card types that you can set with the meta name <code>twitter:card</code>, e.g.
+* <nowiki><meta name="twitter:card" content="summary" /></nowiki>
+* <nowiki><meta name="twitter:card" content="summary_large_image"></nowiki>
+* <nowiki><meta name="twitter:card" content="photo" /></nowiki>
+* <nowiki><meta name="twitter:card" content="gallery" /></nowiki>
+* <nowiki><meta name="twitter:card" content="app"></nowiki>
+* <nowiki><meta name="twitter:card" content="player"></nowiki>
+* <nowiki><meta name="twitter:card" content="product"></nowiki>
+
+== Custom Domain String ==
+
+Twitter generates a "View on ..." link using the meta property <code>twitter:domain</code>. This string does not have to be a valid domain and can include custom text. For example, the tag:
+
+<pre>
+<meta name="twitter:domain" content="kylewm.com to see the original"/>
+</pre>
+
+Gives the string "View on kylewm.com to see the original"
+
+[[File:kwm-twitter-card-custom-domain.png]]
+
+== IndieWeb Examples ==
+* [[User:kylewm.com|Kyle Mahan]] serves twitter card metadata when User-Agent contains Twitterbot since [https://twitter.com/kyle_wm/status/452825505343881217 2014-04-28]. ([http://kylewm.com/article/2014/04/06/1/spring-break-in-mendocino Original])<br>[[File:kwm-twitter-card.png]].<p>I stopped selectively hiding Twitter metadata on 2014-06-26. It was a cute trick but made debugging difficult when e.g., my code picked up another user's avatar as if it was a photo post<br>[[File:accidental-tantek-image-in-twitter-card.png|500px]]
+
+== Silo Examples ==
+=== YouTube ===
+[[YouTube]] embeds some Twitter Card information. Thus when a tweet has a YouTube video link, Twitter shows a posterframe and other information about the video:
+
+'''Example 1:''' https://twitter.com/aaronpk/status/431712331555287042
+
+[[File:Twitter-Card-example1.jpg|550px]]
+
+Also, compare this with the original note; it also uses a [[card]]: http://aaronparecki.com/notes/2014/02/07/1/blackmidi
+
+
+'''Example 2:''' https://twitter.com/kartik_prabhu/status/446879447702990848
+
+[[File:Twitter-Card-example2.jpg|550px]]
+
+The original note does not use a [[card]], currently: http://kartikprabhu.com/notes/lucky-ali-soulful
+
+
+== See Also ==
+* [[link-preview]]
+* [[Twitter]]
+* [[The Open Graph Protocol]]
+* [[cards]]
+* [[microformats]]
+** [[h-entry]]
+** [[h-card]]

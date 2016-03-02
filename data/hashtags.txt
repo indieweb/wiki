@@ -1,0 +1,77 @@
+http://indiewebcamp.com/hashtags
+
+{{stub}}
+
+'''<dfn>hashtags</dfn>''' are the use of the hash "#" symbol followed immediately by a word/phrase/abbreviation to explicitly denote a topic inline in a [[post]]. Popularized on [[Twitter]], they're now everpresent on [[Instagram]] and other [[silos]] where they link to aggregations of posts inside those silos with those tags.
+
+This page is specifically about '''hashtags'''. For general concept of tags and tagging content, see:
+* '''[[tags]]'''
+
+== Markup ==
+
+Use [http://microformats.org/wiki/rel-tag rel=tag] on hashtag links. If you're using [[h-entry]] (you really should be ;) then use p-category as well.
+
+== Discovery ==
+How do we discover indieweb posts tagged with a particular tag? It’s a problem well suited to centralised hubs.
+
+Could we get services like tagboard to start indexing indieweb posts, not just posts in silos?
+
+== IndieWeb examples ==
+=== Aaron Parecki ===
+[[User:Aaronparecki.com|Aaron Parecki]] uses [[p3k]] on aaronparecki.com to auto-link hashtags on his posts to his own [[tag]] aggregation page since 2013-03-08.
+
+=== Barnaby Walters ===
+[[User:Waterpigs.co.uk|Barnaby Walters]] uses [[Taproot]] on waterpigs.co.uk to auto-link to a /tags page containing a list of links to content which is tagged with that tag (as per hypermedia API design, [http://waterpigs.co.uk/tags/music example]) since [http://waterpigs.co.uk/notes/285/ 2012-09-22]. This probably needs some js/iframe goodness to pull that content in --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 05:57, 19 April 2013 (PDT)
+
+== FAQ ==
+=== Autolinking hashtags ===
+'''Where should hashtags in [[posts]] be auto-linked to?'''
+
+Link them to a page on your site which aggregates posts tagged with that tag. It’s fine for this to just redirect to, for example, a google search of your site for that tag, but by always linking to a URL you control you can improve it/self-host it later.
+
+== Silo support ==
+Silos that support hashtag aggregation on their own content.
+
+Single post-type hashtag aggregations:
+* [[Twitter]] - [[notes]] (with embedded media, but not displayed by default, you have to twiddle them open)
+* [[Flickr]] - [[photos]] (and [[videos]], but they don't play on tag aggregation pages, so effectively they're just images as well - poster-images from videos)
+
+Composite post-type hashtag aggregations:
+* [[Tumblr]] - Tumbler has an amazing display of hetergenous post types in a single tag aggregation grid.
+** e.g. http://www.tumblr.com/tagged/cortexiphan shows a tag grid of the following post types
+** [[photo]], including animated GIFs
+** [[video]]
+** [[note]]
+** quote
+** post with embedded media (photo or video), at least partially displayed by default
+
+== Limitations ==
+It appears that most platforms/silos limit hashtags to:
+* _a-zA-Z0-9 characters
+* Twitter, max length 139 (since Tweet length is 140)
+** Twitter max promoted trend (hashtag) is 20.[https://support.twitter.com/articles/20170082?lang=en]
+* most sites disallow hashtags that are just numbers (exception: [[Instagram]] allows them)
+* some sites disallow hashtags that start with numbers (exception: [[Twitter]] near the end of 2009 started supporting hashtags that start with numbers per the increased frequency of use, e.g. [https://twitter.com/hashtag/2009resolution #2009resolution].)
+
+See also:
+* https://moz.com/blog/how-hashtags-work-on-twitter-instagram-google-plus-pinterest-facebook-tumblr-and-flickr
+
+== Brainstorming ==
+Related: [[person-tag#Plain_text_authoring|person-tag plain text authoring]].
+
+
+=== Regex ===
+Check out Twitter's regex: https://github.com/twitter/twitter-text/blob/master/js/twitter-text.js#L135-L141
+
+The following are a coarse approximations which will miss numerous international (non-English) hashtags.
+* <code>/#[_a-zA-Z0-9]{1,139}/</code> is a regex that will match common hashtags per the [[#Limitations]] documented above, while liberally allowing numbers-only and numbers-starting hashtags, limited to hashtags that will fit on Twitter.
+* <code>/#\w{1,139}/</code> is shorter.
+
+== See Also ==
+* [[tags]]
+* [[building blocks]]
+* [[posts]]
+* [[Twitter]]
+* [[microformats]]
+
+[[Category:building-blocks]]

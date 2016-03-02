@@ -1,0 +1,72 @@
+http://indiewebcamp.com/MySQL
+
+{{stub}}
+
+'''<dfn>MySQL</dfn>''' is open source [[database]] software that is often used to store data in several indieweb CMS's like [[Known]], and various other CMS's, e.g. [[WordPress]] and [[MediaWiki]].
+
+== IndieWeb Examples ==
+IndieWeb community members that use MySQL as some primary storage on their personal site:
+=== Kartik Prabhu ===
+[[User:kartikprabhu.com|Kartik Prabhu]]'s [[Bundle]] uses MySQL as the primary storage for data except for Article content which is stored in hand-authored Django-template files.
+=== Gregor Morrill ===
+[[User:Gregorlove.com|gRegor Morrill]] uses MySQL ([[Nucleus CMS]]) as the primary data store on gregorlove.com
+
+'''Regarding [[database-antipattern]]:''' By and large, I have not experienced the downsides documented there. It did take me some time to correctly migrate my database from latin1 encoding to UTF-8 (character encoding is hard, yo), but I did not find that process prohibitive to continuing to use MySQL. gregorlove.com's content has resided safely in MySQL since 2002.
+
+=== Ben Roberts ===
+{{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} uses [[MySQL]] as primary storage in [[Postly]] but caches queries to flat files.
+
+== Secondary Data Store ==
+IndieWeb sites that use MySQL to store secondary data, i.e. not content that they authored, but content from elsewhere.
+=== cweiske ===
+[[User:cweiske.de|cweiske]]'s [[stapibas]] uses MySQL as primary linkback storage
+
+== Caching Examples ==
+=== Aaron Precki ===
+[[p3k]] uses MySQL to query posts by different meta data, but does not store any post content in the database.
+
+__TOC__
+== Criticism ==
+=== Lack of timezone in date columns ===
+MySQL date columns can only store <code>YYYY-mm-dd HH:MM:SS</code> precision. There is no way to specify the timezone along with a date. This means unless you create a second column to store the timezone offset or name, you will have no indication of the timezone of your date in the database.
+
+==== DATE, DATETIME, and TIMESTAMP types ====
+The MySQL <code>DATE</code> and <code>DATETIME</code> types do not store timezone values. It is recommended to use the <code>TIMESTAMP</code> type for maximum flexibility, because these values are converted to <abbr>UTC</abbr> before storage, and converted from <abbr>UTC</abbr> to the current timezone on retrieval.
+
+<blockquote><p>MySQL converts TIMESTAMP values from the current time zone to UTC for storage, and back from UTC to the current time zone for retrieval. (This does not occur for other types such as DATETIME.) By default, the current time zone for each connection is the server's time. The time zone can be set on a per-connection basis. As long as the time zone setting remains constant, you get back the same value you store. If you store a TIMESTAMP value, and then change the time zone and retrieve the value, the retrieved value is different from the value you stored. This occurs because the same time zone was not used for conversion in both directions. The current time zone is available as the value of the <code>time_zone</code> system variable.</p>
+<p> <cite>— http://dev.mysql.com/doc/refman/5.5/en/datetime.html</cite> </p>
+</blockquote>
+
+=== Fulltext Search ignores words shorter than 4 characters ===
+
+This restriction [https://dev.mysql.com/doc/refman/5.0/en/fulltext-natural-language.html##Some+words+are+ignored] makes searches for <abbr title="Three-Letter Acronym">TLA</abbr>s not possible using fulltext searching. If the length of the entire query is less than 4 characters the fulltext search can be replaced with a case-insensitive <code>LIKE</code> match, but this still lessens the accuracy of queries longer than 4 characters with significant terms shorter as they will be ignored.
+
+=== Stopwords ===
+
+MySQL has a default list of stopwords that will not be used in full-text searches. This can and has caused problems with the IndieWebCamp wiki search when searching for simple words.
+
+* [http://dev.mysql.com/doc/refman/5.1/en/fulltext-stopwords.html List of MySQL stopwords]
+
+==== How to disable stopwords ====
+
+Stopwords can be disabled in a MySQL server by doing the following:
+* Add the following to your <code>/etc/my.cnf</code> file (or wherever that file is)
+<pre>ft_stopword_file = ""
+ft_min_word_len=3</pre>
+* Restart mysql. Usually something like <code>sudo service mysqld restart</code>
+* Rebuild the index for any tables you are searching. In the case of MediaWiki, this is the "searchindex" table: <code>mysql -u root -e 'REPAIR TABLE searchindex QUICK;'</code>
+
+=== Lacks Full UTF-8 Support ===
+MySQL's <code>utf8</code> character encoding only partially implements UTF-8. It can only store one- to three-byte characters and cannot store four-byte characters. Instead, the <code>utf8mb4</code> encoding (available since MySQL 5.5.3) should be used. See [https://mathiasbynens.be/notes/mysql-utf8mb4 How to support full Unicode in MySQL databases] for more information.
+
+=== Unhappy with non-ASCII input ===
+<blockquote>unfortunately mysql doesn't seem to happy with my kanji input</blockquote> - Ben Roberts[http://indiewebcamp.com/irc/2014-10-16#t1413493493715] (2014-10-16)
+
+<blockquote>fwiw I had a similar MySQL encoding problem and it barfed on a emdash! luckily only 1 entry needed to be re entered. [...] it refused the emdash as an entry in the DB because it could not be encoded in latin whatever</blockquote> - Kartik Prabhu[http://indiewebcamp.com/irc/2014-10-16#t1413495177394] (2014-10-16)
+
+== See Also ==
+* [[PostgreSQL]]
+* [[database]]
+* [[database-antipattern]]
+* [[database-cache]]
+* [[projects]]

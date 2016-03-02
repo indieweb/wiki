@@ -1,0 +1,44 @@
+http://indiewebcamp.com/REST
+
+'''<dfn>Representational State Transfer</dfn>''' (<abbr>REST</abbr>) is a software design [[architecture]] used to communicate state between two systems that has no current IndieWeb adoption, likely due to its fundamental incompatibility with [[static sites]]. REST is typically associated with web services and applications because the [[HTTP]] protocol contains a set of generic verbs (GET, POST, DELETE, etc.) that can be applied to an arbitrary set of nouns (URIs).
+
+== Why ==
+Why use REST? (to be filled in by someone who thinks it's a good idea)
+
+== How ==
+How to use REST on your site (to be filled in by someone who is [[selfdogfooding]] REST on their own site).
+
+== IndieWeb Examples ==
+No current IndieWeb examples of "REST" APIs on people's personal sites.
+
+== Design Constraints ==
+Applications are said to be RESTful if they are designed with the following constraints:
+* Separate concerns between the client and the server. The client is not concerned with data storage and the server is not concerned with user interfaces or user state.
+* Maintain a stateless server. No client context should be stored on the server between requests.
+* Allow responses to be cacheable in order to reduce client-server interactions.
+* Having a client talk directly to a server or routing the request to an intermediary server should have no effect on the response.
+* A uniform interface that allows clients to identify resources, manipulate them, and interpret responses.
+
+== Not quite REST ==
+There are [[API]]s that often either claim to be REST but do not conform to the above constraints, or claim some similarity to REST by using the following terms:
+* [[REST-based]]
+* [[REST-ish]]
+
+== Criticism ==
+=== Pure REST fails with Static Sites ===
+Pure REST requires that individual URL support all the various HTTP verbs directly (i.e. beyond GET, explicitly PUT, POST, DELETE) and static site servers typically do not support them, hence <em>static</em>.
+
+Since [[static sites]] are a common IndieWeb hosting use-case, this means that pure REST APIs are a showstopper and cannot be used for IndieWeb interop.
+
+Instead, rel [[discovery]] based alternatives like [[Micropub]] and [[PuSH]] are far more practical, allowing for delegation of various operations including editing.
+
+== Alternatives to REST ==
+=== Remote Procedure Calls ===
+In an <dfn><abbr title="Remote Procedure Call">RPC</abbr></dfn> architecture, a client sends a server a set of parameters so that the server may then execute a set of procedures. In the web application context, RPC implementations typically target a single endpoint and use POST to send parameters to that endpoint, in essence using HTTP as a tunnel for a custom protocol. As a result, there are a large number of largely incompatible RPC protocols. Examples include XML-RPC, JSON-RPC, SOAP, etc.
+
+Since clients need prior knowledge of available endpoints and acceptable parameters before beginning an interaction with the server, clients and servers are typically tightly coupled in RPC architectures.
+
+== See Also ==
+* [[design]]
+* [[REST-based]]
+* [[REST-ish]]

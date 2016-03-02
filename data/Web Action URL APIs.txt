@@ -1,0 +1,86 @@
+http://indiewebcamp.com/Web_Action_URL_APIs
+
+{{stub}}
+
+'''<dfn>web action URL APIs</dfn>''' (AKA <dfn>web action handlers</dfn>) are URLs that act as [[API]]s to handle [[web actions]] from another site.
+
+Web-based actions are invariably <code>http://</code> URLs, whereas native actions (well-known and custom) often utilise other URI schemes. These vary from the well known (e.g. <code>mailto:</code>) to custom schemes, e.g <code>twitter://</code>.
+
+On sending a GET request to an Action endpoint, the typical result is to display an interface for carrying out the relevant action, optionally preloaded with text provided in query string parameters.
+
+A list of web (and native) services currently providing URLs which could be made the basis of a [[Web Actions]] implementation.
+
+== Web ==
+=== IndieWeb Support ===
+==== Aaron Parecki ====
+{{aaronpk}} has a URL endpoint for posting new notes/replies which he forces twitter to use for him as demonstrated [http://vimeo.com/48097093 here].
+* A particularly interesting aspect of this implementation is that the only query string parameter is in_reply_to ''URL'', and it looks like he's parsing twitter usernames out of that server side
+==== Barnaby Walters ====
+[[User:WaterPigs.co.uk|Barnaby Walters]] has a URL API for creating new notes, which accepts several query string params, <code>inReplyTo</code>, <code>text</code> and <code>tags</code>
+* I have plans to add more, and more dynamic functionality (e.g. loading text from h-entry markup of an inReplyTo URL so I can quote it really easily) --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 11:30, 2 March 2013 (PST)
+
+==== Jeremy Keith ====
+{{adactio}} has a bookmarklet-invoked URL API for adding links to his [http://adactio.com/links/ link blog]
+
+==== any WordPress user ====
+Anyone using [[WordPress]] since 2.7 (?) can use the [http://codex.wordpress.org/Press_This Press This] endpoint and u/t/s/i query params to pre-fill a “new post” form
+
+=== Silo Endpoints ===
+==== tt-rss ====
+'''[http://tt-rss.org/ tt-rss]''' installs have a URL API for subscribing to a new feed:
+* <code>http://your.tt-rss.host/public.php?op=subscribe&feed_url=urlencoded_url_of_page,</code>
+
+==== Twitter ====
+'''[https://dev.twitter.com/docs/intents Twitter's Web Intents]''' are URLs which link to an interface for [[Twitter]]'s Activities:
+* Tweet Activities
+** Tweet
+** Retweet
+** Favorite
+* User Activities
+** Follow
+
+==== Readability ====
+'''[http://readability.com/ Readability]''' want you to use their [http://www.readability.com/developers/tools embed thing] but they provide an excellent URL API
+
+Endpoints:
+* Read Article: <code>http://readability.com/read?url=urlencoded_url_of_page</code>
+* Read Later: <code>http://www.readability.com/save?url=urlencoded_url_of_page</code> (handles auth really well)
+* Print doesn't look like it's supported through a GET-only URL API
+
+==== Kindle ====
+Can someone with a kindle see if the send to kindle action can be used via a URL API?
+
+==== Facebook ====
+'''[http://facebook.com Facebook]''' provides little-documented (and therefore potentially unstable) URL APIs. They generally need a key in order to be used. 
+
+Endpoints:
+* Share: this one requires no key and can be used to post to your timeline, someone else's or send someone a recommendation: <code>https://www.facebook.com/sharer/sharer.php?u={url}</code>
+* Post to your Wall: the best to use if you require a redirect after posting <code>https://www.facebook.com/dialog/feed?app_id={key}&caption={caption}&description={description}&link={url}&redirect_uri={url}</code>
+* Like: Looking at the source for the like button it seems to be a POST request to <code>http://somefacebookURL/plugins/like/connect</code> --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 02:45, 20 September 2012 (PDT)
+
+=== Open Source Implementations ===
+* '''[http://storytlr.org Storytlr]''' provides a URL API on it’s posting UI. The post Title, Body and URL to use can be set using the <code>t</code>, <code>s</code> and <code>u</code> query parameters.
+
+=== URL APIs To Review ===
+
+* … add here
+
+== Mac OS ==
+
+Mac apps can register with the OS to handle custom URL schemes (e.g. twitter://), which activate the app, optionally in a certain context (e.g. new tweet with text)
+
+* '''Twitter's Mac app''' registers the <code>twitter://</code> URI scheme and exposes the following endpoints:
+** <code>twitter://post?message=urlencoded+text+of+tweet</code>
+** <code>twitter://user?screen_name=twitter_screen_name</code>
+
+== iOS ==
+
+iOS is an interesting case, as not only can apps register custom URL schemes (as on Mac OS), there are several built in handlers for fully-qualified URLs, e.g. youtube URLs and Google Maps URLs.
+* These apps no longer exist on iOS 6, do the URLs still work? --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 02:01, 20 September 2012 (PDT)
+
+* A great many are documented here: [http://www.wiki.akosma.com/IPhone_URL_Schemes]
+* As on Mac, '''Twitter's iOS app''' registers the <code>twitter://</code> URI scheme and exposes the following endpoints:
+** <code>twitter://post?message=urlencoded+text+of+tweet</code>
+** <code>twitter://user?screen_name=twitter_screen_name</code>
+** Apparently most of the old Tweetie endpoints also work
+* Most Twitter clients offer similar endpoints, but Tweetbot have done a particularly good job of [http://tapbots.com/blog/development/tweetbot-url-scheme documenting theirs] - note the callback URL parameter!

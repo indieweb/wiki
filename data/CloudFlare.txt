@@ -1,0 +1,26 @@
+http://indiewebcamp.com/CloudFlare
+
+'''<dfn>CloudFlare</dfn>''' is a service to, in their own words, "supercharge your website". Essentially they provide a distributed DNS service and [[CDN]] that acts as a caching [[reverse proxy]] for traffic from the user to the website. There's a free basic plan available, with paid plans available for $20 (pro) or $200 (business) a month.
+
+The ability to use [[HTTPS]] is included in every plan and CloudFlare provides a "Universal SSL" feature in which they automatically create and manage an SSL certificate for their customer's domains. This is available in the free plan as well, making CloudFlare effectively a free certificate authority!
+
+== Requirements and setup ==
+
+* To use CloudFlare, you need a domain and a registrar that allows you to change the DNS servers (NOT just DNS records).
+* You must either provide an IP address for your website (A record) or a hostname (CNAME record). CloudFlare also allows using CNAME for the root domain!
+* For every A or CNAME record (e.g. different subdomains) you can specify to either use the CloudFlare proxy/CDN or not.
+
+== SSL setups ==
+
+* Flexible SSL only encrypts the connection between the user and the CloudFlare proxy edge location, the traffic to the origin server is not encrypted! For static sites with mostly public content this should be fine, since the risk of an attack closer to the end user (e.g. ISP, untrusted WiFi hotspot) is more likely than an attack on the core infrastructure (IMHO).
+* Full SSL encrypts the connection between the user and the CloudFlare proxy edge location as well as between the edge location and the origin server. The origin server can use a self-signed certificate as well. It's not end-to-end encryption though, so you need to trust CloudFlare on this.
+
+== Possible issues and disadvantages ==
+
+* CloudFlare may block access to fight potential attackers, change the HTML source of your pages (e.g. add some custom code), minify or combine JS/CSS etc., either through services you request ("CloudFlare apps") or on their own because they decide it's required for better performance or security. Generally the less you pay the less control you have over how they "supercharge" your website. There's no visible CloudFlare branding on the site, but it's visible in the source and on the custom error pages they may show on your site.
+* Universal SSL works with SNI only.
+* If you use your domain for [[email]], you may no longer be able to use email services provides by your registrar and CloudFlare does not provide any email services, so you have to provide MX records for your own or a hosted mail service.
+
+== See Also ==
+* [[cloud]]
+* [[Cloudfront]]

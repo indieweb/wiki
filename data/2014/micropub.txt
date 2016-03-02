@@ -1,0 +1,83 @@
+http://indiewebcamp.com/2014/micropub
+
+http://indiewebcamp.com/micropub
+
+Micropub is for roughly using an interface that you didn't build to post to your site.
+
+IndieAuth is used for auth access.
+
+Minimal Example
+<pre>
+POST /micropub HTTP/1.1
+Host: example.com
+Content-type: application/x-www-form-urlencoded
+Authorization: Bearer XXXXXXX
+
+h=entry
+&content=Hello+World
+</pre>
+
+<pre>curl https://example.com/micropub -d h=entry -d "content=Hello World" -H "Authorization: Bearer XXXXXXX"</pre>
+
+Your website becomes an OAuth 2 provider in the process.
+
+Reference implementation: https://quill.p3k.io
+
+In the <head> of: http://aaronparecki.com
+Delegates auth endpoint to IndieAuth
+<pre><link rel="authorization_endpoint" href="https://indieauth.com/auth"></pre>
+Delegates token endpoint:
+<pre><link rel="token_endpoint" href="https://tokens.oauth.net/token"></pre>
+
+<pre><link rel="micropub" href="https://aaronparecki.com/api/post"></pre>
+
+Quill (Micropub posting app in this case) stores that auth token to post to aaronparecki.com each time.
+
+Not going into details but they are here: http://indiewebcamp.com/auth-brainstorming
+
+Why is it h=entry and not type=entry? Aaron says he didn't want to use something that might be a field in an entry. H is indicator of microformats stuff. "type" might conflict with a property of the object
+
+You can use indieauth.com or build it yourself for the auth endpoint and token endpoint.
+
+https://tokens.indieauth.com  documentation on using the token endpoint
+
+To use, put this in your head:
+<pre><link rel="token_endpoint" href="https://tokens.indieauth.com/token"></pre>
+
+Logging into https://quill.p3k.io 
+
+[[File:iwc-2014-quill-signing-in.png|720px]]
+
+error from having no endpoints defined: 
+
+[[File:iwc-2014-quill-sign-in-error.png|720px]]
+
+Does it hurt to set head tag and headers? No, but it does make consumers do more work to check two places. 
+
+The header could be mangled or removed by intermediate servers in the pipe. It is also harder for a user to control what headers can used. IMO for IndieWeb <link> tag is better --Bear
+
+Aaron agreed to change all the spec docs to only use <link> tags, not HTTP headers. Simpler.
+This also follows the same discovery pattern that other parts of indieweb use. -bear
+
+[[File:iwc-2014-quill-signed-in.png|720px]]
+
+Aaron's Micropub endpoint source code:
+* https://github.com/aaronpk/p3k-micropub
+Mostly in:
+* https://github.com/aaronpk/p3k-micropub/blob/master/src/p3k/Micropub.php
+
+
+Shane has contacted the author of MarsEdit; supports blogging APIs, even weird tumblr API. About implementing micropub support for it.
+The description of MarsEdit was one of the first instances of XMP-RPC in the wild for posting content to a blog site
+
+Shane and Jessica are building adapters between different APIs and micro pub api. Look at this neat chart <img src="https://cloud.githubusercontent.com/assets/4361/3127372/193bb444-e7bd-11e3-9b7a-f9a62d93ba0f.png" width="720">
+
+Aaron has an iOS app that speaks micropub https://github.com/aaronpk/PushupCounter-iOS
+as an h-entry that has an p-count property. 
+* http://aaronparecki.com/metrics/2014/06/27/233747
+
+Need new scope for micro pub comments? 
+
+Tokens can be associated with ACL group/scope - the token just identifies who is making the change and it's up to the app to decide if that user+action is allowed --bear
+
+[[Category:2014]]

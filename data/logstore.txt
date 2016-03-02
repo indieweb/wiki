@@ -1,0 +1,108 @@
+http://indiewebcamp.com/logstore
+
+{{stub}}
+
+'''<dfn>Logstore</dfn>''' is an endpoint for storing and retrieving logs from an indieweb site. Web apps and native apps (e.g. iPhone, Android) can use Logstore to store chatroom messages or direct messages as well as recall that history to give context to messaging.    It can also be used to store any dated log entries so that system logs and software logs can be stores as though the software or system is the author of the message.
+
+== IndieWeb Examples ==
+Examples of IndieWeb sites that support the micropub API (in order of deployment).
+
+=== Postly ===
+{{benthatmustbeme}} has started saving IRC chatroom logs directly to [[Postly]] as an initial test case.
+
+== How to implement ==
+How to implement the Logstore API, both in a client that can discover an endpoint and publish to it, and on a server to support an endpoint to append/recall logs.
+
+=== Endpoint Discovery ===
+It should be possible to configure an API client by authenticating as your domain name using IndieAuth. After signing in, your domain needs a way to specify the API endpoint the client will use to create new posts.
+
+Add a &lt;link&gt; tag in the HTML head of your home page, or send an HTTP Link header.
+
+==== HTTP Header ====
+<pre>Link: &lt;https://example.com/logstore&gt;; rel="logstore"</pre>
+
+==== HTML Head ====
+<pre>&lt;link rel="logstore" href="https://example.com/logstore"&gt;</pre>
+
+=== Authentication ===
+This is done exactly like [[Micropub#How_to_implement]]
+
+==== HTTP Header ====
+<pre>
+Authorization: Bearer XXXXXXXX
+</pre>
+
+==== Form-Encoded Body Parameter ====
+<pre>
+access_token=XXXXXXXXX
+</pre>
+
+
+=== Scope ===
+
+
+{{benthatmustbeme}} uses the scope 'logs' for access read/write from the logstore endpoint.
+
+
+=== Log Storage Format ===
+Logs are stored as h-feeds with h-entries (each containing an author) in microformats
+
+
+==== Getting List of Log Feeds ====
+Making an HTTP GET request without an 'h=' option should return a list of feeds that can be accessed in the form... 
+<pre>
+    <a class="h-feed u-url" href="https://ben.thatmustbe.me/logstore?h=feed&url=irc://freenode.net/%23indiechat">
+        irc://freenode.net/#indiewebcamp
+    </a>
+</pre>
+
+Remember to escape any Hash marks in the URL as they are needed for IRC room names. 
+
+==== Storing Log Entries ====
+
+Making a POST request to the endpoint with 
+<pre>
+h=entry
+</pre>
+should store the log entry.
+
+Add the values to be stored similar to [[Micropub]]
+<pre>
+h=entry
+content=GWG not really on you?
+in-reply-to=irc://freenode.net/#indiewebcamp
+published=2015-03-11 07:37:07
+author_name=pfefferle
+</pre>
+
+    
+==== Recalling Log Feed ====
+Making an HTTP GET request with 'h=feed' and 'url=' for the feed identifier
+
+==== Example Log Feed ====
+<pre>
+<div class="h-feed">
+    <div class="h-entry">
+        <time class="dt-published" datetime="2015-03-11 07:37:07">
+            2015-03-11 07:37:07
+        </time>
+        <span class="p-author h-card">
+            <span class="p-nickname p-name">pfefferle</span>
+        </span>
+        <span class="e-content p-name">GWG not really on you?</span>
+    </div>
+</div>
+</pre>
+
+
+== Brainstorming ==
+This entire page is still under developement, and there are several pieces that still need to be worked out.
+
+* Should there be a difference in read and write scope?
+* Storing of direct messages should ideally be able to unify to an actual person.  It would be nice to have a way to mark up on what method a message was delivered via.
+* Should the be a way to delete / clear logs?
+* There will need to be a method of paging when polling a log, or at least a method to say how much to limit to.
+** {{barnabywalters}} suggested [http://indiewebcamp.com/irc/2015-03-12/line/1426177375626] using next/prev markup and have an extra value of before= and a timestamp so they are permanent.  I would recommend something like ls-before to follow the prefix idea of micropub (mp-xxxx).  
+* Currently I am not logging chat entry/exit, there should probably be some markup for these.
+* Currently I am not logging actions, there should be some markup for this.
+* There should likely be a good way to store and recall a 'last-read' value for each feed so you can easily determine if there are any new messages.

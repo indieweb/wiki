@@ -1,0 +1,69 @@
+http://indiewebcamp.com/WordPress/Development
+
+Purpose of this page is to document discussions/brainstorming regarding Indieweb [[WordPress]] Themes and Plugins to operate together, despite the author and future development, as well as advice/suggested practices.
+
+=== Working On ===
+There are several projects to improve both the level and ease of supporting [[IndieMark|IndieWeb formats & protocols]] in WordPress.
+
+Themes:
+* A barebones theme that has [[microformats2]] - point the designers/developers that want to build a theme to use that.
+** gRegor is considering doing this with the HTML5blank.com theme.
+*** [https://github.com/pfefferle/SemPress SemPress]  supports a solid mf2 structure and is easily customizable/extendable --[[User:Notizblog.org|Matthias Pfefferle]]
+*** My understanding is that SemPress is a great out-of-the-box theme, but I also wanted a "blank" theme that indieweb designers could build from scratch on. — [[User:Gregorlove.com|gRegor]] ([[User talk:Gregorlove.com|talk]]) 08:51, 17 June 2014 (PDT)
+* Some common defaults that non-technical users could try out, like Twenty Fourteen with [[microformats2]] support added
+** GWG is working on a fork of _s(Underscores) for Indieweb, which is the stripped down starter theme on which the default Wordpress themes are based. It can be found at [https://github.com/dshanske/mf2_s mf2_s]
+
+Plugins:
+
+
+Ease of installation and management
+* [[Upon2020.com|Johannes Ernst]] [[2014/Demos|demonstrated]] at [[2014|Indie Web Camp 2014]] how to install Wordpress with several preactivated indie web plugins with a single command on [[IndieBox]]. Updates, backups, restores etc are also single commands on [[IndieBox]].
+
+=== Brainstorming ===
+* Based on interpretation of the Wordpress Codex custom post types are intended for creating entirely new content types, not extending the existing post type.
+
+* [[User:acegiak.net|Ashton McAllan]] is currently using custom metadata on standard post types and working out how to display which posts in the theme based on whether or not the metadata is populated for a post, considering classifying posts with a custom taxonomy to make for easier handling in the wordpress administration.
+* GWG had recently decided the best move to get semantic markup was a custom taxonomy with terms like like/reply/repost that could be acted on. He had been working on this with a new custom post type, notes. Based on comments by [[User:acegiak.net|Ashton McAllan]], he switched to the simpler suggestion of adding the custom taxonomy to the default post type.
+* [[User:snarfed.org|Ryan Barrett]] has a Press This-like plugin for inserting webmentions to a post from the bookmark bar: [https://snarfed.org/indieweb-press-this-bookmarklets-for-wordpress IndieWeb Press This bookmarklets for WordPress] (or use the [https://github.com/pfefferle/wordpress-indieweb-press-this WordPress plugin])
+
+== Filters ==
+
+"Filters are functions that WordPress passes data through, at certain points in execution, just before taking some action with the data (such as adding it to the database or sending it to the browser screen). Filters sit between the database and the browser (when WordPress is generating pages), and between the browser and the database (when WordPress is adding new posts and comments to the database); most input and output in WordPress passes through at least one filter. WordPress does some filtering by default, and your plugin can add its own filtering." [
+http://codex.wordpress.org/Plugin_API#Filters | Wordpress Codex]
+
+For the purpose of interoperability between Indieweb plugins and themes, GWG and pfefferle discussed using common filter names in Indieweb Wordpress themes to aid in development.
+
+Suggestion for Common Filter Names/Placement (Work in Progress)
+* Themes based on _s contain an entry-meta class which contains the metadata for the entry. 
+** A header_entry_meta filter which adds additional meta data to a div class entry-meta inside the header
+** A footer_entry_meta filter which adds additional meta data to a div class entry-meta inside the footer
+** The two entries share a class entry-meta, which is used for common styling.
+* A before_content and an after_content filter which appear immediately above and below the e-content div
+** I am not sure if this is needed at all, because the `the_content` filter should be enough to add something above or below the content. --[[User:Notizblog.org|Matthias Pfefferle]]
+** Response from {{gwg}} to above... the_content filter styles the return from the content editor. But, wrapped around that is the markup identifying the content. There may be a better way to do it, but the idea is to be able to add data that is not inside the content block, and not in the header or footer. Example... adding the in-reply-to, or adding a p-summary.
+* I would suggest to use underscores (instead of hyphens) in actions to use the same style as the [http://codex.wordpress.org/Plugin_API/Action_Reference WordPress "actions"] --[[User:Notizblog.org|Matthias Pfefferle]]
+* As of 2015-05-25, {{gwg}} is working on a 'better' idea of adding the 'entry-content e-content' div inside the content block using a filter attached to 'the_content'. This would require some minor theme changes, but would ensure the best compatibility for adding additional elements.
+
+
+The above would allow data to be added/removed by plugins in a designated place outside the content block, either inside a block designated for meta data in the header/footer or not.
+
+== Location == 
+
+Wordpress does not have built-in location awareness or geodata storage for posts. However, it does have a [http://codex.wordpress.org/Geodata standard] for its storage. 
+
+It consists of standard keys for geodata in the meta for posts, pages, users, comments, etc. 
+* geo_latitude
+* geo_longitude
+* geo_public - 1 is public, 0 is private. If there is no geo_public, assume public
+* geo_address - freeform textual description of coordinates. Accuracy level/detail/language is arbitrary
+
+The advantage of using the standard meta keys is support by various plugins. 
+
+GWG is working on a plugin for Wordpress that uses these values, plus a fifth geo_venue, which would indicate the [[venue]]. The plugin, tentatively called [https://github.com/dshanske/simple-location Simple Location], is supposed to add this support to Wordpress. There are plugins that offer location support, but none that implement it in a way best compatible with the location aspect described in the wiki and many would be overbuilt for the purpose. It is nowhere near feature complete.
+
+== See Also ==
+* [[WordPress]]
+* [[WordPress/Data]]
+* [[projects]]
+* [[silos]]
+* [[blogs]]

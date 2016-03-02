@@ -1,0 +1,153 @@
+http://indiewebcamp.com/authorship
+
+{{stub}}
+
+'''<dfn>authorship</dfn>''' is a claim about who the author(s) of a [[post]] are.
+
+== Determining ==
+How to determine authorship of a post on a page - AKA the Authorship [[discovery]] algorithm / processing model for implementations.
+
+# start with a particular <code>[[h-entry]]</code> to determine authorship for, and no <code>author</code>. if no <code>h-entry</code>, then there's no post to find authorship for, abort.
+# parse the <code>[[h-entry]]</code>
+# if the <code>h-entry</code> has an <code>author</code> property, use that
+# otherwise if the h-entry has a parent <code>[[h-feed]]</code> with <code>author</code> property, use that
+# if an <code>author</code> property was found
+## if it has an [[h-card]], use it, exit.
+## otherwise if <code>author</code> property is an <code>http(s)</code> URL, let the <var>author-page</var> have that URL
+## otherwise use the <code>author</code> property as the author name, exit
+# if there is no <var>author-page</var> and the <code>h-entry</code>'s page is a permalink page, then
+## if the page has a [[rel-author]] link, let the <var>author-page</var>'s URL be the href of the [[rel-author]] link
+# if there is an <var>author-page</var> URL
+## get the <var>author-page</var> from that URL and parse it for microformats2
+## if <var>author-page</var> has 1+ <code>[[h-card]]</code> with <code>url</code> == <code>uid</code> == <var>author-page</var>'s URL, then use first such <code>h-card</code>, exit.
+## else if <var>author-page</var> has 1+ <code>[[h-card]]</code> with <code>url</code> property which matches the <code>href</code> of  a [[rel-me]] link on the <var>author-page</var> (perhaps the same hyperlink element as the u-url, though not required to be), use first such <code>h-card</code>, exit.
+## if the <code>h-entry</code>'s page has 1+ <code>[[h-card]]</code> with <code>url</code> ==  <var>author-page</var> URL, use first such <code>h-card</code>, exit.
+# otherwise no deterministic author can be found. Implementations are encouraged to document additional heuristics below for consideration for incorporation in to the authorship algorithm.
+
+Note: the steps of checking for "url == uid == page's URL" and "url that's also a rel-me" were incorporated inline from the steps for [http://microformats.org/wiki/representative-hcard-parsing parsing a representative h-card]. Some improvements have been made here due to feedback from implementations in practice, and those improvements should be incorporated into an iteration of representative h-card.
+
+
+=== Test cases ===
+* HTML files for testing out the above Authorship Algorithm (replace raw.github.com with rawgithub.com to serve the pages with text/html):
+** https://github.com/sandeepshetty/authorship-test-cases
+
+== Issues ==
+
+=== Spoofing ===
+Authorship can potentially be spoofed, as the current algorithm may only look at the markup
+within an arbitrary page to determine the author.
+
+For example, any page with markup like http://paste.debian.net/plainh/587c8bb3 would be parsed as being written by [http://waterpigs.co.uk/ Barnaby Walters]. Examples of such spoofing are
+present at:
+* http://waterpigs.co.uk/notes/4QbH5C/ (search for "Whose articles are these") 
+was not actually written by aaronpk, but posted on a debian pastebin site and linked via a webmention.
+* http://aaronparecki.com/notes/2013/10/12/2/indieweb  (search for "How does parsing work")
+is similarly spoofed.
+
+http://checkmention.appspot.com allows you to test receiving a spoofed webmention from Jonathan Ive.
+
+=== Does not implement standards ===
+The algorithm described above does only rely on new markup, but does not consider the page's head meta and link tags with <tt>rel="author"</tt>. They have been used since HTML 3.02 and are still defined in HTML5:
+* http://www.w3.org/TR/REC-html32#meta
+* http://www.w3.org/TR/html5/links.html#linkTypes
+
+=== Other theoretical ===
+Theoretical issues are grouped here for capturing purposes. If you find a real world example of one of these, feel free to promote it to an actual issue with its own === subhead.
+
+* '''string-only author''': What to do if page h-entry has an author property which is not an h-card, but a string? Treat as empty and continue to fallback methods?
+** Algorithm updated for handling a string-only author that is a URL. See 5.2.
+** This probably isn’t worth discussing much as I can’t find a single example of this in the wild, but as it’s supported in the h-entry spec (“'''optionally''' embedded h-card(s)) it might be worth considering/specifying for when it does happen --[[User:Waterpigs.co.uk|Barnaby Walters]] 15:26, 17 January 2014 (PST)
+
+== Use Cases ==
+=== Name avatar display in comments ===
+In [[comments-presentation]], it describes how a site that accepts indieweb [[reply]] posts via webmention can retrieve those replies and display them as full-fledged comments on a post, including name and icon/avatar of commenter.
+
+[[h-card]] is the most common way that name, URL, photo information is published about a person on the web. Thus parsing for an author's [[h-card]] to retrieve their name and avatar makes the most sense.
+
+=== Name avatar display in a reader ===
+In a [[reader]] (feature of an IndieWeb site), it's nice to show the name and icon/avatar of the person whose posts you're reading from their indieweb home page h-feed.
+
+Typically this name/icon information is found via the authorship algorithm.
+
+==== Unhandled Examples ====
+In some (many?) cases, an indieweb h-feed of h-entry elements does not have explicit author information for a couple of reasons:
+* No author information inside each h-entry, because it would be redundant, since all the entries (the entire h-feed) are from the same author.
+* No rel=author link, because the page itself is likely the home page and thus page representing the author.
+
+IndieWeb examples:
+* {{t}}'s home page at http://tantek.com/
+** tried <code><nowiki><a class="u-author" href="/"></a></nowiki></code> inside <code>h-entry</code> but there doesn't seem to be much interest in handling that. Also am leaning against having to include such seemingly empty / non-visible markup just to work around algorithm limitations.
+* ...
+ 
+==== Fallback to page representative h-card ====
+Proposal: we could add one more fallback to lack of author h-card, or lack of rel-author, and that is to use the page being processed as the author-page if no other author page has yet been found.
+
+I.e. change "7. if there is an author-page URL " to "7. if there is no author-page URL, use the page itself as the author-page URL" and then continue processing the rest of the algorithm accordingly.
+
+This would handle the examples from above:
+* {{t}}'s home page at http://tantek.com/
+* ...
+
+
+==== Fallback to icon for photo ====
+Proposal: if the author doesn't have a photo in their entry h-card, and they also don't have a photo on their representative h-card, but you still want to display a photo as an avatar, how about looking for an [[icon]] in the head of the document?
+
+If a rel="icon" value exists that is using type="image/jpg" (or maybe type="image/png", but *not* type="image/ico"), then that image could be used an avatar. If a sizes attribute exists, a parser can look for the most appropriate size for display as an avatar.
+
+This could be used as a last resort if every other photo discovery mechanism fails to return an image.
+
+(idea by [http://loic.mathaud.fr/ Loic])
+
+Examples of sites with icons, but without photos in h-cards:
+* https://adactio.com/
+
+== Algorithm Design Notes ==
+Why do we parse for the authorship details in the order that we do?
+
+First, we prefer the p-author of the h-entry first because that is the most direct way of specifying the information, visibly, on the page. There's also established practice among indieweb sites of publishing a mini h-card with photo, name (sometimes as the alt text of the photo img), and URL to the person's indieweb site root / home page.  Also, it may be possible that the post is a guest post, in which case we really want the post-specific authorship information rather than anything general to the site.
+
+Only if the post itself lacks direct authorship information do we fall back to checking for a [[rel-author]] link, which is a fairly well established practice for linking from posts to pages representing authors.
+
+On such sites that use rel-author, they almost always point to a page that has a much richer h-card about the author than the post page itself, including a much higher likelihood of having a good photo / avatar image as part of that h-card. Thus we next prefer to go retrieve that rel-author destination, and look for a representative h-card there (per the "url == uid == page's URL" and "url that's also a rel-me" steps noted above).
+
+Only if the rel-author page lacks an h-card do we then fallback to looking for a likely smaller (if present) h-card on the post page itself that has a u-url of the same value as the destination of the rel-author, thus indicating that it is an h-card for the author.
+
+== Implementation heuristics ==
+=== php mf2 getAuthor ===
+[https://github.com/barnabywalters/php-mf-cleaner/blob/master/src/BarnabyWalters/Mf2/Functions.php barnabywalters/mf-cleaner getAuthor()] implements several extra steps whilst missing out the steps above which require fetching another URL — at the moment getAuthor completely lacks side effects:
+
+* If the given h-entry has an author or reviewer (for compat. with h-review if it doesn’t become more consistent with h-entry) property:
+** if the found value is a string, search all the h-cards on the page for one with a name property equal to the found value, and return it
+* If the found value is a microformat, return it
+* Look for page-scoped [[rel-author]], search all the h-cards on the page for one with a url property equal to the first rel-author value — if found, return it
+* If a page URL is given, or the h-entry has a url property, search all h-cards on the page for one where the domain of their url property is the same as the domain of the found url — if found return that
+* Otherwise return the first found h-card on the page, or null
+
+=== Converspace ===
+* First pass at the authorship algo: [https://github.com/converspace/converspace/blob/795a70965ede4cdbdacdb5858d3eb3863bd46d20/webmention.php#L66 get_h_card()] (announcement: http://www.sandeep.io/116)
+** Should be extracting it into an independent lib soon -[[User:Www.sandeep.io|Www.sandeep.io]] 01:23, 24 July 2013 (PDT)
+
+== Silo Implementations ==
+=== non currently ===
+== Past Implementations ==
+=== Google Search ===
+'''Support dropped 2014-08-28[http://searchengineland.com/goodbye-google-authorship-201975]'''
+
+[[Google]]'s search spider supported only part of the authorship algorithm, rel=author, in an oddly [[silo]]-specific way:
+* if there's <code>rel=author</code> link on a page
+** if it links to a [[Google+]] profile, use that profile for authorship information
+** if it links to a [[home page]]
+*** if the home page has a <code>rel=me</code> link to a Google+ profile
+*** and the Google+ profile has <code>rel=contributor-to</code> link back to the home page
+*** then use that profile for authorship information
+
+[[File:googleplus-authorship.png]]
+
+== See Also ==
+* [[discovery]]
+* [[posts]]
+* [[h-entry]]
+* [[h-card]]
+* [[rel-author]]
+
+[[Category:building-blocks]]

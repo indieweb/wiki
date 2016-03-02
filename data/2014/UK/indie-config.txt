@@ -1,0 +1,25 @@
+http://indiewebcamp.com/2014/UK/indie-config
+
+{{stub}}
+
+Indiewebcamp UK 2014
+#indieconfig
+
+Problem: I’m at a post and want to reply to it, how can I do that in-context rather than copy/pasting URLs and such nonsense.
+
+Existing solution: webactions, working demo cross-browser extension. Problems: no-one wants (or should have to) install+configure a browser extension
+
+Pelle built a proof-of-concept (during the demos!) using iframes and registerProtocolHandler to do the same thing without using a browser extension.
+
+We should be able to tell sites we’re browsing how to present us with a dialog
+
+T: perhaps this could work like geolocation/getUserMedia — there’s an async JS API allowing sites to request location data, pending user approval. What if we had that for identity/discovery of your personal website?
+
+The proof-of-concept adds a custom well-known protocol using navigator.registerProtocolHandler(), eg. web+indieconfig, that's pointing to the users own site. Other pages then include an iframe using that well-known protocol, which then resolves to the users own page. The code in that iframe sends a JSON encoded message to its parent window by using window.parent.postMessage() and the parent receive that message, checks that it was sent from the iframe, parses it and uses the data in it to eg. figure out the "reply" URL to use as a fallback in a webactions reply.
+
+Additional things possible in the proof-of-concept is to eg. add a whitelist-check within the iframe using something like confirm(), localStorage and document.refeerer to check if the refeerer is allowed to know about your indie configuration or not.
+
+== See Also ==
+* [[indie-config]]
+
+[[Category: 2014/UK]]

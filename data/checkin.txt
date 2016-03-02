@@ -1,0 +1,216 @@
+http://indiewebcamp.com/checkin
+
+<span style="float:right;height:128px;font-size:128px;margin-top:48px">🚩</span>
+{{stub}}
+
+A '''<dfn>checkin</dfn>''' is the action of checking into a [[location]] and sharing that information. The term is often also used as a verb, to ''check in''.
+
+Services like Foursquare, Gowalla (shutdown after being acquired by Facebook), Dodgeball (shutdown after being acquired by Google), Google Latitude (also shutdown by Google) are social community sites specifically designed for sharing checkins.
+
+The indieweb community is exploring how to [[post]] checkins to one's own website (likely privately), and how/when to syndicate (in [[POSSE]] style) such checkins to checkin-related community sites.
+
+== Why ==
+Why should you publish checkins? A few <span id="use_cases">use cases</span>:
+
+=== serendipitous meetups ===
+If a high enough percentage of your friends use checkins, or view them, you can checkin to increase the chance of serendipitous meetups happening[http://indiewebcamp.com/irc/2015-04-14#t1429040781093].
+
+But to enable this use-case, checkins have to be really simple and unobtrusive, i.e. like the old [http://microformats.org/wiki/dodgeball-syntax Dodgeball txting UI] was so simple that it made it very efficient to do so, so more people did so more often, thus enabling serendipity.
+
+=== personal logging ===
+I'm entering a specific venue, I'd like to quickly/automatically capture the fact that I'm entering that venue (similarly for exiting) for personal logging / quantified self purposes.
+
+Personal tracking could be done purely with private posts, however, friends-only checkin posts, without any expectation of anyone showing up, serve the purpose of also letting friends know where you are (and thus providing a feeling of being implicitly connected, even if mediated through such an indirect means)[http://indiewebcamp.com/irc/2015-04-14#t1429040934837].
+
+=== in town ===
+I'm visiting a city other than my home town, and rather than try to figure out who I know may be in that town at the moment and compile far too many explicit messages or a long BCC email, I'd like to announce to my friends who happen to also be in that city that I've arrived there and will be around a bit in case they'd like to meet up.
+
+=== just in time social meals ===
+I'm out at a coffee shop and want to quickly see if any friends are are nearby and might interested in getting brunch/lunch/dinner/drinks together.
+
+=== finding people in a crowd ===
+I've just arrived at a busy place/event, and I want to see if other people I think are coming have arrived yet so I know whether to look out for them.
+
+=== earning cred ===
+* I want my local coffee shop to see I'm their best customer.
+* I want my boss to see I'm always in the office.
+* I want people to see I regularly help out at the local children's hospital.
+
+=== awkward situation mitigation ===
+* I want to see who else is here before I go in, so I can avoid people I don't want to see.
+* I want to tell the world I'm somewhere I'm not.
+
+=== why not to checkin ===
+* home. Frequent checkins at home can be annoying to your friends that see your checkins.[http://indiewebcamp.com/irc/2015-04-14#t1429040851035]
+* work. Similarly, if you mostly checkin to work at the same time every day, that too can be annoying to your friends.(from personal experience with early Dodgeball usage).
+
+== How ==
+=== Publish ===
+How to markup a checkin post: ...
+* [[h-entry]]
+** p-location [[h-card]] for the venue
+* ...
+
+=== POSSE ===
+What are best approaches to POSSEing checkins?
+==== POSSE to Foursquare ====
+{{benwerd}} POSSEs his checkins to [[Foursquare]] with [[Known]].
+
+==== POSSE to Facebook ====
+{{snarfed}} currently manually POSSEs from his site to Facebook, manually picks the venue etc.
+
+Can likely call Facebook API to get a list of [[venues]] at a geo location.
+
+Could also create a Bridgy Publish feature that looked checkin post with a Facebook venue URL and then POSSE the checkin to FB.
+* https://github.com/snarfed/bridgy/issues/317
+
+
+
+== IndieWeb Examples ==
+In rough launch/implementation order:
+=== Barnaby Walters ===
+[[User:WaterPigs.co.uk|Barnaby Walters]] is using [[Taproot]] on waterpigs.co.uk to post notes with location data (including rev-geocoded address data) represented with an embedded [[h-card]] venue and in an embedded map, since 2013-01-24. Currently manually tagging specific check-ins with #checkin, but is working on adding richer venue information. Examples: 
+* [http://waterpigs.co.uk/notes/872/][http://waterpigs.co.uk/notes/890/][http://waterpigs.co.uk/notes/903/]
+* See [http://waterpigs.co.uk/notes?tagged=checkin Barnaby's notes tagged checkin] for more
+* And [http://waterpigs.co.uk/notes?tagged=location notes tagged location]
+
+=== Tom Morris ===
+[[User:Tommorris.org|Tom Morris]] is using [[Ferocity]] on tommorris.org to publish notes with venue data in an embedded [[h-card]] with [[geo]] microformat hyperlink (with title="lat;long") since 2013-02-02 . Examples:
+* http://tommorris.org/posts/8073
+* http://tommorris.org/posts/8074
+
+=== Ben Werdmuller ===
+[[User:Werd.io|Ben Werdmuller]] is using [[Known]] to post checkins since ????-??-??. e.g.:
+* http://werd.io/2014/checked-into-moscone-center
+
+=== Kyle Mahan ===
+{{kylewm}} is using [[Red Wind]] on kylewm.com to publish checkins since 2014-03-24. E.g.:
+* https://kylewm.com/checkin/2014/05/27/1
+* added support for checkins to actual (permalinked) venues on 2014-10-26.
+** checkin: https://kylewm.com/2014/08/at-mozilla-for-homebrew-website-club
+** venue: https://kylewm.com/venue/mozilla-sf-san-francisco-california
+* Venues are saved as a name, lat/lng location, and reverse geocoded location. Permalinks are name-locality-region. Still TBD what to do about duplicates within a locality, e.g. chipotle-san-mateo-california
+
+=== Michael Owens ===
+{{mko}} is using [[indie.js]] to post checkins with POSSE to [[Foursquare]] since 2014-09-07 e.g.,
+* https://mowens.com/checkins/2014/09/07/1/checking-in-from-my-own-website (POSSE)
+* https://mowens.com/checkins/2014/10/16/1/ (PESOS)
+
+[[File:mko-checkin-example-2014-10-15.png|thumb|left]]
+
+<div style="clear:both">&nbsp;</div>
+
+=== Ryan Barrett ===
+{{snarfed}} is using [[WordPress]] with his own modifications to post checkins [https://snarfed.org/2014-11-13_11514 since 2014-11-13], usually PESOSed via [https://github.com/snarfed/ownyourcheckin ownyourcheckin], occasionally manually POSSEd to Facebook, e.g.
+* '''checkin with nested [[event]]''': https://snarfed.org/2014-11-13_11514
+** <code>[[h-entry]] h-as-article</code> with <code>u-featured</code> (broken due to using class attribute) image and nested:
+*** <code>h-as-checkin</code> with <code>p-location h-card</code> (URL, name), with nested:
+**** <code>[[h-event]]</code> (just URL, name)
+** Note 1: The h-as-checkin should be on the same class as h-entry, not a child, so that the p-location h-card is directly on the h-entry.
+** Note 2: We haven't specified how to check-in at an event (something [[Swarm]] lets you do at some venues, like movie theaters), so this is an interesting prototype to further analyze.
+* '''checkin with [[photo]]''': https://snarfed.org/2014-11-24_11741
+** same as previous, but no u-featured, and a "u-photo" property on the photo img inside the h-entry instead
+* '''checkin with a person''': https://snarfed.org/2014-12-07_11859
+** same as checkin with nested event, but without u-featured, and inside h-as-checkin:
+*** nested h-card for the person with, with name & URL
+* '''checkin with two photos''': https://snarfed.org/2014-12-23_12146
+** same as checkin with photo, however, the two photos are not marked up with u-photo
+* '''checkin with two people and a photo''': https://snarfed.org/2014-12-27_12198
+** same as checkin with a person, both people are marked up as h-cards inside the h-as-checkin.
+** the photo is not marked up with u-photo
+
+=== Ben Roberts ===
+{{benthatmustbeme}} is using google maps static map to generate display in [[Postly]] since 2014-12-24.  e.g.:
+* https://ben.thatmustbe.me/checkin/2014/12/19/3/
+
+=== Prototypes ===
+Some folks have experiments or prototypes of posts resembling or approximating checkins but are lacking key information in some way, e.g. explicitly marked up location information.
+==== Tantek ====
+{{t}} has manually [[PESOS]]ed a couple of checkins to his site tantek.com from inadvertent [[Twitter]] cross-postings from [[Swarm]] on 2015-03-28:
+* http://tantek.com/2015/087/t2/athletic-tshirts-sale ([https://www.swarmapp.com/c/cKVBmzfqlZ5 on Swarm], [https://twitter.com/t/status/581938779033862144 on Twitter])
+* http://tantek.com/2015/087/t1/post-bike-riding-yum ([https://www.swarmapp.com/c/a4NlLQKcGqB on Swarm], [https://twitter.com/t/status/581938464880480256 on Twitter])
+These posts are [[notes]] that show how a checkin could be presented in plain-text form, i.e. how a full checkin post could be POSSEd to Twitter, based on how Swarm cross-posts checkins to Twitter. Note how the Twitter copies have a [[permashortlink]] after their text content that links to the respective Swarm posts.
+
+== sessions ==
+Past discussion sessions on indieweb checkins:
+* 2012-181 OSBridge BarCamp Day: [http://opensourcebridge.org/wiki/2012/Foursquare_is_down! Foursquare is down! Let's figure out IndieWeb Checkins!]
+* 2012-182 IndieWebCamp [[2012]]: [[2012/Open_Checkins|Open Checkins]]
+* 2016-023 IndieWebCamp [[2016/NYC]]: [[2016/NYC/Venues_and_Checkins|Checkins, Locations, Venues]]
+
+Pretty good notes in there that could be abstracted and captured in general form in new sections here.
+
+== questions ==
+More explorations/brainstorms than FAQ yet.
+=== just a note with a location ===
+Is a checkin actually a separate post type?
+
+Or is it just a [[note]] with location information?
+
+Or does a [[note]] with location information become a checkin only when the location is a specific [[venue]]?
+
+E.g. what are the user-expected/intentioned differences between:
+* checking into [[Foursquare]]
+* posting a note on [[Twitter]] with location information?
+
+The [[posts]] page has some discussion about the general question about explicit vs. [[posts#Inferring_post_kinds_from_properties|implicit post kinds]].
+
+== Brainstorming ==
+More <span id="aspirations">ideas</span> than creations, some thoughts about how individual indieweb community folks want to do indieweb checkins.
+
+=== indieweb venues ===
+Main article: [[venues]].
+
+<blockquote>I'd rather post a check-in on my own site, and have it use a venue URL that is *also* on my own site. Then at that indieweb venue URL, it can link to equivalents on Foursquare, OSM, FB, and whatever other centralized venue databases are created in the future. - [[User:Tantek.com|Tantek]] [http://indiewebcamp.com/irc/2012-12-29#t1356810217] </blockquote>
+
+Experience with Foursquare's "community generated/patrolled venues database" is that a few nitwits can pollute/damage the data quite badly, with deletions, overmergings etc. Sad to say, same thing happens with Wikipedia (excessive deletions, overmergings). Thus little hope that a "community hosted venues database" wouldn't have all the same problems, if not worse.
+
+Just use [[hCard]] on indieweb venue URLs.
+
+see also:
+* [[2012/Open_Checkins#Venue|2012 IndieWebCamp Open Checkins Venue discussion]]
+
+=== geolocation detection ===
+In general it is good to use multiple source of geolocation information in order to increase accuracy and decrease latency to provide this information when querying for and presenting (multi-factor prompts) nearby venues.
+
+==== GPS ====
+<blockquote>GPS is great. Except when you are inside a building - it doesn't work. Then you go and get on the Tube, and pop out the other side. It takes time for GPS to seek. You spend much more time waiting for GPS to work out where you are than you do just typing in the name of the bar or whatnot.[http://indiewebcamp.com/irc/2013-03-06#t1362589570]</blockquote>
+
+==== wifi location ====
+wifi-assisted location determination can do better than GPS when inside a building.
+
+==== velocity prediction ====
+Last time(s) you checked in (or GPS was detected), you were moving in this direction at this pace, therefore you're likely at this location now.
+
+==== pattern prediction ====
+The last n times you checked in at place A, you checked in at place B within the next thirty minutes.
+
+==== co-checkin prediction ====
+You just checked in with friend F at location A, your friend F just checked in at location B, therefore you might be at location B as well.
+
+=== plain text design ===
+Like other types of [[posts]] (e.g. [[likes]]), it makes sense to figure out a plain text design for checkins, for various contexts.
+
+Examples:
+* {{snarfed}}'s page of checkins: https://snarfed.org/?s=checked shows a plain text equivalent (summary) for each individual checkin, e.g.
+** "Checked into Pleasanton Ridge Regional Park with Vanessa Barrett and Richard Barrett."
+*** "checked into" venue, "with" person "and" person
+
+=== offline checkins ===
+Background: "offline foursquare" projects
+* https://technobabbl.es/2015/11/blast-from-the-past-offline-foursquare/
+* aaron straup cope's privatesquare: https://github.com/straup/privatesquare
+
+Use-case: wanting to checkin to a location without (good?) connectivity.
+* special case of "async" checkins?
+
+Workaround:
+* {{t}} I will often take a photo at a location where I want to checkin but lack connectivity (yet somehow the photo gets close-enough location info from SSID triangulation etc.), and then later use [[Instagram]] to post the photo with an explicit [[venue]] and cross-post from there to [[Swarm]] to do a "Postsquare" checkin.
+** Problem: Instagram's venues database (since 2014?) is based on Facebook's venues which is of very poor quality in comparison to [[Foursquare]]/[[Swarm]]’s venue database.
+
+== see also ==
+* [[geo]]
+* [[location]]
+* [[media checkin]]
+* [[POSSE]]
+* [http://aaronparecki.com/2012/296/article/1/creating-content-on-the-indie-web Creating Content on the Indie Web] ([[User:Aaronparecki.com|aaronparecki.com]])
+* [[exercise]]

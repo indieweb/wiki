@@ -1,0 +1,37 @@
+http://indiewebcamp.com/summary
+
+{{stub}}
+
+<p class="p-summary">A '''<dfn>summary</dfn>''' is short text that conveys a post's main point(s), or a plain text equivalent for kinds of [[posts]] like [[likes]] and [[RSVP]]s that use other properties to convey their meaning.</p>
+
+== Why ==
+To explicitly indicate what part of the content of a post, or other text equivalent, should be used as a shorter description of the post in [[readers]], other [[link-preview]] use-cases for a displaying a post from elsewhere, providing an excerpt for [[POSSE]] purposes, and a plain-text fallback for special kinds of [[posts]] that the consuming code might not know to do anything special with.
+
+== How ==
+Add the class name "p-summary" to the element (e.g. <nowiki><p> or <span> etc</nowiki>) tag that you want used as the plain text summary for your post.
+
+== IndieWeb Examples ==
+=== Kartik Prabhu ===
+{{kartikprabhu}} on https://kartikprabhu.com/ uses "p-summary" on shorter descriptions when displaying [[articles]] in a list and also, in the full display of [[articles]]. The summary is entered into a [[Django]] database UI manually for the list but, is also present as a "p-summary" in the HTML for the complete article.
+=== Kevin Marks ===
+Manually adding summaries on http://kevinmarks.com Also, [[unmung]]will create summary from feeds, and display summaries in [[storycards]]
+
+== Service Support ==
+=== Bridgy ===
+[[Bridgy]] Publish will look for <code>p-summary</code> in your original post before <code>e-content</code> or <code>p-name</code>[https://brid.gy/about#microformats]
+<blockquote>In general, Bridgy prefers to use p-summary if available, then the full e-content, and finally p-name, in that order. The one exception is original tweets (not @-replies) on Twitter: for those, it prefers p-name before e-content.</blockquote>
+
+== Brainstorming ==
+=== More text UI ===
+Why a summary UI: because you may not want the entirety of your original post going to [[silos]] like [[Facebook]] or [[Twitter]], and prefer to send a short summary to them and have readers there click through to your original post to see it in its entirety.
+
+Why a new summary indicating UI: I wanted a better UI solution for authoring a p-summary than having to explicitly author <code>p-summary</code> markup, or have a separate text field for entering a summary. - {{t}}
+
+Thoughts ({{t}})
+* The author could simply put the explicit text content "More..." or "More:" in its own paragraph  as a way of indicating that everything in "content" before the "More" should be considered the summary.
+* The consuming code (your authoring tool) could remove the "More" text and automatically markup wrap the text before it with: <br/><code>&lt;span class="p-summary"&gt; ... &lt;/span&gt;</code>
+
+== See Also ==
+* [[h-entry]]
+* [[link-preview]]
+* [[featured]]

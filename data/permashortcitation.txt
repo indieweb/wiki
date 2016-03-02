@@ -1,0 +1,117 @@
+http://indiewebcamp.com/permashortcitation
+
+{{stub}}
+
+A '''<dfn>permashortcitation</dfn>''' (or '''<dfn>permashortid</dfn>'''), abbreviated as <dfn><abbr>PSC</abbr></dfn> is a short <em>non-hyperlinked</em> [[citation]] to a [[post]] [[permalink]], in contrast to a [[permashortlink]] which does hyperlink to a post. Permashortcitations are often used in [[POSSE]] copies of posts where the entire content of the post fits in the copy.
+
+Permashort citations are the parenthesized ccTLD and path you might see at the end of tweets or [[Facebook]] posts, like:
+* (ttk.me t4Sw1) 
+* (werd.io s/6kDiG)
+* ...
+
+== Why ==
+Summary reasons: The whole point of POSSE is that you still care about your friends on [[Twitter]] (or other silos) reading you, so you should care about their UX also.  Avoiding linking to what appears to be "duplicate" content helps this, while still enabling [[original-post-discovery]] for better indieweb interactions ([[replies]]).
+
+=== For original post discovery ===
+Using permashortcitations allows discovery of your original post, both:
+* Automatically: using the [[original-post-discovery]] algorithm.
+* Manually: using search engines or simply removing the parentheses and replacing the space with a slash.
+
+=== Why instead of permashortlinks ===
+Why use permashortcitations, in particular why (and when to) use them instead of [[permashortlinks]].
+
+You ''should NOT'' include a post permashort<em>link</em> at the end of POSSE copies of notes that include the ''entire'' note. 
+
+E.g. there's an unspoken convention on Twitter that a link in a tweet (especially at the ''end'' of a tweet) should provide more information. Having an active permashortlink at the end of your tweet when all you provide on your own site is the *exact* same content is bad UX for your friends that follow you on Twitter. 
+
+When permashortlinks are used on copies of posts where the copy has all the content, there are complaints (both in person ([[User:Tantek.com|Tantek]] has received) and on Twitter):
+* https://twitter.com/zeldman/status/24154348602793984 ([http://tantek.com/2011/009/t2/ttk-me-permashortlinks-originals-twitter-copy response])
+* https://twitter.com/sgalineau/status/24171771997462528 ([http://tantek.com/2011/009/t2/ttk-me-permashortlinks-originals-twitter-copy response])
+* https://twitter.com/zeldman/status/24213884298592256 ([http://tantek.com/2011/009/t3/value-searching-finding-past-tweets-self-hosting response])
+* https://twitter.com/zeldman/status/24224559787941888
+* https://twitter.com/zeldman/status/24521588359569409
+And questions raised over time in response to apparent linking to "duplicate" or "the same" content.
+* https://twitter.com/tigerchops/status/306879654227218432
+
+The whole point of POSSE is that you still care about your friends who still read from silos (e.g. Twitter), so you should care about the UX for your friends, whether or not you care about the silo itself.
+
+Only provide permashortlinks as part of your POSSE copies when they link to an the original post <em>with more content</em> than in the copy. 
+
+Otherwise use permashortcitations so that your original posts are still automatically discoverable using the [[original-post-discovery]] algorithm.
+
+== How ==
+How do permashortcitations "work"? I.e. why are they not auto-linked on Twitter?
+
+The key is:
+* Twitter DOES NOT autolink plain references to ccTLDs without schemes or paths.
+
+You need a [[short-domain]] to construct working non-distracting permashortcitations.
+
+== Implementations ==
+=== IndieWeb Examples ===
+==== Tantek ====
+{{t}} uses [[Falcon]] to POSSE from tantek.com with permashortcitations since [https://twitter.com/t/status/49323828383453184 2011-03-19] and current permashortcitation format since [https://twitter.com/t/status/130566099858231297 2011-10-30]. ([http://tantek.com/2011/087/t6/colon-indicate-more-content-added-but-insufficient some background])
+
+==== Ben Werdmuller ====
+{{benwerd}} used [[idno]] on werd.io to publish permashortcitations on POSSEd [[notes]] and most replies (but not photos) from [https://twitter.com/benwerd/status/398754435674812416 2013-11-08] to [https://twitter.com/benwerd/status/400840854488616960 2013-11-14], using current permashortcitation format for [https://twitter.com/benwerd/status/398856667242053634 some updates on 2013-11-08]. ([http://werd.io/2013/what-the-heck-are-the-references-at-the-end-of-my-posts-indieweb explanatory post])
+* 2013-11-08 used permashortcitations for some notes, switched to permashortlinks by end of day.
+* 2013-11-14 stopped using permashortlinks on Twitter POSSEd posts ([https://twitter.com/benwerd/status/400840854488616960 last with], [https://twitter.com/benwerd/status/401134850054172672 next without]).
+* 2013-11-15 permashortlinks on some Twitter POSSEd posts[https://twitter.com/benwerd/status/401382295124201472]
+* 2013-11-16-current (as of 2013-11-19) no more permashortlinks on Twitter POSSEd posts.
+
+=== Services ===
+==== Bridgy ====
+[[Bridgy]] supports permashortcitations for [[original post discovery]].
+
+
+== Criticism ==
+There have been some replies (e.g. on Twitter) asking what the parenthesized text is meant to be, or asking why those links appear "broken".
+
+Citations (more needed):
+* "FYI, the links in your tweets are missing the slash" https://twitter.com/courtarro/status/453689172138926081
+* ...
+
+When doing original post discovery, [[Bridgy]] originally encountered too many false positives [http://indiewebcamp.com/irc/2014-03-21/line/1395422237 "too many false positives"] when looking for PSCs anywhere within the text. Now only looks for citations at the end of text (which can be problematic for tweets that include media w/ automatic media URL)
+
+== More thoughts on use of ==
+The more we find conventions like these, both on our own sites, and on POSSEd content, the more we give people who live on silos clues about the indieweb, its existence, and maybe inspire curiosity at least. - tantek in IRC 2013-11-08.
+----
+People can just paste the whole short citation into a browser search box (or universal input/address bar) and at least in Google, it will likely find the original post via text search (as long as you're publishing your permashort citation in clear text as part of your original post as well).
+
+Google used to (2011-2012?) find original posts via permashortcitation searches immediately upon publication due to Google indexing PuSH notifications, but it appears (2013-11-08) that they no longer surface PuSH results as high or quickly.
+----
+Another thing to consider re: autolinking, now that our own indieweb sites are getting to be more functional than twitter.com, I might want to actually encourage visitors on twitter to click through to my site because they'll get a richer experience. - aaronpk in IRC 2013-11-08.
+
+It needs to be a *considerably* richer experience for the user to not get annoyed. So far the only case of that we have is "additional content in the post". I haven't seen anyone's indieweb note permalinks provide a "considerably richer" experience than Twitter (e.g. my prev/next nav arrows are richer, but not *considerably* than Twitter). It's more important for the indieweb experience to *not* annoy our friends, than it is to "market the hell out of it with more links". We need to continuously make a good impression on non-indieweb readers (silo readers) so they learn to admire, respect, and actually *want* to do that for themselves. - tantek in IRC 2013-11-08.
+
+----
+
+just fyi, PSCs never got much adoption, and it's not clear that they will ... i wouldn't encourage using them, but that's just my opinion - snarfed on IRC 2014-03-21 [http://indiewebcamp.com/irc/2014-03-21/line/1395422272 "never got much adoption"].
+
+as our "original posts" becomes more and more useful than any silo POSSE copy, it will make more and more sense to just use permashortlinks in POSSE copies - since users clicking on those will see more information (e.g. more indieweb/cross-site comments / likes) - tantek on IRC 2014-03-21 [http://indiewebcamp.com/irc/2014-03-21/line/1395436051 permashortlinks "will make more and more sense"]
+
+----
+
+I definitely get people complaining about links to posts that don't contain anything extra. But I think if I broke the links, I'd get an equal amount of people complaining my links weren't right (documented on wiki). *but* when pulling enough replies through from different sites, the original copy of the post *is* enhanced. ie. you can click from twitter and see replies from indieweb, facebook, whatever. which I think is enough extra value. - {{rhiaro}} [http://indiewebcamp.com/irc/2015-06-13/line/1434198401119 on IRC 2015-06-13].
+
+== Origins ==
+How the current permashortcitation format evolved:
+* 2011-03-19 permashortcitations with parentheses without http introduced[http://tantek.com/2011/078/t3/falcon-permashortlink-design-citation-url-more], e.g. <samp>(ttk.me/t4As3)</samp>, in response to "link to duplicate content" complaints.
+* 2011-10-11 [http://tantek.com/2011/284/t8/disliking-twitter-wrapping-urls-w-o-http Twitter starts t.co wrapping even URLs without http] - previous permashortcitation technique was to use parenthesized full URL site and path just without http://, e.g.: <samp>(ttk.me/t4EJ8)</samp>, to avoid distracting users with an explicit hyperlink[http://tantek.com/2011/284/t10/twitter-wrap-problem-distracting-users-with-link]
+* 2011-10-29 decision to iterate on permashortcitations with full site+path.[http://tantek.com/2011/302/t3/annoyed-twitter-http-less-auto-linking-citation]
+* 2011-10-30 modern permashortcitation style introduced[http://tantek.com/2011/303/t1/chicago-manual-style-source-date-cctld-newbase60-epoch] and tested[https://twitter.com/t/status/130566099858231297]<blockquote>Chicago Manual of Style in-text parenthesizes source [space] date. Let's try ccTLD [space] t-NewBase60-epoch-days → (ttk.me t4Ec1)</blockquote> and settled[http://tantek.com/2011/303/t3/settled-falcon-perma-short-link-in-text-cite-design] <blockquote>It's settled: @falcon perma-short-link in-text cite design: (ccTLD [space] t-NewBase60-epoch-days-nth-post). #indieweb</blockquote>
+
+== Posts about ==
+Posts about permashortcitations (newest first)
+* 2013-11-08: http://werd.io/2013/what-the-heck-are-the-references-at-the-end-of-my-posts-indieweb
+* 2011-03-28: http://tantek.com/2011/087/t6/colon-indicate-more-content-added-but-insufficient
+* 2011-03-28: http://aaronparecki.com/articles/2011/03/28/1/shortlink-design-for-syndicating-to-twitter
+
+== See Also ==
+* [[Twitter#Why_permashortcitation_instead_of_a_link|Twitter POSSEing why permashortcitation]]
+* [[permashortlink]]
+* [[permalink]]
+* [[POSSE]]
+* [[short-domain]]
+* [[original-post-discovery]]
+* [[Twitter]]

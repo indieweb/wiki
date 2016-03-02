@@ -1,0 +1,93 @@
+http://indiewebcamp.com/syndication_formats
+
+Content hosted under your domain should be presented as semantically marked up HTML+microformats. If you have not yet done this, go do it now!
+
+Here's an example of a densely marked-up note:
+
+http://public.waterpigs.co.uk/images/syndication/semantic-microblog.png
+
+and here's it's code:
+
+<code><pre>
+<article class="note hentry h-entry">
+ <p class="author h-card">
+  <img class="u-logo u-photo" alt="Barnaby Walters" src="/img/photos/meRaglan100.jpg" />
+  <a class="p-name" href="http://waterpigs.co.uk">Barnaby Walters</a>
+  <a class="u-url" href="http://waterpigs.co.uk">waterpigs.co.uk</a>
+ </p>
+ <div class="entry-content p-name p-entry-content p-entry-summary">
+  <p>
+   <a class="h-card" rel="acquaintence met" href="http://adactio.com">Jeremy Keith</a> might be an idea to update <a class="auto-link" href="http://adactio.com/about/accessibility/">http://adactio.com/about/accessibility/</a>, Safari no longer uses <kbd>alt</kbd> for accesskeys
+  </p>
+ </div>
+ <small class="muted"><time class="published updated dt-published dt-updated" datetime="2012-09-22 18:42:16">22<sup>nd</sup> of September 2012 at 18:42:16</time></small>
+</article>
+</pre></code>
+
+Once you have well-marked-up data under your domain, you should make it available as a [[feeds|feed]], and you'll probably want to [[syndication-models|syndicate]] it out to 3rd party services.
+
+3rd party services will inevitably require your data to be of lower quality than it is under your domain (length limit, no microformats, no markup). For example, here's a representation of the above example as it appeared on twitter:
+
+http://public.waterpigs.co.uk/images/syndication/nonsemantic-microblog.png
+
+No microformats on the web version, a truncated link, network-specific user references and no <code>&lt;kbd&gt;</code> markup on the alt.
+
+== Formatting Content for Syndication ==
+
+=== Feeds ===
+
+When you're syndicating content using feeds (atom, activitystrea.ms), preferably use the same/very similar markup to you do on the web. This has the following advantages:
+
+* Dumb feed readers still get lots of useful links, images as tags, working youtube embeds etc.
+* Smart feed readers get a vast amount of useful data, e.g.
+
+=== Twitter ===
+
+When syndicating content to Twitter, bear the following in mind:
+
+* Not only the 140 char limit, but you may want to allow for the extra characters added when retweeting
+* No HTML is displayed, but most clients will auto-parse image links into images, video links into players
+* #tags will be parsed into twitter-specific tag URLs
+* @names will be parsed into twitter-specific user references
+
+'''Implementation Details'''
+
+* I write my notes using tweet microsyntax, send the raw copy to twitter and turn the microsyntax into more useful formats (e.g. @name -> <code>.h-card</code>, #tag to <code>rel="tag"</code> url) --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 12:26, 22 September 2012 (PDT)
+
+== Truncation and Backlinks ==
+
+The exact formatting of backlinks (see [[POSSE]]) is varied in nature. The user should immediately be able to discern whether or not there’s any extra content to be seen if they click through (clicking through to find content repeated, not amplified is a [http://tantek.com/2011/010/b1/owning-your-data known usability issue].
+
+=== Syndicating Notes (AKA tweets) ===
+
+If the content has to be truncated for syndication, add an ellipsis and the URL for the rest of the content, e.g:
+
+<blockquote>Dear #ireality #ireality2012 speakers, what to do about those trying to revert to the past? eg undo teaching ... http://ttk.me/t4Kp1 </blockquote>
+
+If adding the permalink ''doesn’t'' cause the content be to be truncated, put it in parentheses, e.g:
+
+<blockquote>Built and released today: ~ THE TRUNCENATOR ~ github.com/indieweb/php-truncenator #indieweb (waterpigs.co.uk/notes/356)</blockquote>
+
+A variation of this is to use Whistle-like short URLs and separate the domain from the path by a space, e.g:
+
+<blockquote>If Twitter is for posting updates, why do "Updates from Twitter" use email? <nowiki>http://i.qkme.me/3r3ove.jpg</nowiki>  #philosoraptor (ttk.me t4LA1)</blockquote>
+
+The advantage of this is that Twitter does not wrap it in a t.co URL, leaving it easier for people to retrieve <s>if</s> when t.co goes down. Also, it’s 14 characters long, leaving 6 more than you would have with a 20-char t.co URL (which is only likely to go up)
+
+=== Syndicating Blog Posts ===
+
+There are a whole load of different methods in use to indicate a blog post. The commonest is the Title-colon-link pattern, e.g:
+
+<blockquote>I dream of BBSes: http://www.onebigfluke.com/2012/09/i-dream-of-bbses.html</blockquote>
+
+=== People Formatting Back–links Like This ===
+
+* [[User:aaronparecki.com|Aaron Parecki]] (e.g: [https://twitter.com/aaronpk/status/253697624283152384 amplified note] [https://twitter.com/aaronpk/status/253691505905127424 repeated note] [https://twitter.com/aaronpk/status/238664902485630978 blog post])
+* [[User:waterpigs.co.uk|Barnaby Walters]] (e.g: [https://twitter.com/BarnabyWalters/status/253915109867548672 amplified note][https://twitter.com/BarnabyWalters/status/253926123266789377 repeated note] [https://twitter.com/BarnabyWalters/status/222759094216425474 blog post])
+* [http://www.onebigfluke.com/ Brett Slatkin] (e.g: [https://twitter.com/haxor/status/245607344409567232 blog post])
+* [[User:tantek.com|Tantek Çelik]] (e.g: [https://twitter.com/t/status/243701671585271808 amplified note] [https://twitter.com/t/status/252921999104565250 repeated note] [https://twitter.com/t/status/251375984887083009 blog post])
+* …Add yourself if you use this format
+
+== Tools ==
+
+* [https://github.com/indieweb/php-truncenator ~ THE TRUNCENATOR ~ (PHP)] is a highly-configurable function for nicely squishing content and a back–link into a given character limit

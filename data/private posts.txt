@@ -1,0 +1,127 @@
+http://indiewebcamp.com/private_posts
+
+{{stub}}
+
+'''<dfn>private posts</dfn>''' refer to [[posts]] or portions of posts which are [[privacy|private]] to either the author or to a limited audience chosen by the author. Typical [[silos]] offer some form of private posts (or messaging, like email).This is a nascent area on the indieweb.
+
+== Use Cases ==
+There are numerous use case for private posts, however here we are capturing use-cases raised by active Indieweb community members that wish to [[selfdogfood]] such features on their own site.
+
+=== Private messaging ===
+From Aaron Parecki (who has implemented this on his site)
+* [[indieweb-messaging]]
+
+There could be a possibility with [[pgp#Possible_Solution | pgp messaging]].
+
+=== Allow silo friends to see private posts ===
+From Tom Morris in IRC:
+<blockquote>Allowing your [[Facebook]] friends to see things where you assume they *don't* have their own domain", and thus you'd need to support some form of Facebook-authentication to verify their identities before showing them the private post(s) you'd like them to see. "Similarly [[Twitter]]" friends.</blockquote>
+
+Need to maintain an address book to coordinate identities across various silos, and allow users alternative authentication mechanisms (I'd be inclined to include email). Posts could be shared with individual address-book entries or predefined mailing-lists. Or dynamic lists like "Facebook friends", "Twitter friends" above, or as [[User:aaronparecki.com|Aaron]] [http://indiewebcamp.com/irc/2014-05-04/line/1399224045 suggested], all the h-cards linked to from a webpage like [[irc-people]]   --[[User:Kylewm.com|Kylewm.com]] 11:56, 8 May 2014 (PDT)
+
+Tantek on [http://indiewebcamp.com/irc/2014-05-08/line/1399575433 IRC 2014-05-08]:
+<blockquote>
+interesting - I think tommorris was putting a bunch
+of thought into private posts - as he wants to do exactly that (with
+giving permissions to FB friends). re: address book - the minimal viable address book should
+be just a list of URLs of people in storage. On top of that, cache their
+full name and photo from their h-card at their URL (or retrieved by
+snowflake API from their silo profile URL). everything else should be retrieved dynamically from their
+personal site / profile URL. apply caching as needed. once you make your addressbook person-URL-centric, then all the permissions stuff becomes super obvious
+</blockquote>
+
+=== Partial Page Privacy ===
+
+During IndieWebCamp Online 2014, the question was raised of how to indicate that some or all of a page was not for public consumption.
+
+The Use Case for this came during {{benthatmustbeme}}'s review of his contact page, which displays additional contacts to logged in users. The question was raised of how you would tell a logged in user that you did not want them to share contacts which were not public, as many sites, systems would automatically log in.
+
+The proposed solution was suggested in marking up the information appropriately. Possible parameters might include
+* For Eyes Only - Indicating that the information should not be distributed
+* For Specified Group - Indicating some group it may be shared with
+* The Absence of such markup would suggest public information
+
+=== Public Page Upgrading ===
+
+On IRC it was [http://indiewebcamp.com/irc/2015-09-15#t1442342684222 discussed 2015-09-15] about how to indicate the availability of possible private content for authenticated users on an otherwise public page.
+
+It was suggested to respond with a "WWW-Authenticate" header, like the one used in [[private-webmention]], to indicate the upgrade possibility:
+
+<pre>WWW-Authenticate: IndieAuth</pre>
+
+It was also discussed that the response could include a unique URL as a rel-self to enable realtime [[Pubsubhubbub]] updates on said content.
+
+This would enable [[block]] mechanisms based on eg. [http://microformats.org/wiki/block-list block lists] to advertise both some blocked items to public and additional ones privately to certain trusted users and to have changes propagate in realtime to all clients, such as [[WebMention]] endpoints, that might have use for such data to eg. block mentions from being shown.
+
+It can also be used to upgrade a public [[h-feed]] with private posts when subscribing to it in a [[reader]].
+
+== IndieWeb Examples ==
+
+=== {{kylewm}} ===
+
+[[Red Wind]] has rudimentary support for private posts based on a simple list of the domains of people authorized to view a private post. The posts are viewable only if the [[IndieAuth]]ed user is in the audience list.
+
+Example note from {{kylewm}}'s site:<br>[[File:kmahan-private-note-display.png|border|500px]]<p>[[Posting interface]]:<br>[[File:kmahan-private-note-edit.png|border|500px]]
+
+=== {{aaronpk}} ===
+[[p3k]] (v1) has support for private posts by specifying a list of the domains of people authorized to view a private post. To view the post, the user must identify themselves with [[IndieAuth]] by signing in to the site. After signing in, a session cookie is set which identifies the user.
+
+[[File:p3k-private-post.png|450px]]
+
+=== {{benthatmustbeme}} ===
+[[postly]] has support for private posts as of 2015-11-30, more data forthcoming.
+
+== Silo Examples ==
+We can learn from the UI that [[silos]] use to present and edit the privacy of posts.
+
+=== Facebook ===
+[[Facebook]] posts have varying degrees of (apparent) "privacy". [[photo]]s are a particularly interesting example, where it appears their viewability is on a spectrum. E.g. common examples: 
+* public (indexable)
+* public (no robots / login required)
+* friends of anyone [[person-tag]]ged in the photo
+* friends of the author of the photo
+* subset of friends (curated whitelist) of the author of the photo
+* only the author
+
+[[File:fb-private-post-2015.png]]
+
+=== Google Plus ===
+TODO: find a screenshot of Google+ posts shared publicly as well as with a circle.
+
+== Other Examples ==
+
+=== email, email lists ===
+* private cc:/bcc: - author selected group
+* private to a list server (listserv) - list maintainer selected group
+
+== FAQ ==
+* does any [[reader]] supports reading private posts?
+
+== Unsolved issues ==
+
+=== Private feed for each authenticated ===
+
+Given that there is a private feed for each authenticated user on each website: 
+
+* How does private feed discovery work for readers?
+** A "Follow me" or "subscribe" button usually only transfers the current URL to the reader, delegating the feed discovery task (which is necessary, since the feed reader might support one feed format but not the other). The reader will not be authenticated (as it does not have the same cookies or IP as the user), so it will not see the private feed.
+* Does [[PuSH]] work with private feeds?
+* Do you trust your PuSH hub enough to transmit private messages in its fat pings?
+
+==== Feedback ====
+
+* The first two issues might be solvable through the ideas of [[Private Posts#Public_Page_Upgrading|Public Page Upgrading]] by upgrading the normal discoverable feed to a private one after authenticating. [[User:Kodfabrik.se|Kodfabrik.se]] 11:06, 24 February 2016 (PST)
+
+* the feed can be public without the posts in in being public. Potentially the posts can be linked from the feed, though that may leak timestamp metadata (and content in slugs if you're not careful) [[User:Kevinmarks.com|Kevinmarks.com]] 11:10, 24 February 2016 (PST)
+
+=== Other issues ===
+
+* When sending a private message, I don't want to write my contact's domain names but select the target contacts from a list. How can [[Micropub]] clients get a list of all contacts and contact groups?
+
+== See Also ==
+* [[privacy]]
+* [[indieweb-messaging]]
+* [[messaging]]
+* [[posts]]
+* [[SharingWithCircles]]
+* [[sign-in-use-cases]]

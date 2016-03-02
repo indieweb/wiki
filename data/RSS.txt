@@ -1,0 +1,171 @@
+http://indiewebcamp.com/RSS
+
+{{stub}}
+
+'''<dfn>RSS</dfn>''' typically loosely refers to a set of XML [[feed file]] formats of varying degrees of use for syndicating typically time-stamped content from web sites. <abbr>RSS</abbr> is an acronym that stands for: Rich Site Summary (originally RDF Site Summary, often dubbed Really Simple Syndication)[http://en.wikipedia.org/wiki/RSS]. [[Atom]] is an alternative XML format for [[feeds]].
+
+RSS formats are fairly widely used, from news sites to blogs (all blogging platforms support, self-hosted or share-cropped), through ecommerce or classified sites such as Craisglist, though there have been [[#Shutdowns|shutdown]] in recent years.
+
+RSS formats are fairly open (development/licensing processes/openness varies across variants) yet all encourage an open feed file ecosystem across the web which means that every application can produce or consume RSS feeds, without relying on terms of service, agreements or service-centric API.
+
+== IndieWeb Examples ==
+{{see_also|Atom#IndieWeb_Examples|Atom IndieWeb Examples}}
+
+=== Dan Lyke ===
+{{danlyke}}'s site flutterby.com has an RSS 1.0 (RDF) feed at http://www.flutterby.com/main.rdf 
+
+=== Known ===
+All [[Known]] sites provide an RSS 2.0 feed for any page or feed by adding ?_t=rss to the URL. e.g. 
+* {{benwerd}} on http://werd.io/?_t=rss
+
+=== Malcolm Blaney ===
+[[User:Unicyclic.com_mal|Malcolm]]'s site unicyclic.com provides RSS feeds for new posts and comments. It also supports [[rssCloud]] to register for updates. Any feed will only show updates for the last 24 hours, with the expectation being that subscribers and aggregators will store historical content if they want to. A period of 24 hours was chosen so that feed items could be edited by the author and re-syndicated.
+
+=== ... add more ... ===
+Add yourself . . .
+
+== Projects ==
+* {{snarfed}}'s [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] fetches and converts [[Facebook]], [[Twitter]], [[Instagram]], and [[Google+]] data to and from RSS, as well as other formats like [[ActivityStreams]] and [[microformats2]] HTML/JSON.
+
+== Silo Examples ==
+=== [[Flickr]] ===
+To get the feed of a single person use:
+https://api.flickr.com/services/feeds/photos_public.gne?lang=en-us&format=rss_200&id=USERID.
+
+Unfortunately, the USERID is not the username, and to get the actual ID you either need to need to use the Flickr API or visit a 3rd party service, like http://idgettr.com/.
+At least you can specify set IDs as well to follow, the details are at https://www.flickr.com/services/feeds/.
+
+There is also a way to get the feed of everyone you follow:
+https://api.flickr.com/services/feeds/photos_friends.gne?lang=en-us&format=rss_200&id=USERID
+but in this case, USERID should be your own ID.
+
+There is a documentation on this at https://www.flickr.com/services/feeds/.
+
+=== [[deviantArt]] === 
+
+http://backend.deviantart.com/rss.xml?q=gallery%3AUSERNAME.
+
+"gallery:" becomes "gallery%3A" due to the URL encoding; only replace the USERNAME with the deviantArt username.
+
+=== [[Tumblr]] === 
+
+http://USERNAME.tumblr.com/rss
+
+===  [[WordPress]] === 
+
+WordPress ( both .com and hosted sites ) nearly always have RSS feeds for the site, for the categories, the tags; even for comments, sitewise and per entry.
+
+Examples:
+full site feed
+    http://USERNAME.wordpress.com/comments/feed
+full comments feed
+    http://USERNAME.wordpress.com/comments/feed
+category feed
+    http://USERNAME.wordpress.com/category/CATEGORYNAME/feed
+post specific comments feed
+    http://USERNAME.wordpress.com/URL/TO/THE/POST/feed
+
+=== [[Blogspot.com]] === 
+
+http://USERNAME.blogspot.com/feeds/posts/default
+
+=== [[500px]] === 
+
+https://500px.com/USERNAME/rss
+
+=== [[Behance]] ===
+
+https://www.behance.net/USERNAME.xml
+
+
+=== [[Pinterest]] ===
+
+http://www.pinterest.com/USERNAME/BOARDNAME.rss
+
+
+=== [[Instagram]] ===
+Only trought 3rd pary [http://websta.me], but it works.
+
+http://widget.websta.me/rss/n/USERNAME
+
+=== [[last.fm]] ===
+
+http://ws.audioscrobbler.com/1.0/user/USERNAME/recenttracks.rss
+
+For other feeds, like loved tracks, see [http://www.last.fm/api/feeds].
+
+== Praise ==
+Praise for RSS, example uses:
+* 2013-03-14 Brent Simmons: <cite>[http://inessential.com/2013/03/14/why_i_love_rss_and_you_do_too Why I love RSS and You Do Too]</cite>
+
+== Issues ==
+=== Problems Consuming RSS ===
+There are many known problems consuming RSS feeds. See [[feed#Criticism]] for an extensive listing.
+=== Ambiguous Usage ===
+Use of the term "RSS" in conversation, whether online or in-person, has been ambiguously and interchangeably used to mean:
+* RSS 2.0 in particular (implying all other versions of RSS aren't actually RSS, or are ignorable, or both)
+* RSS feed files of any version
+* RSS feed files of any version AND Atom feed files of any version
+* as a synonym for a feed file of any format
+
+== Criticisms ==
+=== Causes Plumbing Misfocus ===
+Discussion of RSS in the context of indieweb or openweb etc. typically causes everyone involved in such communication to shift their thinking / conversation to be [[plumbing]]-centric (since RSS is a format, not a user feature), instead of user-centric.
+
+This is at the opportunity cost of discussing actual user-level features, such the features and levels in [[IndieMark]], and against generally agreed upon IndieWeb [[principles]], in particular:
+* '''UX and [[design]] are more important than protocols and formats.'''
+
+Solution: refocus the discussion on use-cases.
+
+When someone asks "Why don't you support RSS?" or requests "Please use RSS":
+
+Ask them, "What's the use case you're trying to solve?"
+
+Then document the use-case, and how you're solving it with [[building blocks]] on your own website.
+
+And keep the discussion focused on use-cases, rather than [[plumbing]].
+
+See [[proof of work]] for some techniques to keep discussion focused on [[UX]], use-cases, and other indieweb [[principles]]
+
+=== Feed File Criticisms ===
+{{main|feed_file#Criticism}}
+RSS variants are all [[feed file]]s, thus all the [[feed_file#Criticism|feed file criticisms]] apply as well.
+
+== Alternative ==
+Instead of publishing/consuming RSS:
+* Publish [[h-entry]] in your HTML. See http://indiewebcamp.com/ for more
+* Consume [[h-entry]], e.g. with a [[microformats2]] parser
+* Use a tool like [[unmung]] to convert RSS into h-feed.
+
+When using such alternatives, you should consider RSS or Atom's ubiquituous nature. Very few readers support Microformats at this point, compared to the thousands of self-hosted RSS feed readers.
+
+== Shutdowns ==
+{{main|feed#Shutdowns}}
+This section specifically documents shutdowns or dropping of support for RSS feed files on sites, whether indieweb, corporate, and/or silos.
+=== 2015 ===
+* {{kartikprabhu}} dropped his RSS (version unknown) feed file [https://kartikprabhu.com/notes/no-rss on 2015-02-10]
+
+
+More shutdowns are documented in [[feed#Shutdowns|feed shutdowns]].
+
+== History ==
+See the [http://en.wikipedia.org/wiki/RSS Wikipedia article on RSS] for a more thorough history.
+
+This section is a stub, please add to it to expand it to include notable events in the development of RSS.
+* …
+* 1999-2003 [https://web.archive.org/web/20080724042422/http://diveintomark.org/archives/2004/02/04/incompatible-rss the 9 incompatible versions of RSS]
+* 2000-07 to 2000-11 [http://www.diveintomark.link/2002/history-of-the-rss-fork The Great RSS Schism]
+* 2000-12-06 [http://web.resource.org/rss/1.0/spec RSS 1.0] was [http://web.resource.org/rss/1.0/ published].
+* 2002-09-06 [http://scripting.com/2002/09/06.html#The%20road%20to%20RSS%202.0 RSS 2.0 announced]
+* 2002-09-06 [http://www.aaronsw.com/weblog/000574 RSS 3.0 announced]
+* ...
+* 
+* 2003-2007 [[Atom#RSS_Atom_wars|RSS Atom Wars]]
+* ...
+
+== See Also ==
+* [[h-entry]]
+* [[microformats2]]
+* [[plumbing]]
+* [[feed file]] / [[Atom]]
+* [[sidefile antipattern]]

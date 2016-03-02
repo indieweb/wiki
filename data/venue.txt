@@ -1,0 +1,121 @@
+http://indiewebcamp.com/venue
+
+{{stub}}
+
+A '''<dfn>venue</dfn>''' is a named [[location]] or address/[[geo]] that is typically used for [[checkins]].
+
+<dfn>indieweb venues</dfn> are the practice of self-hosting checkin venues (<dfn>self hosted venues</dfn>) on your own site with your own URLs.
+
+== Indieweb Examples ==
+=== Barnaby Walters ===
+{{barnabywalters}} has been publishing venue data on [http://waterpigs.co.uk waterpigs.co.uk] since 2014-08-19, consisting of:
+* an index of venues, listed and plotted on a map on [http://waterpigs.co.uk/places/ waterpigs.co.uk/places/]
+* each venue has a URL with h-card containing name, address details, tags, map, review and URLs e.g. [http://waterpigs.co.uk/places/basilica-di-santa-maria-maggiore/ waterpigs.co.uk/places/basilica-di-santa-maria-maggiore/]
+* A publicly-visible (soon-to-be-[[micropub]]-app) [http://waterpigs.co.uk/places/new/ venue creation UI] including a map UI with geolocation and venue search powered by [[Nominatim]]
+
+=== gRegor Morrill ===
+{{gRegor}} has been publishing venues on gregorlove.com since 2015-11-12. Currently publishing each venue name, address, and URL with [[h-card]]. The [[event]]s I publish then link to this URL to indicate the location.
+* Example: http://gregorlove.com/venues/mount-baker-theatre-bellingham/
+
+=== rhiaro ===
+{{rhiaro}} has been publishing 'venues' on at [http://rhiaro.co.uk/locations rhiaro.co.uk/locations] since 2015-12-29. They're not real places, but a list of vague places I check in to (home, office, etc). Only contain name and description. Marked up with h-cards but also available as ActivityStreams2 Collections in [http://rhiaro.co.uk/locations?format=json JSON-LD] and [http://rhiaro.co.uk/locations?format=ttl turtle]. My checkin app [https://apps.rhiaro.co.uk/burrow burrow] reads this list to present me with buttons to tap to check in.
+
+== Past Examples ==
+Past examples of venues.
+=== Kyle Mahan ===
+{{kylewm}} used [[Red Wind]] to publish venue data on kylewm.com from 2014-10-26 (and manually backported venues to older location-only checkins) [https://kylewm.com/2016/01/moving-kylewmcom-to-known-indieweb until 2016-01-19], e.g.
+* https://kylewm.com/venues/mozilla-sf-san-francisco-california
+[[File:redwind-venue-permalink-2015.png|700px]]
+Consisting of venue properties:
+* name
+* "geo" - locality, region
+* map
+* list of links to other posts that reference that venue permalink, e.g. [https://kylewm.com/2014/08/at-mozilla-for-homebrew-website-club checkin] and [https://kylewm.com/2015/04/homebrew-website-club-1 event] posts.
+Red Wind maintains its own small database of venues (e.g. https://kylewm.com/venues). When creating a new checkin, it does a very simple exhaustive search to find the 10 nearest venues that have been checked into previously. e.g.,
+[[File:redwind-check-prompt-2015-04-10.png]]
+
+== How To ==
+=== How To Publish ===
+Give each venue a URL containing a basic [[h-card]].
+
+==== Extensions ====
+Possible extensions (encountered by indieweb community members in real world situations)
+* hours open (related format effort: http://microformats.org/wiki/opening-hours )
+** +1 [[User:Tantek.com|Tantek]]
+* subsets of hours open, i.e. more generally,  hours *foo*
+** happy hours (discounted cover, drinks, and/or food)
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that food is served
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that kitchen is preparing food (as opposed to readymade / microwaveable food)
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that full food menu is available
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that evening-only food is available
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that "breakfast" dishes are served
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that espressos are served (some cafes start shutting down their espresso machines early, or bars too)
+*** +1 [[User:Tantek.com|Tantek]]
+** hours that a customers-only bathroom is open (e.g. at some gas stations [https://foursquare.com/item/50df576ae4b0073ea8eaa235])
+** current silo workaround (and future possible syndication)
+*** Foursquare tips attached to those venues. 
+*** Indieweb transition strategy: import said Foursquare tips semi-automatically into indieweb venue URLs when said URLs exist and have rel-alternate URLs to equivalent Foursquare venues.
+
+=== Cross-site Venue Checkin UX Flow ===
+# User A publishes a checkin on their indieweb site, with the venue marked up as an h-card (and possibly a link to a venue URI on the same site)
+# User B is in the same area and sees the checkin. They decide to go to the same place.
+# User B has a browser extension which parses checkin pages for h-card markup, and displays a “Check in to this venue on your site” button. They click it.
+# User B is redirected to a form on their site for the creation of a new venue, auto-filled with information about the venue provided by the h-card
+# User B checks in to their copy of the venue on their own site
+
+Potential enhancements:
+
+* Perform venue creation and checkin in the same step
+** Example Implementation: automatically add machine tags to the checkin note with venue data, then have an event listener which picks up that the tagged venue doesn’t yet have a URI, and creates it
+* Link between venue pages on separate sites
+** Provides a decentralised yet consistent way to refer to a venue
+** Could allow an update to a venue on one site to trigger updates on other sites
+
+=== Opinions ===
+<blockquote>I'd rather post a check-in on my own site, and have it use a venue URL that is *also* on my own site. Then at that indieweb venue URL, it can link to equivalents on Foursquare, OSM, FB, and whatever other centralized venue databases are created in the future. - [[User:Tantek.com|Tantek]] [http://indiewebcamp.com/irc/2012-12-29#t1356810217] </blockquote>
+
+...
+
+== Brainstorming ==
+=== Finding silo venue equivalent ===
+How to find a silo venue URL equivalent, i.e. "How would you find the FB version of a venue?"[http://indiewebcamp.com/irc/2015-09-01#t1441139504221]
+
+Use-case: Using [[Bridgy]] Publish to [[POSSE]] an indieweb post with [[location]] information and have the location information propagate to the POSSE destination[https://github.com/snarfed/bridgy/issues/317] (in particular [[Facebook]][https://developers.facebook.com/docs/graph-api/reference/v2.2/user/feed], and/or [[Twitter]][https://dev.twitter.com/rest/reference/post/statuses/update]
+
+Possible solution:
+* Your own venue URLs's representative h-card have u-url venue equivalent URLs for [[Foursquare]], Facebook, Twitter etc.[http://indiewebcamp.com/irc/2015-09-01/line/1441139549972]
+* Bridgy could read that representative h-card, see if any its u-urls were on the domain of the POSSE destination, if so, use it to determine the location information for the POSSE destination[http://indiewebcamp.com/irc/2015-09-01/line/1441139567867]
+
+=== UI for venues with silo equivalents ===
+The challenge is making a non-insane UI for [http://indiewebcamp.com/irc/2015-09-01/line/1441139584011]
+* creating that original venue with links to silo equivalents
+* publishing a [[check-in]] (or other post with location info) that itself must create a new original venue as well
+
+Possible solutions:
+* Start with "just add the markup to the text directly" UI[http://indiewebcamp.com/irc/2015-09-01/line/1441139610979]
+* 90% case: import your [[Foursquare]] and [[Facebook]] checkin history and create indie venues for all silo venues from the import. Then since most of the time you visit where you've already been, this handles the indie venue / silo venue connection for that part.
+* Interesting case: new venues
+
+See also:
+* https://snarfed.org/indie-checkin-flow
+* [https://github.com/snarfed/ownyourcheckin owndyourcheckin] / ownyoursquare
+
+== Centralized venues ==
+Examples:
+* [[Foursquare]] venues
+* Open Street Maps venues
+
+=== Criticisms ===
+==== Data loss ====
+Experience with Foursquare's "community generated/patrolled venues database" is that a few griefers can pollute/damage the data quite badly, with deletions, overmergings etc. Sad to say, same thing happens with Wikipedia (excessive deletions, overmergings). Thus little hope that a "community hosted venues database" wouldn't have all the same problems, if not worse.
+
+== See Also ==
+* [[2012/Open_Checkins#Venue|2012 IndieWebCamp Open Checkins Venue discussion]]
+* [[checkin]]
+* [[location]]

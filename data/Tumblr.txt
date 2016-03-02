@@ -1,0 +1,297 @@
+http://indiewebcamp.com/Tumblr
+
+{{pagelogo|https://pbs.twimg.com/profile_images/378800000576211895/94a4a4b25f5d692cb836baf74b9e64b1_200x200.png}}
+
+'''<dfn>[http://tumblr.com Tumblr]</dfn>''' is a popular content hosting [[silo]], especially for found [[images]] & [[video]], that explicitly supports multiple types of [[posts]], and through free domain mapping, a [[content hosting service]] as well.
+
+== Post types ==
+:''See also'': [[Posts#Kinds of Posts]]
+
+* text
+* photo
+* quote
+* link
+* chat
+* audio
+* video
+
+== How to ==
+There's a lot you can do with Tumblr and the IndieWeb, the "how tos" here are clustered into two chunks, first, as how to use Tumblr as an domain aliasing [[web hosting]] provider. The second cluster is for if/when you have your own site independent of Tumblr, and want to (still) interact with posts / people on Tumblr.
+
+These two major clusters are separated by how to "Export", which you'll want to use as part of switching from Tumblr as a web host, to more independent [[web hosting]], and subsequent usage of your Tumblr as merely a [[POSSE]]/[[backfeed]] proxy.
+
+=== Use your own domain ===
+See: https://www.tumblr.com/docs/en/blog_management#customdomain
+
+Some key things:
+
+* Go to http://tumblr.com/settings/blog/(username) where "(username)" is your Tumblr username.
+* Click the pencil next to the username block.
+* Toggle the switch that says "Use Custom Domain"
+* Enter your domain name in the text box
+* Click Save
+* Change your A Record to 66.6.44.4 (Tumblr's IP Address) '''Note''': It may take up to 72 hours to change.
+
+=== Add rel-me links and use IndieAuth ===
+On your Tumblr page, click the Customize button, then add [[rel-me]] links as HTML directly in the Description section. [http://www.scottbuehler.com/social-media/ultimate-guide-google-authorship/#tumblrauthor More details.]
+
+You can use this snippet to do so:
+<pre><code>
+{block:Description}
+<meta name="description" content="{MetaDescription}" />
+-<a href=" --Link to Site Goes Here--" rel="me">--Site Name Goes Here--</a>
+{/block:Description}
+</code>
+</pre>
+
+=== Add microformats support ===
+Tumblr has documentation on [http://www.tumblr.com/docs/en/custom_themes How to create a custom HTML theme] which you can use to add [[microformats]] support, especially [[h-entry]] and [[h-card]].
+
+There is a [https://gist.github.com/tantek/ac27fb0f28c41c4fb2a7 indie web version theme] already marked up that you can use. Click on the Edit HTML button and copy and paste this over the existing html.
+
+# Go to your Tumblr URL, e.g. yourname.tumblr.com
+# Click the person icon 👤 (in top right)
+# Choose "Edit appearance" from the drop down menu
+# Scroll a bit and click the [Edit theme] button
+# Click the (Edit HTML) button
+# add [[h-entry]]
+## scroll down and find all instances of <code>&lt;article class="single_post"&gt;</code>
+## change them to <code>&lt;article class="single_post h-entry"&gt;</code>
+## scroll down and find all instances of <code>class="post_date"</code>
+## change them to <code>&lt;div class="post_date dt-published"&gt;</code>
+## you may need to update their contents to publish the date and time in ISO format, using the value class pattern etc. These macros may help with that: {Year}-{MonthNumberWithZero}-{DayOfMonthWithZero} {24HourWithZero}:{Minutes}:{Seconds}
+##  change href="{Permalink}" to: class="u-url" href="{Permalink}"
+##  change href="{permalink}" to: class="u-url" href="{permalink}"
+
+You can use the Link feature of Tumblr to send indieweb replies:
+
+Find the section starting block:Link and change it so it looks like this. 
+<pre>
+
+{block:Link}
+<article class="single_post_wrap">
+    
+    <article class="single_post h-entry">   
+
+        {block:Date}  
+        <h3 class="post_date dt-published">{TimeAgo}</h3>
+        {/block:Date} 
+
+                 
+        <h2><a class="u-in-reply-to" href="{URL}">{Name}</a></h2>
+   
+        {block:Description} 
+        <div class="description e-content" >{Description}</div>                                                                                                  
+        {/block:Description}
+
+</pre>
+
+To reply to something copy the URL and make it a tumblr link.
+You will need to manually send webmentions or sign up for [[Brid.gy]]
+
+You can also mark up your photos and photosets with microformats.
+
+Look for <code>img src="{PhotoURL-500}" alt="{PhotoAlt}"</code> and change it to: <code>img class="u-photo" src="{PhotoURL-500}" alt="{PhotoAlt}"</code>
+.
+
+==== Example Tumblrs with microformats ====
+The following Tumblrs have proper [[h-entry]] markup (per the above instructions) and thus may help as examples:
+* http://tantek.tumblr.com/  (also uses <code>&lt;link rel=author&gt;</code> for site and post [[authorship]]) 
+** Copy and paste from: [https://gist.github.com/tantek/ac27fb0f28c41c4fb2a7 indieweb tumblr theme]. 
+** Be sure to update "yoursite.example.com" to your own domain!
+* http://andthenitcametotheend.tumblr.com/ uses another [https://gist.github.com/tallus/43e09af02cbad58534a4 indieweb tumblr theme].
+* http://days.maybemaimed.com (uses [https://github.com/meitar/resting-crane-theme a free IndieWeb-ified Tumblr theme called "Resting Crane"])
+* http://belp.audio/ uses a [https://github.com/Belp-audio/IndieWebTumblr/blob/master/Template modified version of tantek's indieweb tumblr template].
+
+=== Add webmention support ===
+Tumblr doesn't have built in support for [[webmention]]s, but [[Bridgy]] can send, receive, and display webmentions for Tumblr blogs. You can also receive webmentions with [[webmention.io]] and [https://webmention.herokuapp.com/ webmention.herokuapp.com].
+* See https://www.brid.gy/about#blogs for more.
+
+==== Implementation Notes ====
+ 
+
+* Be aware that brid.gy does not parse your h-entries but rather the RSS feed of your Tumblr. 
+* To check how your Tumblr looks in rss, add /rss behind the URL of your tumblr post. 
+* Make absolutely sure to disable the 'Truncate RSS feed' option inside your Tumblr Template Editor, otherwise URLs will not be shown in the RSS and thus in Brid.gy and no Webmention will happen! 
+* Also note that Brid.gy takes about 3 hours to pick up your RSS feed from your Tumblr. So if you post something to check out whether it works and brid.gy does not show it, wait a few hours before you go consider more trouble-shooting.
+
+You might be interested to read 
+[[User:Belp.audio/MyTumblr|BELP's User Experience on Tumblr & Indieweb]] (non-technical)
+
+=== Post via Micropub ===
+It is possible to use [[Micropub]] clients like Quill to post to blogs on Tumblr using [[silopub]] as a bridge. Sign in to silo.pub, and follow the instructions to include the appropriate headers. Then you will be able to log in to any Micropub client using your Tumblr domain as your identity.
+* See https://silo.pub/ for more
+
+----
+
+=== Export ===
+Tumblr's v1 read API is blissfully simple to use although now deprecated. It returns custom XML but it is fairly straightforward to transform this into HTML etc.
+
+See [http://www.tumblr.com/docs/en/api/v1 documentation].
+
+[[User:Tommorris.org|tommorris]] ported most of his content over from Tumblr.
+----
+
+=== POSSE to Tumblr ===
+Tumblr used to be able to import an RSS feed; they removed this ability in 2011 according to [http://wiredpen.com/2011/06/21/tumblr-removes-rss-import-feature-becomes-far-less-useful/ "Tumblr Removes RSS Import Feature, Becomes Far Less Useful"].
+
+How are people [[POSSE]]ing to Tumblr today? Presumably using their API? Or email?
+
+==== silo pub to Tumblr ====
+[[silo.pub]] supports [[Micropub]] to Tumblr, thus if your server can act as a micropub <em>client</em>, it 
+can automatically POSSE your posts to Tumblr.
+
+IndieWeb Examples:
+* {{kevinmarks}} has been manually POSSEing some of his personal Known site posts to his Tumblr [http://known.kevinmarks.com/2015/does-edit-ui-affect-writing-style since  2015-05-11]. Examples:
+* http://known.kevinmarks.com/2015/does-edit-ui-affect-writing-style (original, but lacks rel-syndication link to Tumblr copy)
+** http://kevinmarks.tumblr.com/post/118736710410/does-editing-ui-affect-writing-style manual POSSE using [[Quill]] to Tumblr, lacks rel=original/canonical etc. [[permashortlink]] back to the original Known post.
+* {{kylewm}} maybe? (creator of silo.pub)
+
+==== Bridgy Publish POSSE to Tumblr ====
+[[Bridgy]] Publish does not yet support POSSE to Tumblr, but there is an open issue on it if you'd like to help make it happen!
+* https://github.com/snarfed/bridgy/issues/418 - POSSE posts ([[notes]], [[quotation]]s, [[photo]]s, [[video]]s, etc.) of various types to Tumblr
+* https://github.com/snarfed/bridgy/issues/272 - POSSE [[reply]]/[[responses]] to Tumblr permalinks, to Tumblr itself natively!
+
+==== POSSE Replies to Tumblr posts ====
+When posting a [[reply]] to a Tumblr post, the proper POSSE behavior should be to do a native reply (on Tumblr) of the post that you're reposting on your own site.
+
+See also and consider contributing to Bridgy Publish feature request for this:
+* https://github.com/snarfed/bridgy/issues/272
+
+IndieWeb community members doing this:
+* none so far (AFAIK)
+
+==== POSSE Replies to Tumblr ====
+When you do a [[reply]] to an indieweb post:
+* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
+* if there is such a [[rel-syndication]] hyperlink with href linking to a Tumblr.com post URL
+* then
+** do a native reply of that Tumblr post URL on Tumblr itself
+* end if
+
+==== POSSE Reposts of Tumblr posts ====
+When posting a [[repost]] of a Tumblr post, the proper POSSE behavior should be to do a native repost (on Tumblr) of the post that you're reposting on your own site.
+
+See also and consider contributing to Bridgy Publish feature request for this:
+* https://github.com/snarfed/bridgy/issues/272
+
+IndieWeb community members doing this:
+* acegiak is doing this as of 2014-050 per claim[http://indiewebcamp.com/irc/2014-02-19/line/1392813763]
+** Example of original repost: [http://acegiak.machinespirit.net/2014/02/20/john-greens-tumblr-nevverjorge-luis-borges/]
+** Example of POSSE repost on Tumblr: [http://acegiak.tumblr.com/post/77227657347/nevver-jorge-luis-borges-this-is-a-lesson-i]
+
+'''Considerations:'''
+Reblogging specifically has to be done through the [http://www.tumblr.com/docs/en/api/v2|tumblrapi] which requires oauth and cannot be done through their email posting service. This is because posting a reblog requires the system to first api fetch the original post that is being reblogged to get it's "reblog_key" that must be sent with it's post id when making the reblog call.
+
+==== POSSE Reposts to Tumblr ====
+When you do a [[repost]] of an indieweb post:
+* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
+* if there is such a [[rel-syndication]] hyperlink with href linking to a Tumblr.com post URL
+* then
+** do a native repost of that Tumblr post URL on Tumblr itself
+* end if
+
+==== POSSE Favorites of Tumblr posts ====
+When posting a [[favorite]] of a Tumblr post, the proper POSSE behavior should be to natively "like" (on Tumblr) the Tumblr post that you're favoriting on your own site.
+
+See also and consider contributing to Bridgy Publish feature request for this:
+* https://github.com/snarfed/bridgy/issues/272
+
+
+IndieWeb Example(s):
+* {{t}} on tantek.com posts [[like]] post(s) of Tumblr posts, and then manually POSSEs those like post(s) using tantek-com.tumblr.com since 2015-07-30, e.g.
+** indie like: http://tantek.com/2015/211/f3
+*** manually POSSE (no permalink, just in [https://www.tumblr.com/liked/by/tantek-com stream of recently POSSEd Tumblr likes] - public but Tumblr login required)
+
+==== POSSE Favorites to Tumblr ====
+When you post a [[favorite]] of an indieweb post:
+* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
+* if there is such a [[rel-syndication]] hyperlink with href linking to a Tumblr post URL
+* then
+** natively "like" that Tumblr post URL on Tumblr itself
+* end if
+
+== PESETAS ==
+Getting data out of Tumblr is pretty easy as documented above. There is no need to get or use API keys or OAuth tokens or anything.
+
+This makes Tumblr a logical destination silo for a [[PESETAS]] setup.
+
+== Feeds ==
+Public feeds are available of Tumblr sites at the path "/rss", e.g.:
+* http://tantek.tumblr.com/rss
+
+== Porting to the IndieWeb ==
+=== Challenges ===
+* porting over content and maintaining URL redirects
+* porting over comments
+* porting over reblogs
+* porting over likes
+
+=== Export Your Posts ===
+* The Tumblr API provides XML and JSON for posts. The v1 API doesn't require authentication. [http://www.tumblr.com/docs/en/api/v1 documentation]
+* ...
+
+==== Mapping Tumblr post types ====
+Tumblr posts can be roughly mapped to IndieWeb posts as follows:
+
+; text : [[note]] or [[article]] (depending on length)
+; photo : [[photo]]
+; quote : [[quotation]]
+; link: [[bookmark]]
+; chat : ???
+; audio : [[audio]]
+; video : [[video]]
+
+== Users own their content ==
+The [https://www.tumblr.com/policy/en/terms-of-service Tumblr TOS] assert that users retain ownership and copyright over all content and IP they post. Details in section 6, Content and Subscriber Content. (Checked 2014-07-21.)
+
+== UI/process documentation ==
+
+=== Auto-syndication ===
+
+Tumblr allows users to set-up auto-syndication of Tumblr posts to Twitter. The UI used for this may be of some use to those implementing [[POSSE]] (although it isn't POSSE as Tumblr isn't your "own site", unless perhaps you're using Tumblr as an indieweb host for your domain). See [http://webapps.stackexchange.com/questions/15315/customize-the-message-tumblr-sends-to-twitter this Webapps StackExchange post] for details of the UI of Tumblr's Twitter syndication.
+
+=== Rich Text Editor ===
+
+In Tumblr's rich text editor, the formatting buttons appear when you highlight text. When the cursor is on a blank line, options to add media appear. Tumblr staff explained the thinking behind their editor in "[http://ministryofdesign.tumblr.com/post/116490088585/a-more-pleasant-post A More Pleasant Post]"; it launched sometime before [http://freyayuki.tumblr.com/post/110824604502/limitation-tumblr-text-post-editor 2015-02-13].
+
+== Criticisms ==
+
+=== Tumblr's Great Termination ===
+"Over the next week, the terminated teens created a huge Facebook group chat; its thousands of messages are filled with anguish and denial and regret: “They took away our lives,” and “The worst part is that everything was just ripped out from under us.” " [https://newrepublic.com/article/129002/secret-lives-tumblr-teens]
+
+=== Downtime ===
+* 2010-340 16:24:41-0800 (PST) "issue in ... [[database]] cluster" [http://www.flickr.com/photos/tantek/5331910087/ http://farm6.staticflickr.com/5046/5331910087_c25749d90b_z.jpg]
+
+=== Poor Quote Post Presentation ===
+In the dashboard view of your own [[quote]] post, it looks like you're quoting yourself, which is misleading:
+
+[[File:tumblr-quote-post-aaronpk.png]]
+
+=== Poor Repost Presentation ===
+Even worse, [[reblogs]] of a [[quote]] post look like they're being said by the reblogger, which is doubly indirectly wrong.
+
+[[File:tumblr-quote-reblog.png]]
+
+=== DMCA takedowns without merit ===
+* Like many of the other silos, Tumblr will comply to DMCA takedown requests quickly and without warning, regardless of their merit.
+** Randy McQueen filed numerous DMCA complaints with Tumblr in order to remove posts that were critical of his artwork (even though art criticism within Fair Use) [http://eschergirls.tumblr.com/post/93520850386/so-yesterday-i-found-out-that-randy-queen-artist]
+** [https://boingboing.net/2016/02/26/a-copyright-troll.html "A copyright troll took down one of our favorite Tumblrs."]
+[[File:tumblr_terminater_screen.jpg]]
+
+=== Blocked Feedreader Bloglovin ===
+* Tumblr has blocked at least one [[feed reader]] ([[Bloglovin]]) from accessing their [[feeds]] [http://venturebeat.com/2014/08/07/tumblr-blocks-bloglovin-fashions-number-one-rss-reader-with-25m-users/]
+** See [http://www.bloglovin.com/tumblr-update Tumblr blocks Bloglovin] (link dead on 2015-04-08)
+
+=== Primary vs Secondary blogs and contributors ===
+* Tumblr allows you to create multiple blogs from your account, but only the primary blog has the full features including follow, like, reply, ask, and submit. Secondary blogs cannot follow other blogs, like posts, ask questions to other users, or submit posts to other blogs.
+* Secondary blogs can have a team of contributors, but primary blogs cannot.
+* Secondary blogs cannot be turned into primary blogs
+* https://www.tumblr.com/docs/en/blog_management
+
+=== Accessibility ===
+* Tumblr's "rich text" editor has no way to add <code>alt</code> text to pictures; you have to switch to the HTML editor and dig in their markup (as of at least 2015-04-17).
+* Search results (e.g. https://www.tumblr.com/search/Rich+Text+Editor) require Javascript, and tag pages (e.g. https://www.tumblr.com/tagged/rich_text_editor) appear broken without it, showing only a few entries (as of at least 2015-04-17).
+
+== See Also ==
+* [[silos]]

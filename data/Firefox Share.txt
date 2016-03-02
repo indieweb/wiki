@@ -1,0 +1,88 @@
+http://indiewebcamp.com/Firefox_Share
+
+{{stub}}
+
+'''<dfn>Firefox Share</dfn>''' is a new toolbar button (Firefox 23 and later) to [[share]] the current page to a share provider of the user’s choice.
+
+It is possible to perform any other [[webactions|action]] ([[reply]], [[like]], [[repost]]…) with the page, but the button is labelled "Share," and most providers implement sharing.
+
+The "Share" toolbar button is represented as a paper airplane icon.
+
+https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Social_API/Guide/Share
+
+Clicking the button gives you an option of sharing the current page to whatever share providers you have installed. If you don't have any installed, it has a link to the [[Firefox Activations|Activations Directory]] where you can install share providers for various services, including:
+* [[Known]] - a share service that lets you use any Known installation, on withknown.com, or your own server.
+
+== Why ==
+By setting up a Firefox share social provider for your site, you can then post a page directly from the Firefox toolbar to your site.
+
+== How to ==
+Use [https://myfreeweb.github.io/foxshare/ FoxShare] to add [[Quill]], [https://micropublish.herokuapp.com Micropublish] or any other web page to the Share button.
+
+== Under the hood ==
+The Share button is part of the [[Firefox Social API|Social API]].
+
+API example:
+* https://github.com/mixedpuppy/socialapi-demo [https://socialapi-demo.paas.allizom.org/ Demo Social Provider]
+Social API Documentation:
+* https://developer.mozilla.org/en-US/docs/Social_API
+
+== IndieWeb Examples ==
+* {{benwerd}} uses the [[Known]] share provider to share from Firefox to his site werd.io.
+* {{myfreeweb}} uses the [https://micropublish.herokuapp.com Micropublish] share provider, added with [https://myfreeweb.github.io/foxshare/ FoxShare], to share from Firefox to their site unrelenting.technology.
+
+== Additional Open Source Examples ==
+=== Diaspora ===
+There's a share provider for [[Diaspora]] on staging:
+* https://activations-dev.allizom.org/en-US/diaspora.html
+
+Since its UI requires the user to choose a pod or personal Diaspora instance to proceed, it could be used as inspiration for a Micropub share provider as well. 
+
+== Brainstorming ==
+=== Micropub share provider ===
+It would be great to have a Firefox share provider in the [https://activations.cdn.mozilla.net/en-US/ Activations Directory] that works with any [[micropub]] supporting IndieWeb site. It could work something like this:
+
+From your own site:
+* User navigates to the "Install Micropub Share Provider Page" on their own website
+** See https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Social_API/Manifest for a sample HTML page that provides a button to install a share provider
+* User clicks the "Activate Micropub Share Provider" button
+* Page posts a "ActivateSocialFeature" event with the JSON data of the share manifest
+* Firefox provides a dropdown asking the user if they want to activate it "Would you like to enable services from ..." with a button (Enable Services)
+* User clicks (Enable Services) - Firefox installs that share manifest
+
+That's it. Now clicking the share (airplane) icon will drop down a UI rendered by your website from the "shareURL" property in the share manifest with the following <nowiki>%{url}</nowiki>, <nowiki>%{text}</nowiki>, etc. properties as documented in https://developer.mozilla.org/en-US/docs/Mozilla/Projects/Social_API/Share#Share_URL_Template
+* url, medium, source, sitename, title, description, text, image
+Equivalent to microformats properties:
+* u-url, ??? type on a href, og:type ???, u-video | u-audio, ???, p-name, p-summary | p-description, p-content, u-photo
+
+Once activated from the toolbar:
+* The shareURL that the user's site renders provides a sign-in UI (assuming they're not already signed-in)
+** The user signs-in with IndieAuth as they would on their own homepage
+* The shareURL provides a UI for posting the information from the page to the user's website, using GET query params for the information from the site as documented above as the shareURL.
+
+
+
+OR - from the Mozilla [https://activations.cdn.mozilla.net/en-US/ Activations Directory]
+* User installs "Micropub" share provider from Activations Directory
+* Choosing the "Micropub" share provider drops down a UI page from a micropub sign-in proxy (maybe at indiewebcamp.com) with a URL field for the user to enter their own site
+* The micropub share provider does micropub discovery on the user's site
+* Then same steps above as "Once activated from the toolbar"
+
+
+==== Micropub Next Steps ====
+# Get one indieweb site working with its own activation UI/page
+# Get a second indieweb site working with its own activation UI/page
+# Figure out how to build a micropub proxy activation UI/page that can forward onto either of those first two indieweb sites, by them just entering their site URL, and following micropub/indieauth sign-in
+# Have the micropub proxy remember (with a cookie) what was the user's personal site URL, and either present a simple sign-in button where it uses the site they used before, or a text field to enter another site.
+# Get that micropub proxy activation UI/page included in the Firefox [https://activations.cdn.mozilla.net/en-US/ Activations Directory]
+
+After that any Firefox user should be able to install that micropub proxy activation provider, enter the micropub-supporting indieweb site URL, and use Firefox Share to post to their own website via micropub.
+
+== Activations Directory ==
+Sample templates from the [https://activations.cdn.mozilla.net/en-US/ Activations Directory]:
+* https://github.com/mixedpuppy/socialapi-directory/blob/master/templates/data-en.json
+
+== See Also ==
+* [[Firefox]]
+* [[Firefox Activations]]
+* [[Firefox Social API]]

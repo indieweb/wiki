@@ -1,0 +1,70 @@
+http://indiewebcamp.com/comment-propagation
+
+{{stub}}
+
+'''<dfn>comment propagation</dfn>''' was the original idea and method conceived for a way of having comments on a post, like a reply post, get propagated up to the post that reply post was in-reply-to — this is now known as '''[[salmentions]]'''.
+
+How we send comments to posts that are themselves comments upstream to the root post?
+
+== Brainstorming == 
+
+This is how I'm hoping it will work &mdash;[[User:Sandeep.io|Sandeep Shetty]]
+
+# Alice publishes a post.
+# Bob comments on Alice's post and sends Alice a webmention.
+## Alice picks up the comment from Bob and displays it on her site.
+# Charlie comments on Alice's post and sends Alice a webmention.
+## Alice picks up the comment from Charlie and displays it on her site along with Bob's comment.
+## Bob is not notified of Charlie's comment and vice-versa.
+# Dave comments on Bob's post and sends Bob a webmention.
+## Bob picks up the comment from Dave and displays it on his site and then sends Alice a webmention.
+### Alice picks up the comment from Bob (again) but this time also picks up it's child (Dave's comment) and displays the thread on her site.
+# Jack comments on Dave's comment on Alice's site. Since Alice's post is the root no webmentions are sent.
+## Dave and Bob are not notified of Jack's comment.
+# Frank comments on Jack's comment on Bob's site for which Bob sends a webmention to Alice.
+## Alice picks up the comment from Bob (again) but this time also picks up it's child (Dave's comment) and it's child (Jack's comment) and it's child (Frank's comment) and displays the thread on her site.
+## Jack and Dave are not notified of Franks comment.
+# Alice replies to Bob's comment and sends Bob a webmention.
+## Bob picks up Alice's comments and displays it on his site.
+# Bob replies to Alice's comment and send Alice a webmention.
+## Alice picks up Bob's comment and displays it on her site.
+
+
+----
+
+
+Visualizing the above comment thread
+* Alice
+* Bob
+** Dave
+*** Jack
+**** Frank
+** Alice
+*** Bob
+* Charlie
+
+== Issues ==
+
+* What happens if Jack answers Daves comment using a comment form on Alices site? &mdash;[[User:Notizblog.org|Matthias Pfefferle]]
+* What if alice is answering bob and bob is once again answering alice and so on &mdash;[[User:Notizblog.org|Matthias Pfefferle]]
+
+
+----
+
+This is going to get complex quickly and it’s debatable just how useful storing a copy of every comment on any comment to your posts, recursively. Is it a) possible to implement in an easy way and b) does it actually enrich your content, or just clog it up with noise?
+
+My preferred solution would be for each post to store and link to the other posts one degree of separation away from it, then build the crawling smarts into the reading client, or a service specifically for viewing the whole of a distributed conversation. Given a post URI, the service would:
+
+* crawl any in-reply-to links recursively
+* crawl any comment links recursively
+** for each in-reply-to or comment link, grab the content, and author, crawl any comment links and do the same for them. Display the whole conversation in a UI probably a bit like [[Branch]], make it really easy to traverse.
+* for every link, perhaps also crawl syndication links and look for conversations happening on silos, bring those into the viewer as well
+* create link previews for all the links within each post as you traverse the graph
+* add web actions to each post in the graph so any one can be replied to/liked/quoted/etc
+&mdash;[[User:Waterpigs.co.uk]]
+
+== See Also ==
+* [[salmentions]]
+* [[comments]]
+* [[comments-presentation]]
+* [[webmention]]

@@ -1,0 +1,46 @@
+http://indiewebcamp.com/Woodwind
+
+{{ stub }}
+'''<dfn>Woodwind</dfn>''' is {{kylewm}}'s minimalist open source indie [[reader]]. 
+* There is an instance running at https://woodwind.xyz/
+* Source code is [https://github.com/kylewm/woodwind on GitHub] 
+
+== Features ==
+* Support for [[h-feed]] and xml feeds
+* Login with [[IndieAuth]]
+* Post responses (likes, replies etc.) via different configurable mechanisms:
+** [[Micropub]]: likes and replies are posted directly to the user's site with minimal clicking.
+** [[indie-config]]: supply indie-actions for each entry, use javascript to configure the endpoints using web+action handler.
+** Configurable action URLs: configure actions and action urls in the user settings page. This is like indie-config but the configuration is stored in Woodwind instead of your web+action handler.
+* Stream-style, avoid feeling like checking [[email]] (constantly marking things as read and unread).
+* Low maintenance. I'm trying to keep the core code under ~500 lines, moving reusable pieces to libraries or flask extensions (e.g., https://github.com/kylewm/flask-micropub)
+** Well I still think this was a noble goal but I blew past it. LOC is closer to 1000 now.
+* Reply context for in-reply-tos h-entrys and tweets (via twitter-activitystreams and a special Twitter user @woodwind_reader that doesn't have access to anyone's private feeds)
+* Embed instagram photos, youtube, and vimeo content when text includes a link and no other embedded content.
+* Supports subscribing to [[Pubsubhubbub]] feeds (h-feed and xml) 
+* Websockets-based live updates using a Node.js proxy almost exactly copied from http://aaronparecki.com/articles/2013/10/13/1/realtime-indieweb-comments, thanks for documenting {{aaronpk}}!!
+** Probably need to improve the UI to hide updates behind a "# new posts" link like twitter.
+* http request caching[https://twitter.com/kylewmahan/status/646552503786471424]
+
+== Itches ==
+* Feeds that are successfully subscribed via PuSH and have received at least one update ping should be polled at a lower rate, 1x/day probably.
+* Show "liked" status if a post has been previously liked 
+** remember successful likes posted through woodwind, and poll the user's unfiltered h-feed to pick up the rest
+** alternative proposal: parse p-like on the target permalink. (This would not be good enough for the feeds I subscribe to... legacy xml feeds, proxied twitter stream, sites that do not publish comments like tantek.com, sites that pull in comments from an external service via javascript)
+* Support "unlike" a status that has been previously liked
+* Aggregate posts by the same author within some temporal window (probably by day)
+* Cluster simple posts (e.g. "like" posts on tantek.com)
+* Quick access to {facebook,twitter,instagram}-activitystreams.appspot.com to make it easy to subscribe to social network feeds.
+
+== Name ==
+A bad pun... woodwinds are "reed" instruments.
+
+== Screenshots == 
+
+[[File:woodwind-screenshot-2015-02-09.png|none|thumb|500px|Aggregate stream]]
+
+[[File:woodwind-settings-2015-02-09.png|none|thumb|500px|User-specific settings]]
+
+== See Also ==
+* [[reader]]
+* [[Red Wind]]

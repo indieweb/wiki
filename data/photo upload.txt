@@ -1,0 +1,63 @@
+http://indiewebcamp.com/photo_upload
+
+{{stub}}
+= photo upload =
+<dfn>Photo upload</dfn> is the act of creating a [[post]] whose primary content is a [[photo]], typically captured by a camera on the same device that is creating the post.
+
+== POSSE ==
+It is possible to [[POSSE]] photo uploads via silo-specific APIs to the following:
+* [[Facebook]]
+* [[Flickr]]
+* [[Wikimedia Commons]] - the API is somewhat complex and undocumented, but for some images that meet [http://commons.wikimedia.org/wiki/COM:SCOPE the project scope] and are licensed under free licenses (CC BY-SA, CC BY, CC0/PD or equivalent)
+** So long as images are not deleted, you are able to store images there indefinitely, hot link them and use Commons to retrieve scaled versions.
+
+== PuPuPu ==
+The popular mobile photo site [[Instagram]] deliberately lacks an API for uploads[http://instagram.com/developer/endpoints/media/]. However it does have an API for real-time notifications of uploads[http://instagram.com/developer/realtime/].
+
+This presents the opportunity to build a [[PuPuPu]] system with Instagram as a publishing client:
+
+* [[Instagram]]
+** -> real-time notification to (and post creation on) your own site 
+*** -> syndication with permalinks to:
+**** [[Facebook]]
+**** [[Flickr]]
+**** [[Twitter]]
+**** [[Wikimedia Commons]] (for photos you don't mind contributing as CC BY-SA, CC BY, CC0/PD or equivalent)
+**** ...
+
+Technically this would be Push-Push-Publishing, since the notifications from Instagram are done in real-time using the [[PuSH]] protocol.
+
+=== Implementations ===
+The [[OwnYourGram]] service enables you to use Instagram as a publishing client for posting photos to your own site.
+
+== HTML5 photo uploads ==
+HTML5 extends the input element to permit pages to declaratively attempt photo uploads with:
+* <code>&lt;input type="file" accept="image/*"&gt;</code>
+For documentation on how this works in browsers see:
+* [https://developer.mozilla.org/en-US/docs/HTML/Element/Input#Image_capture_from_cameras documentation of camera capture on developer.mozilla.org]
+
+== Mobile upload ==
+Until in-browser approaches mature, it may be necessary to use native apps (either tied to a service and then [[PESOS]], or a wrapper app around personal blogging web apps to provide camera functionality).
+
+=== HTML5 Mobile browser upload ===
+* [https://plus.google.com/115133653231679625609/posts/bWvt1eu4KAn The Current State Of Photo/Video Capture In Mobile Browsers]
+
+=== Other approaches ===
+* Email as possible approach? Most smart phones have an email client, and/or have "email this photo" support built-into their native/default camera applications. If you could set-up a custom email address (security through obscurity) on your own domain for receiving photo uploads, you could use that to "upload" photos, and then have your indieweb site POSSE out to the above-mentioned silos.
+
+* [[OwnCloud]] has an Android client which can upload new photos taken on the camera to your own installation,
+
+* Android [http://botsync.com/ BotSync] will watch a subdirectory on your phone and use the <code>scp</code> protocol to transfer new files in that directory to a server, but appears to have some issues with larger files (ie: video).
+
+* The Android app "FolderSync" appears to be a more full-featured alternative to BotSync.
+
+== Desktop upload ==
+Some browsers support uploading images from a laptop/monitor camera:
+* [http://www.w3.org/TR/html-media-capture/ HTML Media Capture] API — W3C Working Draft, implemented in Chrome desktop
+
+== See also ==
+* [[photo]]
+* [[post]]
+* [[POSSE]]
+* [[PESOS]]
+* [[PuPuPu]]

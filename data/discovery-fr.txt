@@ -1,0 +1,101 @@
+http://indiewebcamp.com/discovery-fr
+
+''Cette page a démarré sur [[discovery]]''
+
+{{stub-fr}}
+
+= Découverte =
+
+Sur l'IndieWeb, vous êtes votre URL et votre URL c'est vous. Avec un site indieweb bien conçu, en tant qu'humains, nous pouvons découvrir toute l'information vous concernant que vous choisissez de partager .
+
+Cette page est destinée à documenter et brainstormer les manières de découvrir automatiquement cette même information en suivant une combinaison de marquage sémantique et d'algorithmes.
+
+== Info de Profil ==
+Les sites IndieWeb typiques ont un profil et souvent de l'information de contact directement sur la [[home page-fr|page d'accueil]].
+
+Meilleure pratique de publication : marquez tout avec [[hcard-fr|hCard]], tout spécialement vos hyperliens vers les autres profils avec class="u-url url" et rel="me". Ceci créera une [http://microformats.org/wiki/representative_hCard-fr hCard representative] qui pourra ensuite être utilisée par d'autres sites. 
+
+Exemples dans la jungle : 
+* http://tantek.com/
+* ...
+
+La meilleure pratique d'analyse : une fois donnée une URL indieweb qui représente une personne, parsez-la pour une hCard représentative et utilisez cette hCard pour l'information concernant cette personne. Détails :
+* http://microformats.org/wiki/representative-hcard-parsing-fr
+
+== Page Contact Séparée ==
+Quelques sites indieweb ont une information de contact  sur une page ''séparée'' de la page d'accueil, mais liée à partir de la page d'accueil. Bien que de tels liens peuvent être évidents pour les humains, par ex. avec des étiquettes de texte comme "Contact" ou "À propos", ce n'est pas du tout évident pour les parseurs de savoir où trouver plus d'information.
+
+Les exemples de sites avec des pages de contact/à propos séparées : 
+* http://adactio.com/ - info de contact sur : http://adactio.com/contact/
+* ...
+
+Proposition 
+* Avec une nouvelle valeur 'rel' par ex. '''rel="contact-info"''', les parseurs pourraient découvrir de tels liens, suivez-les, et puis parser la destination pour trouver une hCard représentative.
+
+== Mises à jour ==
+La plupart des sites indieweb ont des mises à jour sur leur page d'accueil, un flux de mises à jour comme par ex. :
+* http://tantek.com
+* http://adactio.com
+
+Meilleure pratique de publication : marquez vos posts avec [[hatom-fr|hAtom]] (et idéalement aussi avec les microformats [[h-entry-fr|h-entry]]).
+
+Meilleure pratique de parsage : parsez l'URL donnée pour hAtom (et de préférence microformats2 [[h-entry-fr|h-entry]]).
+
+D'autres ont une simple page intro/contact pour leur page d'accueil, et fournissent des mises à jour sur une autre URL, par ex. :
+* ... vieil adactio.com
+* ... d'autres exemples actuels ? peut-être que des types qui ont uniquement une seule page de contact indieweb et puis font un lien vers une page séparée pour leur blog ?
+
+Proposition :
+* Avec une nouvelle valeur 'rel' par ex. '''rel="updates"''', les parseurs pourraient découvrir des liens vers les pages séparées "journal", "mises à jour", "notes", "flux" et puis parseraient celles-ci pour hAtom et h-entry.
+
+
+== Information sur le Post ==
+Pour découvrir l'information concernant un [[post-fr|post]] sur une page permalien du post : 
+* parsez la page pour [[h-entry-fr|hentry]] et retrouvez le nom du post, le résumé, l'url, les contenus et l'auteur.
+
+=== Paternité  ===
+* si l'auteur est aussi une [[h-card-fr|hCard]] parsez cela pour plus d'information concernant l'auteur comme name, photo, logo, url, etc.
+* s'il n'y a pas de p-author, alors cherchez un lien [[rel-author-fr|rel-author]].
+** suivez-le et retrouvez la h-card représentative à partir de la destination pour l'information sur l'auteur 
+
+== copies POSSE  ==
+Pour trouver les copies POSSE d'un post original, sur cette page permalien du post original : 
+* chercher les liens rel=[[syndication-fr|syndication]]
+* traiter leurs destinations comme des copies POSSÉes du post original
+
+== Post original ==
+Pour trouver un post original à partir d'une copie POSSÉe, sur cette page permalien de copie POSSÉe : 
+* suivez [[original-post-discovery-fr|découverte-post-orginal]]
+
+== Mises à jour en temps réel ==
+... rel=hub ... sur le lien vers le hub PuSh pour vos mises à jour.
+
+== Clés Publiques ==
+
+Pour un flux Salmon amélioré de découverte de clé (c'est à dire n'utilisant pas les fichiers XRD violant-le-principe-DRY et des identifiants cassant le web comme l'email) nous avons besoin d'exposer en quelque sorte des clés publiques.
+
+* http://microformats.org/wiki/hcard-brainstorming#key_property_for_webid
+* http://microformats.org/wiki/existing-rel-values#HTML5_link_type_extensions (spécifiquement la valeur <code>pgpkey</code>)
+* [http://microformats.org/wiki/public-key-examples Exemples sur la façon dont les personnes exposent leurs clés publiques dans la jungle]
+
+== Aide ou À propos ==
+HTML a la valeur rel="help", mais il n'est pas clair qu'elle convoie le type de ressources "about/à propos" vers laquelle vous faites le lien.
+
+=== Documentation IndieWeb ===
+Par exemple : 
+* Tom Morris a [http://tommorris.org/pages/indieweb-documentation documenté le support indieweb de son site] sur une page séparée.
+
+== Découverte existant ==
+Il existe un paquet de méthodes de découverte d'existants qui valent la peine d'être documentées, au cas où vous vouliez inter-opérer avec des systèmes existants qui dépendent d'elles.
+
+=== Flux ===
+... rel=alternate ... type=...+xml ...
+
+Nous devrions déprécier les flux séparés car 
+* les flux séparés ne sont techniquement pas nécessaires (hAtom ou h-entry sur le HTML visible fonctionne simplement bien).
+* les flux séparés violent le principe [[DRY-fr|DRY]]
+
+== Voir aussi ==
+* [[posts-fr|posts]]
+* [[POSSE-fr|POSSE]]
+* [[original-post-discovery-fr|découverte-post-original]]

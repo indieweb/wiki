@@ -1,0 +1,23 @@
+http://indiewebcamp.com/CORS
+
+{{stub}}
+
+'''<dfn>CORS</dfn>''' is an acronym for "cross-origin resource sharing," a mechanism for allowing browsers to make [[JavaScript]] requests to fetch resources from other domains.
+
+__TOC__
+== How ==
+Use amongst others the <code>Access-Control-Allow-Origin</code> and <code>Origin</code> HTTP headers. See eg. [http://en.wikipedia.org/wiki/Cross-origin_resource_sharing#Simplified_example Wikipedia] and [https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS Mozilla Developer Network] for more information until an example is added here.
+
+== History ==
+Before CORS people often used JSONP-requests to enable requests to other sites, but that required loading the data through an HTML-tag and for it to be wrapped in a JavaScript callback. That required JSONP-specific resources to be created, made it hard to utilize the strengths of the HTTP protocol and eg. do proper error management on HTTP error codes and also posed a security risk due to the fact that JavaScript from sites that were not always trusted had to be run for JSONP to work. Since CORS enables ordinary HTTP requests to be allowed, CORS doesn't suffer from these issues.
+
+== Issues ==
+* '''Session cookies''': If you have a dynamic site where some resources are either only made available for people with a session cookie or which contains personal information for them on an otherwise public site, then making that resource fetchable by other sites through CORS will make it possible for other sites to identify logged in users without them knowing it. One should therefore take extra care of which pages one allows to be fetched from other domains if one are using session cookies on the site. Other authorization mechanisms, like OAuth, where one has to explicitly send the user information with the request is preferable when paired with CORS.
+
+== See Also ==
+* [[JavaScript]]
+* [https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS Mozilla Developer Network]
+* [http://www.w3.org/TR/cors/ Cross-Origin Resource Sharing] specification
+* [https://unhosted.org/ Unhosted] and [http://remotestorage.io/ remoteStorage] communities
+* [http://client.cors-api.appspot.com/client test-cors.org] to test sending and receiving CORS headers
+* [http://enable-cors.org/resources CORS Resource list]

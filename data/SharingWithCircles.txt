@@ -1,0 +1,60 @@
+http://indiewebcamp.com/SharingWithCircles
+
+'''This page is fairly out of date / obsolete and left here for historical purposes.'''
+
+Please see:
+* ''[[private posts]]''
+
+
+----
+'''Scenario:'''
+I have a circle of contacts or friends I would like to see a post or some other info from my personal site. I want to have control over whether my post is public, and who can have access to read it.
+
+'''Tools that do this:'''
+* [[Diaspora]] comes closest, but I don't know if any personal tools can currently send messages to a user in a Diaspora pod.
+* [[OpenID]] + [[hCard]] have been implemented for private/limited sharing of personal info. For reading private / limited distribution content (e.g. personal info or messages) on an indiewebsite, there's also OpenID + hCard, which has been implemeneted by at least one individual (Tom Morris):
+** [http://microformats.org/wiki/openid-brainstorming#OpenID_whitelist_authentication_for_private_hCard OpenID whitelist authentication for private hCard] - though this example is for sharing a phone number and other private personal info, the same technique can be used to share a particular post.
+* [[IndieAuth]] + [[hCard]] have also been implemented for private/limited sharing of personal info.
+** I have implemented basic Indieauth-based access control on my notes ia auth tags (so I tag the content with auth:private=xyz.com and only myself and xyz.com can see it). I have not found a good way of notifying people that there’s private content available for them — pingbacks require the content to be public, perhaps using indieweb messaging would be more suitable --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:54, 25 February 2013 (PST)
+
+'''Technologies that might enable this:'''
+[http://microformats.org/wiki/openid OpenID] can be used to log into a personal indiewebsite URL and determine contact info from their [http://microformats.org/wiki/hcard hCard] (e.g. email).
+* Perhaps ask Tom Morris to share his code (PHP?) which supported this functionality on his own site a while ago.
+
+Webfinger and XRD could be used to find out what the appropriate contact endpoint for the user is. Diaspora currently uses this to provide info like the user's home pod and public key. Email (with or without encryption?) could be used as a fallback.
+
+Info on implementing Webfinger profiles: [http://hueniverse.com/2009/09/implementing-webfinger/]
+
+User XRD examples with some currently defined link types: [http://code.google.com/p/webfinger/wiki/CommonLinkRelations]
+
+Example Diaspora XRD:
+ <nowiki><?xml version="1.0" encoding="UTF-8"?>
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
+  <Subject>acct:reid@joindiaspora.com</Subject>
+  <Alias>"https://joindiaspora.com/"</Alias>
+  <Link rel="http://microformats.org/profile/hcard" type="text/html" href="https://joindiaspora.com/hcard/users/4d19647a2c17436a880021d1"/>
+  <Link rel="http://joindiaspora.com/seed_location" type = 'text/html' href="https://joindiaspora.com/"/>
+  <Link rel="http://joindiaspora.com/guid" type = 'text/html' href="4d19647a2c17436a880021d1"/>
+
+  <Link rel="http://schemas.google.com/g/2010#updates-from" type="application/atom+xml" href="https://joindiaspora.com/public/reid.atom"/>
+
+  <Link rel="diaspora-public-key" type = 'RSA' href="LS0tLS1CRUdJTiBSU0EgUFVCTElDIEtFWS0tLS0tCk1JSUNDZ0tDQWdFQTNH
+UjhncnVST3RINWh5NHBLcmlBNGFXZHF2YmJXdVdtTmtCV3dYVmRyNGtuUi9t
+ckdVRjYKcjlnaUNTOGxYTzdqcFI5SDNCREkxL0dZVnA4M2lwZGl1TUtSZUVL
+NXNIUWNiN2FVMGZDN25LWjVCT0tjaHJ1QQpWcXNQMnRVVWkrNUtuNmovTzZO
+Y0tiVzY1V21MUERhQ2JsR3Z4K1A2ZksvaGZQYjVOYnVmcmxsV2l4Z2NGSUsx
+Ckh0Qk94SG44YUh1eTNPUWtiaTFwby9nTXJzKzNtK2p4VjQ5Ri9oVzFmU2pL
+UThuaTJXN2tKeWVjS1gyUUpTb3gKZ1Zod2JTTk1xM0EzMWdDOVV5OXQrWlk5
+R05lTnhNR3Y4bjJNaEw2TkFNYXFsMVI3Z2FVYnZqRTVGVXc4UFBZcgpZcUtZ
+WW9yazhRYWFVeE1HRDBjRk1iejRURTdFQXduYlB3TDBmbWFrTTBaTlI1ZlFz
+aHc3cyt6bGVrajhkUDBvCmVoY2VEUHZJUVBGdjRZMDZncjAzd2x2QW1ZUUR5
+NjZKNzB0amhuRUxiWWZtSTBLdFpIUWQ0ZnlPRm5CRzRZTzYKODU5NThtdUJx
+S2diRE51Zk5rV1pjTUh4QUFIdlQ2WUdNdU5OWncvM0xVQmZxT0g3QlN1cWY2
+MHJxdDFGWWlRNgpuTkpjcjltenNXQno2aTAxNzAweGQzaXVzYzU3UllEVVgr
+SlZpcWNQRFlUSTVSMEF3VG5tQ3d1YTZwT3R0UVZFCnBrakFFVzV5RmhWSHNq
+NkZtY1dLaFA2dmZ1RndlTU8wWjRkL2FDUWRHdDgxOHBiby92ZVJWSE1BZFNL
+NnRKd1kKUTNWVCtWeWMzNnhBN0NiWDdJTUkvdWtEUG9LOFVGMnRQSU1pd3Jm
+b3MvOCs4L0tha3k2Q1hqOENBd0VBQVE9PQotLS0tLUVORCBSU0EgUFVCTElD
+IEtFWS0tLS0tCg==
+"/>
+</XRD> </nowiki>

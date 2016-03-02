@@ -1,0 +1,192 @@
+http://indiewebcamp.com/User%3AColintedford.com
+
+== Colin Tedford ==
+
+<dfn>Colin Tedford</dfn> is a [[generations|Generation]] 2 cartoonist (among other things).
+
+I'm not a technologist, but I maintain a few websites; I've had mine at [http://colintedford.com colintedford.com] since 2006-02-13 (it started as part of a collective site in 2004). Started off in Notepad, now on [[WordPress]], planning an eventual switch to something more flat & static. Never really warmed up to the silos (except [[LiveJournal]] which had a great comics community 'til most of them moved to [[Tumblr]] and [[Twitter]]). I found IWC in early 2014 or late 2013 (I think) but had interest in related stuff for a while before that.
+
+If there is anything useful to other people hiding in all the text on this page, it's probably [[#Note_names]].
+
+__TOC__
+
+=== IndieMark ===
+
+* Level 1: Complete except the microformat one. 0.8
+* Level 2: Halfway there. 0.5
+* Levels 3-5: Not so much yet.
+
+=== Current setup & practices ===
+
+* Software: [[WordPress]] since 2007-11-07 for main site (maybe earlier for former subsections).
+* [[post|Post]] types:
+** [[articles|articles]]
+** [[notes|notes]]
+** [[comics|comics]]
+** [[jams]] since 2014-10-10 (proto-jams since earlier)
+* [[POSSE]] to:
+**  [[Facebook]] manually since I signed up 2009-07-09 (also, I don't have a profile there, just a [http://www.facebook.com/pages/Colin-Tedford/231529070642 page]). This is my highest-priority silo because it's where most of my friends/followers are.
+** [[Twitter]] manually since 2015-01-15.
+** Comment forms manually since 2015-01-26.
+** [[Github]] issues (& in principal any other bug reports) manually since 2015-02-02 (backfilled thru 2014-12-11).
+* [[PESOS]] from Facebook manually since 2014-06-18 (just copying some older things I only posted there -- mostly Youtube music links)
+* [[backfeed|Backfeed]] from:
+** Facebook manually since 2014-06-18, copying new & old comments (POSSE-ing my replies to new FB comments). Leaving likes alone for now because displaying them isn't important to me, but I might want to collect them eventually & store them somewhere if it's easy.
+** [[Twitter]] manually since 2015-01-15 (in principal; hasn't come up yet).
+** Comment sections manually since 2015-01-26.
+** [[Github]] issues (& in principal any other bug reports) manually since 2015-02-02 (backfilled thru 2014-12-11).
+* Shortlinks (using [https://wordpress.org/plugins/custom-shortlink-structure/ Custom Shortlink Structure plugin] + cted.us [[short-domains|short domain]]). I want to use the [https://wordpress.org/plugins/shorter-links/ Shorter Links plugin] so Wordpress will display my shortlinks w/ my short url without requiring me to muck around, but I found a [https://wordpress.org/support/topic/redirect-bug-1?replies=1 redirect bug] in it. The bug has apparently been fixed ~7 months later (as of version 2.1.0); I haven't tried it out yet.
+
+=== Working on ===
+
+First I want to clear up some long-standing issues with my site, prepping it to migrate from [[WordPress]]. Will add IndieWeb inter-site stuff where it makes sense but right now I mainly want to improve the basic site presentation. I'm reluctant to add much new functionality until I've left Wordpress because I'll just lose it when I switch (or I'll delay switching because I feel obliged to re-implement).
+
+==== Post-WordPress markup ====
+* Merge my WordPress child theme w/ its parent theme so I can delete all the child code that reverses stuff in the parent (so I don't have to take it with me when I migrate). 
+* <s>Mockup post-WordPress site HTML, CSS, & UI. Use this (with tweaks as needed to template-ify) as template for post-WordPress system.</s> On hold for now as I'm doing a bunch of work on my Wordpress theme that I may want to keep post-WordPress.
+
+==== Better archives ====
+
+WordPress makes this harder than it should be >:-(
+
+* Make yearly archives into link lists.
+* Put monthly & yearly archives in chronological order even though it'd be inconsistent w/ the home page?
+* Eliminate the paginated archives & replace their links at the bottom of homepage w/ links to date, tag, & category archives.
+* Link from homepage to next archive back should go to the ID of either the oldest homepage post or the next-oldest post. Or I could put the current month plus the last full month on the homepage, so I'd always be able to just link to the month before that, but that seems excessive.
+* Figure out how I want to handle tag archives, since some might have too many entries for a single page. Maybe page them by date (conditionally?)? 2015-01-06: for now they display all on a single page; I have time before it becomes a problem.
+* ^ Ditto post-type archives (currently handled as Wordpress categories), which are closer to being a problem.
+* Comics archives:
+** Currently I have a main comics index organized by story (+ a couple oddball collections) that I update by hand. I want to make this automatic and style it better. In my current Wordpress setup that means listing all the "Comic" terms reverse-chronologically by date of most recent entry with that term.
+** From the main comics index, maybe link to the index for each story arranged chronologically on a single page with as little meta stuff as possible so readers can just scroll instead of clicking through each page. Research first, though, to see if which reading style gives better reading experience (e.g. less total time spent loading, or which "feels" smoother/faster, or if there are strong reader preferences).
+** Maybe include the comics navigation on posts when they appear in tag/time archives or on the homepage.
+** More prominent display of current in-progress comic, with preview and link to latest page.
+** Maybe small preview thumbnails? Might be nice to have, or might just clutter the design & increase load times (also, I don't want to make them).
+
+==== Note names ====
+
+To set the name of an untitled post for [[reader|readers]], slug, and <code><title></code> I want to take all the text up to the first "pausing" punctuation (comma, [semi]colon, dash, end-of-sentence). Inspired by the convention of referring to untitled poems by their first line (TODO: link to citations in IRC log), this satisfies the [[note#Note_Type_Algorithm|note type algorithm]] without the super-long names than can happen when name = content. Currently trying this out by hand, copying the text to Wordpress's title field and setting the p-name with a custom button (though I don't have h-entry set up yet). As of 2015-03-04 I've been doing this for a couple months & am pretty happy with the resulting post names. I'd like it to happen automatically, so I might take my willingness to ignorantly alter PHP code and try to make the [https://wordpress.org/plugins/auto-generate-title/ Auto Generate Title] plugin do it.
+
+More explicitly, I want the text
+
+* up to the first comma, period, colon, or semicolon that's followed by a space; or
+* up to and including the first exclamation point or question mark that's followed by a space; or
+* up to the first em dash or newline; or
+* up to the first space followed by a dash, double-dash, or em dash followed by a space;
+* up to the first space followed by a parenthesis (added 2015-08-27; need to test)
+
+whichever comes first.
+
+The dashes are kinda tricky; might miss html-encoded ones while checking plain text, but that's tolerable. I'm not sure how I want to deal w/ emoticons, though that's more an issue w/ the urls derived from the names than with the names themselves.
+
+==== URL scheme ====
+
+My current [[url-design|url scheme]] for [[permalinks]] is <code>/YYYY/MM/DD.HHMMSS-slug/</code> (e.g. <code>colintedford.com/2015/01/06.0549-ive-started-improving-my-archive-pages/</code>), chosen with algorithmic shortening in mind & preferring timestamp over sequential post number to match my personal log & allow for backdated posts. The slashes are placed with url hackability in mind; I plan to have archives by year and month but not by day, hour, etc. But these urls are a bit long for my taste and I've realized that instead I can give each post an unchanging, algorithmic-shortening-friendly full date permalink using ordinal days <code>/YYYY/DDD/HHMMSS</code> that redirects to a "nice" url of whatever scheme I please (current plan is <code>/YYYY/MM/slug</code>). If I ever change any urls I'll redirect all old versions to the full date permalink. I also plan to use content negotiation to ditch trailing slashes so I can have extensionless urls without requiring a zillion index.html files when I go flat-file. I'm thinking of putting replies in a folder below their parent post <code>/YYYY/DD/r/slug</code> (maybe not "r" but definitely a single letter). &larr; 2015-08-27: I now think replies should probably be top-level posts, but might still treat incoming posts differently if I get a lot of them.
+
+==== Backfill backfeed ====
+
+* [[LiveJournal]] comments manually (considering using the LJ Crossposter plugin option to turn off LJ commenting & direct commenters to the original post so I only have to collect the old ones. Not urgent since I don't get many comments there.)
+* Check if I posted anything only to [[LiveJournal]] that I care to import
+* [[Tumblr]] comments (ie. any added content from reposts) manually
+* Check if I care to import anything I only posted to [[Tumblr]]
+* Import whatever "posts" I can from the old static version of my site via the Internet Archive.
+
+==== Silo issues ====
+
+* Get Facebook to use the correct image for their link preview (instead of grabbing the one in my sidebar as it sometimes does). Starting point: https://indiewebcamp.com/Facebook#Image_used_in_link_preview
+* Get Facebook to use better text preview (was blank on my old theme; on current it erroneously includes date & title in body -- which I can't remove on the mobile web version). If I'm desperate I can use their proprietary "description" meta tag, but I'll try the generic one first (which I'm not wild about since I already have "classic" microformats, but whatever); surprisingly my theme doesn't generate one. Hopefully [[indiecard]] will help me find good defaults.
+
+==== Noise filter ====
+
+Since 2015-01-26 I hide my outgoing replies (including bug reports, though I'm not sure they count as "replies") from my homepage and show them at <code>colintedford.com/category/outbox</code> ("outbox" was "discussion" 'til 2015-02-25; "category" is a Wordpress artifact destined for the dustbin). This seems good enough for now since on average I post less than once a day. I'm saving my older thoughts below for reference.
+
+<blockquote>
+<small>Now that I post more small entries on my site I'd like a way for readers to be able to filter out some of that higher-volume "noise". Looking at my existing posts (as of 2015-01-19) I think that excluding untitled single-paragraph posts and photos (except drawings) should mostly work. I can then fine-tune by explicitly marking special-case posts for inclusion or exclusion. Not sure if I'll implement this in Wordpress or wait 'til I've migrated.
+
+Rejected filters:
+* Size, structure, and/or presence of title: can suggest importance, but sometimes all you need are a few lines for that important thing. 
+* Explicitly tag all "important" posts: too much cognitive overhead when posting. 
+
+Not sure what to call the more focused feed or its tag yet -- brainstorm: highlight, core, main, essential, basic, reduced, less, light, smaller. I like "highlight" & "main" best so far but will ponder more. Thinking of related terms: (executive) summary, gist, condensed, abridged. Need to look up prior art (news outlets, other kinds of reports). Leaning toward "highlight" like "just give me the highlights" or I think in sports reporting they use the term too. Anyway, could maybe automate some of it, e.g. events tagged "mycomics" should always be in this subset.
+
+However I determine the "more important" posts, I might highlight them somehow in the stream (like surround it with a box). Also might put an expansion toggle on longer posts like [[User:Tommorris.org|Tom Morris]] does (I can't find his post about it but you can see examples at http://tommorris.org). so long posts don't mess up the flow, visitors don't have to load a separate page, and feed readers can still get the whole post without having to follow the link.</small>
+</blockquote>
+
+==== Summaries ====
+
+Use the first paragraph of a post for its summary (if it has more than one). (Just noting this for now; I don't think I want to dig into Wordpress's excerpt code.)
+
+=== Wants ===
+
+* Profile [[icon]].
+* Whole-site [[https]]. Start w/ self-signed for logins?
+* Distinguish [[photos]] as a [[post]] type, except more generically call them "pictures" or "images".
+* "[[collection|Collection]]" post type(s) for pictures and comics.
+** For comics this is to connect the pages of a story, potentially in multiple levels (e.g. chapters of a book).
+** For pictures I'd like to be able to post a collection and have just that show up in my stream, but still have permalinks for each item in it. I also want to be able to add more items to existing collections and have the updates be their own posts (at least optionally). If adding multiple items the update post should also be a collection, at least in terms of what appears in the stream. I might also want to be able to include collections in other collections (though maybe that's just tags).
+* Auto-[[POSSE]] to & auto-[[backfeed]] from [[Facebook]] ([[backfeed]] is more urgent; [[POSSE]]ing by hand is pretty easy).
+* Send, receive, & display [[Webmention]]s. In line with my own current posting practice I'd like the edit history of comments to be visible. I'd like to show the newest version of updated comments (tombstone for deleted) with a link to archived older version(s). The tricky thing with deletions is balancing my desire to support authors' control over their content with my desire to avoid enabling erasure/revision of history.
+* Not sure about [[likes]]. I certainly like knowing someone liked something I did, but I don't know how compelled I feel to display that info. 
+* [[Events]]. I have public events I want to post but I also would like to own my own calendar so I plan to check how easy it would be to use / integrate [[Owncloud]]'s calendar feature.
+** [[RSVP]]s.
+* Mobile posting. Need something to replace the [[WordPress]] app (which I only started using in 2014-06 as I started finally getting my site in shape). Online admin? App? Local webform? SMS? I'd like to keep the site itself as static as possible.
+* [[audio]]
+* [[video]]
+* [[reader]] (including legacy formats) -- currently planning to try [[Owncloud]]'s [[reader]] (since I want to try Owncloud anyway), but keeping [http://selfoss.aditu.de/ Selfoss] in mind since it already has a [[microformats]] [https://github.com/aaronpk/selfoss plugin]. I used the predecessor to Selfoss for a while and it was OK.
+* [[hashtags]]
+* Autolink bare URLs.
+* [[products]] -- I want to get back to selling my comics & merch through my own site instead of a third-party site.
+* [[wiki-page|Wiki pages]], maybe (definitely for my comics group's website).
+* I mostly don't care if my site is "real-time", but I want Indieweb [[messaging]] of some sort. Ideally I'd funnel all of my messaging into & out of a single indie setup ({{benthatmustbeme}} is [[2015/Cambridge/messaging|working on that]]). 
+
+==== Microformats2 ====
+
+2015-08-17: On hold 'til I stop using Wordpress or someone dispels WP's magic version-1 Microformats.
+
+* <strike>h-card</strike> ''2015-01-03''
+* h-entry: Enabled top-level mf2 on 2015-08-17 but had to disable it again b/c of the hard-to-change way Wordpress adds mf1.
+* ???
+
+==== Flat-file storage ====
+
+I want to move from [[WordPress]] to something mostly static. Fully-static may be too hard given all the cool dynamic stuff there is to do, but I want to get away from [[database-antipattern|databases]] and I want whatever code I run to produce a static version of the site in case of code breakage/abandonment/I become a hermit & don't update.
+
+* [[neonblog]] is super tempting even though it 1) isn't recommended for general use and 2) was succeeded by a project I can't use less than a month before I realized I might really want to to try it. It writes posts to html files, supports micropub, and has an experimental reader.
+* If I understand [http://indiewebcamp.com/irc/2015-03-02#t1425360086072 this conversation] correctly, [[Known]] could use [[flat-file storage]] if someone wrote a plugin for it. This might be the most sensible option; it requires someone to write the plugin (or for me to learn how to do it), but passing that one hurdle yields the benefit of all of Known's already-implemented indieweb stuff (and forthcoming stuff, like the reader). Oh, I guess I might want a way to generate a static archive of the site, too. RUMOR: [http://indiewebcamp.com/irc/2015-08-16/line/1439791947214|"I think someone might be working on a flat-file backend for Known though I'm not certain"].
+* [[Kirby]] appeals all the more now that it's main dev is explicity excited about IndieWebCamp-style indieweb. 
+* Was considering [http://getnikola.com/ Nikola] or [[Pelican]] but would have a lot of details to figure out (e.g. I want to be able to post when I'm away from my computer).
+* Harboring pipe-dreams of learning to program and building something myself (see below). I'd like to have a mostly-static system that's easy for laypeople to use (both for myself & so I can recommend it to people I know), but if I have to do it myself it may be a *long* wait.
+
+In the meantime, I plan to try using [https://wordpress.org/plugins/wp-super-cache/ WP Super Cache] to generate static HTML from Wordpress.
+
+=== Pipe Dreams ===
+
+I want to somehow integrate my website, my desktop wiki ([http://zim-wiki.org/ Zim]), and my still-forming personal log (just monthly text files w/ some personal formatting & hashtags, not yet hooked up to any processing) since they all overlap in function. 
+
+Options:
+
+* Learn Python and write some plugins (if even needed -- whenever I think I've hit a limit it turns out Zim can actually do it!) to make Zim do all the stuff. Zim already can function as a simple site generator and it's repeatedly impressed me as a program. First step would be to just learn its template system.
+* Learn Python (or another language but Python's supposed to be a good starter) and write my own. Preposterous but appealing. I've been making notes on this for a while.
+* 2014-12-08 Oh jeez, apparently what I'm looking for sort of describes [http://orgmode.org/ Org-mode] -- Maude help me.
+
+TODO: Add notes on current personal log format, and thoughts on relationship between personal log and public website.
+
+=== Done ===
+
+* 2015-01-17: Footer now becomes a sidebar on the homepage on larger screens. Stays as footer on other pages to keep focus on content.
+* 2015-01-15: Shortlinks.
+* 2015-01-06: Archive pages now show all relevant posts instead of paginating and have better page title styling. Added prev & next nav to yearly & monthly archive pages w/ [https://wordpress.org/plugins/adjacent-archive-links/ Adjacent Archive Links plugin].
+* 2015-01-02: Add colophon & copyright info to footer.
+* 2015-01-01: Improve <strike>"sidebar"</strike> footer display: Fixed the alignment, gave it a border, & rejiggered content to bio, ways to follow, & ways to contact. "About" menu item now links to here, separate page seems unnecessary. Stopped calling it a sidebar b/c the only place I want it to be in that position is the homepage (& that's not a priority).
+* 2014-12-31: My (small) [[2015-01-01-commitments|2015-01-01 commitment]]: Fix single post display: Move date above title on articles, move date before tags on comics, hide title on notes, pics, & comics, add margin/padding to small-screen view of elements below main post.
+* 2014-12-11: Added rel="me" to current theme so I can log back into IWC wiki if I get logged out ;)
+* 2014-10-01: Made comics nav bigger & prettier.
+* 2014-09-29: Moved comics nav code over from the old theme.
+* 2014-09-16: Finished migrating comic images one...by...one (''finally''), applied custom taxonomy to comics so I don't have to have a category for each one, disabled Webcomic plugin, switched to more responsive theme.
+* 2014-08-12: Finished migrating comics transcripts to new format (for now using https://wordpress.org/plugins/azurecurve-toggle-showhide/ b/c the non-JS show/hide code I chose mysteriously doesn't work in WordPress).
+
+=== Former setup & practices ===
+
+* Hand-coding in Notepad (2005 through 2007). Main content types were [[notes]] (I didn't title my news updates ... and deleted them when they got old!) and [[comics]].
+* [[Blogger]] (self-hosted version) (2006? through 2007?) -- I don't think I ever used it for my main site but I did for one of my comic series. Mainly [[comics]] with perhaps an occasional [[articles|article]].
+* [[POSSE]]d to [[LiveJournal]] via [http://wordpress.org/plugins/lj-xp/ LiveJournal Crossposter plugin] for some years (I did it manually from when I signed up in 2006 to whenever I installed LJ-XP). LJ-XP seems to have broken sometime prior to 2014-08-28 :(
+* Used [http://wordpress.org/plugins/webcomic/ Webcomic plugin] 2010--2014 (it's nice but I'm prepping for an eventual migration from [[WordPress]])

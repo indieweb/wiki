@@ -1,0 +1,72 @@
+http://indiewebcamp.com/2013/UK/Webmention_Implementation
+
+{{stub}}
+
+Archived from etherpad https://etherpad.mozilla.org/indiewebcamp-webmention, please help clean up
+
+== WebMention Implementation (Day 2) ==
+
+[http://www.flickr.com/photos/aaronpk/9701666970/in/set-72157635446544162/ http://farm6.staticflickr.com/5529/9701666970_8c0b5df681_n.jpg]
+
+=== How to send a WebMention ===
+
+Mark up your posts with h-entry (http://microformats.org/wiki/h-entry )
+
+Test your markup with one of the parsers:
+* http://pin13.net/
+* http://waterpigs.co.uk/php-mf2/
+
+Write a short post on your site in reply to a post
+
+[https://gist.github.com/aaronpk/6475852 Send a WebMention manually] to see if it shows up! 
+
+=== How to receive a WebMention ===
+Add the WebMention endpoint to your site for discovery. (Can be in an HTTP header or as a <link> tag in your HTML head)
+<code><link rel="webmention" href="http://example.com/webmention"></code>
+
+Handle incoming webmention requests (containing source= and target= POST variables) at your endpoint. The endpoint should always return "202 Accepted" after a basic level of error checking. 
+The shortest path to accepting a webmention may be something like sending yourself an email when an incoming webmention is received.
+
+[https://gist.github.com/adactio/6484118 minimum webmention handler in PHP]
+
+==== Further Verification ====
+So far this will get you to the point of accepting an incoming webmention and acknowledging it to the sender. You probably want to also render it as a comment on your original post.
+
+==== Sample Code ====
+* PHP webmention server: https://github.com/mapkyca/pingback2hook
+* Ruby webmention server: https://github.com/aaronpk/webmention.io
+
+=== Shortcut: Using webmention.io ===
+To start collecting incoming webmentions without writing the endpoint yourself, you can use webmention.io temporarily. This will also allow you to accept webmentions on static sites.
+
+You'll need to contact aaronparecki.com to get an account (there is no signup form on the site), and then you can enable incoming webmentions by adding the link tag to your site:
+
+<code><link rel="webmention" href="http://webmention.io/username/webmention" /></code>
+
+Then, check out http://webmention.io for sample javascript for retrieving the list of incoming webmentions given a page, or showing the comment count for posts. 
+
+=== Resources ===
+* Webmention clients and servers on Github: https://github.com/search?q=webmention&source=cc
+* Webmention spec: http://webmention.org/
+* More information: http://indiewebcamp.com/webmention
+
+=== Notes ===
+==== Asynchronous processing ====
+HTTP response to the incoming webmention should return `HTTP 202 Accepted` and hang up immediately. Otherwise your site performance is dependent on making many other HTTP requests to external servers.
+
+Ways to process and verify webmentions asynchrounously:
+
+* webmention request starts a job, which is processed in a job queue - beanstalkd, Sidekiq, etc
+* Insert the inbound link into a database, and process/verify on:
+** a cron job
+** when the target page is next viewed
+** using a third party service to hit a "process" endpoint (like using pingdom to request Wordpress' wp-cron.php periodically)
+
+==== HTTP requests ====
+When requesting the `source` to verify there is a link there, what should the HTTP user agent be set to?
+Maybe send something like `http://aaronparecki.com/ (http://webmention.org)` so people know the server that was making the request as well as have a link to the webmention spec to find out more about it. Could also include the full post URL.
+
+==== Follow-up Replies ====
+benward: Not accepting comments on blog posts. I find out about people linking to my blog posts from things like Google Analytics, looking at HTTP referers, and can now also use webmention to find them faster. Then writes a follow-up blog post as a curated list of replies from people.
+
+[[Category:2013/UK]]

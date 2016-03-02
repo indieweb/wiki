@@ -1,0 +1,79 @@
+http://indiewebcamp.com/2012/Own_Your_Comments
+
+IndieWebCamp 2012
+
+2012-182 15:00 Teroperate
+
+https://etherpad.mozilla.org/indieweb-comments
+
+This session is about IndieWeb Commenting and feedback systems.
+
+What does it mean to post a comment in an indie web? As the author of a comment, you should own and control it, most likely you should post it on your own site. But we still want to have the benefits of centralized commenting systems like seeing a list of all comments left on a post, filtering spam comments, etc.
+
+One way to handle comments is through the pingback or trackback protocols, both of which are widely implemented in many major blogging platforms. We can discuss the merits and drawbacks of each, and other possible solutions. A workshop session could involve implementing trackbacks/pingbacks on your own site, or implementing a new mechanism for using them.
+
+
+* Comments on the web are broken.
+* Disqus and Livefyre trying to be a central repository of comments.
+** Disqus are trying to be a social network in their own right with new update
+** Facebook has also tried to do this with their comment widget thing.
+* Blogs that use Disqus mirror the comments on the blogs themselves.
+
+
+* Comments as standalone posts on the commenter's domain
+** Follow Ups
+** Linked via &lt;a href&gt;, Pingback, Trackback, refback https://en.wikipedia.org/wiki/Linkback
+
+Trackback and pingback create a pogostick UI. (have to click somewhere then click back)
+
+Not a good standard format for pushing status updates or microblog entries on your own site.
+
+Goal: Let me link to other people's comments but I don't want their actual content on my site.
+* Can we mark this up in some way so that a browser extension could pull the text in dynamically
+
+Can we canonicalize twitter's scheme of showing what tweets are in-reply-to other tweets?
+* Microformats around this? Rel value for in-reply-to?
+** is rel="next/previous" incorrect usage for this context? Yes.
+* Extension to hAtom?
+
+rel="in-reply-to" the root post and order-by datetime
+* rel="in-reply-to" is a possibility when linking to a post that you're commenting on.
+** How to handle threads? For example, if each reply is in-reply-to the previous one, if one link goes missing the entire chain collapses.
+* My name is Shane Becker and I support this rel attribute
+* …other alternatives?
+
+Salmon: syndicated comments on someone else's site that swim upstream. includes crypto.
+http://www.salmon-protocol.org/
+* Why is so Salmon so complicated?
+* Why does it depend on so many other things?
+* Why did it use/depend-on a *new* auth/identity mechanism (WebFinger) rather than building on simpler solutions already deployed?
+* IndieWebCamp folks that looked at Salmon spec and gave up on it:
+** Aaron Parecki
+** Tantek Çelik
+** ...
+
+Can we either enhance pingback or scale back salmon?
+Pingback is xml-rpc and so would be very easy to extend, provided we agreed on a protocol.
+
+Who is posting comments to their own site? 
+* And how are they syndicating back to the source? (if at all)
+* Are you syndicating in the original at all (for a copy, display etc.) ?
+Answers from attendees:
+* Barnaby Walters (WaterPigs.co.uk): When I post anything and syndicate links to it, I store the id of the clone on the remote system in a `clones` object. I *would* be pulling back comments and activity from facebook but restricted because of my age (bah!). Twitter gives no straightforward way of getting activity related to a given tweet, we have to poll mentions and grab any which are related
+** Wrote a load about this here: http://indiewebcamp.com/backfeed
+** I also accept pingbacks, although I don't do anything with them yet and don't really know if it works properly
+* Nigel - trackback, cut/paste blockquote
+* Ed
+* Tantek - unlinked twitter reply posted to twitter, copy/paste blockquote when my comments are posts
+* Shane - manual pingback comment, sometimes copy/paste blockquote
+
+When posting a link to Facebook, Facebook shows summary of the thing you're commenting on. Example of a good UI. Also allows you to choose thumbnail image, remove preview, etc. Third Party Apps posting links can '''completely''' customise the preview display.
+
+Facebook's comments on links are relevant because they're restricted to your social graph. If there were a good indieweb social graph solution, this indicates it would be solved as well.
+
+Difference between posting a reply to the author, vs adding context to the people you're sharing with. Example: People sharing links on Twitter and adding text to the link, they are not replying to the author.
+
+If we had an "in-reply-to" attribute then you could search google for all pages that are "in reply to" a given URL.
+
+
+[[Category:2012]]

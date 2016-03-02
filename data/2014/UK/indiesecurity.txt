@@ -1,0 +1,37 @@
+http://indiewebcamp.com/2014/UK/indiesecurity
+
+{{stub}}
+
+Security
+IndieWebCamp UK 2014
+
+* Let’s at least not get embarrassingly hacked
+* For HTTPS: need a cert signed by a commonly-trusted authority
+** StartSSL are free
+** Globalsign will give out free wildcard certs to open source projects
+* Which certificate?
+** Basic SSL cert will cover bare domain and www. (tom: http://no-www.org/ because who wants to type www all the time)
+** Generate at least 2048 bit key
+** Don’t get a SHA1 cert, it’s being phased — get a SHA2
+
+Process:
+* you generate a key (.key file) — this never leaves your server
+* you generate a certificate signing request (.csr)
+* you send the CSR to the authority (NOT the .key)
+* you get a certificate (either .crt or .pem) which is signed by the authority
+
+Jeremy: this stuff isn’t easy, esp. for people who’ve just learnt HTML+CSS — why isn’t there a GUI where you can press a button and it’s done?
+Tim: With StartSSL there’s no need to use the CLI, you can do it all in the browser [ed: how? need docs!]
+
+First: get HTTPS working
+Then, make sure all that effort wasn’t wasted:
+* redirect HTTP -> HTTPS
+** some web application frameworks give you hooks to ensure URLs are protected
+* add HSTS header
+* make sure your cookies are secure (only served over HTTPS) and HTTP-only (XSS attacks can’t access them via JS)
+* avoid mixed content warning
+
+Intermediate certificates: when a root authority gives someone else the ability to sign, and they sign you, you need to provide both your cert and any intermediate certs, concatenated in the same file [in what order?]
+
+
+[[Category: 2014/UK]]

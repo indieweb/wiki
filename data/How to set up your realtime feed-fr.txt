@@ -1,0 +1,123 @@
+http://indiewebcamp.com/How_to_set_up_your_realtime_feed-fr
+
+'''Régler un flux Atom pour de la publication temps-réel.'''
+
+Le but de ce post est de collecter de l'information sur les façons de préparer votre site web et le flux Atom pour publier du contenu temps-réel.
+
+Vous pouvez vous abonner à votre flux dans http://identi.ca, ou en utilisant un client PubSubHubbub. Il existe un [http://push-bot.appspot.com/ PuSHBot] vraiment génial pour tester qui enverra un message sur Jabber quand un flux est mis à jour.
+
+== Régler la page HTML ==
+Premièrement, vous devez régler votre page HTML pour référencer le fichier Atom. Au moment de vous abonner à partir de identi.ca, vous saisirez l'adresse de la page de quelqu'un, pas directement un flux Atom.
+
+Le marquage principal dont vous avez besoin est d'ajouter la section &lt;head&gt; comme ceci :
+
+<pre>
+<link rel="updates alternate" type="application/atom+xml" href="/updates.atom" />
+</pre>
+
+== Flux Atom ==
+Exemples live 
+
+* http://tantek.com/updates.atom
+* http://aaronparecki.com/notes.atom
+
+=== Header ===
+Vous devrez au moins avoir ces éléments comme base du flux Atom.
+<pre>
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en-US">
+  <title>Tantek Çelik</title>
+  <link href="http://tantek.com/" rel="alternate" title="Tantek Çelik" type="text/html"/>
+  <link href="http://tantek.com/updates.atom" rel="self"/>
+  <link rel="hub" href="http://pubsubhubbub.appspot.com/"/>
+  <id>http://tantek.com/updates.atom</id>
+  <author>
+    <name>Tantek</name>
+    <uri>http://tantek.com/</uri>
+  </author>
+  <updated>2012-08-17T10:48:00-07:00</updated>
+</pre>
+
+Pour le marquage author, vous devez inclure un nom et une URI, autrement identi.ca ne reconnaîtra pas cela comme un flux valide.
+
+En liant vers le hub pubsubhubbub.appspot.com, vous tirerez profit du service de hub gratuit fourni par google. Quiconque pourra s'abonner à votre contenu temps-réel à partir de ce hub. Une indication anecdotique a aussi montré que Google indexera véritablement le contenu posté ici, aussi vous pourrez aboutir à des résultats temps réel dans Google en utilisant ce hub.
+
+=== Entries ===
+Les éléments "Entry" doivent avoir au moins les balises qui suivent :  title, content, published, updated, link, et id. 
+Voici deux exemples que vous pouvez prendre comme référence : 
+
+<pre>
+  <entry>
+    <updated>2012-08-17T10:48:00-07:00</updated>
+    <published>2012-08-17T10:48:00-07:00</published>
+    <link href="http://tantek.com/2012/230/t1/tweetcc-cc-license-tweets-quote-embed-indieweb" rel="alternate" title=" use tweetcc.com to CC license tweets so others may quote/embed yours independent of Twitter's TOS. #indieweb " type="text/html"/>
+    <id>http://tantek.com/2012/230/t1/tweetcc-cc-license-tweets-quote-embed-indieweb</id>
+    <title type="xhtml">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+use tweetcc.com to CC license tweets so others may quote/embed yours independent of Twitter's TOS. #indieweb
+</div>
+    </title>
+    <content type="xhtml" xml:base="http://tantek.com/2012/" xml:space="preserve">
+      <div xmlns="http://www.w3.org/1999/xhtml">
+use <a class="auto-link" href="http://tweetcc.com">tweetcc.com</a> to CC license tweets so others may quote/embed yours independent of Twitter's TOS. #indieweb
+</div>
+    </content>
+    <object-type xmlns="http://activitystrea.ms/spec/1.0/">http://activitystrea.ms/schema/1.0/note</object-type>
+  </entry>
+</pre>
+
+<pre>
+  <entry>
+    <title>Children, though they are good tax deductions, can be an expensive hobby.</title>
+    <content type="xhtml" xml:base="http://aaronparecki.com/2012/222/note/3/" xml:space="preserve"><div xmlns="http://www.w3.org/1999/xhtml"> Children, though they are good tax deductions, can be an expensive hobby. </div></content>
+    <published>2012-08-09T14:04:11-07:00</published>
+    <updated>2012-08-09T14:04:11-07:00</updated>
+    <link href="http://aaronparecki.com/2012/222/note/3" rel="alternate" type="text/html" title="Children, though they are good tax deductions, can be an expensive hobby." />
+    <id>http://aaronparecki.com/2012/222/note/3</id>
+    <object-type xmlns="http://activitystrea.ms/spec/1.0/">http://activitystrea.ms/schema/1.0/note</object-type>
+  </entry>
+</pre>
+
+Comme cela est affiché dans ces deux exemples, le marqueur <title> peut être soit en plein-texte, ou peut avoir un attribut <code>type="xhtml"</code>.
+
+== Notes d'intégration Statusnet/identi.ca ==
+
+Statusnet/identi.ca (noté ici sous statusnet dans ce doc pour la brièveté) est probablement l'implémentation OStatus la plus aboutie et la plus largement déployée. Si vous implémnetez n'importe quelle partie de Ostatus, vous devriez viser une intégration avec statusnet.
+
+statusnet ne comprendra pas un élément <content> de ce format : 
+<pre><content type="html"><![CDATA[ <p>Exemple Contenu</p> ]]></content></pre>
+
+Il doit utiliser xhtml, comme suit :
+<pre><content type="xhtml" xml:base="http://aaronparecki.com/2012/222/note/3/" xml:space="preserve">
+  <div xmlns="http://www.w3.org/1999/xhtml"><p>Example Content</p></div>
+</content></pre>
+
+Le xhtml '''doit''' être bien formé afin que statusnet et bon nombre de lecteus de flux puissent le consommer avec succès. StatusNet semble être encore plus sélectif comparé à la plupart des lecteurs de lfux, et ne vous donnera pas de messages d'erreur. En cas de doute, validez ! 
+
+Une autre chose à regarder sont les éléments provenant de la spec activitystreams, par ex. <code>activity:object-type</code> ou <code>activity:verb</code>. Les valeurs de ces éléments '''doivent''' être complètes, des URLs bien formées et '''pas''' uniquement le bit à la fin (par ex. 'post', 'edit', 'article', 'note' etc)!
+
+Suivez les exemples au-dessus et les exemples dans la jungle qui sont connus pour être supportés par statusnet au lieu des exemples dans le schéma activitystreams qui ne fonctionnera pas avec statusnet.
+
+== Vérifier votre Travail ==
+Il existe plusieurs façons de tester si cela a fonctionné.
+
+Tout d'abord, vous pouvez utiliser un validateur de lfux afin de vérifier les erreurs majeures telles que les erreurs XML ou les éléments manquants. [http://feedvalidator.org/ feedvalidator.org] fait un vraiment bon boulot.
+
+En supposant que vous n'ayez aucune erreur à ce stade, vous pouvez essayer de vous abonner au flux dans un lecteur traditionnel de flux RSS, comme [http://www.vienna-rss.org/ Vienna]. 
+
+Essayez d'utiliser le service [http://push-bot.appspot.com/ PuSHBot] pour vous envoyer des messages Jabber quand votre flux est mis à jour. Vous pouvez utiliser ça facilement si vous disposez d'un compte Jabber, et n'oubliez pas que les comptes Google Chat sont jabber.
+
+# Ajoutez push-bot@appspot.com à votre liste de contacts.
+# Envoyez-lui un message d'abonnement en utilisant la commande /subscribe : /subscribe http://exemple.com/updates.atom
+# Si tout va bien, vous devriez voir un message de confirmation comme Subscribed to http://exemple.com/updates.atom
+
+Puis vous n'avez plus qu'à envoyer le message de publication vers le hub appspot. Vous pouvez faire ça à partir de cURL sur la ligne de commande comme ceci :
+
+<pre>
+$ curl -i -d hub.mode=publish -d hub.url=http://example.com/updates.atom https://pubsubhubbub.appspot.com/publish
+</pre>
+
+Si cela a fonctionné, vous recevrez une réponse <code>204 No Content</code>.
+
+__NOTOC__
+[[Category:how-fr]]

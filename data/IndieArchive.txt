@@ -1,0 +1,156 @@
+http://indiewebcamp.com/IndieArchive
+
+{{stub}}
+
+'''<dfn>IndieArchive</dfn>''' is a [[project]] to collaboratively grow an [[archival copy]] of pages [[replies|replied to]] (possibly also [[comment|mentioned]]) in indie web [[posts]].
+
+i-a.github.io was started as a possible shared repository of linked-to content. Presently it consists of a spec only, though several sites keep their own archive based on the concept.
+
+* [[Github]]: https://github.com/i-a
+* Live raw files: http://i-a.github.io/
+
+== URL design ==
+Like [[archive.org]], but without dumb/meaningless redundancy, and dates/times compressed with [[NewBase60]] to make the URLs even shorter.
+
+archive.org example:
+* http://web.archive.org/web/20050310031944/http://aaronparecki.com/
+* http://web.archive.org/web/20050310031944/https://aaronparecki.com/
+
+i-a design:
+* http://i-a.github.io/3_C/3Kj/aaronparecki.com/
+* http://i-a.github.io/3_C/3Kj/https:aaronparecki.com/
+
+* 3_C = 2005-03-10 converted to NewBase60 epochdays
+** e.g. using [[CASSIS]] ymd_to_sd() function
+* 3Kj = 03:19:44 = 11984 seconds in NewBase60
+** e.g. using [[CASSIS]] num_to_sxg() function
+
+Notes:
+* no "web." nor "/web" - we know this is a ''web'' archive, duh.
+* no "http:" - it's the default - optimize for the majority. 
+** Other schemes may be explicit, but omit the "//" (per [http://bits.blogs.nytimes.com/2009/10/12/the-webs-inventor-regrets-one-small-thing/?_r=0]), e.g. "https:", "ftp:" as shown in the example
+* Trailing slash is required on root-level domains
+
+== IndieWeb Examples ==
+=== Aaron Parecki ===
+{{aaronpk}} is keeping an archive since 2013-09-08 of external linked to pages. 
+
+=== Barnaby Walters ===
+[[User:waterpigs.co.uk|Barnaby Walters]] is keeping an archive since ????-??-?? of external linked to pages, and has published a php library for maintaining and querying an archive:
+* https://github.com/Taproot/archive
+
+== Storage ==
+The files in this archive should be stored on disk in an easily inspectable manner. However, URLs do not map cleanly to the filesystem. These four URLs are unique web pages but would result in conflicts on a filesystem:
+* example.com/tags
+* example.com/tags/
+* example.com/tags/indieweb
+* example.com/tags/IndieWeb
+Additionally, we need to be able to store http and https URLs separately, as well as non-standard ports:
+* <nowiki>http://example.com/</nowiki>
+* <nowiki>https://example.com/</nowiki>
+* <nowiki>http://example.com:8080/</nowiki>
+
+As such, we need a simple set of rules to map URLs to filesystem locations, so that we can be sure there are no conflicts when saving on the filesystem.
+
+Given a URL, the location on disk will be:
+* In a folder called "http" or "https" depending on the scheme
+* A folder for the domain name, all characters converted to lowercase
+* Split the domain, port and path on slashes (except a trailing slash), and create a folder for each except the last component
+** URL escape all characters not in a-z 0-9 . - _ (e.g. <code>E</code> becomes <code>%45</code>)
+** Append a <code>:</code> to the name of the folder (disambiguates between files and folders with the same name, and also looks nice since it appears as <code>/</code> on OSX in Finder)
+* Create a file for the last component
+** URL escape all characters not in a-z 0-9 . - _ (including the trailing slash if any)
+
+For example, see below for the resulting paths for the examples above.
+* example.com/tags -> "http/example.com:/tags"
+* example.com/tags/ -> "http/example.com:/tags%2F"
+* example.com/tags/indieweb -> "http/example.com:/tags:/indieweb"
+* example.com/tags/IndieWeb -> "http/example.com:/tags:/%49ndie%57eb"
+* <nowiki>http://example.com/</nowiki> -> "http/example.com%2F"
+* <nowiki>https://example.com/</nowiki> -> https/example.com%2F"
+* <nowiki>http://Example.com/</nowiki> -> "http/example.com%2F"
+* <nowiki>http://example.com:8080/</nowiki> -> "http/example.com%3A8080%2F"
+* <nowiki>http://example.com/8080/</nowiki> -> "http/example.com:/8080%2F"
+
+Note that without appending ":" to folders, it would be impossible to store all these files on disk since "example.com/tags" would have to be both a file and a folder.
+
+This results in a folder structure that looks like the following (OSX renders ":" as "/")
+
+[[File:indiearchive-example-files.png]]
+
+=== Versioning ===
+
+Ideally I'd like to be able to store multiple versions of external files I encounter, for example when someone updates a post, I may want to be able to see the previous version of it so I know what has changed.
+
+To accomplish this, it is easy to extend the above archive scheme to include versioning support by appending a version number to the end of the filename. A human-readable way to handle this it to use the current timestamp to indicate the version. For example:
+
+* http/example.com:/tags:/indieweb:20151002:094203
+* http/example.com:/post:/100:20151003:094823
+* http/example.com:/post:/100:20151003:132841
+
+It is possible to find the latest version of a particular URL by sorting the files that match the base URL path alphabetically and using the last entry.
+
+== Origins ==
+A conversation between aaronpk and tantek on IRC about link rot and an OSCON 2011 session that was about a [[WordPress]] plugin that automatically made personal archives of pages you linked to.[http://tantek.com/2011/209/t3/oscon-web-archives-sites-you-link-to-owark-indieweb]
+
+So what would be a good way to make a backup of every page you link to from your site?
+
+We could do it collaboratively for public pages, automatically in our publishing systems of pages we link to.
+
+Use-cases:
+* repair link rot. when things you've linked to go down or away, (semi-)automatically, redirect those links to your archives
+* shared reply/link contexts. see below thoughts from IRC.
+
+== Thoughts ==
+On the design / usage of IndieArchive - notes from IRC:
+
+Inception: 
+* Itch: "holy cow, I've already downloaded 63 megs of HTML from external pages in my reply context code"[http://indiewebcamp.com/irc/2013-05-24#t1369440902]
+* Scratch: "maybe we should just shove archive HTML pages into static github pages"[http://indiewebcamp.com/irc/2013-05-24#t1369440990]
+
+Design:
+* keep snapshots by datetime index… we won't collide
+
+* we place no copyright claims and state it is purely for library/archive purposes only, and anyone is welcome to clone (not modify) and keep the same terms
+
+* once we get it going, we could even likely talk archive.org into maintaining a mirror of it - and it's git, so it's easy for anyone to mirror!
+
+* performance shouldn't be an issue either - as rarely should we need to reparse the HTML
+
+* still locally store parsed JSON bits for speed of retrieval / display on my server, but then keep a URL to the copy of the HTML on i-a.
+
+Web of Social Trust:
+* we build up the write-access contributors through [[XFN|social web of trust]] from the initial seed of indieweb camp attendees that have their own indieweb sites setup - whatever they used to sign-into indiewebcamp.com
+
+Aside: '''IndieWeb vs. FSW methodologies and coming up with this'''
+* this is the kind of stuff that you end up figuring out / building when you scratch your own itches and follow them to their logical conclusions
+* I don't think anyone in FSW circles came up with the idea of a distributed collaborative mirroring of posts that they replied to! (despite it being a really simple idea)
+* everyone was so focused on building a [[monoculture|full stack that did everything]]
+* instead of distributed systems that cooperatively grew
+
+Aside: '''Unexpected uses'''
+* wouldn't surprise me if someone asks for a feed of all the URLs, as they happen, get linked to
+
+== Collaboration ==
+The Internet Archive (archive.org) is a logical organization to coordinate with for indiearchiving.
+
+2013-146 Brewster Kahle said to email him re: how can the Internet Archive help with IndieArchive.
+
+on 2016-01-28 The Berkman Center [https://cyber.law.harvard.edu/node/99276 released] a plugin called [http://amberlink.org/ Amber] that caches linked pages using archive.org and perma.cc
+
+== Brainstorming ==
+
+Some blue-sky speculation on the idea of "memory" in the web - both for remembering (archiving) as well as forgetting.
+
+A site that notices certain off-site links are frequently clicked could begin archiving the target page locally - it retains a "memory" of the target content, and so that content has a greater chance of remaining over time. Conversely, a site that feel a need to do so, could choose to remove un-clicked links over time - it "forgets" about this portion of the web.
+
+This could also be done directly by clients browsing sites too. Frequently visited sites are archived locally. Infrequently visited sites are just not archived ("forgotten").
+
+== See Also ==
+* [[archival copy]]
+* [[Internet Archive]]
+* [[archive]]
+* [[projects]]
+* [[replies]]
+* [[mentions]]
+* [[posts]]

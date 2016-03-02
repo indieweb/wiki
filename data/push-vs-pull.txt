@@ -1,0 +1,134 @@
+http://indiewebcamp.com/push-vs-pull
+
+{{stub}}
+
+This page explores why pull might be better than push for most things on the indieweb. Push has it's place (like with [[webmention]]; basically one-to-one pings), but for most things especially feeds you could start off with pull and then implement push if you '''really''' need it.
+
+== Pull ==
+* simple publisher
+** '''julien51''': not really, it's actually quite hard to scale. I have 2126 subscribers on Twitter, if all of them had servers polling my own server every 5 minutes, that'd still be 7 requests per second!
+*** '''sandeepshetty''': publishers could easily delegate the feed to an aggregator or cdn
+* complicated subscriber.
+** has to fan out polling requests to multiple publishers. (if you're using PHP [http://www.php.net/manual/en/function.curl-multi-init.php curl_multi_*] might help)
+** has to keep track of failures and retry (multiple times).
+* publishers can take advantage of caching (intermediaries at multiple layers) by sending appropriate headers.
+** '''julien51''': caching is actually also quite hard and saves bandwidth but not computing!
+*** '''sandeepshetty''': Why doesn't caching at the intermediaries (could also be an aggregator or cdn) save computing?
+* subscribers can send conditional GET to avoiding receiving a payload if there are no updates.
+* subscribers don't need to have a public endpoint (you could use a script running on your laptop to get latest updates)
+** implies your site could be static.
+* almost real-time (> 1 min latency) but that might be ok for most cases.
+** '''julien51''': there are actually few people/sysadmins/site owners who could even tolerate that you poll them once every minutes! We get complaints from publisher that we poll once an hour!
+*** '''sandeepshetty''': That's a great point about the"real" world. Maybe like PuSH, aggregators and cdns are the solution?
+* aggregators can offload publishers load.
+* subscribers are "responsible" for delivery.
+* better for frequent updates because they are grouped together.
+** '''julien51''': actually no, that's worse for frequent updates because the risk of missing one is extremely high! feeds are windows. Say your feed has 10 items, and on average a new one is added every 10 seconds. If I haven't polled your feed for 100 seconds, then I've missed one! The same phenomenon also applies to caching mechanisms.
+*** '''sandeepshetty''': That's a good point. [[pagination|Pagination]] on feeds should solve that (If I don't have the last post in this feed already follow rel="next" and so on till you find a page with the last post you have).
+* turtles all the way down: everyone pulls.
+* supported across the board. The web is based on pull.
+* publishers don't need to know about subscribers (loosely coupled).
+* publishers need to scale in proportion to (subscribers * how often they poll).
+
+== Push ==
+* (not so) simple subscriber.
+** '''julien51''': I guess that's debatable, but webhooks mechanisms are now pretty widespread and used by many devs
+*** '''sandeepshetty''': widespread usage doesn't say anything about simplicity (which is what the point is about)
+** has to send subscription request (along with secret key?) and verify subsequent request from publisher, confirming intent to subscribe.
+*** implies sending subscription request over secure channel (publisher must support https)
+*** implies requirement for a public endpoint.
+*** implies your site cannot be static.
+**** '''julien51''': not true! I use PuSH with a static site!
+***** '''sandeepshetty''': I need to make this more clear (static might not be the right word, I used it to mean "not reachable on the web"), but I'm talking about subscribers here not publishers.
+** has to verify that each push came from the publisher (secret key)
+*** implies keeping track of secret keys for each publisher.
+** '''julien51''': Many of these points are security related, which makes sense, but you should also make security points in the 'poll' description. If you go unsecure for pull and secure for push, you're comparing apple and oranges.
+*** '''sandeepshetty''': Part of this is to avoid the avoid vector (which does not apply to pull) and part of it is to verify origin that requires custom code/libs (as opposed to using common http servers and clients for pull). So I don't think it's apples to oranges.
+* complicated publisher
+** has to fan out pushes to all subscribers. (if you're using PHP [http://www.php.net/manual/en/function.curl-multi-init.php curl_multi_*] might help)
+*** '''julien51''': Not true! Just to a hub!
+**** '''sandeepshetty''': Yes a hub (like in PuSH) is a solution just like delegating serving feeds to aggregators/cdn is for pull.
+*** has to sign pushes to confirm origin
+**** '''julien51''': again, security concern, applies to pull as well with cert mechanism
+***** '''sandeepshetty''': installing a cert requires no coding but signing does. 
+** has to keep track of failures and retry (multiple times)
+*** '''julien51''': not true, that's what hub do!
+**** '''sandeepshetty''': Yes. But that doesn't change the fact that someone *still* needs to do this. With pull a publisher doesn't have to do this.
+** has to support https (see subscriber section above)
+*** '''julien51''': security... same remarks as above
+**** '''sandeepshetty''': Publishers need this to accept subscription requests so with push you need a cert even if subscribers don't want to confirm origin of push.
+* potential attack vector: Publishers can be used to send requests to subscribers on behalf of an attacker.
+** '''julien51''': well, yes, unless you go for secure, but that same applies to pull: people can attack website with DDOS
+*** '''sandeepshetty''': attacking a website is different from getting someone else (publisher) to attack a website.
+* potentially real-time (depends on no. of subscribers and the publishers current queue).
+** '''julien51''': Who said Queues have to be in series and not parallel? realtime-ness does not depend on size of queue, but on implementation!
+*** '''sandeepshetty''': I agree. The point though is that just because you went push doesn't necessarily mean real-time. You have to put in effort and resources to ensure that it's real-time (just like you need to add resources to support a lot of subscribers with pull).
+* hubs can offload publishers load and complexity.
+** pushing complexity to the hub is just pushing it under the carpet... it's still there just hidden away with an indirection... and when a hub goes out of business or you decide to implement it yourself... that's when the complexity matters.
+*** '''julien51''': Mah. it's just using the web, I guess you could also create your own electricty because when PG&E goes out of business you'd be screwed. There are dozens of hub implementations out there and at least 3 open hubs that I know!
+**** '''sandeepshetty''': custom code/lib on top of http is not the same as using existing http servers+clients. Curious to know about the open hubs and how many of them are actually able to handle the load that is thrown at them (unlike the one run by google on appengine). The situation with hubs feels a lot like the situation with Google Reader (not enough competition mean it's a big risk to rely on them).
+* publishers are "responsible" for delivery.
+** '''julien51''': not true, hubs are!
+*** '''sandeepshetty''': Yes, with PuSH, though I was taking about push in general. A hub is just a delegated publisher and publishers have to keep track of failures and retry several times.
+* better for infrequent updates.
+** '''julien51''': not true, we push the Etsy and getglue firehoses, that's about 10 entries per second each and works pretty well!
+*** '''sandeepshetty''': Didn't say it won't work. Just that it's inefficient to send 10 individual entries instead of 1 entry per second with 10 entries.
+* doesn't address the last mile (your server to your browser) which turns out to be a pull in most cases.
+** side note: PuSH was designed by Google engineers to solve their problems with aggregation and not solve the problems of the subscriber - which is a central actor on the indieweb
+** '''julien51''': plain BS. It solves the problem of some subscribers... not all, but some
+*** '''sandeepshetty''': How does it solve the last mile  (your server to your browser) problem for "some" subscribers?
+* requires explicit implementation.
+** '''julien51''': what does that even mean?
+*** '''sandeepshetty''': For example on the indieweb (where we usually markup our html with microformats)  a publisher has to do nothing additional.
+* publishers need to know about subscribers (less loosely coupled).
+** '''julien51''': not true at all!
+*** '''sandeepshetty''': How does a publisher (or hub in case of PuSH) send pushes without knowing about subscribers?
+* publishers need to scale in proportion to no. of updates that need to be sent out.
+
+== PuSH (PubSubHubbub) ==
+* simple publisher
+** ...
+* simpler subscriber
+** ...
+
+== Discussion ==
+* https://twitter.com/sandeepshetty/status/339662379677777920 (the tweet that started this)
+* http://indiewebcamp.com/irc/2013-05-31#t1369991912
+* "subscribing (using PuSH is) too hard": http://indiewebcamp.com/irc/2013-05-29#t1369859193
+
+== Notes ==
+* On the decentralized web, traffic is spread out, so wasting resources on polling (a common drawback cited by push advocates) might not be a concern (since nodes will have resources to spare). Wasting resources becomes a concern for centralized systems because they don't have resources to spare.
+* See [http://sandeep.shetty.in/2013/06/does-polling-scale-better-than-push.html Does pull scale better than push] and [http://sandeep.shetty.in/2013/06/pushhubpullsub.html PushHubPullSub]
+
+== References ==
+* https://speakerdeck.com/veganstraightedge/the-constellation-architecture-all-the-little-apps
+* http://farmhouse.la/podcast/2
+* [http://opensourcebridge.org/sessions/1153 Polling: It's Good Enough for the WWW & It's Good Enough for You]
+* http://code.google.com/p/pubsubhubbub/wiki/WhyPollingSucks
+* http://blog.caplin.com/2010/03/08/pubsubhubbub-the-not-quite-real-time-web/
+* http://www.tbray.org/ongoing/When/200x/2009/10/18/PubHubSunday
+* http://thelimberlambda.com/2009/08/10/pubsubhubbub-hullabaloo/
+* (pdf) http://www.aaai.org/ocs/index.php/ICWSM/ICWSM12/paper/viewFile/4741/5094
+* (pdf) http://oak.cs.ucla.edu/~cho/papers/sia-blog.pdf
+* [http://bob.wyman.us/main/2006/04/dave_winer_show.html Dave Winer: Show me that mathematical proof!]
+* http://code.google.com/p/pubsubhubbub/wiki/DesignPrinciples
+* http://code.google.com/p/pubsubhubbub/wiki/PublisherEfficiency
+* http://code.google.com/p/pubsubhubbub/wiki/BuildingAHub
+* http://code.google.com/p/pubsubhubbub/wiki/ComparingProtocols
+* http://techcrunch.com/2009/09/09/rsscloud-vs-pubsubhubbub-why-the-fat-pings-win/
+* [http://www.flickr.com/groups/api/discuss/72157627016626217/ Announcing new Flickr PuSH API methods]
+* http://brad.livejournal.com/2405147.html
+* http://web.archive.org/web/20101023173726/http://wiki.webhooks.org/
+* http://www.quora.com/Why-doesnt-Facebook-implement-PubSubHubbub-as-a-Subscriber
+* http://atechie.net/2009/09/poll-ping-pubsub-pubsubhub-pubsubhubbub/
+* http://blog.caplin.com/2009/04/20/what-is-the-real-time-web/
+* http://www.leggetter.co.uk/2011/03/17/real-time-web-or-right-time-web.html
+* http://www.therssweblog.com/?guid=20090929105432
+* http://ivanzuzak.info/2010/01/11/real-time-feed-processing-and-filtering.html
+* http://blog.louisgray.com/2009/07/pubsubhubbub-real-time-feeds-and-real.html
+* http://sweatinvestor.com/2010/05/building-real-time-apps-with-pubsubhubbub-live-blogging-google-io-2010/walterroth
+
+== See Also ==
+* [[PubSubHubbub]]
+* [[feeds]]
+* [[pubsub]]

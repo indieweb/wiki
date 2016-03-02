@@ -1,0 +1,56 @@
+http://indiewebcamp.com/reply-chain
+
+{{stub}}
+
+A '''<dfn>reply chain</dfn>''' (AKA <dfn>reply thread</dfn>) is a list of [[replies]], and replies to those replies, displayed under the original post.
+
+== Indieweb Examples ==
+=== {{acegiak}} ===
+* 2015-05-?? began re-sending webmentions for a post when it receives a comment.
+
+=== {{kylewm}} ===
+* 2015-06-09 supporting downstream comments
+** [[Red Wind]] re-sends webmentions for a post when it receives a comment.
+** also parses "p-comment" on incoming replies and interprets them as downstream replies (they look just like first-order replies in my UI).
+
+=== {{benthatmustbeme}} ===
+* 2015-10-16 supporting reading and display of downstream comments but intentionally only goes one level down.
+** https://ben.thatmustbe.me/note/2014/4/24/1/_
+
+== Why ==
+* ... to see all replies
+
+== Markup ==
+How to markup a reply chain:
+* ... still under study ... feel free to add suggestions ...
+
+== Receiving downstream comments ==
+
+On 2015-02-19, {{acegiak}} proposed a mechanism for propagating a reply-to-a-reply upstream, back to the original post[http://indiewebcamp.com/irc/2015-02-19/line/1424397064095].
+
+The mechanism works like this:
+
+# Aaron writes a note
+# Barnaby replies to the note and sends a webmention to Aaron
+# Aaron parses the reply, and adds it as a comment on his note
+# Crystal replies to Barnaby's reply, sends a webmention to Barnaby
+# Barnaby parses Crystal's reply, adds it as a comment on his reply
+# Since Barnaby's post is itself a reply, he in turn sends a webmention to Aaron's original post, letting him know the reply has updated.
+# Aaron checks Barnaby's reply for updates as usual, and sees that Barnaby's reply now has a comment
+# Aaron parses the comment and interprets it as a 2nd level comment on the original post.
+
+== Silo Examples ==
+=== Twitter ===
+* An example of reply chaining on [[Twitter]]: https://twitter.com/benwerd/status/490958867803537408
+* Twitter also clusters related replies together in its visual design from https://twitter.com/craigmod/status/623506782267305984 (Screenshot on 2015-07-21) [[File:twitter-reply-cluster.jpg|300px]]
+
+== FOSS ==
+* [http://www.debiki.com/ Debiki] uses a unique 2D scrolling view: http://www.debiki.com/demo/-71cs1/demo-page-1
+
+[[File:debiki-comment-system.png|250px|Debiki 2D threaded comments]]
+
+== See Also ==
+* [[reply]]
+* [[recursive reply-contexts]]
+* [[comment]]
+* [[comment-propagation]]

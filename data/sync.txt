@@ -1,0 +1,108 @@
+http://indiewebcamp.com/sync
+
+{{stub}}
+
+'''<dfn>sync</dfn>''' is short for synchronize / synchronizing (AKA syncing) / synchronization and refers to the process of keeping data consistent between two or more devices (including servers).
+
+== Related Standards ==
+=== WebDAV ===
+WebDAV is RFC4918. [http://www.ietf.org/rfc/rfc4918.txt]
+
+[http://www.webdav.org/specs/]
+
+Used for general web-based syncing (between ??? and ??? implementations/services?).
+
+=== CalDAV ===
+CalDAV is RFC4791 [http://tools.ietf.org/html/rfc4791].
+
+Used for calendar-specific web-based syncing (between ??? and ??? implementations/services?).
+
+=== CardDAV ===
+CardDAV is RFC6352 [http://tools.ietf.org/html/rfc6352].
+
+Used for contacts-specific web-based syncing (between ??? and ??? implementations/services?).
+
+=== OData ===
+[http://www.odata.org/ OData] is "a standardized protocol for creating and consuming data APIs. OData builds on core protocols like HTTP and commonly accepted methodologies like REST. The result is a uniform way to expose full-featured data APIs."
+
+It's [https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=odata an OASIS standard].
+
+=== SyncML ===
+
+[http://en.wikipedia.org/wiki/SyncML SyncML] is a "platform-independent information synchronization standard." It had a decent amount of traction for a while, but it was also renamed to _Open Mobile Alliance Data Synchronization and Device Management_, which is probably pretty illustrative of the mindset behind it.
+
+=== Exchange ActiveSync ===
+[http://en.wikipedia.org/wiki/Exchange_ActiveSync Exchange ActiveSync] is Microsoft's protocol for synching email, contacts, calendar, tasks, and notes between Exchange servers and clients. It's gotten a decent amount of adoption from third parties, probably due to Exchange's historical market share.
+
+== Related Projects ==
+
+Version control systems in general are related. Notably...
+
+=== Git ===
+As a distributed version control system (DVCS), Git (and github) is good at merging different sets of changes from different sources to the same file.
+
+=== git-annex ===
+[http://git-annex.branchable.com/ git-annex] is a way to sync between the repositories of your choice (backends include ssh server, Amazon S3, Box.com, local file transfer, xmpp, etc.) and it there are clients for Linux, OSX, Windows and Android. The webapp that comes with it is a good replacement for Dropbox.
+
+=== Mercurial ===
+Similarly, Mercurial (also a DVCS) handles multi-change merging reasonably well.
+
+=== Firefox sync ===
+[https://www.mozilla.org/en-US/firefox/sync/ Firefox sync] lets the user synchronize bookmarks, passwords, tabs, history, add-ons and preferences between different devices when using Firefox. It offers the users to use a Mozilla server to do that, but also tries to make it possible to [https://www.mozilla.org/en-US/firefox/sync/ host the server yourself], but sadly it is not very easy to set up as [https://jeena.net/firefox-sync-15 Jeena found out].
+
+=== MediaWiki ===
+[[MediaWiki]] (e.g. this wiki) does a good job of handling different edits to the same page by different people well when they edit different sections. If edits collide, the latter save is prompted with two text areas to manually merge the changes.
+
+=== Operational transformation ===
+[http://en.wikipedia.org/wiki/Operational_transformation Operational transformation] (OT) is a set of abstract models and algorithms for implementing multi-master sync, merge, and conflict resolution of arbitrarily structured data. It's big and heavy and overkill for most of our use cases, but it's a common touchstone when discussing data synchronization.
+
+=== Simperium ===
+
+[https://simperium.com/ Simperium] is a cross-platform data synchronization layer. In their words, it's "a service for developers to move data everywhere it's needed, instantly and automatically." It was built by the [http://simplenote.com/ Simplenote] people. Automattic recently bought them [http://www.theverge.com/2013/9/18/4741908/simplenote-reborn-first-great-notes-app-ios-android-mac-web].
+
+== Proprietary Sync Implementations ==
+=== iTunes sync ===
+[[Apple]] iOS devices can directly sync via USB and/or wifi with OSX devices (except if you upgrade to iOS7 or later and OSX Mavericks or later[http://tantek.com/2013/322/b1/homebrew-computer-club-reunion-inspiration#mavericks-requires-icloud-sync]) using the built-in [[iTunes]] OSX application.
+
+Criticism:
+* '''Data loss''': It looks like iTunes does sync by treating the Mac as master, so if you delete something on your Mac, but edit it or add to it it on your iPod/iPhone - it gets deleted next time you sync, and everything you edited or added is thus lost. - [[User:Tantek.com|Tantek]] 19:38, 26 November 2013 (PST)
+** Blogged: 2013-11-27 <cite>[http://tantek.com/2013/331/b1/lose-data-apple-ios-notes-five-easy-steps How To Lose Your Data In Apple iOS Notes In Five Easy Steps]</cite>
+* '''Poor design choices''': What I don't understand is the design decision to assume a delete even when there's a conflict. I'd think a fork would be better:
+** Far more forgiving to the user
+** It's easy to delete something one more time. Harder to undelete.
+** When in doubt, preserve the user's data.
+* '''Unreliable as backup''': Sadly, it looks like iTunes didn't keep the previous backup, so once you sync (and create a new local backup of your iOS device) after any delete operations you will likely lose data. - [[User:Tantek.com|Tantek]] 19:38, 26 November 2013 (PST)
+
+== Silo sync services ==
+Proprietary sync services.
+=== iCloud ===
+[[Apple]] offers free (up to a data/bandwidth limit) sync services via its ([http://tantek.com/2012/159/t5/icloud-fixed-pricing-not-dynamic-nor-elastic misnamed]) [[iCloud]] service between Apple devices such as iOS (iPod Touch, iPhone), and Macs (laptops etc.).
+
+Articles:
+* 2013-12-05 <cite>[http://tantek.com/2013/339/b1/why-not-sync-ios-icloud-ability-revert-updates Why NOT to sync iOS apps to iCloud: Ability to revert updates]</cite>
+
+=== Google ===
+[[Google]] offers a sync service for Google Apps data (GMail, Calendar, Docs/Drive, etc.) between Android devices and its servers. It also synchronizes a smaller subset of that data to Chromebooks, iOS devices, Gmail Offline, and others.
+
+== IndieWeb thoughts ==
+=== Complexity causes unreliability ===
+Excess complexity leads to fragile implementations and unreliability. - [[User:Tantek.com|Tantek]] 19:38, 26 November 2013 (PST)
+=== Reliability comes from simple building blocks ===
+If you want reliability, you have to have simplicity in the building blocks (which [[OStatus]] did not have).
+
+=== Power-unaware synching is harmful ===
+Bad for performance, power usage, etc. Naive synching implementations can easily hog client (and server) CPU and battery [http://tantek.com/2013/225/t3/huge-problem-everything-cloud-fast-drain-mobile-mifi].
+
+Good implementations avoid this with a variety of techniques such as timer coalescing. As examples, Android has a fairly mature, power-aware network data synchronization system [http://developer.android.com/training/sync-adapters/], and Mac OS X Mavericks's kernel has a power-aware scheduler. [http://images.apple.com/media/us/osx/2013/docs/OSX_Mavericks_Core_Technology_Overview.pdf] [http://www.apple.com/osx/advanced-technologies/#timer]
+
+Also, centralized sync services can change their policies, for example requiring network sync instead of wired between devices (e.g. phone to laptop), as Apple did, which can hurt power usage and performance. This is yet another reason to avoid silos and prefer decentralized services.
+
+([http://indiewebcamp.com/irc/2013-11-26/line/1385498451 IRC discussion])
+
+=== Syncing is hard like federation ===
+<blockquote>It feels like syncing, like [[federation]], is both hard to get right, and there's little incentive for big players to get it right.[http://indiewebcamp.com/irc/2013-11-26/line/1385501941]</blockquote>
+
+
+== See Also ==
+* [[federation]]
+* [[why]]

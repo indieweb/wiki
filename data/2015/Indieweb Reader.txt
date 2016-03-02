@@ -1,0 +1,50 @@
+http://indiewebcamp.com/2015/Indieweb_Reader
+
+http://etherpad.indiewebcamp.com/iwreader
+
+Previously: https://etherpad.mozilla.org/indie-reader
+
+2015-07-11
+
+== IndieWeb Reader ==
+
+* {{jeena}} - facilitator
+* {{aaronpk}}
+
+* uses a reader to avoid visiting lots of sites
+* wants to track read state across all instances of the reader
+* list of subscriptions should be synced
+* offline reading and responding
+* native application, not a website, to be able to run in the background to sync data
+
+why not just reuse RSS?
+
+
+Aaron: what we've been doing so far is consuming microformats.  if you put h-entry's into a list, it looks a lot like a feed.
+
+Jeena: my home page is a picture of me, my latest photo, latest note, but no feed of posts. there's a link to my notes page and pictures page.
+
+Aaron: struggling with a similar thing. if you go to my home page, you see my latest notes and photos, but not my replies, and not my other kinds of content like food.  so right now if you subscribe to my home page you only get notes and photos.  what i'm planning on doing is having 'minor content' (not sure what to call it) as a super-trimmed-down version of it that links to the full post.   if i write an article, i don't want the full articule on the home page, just a link to it.  similarly edits, it's useful for them to be in a feed, but i don't want them to be a giant thing on my home page.
+
+Bryan: right, it's a curation issue.  what of this data needs to be seen first, what needs to be seen somewhere.  still, seems you like you could have microformats and RSS.
+
+Aaron: there are already services that go both ways -- MF to RSS, RSS to MF.  but that doesn't solve the underlying problem that people's stream on their home page doesn't match what's on the entire site.
+Things to avoid: creating a side file, usually winds up less maintained.  RSS usually falls into that category.  people forget about it, so they redesign their site and break it, without realizing it.  way to avoid that is to stick to human-visible data first.
+
+Is there any way to mark up the notes link from Jeena's home page to say it's a feed?  [Analogous to the problem where he's got his contact info on the About page, but IndieAuth doesn't follow that.]
+
+rel=feed should work.  doesn't currently work in monocle, aaron will look on it.
+
+Aaron's planning on having multiple feeds.  e.g., exercise = bike rides and runs, transport = bike rides and car trips.  [how to communicate what kinds of content are included in which feed?  naming could help.  maybe it's a good reason to create a description of the feed - h-feed can have a description.]
+
+
+indiereaders out there?
+- monocle and woodwind are fairly far along, allow for others to log in; others have it integrated into their site
+- known has a reader, it just doesn't have a UI yet
+Jeena: would like to include RSS
+Aaron: I think woodwind does, I might enable that by basically running it through a converter.
+
+can the same feed have differnet contents when viewed by different people?  that's an access control thing, there have been some experiments, but nobody's actually doing it.
+
+where to store the information about what i've read?  if the info about the subscriptoins are up on a web site the data about what i've read is there as well.  if my own web site is also the reader, that's where it lives.  
+could be a webmention, "i've read it"  it's SWAT0!  you, the site it's on, the reader

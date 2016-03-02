@@ -1,0 +1,61 @@
+http://indiewebcamp.com/pubsub
+
+{{stub}}
+
+'''<dfn>pubsub</dfn>''' is a generic name for a protocol, system, or service that routes messages between producers and consumers. It usually refers to one of three things:
+* a system that notifies [[reader]]s that a [[publisher]] has published new content, e.g. [[PubSubHubbub]].
+* a system that sends push notifications to users, e.g. [[iOS]]'s APN and [[Android]]'s GCM.
+* a category of [[plumbing]], e.g. [[Google Cloud PubSub]] and [[Amazon SQS]].
+
+Subscribing to updates to a URL (ie the first definition above) is an extremely useful [[building-block]] for the indieweb. The rest of this page discusses that context.
+
+== Generalised Flow ==
+
+# Subscriber -> Publisher: Please let me know when you update http://example.org/
+# Publisher -> Subscriber: Okay, now I’ve verified you’re not spam I’ll let you know
+
+Later, after updating http://example.org/
+
+# Publisher -> Subscriber: I updated http://example.org, here’s its new content
+
+=== Problems with this flow ===
+
+* Lots of load on the publisher: Subscription management, sending updates. Too much complexity, too low a value/pain ratio for most creators to implement
+** Solution: Hubs as the middle man between subscribers and publishers
+
+== Previous/Current Work ==
+
+* [[PubSubHubbub]] is a decentralised, hub-based approach
+** Widely implemented and suitably easy for publishers to use, but difficult to test
+** Lots of complexity for subscribers
+** Reliance on ATOM format, semantics and DRY-violating duplication
+* [http://en.wikipedia.org/wiki/RSS_Cloud RSS Cloud]
+
+== Brainstorming ==
+
+Ideal solution: a content-agnostic, pure-HTTP hub-based approach.
+
+Publishers create content on the web, and let hub(s) know that it exists/when it’s updated via a POST request. Content is published with a Last-modified header.
+
+Hubs periodically poll the content for changes (HEAD request and Last-modified header inspection) just in case they missed any updates/to enable pubsub of content published by people who for whatever reason can’t notify the hub.
+
+Publishers publicly declare which hub manages notifications for their content via a Link header or HTML/XML element with rel=hub.
+
+When a subscriber wants to subscribe to changes to a URL, they discover the hub as described above, and send a POST request to some endpoint (/subscribe?) with the URL they’re subscribing to and the URL they want notifications sent to.
+
+* We need some sort of auth at this point to weed out spammers and enable the authenticity of future notifications.
+* TODO: spec this stage out in more detail, take inspiration from current PuSH work
+
+Then, when a publisher updates their content and either a) sends a notification to the hub or b) the hub polls the URL and sees the Last-modified header change, the hub sends POST requests out to all the subscribers for that URL.
+
+* Possibly with the URL content as the POST body to prevent the Thundering Herd problem
+
+=== Benefits over current solutions ===
+
+* Eliminates DRY-violating duplication
+* Content-agnostic, not tied to ATOM feeds but can be used with *any* content served over HTTP
+* Extremely low barrier to entry for publishers — occasional hub polling of content eliminates the need to even send notifications to the hub to begin with
+
+
+== See Also ==
+* [[push-vs-pull]]

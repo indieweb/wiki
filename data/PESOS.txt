@@ -1,0 +1,53 @@
+http://indiewebcamp.com/PESOS
+
+'''<dfn>PESOS</dfn>''' is an acronym/abbreviation for '''Publish Elsewhere, Syndicate (to your) Own Site'''. It's a [[syndication-models|Syndication Model]] where publishing flow starts with posting to 3rd party services, then using some infrastructure (e.g. feeds, pingbacks, [[webhooks]]) to create an archive copy under your domain.
+
+The opposite (and preferable) approach is [[POSSE]], whereby a user publishes original content to their own site, and then syndicates copies to 3rd party services, preferably with perma(short)links back to the originals on their own site.
+
+== Implementations ==
+=== IndieWeb Examples ===
+
+* Laurent Eschenauer pulls content in from various silos:
+** [[Twitter]] ([http://eschnou.com/entry/rt-teabass-there-are-now-four-upcoming-nodecopter-events-in-the-uk-this--24948-8866935.html example])
+** likes from [[Vimeo]] ([http://eschnou.com/entry/domaine-de-chambord-filmy-en-drone-pour-france-2-24946-9661.html example]) and [[YouTube]] ([http://eschnou.com/entry/its-not-about-the-nail-24947-138521.html example])
+** photos from [[Flickr]] ([http://eschnou.com/entry/tilff-se-prypare-y-la-fyte-ambiance-vacancez-sous-ce-beau-soleil-24937-1608210.html example])
+* '''[[User:Hupili.net]]''' pulls content from multiple silos and present them in his own sites (currently only in form of an RSS feed) using SNSAPI https://github.com/hupili/snsapi
+** Facebook
+** Twitter
+** Renren, the large OSN in China. It's a Facebook like model: http://www.renren.com/
+** SinaWeibo, ("weibo" in Chinese means "micro-blog"). It's a twitter like model: http://weibo.com/
+** TecentWeibo. It's another micro-blogging service in China. Due to the broad production line of Tecent, TecentWeibo has some unique access point (e.g. WeChat from a mobile device). http://t.qq.com/
+** The aggregated status update from those silos: http://hupili.net/feeds/all.xml  . It's currently a mix of all materials. I'll separate the English and Chinese messages later.
+* '''[[User:Www.flutterby.net_user:danlyke|danlyke]]'''
+** Used Twitter export to back-patch Twitter IDs into posts originally syndicated out to Twitter but for which the Twitter ID wasn't originally recovered from the API.
+** Uses [https://support.google.com/calendar/answer/37111?hl=en the Google calendar export] to backup calendar data in his own repository
+* Add yourself and a list of the silos you PESOS from
+* …
+
+=== Software ===
+* [http://ownyourgram.com/ OwnYourGram.com] is a service which streams your Instagram photos to your own site in real-time. {{main|OwnYourGram}}
+* [https://github.com/snarfed/ownyourresponses ownyourresponses] PESOSes your Facebook, Twitter, and Instagram [[interactions]]/[[responses]] to your site via [[micropub]].
+* [https://github.com/snarfed/ownyourcheckin ownyourcheckin] PESOSes Facebook checkins to your WordPress site via the [https://developer.wordpress.com/docs/api/ WordPress REST API].
+
+== Disadvantages ==
+PESOS is considered less robust and inferior to [[POSSE]] for the following reasons:
+
+* '''Possible loss or restriction of ownership.''' By posting ''first'' on a silo, you are subject to that silo's TOS, both with entering the data and later getting it out. You calling their API or feeds to extract your own data may still shackle your data with some rights to them (e.g. "database copyright" for content contributed to silo collections like [[Foursquare]] venues). You have a ''dependent'' ownership chain for your content (from creation, to syndication/re-use, to consumption), where the silo is an intermediate dependent party that you can never be rid of.
+** '''[[Twitter]] Developer Rules of the Road appears to prohibit export to your site''': <blockquote cite="https://dev.twitter.com/terms/api-terms"> Exporting Twitter Content to a datastore as a service or other cloud based service, however, is not permitted.[https://dev.twitter.com/terms/api-terms]</blockquote> Discovered via [https://twitter.com/michielbdejong/status/347438063187804161].
+* '''Less reliable.''' Your site relies on 3rd Party Services to post any content
+** 2014-10-05 E.g. [[Flickr]] https://twitter.com/anomalily/status/518830141502685185
+* '''Non-canonical.''' Copes archived to your domain are not a canonical copy
+* '''Lower quality.''' Pulling in from 3rd Party Services can reduce the quality of content, e.g.
+** character limits (e.g. 140 character [[Twitter]] posts, 200 character Foursquare shouts/tips).
+** link-wrapping (e.g. Twitter hides all links behind their t.co link-wrapper)
+
+== Background ==
+* 2012-06-22 <i>PESOS</i> term defined: http://tantek.com/2012/174/t2/opposite-posse-pesos-publish-elsewhere
+
+== See Also ==
+* Relevant session from [[2011]]: [[Publish_Then_Syndicate_and_Replicate]]
+
+== Related ==
+* [[POSSE]]
+
+[[Category:building-blocks]]

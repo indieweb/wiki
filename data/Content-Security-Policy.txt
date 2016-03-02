@@ -1,0 +1,129 @@
+http://indiewebcamp.com/Content-Security-Policy
+
+__TOC__
+{{stub}}
+
+'''<dfn>[https://w3c.github.io/webappsec/specs/content-security-policy/ Content-Security-Policy]</dfn>''' (abbreviated <abbr>CSP</abbr>) is an [[HTTP]] directive that a site can use to restrict what external resources are retrieved by a browser, to mitigate some [[XSS]] and injection attacks.
+
+== Why ==
+AT&T hotspot ad injection into http sites: http://webpolicy.org/2015/08/25/att-hotspots-now-with-advertising-injection/
+
+== How to ==
+=== Send CSP header ===
+Configure your webserver to send a 
+* <code>Content-Security-Policy</code>
+HTTP header (e.g. for [[Apache]], update your .htaccess) according to the policy you prefer (see [[#Examples|Examples section below]] for options to consider for your site.
+
+=== Test your CSP ===
+Check that your server is sending the right CSP:
+# Go http://www.whatsmyip.org/http-headers/
+# Enter your domain (or a post permalink) into the big white text box
+# click "Get Headers"
+# scroll down to "HTTP Response Headers"
+# you should see an entry for "Content-Security-Policy" in the left column, and on its row in the right column, it should show exactly what you configured your server to send.
+
+Then load your site/permalinks in whatever browsers you can run, and check their View/Tools/Developer (Web Console, Show Error Console, Developer Tools) for errors, in particular for anything being blocked that you wanted to load.
+
+== Examples ==
+=== Only Resources From Same Domain ===
+Only allow external resources from the precise same domain, no subdomains:
+<pre>
+Content-Security-Policy: default-src 'self'
+</pre>
+
+Include subdomains:
+<pre style="white-space:pre-wrap">
+Content-Security-Policy: default-src 'self' *.example.com
+</pre>
+Where example.com is your trusted top level [[personal domain]].
+
+=== Allow Only Media From Anywhere ===
+Allow images/audio/video embeds from anywhere, but scripts, style sheets, iframes etc. only from same domain:
+<pre style="white-space:pre-wrap">
+Content-Security-Policy: default-src 'self'; img-src *; media-src *
+</pre>
+
+;Why <code>img-src *</code>
+:Embedding images from external domains is a fairly common practice, e.g. [[icon]]s of people in [[reply-context]]s, [[comments]], or photos hosted on other domains (e.g. [[silos]]), etc. Alternatively if you proxy all your images through a subdomain on your site (i.e. to uplevel them to https), then you could restrict img-src to that subdomain (with https).
+
+;Why <code>media-src *</code>
+:Also if you [[autolink]] your notes, e.g. with the [[CASSIS]] <code>auto_link()</code> function, then you're likely also [[auto-embed]]ding as part of that and thus turning any common audio file extension link into an <code>&lt;audio&gt;</code> and similarly with video file extension links and <code>&lt;video&gt;</code>. Since those audio/video file links can be from any domain, the <code>media-src *</code> makes sense.
+
+=== Allow Anywhere Media Whitelist Iframes ===
+Allow images/audio/video embeds from anywhere, iframes from an https whitelist, and scripts, style sheets only from same domain:
+<pre style="white-space:pre-wrap">
+Content-Security-Policy: default-src 'self'; img-src *; media-src *; child-src https://player.vimeo.com https://www.youtube.com
+</pre>
+
+;Why <code><nowiki>child-src https://player.vimeo.com https://www.youtube.com</nowiki></code>
+:Again if you use an [[autolink]] function that [[auto-embed]]s, then it's likely turning every YouTube and Vimeo link into an iframe to embed players for those videos. That <code>child-src</code> directive in the example explicitly allows loading of external iframes only over https only from those specific domains (whitelist).
+
+IndieWeb Examples:
+* {{t}} uses this, with <code>frame-src</code> (previous version of child-src) for backcompat, and a few more directives. See details in [[#Tantek|IndieWeb Examples: Tantek]].
+
+== IndieWeb Examples ==
+=== Tantek ===
+{{t}} on tantek.com since 2015-08-28 has used the following CSP on his home page and post permalinks:
+
+<blockquote><code><nowiki>
+Content-Security-Policy: default-src 'self'; img-src *; media-src *; script-src 'self' 'unsafe-inline' https://platform.twitter.com; style-src 'self' 'unsafe-inline'; frame-src https://player.vimeo.com https://www.youtube.com platform.twitter.com; child-src https://player.vimeo.com https://www.youtube.com platform.twitter.com;
+</nowiki></code></blockquote>
+
+Based on the '''[[#Allow_Anywhere_Media_Whitelist_Iframes|Allow Anywhere Media Whitelist Iframes]]''' example above, with the following additions for the following reasons:
+
+* <code>script-src 'self' 'unsafe-inline'</code> - because I still have some inline scripts that I didn’t want to take the time to fix before, but now have motivation to do so.
+** with <code><nowiki>https://platform.twitter.com</nowiki></code> to allow Twitter [[webaction]] tweet button with tweeted count to work on my [[article]] posts.
+* <code>style-src 'self' 'unsafe-inline'</code> - because I still have some inline style sheets and style attributes that I didn’t want to take the time to fix before, but now have motivation to do so.
+* <code>frame-src</code> - for backcompat with Safari 8.0.7 (and before?) which is latest version on OSX 10.10.4, and Microsoft Edge (tested as of 2015-08-28 Microsoft Edge build).
+* <code><nowiki>child-src platform.twitter.com</nowiki></code> - to also allow Twitter tweet buttons as noted above. <br/>Note: <code><nowiki>child-src platform.twitter.com</nowiki></code> instead of <code><nowiki>child-src https://platform.twitter.com</nowiki></code> (which would be better) because the current platform.twitter.com/widgets.js, even if referenced via https, has one spot where it does an iframe embed that is parent page protocol relative, and thus ends up embedding an http iframe. To be able to use only the child-src https, I need to either:
+** Get Twitter to fix platform.twitter.com/widgets.js to always embed its iframe with https, OR
+** Switch my site to using https so the protocol relative iframe src will also be https, OR
+** Drop the "Tweet" button from my [[article]] posts (in which case I could drop the <code><nowiki>platform.twitter.com</nowiki></code> from the <code>child-src</code> and <code>frame-src</code> completely.)
+
+=== Shane Becker ===
+{{veganstraightedge}} on veganstraightedge.com using [[Dark Matter]] since 2016-02-24 has used the following CSP on his website 
+<blockquote><code><nowiki>
+Content-Security-Policy: default-src 'self' http:; child-src *; frame-src *; img-src * data:; media-src *; script-src 'self' platform.instagram.com ; style-src 'self' 'unsafe-inline'
+</nowiki></code></blockquote>
+
+Based on the '''[[#Allow_Anywhere_Media_Whitelist_Iframes|Allow Anywhere Media Whitelist Iframes]]''' and {{t}}'s examples above, with the following additions for the following reasons:
+
+* <code>default-src 'self' http:</code> - My software ([[Dark Matter]]) adds <code>http:</code> or <code>https:</code> to match whatever the site uses (based on a setting that is user changeable to match their site's scheme)
+* <code>child-src *</code> - Both of these are set to <code>*</code> mainly because I couldn't get this work with a list. I plan change this to an explicit list when I figure out what my code's problem is.
+* <code>frame-src *</code> - Both of these are set to <code>*</code> mainly because I couldn't get this work with a list. I plan change this to an explicit list when I figure out what my code's problem is.
+* <code>img-src * data:</code> - I include <code>data:</code> because I'm using some SVG from a data://url in addition to SVG img[src=url.svg]
+* <code>script-src 'self' platform.instagram.com </code> - I don't include <code>'unsafe-inline'</code> because I don't already have any inline script blocks that I need to support. And I don't want to support them going forward. I don't include <code>https://platform.twitter.com</code> because I don't have Twitter buttons on my site. I also added <code>platform.instagram.com</code> because I use Instagram's embed code.
+** I'll add more domains to this whitelist for auto-embeds in [[Notes]].
+** I'll eventually remove instagram in particular by building an auto-embed that doesn't use Instagram's JS/iframe.
+* <code>style-src 'self' 'unsafe-inline'</code> - I also include <code>'unsafe-inline'</code> because post specific styles are served up into <code>style</code> tags. And I don't see a meaningful security hole by allowing CSS in style tags.
+
+
+=== ... add your site too! ... ===
+Add your site, when you started using a CSP, and preferably copy/paste it here inline and explain any changes from the common practices in the Examples section.
+
+== FAQ ==
+=== Why bother if attacker can hack CSP too ===
+Q: On an [[HTTP]] (not [[HTTPS]]) connection, an attacker can theoretically either strip your CSP header, modify it (to allow their junk), or replace it entirely with one of their own. Why bother adding a CSP since it too can be attacked?
+
+A: In short, [https://en.wikipedia.org/wiki/Defense_in_Depth_%28computing%29 Defense in Depth]. 
+
+Longer:
+
+Just because an attacker is willing to use one mechanism, it doesn’t mean they are willing (or even necessarily capable - even if you think it is "obvious") to use another mechanism.
+
+In the case of ATT wifi hotspots injecting ads, it's one thing to just add ads to the page, but it's quite different in quality and nature to remove/change HTTP headers, especially one with <strong>security</strong> in its name, hence they are unlikely to do so. That being the original use-case we were solving for, we can consider it solved.
+
+And even if an attacker is willing to workaround multiple mechanisms, they are having to spend more time doing so, which in some cases may be enough to thwart an attack, especially if time/timing is an issue.
+
+For more on the general concept see: [https://en.wikipedia.org/wiki/Defence_in_depth Wikipedia: Defence in depth].
+
+== Resources ==
+* [https://w3c.github.io/webappsec/specs/content-security-policy/ W3C Content Security Policy Editor’s Draft]
+* 2012-06-15 (updated 2015-05-08) Mike West <cite>[http://www.html5rocks.com/en/tutorials/security/content-security-policy/ An Introduction to Content Security Policy]</cite>
+* https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy
+* https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy
+
+== See Also ==
+* [[HTTPS]]
+* [[CORS]]
+* [[sandbox]]

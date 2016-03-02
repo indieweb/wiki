@@ -1,0 +1,35 @@
+http://indiewebcamp.com/WordPress_shortlink
+
+'''<dfn>WordPress shortlink</dfn>''' is a shortened URL for each WordPress post, using the post ID in the format <code>example.com/?p=1234</code>. 
+
+== Replacing the build in WordPress Shortlink ==
+
+    remove_action( 'wp_head', 'wp_shortlink_wp_head', 10, 0 );
+    add_action( 'wp_head', 'replace_shortlink');
+    function replace_shortlink () {
+        // make the new shortlink here somehow, for example, this is what I used:
+        global $post;
+        if ( !empty(SHORTDOMAIN) ) {
+            $short = SHORTDOMAIN . $post->ID;
+        }
+        else {
+            $url = rtrim( get_bloginfo('url'), '/' ) . '/';
+            $short = $url.'?p='.$post->ID;
+        }
+        printf ('<link rel="shortlink" href="%s" />%s', $short, "\n") ;
+    }
+
+
+== nginx redirection for shortlink id to not nice WordPress URL ==
+
+    # dom.ain
+    server {
+        listen 80;
+        server_name .dom.ain;
+        rewrite "^/([0-9]{1,6}).*$" https://real-domain.com/?p=$1 permanent;
+        # fallback
+        rewrite ^(.*)$ https://real-domain.com$1 permanent;
+    }
+
+== See Also ==
+* [http://codex.wordpress.org/Function_Reference/the_shortlink WordPress Codex Function Reference: the_shortlink()]

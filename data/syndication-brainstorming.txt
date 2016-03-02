@@ -1,0 +1,197 @@
+http://indiewebcamp.com/syndication-brainstorming
+
+{{stub}}
+
+__TOC__
+
+The goal of this page is to come up with a syndication protocol, so people can syndicate their post to various destinations that support this syndication protocol.
+
+To illustrate these options, we will use the example of Alice creating a post and syndicating it to a news aggregator, news.indiewebcamp.com.
+
+== Syndicate by Reference ==
+Summary: This method, like a webmention, contains the minimal number of parameters for the request, and the syndication destination is expected to fetch the contents of the post being syndicated from the source.
+
+Alice is using a Micropub client to create a post while indicating it should be syndicated. The micropub request looks like the following:
+
+<pre>
+POST /micropub HTTP/1.1
+Authorization: Bearer xxxxxxxxx
+
+h=entry
+&content=this post is relevant to #indiewebcamp
+&mp-syndicate-to=http://news.indiewebcamp.com/
+</pre>
+
+Alice's server handles the Micropub request and creates an h-entry post on her website. In the entry, the server adds a "u-syndication" property linking to the indienews home page.
+
+<pre>
+<div class="h-entry">
+  <p class="e-content">this post is relevant to #indiewebcamp</p>
+  <a href="http://alice.example.com" class="u-author h-card">Alice</a>
+  <a href="http://alice.example.com/post/100" class="u-url">
+    <time class="dt-published" datetime="2015-07-25T06:00:00-0700">July 25</time>
+  </a>
+  <a href="http://news.indiewebcamp.com/" class="u-syndication"></a>
+</div>
+</pre>
+
+When Alice publishes this post, before sending normal webmentions, her server first sends the syndication request.
+
+To discover the endpoint indienews expects to receive syndication requests, Alice's server first does the discovery by fetching the news.indiewebcamp.com URL and looking for <code>rel=webmention</code> (TODO: does this need to be a different endpoint from the webmention endpoint?).
+
+Alice's server then sends the syndication request, which looks similar a normal [[webmention]].
+
+<pre>
+POST /endpoint HTTP/1.1
+Host: news.indiewebcamp.com
+
+source=http://alice.example.com/post/100
+&target=http://news.indiewebcamp.com/
+[&callback=http://alice.example.com/syndication-callback
+ &secret=1234123412341234]
+</pre>
+
+By default, the syndication target will publish the syndicated post synchronously and return HTTP "201 Created" and a Location header with the URL of the syndication. The response body may contain the syndicated post URL as plain text, [https://www.brid.gy/about#response or a more complex object.]
+
+<pre>
+HTTP/1.1 201 Created
+Location: http://news.indiewebcamp.com/post/823235
+
+http://news.indiewebcamp.com/post/823235
+</pre>
+
+The syndication target may also choose to publish the syndicated post asynchronously. The syndication request may include an optional callback URL that will receive the final URL of the syndicated copy, as well as a secret the server generated that will be used to verify this callback request. (Including the <code>callback</code> param does not require asynchronous operation.)
+
+When a syndication target operates asynchronously, the response is the HTTP "Accepted" response:
+
+<pre>
+HTTP/1.1 202 Accepted
+</pre>
+
+The syndication endpoint goes and fetches Alice's source URL, and verifies that it contains a link to http://news.indiewebcamp.com, and verifies the link is marked up with either <code>rel=syndication</code> or is a <code>u-syndication</code> property of the h-entry.
+
+It then parses the page for microformats and finds the h-entry there. Using the contents found in the h-entry, it creates the syndicated copy using that data. 
+
+If the syndication request contains a callback URL, the syndication endpoint needs to tell Alice's server the URL of the syndicated copy.
+
+The syndication endpoint sends a POST request to the callback URL specified in the request.
+
+<pre>
+POST /syndication-callback
+Host: alice.example.com
+
+url=http://alice.example.com/post/100
+&syndication=http://news.indiewebcamp.com/post/823235
+&secret=1234123412341234
+</pre>
+
+(TODO: It isn't strictly necessary to include the URL in this, since Alice's endpoint could look it up based on the secret that was generated.)
+
+Alice's callback endpoint updates the original post and adds the syndication URL, so that the post now includes the URL of the syndicated copy:
+
+<pre>
+  <a href="http://news.indiewebcamp.com/post/823235" class="u-syndication">view on news.indiewebcamp.com</a>
+</pre>
+
+=== Summary ===
+
+The author needs to support:
+* Publishing an h-entry
+* Sending the syndication request, either:
+** Sending webmentions
+** Storing a secret and creating a callback URL that can update the post
+
+The syndication endpoint needs to support:
+* Parsing microformats and looking for an h-entry
+* Sending a POST request to the callback URL if present
+
+== Syndicate by Content ==
+Summary: This method, like micropub, contains all of the data of the post being syndicated. The syndication destination only needs to verify the intent to syndicate in some way.
+
+Alice is using a Micropub client to create a post while indicating it should be syndicated. The micropub request looks like the following:
+
+<pre>
+POST /micropub HTTP/1.1
+Authorization: Bearer xxxxxxxxx
+
+h=entry
+&content=this post is relevant to #indiewebcamp
+&mp-syndicate-to=http://news.indiewebcamp.com/
+</pre>
+
+Alice's server handles the Micropub request and creates an h-entry post on her website.
+
+<pre>
+<div class="h-entry">
+  <p class="e-content">this post is relevant to #indiewebcamp</p>
+  <a href="http://alice.example.com" class="u-author h-card">Alice</a>
+  <a href="http://alice.example.com/post/100" class="u-url">
+    <time class="dt-published" datetime="2015-07-25T06:00:00-0700">July 25</time>
+  </a>
+</div>
+</pre>
+
+Alice's server then begins the syndication request. To discover the endpoint indienews expects to receive syndication requests, Alice's server first does the discovery by fetching the news.indiewebcamp.com URL and looking for <code>rel=webmention</code> (TODO: does this need to be a different endpoint from the webmention endpoint?).
+
+TODO: some kind of authorization here to obtain a bearer token
+
+Alice's server then sends the syndication request.
+
+<pre>
+POST /endpoint HTTP/1.1
+Host: news.indiewebcamp.com
+Authorization: Bearer xxxxxxxxx
+
+url=http://alice.example.com/post/100
+&h=entry
+&content=this post is relevant to #indiewebcamp
+&author=http://alice.example.com
+&published=2015-07-25T06:00:00-0700
+</pre>
+
+The response contains the location of the syndicated copy that was created.
+
+<pre>
+HTTP/1.1 201 Created
+Location: http://news.indiewebcamp.com/post/823235
+</pre>
+
+TODO: does this need to happen asynchronously in order to verify the post exists on alice.example.com/post/100? If so, use the callback mechanism described above.
+
+=== Summary ===
+
+The author needs to support:
+* Publishing an h-entry
+* TODO: obtaining a bearer token
+* Sending the post contents in the syndication request
+
+The syndication endpoint needs to support:
+* Verifying a bearer token
+* ...
+
+=== Brainstorming ===
+==== Getting Token / Initial set-up ====
+* {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} 19:44, 25 July 2015 (PDT) How I have been planing with [[mpTweet]] (still need to get the last bits of this working) is to have the syndication site send the token via the micropub endpoint.   So flow would be:
+*# User enters URL at mpTweet site
+*# User allows mpTweet access to their twitter account (twitter authorize the app)
+*# User is redirected to their authorization endpoint, go give mpTweet "register-syndication" access to their site
+*# mpTweet sends a token, URL, and label to the user's micropub endpoint, essentially registering the syndicate-to data
+
+* For posting
+*# User's micropub client will present mpTweet as a syntidate-to option, the user selects it
+*# User submits the post to their micropub endpoint
+*# The user's micropub endpoint creates the post on the user's own site
+*# The micropub endpoint then looks up the stored mpTweet token and sends almost all the same data to mpTweet (removing syndicate-to, adding u-url) or some subset of them.  
+*# mpTweet posts to twitter with the u-url backlink and responds with the link to the tweet
+
+== IndieWeb Examples ==
+
+=== Bridgy ===
+
+[[Bridgy]] Publish has supported the synchronous [[#Syndicate_by_Reference]] method [https://snarfed.org/2014-03-25_bridgy-publish since 2014-03-25]. Docs: [https://www.brid.gy/about#webmentions request], [https://www.brid.gy/about#response response].
+
+[[mpTweet]] Publish by [[#Syndicate_by_Content]] method working to post to twitter since 2015-07-27
+
+
+== See Also ==
+* [[micropub_chaining]]

@@ -1,0 +1,181 @@
+http://indiewebcamp.com/2013/demos
+
+Part of IndieWebCamp [[2013]].
+
+== Start Demos ==
+Day 1: 2013-06-22.
+
+Demonstrate what you have working ([[selfdogfood]]) on your indieweb site '''today''':
+
+'''3 minute demos'''
+
+Ordered from simplest to most featured:
+
+Posting to your indiewebsite:
+* BradFitz - posting to his own site with Camlistore
+* ...
+
+Posting to your indiewebsite CC material from another site
+* [http://www.harlantwood.net/ Harlan T Wood] - demoing forking CC material to Github
+* ...
+
+Posting to your indieweb site [[POSSEing]] (e.g. to [[Twitter]])
+* Will Norris - [[WordPress]] + [[Snowflake]], automatic to Twitter & FB, manual POSSE to Google+
+* ...
+
+Posting a [[reply]] to your indiewebsite and POSSEing the reply to Twitter
+* [[User:Tantek.com|Tantek]] - brief demonstration of posting a reply using [[Falcon]]
+* ...
+
+Personal site email + Open Badges to leave a site comment:
+* [[User:Donpark.org|Don Park]]
+
+Logging into your own site with a self-hosted [[Persona]] deployment, and posting content 
+* [[User:Ozten.com|Austin]] - [http://ozten.com/psto/2013/06/22/posted-from-indiewebcamp/ Persona, editing personal wiki]
+* ...
+
+PESOS:
+* Beeminder's Real-Time PESOS by dreeves and bsoule, with assistance from pjf
+
+Smallest Federated Wiki
+* Ward Cunningham http://ward.fed.wiki.org
+
+Self-hosted personal data/photo archives with private hosted WordPress install and a Flickr Clone 
+* [[User:caseorganic.com|Amber Case]] - [[Archivr]], [[TheBrain]] 
+
+Displaying avatars on your site and hosting them on your domain:
+* [[User:Fmarier.org|Francois Marier]]
+
+Checking in on your own website (posting a [[checkin]]) and POSSEing to [[Foursquare]]:
+* Ben Werdmuller
+
+Posting a reply to your indiewebsite that itself is a reply to an indie post - showing reply-context
+* Aaron Parecki - [[p3k]]
+* ...
+
+Posting a reply to your indie web site and having it show up as a comment on another indie web post:
+* ...
+
+...
+
+Social
+* I'm participating remotely and have a flaky internet connection. Would love for someone to demo [http://www.sandeep.io/39 Indieweb Federated Like] on my behalf &mdash;[[User:Sandeep.io|Sandeep Shetty]]
+
+== Hack Day Demos ==
+Day 2: 2013-06-23 - ~3 minute hack demos.
+
+=== Brian Hendrickson ===
+Brian Hendrickson - brianhendrickson.com demo
+
+Using his TrueMVC (see yesterday session from the [[2013/Schedule]]) code/architecture - written in Javascript / Coffeescript.
+
+Posts a comment - sends a webmention to Laurent's Post. Webmention didn't go thru.
+
+Note: Github repo at the bottom of brianhendrickson.com
+
+Posts a comment - sends a webmention to one of Sandeep's posts.
+
+Implemented webmentions, then found out that [[Storytlr]] only supports receiving pingbacks.
+
+Style playing with it. Work in progress. 
+
+Node code, webmentions, pingbacks. All in there.
+
+=== Brad Fitzpatrick and Brett Slatkin ===
+Brad Fitzpatrick and Brett Slatkin - Web Fist
+
+Emails from Facebook and Gmail to webfist.org
+
+verify spec rel
+
+webfist.org/.well-known/...
+
+Recent changes on webfist.org - modtime, scrypted version of email address, sha1 of the blob that proves that you have the stuff
+
+blob includes a proof URL
+
+querying the proof URL also doing the scrypt thing - there's the raw original email with DKIM that Facebook signed.
+
+=== Tantek Çelik ===
+Tantek Çelik - tantek.com rel-syndication links and super simple reply-context
+
+Add displaying of [[rel-syndication]] and [[rel-in-reply-to]] links to [[Falcon]].
+
+E.g.  on http://tantek.com/ :
+
+* http://tantek.com/2013/174/t4/view-conversation-rel-syndication-posse-indiewebcamp
+
+Note the "View on Twitter" link in case you want to go favorite it or reply or otherwise look at it on twitter - marked up with [[rel-syndication]].
+
+Then look at the previous post (left arrow nav)
+
+* http://tantek.com/2013/174/t3/fitness-heartrate-faster-b2b-half-marathon-future
+
+Note that "View Conversation on Twitter" because this post is a reply, which lets you see the whole conversation on Twitter because I haven't implemented that.
+
+Then in about 7 minutes before the demo deadline, I implemented a super simple [[reply-context]] display there at the top that just says "In reply to" and links with [[rel-in-reply-to]] to the original post that my reply is a reply to.
+
+=== Bret Comnes ===
+Bret Comnes - indieweb comments using gh-pages - on Laurent's post, everything but the avatar pic - with manual [[webmention]]
+
+=== Sean McGregor ===
+* Sean McGregor - Personal Semantic APIs - using iframes to get fine-grained locally controlled access control. modify the experience of every site using greasemonkey scripts.
+
+=== Jack Senechal and Augustin Bralley ===
+* Jack Senechal and Augustin Bralley - Camlistore with Node.js and Raspberry Pi
+
+=== Aaron Parecki ===
+==== SMS login without password ====
+Aaron Parecki - IndieAuth with SMS and Persona logins
+
+Get the IndieAuth prompt screen
+
+if you add the sms: rel-me link you get a link to use it
+
+A text box shows up.
+
+Enters 4 digit code from his phone.
+
+Logged into IndieWebCamp.com
+
+==== IndieAuth with email via Persona ====
+Get the IndieAuth prompt screen
+
+if you add the mailto: rel-me link you get a Persona login button
+
+click it - go through the Persona login flow
+
+and you're logged into IndieWebCamp again.
+
+=== Aaron Parecki and Francois Marier ===
+Aaron Parecki and Francois Marier - IndieAuth as an authentication provider for Persona logins.
+
+Didn't have time to code it - but figured out what the flow needs to be and wrote up a spec https://github.com/fmarier/indieauth-personaidp-spec
+
+As a user all you have to do is serve the support document on your email domain (your own personal email domain). Then you set indieauth.com as the authority for that domain.
+
+Second you set a rel-me to your email address which if it's the same as your web domain you're done.
+
+If your email domain is different from your web domain then you need to setup webfinger to connect the to.
+
+Aaron will post his document on how to do so.
+
+=== Ben Werdmuller ===
+Ben Werdmuller - likes, working comments, syndication links
+
+1. Fixed his IndieWeb comment presenting setup.
+
+2. Added [[rel-syndication]] links to [[POSSE]] copies of posts. E.g. photos are linked to their [[Flickr]] and [[Facebook]] copies.
+
+3. "Favorites". He's going to "like" a like on Sandeep's post. sandeep.io/83 except he prefers stars. Demonstrates Federated liking!
+
+http://werd.io/view/51c7870abed7de3205566039
+
+== See Also ==
+* [[2013]]
+
+== other years ==
+{{#categorytree:Demos|mode=pages|hideprefix=always|hideroot=on}}
+
+[[Category:2013]]
+[[Category:Demos]]

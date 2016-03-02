@@ -1,0 +1,128 @@
+http://indiewebcamp.com/backfeed
+
+'''<dfn>Backfeed</dfn>''' is the process of syndicating [[interactions]] on your [[POSSE]] copies <em>back</em> (AKA <dfn>reverse syndicating</dfn>) to your original posts.
+
+== Why ==
+We [[POSSE]] to '''make it easier for our friends''' and others to read our posts.
+
+The point of implementing [[backfeed]] is to similarly make it easy for those same people to <em>interact</em> with those POSSE copies in a way that makes it back to the original, thus '''make it easier for you''', the author of those original posts on your indieweb site to read their comments, and view other interactions.
+
+You should implement backfeed to:
+* '''Read more comments on your posts''': all in one place, indieweb [[comments]], and comments on your POSSE copies.
+* '''See likes & reposts of your posts'''. Again, by aggregating indieweb [[likes]] with likes/[[favorites]] of POSSE copies into one place, you can more quickly get an overview of all those reactions.
+* '''Better save comments, likes, reposts.''' In short: greater [[longevity]] of interactions. By copying those interactions to your own post permalink, you save them from numerous silo-content-loss scenarios from malevolent censorship to eventual [[site-death]].
+* '''Have higher quality discussions''': get better signal to noise than what some silos allow. E.g. [[Twitter]] has no mechanism to delete (or disassociate) comments (@-replies) on your posts (tweets). They only have mute and half-implemented block which hides them from you, however everyone else still sees any abusive or noisy @-replies. You can moderate those as you see fit on your own site, thus improving the comments overall on your posts as compared to what silos allow for.
+
+== How ==
+There are two general approaches to implementing backfeed from silos.
+
+=== Use a silo API ===
+You can use silo APIs to either be notified about interactions (via [[webhooks]]), or poll your POSSE copies for interactions, and incorporate them into your posts. Some APIs have better functionality for this than others. 
+
+Specific "how to backfeed" documentation per silo API:
+
+==== Twitter ====
+[[Twitter]] APIs to use for getting @-replies etc. on Twitter to your Twitter POSSE copies:
+* Search for <code>DOMAIN filter:links</code> with <code>result_type=recent</code>. See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L73 example code here] (and continued [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L149 here]). Only returns recent results, but otherwise works ok.
+* There's [http://stackoverflow.com/questions/2693553/replies-to-a-particular-tweet-twitter-api no official way] to get replies to a given tweet. If it's not too old, though, you can search for @-mentions of the original tweet's author, then look through the results for any whose <code>in-reply-to</code> field points to the original tweet. See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L113 example code here].
+* Otherwise, there's the unreliable, undocumented, unofficial 'related_results' endpoint.
+* There is [https://github.com/adriancrepaz/acTwitterConversation/ acTwitterConversation] PHP class made by [http://adriancrepaz.com/twitter_conversations_api Adrian Crepaz] that pulls the mobile version of twitter and parses the replies from there.
+
+==== Facebook ====
+===== [https://developers.facebook.com/docs/graph-api Graph API] =====
+The Graph API is the official way of communicating with Facebook.
+
+To get comments for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/comments]:
+
+  https://graph.facebook.com/v2.2/POSTID/comments?limit=LIMIT&access_token=ACCESS_TOKEN
+
+POSTID is the id of a post; no need for any user id, just the regular, post id
+LIMIT how many comments should be shown in one request
+ACCESS_TOKEN is the Oauth2 access token to the service
+
+Similarly, to get likes for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/likes]:
+
+  https://graph.facebook.com/v2.2/POSTID/likes?limit=LIMIT&access_token=ACCESS_TOKEN
+
+===== FQL =====
+* before Graph API 2.2, there was FQL that could be used as:
+* [https://developers.facebook.com/docs/technical-guides/fql/ FQL] makes this surprisingly easy. For example, here's a query to get all comments on the posts from a given user with links in them:
+  SELECT post_fbid, time, fromid, username, object_id, text FROM comment
+    WHERE object_id IN (SELECT link_id FROM link WHERE owner = USER_ID)
+    ORDER BY time DESC
+* And here's the follow-up query to get the URLs of those links (where <tt>LINK_IDS</tt> is a comma-separated list of the <tt>object_id</tt>s from the above query):
+  SELECT link_id, url FROM link WHERE link_id IN (LINK_IDS)
+* See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/facebook.py#L167 example code here]. There's also [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/facebook.py#L185 this example code] that fetches and processes comments from the posts found by those queries.
+* API is sometimes slow. Most backfeed solutions will/should poll in offline processes though, so they won't usually block end user requests.
+* Returns extremely unclear failed results for API calls to posts by under-18s
+** This is bloody annoying for us minors. It's more "bothersome" than "protecting" -- [[User:Waterpigs.co.uk|barnabywalters]]
+
+* How best to represent external users?
+** Facebook URI (not preferable)
+** Can we grab their personal URI from their profile?
+** Detect comments from originating user?
+
+==== Flickr ====
+Flickr has direct APIs for this:
+* [http://www.flickr.com/services/api/flickr.photos.comments.getList.html flickr.photos.comments.getList]
+* [http://www.flickr.com/services/api/flickr.photos.getFavorites.html flickr.photos.getFavorites]
+
+=== Use a backfeed proxy ===
+Alternatively, you can support receiving [[webmentions]], and then use a proxy that calls silo APIs for you, and sends you [[webmentions]] for each silo interaction. E.g.
+* [[Bridgy]]
+
+== IndieWeb Examples ==
+=== Singpolyma ===
+[[User:Singpolyma.net|singpolyma]] syndicates posts out to Twitter and runs a cronjob that polls the replies/mentions (authenticated) API endpoint to pull in responses. (since ????-??-??)
+
+=== Ryan Barrett ===
+{{snarfed}} uses [[Bridgy]] (see below) to backfeed comments, likes, and reposts from the silos to his own site. E.g. see Facebook and Twitter comments here:
+* http://snarfed.org/2013-12-06_new-app-engine-logo#comments
+See Facebook, Twitter, G+ comments, likes, +1s here:
+* https://snarfed.org/2015-04-21_introducing-color-genomics
+
+== Service Implementations ==
+=== Bridgy ===
+{{main|Bridgy}}
+[http://brid.gy/ brid.gy] is a service that sends [[webmentions]] for comments/replies, likes, and reposts on Facebook, Twitter, Google+, and Instagram posts. It uses [[original post discovery]] to find target links for the webmentions. [https://github.com/snarfed/bridgy GitHub repo here.]
+
+=== Salmon Unofficial ===
+[https://salmon-unofficial.appspot.com/ salmon-unofficial] is an older, unmaintained alternative to [[Bridgy]] that uses the [[Salmon]] protocol instead of [[webmention]]. It discovers original source sites via LRDD, WebFinger, and XRD, as specified by Salmon. [https://github.com/snarfed/salmon-unofficial GitHub repo here.]
+
+== Server Implementations ==
+=== WordPress Plugins ===
+* [http://wordpress.org/plugins/social/ Social]
+* [http://www.nextscripts.com/snap-features/auto-import-comments-from-facebook-and-twitter/ NextScripts SNAP]
+
+[http://jetpack.me/support/publicize/ Jetpack Publicize] is great, but doesn't yet implement backfeed.
+
+== Discussion ==
+Do these responses ''belong'' on your indie page, at the original source of the content? There are storage, legal, data ownership, UX, and other questions.
+
+* Yes:
+** Gives people a choice about where to author their replies
+** Enhanced UX (debatable depending on service used)
+** Ease of use, low barrier of entry. [http://shawfactor.com/2013/08/06/thoughts-on-extending-webmentions/ Peter Shaw describes this well], notably the value and intuition of replying at the location source post, which is especially compelling for users who are less technical or willing to spend extra time and effort.
+** Meets the majority of users who aren't technical or don't feel strongly where they currently are: in the silos.
+** +1 [[User:Waterpigs.co.uk|barnabywalters]]
+** +1 [[User:snarfed.org|Ryan]]
+** ...
+
+* No:
+** Generic, open systems such as [[pingback]] are preferable to backfeed from closed silos (although open response systems are another discussion entirely).
+** Responders didn't choose to publish at the original source. In rare cases, this could cause legal problems.
+** Imposes more overhead.
+** May antagonize silos. They often try to prevent this kind of outward syndication of their data. [http://snarfed.org/2013-07-09_twitter-atom-is-back One example] (of many).
+
+Also, many silos support private and semi-private posts: [[Twitter]] protected accounts, [[Instagram]] [http://help.instagram.com/448523408565555 private accounts], [[Google+]] circles, [[Facebook]] posts to just your friends. Replies to those posts are usually limited to the same audience, which means they generally ''should not'' be backfed to any publicly visible web page. 
+
+These (semi-)private replies could be backfed to a [[private_posts|private post]] that's only visible to the same audience. Private posts aren't very widespread yet, though, especially not POSSEd to the same private audience, so we haven't really seen that in practice yet.
+
+== Background ==
+* 2010-02-03 backfeed first described online as a concept in <cite>[http://tantek.com/2010/034/t2/diso-2-personal-domains-shortener-hatom-push-relmeauth conceptualizing #DiSo 2.0]</cite> but called "reverse syndication": <blockquote>#8 reverse syndication of comments+tags+notes from said specific sites. </blockquote>
+* 2010-10-06 POSSE+backfeed conceptual architecture (predating the terms) [http://www.flickr.com/photos/tantek/5301870765/ http://farm6.static.flickr.com/5250/5301870765_80a1e06212.jpg] <br/>Note the arrows to/from the "Personal site" in the middle. Arrows outward are conceptually illustrating [[POSSE]], while those returning, [[backfeed]]. 
+
+== See Also ==
+* [[interactions]] ([[comments]], [[likes]]/[[favorites]], [[reposts]])
+* [[POSSE]]
+* [[webmention]]

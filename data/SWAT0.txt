@@ -1,0 +1,174 @@
+http://indiewebcamp.com/SWAT0
+
+'''<dfn><abbr>SWAT0</abbr></dfn>''' is an abbreviation for The Social Web Acid Test level 0 and is a user-feature interoperability test for social web functionality defined in 2010.
+
+See:
+* [http://www.w3.org/2005/Incubator/federatedsocialweb/wiki/SWAT0 description of SWAT0 on W3.org].
+* Tweet version: http://tantek.com/2015/029/t1/swat0-posts-tags-mobile-photo-comment and [https://twitter.com/t/status/560921112767242241]
+
+== Video ==
+Video of SWAT0 being demonstrated:
+* https://aaronparecki.com/notes/2015/07/14/1/swat0
+
+== Summary ==
+The SWAT0 test can be rephrased in IndieWeb terminology, referring to people's own websites rather than "social network" services.
+
+# With his phone, {{benthatmustbeme}} takes a photo of {{aaronpk}}, tags him in the photo, and posts it to his site.
+# {{aaronpk}} gets a notification that he's been tagged in a photo.
+# {{kylewm}}, who is subscribed to {{benthatmustbeme}}, sees the photo in his [[reader]] UI.
+# {{kylewm}} posts a reply to the photo from this UI, the reply is posted to his site.
+# {{benthatmustbeme}} and {{aaronpk}} receive notifications that {{kylewm}} has commented on the photo.
+
+== mapping to indieweb ==
+The following indieweb mapping of the SWAT0 steps and user flow was demonstrated on 2015-07-12:
+
+# With his [[phone]], {{benthatmustbeme}} takes a photo of {{aaronpk}}, tags him in the photo (by [[person-tagging]] with http://aaronparecki.com/) , and posts it to his site (which sends a [[webmention]] to aaronparecki.com)
+# {{aaronpk}} gets a [[person-tag]] mention (a specific form of [[person mention]]) notification that he's been tagged in a photo (because his watch buzzes when he is webmentioned), because Ben Roberts's website linked to aaronpk's site with a class of "u-category h-card".
+# {{kylewm}}, who follows {{benthatmustbeme}}, sees the photo in his [[reader]]. His reader being [[Woodwind]] which is pinged by {{benthatmustbeme}}'s [[PuSH]] support.
+# {{kylewm}}, still using [[Woodwind]], posts a reply to the photo on his site. (using [[micropub]])
+# {{benthatmustbeme}} receives a notification that {{kylewm}} has commented on the photo, via webmention to {{benthatmustbeme}}'s site about the new comment, which his server sends back to his client device (laptop browser) as a [[push notification]]
+# {{aaronpk}} receives a notification of the new comment on a photo he's tagged in:
+## because {{benthatmustbeme}}'s server, having received the comment, does [[salmention]] sending and thus resends a [[person-tag]] webmention to {{aaronpk}}
+## then {{aaronpk}}'s server receives the [[person-tag]] webmention and does [[salmention]] receiving processing, notices the new comment on the source of the webmention, generates a push notification to aaronpk's client device ([[phone]]) that {{kylewm}} has commented on the photo {{aaronpk}} is tagged in.
+
+<nowiki>*</nowiki> Note: On 2015-07-12 {{kevinmarks}} commented on {{benthatmustbeme}} photo nearly the same time (likely before) as {{kylewm}}, also using [[Woodwind]], but signed-in using his [[Known]] install on known.kevinmarks.com. However, kylewm is noted in the example above since he wrote all the software he used (Woodwind and Red Wind). ([[selfdogfood]] tie-break).
+
+=== implementation requirements ===
+For the above to work, each of the three participants has some implementation requirements for their indieweb site/service.
+
+Players A, B, C as identified by the [http://tantek.com/2015/029/t1/swat0-posts-tags-mobile-photo-comment tweetable summary]:
+
+==== A must support ====
+* taking and posting a [[photo]] post, with [[person-tag]]s, or separately [[person-tagging]] the photo right after posting
+* receiving [[webmentions]] from [[comments]], adding them to their posts
+* sending a push [[notification]] from their server to their client for any [[webmention]]
+* [[salmention]] sending, that is when their post receives a webmention, they must resend webmentions to any in-reply-to posts and anybody person-tagged (or better, anyone [[person-mention]]ed) in their posts
+
+==== B must support ====
+* receiving [[homepage]] webmentions
+* receiving [[person-tag]] mentions in particular
+* passing along received webmentions as specific push [[notification]]s to their client device, e.g. that they've been "tagged in a post" and (implied) type of post too, e.g. "tagged in a photo".
+* [[salmention]] receiving, that is when receiving a webmention, they must notice the new "comment" on the source of the webmention, and
+* generate a push notification to their client device that someone has commented on the photo they are tagged in.
+
+==== C must support ====
+* having a [[reader]] with an integrated commenting UI, either directly as part of their site, or as a [[Micropub]] client support built into the [[reader]]
+* sending a [[webmention]] from their site for a [[reply]] post to the in-reply-to post
+
+== Silo SWAT0 ==
+
+Silo SWAT0 is a variant where one or two people (but not all three) participate entirely inside a [[silo]]. The other participant(s) interact with the silo participants via [[POSSE]], [[backfeed]], and silo [[feed]] proxies and converters.
+
+SWAT0 revolves around a single post and its responses and notifications, so silo SWAT0 requires that post to exist inside the silo. If A (Ben) is the silo-native participant, the photo post will be published first (and only) inside the silo. If A is a non-silo participant, they must either [[POSSE]] or [[PESOS]] the photo post.
+
+(The requirements and design for multi-silo SWAT0 are left as an exercise for the reader.)
+
+Here are the requirements for each participant to be ''outside'' the silo:
+
+=== A must support ===
+* [[POSSE]] or [[PESOS]] [[photo]] post with [[person tag]]s
+* [[backfeed]] [[replies]] to posts
+
+=== B must support ===
+
+* [[backfeed]] [[person tag]] to [[front page]]
+* [[backfeed]] [[response]]s to [[person tags]]
+
+=== C must support ===
+* [[reader]] with an integrated commenting UI and silo [[feed]] (eg [http://twitter-atom.appspot.com/ twitter-atom])
+* [[POSSE]] or [[PESOS]] [[reply]]
+
+
+=== Silo API support ===
+
+Here's the current status of the major silos' API support for the more unusual features, as of 2015-11-14. Common indieweb silo features like [[POSSE]] and [[backfeed]]ing responses are omitted.
+
+Based on the data below, it looks like [[Facebook]] and [[Flickr]] could do silo SWAT0, but [[Twitter]], [[Instagram]], and [[Google+]] can't.
+
+==== POSSE person tags ====
+
+* '''Facebook: yes.''' POST to [https://developers.facebook.com/docs/graph-api/reference/v2.2/user/feed `/user/feed`] and set the `tags` param to a comma separated list of FB user ids. needs the `user_friends` permission and maybe the Taggable Friends API. [https://indiewebcamp.com/POSSE_to_Facebook#Mention_Tagging Details.]
+* '''Flickr: yes.''' using the [https://www.flickr.com/services/api/flickr.photos.people.add.html `photos.people.add`] endpoint. we'd need to do [https://github.com/snarfed/bridgy/issues/432 #432] (publish support) first though.
+* Twitter: no. they're called [https://support.twitter.com/articles/20156423# photo or people tags]. nothing in the [https://dev.twitter.com/rest/public/uploading-media uploading media] or [https://dev.twitter.com/rest/reference/post/statuses/update `statuses/update`] docs, [https://dev.twitter.com/search/node/photo%20tags%20language%3Aen doc searches], or forum [https://twittercommunity.com/search?q=tags%20category%3A20 searches] or [https://twittercommunity.com/t/tag-users-on-pictures/54766 posts].
+* Instagram: no, since the API is mostly read only. you [https://instagram.com/developer/endpoints/media/ can't post pictures] [https://instagram.com/developer/endpoints/tags/ or tags].
+* Google+: no, since [https://developers.google.com/+/web/api/rest/index#api the API is read only].
+
+[https://github.com/snarfed/bridgy/issues/459#issuecomment-154229985 (originally published here)]
+
+==== backfeed person tags ====
+
+* '''Facebook: yes''', via [https://developers.facebook.com/docs/graph-api/reference/photo/tags/ `/photo/tags`] (needs testing).
+* '''Flickr: yes''', via [https://www.flickr.com/services/api/flickr.photos.people.getList.html `photos.people.getList`] etc.
+* Twitter: no. photo people tags aren't exposed in the API.
+* Google+: no. G+ doesn't have person tags distinct from mentions. Google Photos probably does, but it's mostly a separate product now.
+* Instagram: no.
+
+[https://github.com/snarfed/bridgy/issues/488#issuecomment-156341222 (originally published here)]
+
+
+==== backfeed mentions ====
+* '''Twitter: yes''', via search. we [https://github.com/snarfed/granary/blob/master/granary/twitter.py#L353 already do this to walk reply chains].
+* '''Google+: kind of.''' i tried [https://developers.google.com/+/web/api/rest/latest/activities/search `activities/search`] for finding the _+Trisha Weir_ mention in [https://plus.google.com/+SimonNewton0/posts/4WAyTr3VgMe this post]. it didn't work with `"+Trisha Weir"`, `+Trisha Weir`, [https://plus.google.com/+TrishaWeir `https://plus.google.com/+TrishaWeir`], or [https://plus.google.com/106299364027673376307 `https://plus.google.com/106299364027673376307`], but it did work with `"Trisha Weir"`. that query will technically return posts that just have people's names without mentioning them, which means we'll get some false positives, but maybe in practice that's ok. not sure.
+* Flickr: no. Flickr only has people tags ([https://github.com/snarfed/bridgy/issues/488 #488]), not mentions.
+* Facebook: no. Not via notifications: They can only be read [https://developers.facebook.com/docs/graph-api/reference/page/notifications for pages], [https://developers.facebook.com/docs/graph-api/reference/user/notifications not for users]. A number of other endpoints look promising, but don't pan out. [https://www.google.com/search?q=facebook+api+user+mentions Google doesn't find much either.] and FB removed search from the API in v2.0 (see [https://github.com/snarfed/bridgy/issues/456 #456]).
+* Instagram: no. [https://instagram.com/developer/endpoints/media/#get_media_search search] is just for location, not text query.
+
+[https://github.com/snarfed/bridgy/issues/523#issuecomment-155523875 (originally published here)]
+
+
+==== backfeed responses to person tags or mentions ====
+Mostly the same as the last two items.
+
+* '''Twitter: yes for mentions''', via search; no for photo people tags, they're not exposed in the API.
+* '''Google+: kind of for mentions,''' via search. details in [https://github.com/snarfed/bridgy/issues/523 #523]. no for tags.
+* '''Flickr: yes''', via [https://www.flickr.com/services/api/flickr.people.getPhotosOf.html `people.getPhotosOf`] etc.
+* '''Facebook: yes for tags''', no for mentions.
+* Instagram: no.
+
+[https://github.com/snarfed/bridgy/issues/540#issuecomment-155991570 (originally published here)]
+
+== IndieWeb Examples ==
+=== 2015-07-12 B A K ===
+On 2015-07-12 two overlapping sets of IndieWeb community members simultaneously demonstrated SWAT0 as documented that night in: 
+* [http://tantek.com/2015/193/t1/congratulations-first-indieweb-swat0 Congratulations first indieweb SWAT0 demo!] and 
+* [http://tantek.com/2015/193/t2/user-flow-permalinks-indieweb-swat0 User flow and permalinks from IndieWeb SWAT0 achievement]. 
+* Video: [https://aaronparecki.com/notes/2015/07/14/1/swat0 Live demo of #SWAT0 at IndieWebCamp 2015] (93 seconds)
+
+'''Players A, B, C''' (caveats if any in parenthesesl)
+* {{benthatmustbeme}}, {{aaronpk}}, {{kevinmarks}} (using a secondary site of his)
+* {{benthatmustbeme}}, {{aaronpk}}, {{kylewm}}
+
+
+=== 2015-11-16/18 Silo SWAT0 on Facebook: R B K ===
+On 2015-07-16 and 2015-11-18, {{snarfed}}, {{benwerd}}, and {{kylewm}} demonstrated silo SWAT0 on Facebook. A and C were indieweb, B was Facebook-only. Documented in:
+* [https://snarfed.org/silo-swat0-on-facebook Silo SWAT0 on Facebook] (with step by step screenshots)
+
+'''Players A, B, C''' (caveats if any in parenthesesl)
+* 2015-07-16: [https://brid.gy/facebook/1407574399567467 Snoopy Barrett] (driven by {{snarfed}}), {{snarfed}}, {{kylewm}}
+* 2015-07-18: {{snarfed}}, {{benwerd}}, {{kylewm}}
+
+== Background ==
+Past iterations, fixes:
+
+=== fixed ===
+In the development of the indieweb mapping of SWAT0, the following were figured out and/or fixed:
+
+* '''How to handle receiving a [[salmention]]''' - when you receive a webmention in-reply-to your post or person-mentioning you, your server must read not only the source post's authored properties, but also any [[responses]] like [[comments]] (or [[likes]] or [[reposts]]) that may be children of that post!
+* '''How/when to send a [[salmention]]''' - when there's any [[response]] to your post, you resend webmentions to any post your post is in-reply-to, as well as anyone person-tagged in your post.
+* '''How to [[people-tag]] someone in a [[photo]]'''. Merely linking in a comment/caption to someone is just a ''mention'', not a people-tag (i.e. the difference between @-mentioning someone in an [[Instagram]] comment/caption vs. actually tagging the person at a 2D point in the photo with their (…) "Tag People" UI).
+** Flickr supports tagging people in photos without marking a 2D point in the photo. So I'm not sold on requiring a 2D point as part of tagging people in a photo. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:34, 23 September 2014 (PDT)
+** Still to be improved: [[area-tagging]] a [[person-tag]] - but not needed for SWAT0
+* How does someone receiving a [[homepage]] webmention tell the '''difference between a mere mention (e.g. in a comment/caption) vs. actually being tagged (optionally at a specific point/rect''') in a [[photo]] post? I.e. we know how to distinguish between a post-mention/[[reply]]/[[RSVP]] - and hypothetically homepage-mention/[[invitation]]. Possibly by detecting that the source's link to your target is on "u-category" or a "u-url" inside a "u-category h-card"?
+** This is described on [[person_mention#How_to_distinguish_person_mentions]]
+
+=== history ===
+In 2010, not long after the original SWAT0 challenge, the following protocol flow was figured out based on the proposed standards of the time: [[Activitystreams]] (Atom/XML), [[PuSH]], [[Salmon]], and [[Webfinger]]
+* http://www.w3.org/2005/Incubator/federatedsocialweb/wiki/SWAT0_-_strawman_protocol_flow
+
+== See Also ==
+* [https://www.w3.org/wiki/Socialwg/SWAT0 Social Web WG SWAT0 page]
+* [[photo]]
+* [[person-tag]]
+* [[person-mention]]
+* [[notification]]
+* [[reply]]

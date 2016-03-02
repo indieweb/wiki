@@ -1,0 +1,66 @@
+http://indiewebcamp.com/User%3AGregorlove.com/notes
+
+= Notes = 
+'''Notes''' are the second indieweb project I will be tackling.
+
+== URL structure ==
+The stream of notes is at http://gregorlove.com/notes/. I beta tested notes for a year before I added a link to the primary navigation on 2015-07-12. 
+
+This stream is paginated, displaying 20 notes per page. The "older" link will increment the page number. Page 1 contains the newest notes, which is the same as <code>/notes</code>, so <code>/page1</code> redirects appropriately.
+* Example: http://gregorlove.com/notes/page2/.
+
+Note permalinks were based on the date posted and their ordering. For example, http://gregorlove.com/notes/2014/06/25/1/ was posted June 25, 2014 and is the first note posted that day. I chose to update the permalinks to <code>/YYYY/MM/[slug]</code> as of 2015-07-12. The old permalinks redirect to the new ones. For more information, see [[User:Gregorlove.com/Changing permalinks|changing permalinks]].
+
+== Posting interface ==
+My note posting interface was integrated into my main site design on 2015-07-18. Since I am not posting [[likes]] or [[reposts]] yet, I've removed those options. A bonus feature of integrating the form into the site is that the form is responsive and works well on mobile.
+
+After submitting the form, the note is previewed on the same page, above the "New Note" form, regardless of whether the note was saved as a draft or published. See screenshots below.
+
+=== Fields ===
+* note: textarea field; accepts HTML, since I do not auto-link URLs.
+* in-reply-to/repost-of: textarea field; one URL per line.
+* syndication: textarea field: one URL per line.
+* published: text field; defaults to "now" if left blank.
+* timezone: text field; uses the PHP timezone options and defaults to the last note's timezone.
+* save as draft: checkbox; unchecked by default.
+* URL slug: text field; Javascript will auto-populate this field based on the first five words of the note content.
+
+=== Screenshots ===
+'''New Note: 2015-07-18'''<br />
+[[File:gregorlove-new-note-2015-07-18.png]]
+
+'''Note Added: 2015-07-18'''<br />
+[[File:gregorlove-note-added-2015-07-18.png]]
+
+=== History ===
+''Before 2015-07-12''
+
+I began by mocking up, in HTML, the form for posting a new [[note]]. I want the form to have a simple and pleasing UI. To do this, I set the font-size larger and put some padding on the form inputs to give them some room to breathe.
+
+I am going to be a bit nontraditional and allow my notes to optionally have a title. Most notes will be short status updates, but I can imagine instances where I might want to jot down some notes with a title.
+
+I decided on one field for the URL if I'm replying-to/reposting. The checkbox below it will differentiate if the note is in-reply-to (default) or a repost of the URL.
+
+Then a separate checkbox determines if I'm also "liking" the URL.
+
+After my initial version, I decided to re-order the fields:
+* ''Title'' will be used least often, so it's at the bottom.
+* I do not have POSSE set up yet, so ''Syndication'' will always be manual and thus used less often.
+* The ''Published Date'' and ''Timezone'' defaults to the current time, so will only be necessary for future posts, or to post in a different timezone.
+* ''Note'', ''Likes'', and ''Re-posts'' will be the most commonly used fields, so they're at the top.
+
+'''Current version:'''<br>
+(looks better [http://indiewebcamp.com/images/2/24/gregorlove-add-note-2014-06-23.png full-size])
+
+[[File:gregorlove-add-note-2014-06-23.png|700px]]
+
+<hr>
+
+'''Initial version:'''<br>
+(looks better [http://indiewebcamp.com/images/a/a8/gregorlove-add-note-2014-06-18.png full-size])
+
+[[File:gregorlove-add-note-2014-06-18.png|700px]]
+
+== Todo ==
+* Display [[reply-context]]
+** When replying to a tweet, use https://github.com/aaronpk/php-mf2-twitter-shim

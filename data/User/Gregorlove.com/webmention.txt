@@ -1,0 +1,140 @@
+http://indiewebcamp.com/User%3AGregorlove.com/webmention
+
+= Webmention =
+'''Webmention''' is the first bit of #indieweb that I added to my site on 2014-02-04. I [https://github.com/gRegorLove/nucleus-plugin-webmention released the plugin] to the public on 2014-03-08.
+
+Here is a description of the current plugin processes:
+
+== Sending webmentions ==
+
+After adding or updating a post, all URLs that begin with <code>http://</code> or <code>https://</code> are extracted and sent through the [[#Endpoint_discovery|endpoint discovery]] process. If an endpoint is found, the webmention is sent. I log the endpoint, body of the sent webmention, the endpoint response (including headers), and the datetime the webmention was created.
+
+== Endpoint discovery ==
+
+1) Link: headers are parsed by separating each line by the first colon. If a Link: header is found, a regular expression is used on its value to determine if it is a rel=webmention header.
+
+Regular expression matching (PHP):
+
+<code>preg_match('#\<(.*?)\>\s*\;\s*rel\=\"?(?:.*?)webmention(?:.*?)\"?#', $value, $matches);</code>
+
+This should find all valid variants of the webmention header including rel=webmention, rel=http://webmention.org, and combinations of the two—with and without quotation marks.
+
+If found, the <code>$matches</code> variable will be an array with two elements. The second element is the URL of the webmention endpoint, so it can be popped off the array and used to send a webmention.
+
+2) If no endpoint is found in a Link: header, the page's HTML is parsed using PHP's DOMdocument. The <code><link></code> elements are extracted and the first one with a rel=webmention attribute is used to send a webmention.
+
+== Receiving webmentions ==
+
+First, the Accept: HTTP header is parsed to determine the Content-Type the response should be sent with. This is a rudimentary check and does not currently take into account the quality factor (q=) part of the header.
+
+In order, <code>application/json</code> and <code>text/plain</code> are used as the response format if they are specified in the Accept: header. Otherwise, <code>text/html</code> is used. The character set is always UTF-8.
+
+If the request is not a <code>post</code> request and/or the Content-Type is not <code>application/x-www-form-urlencoded</code>, an HTTP 500 is returned with the message: "Webmention must be posted with Content-Type: application/x-www-url-form-encoded."
+
+If the <code>source</code> parameter is missing, an HTTP 400 is returned with the message: "Webmention "source" parameter is missing."
+
+If the <code>target</code> parameter is missing, an HTTP 400  is returned with the message: "Webmention "target" parameter is missing."
+
+If the host name of the <code>target</code> is not "gregorlove.com", an HTTP 400 is returned with the message: "Webmention "target" is not a valid URL at this domain."
+
+<strike>The post ID is extracted from the URL. If it is not found or does not match a published post, an HTTP 400 is returned with the message: "Webmention "target" is not a valid URL at this domain."</strike>
+
+This post ID check was removed once I started posting notes on [http://gregorlove.com/notes/2014/06/25/1/ 2014-06-25]. The reasoning is that the post ID check was too tightly tied to the Nucleus CMS core code. Now I can receive webmentions at any URL path on gregorlove.com.
+
+If the incoming webmention passes all those checks, I log <strike>the post ID,</strike> an MD5 hash of the <code>source</code> and <code>target</code> URLs (see [[#Updating_webmentions|Updating webmentions]] below), the <code>source</code> and <code>target</code> URLs, and the datetime the webmention was received.
+
+Finally, an HTTP 202 is sent with the message: "Webmention queued for processing."
+
+== JSON responses ==
+
+Per discussion on IRC, most implementations are probably not paying attention to the response body, since the HTTP status code gives the primary information. Still, I wanted to provide meaningful responses. With <code>text/plain</code> and <code>text/html</code> responses, the format is straightforward.
+
+With JSON, though, the question became what key should be used in the response key-value pair. I opted for — and recommend — using the key "response":
+
+<code>{"response":"Webmention received."}</code>
+
+When parsing webmentions asynchronously and including a URI that can be used to check the status of the webmention, I recommend using the key "status":
+
+<code>{"response":"Webmention queued for processing.","status":"http://hostname/path/to/status/"}</code>
+
+== Processing webmentions ==
+
+Webmentions are processed asynchronously.
+
+The <code>target</code> URL is fetched. If it returns HTTP 404, the log is updated with a message to that effect.
+
+The <code>source</code> URL is fetched. If it returns HTTP 410, the existing webmention in my database is flagged as deleted and no longer appears on my site.
+
+If the <code>target</code> is not found within the <code>source</code>, the log is updated with a message to that effect.
+
+Otherwise, if an h-entry is found within the <code>source</code>, it is parsed for content, permalink, author name, author photo, author logo, author url, published date, and updated date. These fields are stored in a separate table.
+
+If an <code>in-reply-to</code> URL is found pointing to <code>target</code>, it is marked as a "reply." Otherwise it is marked as a "mention."
+
+If no timezone is included with the published / updated dates, I assume the time is UTC and store a flag indicating there was no timezone specified. This will allow me to potentially fix the times in the future, if the actual timezone can be implied.
+
+If no h-entry is found within the <code>source</code>, the author name is set to the hostname and the <code>source</code> is used as the permalink.
+
+By default, processed webmentions are not marked as "displayed on site." Trusted hostnames can be added to a whitelist so they are automatically marked as "displayed on site."
+
+A cron is set up to process received webmentions every five minutes.
+
+=== Relating webmentions together ===
+As of 2014-06-15, I added additional processing that maps together webmentions from the same person. The use-case is specifically for [[brid.gy]] when it sends separate webmentions for a comment and a like. I wanted to display the "like" as meta information directly under the comment instead of a separate comment.
+
+To achieve this, I have two additional database tables: <code>author_urls</code> and <code>webmentions_related</code>.
+
+The <code>author_urls</code> table keeps track of the webmention ID and the author URLs associated with it (one URL per row, so there may be multiple rows for the same webmention). When a webmention is processed, the author URLs are checked against the others for the same post. If there is a match, the two webmentions are considered related.
+
+The <code>webmentions_related</code> table keeps track of this relationship by storing the webmention ID and the webmention ID it is related to. ''Mentions'' are related to ''replies'' — not vice versa — since the former serves as meta information ("favorited this," or "liked this.") and the latter is the comment.
+
+When displaying comments, the <code>webmentions_related</code> table is first queried to build an array of the webmentions that serve as meta information. Then these webmention IDs are ''excluded'' from the query that retrieves the comments to display.
+
+When looping through each comment to display it, if meta information exists in the array, it is added on to the comment.
+
+=== Checking Authorship ===
+[[authorship#Spoofing|Authorship spoofing]] is not a big concern at the moment, but it is still a legitimate problem to address. http://checkmention.appspot.com allows you to test your webmention support for [[XSS]] vulnerabilities as well as authorship spoofing.
+
+My initial attempt at solving this is to fetch the h-card from the author's claimed URL and see if it matches the claimed author name from the webmention. If no h-card is found on the author's claimed URL, or the name does not match, the webmention is flagged as potentially a spoof.
+
+These potentially spoofed webmentions are not displayed on my site by default. I can then review these to determine their legitimacy.
+
+I realize this process may not be the most efficient; feedback is welcome.
+
+== Updating webmentions ==
+
+I generate an md5 hash of the incoming <code>source</code> and <code>target</code> URLs and store this in a field that has a unique index. This means if a subsequent webmention is received with the same <code>source</code> and <code>target</code> URLs, the <code>INSERT . . . ON DUPLICATE KEY UPDATE</code> query will automatically update the previous webmention.
+
+== Whitelist ==
+
+The administrator interface allows me to add hostnames to a whitelist. Webmentions received from these hostnames will automatically be approved for display on the site. This is useful for auto-approving webmentions from trusted sites. Webmention spam does not appear to be a major problem yet, but it certainly could become one. :)
+
+== Blacklist ==
+
+Speaking of spam . . .
+
+The administrator interface allows me to add hostnames to a blacklist. Webmentions received from these hostnames will still be processed, but will be marked as blacklisted and not displayed on the site. Currently there is not an interface to view these / individually approve them, but I will probably add something like that.
+
+== Displaying webmentions ==
+
+As of 2014-04-23, webmentions are displayed interleaved with local blog comments.
+
+* Example: http://gregorlove.com/2014/02/1180/
+
+=== Display Concepts ===
+For people that "like" ''and'' reply to a post, I would prefer to display all their information grouped together. In this scenario, I basically view the comment as the primary content and the "like" as meta information that is displayed underneath it.
+
+My site uses a rather minimalist design currently and I feel that a [[facepile]] would clutter it up by duplicating avatars displayed on the page. I also prefer a textual description of the action, which can include the source of the action (Facebook, Twitter, etc.) This provides the same amount of information as a facepile, but in a more compact way.
+
+The implementation of this is still in progress. Below is a screenshot of the concept, mocked up in-browser. It is based on this comment: http://gregorlove.com/2014/01/1178/#w9
+
+[[File:gregorlove-reply-and-like-2014-06-02.jpg|650px]]
+
+== Todo ==
+* <span style="text-decoration: line-through;">Add backend webmention approval interface</span>
+* <span style="text-decoration: line-through;">Add ability to whitelist domains to automatically display their webmentions</span>
+* <span style="text-decoration: line-through;">Display "reply" webmentions on articles</span>
+* <span style="text-decoration: line-through;">Accept webmentions for just "gregorlove.com" - for generic mentions that are not in reply to a note/article.</span>
+* Update the plugin so other plugins (e.g. [[User:Gregorlove.com/notes|notes]]) can more easily "hook" into the send webmention functionality.
+* Add a "mentions" page which is a stream of incoming, approved webmentions
+* Add a "status" URL that webmention senders can check whether their webmention was accepetd/denied

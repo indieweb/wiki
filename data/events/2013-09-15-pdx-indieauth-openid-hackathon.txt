@@ -1,0 +1,161 @@
+http://indiewebcamp.com/events/2013-09-15-pdx-indieauth-openid-hackathon
+
+== Links ==
+__TOC__
+
+* Event info: http://calagator.org/events/1250464804
+* https://indieauth.com    <-- try logging in here with your domain!
+* IndieAuth source code: https://github.com/aaronpk/IndieAuth
+* IRC: #indiewebcamp on feenode.net
+* [https://github.com/openid/ruby-openid/blob/master/examples/rails_openid/app/controllers/server_controller.rb Reference OpenID OP example]
+* [http://wiki.openid.net/w/page/12995226/Run%20your%20own%20identity%20server Run your own identity server]
+* Sinatra example: http://bogomips.org/local-openid/
+
+
+
+
+
+
+[[File:2013-09-15-pdx-indieauth-openid-hackathon.jpg]]
+
+
+== Terminology ==
+
+* OP - an "OpenID Provider," in this case, IndieAuth.com
+* RP - a "Relying Party," the site that is requesting identification.
+* XRDS - an XML document provided by the OP describing the capabilities and resources available on the RP. OpenID 1.1.
+* Yadis -  the discovery protocol for discovering OpenID 1.1 IDs.
+
+
+== Goal ==
+
+If you are using myopenid.net as your openid delegate, be able to replace that with indieauth.com.
+
+You probably have something like this markup if your'e delegating to myopenid.net:
+
+  <link rel="openid.server"
+        href="http://www.myopenid.com/server" />
+  <link rel="openid.delegate"
+        href="http://youraccount.myopenid.com/" />
+  <link rel="openid2.local_id"
+        href="http://youraccount.myopenid.com" />
+  <link rel="openid2.provider"
+        href="http://www.myopenid.com/server" />
+  <meta http-equiv="X-XRDS-Location"
+        content="http://www.myopenid.com/xrds?username=youraccount.myopenid.com" />
+
+(from https://www.myopenid.com/help#own_domain)
+
+=== Using IndieAuth as an OpenID delegate ===
+
+Should be able to delegate to indieauth.com with tags like:
+
+  <link rel="openid.server"
+        href="https://indieauth.com/openid" />
+  <link rel="openid.delegate"
+        href="http://aaronparecki.com/" />
+  <link rel="openid2.local_id"
+        href="http://aaronparecki.com/" />
+  <link rel="openid2.provider"
+        href="https://indieauth.com/openid" />
+  <meta http-equiv="X-XRDS-Location"
+        content="https://indieauth.com/openid/xrds?domain=http://aaronparecki.com/" />
+
+
+=== Minimum Implementation ===
+
+At a minimum, support OpenID 1. This means only the following tags are needed:
+
+  <link rel="openid.server"
+        href="https://indieauth.com/openid" />
+  <link rel="openid.delegate"
+        href="http://aaronparecki.com/" />
+
+We'll shelve the openid2 and xrds stuff until we get the first part working.
+* +1 -t
+
+
+== Getting Started ==
+
+If you have not yet used IndieAuth, go to indieauth.com and try to sign in. There are instructions on indieauth.com for how to add the markup to your home page if you haven't yet.
+
+Simplest example: add a link to your github profile on your home page:
+
+<pre>
+<a href="https://github.com/username" rel="me">github</a>
+</pre>
+
+
+== Find an OpenID server gem ==
+(not) 'openid' v0.01(only release in 2005)
+'ruby-openid' v2.3.0 Sep 2003 (looks like a winner)
+
+== Authentication Flow ==
+
+Using "peat.org" as the example OpenID, and authenticating at "opensourcebridge.org".
+
+* 1) End user goes to opensourcebridge.org (the RP) and enters in "peat.org" (the OpenID).
+* 2) RP requests "GET http://peat.org/" looking for server and delegate information:
+**     2a) RP discovers the openid.server link tag, seeing that the indieauth.com/openid is the end point that will handle the initial request.
+**     2b) RP discovers the "openid.delegate" tag, seeing that the OpenID being claimed is "peat.org"
+* 3) RP starts OpenID process
+**     3a) RP does a "POST https://indieauth.com/openid" to start the OpenID process with a shared secret.
+**     3b) RP redirects the end user to "GET https://indieauth.com/openid" with a crapload of fancy parameters.
+* 4) OP (indieauth.com) verifies the parameters, and saves them for future reference.
+* 5) OP redirects the end user to the indieauth.com/auth page to complete authentication via one of the known methods.
+* 6) On successful authentication, OP then redirects the end user to the RP with a successful OpenID response.
+
+
+== List of notable websites that consume OpenID ==
+* [http://opensourcebridge.org/wiki/Main_Page Open Source Bridge wiki]
+* [http://slashdot.org/ Slashdot] - Working
+* [http://sourceforge.net/ Source Forge] - Working
+* [http://stackoverflow.com/ Stack overflow] - Working
+* [http://status.net/ Status.net]  - ???
+* [https://pypi.python.org/pypi PyPi] - Not working. See this [https://github.com/aaronpk/IndieAuth/issues/37 issue]
+* ...
+
+== Implementation Notes ==
+
+RP directs the browser to indieauth.com with a bunch of parameters (see #3 above)
+
+https://indieauth.cc/openid?openid.identity=http%3A%2F%2Faaronparecki.com%2F&openid.mode=checkid_setup&openid.return_to=http%3A%2F%2Fopensourcebridge.org%2Fbrowser_session%3Fopen_id_complete%3D1%26openid1_claimed_id%3Dhttp%253A%252F%252Faaronparecki.com%252F%26rp_nonce%3D2013-09-15T18%253A29%253A34ZUEhLXi&openid.sreg.optional=nickname%2Cemail%2Cfullname&openid.trust_root=http%3A%2F%2Fopensourcebridge.org%2F
+
+Pretty-printed parameters:
+<pre>
+{
+  "openid.identity": "http://aaronparecki.com/",
+  "openid.mode": "checkid_setup",
+  "openid.return_to": "http://opensourcebridge.org/browser_session?open_id_complete=1&openid1_claimed_id=http%3A%2F%2Faaronparecki.com%2F&rp_nonce=2013-09-15T18%3A29%3A34ZUEhLXi",
+  "openid.sreg.optional": "nickname,email,fullname",
+  "openid.trust_root": "http://opensourcebridge.org/"
+}
+</pre>
+
+
+<pre>
+http://opensourcebridge.org/browser_session?open_id_complete=1&openid1_claimed_id=http%3A%2F%2Faaronparecki.com%2F&rp_nonce=2013-09-15T19%3A24%3A48ZSuYX6F&openid.assoc_handle=%7BHMAC-SHA1%7D%7B52360997%7D%7BSOSKKw%3D%3D%7D&openid.identity=http%3A%2F%2Faaronparecki.com%2F&openid.mode=id_res&openid.op_endpoint=http%3A%2F%2F4gfj.localtunnel.com%2Fopenid&openid.response_nonce=2013-09-15T19%3A25%3A11ZhE11Rl&openid.return_to=http%3A%2F%2Fopensourcebridge.org%2Fbrowser_session%3Fopen_id_complete%3D1%26openid1_claimed_id%3Dhttp%253A%252F%252Faaronparecki.com%252F%26rp_nonce%3D2013-09-15T19%253A24%253A48ZSuYX6F&openid.sig=3WXGrBUS%2BukquF7lYFwUadaLE7Q%3D&openid.signed=assoc_handle%2Cidentity%2Cmode%2Cop_endpoint%2Cresponse_nonce%2Creturn_to%2Csigned
+</pre>
+
+
+== Contributing to IndieAuth.com ==
+
+Working on the 'openid-server' branch: https://github.com/aaronpk/IndieAuth/tree/openid-server
+
+Please submit pull requests with any changes.
+
+
+== Changing github oauth scopes == 
+
+Right now, indieauth does not send an oauth scope, and requests read access to all public info.  This is an attempt to try and only get read only access to profile information only.
+https://github.com/bcomnes/IndieAuth/commit/825fe15e7c1dccba5ef927754cf51451c3f90bf9
+
+
+== Roster ==
+* [http://aaronparecki.com aaronparecki.com]
+* [http://peat.org peat.org]
+* [http://donpark.org donpark.org]
+* [http://bret.io bret.io]
+* [http://tobilehman.com tobilehman.com]
+* [http://tantek.com tantek.com]
+* [http://jw134.net jw134.net]

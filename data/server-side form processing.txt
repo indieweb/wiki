@@ -1,0 +1,25 @@
+http://indiewebcamp.com/server-side_form_processing
+
+{{stub}}
+
+'''<dfn>server-side form processing</dfn>''' is the model by which a web receives a HTML form submission over HTTP, and processes it.
+
+All the HTML specs punt on what servers should do [http://www.w3.org/TR/html5/forms.html#implementing-the-server-side-processing-for-a-formw3c HTML5] says:
+<blockquote>The exact details for writing a server-side processor are out of scope for this specification.</blockquote>
+== x-www-form-encoded ==
+
+The closest thing to a spec I could find was in the [https://web.archive.org/web/20010203172800/http://hoohoo.ncsa.uiuc.edu/cgi/forms.html old CGI docs] 
+which is a wiki page that says:
+<blockquote>
+As you now know, there are two methods which can be used to access your forms. These methods are GET and POST. Depending on which method you used, you will receive the encoded results of the form in a different way.
+* The GET method
+::If your form has METHOD="GET" in its FORM tag, your CGI program will receive the encoded form input in the environment variable QUERY_STRING.
+
+*The POST method
+::If your form has METHOD="POST" in its FORM tag, your CGI program will receive the encoded form input on stdin. The server will NOT send you an EOF on the end of the data, instead you should use the environment variable CONTENT_LENGTH to determine how much data you should read from stdin.
+
+</blockquote>
+than a  list of implementations in different languages then:
+<blockquote>The basic procedure is to split the data by the ampersands. Then, for each name=value pair you get for this, you should URL decode the name, and then the value, and then do what you like with them.</blockquote>
+
+The [http://tools.ietf.org/html/rfc3875#section-4.1.7 CGI RFC ] does much the same.

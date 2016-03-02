@@ -1,0 +1,43 @@
+http://indiewebcamp.com/page-name-discovery
+
+{{stub}}
+
+'''<dfn>page name discovery</dfn>''' is the process of starting from a URL and its HTML and coming up with a human readable name for that URL. There are many use-cases for wanting  human readable text for a URL, e.g. to use as linktext when linking to it (a minimal [[link-preview]]), e.g. in response to receiving a [[webmention]] from that URL.
+
+== Algorithm ==
+When you receive a [[webmention]] and want some linktext for the source link:
+# use the p-name of the representative [[h-entry]] if any
+# else use the p-summary of the representative [[h-entry]] if any
+# else use the contents of the first <code>&lt;title&gt;</code> element if any
+# else use "Untitled", optionally appending the [[datetime]] (of when the [[webmention]] was received).
+
+Details:
+* If the name you [[discover]] via this algorithm is "too long" (by whatever constraints you have for your site/content), see [[comments-presentation]] for more details on how to handle it.
+
+== FAQ ==
+=== meta tags ===
+Q: What about meta tags like meta name, content, description, title etc.?
+
+A: They're all undependable invisible metacrap. Ignore them. Using "Untitled" is safer than using likely unreliable/rotten/spammed invisible meta tags.
+
+
+Q: What about meta [[OGP]] tags? 
+
+A: Same thing, just proprietary.
+
+
+Q: What about [[Twitter Cards]]?
+
+A: Same thing, but both proprietary and less open than [[OGP]] (which is at least licensed under OWFa).
+
+
+Also, ignoring metacrap provides incentive to publishers to markup their *visible* content on the page, which is better for them (more reliable over time than invisible meta), and better for the consuming page (that more reliable means it's more trustworthy for the consuming page).
+
+== See Also ==
+* [[discovery]]
+* [[authorship]]
+* [[link-preview]]
+* [[datetime]]
+* [[webmention]]
+* [[comments]]
+* [[comments-presentation]]

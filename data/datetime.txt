@@ -1,0 +1,47 @@
+http://indiewebcamp.com/datetime
+
+{{stub}}
+
+'''<dfn>datetime</dfn>''' refers to an expression of the date (year, month, day), time (hours, minutes, optionally seconds), and optionally timezone. On the indieweb, datetimes are most often published as part of [[posts]], specifically as the [[h-entry]] [[microformats2]] markup for <code>dt-published</code> and <code>dt-updated</code> properties. 
+
+[[Comments]] and other activities on posts (e.g. [[likes]], [[reposts]]) also typically have datetimes.
+
+[[Event]] posts have at least a <code>dt-start</code> datetime and often a <code>dt-end</code> as well.
+
+== in webmentions ==
+Receivers of [[webmentions]] SHOULD keep track of when (server time) a webmention for a source URL was ''first'' received (CREATE) and ''most recently'' received (UPDATE), and may use that instead of (or with) the explicit/asserted dt-published / dt-updated respectively of the [[h-entry]] of the post. 
+
+== sanity checking webmentions ==
+It may be useful to sanity check datetimes from webmention sources.
+
+E.g. 
+* if the dt-published datetime is within the hour before the webmention received time, the dt-published is likely accurate.
+* if the dt-published is AFTER the webmention received time, there's probably an error in the source's dt-published (perhaps a timezone error)
+
+'''Whitelists.''' It's likely that absolute datetimes from [[silos]] are precisely accurate as they have very high incentives to make sure of it. Thus it may be reasonable to treat "old" dt-published / dt-updated values as correct if they are for h-entry's hosted on:
+* [[Facebook]] facebook.com
+* [[Google+]] plus.google.com
+* [[Instagram]] instagram.com
+* [[Tumblr]] tumblr.com
+* [[Twitter]] twitter.com
+Or for that matter, anything from the silos supported by [[Bridgy]].
+
+== no timezone ==
+If a datetime lacks a timezone, the datetime is known as a "floating" datetime - that is, the same time in every timezone. E.g. an alarm that is set to "6:00" is expected to go off at six o'clock in whatever timezone the user is in.
+
+== implying timezone from webmentions ==
+Webmention receivers often want an absolute datetime including timezone information, e.g. in order to display comments in the order they were written, regardless of where in the world (and timezone) they were written. 
+
+If a webmention receiver sees a floating datetime (e.g. in the h-entry dt-published of a webmention source) they can use the following heuristic to imply a timezone:
+
+# use earlier timezone knowledge of that domain if any
+#* i.e. if it's an indieweb site that consistently uses datetimes in one timezone (accounting for DST) either explicitly or implied from earlier processing
+# else if the datetime received is within 24 hours of the dt-published, assume the dt-published happened in the hour before the webmention received time, and compute implied TZ accordingly.
+
+Similarly for dt-updated and secondary (etc.) webmentions for the same source URL.
+
+== See Also ==
+* [[webmention]]
+* [[microformats]]
+* [[posts]] - [[h-entry]]
+* [[event]] - [[h-event]]

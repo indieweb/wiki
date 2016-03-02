@@ -1,0 +1,224 @@
+http://indiewebcamp.com/Indie.js
+
+'''<dfn>Indie.js</dfn>''' is an open-source IndieWeb [[project]] that was officially started [http://indiewebcamp.com/irc/2014-07-18/line/1405668719000 on July 18th, 2014] but has powered [https://mowens.com mowens.com] since July 8th, 2014.
+
+== Goals & Model ==
+
+[http://indiejs.com Indie.js] is more than just a homerolled IndieWeb server. Its goal is to provide a turnkey IndieWeb framework that helps people [[own-your-data]] and have a better IndieWeb experience. The expectation is that Indie.js will have both a self-hosted and a hosted version.
+
+== Development ==
+
+[[User:mowens.com|Michael Owens]] is the sole developer of Indie.js at the present time. Development tends to correlate pretty directly with the needs of Michael's personal website and time constraints.
+
+Development of [https://mowens.com mowens.com] is generally open-source and available on [https://github.com/mko/mowens.com-public GitHub]. The Indie.js framework, once a stable version is available, will be released simultaneously at [http://indiejs.com IndieJS.com], [https://github.com/mko/Indie.js GitHub], and on [https://npmjs.org/package/indie NPM].
+
+From that point forth, all development will be fully open-source and separate from the app code for Michael's personal site.
+
+=== Architecture ===
+
+Indie.js leverages the bleeding-edge [http://nodejs.org Node.js] web framework, [http://koajs.com Koa.js], which relies heavily on <abbr title="ECMAScript 6">ES6</abbr> Generators and Proxy to provide a much more readable, reliable, and enjoyable Node.js experience than current generation Node.js web frameworks like [http://expressjs.com Express]. Callbacks are a thing of the past.
+
+Authentication and syndication account management is handled by [[Passport]] using the [https://npmjs.org/package/passport-indieauth passport-indieauth] module also written and maintained by Michael.
+
+Right now the specific module architecture is in flux, but the intent is that the core of the system will be a set of <code>indie-</code> modules that will provide an easily customized experience.
+
+=== Modules ===
+
+Currently, the software has the following modules:
+
+* indie-webmention
+* indie-authentication
+* indie-categories
+* indie-entries
+* indie-publisher
+* indie-search
+
+The intent of these modules is that once fully abstracted, these modules could be used together as the complete Indie.js framework or as standalone components.
+
+==== indie-webmention ====
+
+<code>indie-webmention</code> currently supports the following featureset:
+
+* Incoming Webmention Request Parsing
+* Incoming Webmention Simple Verification
+* Incoming Webmention Complex Verification
+* Incoming Webmention Response Parsing/Caching
+* Incoming Webmention Whitelist Validation
+* Incoming Webmention Custom Validation
+* Incoming Webmention Queuing / Moderation
+* Incoming Webmention Publishing
+* Webmention Endpoint Discovery
+* Outgoing Webmention Sender
+
+==== indie-authentication ====
+
+<code>indie-authentication</code> currently supports the following featureset:
+
+* [[RelMeAuth]] as primary login mechanism via <code>passport-indieauth</code>
+* Syndication Account Connection for the following syndication mechanisms:
+** Facebook via <code>passport-facebook</code>
+** Twitter via <code>passport-twitter</code>
+
+==== indie-categories ====
+
+<code>indie-categories</code> currently supports the following featureset:
+
+* h-entry compatible category tagging
+* all categories page (note: highly inefficient currently, should avoid using)
+* individual category archives
+* basic category statistics gathering
+
+==== indie-entries ====
+
+<code>indie-entries</code> currently supports the following featureset:
+
+* [[algorithmic]] URL shortening via [http://indiewebcamp.com/permalinks#Whistler Whistler]
+* custom content-type dictionary for algorithmic URL shortening
+* [[pagination]] for individual entries
+* pagination for feed pages by timestamp
+* pagination for query-selected feeds
+* [[h-feed]] generation
+* [[h-entry]] extensions following the spirit of the [[posts]] philosophy:
+** h-as-[[article]]
+** h-as-[[note]]
+** h-as-[[photo]]
+** h-as-[[reply]]
+** h-as-[[like]]
+** h-as-[[favorite]]
+** h-as-[[checkin]]
+* Entry metadata regarding character/word length and reading time
+* Embedded [[webmentions]]
+* OEmbedded Related Content
+* Varying [[reply-context]] displays, based on context type
+
+Other planned h-entry extensions:
+* h-as-bookmark
+* h-as-comics
+* h-as-data
+* h-as-event
+* h-as-gallery
+* h-as-presentation
+* h-as-repost
+* h-as-rsvp
+* h-as-video
+
+Note: The term "h-entry extension" in this context specifically refers to a superset of <code>h-entry</code> data. Every entry can be displayed purely as a basic h-entry without losing context, data fidelity, or understanding. A "h-entry extension" is a combination of additional displayed interface and data (i.e. reading time for a h-as-article or an instance of a map for a h-as-checkin) that is not required to understand the entry but may enhance the experience.
+
+==== indie-publisher ====
+
+<code>indie-publisher</code> is a module that enables the posting of <code>indie-entries</code> compatible entries. It includes a full suite of publishing tools including the following:
+
+* Dynamic posting user interface
+* Dynamic editing user interface
+* Automatic webmention sending via <code>indie-webmention</code>
+* Category management via <code>indie-categories</code>
+* Backdating published datetime
+* Automatic syndication post composition (not auto-posting yet)
+* Syndication to Twitter, Facebook, and LinkedIn
+* Media uploading system (supports images and videos but does not optimize either yet)
+* Uploaded media preview
+* Automatic geolocation
+* Automatic place definition to neighborhood resolution
+
+==== indie-search ====
+
+<code>indie-search</code> currently is an in-memory full-text search that indexes entry content type, title, summary, and content for all entries. It leverages [https://github.com/visionmedia/reds reds] by [https://github.com/visionmedia TJ Holowaychuk] and presents a noticeable performance hit upon startup when indexing more than around 10,000 entries.
+
+== Live Sites Running Indie.js ==
+
+The following websites are currently running Indie.js:
+
+* [https://mowens.com Michael Owens] - mowens.com
+
+== IndieMark ==
+
+As of August 19th, 2014, Indie.js provides an [[IndieMark]] score of <span style="color: #cc0">'''3.2 out of 6.0'''</span> using [https://mowens.com mowens.com] as the baseline implementation:
+
+* <span style="color: #0c0">Level 1: ''1.0'' / ''1.0''</span>
+** <span style="color: #0c0">identity: '''0.2''' / '''0.2'''</span>
+*** <span style="color: #0c0">✓ Personal Domain</span>
+** <span style="color: #0c0">authentication: '''0.2''' / '''0.2'''</span>
+*** <span style="color: #0c0">✓ IndieAuth</span>
+*** <span style="color: #0c0">✓ rel-me</span>
+** <span style="color: #0c0">posts: '''0.4''' / '''0.4'''</span>
+*** <span style="color: #0c0">✓ permalinks for multiple posts '''0.2''' / '''0.2'''</span>
+*** <span style="color: #0c0">✓ h-entry '''0.2''' / '''0.2'''</span>
+** <span style="color: #0c0">search: '''0.2''' / '''0.2'''</span>
+*** <span style="color: #0c0">✓ index-ready</span>
+*** <span style="color: #0c0">✓ HTML-based content</span>
+*** <span style="color: #0c0">✓ site-searchability (Google)</span>
+* <span style="color: #0c0">Level 2: ''1.0'' / ''1.0''</span>
+** <span style="color: #0c0">h-card: '''0.1''' / '''0.1'''</span>
+*** <span style="color: #0c0">✓ contact info and icon</span>
+** <span style="color: #0c0">multiple post types: '''0.2''' / '''0.2'''</span>
+*** <span style="color: #0c0">✓ two or more post types (article, note, photo)</span>
+** <span style="color: #0c0">POSSE support: '''0.2''' / '''0.2'''</span>
+*** <span style="color: #0c0">✓  POSSE multiple posts to silos you only POSSE to</span>
+** <span style="color: #0c0">posting UI: '''0.1''' / '''0.1'''</span>
+*** <span style="color: #0c0">✓  automatically compose syndicated posts or post to silo</span>
+** <span style="color: #0c0">navigation: '''0.1''' / '''0.1'''</span>
+*** <span style="color: #0c0">✓ linear prev/next navigation</span>
+** <span style="color: #0c0">search: '''0.1''' / '''0.1'''</span>
+*** <span style="color: #0c0">✓ search UI on own site</span>
+** <span style="color: #0c0">aggregation: '''0.1''' / '''0.1'''</span>
+*** <span style="color: #0c0">✓ autolinking of URLs / mentions</span>
+*** <span style="color: #0c0">✓ embeds of external resources</span>
+** <span style="color: #0c0">web actions: '''0.1''' / '''0.1'''</span>
+*** <span style="color: #0c0">✓ provide one or more hard-coded web action in &lt;action&gt; element wrapper</span>
+* <span style="color: #cc0">Level 3: ''0.8'' / ''1.0''</span>
+** <span style="color: #0c0">✓ post reply post type '''0.2''' / '''0.2'''</span>
+** <span style="color: #0c0">✓ post other reply types '''0.2''' / '''0.2'''</span>
+** <span style="color: #0c0">✓ webmention inreplyto '''0.2''' / '''0.2'''</span>
+** <span style="color: #c00">✗ POSSE thread reply posts with rel-syndication '''0.0''' / '''0.2'''</span>
+** <span style="color: #0c0">✓ display reply-context on reply posts '''0.2''' / '''0.2'''</span>
+* <span style="color: #c90">Level 4: ''0.4'' / ''1.0''</span>
+** <span style="color: #0c0">✓ receive webmentions '''0.2''' / '''0.2'''</span>
+** <span style="color: #0c0">✓ display comments on all post types '''0.2''' / '''0.2'''</span> <em>Note: Not "great" display.</em>
+** <span style="color: #c00">✗ display other reply types on all posts '''0.0''' / '''0.2'''</span>
+** <span style="color: #c00">✗ post rsvp posts '''0.0''' / '''0.1'''</span>
+** <span style="color: #c00">✗ send webmention rsvps '''0.0''' / '''0.1'''</span>
+** <span style="color: #c00">✗ display rich media / embedded reply context '''0.0''' / '''0.1'''</span>
+** <span style="color: #c00">✗ backfeed interactions from silos '''0.0''' / '''0.1'''</span>
+* <span style="color: #c00">Level 5: ''0.0'' / ''1.0''</span>
+** <span style="color: #c00">✗ post event post types '''0.0''' / '''0.2'''</span>
+** <span style="color: #c00">✗ receive rsvps '''0.0''' / '''0.2'''</span>
+** <span style="color: #c00">✗ display rsvps on event posts '''0.0''' / '''0.2'''</span>
+** <span style="color: #c00">✗ CRUD reply posts '''0.0''' / '''0.2'''</span>
+** <span style="color: #c00">✗ full webmention support '''0.0''' / '''0.2'''</span>
+* <span style="color: #c00">Level 6: ''0.0'' / ''1.0''</span>
+** <span style="color: #c00">✗ personal social reader via backfeed '''0.0''' / '''1.0'''</span>
+
+== Screenshots ==
+
+[[File:indiejs-v1-posting-article.png|none|thumb|600px|Posting an article (full UI)]]
+
+[[File:indiejs-v1-posting-note.png|none|thumb|600px|Posting a note (full UI)]]
+
+[[File:indiejs-v1-posting-photo.png|none|thumb|600px|Posting a photo (full UI)]]
+
+[[File:indiejs-v1-feed-narrow.png|none|thumb|400px|h-feed (narrow UI)]]
+
+[[File:indiejs-v1-feed-wide.png|none|thumb|600px|h-feed (wide UI)]]
+
+[[File:indiejs-v1-webmention-manager.png|none|thumb|600px|Webmention manager]]
+
+[[File:indiejs-v1-web-action-reply.png|none|thumb|600px|Reply Web Action UI]]
+
+[[File:indiejs-v1-web-action-repost.png|none|thumb|600px|Repost Web Action UI]]
+
+[[File:indiejs-v1-search-categories.png|none|thumb|600px|Search and Categories UI]]
+
+[[File:indiejs-v1-indieauth-loggedout.png|none|thumb|300px|IndieAuth Login box]]
+
+[[File:indiejs-v1-indieauth-loggedout.png|none|thumb|300px|IndieAuth Profile / Logout link]]
+
+== TODO ==
+
+The Indie.js [https://github.com/mko/mowens.com-public/blob/master/TODO.md TODO] list is maintained currently on the [https://github.com/mko/mowens.com-public GitHub repo for mowens.com]. Once properly abstracted and modularized, the TODO will move to the Indie.js repo.
+
+== See Also ==
+
+* [[projects]]
+* [[Passport]]
+* [[IndieAuth]]
+* [[IndieMark]]

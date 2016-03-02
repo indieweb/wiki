@@ -1,0 +1,36 @@
+http://indiewebcamp.com/feed_file
+
+{{stub}}
+
+A '''<dfn>feed file</dfn>''' is a [[feed]] represented as a [[side file]] (a separate file, as opposed to as part of an existing HTML page, e.g. [[homepage]]), typically in a custom feed-specific format (e.g. legacy[http://documentation.superfeedr.com/subscribers.html] XML like [[RSS]]/[[Atom]], or JSON like [[ActivityStreams]] 2.0). Feed files are superseded by simply marking up feeds already present on HTML pages, e.g. with [[h-entry]] and optionally [[h-feed]].
+
+== Advantages ==
+=== Full-text feeds ===
+Feed readers only have to retrieve a single file that contains all the latest posts with their full text contents. h-feeds mostly[http://indiewebcamp.com/irc/2016-02-15/line/1455545755495] require retrieving the h-feed URL and all linked h-entry URLs if they want to provide the same user experience (displaying full content and not only headlines).
+* '''Counter-evidence:''' My [[h-feed]], at http://tantek.com/ has latest posts with full text contents. This is typical for h-feeds, and thus typically relegates feed files unnecessary and inefficient per '''[[#Criticism]]''' below (extra markup required, extra artificial precision in datetimes required, etc.). - {{t}}
+
+Comparision of required bandwidth: [http://cweiske.de/tagebuch/atom-vs-hfeed-size.htm Atom feed vs. h-feed size]
+
+== Criticism ==
+Feed files, being separate from actual viewable content on a website, suffer from several problems like:
+=== DRY Violations ===
+{{main|DRY}}
+As a duplicate of information already in the HTML of a web page, feed files are an example of the usual [[DRY]] violations.
+=== Maintenance ===
+Higher maintenance (requiring a separate URL, separate code path to generate, separate format understanding)
+=== Out of date ===
+Feed files become out of date with the visible HTML page (often because of broken separate code path), e.g.:
+* 2015-02-03: 50 days out of date: http://indiewebcamp.com/irc/2015-02-03#t1422988681803
+* 2015-04-26 (reported) : <blockquote>my RSS failed once for 3 weeks even though I generated it from the same database, because I changed the name of a field! Updated HTML templates but forgot the feed templates, since invisible</blockquote>[http://indiewebcamp.com/irc/2015-04-27/line/1430170562685]
+=== Inefficient Representation ===
+Inefficient representation (XML feeds tend to be "wordier" and require more elements, duplication of data, artificial precision in datetimes, etc. all of which add up to higher bandwidth costs etc.)
+=== No Archives ===
+* no access or discovery of archives 
+=== No Since Support ===
+* no way of getting content since a particular datetime
+
+== See Also ==
+* [[side-file]]
+* [[feed]]
+* [[h-entry]]
+* [[PuSH]]

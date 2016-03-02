@@ -1,0 +1,368 @@
+http://indiewebcamp.com/event
+
+{{stub}}
+<span style="float:right;height:128px;font-size:128px;margin-bottom:-64px">📅</span>
+An '''<dfn>event</dfn>''' is a type of [[post]] that in addition to a post name (event title) has a start datetime (likely end datetime), and a location.
+
+''For information on IndieWebCamp [[events]] themselves, see:''
+* [[events]]
+
+__TOC__
+== Why ==
+=== Why publish indie events ===
+You should post events on your own site to own your events and so your friends with indieweb sites can directly [[RSVP]] to you (as well as post [[invitation]]s to others) without depending on a [[silo]] to mediate your event related interactions.
+=== Why POSSE events ===
+You should [[POSSE]] copies of your events to the [[silos]] where your friends without their own indieweb sites keep track of their events and/or calendar.
+
+== How to ==
+=== How to markup ===
+Event posts must be <span id="Marking up">marked up</span> with [[h-event]].
+
+Optionally they can be wrapped in an [[h-entry]] as well (though it's not clear this is necessary). ''Parsers should be prepared to handle events without an h-entry tag.''
+
+(sample event post markup with a top level <code>h-event</code> would be nice!)
+
+=== How to provide an RSVP UI ===
+Event posts should have [[webaction]] buttons for RSVP actions and inviting others. E.g.
+<code>[ Going ][ Maybe ][ Can't Go][ Invite ]</code>
+
+See [[Facebook]]'s RSVP UI:
+* http://microformats.org/wiki/rsvp-examples#Facebook
+
+=== How to accept RSVPs ===
+A site publishing event posts '''should''' <span id="Accepting_RSVPs">accept</span> [[rsvp]] [[webmentions]] and update the event's attendance information accordingly.
+
+See: http://microformats.org/wiki/rsvp
+
+=== How to accept invitations ===
+A site publishing event posts '''should''' <span id="Accepting_Invitations">accept</span> [[invitation]] [[webmentions]] and update the event's "invited" information accordingly.
+
+<!-- See: http://microformats.org/wiki/invitation -->
+
+=== How to limit capacity ===
+Some events have limited capacity and want to offer "tickets," ie only accept the first N RSVPs.
+
+To do this, the site that hosts the canonical h-event should set the capacity. When it renders the event, it should show the space remaining based on its current number of <code>yes</code> [[rsvp]]s.
+
+It should handle RSVP [[webmention]]s for the event in serial. When it gets a <code>yes</code> RSVP, it should check the capacity against the current number of yes RSVPs. If the event is full, it should reject the RSVP webmention. This could be done with either an explicit 403 Forbidden, or an implicit status like 203 Non-Authoritative Information or 304 Not Modified along with a human-readable message saying the event is full.
+
+The host could also put overflow yes RSVPs on an ordered waiting list, mention that in the reject message, and automatically upgrade people on the waitlist when existing yes RSVPs are withdrawn.
+
+[http://indiewebcamp.com/irc/2015-11-29#t1448841891092 IRC discussion of whether/how this fits into the webmention spec.]
+
+== IndieWeb Examples ==
+In implementation order:
+=== Ben Werdmuller ===
+{{benwerd}} uses [[idno]] on werd.io to post events since [http://werd.io/event/51c94deebed7de5c2386a1b4/unofficial-portland-post-indiewebcamp-meetup 2013-06-25] (right after IndieWebCamp [[2013]]!), which automatically accept RSVPs from other sites using [[RSVP]] webmentions. Events may also be [[comments|replied]] to in the same manner as notes and articles. E.g.
+* index page of upcoming/recent events: http://werd.io/content/events
+* http://werd.io/event/51c94deebed7de5c2386a1b4/unofficial-portland-post-indiewebcamp-meetup
+* http://werd.io/2013/an-indieweb-catchup-over-food-and-drink (with example of explicit visible [[event#Invitations|invitations]])
+* http://werd.io/2014/homebrew-website-club
+** [[POSSE]] copy on [[Facebook]]: https://www.facebook.com/events/200590280142030/
+
+=== Aaron Parecki ===
+{{aaronpk}} uses [[p3k]] on aaronparecki.com to post events since [http://aaronparecki.com/events/2013/07/09/1/speed-geeking-an-intro-to-oauth2 2013-07-08], which automatically accept RSVPs from other sites using [[RSVP]] webmentions. E.g.
+* index page of recent events: http://aaronparecki.com/events
+* http://aaronparecki.com/events/2013/07/09/1/speed-geeking-an-intro-to-oauth2
+* http://aaronparecki.com/events/2014/01/29/1/homebrew-website-club
+** [[POSSE]] copy on [[Facebook]]: https://www.facebook.com/events/1453049941575679/
+
+=== Bret Comnes ===
+[[User:Bret.io|Bret Comnes]] has implemented events inside of [[jekyll]] for bret.io since [http://bret.io/2013/07/25/t1/ 2013-07-25]. It supports receiving webmentions, but does not parse responses for RSVP status or display reply contexts at the moment. Example:
+*  http://bret.io/2013/07/25/t1/
+*  (bad) Example of data https://raw.github.com/bcomnes/bcomnes.github.io/master/_posts/notes/2013-07-25-t1.md
+The event data is stored in the YAML which separates the final layout and the event data.  A form is used to assist in creating the event post via [[prose.io]].
+
+=== Jeena ===
+{{jeena}} has implemented events on his website because he wanted to host HWC:s and it wouldn't look good without the possibility to RSVP to a indie event. The event page receives RSVP:s and displays them under the event. Example:
+*  https://jeena.net/events/2
+
+=== Ryan Barrett ===
+[[User:snarfed.org|Ryan Barrett]] is manually posting events inside [[article]] posts on snarfed.org [https://snarfed.org/2014-01-15_homebrew-website-club-tonight since 2014-01-15]. Examples:
+* https://snarfed.org/2014-06-16_homebrew-website-club-at-quip (includes native and [[backfeed]] [[rsvp]]s)
+** Posted 2014-06-16, for an event on 2014-06-18
+** POSSE FB event: https://www.facebook.com/events/675481332531191/
+** Tweet about: https://twitter.com/schnarfed/status/478564735265157120
+** G+ post/linkshare about: https://plus.google.com/+RyanBarrett/posts/JwiJAfBNs9w
+** Both tweet and G+ posts worked as proxy POSSE posts for Bridgy [https://snarfed.org/2014-06-16_homebrew-website-club-at-quip#comments backfeed interactions] (favorites, retweets, +1s etc.)
+* https://snarfed.org/2014-01-15_homebrew-website-club-tonight
+** POSSE tweet: https://twitter.com/schnarfed/status/423586870144942080
+
+=== Kyle Mahan ===
+{{kylewm}} added event posting with RSVPs to [[Red Wind]] on 2014-12-14. Example:
+* https://kylewm.com/2014/12/homebrew-website-club-17-december-2014
+* POSSE facebook copy: https://www.facebook.com/events/736605033092500/
+* More recent event: https://kylewm.com/2015/04/homebrew-website-club-1
+** has fixed the duplicate display of "is going" colored text vs. "is attending." default text summary from Bridgy (which the above 2014 example has)
+
+=== gRegor Morrill ===
+{{gRegor}} added event posts (sans RSVP) on 2015-10-01. Example:
+* http://gregorlove.com/2015/09/mew/
+* [[h-feed]] of upcoming events: http://gregorlove.com/events/
+* h-feed of past events: http://gregorlove.com/events/past/
+* Immediate use-case is that I want to log all concerts I attend.
+
+
+=== Shane Becker ===
+{{veganstraightedge}} uses [[Dark Matter]] on veganstraightedge.com to post events since 2016-01-10] sans RSVPs. Back-dated events were added at that time. Examples:
+
+* All events: http://veganstraightedge.com/events
+* Single event: http://veganstraightedge.com/events/2013/11/02/farmhouse-conf-5-collapse
+
+=== IndieWeb Itches ===
+The following people either strongly want to implement events on their site, or are in the process of doing so, you may find some implementation clues in their notes
+
+==== Tantek ====
+{{t}}: event posts are a pretty big itch for me, but also a lot of specific work:
+* [[Falcon#event_posts]]
+Prototype event as a note:
+* http://tantek.com/2013/323/t5/event-note-homebrew-website-club
+** with: name, datetime start, time end, how to RSVP
+** POSSE tweet copy: https://twitter.com/t/status/403064607373537280
+
+==== Amy Guy ====
+{{rhiaro}}: "events is my biggest itch currently"[http://indiewebcamp.com/irc/2015-03-04/line/1425508438873]
+
+Staged implementation[http://indiewebcamp.com/irc/2015-03-04#t1425508589730]
+# I'm going to work with jarofgreen to get webmentions in opentechcalendar (since most events, at least ones I attend in scotland, are on there, and if they're not I can add them)
+# then do all my events through that
+# and [[rsvp]] from my site
+# longer term hopefully we can get something working so I can post an event on my site initially
+# POSSE (perhaps by sending a webmention) to opentechcalendar and have it create a public event copy
+
+== Brainstorming ==
+As <span id="Design_Brainstorming">ideas</span> here are implemented, they should be moved to actual sections of their own with links to examples.
+
+=== Image header ===
+Typical [[silos]] event posts (e.g. [[Facebook]], [[Google+]]) provide (encourage) the option of an event image - used as a header for the event. This header is used at the top of the event permalink page, and also often shown in an event list view (e.g. on [[Facebook]]).
+
+Such header images are often quite a good visual/emotional draw for the event. Header images are typically representative of the event, sometimes displayed with the name of the event superimposed on top.
+
+If you're posting events, consider providing this option for yourself (in your event posting UI or otherwise as part of your publishing system) as part of your indieweb event posts as well.
+
+Since the photo would be deliberately chosen and associated with the event, we could extend [[h-event]] to represent the photo as well with:
+* <code>u-photo</code> (re-used from [[h-card]]).
+
+'''Screenshots needed'''
+
+=== Map image ===
+Some [[silos]] event posts (e.g. [[Facebook]], [[Plancast]]) automatically generate a horizontal rectangle map view of the event location.
+
+In particular, on event posts, the location is shown *first* as a centered dot in a wide and short rectangle map that shows the local area, and then second underneath as text address.
+
+Showing a map and showing it early is both visually striking and instantly provides a sense of "is this near me", or "is this near somewhere I'd like to be or might be anyway". It quickly gives you context in a way that a purely textual address does not.
+
+'''Screenshots needed'''
+
+A horizontal map (banner map?) from a Facebook event:
+
+[[File:event-map-horizontal.jpg]]
+
+=== Attendees ===
+Event posts should display attendees, [[RSVP]]s in general, and [[invitation]]s.
+
+There are two typical existing approaches to displaying RSVPs:
+* clustered by state (yes, no, maybe) - current [[silos]] do this - see below
+* in time order regardless of RSVP state
+
+Clusters are typically displayed as [[facepiles]], either entirely, or abbreviated at some fixed number with a method to expand / view the whole set.
+
+Time order presentation usually include some text about the RSVP, e.g. "is going", "is attending"
+
+==== Silo Attendees ====
+Every event silo by default shows who else is has [[RSVP]]ed that yes they're going, and more so, often first display who <em>you know</em> that's going to the event. Quickly seeing "who else is going" or might go or is invited is a huge sense of context/comfort as well, especially with little face icons.
+
+E.g. Facebook clusters (potential) attendees by:
+* Going
+* Maybe
+* Invited
+(and declined is typically hidden)
+
+'''More screenshots needed'''
+
+Event attendees on Facebook:
+
+[[File:event-attendees-facebook.png]]
+
+Note the going/maybe/invited sections on FB first show *only* those you know (if any), and *only if* there's no one you know in a section, does the section show 5 icons of others who said they're going/maybe or were invited. In either case, the order of icons is most recently responded/invited first.
+
+Public events don't necessarily have a public list of invited users, depending on the system, but nonetheless list attendees. For example, on Plancast:
+
+[[File:public-event-plancast.jpg|300px]]
+
+Plancast only shows invitees on an event to the event organizer, i.e. when the event organizer themselves is looking at the event permalink page.
+
+=== Invitations ===
+{{main|invitation}}
+People like being explicitly invited to events. One way to send invitations with indieweb events is:
+* Add people explicitly to an invited list on the event (present on the event page as noted above in Attendees) - with icon and name linked to their home page.
+* Send [[webmentions]] to their home page from the event permalink.
+The idea is that a person's site's webmentions queue sees webmentions from the event to the home page and interprets that as an invitation to the event. If needed we could add some markup like <code>rel="invitee"</code> or <code>class="u-invitee"</code> or <code>class="p-invitee h-card"</code> to the event page so that consuming applications could tell the difference between mentions and invitations of people.
+
+Also see [[indieweb messaging]], which also uses a webmention to the user's homepage.
+
+=== POSSE ===
+How and where should event posts be [[POSSE]]d?
+* Related: [[RSVP#POSSE|RSVP: POSSE]]
+
+Event-aware destinations to consider:
+==== POSSE to Eventbrite ====
+[[Eventbrite]] - has best API for creating events, getting updates, perhaps backfeeding attendees etc.
+* [https://github.com/snarfed/bridgy/issues/275 Bridgy feature request: publish Eventbrite events]
+* Lots of people seem to use Eventbrite
+* It seems to be good at getting people to show up to events - e.g. with reminders etc.
+* Eventbrite also emails people when some number (2+?) of their friends are going to an event.
+
+==== POSSE to Facebook ====
+[[Facebook]] - likely has broadest reach of people you might want to explicitly invite
+* Currently the [https://developers.facebook.com/docs/graph-api/reference/v2.1/event#publish Facebook API disallows creating, updating, or deleting events]
+** [https://github.com/snarfed/bridgy/issues/274 Bridgy feature request: publish Facebook events]
+* Creating a '''manual POSSE event copy on FB''' of an event on your site is still useful!
+** including copy a [[featured]] image from your indie event (e.g. [https://snarfed.org/2014-06-16_homebrew-website-club-at-quip photo of French press coffee on this event]) to the FB event's "Event Photo"
+* people's RSVPs on the FB event can send webmentions to your site via a [[Bridgy]], and thus display people's FB RSVPs  *on the event on your site* E.g.
+* '''{{aaronpk}}''' is posting events using [[p3k]] on aaronparecki.com and manually POSSEing them to Facebook:
+** original: http://aaronparecki.com/events/2014/01/29/1/homebrew-website-club
+** POSSE copy: https://www.facebook.com/events/1453049941575679
+* '''{{benwerd}}''' is posting events using [[idno]] on werd.io and manually POSSEing them to Facebook: 
+** original: http://werd.io/2014/homebrew-website-club
+** POSSE copy: https://www.facebook.com/events/200590280142030/
+* '''{{snarfed}}''' is posting events inside article posts on snarfed.org  and manually POSSEing them to Facebook: 
+** original:  https://snarfed.org/2014-06-16_homebrew-website-club-at-quip
+** POSSE copy: https://www.facebook.com/events/675481332531191/
+
+==== POSSE to Lanyrd ====
+[[Lanyrd]] - has an API for creating events, getting updates, backfeeding RSVPs
+* [https://github.com/snarfed/bridgy/issues/390 Bridgy Publish feature request: POSSE to Lanyrd]
+* [https://github.com/snarfed/bridgy/issues/391 Bridgy backfeed from Lanyrd feature request]
+
+==== POSSE to Plancast ====
+[[Plancast]] - event-specific silo
+
+==== POSSE to Google+ ====
+[[Google+]] - another [[silo]] that has explicit event posts, but has enough challenges to be considered problematic:
+* G+ API doesn't expose events
+** when someone shares an event, you can see it in their stream with activities.list and get, but that's just a note about it, not the event itself. 
+** G+ API bug asking for events: http://code.google.com/p/google-plus-platform/issues/detail?id=567
+
+==== POSSE to Twitter ====
+Despite not supporting event posts per se, [[Twitter]] is worth considering as a POSSE destination.
+
+* Can we compress the details of an event post into 140 characters or less? (117 to leave room for event permalink URL, 116 for https).
+* How do we abbreviate what/when/where "fields"? E.g. 
+** What: summary... (ellipsed)
+** Where: @-alias of venue (how do we do venue lookup on Twitter? Perhaps use [[Foursquare]] to lookup the venue and see if their venue entry has a Twitter for the venue?
+** When: YYYY-MM-DD HH:MM (seems quite long, what's the best way to compress a datetime in a human readable way?)
+** CC: @-names (of folks to explicitly notify, like an invitation)
+* Should such fields be explicitly labeled e.g. with "What: / Where:" etc. with linebreaks between them?
+* Or should we figure out a plain text event serialization format since things like an @-named venue already reads well "at venue"? (see [http://microformats.org/wiki/picoformats picoformats] for prior work/research on this)
+* "featured" or map image -> tweet photo?
+** Should an event post with a featured/header photo be POSSEd to Twitter as a tweet with a photo?
+** Should an event post without a featured/header photo, but with a location, be POSSEd to Twitter as a tweet with a photo which is just a static rendered image of the map view of the venue / location?
+** What is the "engagement" or "response rate" is on tweets/events with header photos vs. events without? *guessing* that with photos is much higher
+
+=== Events index ===
+Indieweb sites with event posts (and perhaps even just [[RSVP]] posts) could also provide an index of what events they're attending, e.g.
+* at a /events URL
+
+From a human [[design]] perspective this makes sense as:
+* "these are the events I'll be at" 
+which is likely a union of personal event posts and RSVP yes (and maybe maybes too?) posts.
+
+Kind of like a view of your public calendar of events, regardless of whether you're organizing/hosting or just attending.
+
+Such an events index could be displayed as a list view (similar to the default view of fb.com/events) or as a calendar view (like gCal), or with an option to toggle between them.
+
+An easily-discoverable link should probably be displayed from the user's index or homepage.
+* Potential for microformats or microformats-like markup to indicate a user's calendar as linked from their h-card?
+
+=== Markup design ===
+Markup for an h-event on a site must include a number of properties to enable presentation and user interaction as implied by some of the above brainstorming, and some of the better silo UX as documented in "Silo Examples"
+
+The following fields/properties are necessary in the markup somewhere:
+* <code>p-name</code>
+** optional <code>u-featured</code> for an event background photo
+* <code>dt-start</code> (likely in the future)
+* <code>p-location</code> 
+** with possible nested object <code>h-card</code> venue
+*** with a map <code>u-url</code> - but how to identify it as a map URL?
+*** with a map <code>u-photo</code> - but how to identify it as a map photo?
+* <code>p-organizer</code> (reserved h-event property)
+* <code>e-description</code> 
+* <code>p-attendee</code> <code>h-card</code> for who is going
+** not sure how to indicate RSVP status for each
+* <code>p-x-responses h-feed</code> - event activity, e.g. <code>h-entry</code>s inside for:
+** event creation, comments, when RSVPs were received
+
+Markup example:
+* TBD after a plain text design
+
+=== Response context CRUD ===
+Similar to the general [[reply-context#CRUD|reply context: CRUD]] protocol, when an event changes (name, location, times, description, etc.) you should send webmentions to all the responses to the event that you've accepted, e.g. to all:
+* [[RSVP]]s in response to your event
+* [[invitation]]s to your event
+* and all other generic responses like comments, likes, reposts
+
+What about when an event is cancelled? Options:
+* Implement event cancellation as a [[delete]] and return 410, based on real world existing silo example:
+** [[Facebook]] notifies you when an event you've indicated interest in has been cancelled, but then clicking that notification doesn't go anywhere - the event permalink itself just 404s.
+* ... other options?
+
+== Silo Examples ==
+=== Facebook ===
+==== Redesign 2014-02-27 ====
+Here is what the 2014-02-27 redesign (limited rollout as of that date, but subsequently broadly rolled out) looks like: 
+
+[[File:Screen_Shot_2014-02-27_at_16.10.11.png|500px|Desktop]]
+
+
+'''Mobile Web UI:'''
+
+[[File:2014-03-03-fb-event-new-ios-web-ui-1.jpg|500px]]]]<br/>
+[[File:2014-03-03-fb-event-new-ios-web-ui-2.jpg|500px]]<br/>
+[[File:2014-03-03-fb-event-new-ios-web-ui-3.jpg|500px]]<br/>
+
+
+Shall we count the design regressions?
+
+# Global noise in the left column replaces the very relevant and easily skimmable who is going, maybe, invited lists of people
+# Big blank area where there is no event header image
+# Lots of visual noise from the gray background between the white blocks of text
+# Missing the map overview graphic
+# Less clear who is going/maybe/invited
+# Lack of hierarchy (ordering) of going/maybe/invited removes subtle invitee incentive to upgrade from invited to maybe to going.
+# ... more?
+
+==== Before 2014-02-07 ====
+This was perhaps the pinnacle of Facebook's event page design.
+
+[[Facebook]] has had one of the more interesting/nicer/cleaner event page designs for quite some time.
+
+Here is a screenshot of the [[events/2014-02-12-homebrew-website-club|2014-02-12 Homebrew Website Club]] event (for the SF location) on Facebook, manually POSSEd by [[User:Werd.io|Ben Werdmuller]] from http://werd.io/2014/homebrew-website-club-meeting :
+
+[[File:20140227-facebook-event-example.png|500px|Desktop Web UI]]
+
+
+'''Mobile Web UI:'''
+
+[[File:fb-event-iphone-mobile.png|Mobile iOS Screenshot|500px|Mobile Web UI]]
+
+
+* Also: [[:File:fb_event_android_chrome_1.png|Mobile Android Screenshot]]
+
+==== Before 2014 ====
+<span id="Facebook_before_2014">Facebook pre-2014:</span>
+
+[[File:Screen_Shot_2014-02-27_at_4.05.00_PM.png|500px|Facebook pre-2014]]
+
+
+== See also ==
+* [[events list]]
+* [[datetime]]
+* [[rsvp]]
+* [[webmention]]
+* [[posts]]
+* [[invitation]]
+* http://microformats.org/wiki/rsvp
+**  http://microformats.org/wiki/rsvp-brainstorming
+* http://microformats.org/wiki/hcalendar
+** http://microformats.org/wiki/hcalendar-brainstorming

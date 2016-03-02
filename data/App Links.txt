@@ -1,0 +1,27 @@
+http://indiewebcamp.com/App_Links
+
+'''<dfn>[http://applinks.org/ App Links]</dfn>''' are a technology launched 2014-04-30(?) by [[Facebook]] at their F8 Developer Conference.
+
+They are intended to solve [http://www.kevinmarks.com/f8-2014.html##stuck+in+a+mobile+web+browser Ilya Sukhar's problem] of feeling [https://twitter.com/kevinmarks/status/462482334604726272 "trapped in the browser"] when clicking a link in a mobile app. The intention is to enable cross-platform deep-linking into apps by providing a way for web pages to specify equivalent URLs and applications to load them in for iOS, Android, Windows Mobile and mobile web.
+
+== Criticism ==
+App Links have a number of structural problems:
+=== Overrides working URL mechanisms ===
+The Web and Android already have an adequate model for apps to use URLs. Android provides a mechanism for apps to claim URLs by regex, and a user-mediated way to resolve conflicts. On iOS this is [http://epeus.blogspot.com/2013/06/how-apples-ios-fragmentation-problems.html##missing+links not the case] - apps can only claim schemes and there is no contention resolution. Imposing a new model atop this adds confusion.
+=== Site overrides user choice ===
+By making the site the arbiter of what mobile apps will display it, this breaks the Web notion of User-Agent choice - the website becomes an appendage of the mobile app, as Instagram was historically. You may want to use a specific 3rd party app for Twitter, for example, and this will force you to use theirs. 
+Similarly, the [http://idontwantyourfuckingapp.tumblr.com/ interstitial app downlaod antipattern] can now be enforced by facebook and applink users before you even see the website, overriding your preference ot view in the browser.
+=== Facebook is man-in-the-middling URL resolution ===
+By Facebook putting their own code in the middle of URL resolution, they can both track and redirect links themselves. At launch there were examples of them misdirecting links to Medium that were posted via Twitter [http://youtu.be/IChazBFYSSE Android goes to app store for Twitter] [http://youtu.be/_tDCWsZ4gVI iOS says Medium is Twitter]
+=== Sites could prank redirect ===
+Sites could mischievously redirect certain platforms, for example rickrolling iOS or Android users selectively
+=== Lack of selfdogfood ===
+As of 2014-05-05, Facebook doesn't markup their own webpages with applinks.org. (KevinMarks in IRC). 
+
+For example [http://facebook.com/kevinmarks my facebook page] could link to various FB apps, which would be useful for [http://tantek.com/2014/120/b1/markup-people-focused-mobile-communication people-focused mobile communication]
+
+== Possible indie usage ==
+By marking up with this syntax, it may be possible to redirect webpages to a specific mobile browser on iOS rather then to Facebook's Safari-based webview. This could be useful for pages using web technologies nto yet in Safari, such as WebRTC.
+== See Also ==
+* [[Facebook]]
+* [[OGP]]

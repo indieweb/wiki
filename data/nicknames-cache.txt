@@ -1,0 +1,72 @@
+http://indiewebcamp.com/nicknames-cache
+
+{{stub}}
+
+A '''<dfn>nicknames cache</dfn>''' is a way indieweb sites store information about people to improve the user experience of the site owner referring, mention, and/or linking to those people.
+
+== Use Cases ==
+=== Easier Person References When Writing ===
+When [[creating]] a post, being able to type merely a given-name, or @-handle, or even domain name that represents a person, and have your site automatically both [[autosuggest]] while typing, autocomplete, and convert that reference:
+* on your post on your site: a mini-[[h-card]] hyperlinking the person's full name to their domain
+** or perhaps the person's given-name inside an <code>abbr</code> element which has the full name
+* in a [[POSSE]] copy
+** on Twitter: the corresponding @-name for that person (per [[Twitter#POSSE_to_Twitter]] step 4. translate indiewebsite people references)
+** on Facebook: the corresponding profile-link (person-tag) reference for that person
+
+=== Better Person Name Display ===
+When displaying a [[reply-context]] or a [[comment]] or other interaction ([[likes]], [[reposts]]) e.g. in a [[facepile]], it's better to:
+* '''Retrieve the name of the referring person from a nickname cache'''
+
+Rather than have to:
+* Retrieve the name dynamically from an h-card on that person's site
+** disadvantage: slower, less responsive, more code
+* Retrieve the name from your own storage of the reply / interaction
+** disadvantage: refers to people by their old name, which they may have changed for any number of reasons, personal, relationship or otherwise.
+
+=== Better Person Icon Display ===
+When displaying a [[reply-context]] or a [[comment]] or other interaction ([[likes]], [[reposts]]) e.g. in a [[facepile]], it may be better to:
+* '''Retrieve the icon of the referring person from a nickname cache'''
+
+Rather than have to:
+* Retrieve the icon URL dynamically from an h-card on that person's site
+** disadvantage: slower, less responsive, more code
+* Retrieve the icon URL from your own storage of the reply / interaction
+** disadvantage: less reliable, icon URLs change
+
+Alternatively, it may be better to:
+* '''Retrieve the icon image itself from your own storage of the reply / interaction'''
+** advantage: shows the icon that the person was using as of the time of the post! <blockquote>"… the idea that an avatar at the moment of a Tweet should be considered a part of that Tweet is also valid and interesting.</blockquote>[https://twitter.com/benward/status/561686435552854016] <blockquote>"… screenshots, which do preserve that context,it makes sense"</blockquote>[https://twitter.com/kevinmarks/status/561690436062814208]
+** disadvantage: storage space: requires copying and storing likely many duplicate copies of the same icons of people for every such reply / interaction
+** disadvantage: showing a dated/old icon of the person (one they may no longer want to publish)
+
+=== Connecting Authors As One ===
+When displaying sequential [[like]] posts, it may be possible to (further) cluster them if it can be determined that they were made by the same person, even if across different sites (their own site, different silo accounts etc.), by looking up their different author URLs in a nicknames cache and determining that they're all the same person.
+
+See [[like#Brainstorming]], specifically, "With authorship knowledge, [...]".
+
+== IndieWeb Examples ==
+* https://kylewm.com/addressbook used in posts to show sparkline icon and full name of person hyperlinked to their website, and @-names in POSSE tweet copy, e.g.:
+** https://kylewm.com/reply/2014/07/01/1
+** POSSE copy: https://twitter.com/kyle_wm/status/483972403169460224
+** more info: [[Red_Wind#Address_Book]]
+* [[p3k#Local_Nicknames]]
+
+== Storage Model ==
+Typically a flat list of items at least with:
+* person full name
+* shortname / given-name (what the author of a post would type to refer to the person)
+* domain name
+* @-name
+* icon URL
+And potentially also:
+* other profile URLs or userids on [[silos]] you [[POSSE]] to (e.g. [[Facebook]])
+
+== Discussion ==
+* How do we get the information into the cache? [http://indiewebcamp.com/irc/2014-07-13#t1405285303000]
+
+== See Also ==
+* [[autosuggest]]
+* [[blogroll]]
+* [[communication]]
+* [[reply-context]]
+* [[hashtag-cache]]

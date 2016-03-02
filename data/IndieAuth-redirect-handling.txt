@@ -1,0 +1,33 @@
+http://indiewebcamp.com/IndieAuth-redirect-handling
+
+{{stub}}
+
+This is an attempt to document profile redirects to be sure IndieAuth.com is handling them properly.
+
+=== <nowiki>me=http://petermolnar.eu/</nowiki> ===
+<pre>
+http://petermolnar.eu/ -301-> https://petermolnar.eu/
+https://petermolnar.eu/ -links-to-> https://github.com/petermolnar
+https://github.com/petermolnar -links-to-> https://petermolnar.eu/
+</pre>
+
+In this case, Peter entered "http://petermolnar.eu/" in the sign-in form.
+
+When checking whether Github links back to his site, we encounter the situation where his Github profile links to the https profile which is not the thing entered in the sign-in form.
+
+To support this case, the server should look for any of the URLs in the initial redirect chain when checking whether Github links back.
+
+
+=== <nowiki>me=https://petermolnar.eu/</nowiki> ===
+<pre>
+https://petermolnar.eu/ -links-to-> https://github.com/petermolnar
+https://github.com/petermolnar -links-to-> https://petermolnar.eu/
+</pre>
+
+=== <nowiki>me=http://dreev.es/</nowiki> ===
+<pre>
+http://dreev.es/ -301-> http://ai.eecs.umich.edu/people/dreeves/
+http://ai.eecs.umich.edu/people/dreeves/ -links-to-> https://github.com/dreeves
+https://github.com/dreeves -links-to-> http://dreev.es/
+</pre>
+[[Category:IndieAuth]]

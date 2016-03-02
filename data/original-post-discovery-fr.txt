@@ -1,0 +1,57 @@
+http://indiewebcamp.com/original-post-discovery-fr
+
+''Cette page a démarré sur [[original-post-discovery]]''
+
+{{stub-fr}}
+
+La découverte originale de post ou '''<dfn>original post discovery</dfn>''' est un algorithme de [[discovery-fr|découverte]] pour démarrer avec une copie [[POSSE-fr|POSSÉe]] d'un [[post-fr|post]] et trouver le post original.
+
+== Cas d'Usages ==
+=== Réponse à l'original ===
+Premièrement, comme faisant partie d'un [[comment-fr#Produire un commentaire||Comment produire un commentaire]], ce serait plus indieweb si les implémentations de publication de post : 
+* détectaient automatiquement quand un utilisateur essaye de réponse à une copie POSSÉe (par ex. un tweet),
+* auto-découvraient le post original, et 
+* liaient à la place vers le post original
+
+Sous forme de question :
+* Comment trouver le post original d'une copie POSSÉe à laquelle je suis en train de répondre ?
+
+=== Fil de discussion original des posts et copies POSSÉes ===
+Deuxièmement, au moment de POSSEr les posts de réponses, il est utile de faire automatiquement : 
+* marquez votre post de réponse avec un marquage [[in-reply-to-fr|in-reply-to]] vers le post original
+* au moment de POSSEr votre post de réponse vers [[Twitter-fr|Twitter]], réglez le "in-reply-to-status-id" sur le "status-id" de la copie POSSÉe du tweet du post original.
+* pour plus de détails voir : [[comment-fr#POSSEr_un_commentaire|Comment POSSEr un commentaire]]
+
+== Algorithme ==
+Comment découvrir un post original à partir d'une copie POSSEe de ce post.
+
+# chercher un lien rel=canonical dans la copie POSSEe qui fait un lien retour vers un original - utilisez ça
+# autrement si une citation permalien-raccourci entre parenthèses est la dernière chose dans la copie POSSEe, convertissez cela en une URL, et faites la prochaine étape avec cette URL comme la dernière chose
+# autrement si une URL est la dernière chose dans la copie POSSEe, allez retrouver cette URL et regardez si elle fait un lien retour vers la copie POSSEe avec rel=syndication et ensuite utilisez cette URL
+
+Une citation permalien-racccourci entre parenthèses ressemble à quelque chose comme ça : 
+* (ttk.me t4Pc2) 
+Le format spécifique de la citation permalien-raccourci est : 
+# littéral '('
+# nom de domaine, probalement un [[short domain name-fr|nom-de-domaine-court]] (pour éviter que Twitter ne l'auto-lie, car Twitter auto-lie les TLDs .com .net .org.
+# espace littéral  ' '
+# id composée de a-zA-Z0-9
+# littéral ')'
+
+Convertir une citation permalien-raccourci vers une URL en : 
+* commençant par la chaîne "http://"
+* ajouter le nom de domaine de (2) au-dessus de la chaîne
+* ajouter un slash littéral '/' à la chaîne
+* ajouter l'id de (4) au-dessus de la chaîne
+* la chaîne résultante est une url-perma-raccourci
+
+== Implémentations ==
+* [[p3k-fr]] implémente la découverte du post original post.
+** Voir la vidéo de démonstration : http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery
+
+== Voir aussi ==
+* Démo live : http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery
+* [[discovery-fr|découverte]]
+* [[posts-fr|posts]]
+* [[comments-fr|commentaires]]
+* [[POSSE-fr|POSSE]]

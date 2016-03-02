@@ -1,0 +1,21 @@
+http://indiewebcamp.com/User%3AGregorlove.com/Changing_permalinks
+
+In 2015 I moved my site from [[Nucleus]] to [[ProcessWire]]. In the process, I decided to update my permalink URL structure. Below I will document problems and the solutions I've found.
+
+== Existing URLs ==
+* [[article]] permalinks used URL path <code>/YYYY/MM/[post id]/</code>
+* [[notes]] permalinks used URL path <code>/notes/YYYY/MM/DD/[ordinal]/</code>
+
+== New URLs ==
+* [[article]] permalinks will use URL path <code>/YYYY/MM/[slug]/</code>
+* [[notes]] permalinks will use URL path <code>/YYYY/MM/[slug]/</code>
+
+== Problems ==
+=== Accessing Old URLs ===
+The existing URL paths are stored along with each page in ProcessWire. The ProcessWire templates detect the old URL path and return a 301 redirect to the new permalink.
+
+=== De-duping Webmentions ===
+* To uniquely identify and de-dupe webmentions, my code uses <code>md5(source + target)</code>. Since the permalinks will be changing in my notes h-feed, I suspect [[bridgy]] will try to re-send recent webmentions to the new URLs. Since the md5 hash will be different, they will not be properly de-duped.
+** '''My solution:''' When migrating webmentions to ProcessWire, I re-calculated the hash to be <code>md5(source + target path sans scheme)</code>. For example, instead of using http://gregorlove.com/2014/06/this-is-my-first-note/ in the hash, I will use gregorlove.com/2014/06/this-is-my-first-note/. Leaving the scheme off is a bit of future-proofing, since I intend to deliver all my pages https-only eventually.
+
+* . . .

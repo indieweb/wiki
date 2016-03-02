@@ -1,0 +1,152 @@
+http://indiewebcamp.com/events/2014-06-24-indieauth-at-osbridge
+
+<div class="h-event">
+= <span class="p-name=">OAuth, IndieAuth, and the Future of Authorization APIs</span> =
+
+* Date: <span class="dt-start">June 24, 2014</span>
+* Event: <span class="p-location">Open Source Bridge</span>
+* <span class="u-url">http://opensourcebridge.org/sessions/1363</span>
+* <span class="u-url">http://aaronparecki.com/presentations/2014/06/24/1/indieauth-osbridge</span>
+* [http://aaronparecki.com/presentations/2014/06/24/1/files/slides/ View Slides]
+* [https://www.youtube.com/watch?v=myC7ZWhE7Kc&index=11&list=PLfwE4lxvXUNnOF_T6WyIbs_sW4b9E7onr Watch Video]
+
+<div class="p-summary">You use OAuth every time you log in to Facebook or Twitter, but what if you could use it from your own website? What if your own domain became a source of data, and you had your own personal API? By decentralizing authorization to your own domain instead of a silo, you control when, how, and to whom your data is shared.</div>
+
+</div>
+
+== Session Notes ==
+
+Notes from Aaron Parecki's talk at Open Source Bridge, 2014
+
+Talking about oauth and indieauth
+
+people used to microblog on the old days of twitter
+there was an ecosystem of apps that let you write and read tweets in many creative ways.
+
+the twitter web interface included which app was used to post that note leading to a diverse ecosystem of apps
+
+some apps would create visualizations of your tweet history
+
+in the dark ages before oath, you used to hand over credentials over to some of these applications.  this was a major problem.  how can people post to their twitter accounts without asking for their password?
+
+lots of problems:
+* security issues
+* multiple places to change your password
+
+everyone jumped on board with oath!  this problem was no more
+
+2014: moving this ecosystem out of twitter?
+
+examples of indieweb sites:
+* http://aaronparecki.com
+* http://werd.io
+* http://bret.io
+* https://kartikprabhu.com
+
+Current in progress posting interfaces to personal websites and blogs:
+* wordpress
+* p3k (from http://aaronparecki.com)
+* Known (from werd.io)
+* Red Wind 
+* gRegor
+
+Building our own posting interface gets boring, so why not use each others?
+
+Quill: a simple web interface for posting notes to your website.
+* signing in gives you a checklist of requirements that need to be met to use the client
+* a simple post interface
+* pressing post sends off a request to your website and it makes the post.
+
+There are a few of these interfaces that work on multiple sites.  
+
+* taproot (barnaby walters waterpigs.co.uk)
+* ownyourgram (ownyourgram.com)
+
+
+Working with constraints:
+* (re)invent as little as possible
+* https is easier than cryptography
+
+Oauth2 dropped crypto and relies only on https
+
+only form encoded request and html for authentication
+
+users are represented by urls
+
+apps are represented by urls
+
+putting these things together you get:
+IndieAuth: Oauth2 + Web Identity
+
+Example signing in with IndieAuth:  
+
+Application
+* ClientID:  the client you are signing into e.g.: indiewebcamp.com
+* redirect_url: the thing indieauth redirects back to? e.g. indiewebcamp.com/auth/callback
+
+* user
+*me = their website identity e.g. aaronparecki.com
+
+this is done by adding a rel=me attribute to a link to an profile that is OAuth enabled IE twitter or github.
+
+The user clicks sign in on the client applicationL
+
+Going through the details of how indiauth interacts with the client application.  See: http://indiewebcamp.com/authentication
+
+
+Now lets do that again in a different context.  Signing into a web posting client with the domain name you will be posting to:
+
+We will sign into a 3rd party app
+
+* client_id = quill.p3k.io
+* redirect_uri = a callback url
+* user
+* me = personal domain
+
+users services:
+* authorization endpoint
+* token endpoint
+*micropub endpoint http://indiewebcamp.com/micropub-endpoint
+
+the client authorizes the app, the app gets an authorization code, now goes and gets an access token.
+
+the client gives that authorization code to the token endpoint.  the token endpoint verifies the auth token and generates an access token for the client.  the client stores that token to make publish requests to the micro pub endpoint.  this is all oAuth2 with an additional layer of an identity layer (rel=me) on top?
+
+If you want to actually try this, you can use quill.p3k.com to set all this up.  You can just jump straight to building just the micro pub endpoint and put off the token endpoint work by using the auth and token endpoints aaron built.
+
+Your personal site needs to verify access tokens
+
+it can query the token endpoint to check token validity.
+
+=== Micropub ===
+
+"Chances are half of you have your own website running different software for publishing"  Micropub is a vocabulary for creating and editing posts on your website.  
+its based on micro format 2 vocal: http://microformats.org/wiki/microformats-2
+authentication is handled by oauth2 bearer tokens Usually provided by indieauth
+
+you can delegate your endpoint to another service
+
+Micropub details….  see the documentation linked above
+
+Examples of different post types:
+instagram photos via ownyourgram.com
+quill
+
+Multipart used for receiving files from a simple post request
+
+no additional encoding scheme was required, just use multipart
+
+trying to reinvent as little as possible
+
+=== Questions ===
+
+Shared secrets are scary (iOS decompile lead to secrete (the app) shared secrets to be leaked)
+
+Is the access token similar to a session ID?  Its kinda like a session ID.  Pretty much equivalent.  Its responsible for issuing a session.  A string that you can use so when you come back and make a request it will be granted.  Inforamtion on the website.
+
+Open ID is complicated:  How does this get out of the realm of geeks?  How do we get people to get their own website.  This is true.  A lot of indieweb work is under the assumption that people have their own website.  The assumption is that it will be easier to have a website in the future.  Google just announced it will be a domain reg and will likely do a good job.  An assumption but something we are working towards. 
+
+All urls are SSL.  Thats complicated:  Answer: yes a level of complexity, but its getting easier to run ssl.  ssl is cheaper and companies are willing to dish out cheaper ssl certs.  startssl gives out FREE ssl certs.  Woop!  Its a well established standard and hope the tools become easier.  http://indiewebcamp.com/generations covers some of these issues. 
+
+
+__NOTITLE__
