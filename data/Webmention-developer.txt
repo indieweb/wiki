@@ -1,0 +1,422 @@
+https://indieweb.org/Webmention-developer
+
+{{stub}}
+
+<span style="margin-top: -2em; background:white; float:right;">[[File:webmention-logo.svg|160px]]</span>
+
+This page documents technical details of [[Webmention]], specifically for '''<dfn>Webmention developers</dfn>''' so they can support cross-site [[comments]] and other [[responses]] in their code, or on their site or service.
+
+Webmention is a [https://www.w3.org/TR/2017/REC-webmention-20170112/ W3C Recommendation] that supersedes [[Pingback]], using only HTTP and x-www-form-urlencoded content rather than [[XML-RPC]], with additional functionality (e.g. updates & deletes) as well as greater security & robustness from years of experience with prior iterations.
+
+'''Submit an implementation report for Webmention to help document the growing interoperable decentralized webmention network!'''
+* Instructions: https://github.com/w3c/webmention/tree/master/implementation-reports
+
+[[File:w3c-spec-REC.svg]]
+
+== Overview ==
+A typical Webmention flow is as follows:
+
+# Alice posts some interesting content on her site (which is set up to receive webmentions).
+# Bob sees this content and comments about it on his site, linking back to Alice's original post.
+# Using Webmention, Bob's publishing software automatically notifies Alice's server that her post has been linked to by the URL of Bob's post.
+# Alice's publishing software verifies that Bob's post actually contains a link to her post and then includes information about Bob's post on her site, for example, displaying it as a comment.
+
+== Protocol Summary ==
+{{main|webmention-spec}}
+
+If Aaron's blog supports receiving webmentions, and Barnaby's blog supports sending webmentions, then this is how they interact:
+
+# User Aaron posts a blog post on his blog
+# User Barnaby writes post on his blog that links to Aaron's post.
+# After publishing the post (i.e. it has a URL), Barnaby's server notices this link as part of the publishing process
+# Barnaby's server does webmention discovery on Aaron's post to find its webmention endpoint (if not found, process stops)
+# Barnaby's server sends a webmention to Aaron's post's webmention endpoint with 
+#* <code>source</code> set to Barnaby's post's permalink
+#* <code>target</code> set to Aaron's post's permalink.
+# Aaron's server receives the webmention
+# Aaron's server verifies that <code>target</code> in the webmention is a valid permalink on Aaron's blog (if not, processing stops)
+# Aaron's server verifies that the <code>source</code> (when retrieved, after following redirects) in the webmention contains a hyperlink to the <code>target</code> (if not, processing stops)
+
+Unmentioned but implied (and vaguely mentioned in the pingback spec):
+
+* Aaron's server displays the information about Barnaby's post somewhere on Aaron's post.
+* If a <code>u-url</code> is present at the <code>source</code>, then the receiver could display that URL, and default to showing the <code>source</code> otherwise. This allows services like [[Bridgy]] to render the original tweet URL in the <code>u-url</code> property so receivers will link to the tweet instead of the Bridgy proxy page.
+
+See [[comment#Accept_a_comment|comment: how to accept a comment]] for more details on accepting comments in general and displaying them.
+
+== How to ==
+=== How to implement sending ===
+(stub)
+
+Every time you:
+* create a post, send Webmentions to every link in the post
+* [[update]] a post, send Webmentions to every link in the post before the update and after the update
+* [[delete]] a post, send Webmentions to every link that was in the post
+
+To send a Webmention to a link:
+* do Webmention endpoint discovery on that link
+* send a Webmention using the endpoint, source= your page with the link, target= the link
+
+=== How to implement receiving ===
+(stub)
+* set up a Webmention endpoint to receive them for you
+* add Webmention endpoint discovery link to your post [[permalink]]s and any other pages you wish to receive webmentions for, like your [[homepage]]
+* validate and process received Webmentions for what type it is (like a [[reply]], [[like]], [[repost]], or other [[response]]), and whether it is new, an update, or a notification of deletion.
+* display received [[comments]], [[likes]], [[reposts]], and other [[responses]]
+
+=== How to test ===
+(stub)
+* [https://webmention.rocks/ Webmention.rocks]
+
+=== How to send webmentions with cURL ===
+Manually sending a webmention with [[cURL]] can be the quickest way for developers to test webmentions.
+
+When your ''source'' URL links to a ''target'' URL:
+
+# Find the ''target'''s webmention ''endpoint''. This may be in the HTML or in an HTTP Link header, with <code>rel=webmention</code>
+# Using the ''source'', ''target'', and ''endpoint'' URLs, enter at the command line:<br> <code>curl -i -d source=''source'' -d target=''target'' ''endpoint''</code>
+
+== Implementations ==
+=== IndieWeb Examples ===
+
+The following users/sites have live <span id="IndieWeb_implementations">implementations</span> for sending and or receiving webmentions, listed in rough chronological order of when they did so.
+
+For past implementations that are no longer live, see '''[[#Previous_Examples|Previous Examples]]'''.
+
+If you add Webmention sending or receiving to your site, add yourself in a new section at the bottom of this list and link to your site, implementation(s), and permalinks of your webmention receiving/sending posts. Try to include a screenshot that shows that too.
+
+==== Aaron Parecki with p3k ====
+* [[User:Aaronparecki.com|Aaron Parecki]] using [[p3k]] on [http://aaronparecki.com/ aaronparecki.com] as of 2013-05-26. Details:
+** All posts send webmentions (as of 2013-05-26 first (semi-)automatic webmention sent on 2013-03-31) upon posting (asynchronously with posting UI, no results reported).
+** Events, notes (including RSVPs), replies accept webmentions (as of 2013-05-26)
+** Discovery with both: <code>rel="webmention"</code> and <code><nowiki>rel="http://webmention.org/"</nowiki></code> links in head, and HTTP <code><nowiki>Link: rel="http://webmention.org/</nowiki></code> header
+** Posts have an input form for pasting in your comment URL to conveniently send a manual webmention (as of 2013-10-12)
+
+[[File:aaronparecki-webmention-display.png|400px|link=https://aaronparecki.com/2017/02/27/4/day-69-editing-in-quill]]
+
+==== Ben Werdmuller with Known ====
+* [[User:Werd.io|Ben Werdmuller]] using [[Known]] ([[idno]] ) on [http://werd.io werd.io] as of 2013-05-31. Details:
+** All(?) posts send webmentions as of 2013-05-31 and accept as of 2013-06-??
+** Discovery with both: <code><nowiki>rel="http://webmention.org/"</nowiki></code> and <code>rel="webmention"</code> links in head, and with HTTP <code><nowiki>Link: <http://werd.io/webmention/>; rel="webmention"</nowiki></code>
+==== Barnaby Walters with Taproot ====
+* [[User:Waterpigs.co.uk|Barnaby]] using [[Taproot]] on [http://waterpigs.co.uk/ waterpigs.co.uk] as of 2013-06-11 (per git). Details:
+** All [[notes]] and [[articles]] accept (as of 2013-06-20) and send webmentions (as of 2013-06-11) upon posting (posting UI returns response content to the browser, then synchronously sends webmentions)
+** Incoming webmentions for notes and articles are parsed and stored, displayed for notes (comment updating as of 2013-06-23) but not yet articles
+** Discovery only with HTTP <code><nowiki>Link: <http://waterpigs.co.uk/mentions/webmention/>; rel="http://webmention.org/"</nowiki></code>
+
+[[File:waterpigs-webmention-display.png|400px|link=https://waterpigs.co.uk/notes/4n2Kp2/]]
+
+<!-- 
+==== Tom Morris ====
+* [[User:Tommorris.org|Tom Morris]] using [[Ferocity]] on [http://tommorris.org/ tommorris.org] as of 2013-??-??. Details:
+** All(?) posts send webmentions (as of 2013-??-??) upon posting (asynchronously with posting UI, no results reported). 
+-->
+
+==== Jeremy Keith with adactio.com ====
+* [[User:Adactio.com|Jeremy Keith]] on [http://adactio.com/ adactio.com] as of [http://adactio.com/journal/6495/ 2013-09-15]. Details:
+** All blog posts accept webmentions
+** Discovery only with: <code>rel="webmention"</code> link in head
+** Blog posts have an input form for pasting in your comment URL to conveniently send a manual webmention
+
+[[File:adactio-webmention-display.png|400px|link=https://adactio.com/journal/6495/]]
+
+==== Barry Frost with barryfrost.com ====
+* Barry Frost on [http://barryfrost.com barryfrost.com] as of 2013-09-15[http://barryfrost.com/posts/11][http://barryfrost.com/posts/13]. Details:
+** All(?) posts send and accept webmentions
+** Discovery with: <code>rel="webmention"</code> link in head, and HTTP <code><nowiki>Link: <http://barryfrost.com/webmention>; rel="webmention"</nowiki></code> in header
+** Posts have a hyperlink in footer "[http://barryfrost.com/how-to-comment How to comment on this post]" to instructions detailing posting an [[h-entry]] with [[h-card]] and how to send a webmention.
+
+[[File:barryfrost-webmention-display.png|400px|link=https://barryfrost.com/2016/06/i-would-love-the-option-to]]
+
+==== Calum Ryan with calumryan.com ====
+* {{calumryan}} on [https://calumryan.com/ calumryan.com]
+** Since 2016-08-28 support for receiving webmentions using [https://github.com/aarongustafson/jekyll-webmention_io jekyll-webmention_io] initially on purely Jekyll generated pages but now also on notes generated from self-built CMS in PHP
+** Since 2016-11-06 built in function for manual sending of webmentions via self-built CMS in PHP using [https://github.com/indieweb/mention-client-php mention-client-php]
+
+==== Christian Weiske with stapibas ====
+* [[User:Cweiske.de|Christian Weiske]] receiving webmentions on [http://cweiske.de/ cweiske.de] as of 2013-10-22. Details:
+** All posts accept webmentions using [http://git.cweiske.de/stapibas.git/ stapibas]
+** Discovery only with HTTP <code><nowiki>Link: <http://cweiske.de/stapibas/xmlrpc.php>; rel="webmention"</nowiki></code>
+** Approach for sending webmentions (with fallback sending of pingbacks)
+*** https://github.com/pear2/Services_Linkback/blob/master/src/PEAR2/Services/Linkback/Client.php#L236
+*** check self Atom feed, if there are updates then proceed with discovery/sending for each update, for each link in the update: do a HEAD request first, do discovery for webmention endpoint, if none found, do discovery for pingback endpoint, if none found and the resource is <code>'application/xhtml+xml'</code> or <code>'text/html'</code>, do a GET request, do discovery for webmention endpoint, if none found, do discovery for pingback endpoint. send webmention if an endpoint was found, otherwise send pingback if an endpoint was found.
+
+==== Bear with bear.im ====
+* [[User:Bear.im|Bear]] on [https://bear.im bear.im] as of 2013-12-01.
+** All posts accept webmentions and send webmentions for new and updated posts
+** Full Discovery for link headers, links in html head and body
+** webmention handling done by the Python library [[ronkyuu]]
+
+==== Kartik Prabhu with kartikprabhu.com ====
+* [[User:kartikprabhu.com|Kartik Prabhu]] on [http://kartikprabhu.com/ kartikprabhu.com] as of  2013-12-03.
+** All articles & notes accept webmentions
+** Articles have an input form for sending a manual webmention inspired by [http://adactio.com adactio.com]. The form prompt links to the [https://kartikprabhu.com/webmention webmention endpoint].
+** Webmentions are saved as responses and appear below the article classified according to response type.
+** Webmentions are sent manually for all posts.
+
+[[File:kartikprabhu-fragmention-display.png|400px|link=https://kartikprabhu.com/articles/marginalia]]
+
+==== Pelle Wessman with webmention.herokuapp.com ====
+* [[User:Kodfabrik.se|Pelle Wessman]] using [[webmention.herokuapp.com]] on [http://voxpelli.com/ voxpelli.com] as of [http://voxpelli.com/2013/12/webmentions-for-static-pages/ 2013-12-18]. Details:
+** All blog posts accept webmentions
+** Discovery only with: <code>rel="webmention"</code> link in head
+** Blog posts have an input form for pasting in your comment URL to conveniently send a manual webmention
+
+==== Jeena with jeena.net ====
+* {{jeena}} using a home grown Rails app on [https://jeena.net https://jeena.net] as of [https://jeena.net/people-first 2013-12-06]. Details:
+** All homepage, blog posts and notes, photos, comments and events accept webmentions
+** Discovery with: <code>rel="webmention"</code> Link: in HTTP header
+** Sends webmentions on create, update and delete, no salmentions yet
+** Has a manual form
+** Homepage receives webmentions and notifies him per email
+
+[[File:jeena.net-webmention-comments-display.png|400px|link=https://jeena.net/notes/808]]
+
+==== Christian Kruse with wwwtech.de ====
+* [https://indiewebcamp.com/User:Wwwtech.de_about Christian Kruse] using a home grown [http://indiewebcamp.com/Phoenix Phoenix] app on [https://wwwtech.de https://wwwtech.de] as of somewhen in 1998. Details:
+** All homepage, blog posts and notes, photos, comments accept webmentions
+** Discovery with <code>rel="webmention"</code> in HTTP header and HTML document
+** Sends webmentions on create and update, no salmentions yet
+
+==== Andy Sylvester with WordPress Webmention plugin ====
+* [[User:Andysylvester.com|Andy Sylvester]] using the [http://wordpress.org/plugins/webmention Webmention plugin] for WordPress on [http://andysylvester.com http://andysylvester.com] as of [http://andysylvester.com/2014/01/24/testing-the-wordpress-webmention-plugin/ 2014-01-24]. Details:
+** All blog posts accept webmentions
+
+==== gRegor Morrill with ProcessWire plugin ====
+* [[User:Gregorlove.com|gRegor Morrill]] sending and receiving webmentions on [http://gregorlove.com gRegorLove.com] as of 2014-02-04.
+** Using a custom plugin I developed for [[ProcessWire]]; previously a plugin for Nucleus CMS
+** All articles can receive webmentions
+** Webmention endpoint is broadcast via Link: HTTP header and <link> element
+** Incoming webmentions validate the target is a valid URL on gregorlove.com and the post ID in the URL is valid.
+** Webmentions are parsed and further validated asynchronously. Replies/mentions are displayed interleaved with "local" blog comments..
+** [[User:Gregorlove.com/webmention|More implementation notes]]
+
+==== Glenn Jones with node webmentions module ====
+* [[User:glennjones.net|Glenn Jones]] using node.js module [https://github.com/glennjones/webmentions github.com/glennjones/webmentions] on [http://glennjones.net/ glennjones.net] as of 2014-02-19.. Details:
+** All notes accept webmentions
+** Discovery only with: <code>rel="webmention"</code> link in head
+** The notes editor has an input for the <code>in-reply-to</code> URL
+** The webmentions module allows pinging of webmention between any sites
+** Yet to implement: full authorship parsing, updates, deletes.
+
+==== David Shanske with WordPress plugin ====
+* {{gwg}} supports sending and receiving webmentions for all posts using [[WordPress]] on [https://david.shanske.com david.shanske.com] as of 2014-03-?.
+
+==== Ben Roberts with ben.thatmustbe.me ====
+* [[User:Ben.thatmustbe.me|Ben Roberts]] sending and receiving webmentions on [http://ben.thatmustbe.me/ ben.thatmustbe.me] as of 2014-04-24
+** Parsing replies, mentions, and likes.  Rsvps are handled as just mentions currently.
+** Discovery with both: <code>rel="webmention"</code> and <code><nowiki>rel="http://webmention.org/"</nowiki></code> links in head, and HTTP <code><nowiki>Link: rel="http://webmention.org/</nowiki></code> header
+** Currently uses [[vouch]] and a whitelist while all others are sent to moderation.
+** Processing happens asynchronously by cron job.
+** Submissions return a link for queue record that returns a status as a <code>Webmention-Status</code> header as well as a minor note in the body. 
+** Attempting to keep implementation notes as a modified spec at [http://github.com/dissolve/webmention webmetion0.2-b1]
+** Sending is done automatically when post is made.
+
+==== Will Norris with webmention.herokuapp.com ====
+* [[User:Willnorris.com|Will Norris]] using [[webmention.herokuapp.com]] on [https://willnorris.com/ willnorris.com] as of 2014-07-31. Details:
+** All posts accept webmentions, but none are displayed (yet)
+** Webmentions sent on-demand via command line application that handles the discovery bits
+** Discovery only with <code>rel="webmention"</code> link in head
+** Advertised webmention endpoint is on-site, but POSTs are proxied to [[webmention.herokuapp.com]].  ([https://willnorris.com/2014/08/proxying-webmentions-with-nginx documented here])
+** Previously used [http://wordpress.org/plugins/webmention/ webmention plugin] for WordPress as of [https://willnorris.com/2013/06/testing-indieweb-comments 2013-06-23]
+
+==== Joel Dueck with thelocalyarn.com ====
+* [[User:Thelocalyarn.com|Joel Dueck]] receiving webmentions on [http://thelocalyarn.com/ thelocalyarn.com] as of 2014-09-23.
+** All posts accept webmentions as well as traditional comments.
+** Webmentions (if valid) are logged to a text file and sent to Joel via email. Those that pass moderation are manually added to the target post as a comment (which on this site means it is included in the blog and sent to email and RSS subscribers as well as being appended to the target post).
+** Endpoint is a [https://gist.github.com/otherjoel/9301d985622f0d3d1a09 modified version of Jeremy Keith's webmention.php].
+** Webmentions sent manully. More to implement. To-do list is long. Site is running [http://textpattern.com Textpattern] CMS, so a complete webmentions plugin is both feasible and ideal.
+
+==== Dan Lyke with www.flutterby.com ====
+* [[Www.flutterby.net user:danlyke|Dan Lyke]] receiving webmentions on [http://www.flutterby.com Flutterby.com] blog entries as of 2014-10-10.
+** Webmention endpoint is broadcast via <link> element and <indie-action> element.
+** Currently only displays links on title text back to source URLs
+
+==== Johnny Oskarsson with joskar.se ====
+* [[User:Joskar.se|Johnny Oskarsson]] receiving webmentions on [https://joskar.se joskar.se] as of 2014-10-23.
+** Webmention endpoint is broadcast via Link: HTTP header only.
+** Pages marked up with h-entry in-reply-to show up as comments, others won't show up at all. (but they will be logged)
+** Webmentions are sent manually for now.
+
+==== Stuart Langridge with Pelican additions ====
+* [[User:www.kryogenix.org|Stuart Langridge]] sending and receiving webmentions on [http://www.kryogenix.org/days kryogenix.org] as of 2014-11-29.
+** Write up linking to various bits of code for Pelican, the Python static site generator, at "[http://www.kryogenix.org/days/2014/11/29/enabling-webmentions/ Enabling Webmentions]".
+** Webmention endpoint is declared in the HTML with a <link> element, because HTTP headers are a pain in the behind to set up by comparison.
+** Uses Pelle Wessman's [https://webmention.herokuapp.com webmention Heroku endpoint] as endpoint, and then some Python to fetch and bake in webmentions on site regeneration, and some JS to pull them in live.
+
+[[File:kryogenix-webmention-comment-display.png|400px|link=https://www.kryogenix.org/days/2017/02/24/a-standard-password-change-api/]]
+
+==== Giovanni Parra with Jekmentions ====
+* [[User:fiatjaf.alhur.es|Giovanni T. Parra]] receiving webmentions on [http://fiatjaf.alhur.es fiatjaf.alhur.es] as of 2015-02-28.
+** Wrote [[Jekmentions]], a small service that works as a webmention endpoint for Jekyll sites hosted on GitHub that sends the webmentions received as files in commits to the GitHub repository.
+** Webmentions are sent manually for now. Some are being sent, but only through [[brid.gy]] to [[twitter]].
+
+==== Tantek with Falcon ====
+{{t}} using [[Falcon]] on [http://tantek.com/ tantek.com] sends webmentions automatically as of [http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb 2015-06-11] specifically for the following kinds of links:
+* RSVPs (manually [[rsvp#Tantek|since 2013-09-21]]), comments (manually [http://tantek.com/2013/286/t1/real-time-indieweb-comments since 2013-10-13]), likes (manually [[like#Tantek|since 2014-12-31]])
+* [[2016/Nuremberg/Demos#Tantek_2|2016-04-07]] mentions  - i.e. all links in content
+
+==== Alex Kearney with IndieAnndroid ====
+* {{kongaloosh}} sending webmentions since [http://kongaloosh.com/e/2015/8/4/i-guess-i-have-the-mechanical-aspects-of-webmentions-in-place 2015-08-04] using [[IndieAnndroid]]
+
+==== Jason Garber with FrancisCMS ====
+* {{jgarber}} using [[FrancisCMS]] on [https://sixtwothree.org sixtwothree.org] as of 2016-01-27. Details:
+** All [[article|posts]], [[bookmark|links]], and [[photo|photos]] automatically accept webmentions. Replies, shares, and likes are [[backfeed|reverse syndicated]] via [[Bridgy]].
+** Post, link, and photo [[permalink]] pages have an input form for pasting in your comment URL to manually send a web mention.
+** Discovery with: <code><nowiki>Link: <https://sixtwothree.org/webmentions>; rel="webmention"</nowiki></code> HTTP header and <code><nowiki><link rel="webmention" href="https://sixtwothree.org/webmentions"></nowiki></code> in the HTML's <code><head></code>.
+** Webmention source URLs are parsed using the [https://github.com/indieweb/microformats2-ruby microformats2 Ruby gem].
+
+==== Jay Robinson with aruna ====
+* {{j4y_funabashi}} on [http://j4y.co j4y.co] as of 2016-06-13.
+** All new posts send webmentions
+** passes all 21 Discovery tests on webmention.rocks
+** receiving sort of works but I don't display anything yet and there are bugs that sometimes spam brid.gy 
+
+==== Sebastiaan Andeweg on seblog.nl ====
+* {{sebsel}}
+** Received webmentions are displayed as comments
+
+[[File:seblog-webmention-comment.png|400px|link=https://seblog.nl/2017/02/16/2/day-32-new-repost-policy]]
+
+=== Previous Examples ===
+==== Sandeep Shetty ====
+[[User:Sandeep.io|Sandeep Shetty]] used [[Converspace]]. The domain now redirects, however based on git commit history and archived links:
+* 2013-06-04: added ability to send webmentions [https://github.com/converspace/converspace/commit/02f0be8820d67f75376bed184df6b5a4d426d53b]
+* 2013-06-09: added ability to receive webmentions [https://github.com/converspace/converspace/commit/2141426413658bc9340ab4ca6406c8e3a9ab97c1]
+* 2013-06-11: received a webmention from {{aaronpk}} and displayed it as a comment. [https://aaronparecki.com/2013/06/11/2/microformats] [https://web-beta.archive.org/web/20160331132325/http://www.sandeep.io/44]
+** It appears this is the first [[federated]] comment thread using webmention and [[h-entry]]
+
+=== Libraries ===
+<span id="Webmention-related_libraries_and_tools"></span>
+==== Sending ====
+* [https://github.com/indieweb/mention-client-php indieweb/mention-client-php] - '''PHP''' library for sending webmention and pingpack notifications
+* [https://github.com/indieweb/mention-client-ruby indieweb/mention-client-ruby] - '''Ruby''' library for sending webmention notifications
+* [https://github.com/phpish/webmention phpish/webmention] - Simple webmention client (non-OO) in '''PHP''' packaged as a composer package.
+* [https://github.com/vrypan/webmention-tools vrypan/webmention-tools] - '''Python''' client library and command line webmention sender
+* [https://github.com/pear2/Services_Linkback pear2/Services_Linkback] - '''PHP''' pingback+webmention client + server library
+* [https://github.com/bear/ronkyuu ronkyuu] - '''Python''' client library and command-line tools
+* [https://github.com/glennjones/webmentions glennjones/webmentions] - '''Node.js''' a helper library for endpoint discovery, pulling validating webmentions and sending webmention requests
+* [https://willnorris.com/go/webmention willnorris.com/go/webmention] - '''Go''' client library and command-line tool for discovering and sending webmentions.
+* [https://github.com/ckruse/webmentions-elixir ckruse/webmentions-elixir] - '''Elixir''' client library for discovering and sending webmentions.
+* …
+
+For webmention endpoint discovery:
+* [https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/link_rel_parser.php link_rel_parser] - '''PHP''' <code>http_rels($h)</code> & <code>head_http_rels($url)</code> - HTTP header string parser for RFC5988 Link: rels (including <code>X-Pingback</code>) & function to curl a HEAD request and parse it all in one.
+** and [https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/get_rel_webmention.php get_rel_webmention] (in same library) - '''PHP''' <code>get_rel_webmention($url)</code> - calls aforementioned functions to obtain first webmention (if any) and pingback (if any) endpoints.
+* [https://github.com/indieweb/link_rel_parser-ruby link_rel_parser] - '''Ruby''' Link header (RFC 5988) parser (port of [https://github.com/indieweb/link-rel-parser-php/ link-rel-parser-php])
+* [https://github.com/phpish/link_header phpish/link_header] - '''PHP''' Link header (RFC 5988) parser
+* [http://pear.php.net/package/HTTP2 PEAR: HTTP2] - '''PHP''' Link header (RFC 5988) parser ([http://pear.php.net/manual/en/package.http.http2.parselinks.php documentation])
+* [https://github.com/bear/ronkyuu ronkyuu] - '''Python''' client library and command-line tools
+
+==== Handling ====
+Handling receiving webmentions:
+* PHP Minimum Viable Webmention handler: https://gist.github.com/adactio/6484118
+* [https://github.com/pear2/Services_Linkback pear2/Services_Linkback] - '''PHP''' pingback+webmention client + server library
+* …
+
+For parsing the mentions, the following may come in handy:
+* [http://microformats.org/wiki/microformats2#Implementations microformats2 implementations and parsers]
+* [https://github.com/barnabywalters/php-mf-cleaner php-mf-cleaner] - "Takes microformats2 array structure and makes it more sane. Counterpart to indieweb/php-mf2"
+* [https://github.com/fiatjaf/went went] - Webmention Endpoint Tools, a '''Python''' library that takes '''source''' and '''target''' URLs and does the rest of the job for you.
+* [https://github.com/bear/kaku kaku] - '''Python''' Flask app that handles webmentions using [https://github.com/bear/ronkyuu ronkyuu]
+
+==== Notifications ====
+The following tools show how a notification could be sent upon receiving a webmention
+* PHP to email
+**  https://gist.github.com/otherjoel/9301d985622f0d3d1a09
+* Javascript
+** bear is working on this...
+* XMPP
+** [[webmention.io]] [https://github.com/aaronpk/webmention.io#jabber can do this]
+** - bear is working on this...
+
+=== Publishing Software ===
+Some open source publishing software supports webmentions:
+* [[Known]] personal publishing software sends webmentions and accepts webmention comments (including webmention updates), and likes
+* [[FrancisCMS]] personal publishing software similarly sends and receives
+* [[WWWTech]] personal publishing software similarly sends and receives
+* [[phorkie]] sends and accepts webmentions to notify remote instances about forks
+Some additional publishing software, portions of which are open source, supports webmentions:
+* [[p3k]] sends webmentions for all posts and accepts webmention comments on events, notes, replies, RSVPs
+* [[Taproot]]
+* [[Falcon]] sends webmentions for all links in posts (except maybe articles - untested)
+
+'''Plugins''' exist for some open source publishing software:
+* [[WordPress/Plugins]]
+* [https://www.drupal.org/project/vinculum Drupal]
+* [https://github.com/mapkyca/elgg-webmention Elgg]
+* [https://github.com/gRegorLove/nucleus-plugin-webmention Nucleus CMS]
+* [https://github.com/jgarber623/craft-webmention-client Craft CMS webmention client]
+* [https://github.com/bastianallgeier/kirby-webmentions Kirby]
+* [[ProcessWire#Plugins|ProcessWire]]
+* …
+
+=== Services ===
+Some services one can use to receive or send webmentions. Alphabetical.
+
+==== Bridgy ====
+{{main|Bridgy}}
+[http://brid.gy/ brid.gy] is a service that sends [[webmentions]] for comments/replies, likes, and reposts on Facebook, Twitter, Google+, and Instagram posts. It uses [[original post discovery]] to find target links for the webmentions. [https://github.com/snarfed/bridgy GitHub repo here.]
+
+[https://www.brid.gy/about#publish Bridgy Publish] also supports webmention as a mechanism to trigger [[POSSE]]ing to Facebook, Twitter, and Instagram.
+
+[[File:bridgy_example_screenshot.png]]
+
+==== mention-tech ====
+{{main|mention-tech}}
+[http://mention-tech.appspot.com/ mention-tech] is a service that can receive webmentions on behalf of anyone via both webmention directly, and a web form on its home page.
+
+==== stapibas ====
+[[stapibas]] is a self-hosted service to send and receive webmentions for websites and blogs.
+
+It can be used to send out webmentions and pingbacks for new posts on static sites.
+
+==== Telegraph ====
+[[Telegraph]] is an open source project and hosted service for sending [[webmentions]] and [[pingbacks]]. You can use it to send mentions to all links on a page, or send a webmention with specific source and target.
+
+==== webmention.herokuapp.com ====
+{{main|webmention.herokuapp.com}}
+[https://webmention.herokuapp.com/ webmention.herokuapp.com] is an open-source project and hosted service for receiving [[webmentions]] for registered sites and allowing those to be displayed through javascript.
+
+==== webmention.io ====
+{{main|webmention.io}}
+[http://webmention.io webmention.io] is an open-source project and hosted service for receiving [[webmentions]] and [[pingbacks]] on behalf of your indieweb site.
+
+=== Tools ===
+Tools you can install to send webmentions
+==== Firefox Addon ====
+* https://addons.mozilla.org/fr/firefox/addon/webmention/
+* source: https://github.com/eliemichel/firefox-webmention-addon
+
+== Resources ==
+* <span id="How_to_test_webmentions">How to test webmentions: [[webmention-implementation-guide|Implementation Guide]]</span>
+* <span id="Implementation_Details">[[webmention-implementation-details|Implementation Details]]</span>
+* <span id="FAQ">[[Webmention-faq|FAQ]]</span>: Please read this before filing an issue or adding to brainstorming
+* <span id="Issues">[[Webmention-brainstorming#Issues|Issues]]</span>
+* <span id="Brainstorming">[[Webmention-brainstorming|Brainstorming]]</span>
+
+== Page To Do ==
+Edits / improvements for this page in particular:
+* Simplify this page for web developers
+** simplify prose
+* Re-order content as needed to to
+*# motivate web developers first
+*# provide the simplest, easiest thing to implement first
+*# then the next simplest/easiest but still useful, etc.
+* provide illustrative diagrams for protocol overview, how tos
+* perhaps write up a developer-centric [[#Why]] section
+* figure out how to integrate this with [[IndieMark]]
+
+Edits to [[Webmention]]:
+* keep analyzing, asking, doing:
+*# How can the [[Webmention]] page be simplified to quickly:
+*## make sense to [[generations]] 1-3
+*## motivate [[generations]] 1-3 that they want Webmentions on their site(s)
+*# Add clear instructions for enabling Webmentions with full POSSE/backfeed support with the goal of all responses to your content on social media goes back to your site, whether it uses:
+*## [[Known]]
+*## [[WordPress]] (depends on simpler plugin strategy? like just one instead of two)
+*# Provide inspirational screenshots / diagrams of Webmention potential, e.g.
+*#* [[marginalia]]
+
+== See Also ==
+* [[Webmention]]

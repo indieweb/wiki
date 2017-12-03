@@ -1,4 +1,4 @@
-http://indiewebcamp.com/tag-reply
+https://indieweb.org/tag-reply
 
 {{stub}}
 
@@ -7,8 +7,63 @@ A '''<dfn>tag reply</dfn>''' is a [[response]] to a post that tags that post wit
 == Why ==
 Tagging others' content is a very common [[silo]] UX and practice. By using your own site to tag others' content, you "ownyourtags" even if/when the [[silo-deaths|silos die]].
 
-== How to ==
-=== simple tag-reply ===
+== IndieWeb Examples ==
+. None so far
+
+== Silo Examples ==
+=== Flickr ===
+[[Flickr]] allows people to tag other people's photos, both with plain text [[tags]], and [[person-tag]]s.
+
+The (person-)tag shows up immediately, there is no pending/approval/moderation.
+
+By default, only your friends on Flickr can (person-)tag your photos. You can change that permission to allow everyone or no one.
+
+Sometime in 2000s-2014(?), if you hovered over a tag on a photo/video permalink page, it would show an HTML popup indicating who added it and when.
+
+(screenshot needed)
+
+==== Flickr backfeed ====
+If you POSSE your photos to Flickr, you should also backfeed the tags (including person-tags) added to the Flickr copy of your photo as tag-replies to your own site. 
+
+Bridgy Backfeed feature requests:
+* [https://github.com/snarfed/bridgy/issues/776 backfeed Flickr tags on your photos #776]
+* [https://github.com/snarfed/bridgy/issues/488 backfeed person tags (especially on photos) to original posts #488]
+* [https://github.com/snarfed/bridgy/issues/540 backfeed responses to mentioned/tagged users' front page #540] e.g. if someone tags you in a photo on Flickr, and you're signedup with Bridgy/Flickr, then you should receive a Bridgy backfeed person-tag post to your site. This is a [[homepage]] response in contrast to a response to a post permalink.
+
+... other approaches?
+
+=== Facebook ===
+[[Facebook]] allows people to [[person-tag]] other's photos.
+
+If you hover over a person-tag on a photo/video, it shows an HTML popup card of that person, with small text at the top saying "Tagged by fullname" where fullname is the name of the person that added the tag.
+
+(screenshot needed).
+
+==== Facebook backfeed ====
+If you POSSE your photos to Facebook, you should also backfeed the person-tags added to the FB copy of your photo as tag-replies to your own site. 
+
+Bridgy Backfeed Feature Requests: 
+* [https://github.com/snarfed/bridgy/issues/488 backfeed person tags (especially on photos) to original posts #488]
+* [https://github.com/snarfed/bridgy/issues/540 backfeed responses to mentioned/tagged users' front page #540] e.g. if someone tags you in a photo on Facebook, and you're signedup with Bridgy/Facebook, then you should receive a Bridgy backfeed person-tag post to your site. This is a [[homepage]] response in contrast to a response to a post permalink.
+
+* ... other approaches?
+
+=== Instagram ===
+[[Instagram]] does not have any ability for anyone but the author to add person-tags or hashtags.
+
+==== Instagram backfeed ====
+Still, it would be useful even in the case of the original author adding person-tags or hashtags to a POSSE copy on Instagram to backfeed them to the original.
+
+Since author hashtags are implicit by including them inline in the caption or comments on the photo, if you are backfeeding comments and processing the hashtags in the comments as tag-replies, you should get this functionality automatically.
+
+Related Bridgy Feature requests:
+* [https://github.com/snarfed/bridgy/issues/488 backfeed person tags (especially on photos) to original posts #488]
+* [https://github.com/snarfed/bridgy/issues/540 backfeed responses to mentioned/tagged users' front page #540] e.g. if someone tags you in a photo on Instagram, and you're signedup with Bridgy/Instagram, then you should receive a Bridgy backfeed person-tag post to your site. This is a [[homepage]] response in contrast to a response to a post permalink.
+
+== Brainstorming ==
+Until implemented (published, webmentioned, received, incorporated into an original post), these are brainstorming How to examples.
+
+=== How to simple tag-reply ===
 How to mark-up a tag reply, e.g. with the tags "indieweb" and "indiewebcamp":
 
 Inside your usual [[h-entry]], use:
@@ -22,9 +77,19 @@ And then send a webmention from your tag reply permalink to <nowiki>http://a.exa
 
 Doing so will tag that postpermalink37 with the tags "indieweb" and "indiewebcamp".
 
+=== tag and fallback ===
+To tag some other post, and provide fallback reply text to display for sites that support receiving [[reply]] posts but not tag-of posts, use the u-tag-of markup, and a u-in-reply-to plus p-summary for the fallback text.
+
+E.g.
+* "Tantek tagged Sebastian in this photo."
+Advantages:
+* Something shows up instead of nothing, on sites that at least show [[comments]]
+* Fallback as new technology discovery mechanism. The "third person" verbage implies that there may be more markup for the specific type of response that the receiving site / person may want to investigate and support! 
+
+(markup example needed)
 
 === tag and comment ===
-To tag some other post, and comment on it at the same time:
+Alternatively, does this use-case make sense? To tag some other post, and comment on it at the same time:
 
 Inside your usual [[h-entry]], use:
 <pre>
@@ -39,27 +104,31 @@ And then send a webmention from your tag reply permalink to <nowiki>http://a.exa
 
 Doing so will tag that postpermalink37 with the tags "indieweb" and "indiewebcamp", as well as make the comment <blockquote>This is a great post about the indieweb and indiewebcamp</blockquote>
 
-== IndieWeb Examples ==
-. None so far
+=== person tag reply ===
+To tag someone in someone else’s photo, post a person tag reply such as this, and send webmentions to all the links.
+<pre><nowiki>
+<span class="h-entry">
+ <a class="p-author h-card" href="http://a.example.com/">Amber</a> 
+ tagged 
+ <a href="http://b.example.com/" class="u-category h-card">Bea</a> and 
+ <a href="http://c.example.com/" class="u-category h-card">Crystal</a> 
+  in 
+ <a class="u-tag-of u-in-reply-to" href="http://d.example.com/permalink47">
+  <img src="http://d.example.com/photo47.png" alt="Dawn’s photo of Bob and Cole" /></a>
+</span>
+</nowiki></pre>
 
-== Silo Examples ==
-=== Flickr ===
-[[Flickr]] allows people to tag other people's photos, both with plain text [[tags]], and [[person-tag]]s.
+As a result of the webmentions:
+* Dawn's photo post will be notified that Amber has asked to tag Bea and Crystal in the photo.
+* IF Dawn accepts the person-tags on the photo THEN
+** Bea and Crystal will be notified that Amber tagged them in a photo.
 
-Sometime in 2000s-2014(?), if you hovered over a tag on a photo/video permalink page, it would show an HTML popup indicating who added it and when.
-
-(screenshot needed)
-
-=== Facebook ===
-[[Facebook]] allows people to [[person-tag]] other's photos.
-
-If you hover over a person-tag on a photo/video, it shows an HTML popup card of that person, with small text at the top saying "Tagged by fullname" where fullname is the name of the person that added the tag.
-
-(screenshot needed).
 
 == See Also ==
 * [[response]]
 * [[tag]]
 * [[person-tag]]
 * [[area-tag]]
+* [[location-of]]
 * [[ownyourdata]]
+* [[untag]]

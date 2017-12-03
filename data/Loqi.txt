@@ -1,29 +1,44 @@
-http://indiewebcamp.com/Loqi
+https://indieweb.org/Loqi
 
 {{stub}}
 
-<span class="p-summary">'''<dfn>Loqi</dfn>''' is a friendly and useful bot present in the #indiewebcamp [[IRC]] channel and other channels.</span>
+<span class="p-summary">'''<dfn>Loqi</dfn>''' is a friendly and useful bot present in the IndieWeb [[discussion]] channels.</span>
 
 == Commands and Queries ==
 Loqi will respond to certain commands and queries entered in the chat.
 
 Questions can optionally include a question mark at the end.
 
-; !standards
-: Responds with the link http://xkcd.com/927/
-
+=== Wiki ===
 ; what is xyz, what are xyzs, what is an xyz, what was xyz
 : Looks up "xyz" on the wiki and responds with the first sentence of the page that includes a [[dfn|dfn element]].
+; what is xyz,
+; xyz is A Long and Boring Definition
+:  Adds [[dfn|dfn element]]
+; xyz is _____
+: After a "what is xyz" prompt, saying "xyz is ___" will create a new stub wiki page with the definition.
+; xyz is <nowiki>http(s)://____, _____</nowiki>
+: If the definition starts with an URL, followed by a comma, [[Kaja]] will afterwards edit the page to link the <code><nowiki><dfn></nowiki></code> to the URL
 
 ; when is X
 : Looks up "X" on the wiki, and if it's an event, responds with the date and location of the event
 : http://indiewebcamp.com/irc/2015-02-02#t1422900152023
 
-; xyz is _____
-: After a "what is xyz" prompt, saying "xyz is ___" will create a new stub wiki page with the definition.
-
 ; who is xyz
 : Looks up "xyz" on the [[irc-people]] page and responds with the <code>p-summary</code>, or the first sentence of the page that includes a [[dfn|dfn element]].
+
+; <nowiki>X << [[foo]] (or X << http://example.com)</nowiki>
+: Add the specified text to the "See Also" section of page X. If no "See Also" section exists, it will be created.
+
+; what time is it for username
+: Looks up "username" on [[irc-people]] and return the current time and date in their timezone, if specified.
+
+=== Interactions ===
+;!tell username message
+: Delivers message to username the next time they speak in the channel.
+
+;!tell userA,userB message
+: same as above, but for multiple users
 
 ; username++
 : Adds 1 point of [[karma]] to the username and responds with the total karma points for that username.
@@ -33,8 +48,84 @@ Questions can optionally include a question mark at the end.
 : Subtracts 1 point of [[karma]] from the username and responds with the total karma points for that username.
 : This is typically used on non-username text values, e.g. "silos--". Be nice to each other. :)
 
-; !karma xyz
+;!karma xyz
 : Responds with the current karma points for xyz.
+
+;Retweet a URL by @indiewebcamp (only available to users on [[irc-people]] [https://chat.indieweb.org/meta/2017-11-27/1511819038204500])
+: <jeremycherfas> !rt http://twtr.io/1YwDs81hEtt
+: <Loqi> Thanks! We need one more person to confirm the retweet!
+: <sebsel> !rt http://twtr.io/1YwDs81hEtt
+: <Loqi> Thanks sebsel and jeremycherfas! https://twitter.com/indiewebcamp/status/936595100691345408
+
+=== Meme image generation ===
+Loqi will generate meme images when it finds certain pieces of text in a line:
+
+; !meme some text
+
+; Y U NO
+: <petermolnar> cweiske Y U NO use Loqi properly?
+
+; all the
+: <cweiske> disable all the things
+
+; what if
+: <cweiske> what if that worked?
+
+; not sure if $a or $b
+
+; this is .*!
+: <tantek> this is why I use fb.com/events as my way to check "happening tonight" !
+
+; one does not simply ...
+
+=== Countdown ===
+;  24 hours until kylewm's t-shirt
+: <Loqi> I added a countdown scheduled for 6/1 11:41pm (#5839)
+: ...
+: <Loqi> kylewm's t-shirt
+: <Loqi> Countdown set by cweiske on 5/31/16 at 11:42pm
+
+; !cancel 5839
+: Removes a scheduled countdown
+
+
+=== Other ===
+;!standards
+: Responds with the link http://xkcd.com/927/
+
+; extracts and posts h-entry
+: Like Twitter links, Loqi will fetch the contents of any URL posted and look for an h-entry, posting a summary of the h-entry in IRC
+: Displays the full content of github issue comment URLs
+
+; !date 1301943765
+: Convert between unix timestamps and readable dates. Try giving him other date formats too.
+
+; Random answer selection
+: <cweiske> Loqi, a or b?
+: <Loqi> I think a
+: <cweiske> Loqi, a, b or c?
+: <Loqi> b
+
+; Encouragement: Woohoo
+: <cweiske> Woohoo. Foo bar baz
+: <Loqi> yay!
+: <Loqi> 😊
+
+; Simulated fun
+: <cweiske> haha something completely different
+: <Loqi> hahaha
+
+; Giving, returning and eating
+: <KartikPrabhu> gives Loqi a cake
+: <Loqi> gives back the cake
+: <KartikPrabhu> gives Loqi a cake
+: <Loqi> peers at the cake
+: <cweiske> gives Loqi a Loqi
+: <Loqi> eats the Loqi
+
+; !block username
+: [https://chat.indieweb.org/2017-10-27/1509135863435000 <aaronpk> !block dahstar]
+: <Loqi> Okay, I blocked "dahstar" from all IndieWeb Twitter searches
 
 == Ideas ==
 Brainstorms and feature requests for Loqi!
@@ -46,9 +137,6 @@ Brainstorms and feature requests for Loqi!
 ; why xyz
 : This question could respond with a link to [[xyz#Why]].
 : Alternative syntax: "why should I use xyz", "why should I support xyz"
-
-;extract and post h-entry
-:For Twitter links, Loqi extracts the tweet and posts it in the IRC channel. Be good if he extracted h-entry and posted the e-content for indieweb links! mf2-FTW!
 
 ; report updates from an XML feed
 : [[User:tommorris.org]] [http://indiewebcamp.com/irc/2014-08-15/line/1408095816551 Suggested on IRC] that updates to relevant Wikipedia articles might be useful
@@ -64,11 +152,64 @@ Brainstorms and feature requests for Loqi!
 ; where is xyz?
 : Finds the person's website on [[irc-people]] and looks for the latest post in their stream that contains location, and says "xyz last posted from {location} at {date / date and time} {url}"
 
+;optional ! if line is directed at Loqi
+: "Loqi: tell tantek..." would work the same as "!tell tantek"
+
+; Allow linking <nowiki><dfn></nowiki> in definitions
+: e.g. by saying "_____ is https://example.com, ....."
+
+; Report page creations differently
+: A link to the main page is often more useful than the diff shown currently
+
+; Warn (or even reject / require confirmation) if you try to !tell someone who has never joined the channel
+: "I have not seen that nickname in this channel, are you sure you want to try leaving a message for them?"
+: (same !tell as before, i.e. copy paste, or "yes Loqi", or "yes")
+: "Ok, I'll tell them that when, or if they show up here."
+
+; Multiple nicknames for karma
+: {{strugee}} uses a different nickname on Freenode than he does on W3C IRC, and would feel far cooler if he could "link" these nicknames so their karma was the same.
+
+; Only deliver a message when user is seen in the past 2 months
+: When a non-regular visitor of the IRC channel says something, they often get spammed with a lot of "can you attend X next week" from months ago.
+: When someone attempts to send a message: check if the user was online if the past 2 (or 1 or 3?) months, and if not, warn the user and don't take the message, but urge them to e-mail / look at their domain to know how to contact.
+
+; PM with reminder of the messages in a channel
+: When a person never says something in a specific channel, but there is a message lurking, the person will not receive the message despite being active in other channels.
+: Send a PM to a person who says something in an IndieWeb channel, when there is a message in another channel. Only "there is a message for you in #indieweb-x", not the actual message.
+
+; Notifications via Webmention
+: Send a notification (probably a homepage-webmention?) when someone mentions you in chat and/or sends a !tell
+
+
+=== IndieWeb x Loqi Dominate the Day ===
+; Hey Loqi, read the [[2017/Schedule|indieweb summit schedule]]
+: There are 25 items starting at 9:00, 10:00, …
+; Hey Loqi, show me [[User:Tantek.com#itches|my itches list]]
+: I found 5 reminders
+; Hey Loqi, get me a ride to [[next-hwc#San_Francisco|HWC]]
+: (rideshare service) can get you a ride in 60 seconds, you can take transit from (nearest station)
+; Hey Loqi, what's the temperature in [https://en.wikipedia.org/wiki/Downtown,_San_Francisco downtown] today?
+: The high [https://darksky.net/forecast/37.7952,-122.4029/us12/en temperature for today in the Financial District of San Francisco] will be 69 degrees and the low will be 56 degrees.
+; Hey Loqi, read me my last tell
+: 08:40 {{petermolnar}} left you [https://chat.indieweb.org/dev/2017-07-25/1500997255279000 a message], re "zip in zip" 42.zip link
+
+More to link-up and come up with equivalent responses that make sense:
+* Hey Loqi, show me photos of my UI sketches
+* Hey Loqi, tell aaronpk I want to code Loqi features
+* Hey Loqi, how does a [https://duckduckgo.com/html/?type=list&q=PHP+array PHP array] compare to a [https://duckduckgo.com/html/?type=list&q=JS+array JS array]?
+** [http://php.net/manual/en/function.array.php PHP array] vs [https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array JS array]
+* Hey Loqi, play this week in indieweb podcast
+* Hey Loqi, create a new itches section, for next HWC
+* Hey Loqi, play https://youtu.be/ufBLI6bB9sg for aaronpk
+
 == Bugs ==
 * fragmention: Loqi strips out the fragmention link from tweets. e.g.: http://indiewebcamp.com/irc/2015-11-30#t1448927404974
+* bug: loqi's "When is" is case-sensitive. Only returns the link with lowercase "when is..."
+* bug: don't ignore lone stopwords, e.g. "what is about?"
+* "what is..." for h-event pages does not return the name or summary.
+* bug: !cancel should work with (#6198) and #6198 variants (e.g. !cancel #6198) since Loqi says "(#6198)" literally when he confirms the timer was created: https://chat.indieweb.org/2017-10-24/1508862956980000
 
 == See Also ==
 * [[IRC]]
 * http://loqi.me
-* [http://loqisaur.tumblr.com/ Loqi's Adventures in IRC]
 * [http://aaronparecki.com/articles/2011/02/12/1/loqi-the-friendly-irc-bot Loqi the Friendly IRC Bot]

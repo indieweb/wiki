@@ -1,3 +1,42 @@
-http://indiewebcamp.com/deduplication
+https://indieweb.org/deduplication
 
-#redirect:[[Webmention#de-duplication]]
+{{stub}}
+
+'''<dfn>deduplication</dfn>''' (<dfn>de-duplication</dfn> AKA <dfn id="deduping">deduping</dfn>/<dfn>de-duping</dfn>) is the process of comparing [[responses]] (sometimes posts) and seeing if they are exactly or essentially the same, and only keeping the earliest or most canonical version, perhaps keeping track of alternative URLs, like syndicated copies.
+
+== How to deduplicate responses ==
+Replies and other responses are often duplicated in different places, e.g. via [[backfeed]] of [[POSSE]]d replies by [[Bridgy]]. Ideally, recipients should try to de-dupe webmention sources, preferring an original post (see below). Getting this perfect is hard, but getting close is pretty easy (see [http://indiewebcamp.com/irc/2014-01-30/line/1391125255 one IRC discussion] [http://indiewebcamp.com/irc/2014-11-24#t1416853586320 and another]) by both:
+
+# [[Webmention-brainstorming#prefer_original_posts|Preferring original replies]]
+# Comparing an incoming reply (etc) to existing replies based on:
+#* u-uid
+#* u-url
+#* [[u-syndication]] (also compare to u-url, and vice versa)
+#* other u-in-reply-to links in the incoming reply
+#* full text, after stripping HTML tags and probably ignoring whitespace differences
+#* text prefix, after also stripping leading @username, RT/MT, trailing ..., etc.
+#* [http://en.wikipedia.org/wiki/Edit_distance edit distance], [http://en.wikipedia.org/wiki/Longest_common_subsequence_problem longest common subsequence], or other fuzzy match
+
+=== Responses challenges ===
+Examples / challenges for de-duping (use these as source material to check any de-duping approaches / algorithms)
+* comments on https://waterpigs.co.uk/notes/4Y38Ts/
+* security / identification / preventing hijacking. An attacker could overwrite or delete an existing webmention by sending a new one from their own site with the same u-url. To prevent this, receivers can compare source domain as well as uid, u-url, etc., and only interpret two webmentions as duplicates if both match.
+
+== IndieWeb Examples ==
+=== Kyle Mahan ===
+{{kylewm}} de-duplicates comments on his site since at least 2015-06:
+* 2015-06-30 https://kylewm.com/2015/06/i-wonder-how-much-this-conversation-is-annoying-kartikprabhu has a de-duplicated comment from {{kartikprabhu}} that links back both to its indieweb permalink, and its Twitter POSSE copy! (archive.org snapshot: http://web.archive.org/web/20160711221855/https://kylewm.com/2015/06/i-wonder-how-much-this-conversation-is-annoying-kartikprabhu)
+
+=== Aaron Parecki ===
+{{aaronpk}} de-duplicates comments on his site since 2017-09-01, with a partially working implementation since ~2016
+* e.g. https://aaronparecki.com/2017/06/26/30/indieweb
+[[File:2017-09-aaronpk-syndicated-copy-of-webmention-comment.png|400px]]
+* https://aaronparecki.com/2016/12/29/21/day-9
+[[File:2017-09-aaronpk-syndicated-copy-of-webmention-reply.png|400px]]
+
+== Silo Examples ==
+=== Twitter ===
+* [[Twitter]]: ~24hr(?) dedupe. In their web [[create]] UI, if you enter the same text as a previous tweet in the past 24hrs (tested minutes, and years, educated guessing 24hrs) and attempt to "Tweet", Twitter won't post it, and will instead show an error message of "You have already sent this Tweet.".
+
+== See Also ==
+* https://en.wikipedia.org/wiki/Data_deduplication

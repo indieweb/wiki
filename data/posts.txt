@@ -1,4 +1,4 @@
-http://indiewebcamp.com/posts
+https://indieweb.org/posts
 
 <dfn>Post</dfn> or <dfn>posts</dfn> may refer to individual pieces of content published on an indieweb site such as [[notes]], [[articles]], & [[responses]], or the act of creating the aforementioned content (present tense), or [[Posts about the IndieWeb]].
 
@@ -21,17 +21,21 @@ How to publish a post.
 * on your [[personal domain]]
 
 == Kinds of Posts ==
+This section is about post kinds (kinds of posts) in general, for the [[Wordpress]] plugin, see:
+* [[Post Kinds Plugin]]
 Experience has shown that there are different kinds of posts on indieweb sites, and publishing and display interfaces for them vary by type. Here are a few kinds of posts that indieweb community members are currently publishing:
 
-Roughly ordered by apparent/anecdotal indieweb posting frequency across different sites / implementations:
+Roughly ordered by apparent/anecdotal indieweb posting frequency across different sites / implementations (Most of these are also cross-linked from [[:Category:PostType]]):
 * [[📔]] [[note]] <!-- huge number -->
 * [[📄]] [[article]] <!-- lots, due to blog default post type etc. -->
 
 * [[💬]] [[reply]] <!-- many many due to being a minor variant on note -->
 
-* [[👍]] [[like]] <!-- 10 --> (or [[favorite]])
+* [[💌]] [[rsvp]] <!-- 9-13+ per 2016.indieweb.org -->
 
-* [[📷]] [[photo]] <!-- 8 -->
+* [[📷]] [[photo]] <!-- 9 -->
+
+* [[👍]] [[like]] <!-- 8 --> (or [[favorite]])
 
 * [[🚩]] [[checkin]] <!-- 7 -->
 * [[📅 ]] [[event]]
@@ -40,26 +44,31 @@ Roughly ordered by apparent/anecdotal indieweb posting frequency across differen
 * [[♺]] [[repost]]
 * [[♫]] [[jam]] 
 
-* [[💌]] [[rsvp]] <!-- 5 -->
 * [[🎥]] [[video]]
 * [[🎧]] [[scrobble]]
 
-* [[📑]] [[collection]] <!-- 4 -->
+* [[⭐️]] [[review]] <!-- 5 -->
 
+* [[📑]] [[collection]] <!-- 4 -->
+* [[📍]] [[venue]]
+
+Posted by only three indieweb sites, worthy of consideration for [[post type discovery]]
 * [[📖]] [[read]] <!-- 3 -->
 * [[🎴]] [[comics]] 
 
 Posted by only a couple of indieweb sites so far
-* [[🍛]] [[food]]
-* [[💪]] [[exercise]]
 * [[🎤]] [[audio]]
+* [[💪]] [[exercise]]
+* [[🍛]] [[food]]
+* [[“]] [[quotation]]
+* [[🍽]] [[recipe]]
+* 🐔 [[chicken]]
 
 Posted by only one indieweb site so far:
-* [[edit]]
-* [[quotation]]
-* [[session]]
+* [[✏️]] [[edit]]
+* [[🐛]] [[issue]]
 * [[😴]] [[sleep]]
-* [[venue]]
+* [[session]]
 
 Posts of various types may also be implicit [[mentions]] of other posts by linking to them, but the difference only matters to the receiver — i.e. there is no dedicated UI for people to publish a “mention” of something.
 
@@ -110,6 +119,10 @@ If you get that far, step one, document real world examples of such new UX (even
 
 After you've documented existing UX of a post type, see if you can find something similar in  [[ActivityStreams]]'s similar concept of "object types", and thus re-use their name/terminology.
 
+=== Related Sessions ===
+Related IndieWebCamp discussion sessions:
+* 2016: [[2016/Brighton/posttypes|IndieWebCamp Brighton: Post Types]]
+
 == Pieces of a Post ==
 At a minimum, indieweb posts should have:
 * '''[[permalink]]''' URL
@@ -124,9 +137,8 @@ All marked up with [[h-entry]]+[[h-card]] naturally.
 Additional information about the post:
 * '''date updated'''
 * '''name''' - (AKA "title") of a post ([[articles]] typically have titles)
-* '''[[location]]''' - (AKA "geo") that the post is about, e.g. photos taken at a location, [[checkins]]. E.g. [[Instagram]] locations are "locations" that the photos are of, [[Wikipedia]] uses the [[geo]] microformat on pages to indicate location information about the subject of the page.
-* '''changes''' - ideally marked up with <code>&lt;ins></code> and <code>&lt;del></code>
-* '''from''' - location published/posted <em>from</em>, not necessarily the same as location that the post is about. E.g. [[Twitter]] locations are "published from" locations.
+* '''[[location]]''' - (AKA "geo") that the post was created or published from, e.g. [[tweet]] location. This can be different from the location that a post is <em>about</em>, e.g. photos of a location, [[Instagram]] locations are "locations" that the photos are of, [[Wikipedia]] uses the [[geo]] microformat on pages to indicate location information about the subject of the page, even [[checkins]] (which are usually posted at the location, but sometimes after e.g. [[postsq]]).
+* '''changes''' - specifically, notable content updates since original publishing, ideally marked up with <code>&lt;ins></code> and <code>&lt;del></code> and then styled to be apparent.
 * '''using''' - tool or application that was used to author / publish the post.
 ==== Footer sections ====
 Footer sections. Posts sometimes have footers with links, references etc. Here are few known footer sections with a real world indieweb example in the wild of each.
@@ -135,19 +147,19 @@ Footer sections. Posts sometimes have footers with links, references etc. Here a
 * '''[[posts-elsewhere|Elsewhere]]''' - a list of links to [[POSSE]] syndicated copies of the post on other services. E.g. [http://tantek.com/2013/073/b1/silos-vs-open-social-web]
 ** '''Elsewhere of this Translation''' - a list of links to [[POSSE]] syndicated copies of a post which is a translation of another post.
 * '''Translations''' - links to translations of the post. E.g. [http://tantek.com/2013/073/b1/silos-vs-open-social-web]
-* '''[[Comments]]''' - a list of comments (in time sequence order) about or replying to the post. E.g. [http://tantek.com/2013/073/b1/silos-vs-open-social-web]
+* '''[[comments]]''' - a list of comments (in time sequence order) about or replying to the post. E.g. [http://tantek.com/2013/073/b1/silos-vs-open-social-web]
 * '''Referencing Articles / Mentions''' - other discussions / articles spawned as a result of (after) the post, or other related reading that cites the post. A that reader already took the time to read it and have the post in mind as context, may want to read articles that build upon it. E.g.: [http://tantek.com/2011/214/b1/osx-lion-full-screen-bug-workarounds].
-* '''[[Likes]]'''/favorites - primarily on [[silos]] but capturing here as something that indieweb community members have expressed an interest in implementing on their own posts
-* '''[[Tags]]''' - often parsed from hashtags within the post. Examples: [http://waterpigs.co.uk/notes/4SjLvd/] [http://notizblog.org/2013/08/15/open-app-net/]
-* '''[[Navigation]]''' - usually previous/next links between posts. Examples: [http://waterpigs.co.uk/notes/1000] [http://aaronparecki.com/notes/2013/10/18/1/realtimeconf] [http://tantek.com/2013/300/t1/bandwidth-exceeded-ahrefsbot-blocked-htaccess] [http://jschweinsberg.de/2013/10/16/1381893102/]
+* '''[[likes]]'''/favorites - primarily on [[silos]] but capturing here as something that indieweb community members have expressed an interest in implementing on their own posts
+* '''[[tags]]''' - often parsed from hashtags within the post. Examples: [http://waterpigs.co.uk/notes/4SjLvd/] [http://notizblog.org/2013/08/15/open-app-net/]
+* '''[[navigation]]''' - usually previous/next links between posts. Examples: [http://waterpigs.co.uk/notes/1000] [http://aaronparecki.com/notes/2013/10/18/1/realtimeconf] [http://tantek.com/2013/300/t1/bandwidth-exceeded-ahrefsbot-blocked-htaccess] [http://jschweinsberg.de/2013/10/16/1381893102/]
 * ... have a different section in the footer of your posts? Add it here with a link to a real world example.
 All marked up with [[h-cite]]+[[h-card]] naturally (except maybe the comments can be just [[h-entry]]+[[h-card]]).
 
 ==== Inline and other references ====
 Some post to other post or page references are inline in a post or elsewhere but not in a separate footer per se.
 
-* '''Inspired by''' [http://tantek.com/2010/231/b1/bringing-back-the-blog][http://tantek.com/2014/324/t1/apps-oauth-access-accounts-freemyoauth][http://tantek.com/2013/149/b1/bayesian]
-* '''With apologies to'''[http://epeus.blogspot.com/2012/01/translation-from-sanctimonious-bluster.html]
+* '''inspired by''' [http://tantek.com/2010/231/b1/bringing-back-the-blog][http://tantek.com/2014/324/t1/apps-oauth-access-accounts-freemyoauth][http://tantek.com/2013/149/b1/bayesian]
+* '''with apologies to'''[http://epeus.blogspot.com/2012/01/translation-from-sanctimonious-bluster.html]
 
 == Posting practices ==
 IndieWeb community members' thoughts on some of the details of how they post and why:
@@ -169,14 +181,6 @@ Here are some tools for testing indieweb posts:
 == See Also ==
 * [[h-entry]]
 * [[posts-elsewhere]]
-Post kinds:
-* [[article]]
-* [[checkin]]
-* [[comics]]
-* [[event]]
-* [[like]]
-* [[note]]
-* [[photo]]
-* [[reply]]
-* [[rsvp]]
-* [[video]]
+* [[:Category:PostType]]
+
+[[Category:building-blocks]]

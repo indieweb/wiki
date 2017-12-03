@@ -1,0 +1,312 @@
+https://indieweb.org/multi-photo_vs_collection
+
+{{stub}}
+
+'''<dfn>multi-photo vs collection</dfn>''' refers to [[multi-photo]] vs [[collection]] posts and the challenges of combining photos and videos in a post.
+
+In 2017, [[Instagram]] launched the [https://www.instagram.com/p/BQ0mDB2gV_O/ ability to include multiple photos and videos] in a single Instagram post. Instagram is not the first to have launched a similar feature, Twitter had [[multiphoto]] support (the ability to post up to 4 images in a post), and Swarm allows up to 7 photos in a checkin (and then adding more up to 7 at a time after the checkin). However Instagram was the first to allow a combination of photos and videos. (Twitter allows up to 4 images, but if you include a video then the only media attached to the tweet can be the one video.)
+
+This has proven challenging to translate to an appropriate IndieWeb equivalent using Microformats and Micropub. While there are IndieWeb examples of [[multi-photo]]s and [[collection]]s, none of the examples given combine photos and videos. 
+
+== Silo Examples ==
+Silo examples of [[multi-photo]] and/or [[collection]] post support.
+
+=== Twitter ===
+[[Twitter]] supports:
+* 1-4 [[photos]] or 1 gif/[[video]] by itself in a tweet.
+* [[person-tag|Tagging people]] in the tweet as a whole, not in individual photos
+
+=== Instagram ===
+[[Instagram]] posts:
+* can contain 1-10 photos and/or videos
+** with the same aspect ratio (i.e. orientation, e.g. all square, or as of [https://www.macrumors.com/2017/08/29/instagram-multiple-photos-landscape-portrait/ 2017-08-29 all landscape or all portrait])
+* can have [[person-tag]]s on individual photos, but [https://help.instagram.com/375691319209377 videos do not support person-tags]
+
+=== Swarm ===
+[[Swarm]] supports:
+* adding up to 7 photos to a checkin (then more photos after checking-in up to 7 at a time to the same checkin).
+* Tagging people is limited to tagging people in the checkin (as in people "you are with"), not in the individual photos.
+
+Swarm does not support adding videos to checkins.
+
+== Microformats Representation ==
+There are several ways to represent an equivalent of these silo posts on your own website using Microformats.
+
+Most cases can be represented by a simple [[multi-photo]] post. A [[multi-photo]] post is represented in Microformats (and by extension in Micropub) as a single <code>h-entry</code> with multiple <code>u-photo</code>. For example:
+
+<pre>
+<div class="h-entry">
+  <p class="e-content p-name">a caption for the post</p>
+  <img src="/photo1.jpg" class="u-photo">
+  <img src="/photo2.jpg" class="u-photo">
+</div>
+</pre>
+
+which would parse as
+
+<pre>
+        {
+            "type": [
+                "h-entry"
+            ],
+            "properties": {
+                "name": [
+                    "a caption for the post"
+                ],
+                "photo": [
+                    "/photo1.jpg",
+                    "/photo2.jpg"
+                ],
+                "content": [
+                    {
+                        "html": "a caption for the post",
+                        "value": "a caption for the post"
+                    }
+                ]
+            }
+        }
+</pre>
+NOTE: "photo" properties above show relative URLs whereas in practice they would be absolute URLs resolved using the path of the page/document that the markup came from.
+
+If you want to be able to [[person-tag|tag people]] in individual photos, or include any other kind of information about them, then need to represent each photo as its own h-entry. Thus the whole post including all of them must be a [[collection]] with multiple <code>h-entry</code>s itself. This is typically referred to as a [[collection]] post. 
+
+For example, a minimal collection h-entry with person-tags on individual photos could look like the following:
+
+<pre>
+<div class="h-entry">
+  <p class="p-name e-content">The caption for the whole collection. Instagram, 
+    Twitter and Swarm are currently limited to posting text associated with the 
+    whole post rather than associated with each individual image.</p>
+
+  <div class="h-entry">
+    <img class="u-photo" src="/image1.jpg">
+    <a class="p-category h-card" href="https://aaronparecki.com">Aaron Parecki</a>
+    <a class="p-category h-card" href="http://tantek.com">Tantek Çelik</a>
+  </div>
+
+  <div class="h-entry">
+    <img class="u-photo" src="/image1.jpg">
+    <a class="p-category h-card" href="https://aaronparecki.com">Aaron Parecki</a>
+    <a class="p-category h-card" href="https://indiewebcat.com">Dora</a>
+  </div>
+</div>
+</pre>
+
+This is parsed as follows, an h-entry containing multiple h-entrys as children, each inner h-entry containing the person-tags.
+
+<pre>
+{
+    "items": [
+        {
+            "type": [
+                "h-entry"
+            ],
+            "properties": {
+                "name": [
+                    "The caption for the whole collection. Instagram, \r\n    Twitter and Swarm are currently limited to posting text associated with the \r\n    whole post rather than associated with each individual image."
+                ],
+                "content": [
+                    {
+                        "html": "The caption for the whole collection. Instgram, \r\n    Twitter and Swarm are currently limited to posting text associated with the \r\n    whole post rather than associated with each individual image.",
+                        "value": "The caption for the whole collection. Instgram, \r\n    Twitter and Swarm are currently limited to posting text associated with the \r\n    whole post rather than associated with each individual image."
+                    }
+                ]
+            },
+            "children": [
+                {
+                    "type": [
+                        "h-entry"
+                    ],
+                    "properties": {
+                        "category": [
+                            {
+                                "type": [
+                                    "h-card"
+                                ],
+                                "properties": {
+                                    "name": [
+                                        "Aaron Parecki"
+                                    ],
+                                    "url": [
+                                        "https://aaronparecki.com"
+                                    ]
+                                },
+                                "value": "Aaron Parecki"
+                            },
+                            {
+                                "type": [
+                                    "h-card"
+                                ],
+                                "properties": {
+                                    "name": [
+                                        "Tantek \u00c7elik"
+                                    ],
+                                    "url": [
+                                        "http://tantek.com"
+                                    ]
+                                },
+                                "value": "Tantek \u00c7elik"
+                            }
+                        ],
+                        "photo": [
+                            "/image1.jpg"
+                        ],
+                        "name": [
+                            "Aaron Parecki\r\n    Tantek \u00c7elik"
+                        ]
+                    }
+                },
+                {
+                    "type": [
+                        "h-entry"
+                    ],
+                    "properties": {
+                        "category": [
+                            {
+                                "type": [
+                                    "h-card"
+                                ],
+                                "properties": {
+                                    "name": [
+                                        "Aaron Parecki"
+                                    ],
+                                    "url": [
+                                        "https://aaronparecki.com"
+                                    ]
+                                },
+                                "value": "Aaron Parecki"
+                            },
+                            {
+                                "type": [
+                                    "h-card"
+                                ],
+                                "properties": {
+                                    "name": [
+                                        "Dora"
+                                    ],
+                                    "url": [
+                                        "https://indiewebcat.com"
+                                    ]
+                                },
+                                "value": "Dora"
+                            }
+                        ],
+                        "photo": [
+                            "/image1.jpg"
+                        ],
+                        "name": [
+                            "Aaron Parecki\r\n    Dora"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
+</pre>
+
+=== Issues ===
+While a single h-entry can represent a [[multi-photo]], it cannot represent multiple photos and videos, or even multiple videos with poster images.
+
+==== Ambiguous Ordering ====
+If you tried to represent multiple photos and videos in a single h-entry, you would lose the order amongst them since they are parsed into their own lists of values for each property.
+
+For example if you tried to represent a multi-media post with an h-entry like:
+
+<pre>
+<div class="h-entry">
+  <p class="e-content p-name">a caption for the set of photos and videos</p>
+  <img src="/1-photo.jpg" class="u-photo">
+  <video src="/2-video.mp4" class="u-video"></video>
+  <img src="/3-photo.jpg" class="u-photo">
+</div>
+</pre>
+
+The parsed result is:
+
+<pre>
+        {
+            "type": [
+                "h-entry"
+            ],
+            "properties": {
+                "name": [
+                    "a caption for the set of photos and videos"
+                ],
+                "photo": [
+                    "/1-photo.jpg",
+                    "/3-photo.jpg"
+                ],
+                "video": [
+                    "/2-video.mp4"
+                ],
+                "content": [
+                    {
+                        "html": "a caption for the set of photos and videos",
+                        "value": "a caption for the set of photos and videos"
+                    }
+                ]
+            }
+        }
+</pre>
+NOTE: Again, relative URLs for example purposes only.
+
+As you can see, the ordering of the photos and videos has been lost, since they were parsed out separately.
+
+Currently there is only one reasonable option to preserve the ordering of photos/videos like that:
+* use a [[collection]] post with an h-entry for each photo and video
+
+Alternatively, or rather theoretically, you could try experimenting with a "u-x-media" experimental property for all photos and video, and seeing if you could convince any consuming code to look for it. But even this approach only gets you so far, as you will still have the problems of not being able to put per-media person-tags, and you'll have the next problem as well (poster images / fallback).
+
+==== Poster image vs multiphoto ====
+This becomes even more of a problem when the "photo" property is used to provide a poster image or fallback image for the video property.
+
+<pre>
+<div class="h-entry">
+  <p class="e-content p-name">a caption for the set of photos and videos</p>
+  <img src="/1-photo.jpg" class="u-photo">
+  <video poster="/2-video-poster.jpg">
+    <source class="u-video" src="/2-video.mp4">
+    <img class="u-photo" src="/2-video-poster.jpg">
+  </video>
+  <img src="/3-photo.jpg" class="u-photo">
+</div>
+</pre>
+
+This is parsed as
+
+<pre>
+        {
+            "type": [
+                "h-entry"
+            ],
+            "properties": {
+                "name": [
+                    "a caption for the set of photos and videos"
+                ],
+                "photo": [
+                    "/1-photo.jpg",
+                    "/2-video-poster.jpg",
+                    "/3-photo.jpg"
+                ],
+                "video": [
+                    "/2-video.mp4"
+                ],
+                "content": [
+                    {
+                        "html": "a caption for the set of photos and videos",
+                        "value": "a caption for the set of photos and videos"
+                    }
+                ]
+            }
+        }
+</pre>
+
+The problem is demonstrated here because consuming code would not know whether one of the photo values is a fallback or poster image for a video, and in addition the ordering of the photos and videos being lost.
+
+Thus again, for a video with extra information (like a poster image), it must be marked up as its own h-entry in order to contain/cluster that extra information with that specific video.
+
+== See Also ==
+
+* [[multi-photo]]
+* [[collection]]

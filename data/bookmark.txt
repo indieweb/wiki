@@ -1,8 +1,7 @@
-http://indiewebcamp.com/bookmark
+https://indieweb.org/bookmark
 
-<span style="float:right;height:128px;font-size:128px;margin-top:48px">🔖</span>
-
-{{stub}}
+[[Category:PostType]]
+{{emojicon|🔖}}
 
 A '''<dfn>bookmark</dfn>''' (or <dfn>linkblog</dfn>) is a [[post]] that is primarily comprised of a URL, often title text from that URL, sometimes optional text describing, [[tag]]ging, or quoting from its contents.
 
@@ -11,9 +10,8 @@ Why should you post bookmark posts? Good question. People seem to have reasons f
 (please feel free to replace this rhetorical question with actual reasoning)
 
 * I bookmark things usually as 'read later', 'will read again' or 'should reference in a paper'. - {{rhiaro}}
-* i bookmark other peoples sites or twitter accounts and setting `rel=following` onto links – {{dym_cx}}
 
-__TOC__
+
 == How ==
 === How to markup ===
 How to markup a bookmark post. Use an h-entry as usual and a u-bookmark-of property on the link to the actual URL you are bookmarking. E.g.
@@ -35,6 +33,59 @@ For bookmarks that contain both a link and a meaningful title, consider using "u
   </a>
 </span>
 </nowiki></pre>
+
+__TOC__
+=== How to display ===
+(stub)
+
+Displaying bookmark posts are challenging because the display should clearly show both the author of the bookmark (as its a bookmark post), and the author of the thing being bookmarked (as well as that thing)
+
+There are at least three types of bookmark presentation to specifically design:
+# '''[[permalink]]''' presentation of a bookmark post
+# '''list''' presentation of multiple bookmark posts (e.g. on a post-type-specific [[archive]] page)
+# '''composite''' list of bookmarks and other posts (e.g. on a [[homepage]]
+
+(To be expanded with more advice / screenshots of existing approaches for each)
+
+==== Showing Bookmarks vs Submissions ====
+[[File:indienews-bookmark-posts.png]]
+
+IndieNews is an aggregator where you can submit posts via Webmention. You can either submit your own posts by adding a u-syndication link from your post to IndieNews, or you can submit other posts by making a bookmark post on your site and submitting that.
+
+For direct submissions, IndieNews displays the name of the post and the domain name of the site (see bottom post in screenshot).
+
+For submissions of bookmarks, IndieNews displays the name and domain of the bookmarked post as if it were posted directly, and indicates that it was "submitted from" the domain of the person who submitted it. (see above post in screenshot).
+
+=== How to POSSE ===
+There are some emerging patterns for how people [[POSSE]] bookmark posts in particular.
+
+==== POSSE to Twitter with Emoji ====
+Similar to POSSEd post types like [[jam]] and [[read]] one could prepend POSSE posts to Twitter with an [[🔖]] [[emoji]] to indicate the post type. Rather than simply posting a title and a URL, the emoji could help to indicate that a bookmarked post hasn't (necessarily) been read by the poster. Emoji use on Twitter is particularly effective as the platform limits the number of characters to indicate sentiment. One can also take advantage of the concept of Twitter cards to shoehorn additional information from the post into the tweet (though this is only displayed on some twitter clients/outlets).
+
+Examples:
+* {{chrisaldrich}} POSSE to Twitter https://twitter.com/ChrisAldrich/status/768874827218169856
+* Bookmark emoji appears in Twitter card rather than in main tweet, this allows additional sentiment to be placed in both the Tweet body as well as the Twitter card: https://twitter.com/ChrisAldrich/status/825206436305137664
+
+==== POSSE to another Twitter ====
+A number of individuals POSSE bookmarks explicitly to a different [[Twitter]] account than their "normal" or "primary" one.
+
+Examples:
+* {{adactio}} POSSEs from his site's bookmarks to https://twitter.com/adactiolinks
+* ...
+
+Related examples (bookmarking to another Twitter in general, might not be POSSEing)
+* [https://twitter.com/nelson @nelson] posts bookmarks to https://twitter.com/somebitsLinks
+* ...
+
+==== Design of POSSE bookmark tweets ====
+Alternative approaches exist regarding the content POSSEd to Twitter, mainly based on the intended audience and whether the post contains just the bookmark or broader commentary:
+
+{{adactio}} provides short commentary in the post but has, based on feedback regarding unnecessary clicks, decided to share only the bookmarked URL on his Twitter feed:
+* https://twitter.com/adactioLinks/status/779759088485953536
+
+{{sgreger}} is testing various approaches that feature the URL of his own post, in order to always present the reader with his commentary:
+* linking only to the bookmark post https://twitter.com/sebastiangreger/status/769068496261177344
+* links to both the bookmarked website and the bookmark post, e.g. https://twitter.com/sebastiangreger/status/768770201135505408 (N.B. only the last URL in a Tweet is shown as a link preview on Twitter, see http://indieweb.org/twitter#Features)
 
 == IndieWeb Examples ==
 === Aaron Parecki ===
@@ -67,6 +118,8 @@ Video showing browser bookmarklet from [[Quill]] used to post bookmarks:
 * tags
 * Description
 
+He also displays webmentions received from bookmark posts: https://adactio.com/articles/9843#comment37529
+
 === Shane Becker ===
 {{veganstraightedge}} imports bookmarks to [http://veganstraightedge.com/bookmarks veganstraightedge.com/bookmarks] by [[PESOS]]ing from [[Instapaper]] (tagged with "imported:from=instapaper.com") and [[Pinboard]] (tagged with "imported:from=pinboard.in") since ????-??-??. He sub-categorizes them by adding a "fave", "read-later", "watch-later" or "listen-later" tag to a bookmark post. The linked title of a bookmark post goes to the bookmarked URL, not the bookmark post's permalink. Bookmark posts have a '''⇜''' before the title to help indicate that the link goes to an external site. The '''⇜''' is applied using a CSS :before selector and a content property to keep it out of the actual HTML/microformat content. These bookmark posts contain:
 * URL
@@ -82,17 +135,79 @@ https://ben.thatmustbe.me/bookmark/2014/10/10/6/bookmark
 === atomicules ===
 [[User:atomicules.co.uk]], taking a slightly different approach, I decided I did not want to host or own every bookmark I make as I would never have a self-hosted tool as quick and as convenient as Pinboard, etc, nor did I want the clutter of bookmarks offtopic to that of my website. I did, however, already have link type posts, so I decided to start syndicating these out to [[Pinboard]] (See that page for my example).
 
+=== Larry Kooper ===
+At [https://indieweb.org/2016/NYC2 IndieWebCamp NYC2], attendee Larry Kooper demoed a [http://marybeth.nyc/bookmarks/homepage.php bookmark site] he built. The [https://github.com/larrykooper/bookmarks code is available on Github].
+
+=== Chris Aldrich ===
+{{chrisaldrich}} uses a customized bookmarklet in combination with the [https://wordpress.org/plugins/indieweb-post-kinds/ Post Kinds] plugin for [[WordPress]]. Bookmarks contain:
+* URL
+* Title
+* Date
+* Optional author, name of source, tags & categories
+* [[oEmbed]] of original page if available
+* Ability to redirect the entire post to the original content using a canonical URL
+I also have an optional workflow using [http://pressforward.org/ PressForward] that not only includes the above, but which can scrape the content of the page via the [[Mercury]] API to make an [[archival copy]] on my site if I wish. I also use [https://wordpress.org/plugins/post-archival/ Post Archival] to [https://indieweb.org/Internet_Archive#Trigger_an_Archive trigger an archival copy to the Internet Archive] as well. [[POSSE]] copies are often sent to [[Twitter]], usually with a bookmark emoji as described above and other optional services like Mendeley, diigo, delicious, scoop.it, flipboard, stubleupon, and others as appropriate.
+
+=== rhiaro ===
+{{rhiaro}} stores bookmarks in [[sloph]] as ActivityStreams 2.0 Add activities to the Bookmarks collection, visible at [https://rhiaro.co.uk/bookmarks/ rhiaro.co.uk/bookmarks/].
+
+Related: [https://rhiaro.co.uk/2017/01/bookmarks-to-as2 Script for porting Firefox bookmarks backup to AS2]
+
+=== Sebastiaan Andeweg ===
+{{sebsel}} posts bookmarks as of 2016-11-20, showing the text 'Seb heeft [title] door [author] gebookmarkt.' with a bookmark-icon. No quotes. Similar as a like (with a heart icon), but for more serious articles, meaning 'interesting' or 'please also read this' and in some cases 'want to read' or 'want to read again later'.
+* I realised (on 2017-08-06) that I bookmarked something twice. They ment more "I want to read this" than "please read this too". Thinking about changing how I use them, more into an archive of interesting articles, with categories and notes, to revisit and actually add value to the post.
+* <cite>"I subscribed to my own bookmarks feed in my reader, back when I used a reader. That was the purpose: to be able to revisit interesting articles.</cite> [https://chat.indieweb.org/2017-08-06#t1502045319051000]
+
+=== Marty McGuire ===
+{{martymcguire}} uses [[Quill]] to post bookmarks as of 2017-04-25 ([https://martymcgui.re/2017/04/25/105934/ example]). Bookmarks contain:
+* URL
+* Title
+* Date
+* Tags
+* Optional blockquote snippet copied from the original text
+
+== Additional Indieweb Discussion ==
+* [[2016/Brighton/indiebookmarks]] Bookmark Workflow was a session at IndieWebCamp Brighton 2016.
+* [[2017/Berlin/bookmarks]] Bookmarks & Archiving was a session at IndieWebCamp Berlin 2017.
+
 == Silos ==
 Bookmark hosting silos:
-* [[Instapaper]]
+* [[Instapaper]] - ([http://www.wired.com/2016/08/pinterest-buys-instapaper/ bought out by PInterest in late August 2016])
 * [[Pinboard]]
+** The below image is of the bookmark display on Pinboard, which adopts a text-first somewhat minimalist design which shows the name, when it was bookmarked, and by whom. A description and tags can be optionally added. [[File:Pinboard.png]]
+** In late 2016 Björn Stierand created a [https://github.com/egoexpress/known-pinboard Known plugin for syndicating bookmarks to Pinboard]
+* [[diigo]]
+* [http://www.stumbleupon.com/ StumbleUpon]
+* [[Reading.am]] - for [[reading]] related bookmarks
+* [[Pocket]] - now owned by [[Mozilla]] and integrated into [[Firefox]]
 
-The below image is of the bookmark display on Pinboard, which adopts a text-first somewhat minimalist design which shows the name, when it was bookmarked, and by whom. A description and tags can be optionally added.
+=== Academic/Research Related bookmarking silos ===
+The following silo services, often with other social features built in, are often used by those in academia to bookmark research papers and journal articles:
+* [http://www.mendeley.com Mendeley]
+* [http://www.citeulike.org/ Citeulike]
+* [http://www.bibsonomy.org/ Bibsonomy]
+* [http://sciencewise.info/bookmarks/ Sciencewise]
 
-[[File:Pinboard.png]]
-
-Previously:
+=== Previously ===
 * [[delicious]]
+** While in late 2016, it appears that delicious is making an attempt at a comeback, it doesn't have the ability to export anymore. Those interested in a separate export functionality may appreciate [https://github.com/szafranek/delicious-exporter Szafranek's Delicious Exporter].
+
+
+== Silo Examples ==
+
+Some UI documentation.
+
+=== Pocket ===
+
+[[Pocket]] has integration with Mozilla's [[Firefox]] browser. In version 57, a Pocket-icon appears in the address-bar. When clicked upon, it shows a little popup with 'Saving...' and then 'Saved to Pocket', with links to remove the bookmark or view the list. It is also possible to add comma separated tags to the bookmark.
+
+[[File:2017-10-09-firefox-pocket-bookmark-ui.jpg|300px]]
+
+The reading list 'My List' contains all your bookmarked pages. When you hover over an item, it gives you options to share, archive, delete, re-tag, or favorite the item. Clicking the check-mark archives the item and removes it from the list and adds it to archive, so you can keep track of what you have read and what you haven't.
+
+Pocket removes double entries: if you save a page twice (by accident?) it won't save it twice on your list. If you marked it as read, however, it will appear as unread in your reading list.
+
+[[File:2017-10-09-pocket-reading-list.jpg]]
 
 == Similar Post Kinds ==
 Text of a '''bookmark post''' is most often the title of the linked resource, i.e. created by the author of the linked resource, rather than the person posting the bookmark post.
@@ -118,3 +233,5 @@ If the text of a bookmark post is merely part of the contents of the thing that 
 * [[posts]]
 * [[note]]
 * [[h-cite]]
+* [[read later]]
+* http://blog.del.icio.us/?p=1204

@@ -1,0 +1,140 @@
+https://indieweb.org/Let%27s_Encrypt
+
+'''<dfn>[https://letsencrypt.org Let’s Encrypt]</dfn>''' is a Certificate Authority intended to be free, automated, and open.
+
+<div style="float:right; max-width:40%">
+[http://www.commitstrip.com/en/2016/06/13/the-end-of-an-expensive-era/ <img style="max-width:100%" src="http://www.commitstrip.com/wp-content/uploads/2016/06/Strip-The-end-of-an-expensive-era-650-final.jpg" alt="Comic strip about switching to LetsEncrypt and not needing to renew an expensive SSL certificate"/>]
+</div>
+
+== Why ==
+You should use LetsEncrypt because it's the simplest way to setup easy-to-maintain [[HTTPS]] support on your indie web site.
+
+== How To ==
+See: https://letsencrypt.org/howitworks/
+
+=== Set up without root access ===
+{{gRegor}} has used https://github.com/diafygi/letsencrypt-nosudo, an interactive [[Python]] script that does not require sudo/root. The host will need to install the generated certificate for you, though. This is a good option if you do not have root access or do not want to trust the letsencrypt script with root access. Since it's an interactive process, I do not believe it can be automated.
+
+== IndieWeb Examples ==
+=== Colin Tedford ===
+{{colintedford}} signed up for Let's Encrypt through [[Dreamhost]] on 2016-02-13 but needs to check for mixed content and [[WordPress]] gotchas (if any) before switching to [[https]] by default. 
+
+=== Aaron Parecki ===
+{{aaronpk}} uses letsencrypt on a bunch of domains, including aaronparecki.com and indieweb.org. [https://aaronparecki.com/2015/12/07/8/letsencrypt]
+
+=== Rascul ===
+{{rascul}} uses Let's Encrypt on [https://rascul.xyz rascul.xyz].
+
+=== gRegor Morrill ===
+{{gRegor}} https://gregorlove.com switched from [[StartSSL]] on 2016-06-15.
+
+=== Martijn van der Ven ===
+{{martijnvdven}} set-up Let’s Encrypt on [https://licit.li licit.li] during [[2016/Brighton|IndieWebCamp Brighton 2016]].
+
+=== Jonny Barnes ===
+{{jonnybarnes}} uses Let’s Encrypt on [https://jonnybarnes.uk jonnybarnes.uk] via the EFF’s [https://certbot.eff.org Certbot] client and a custom systemd timer for renewals.
+
+=== Daniel Goldsmith ===
+
+{{dgold}} uses LetsEncrypt on nginx for his indieweb sites:
+* [https://ascraeus.org ViewFromAscraeus] uses LetsEncrypt with Hugo (previously pelican) since [https://ascraeus.org/setting-up-mutt-with-gmail/ Jan 2016]
+* [https://arbitary.ascraeus.org Arbitary] uses it with {{kylewm}}'s Woodwind
+
+=== Sebastiaan Andeweg ===
+{{sebsel}} uses Let's encrypt via the [https://www.directadmin.com/features.php?id=1828 build in form on DirectAdmin].
+
+=== Eddie Hinkle ===
+{{eddiehinkle.com}} uses Let's encrypt via [https://www.digitalocean.com/community/tutorials/how-to-set-up-let-s-encrypt-with-nginx-server-blocks-on-ubuntu-16-04 Certbot] to manage for all his domains including [https://eddiehinkle.com eddiehinkle.com].
+
+=== add yourself! ===
+
+== Other Independent Examples ==
+=== AbstractFactory ===
+{{mwunsch}} is using it on abstractfactory.tv
+
+== Renewal ==
+Letsencrypt certificates are valid for only 90 days. As such, it becomes important to streamline the process of renewing the certificate. 
+
+=== crontab ===
+{{aaronpk}} uses the following method to renew certificates using a cron job.
+
+Create a file, <code>/path/to/renew-letsencrypt.sh</code> that includes the following. This will renew all pending certificates, and reload nginx.
+
+<pre>/path/to/certbot-auto renew --no-self-upgrade --post-hook "/usr/local/sbin/nginx -s reload"</pre>
+
+Note the <code>--no-self-upgrade</code> flag will tell the client not to update itself, which is sometimes a long process and might require user input.
+
+Add the following line to your crontab, which renews all soon-expiring certificates at 12:18am:
+
+<pre>18 0 * * 0 /path/to/renew-letsencrypt.sh 2>&1</pre>
+
+=== systemd ===
+{{jonnybarnes}} uses a systemd timer to renew certificates.
+
+Create a service file, which will invoke the certbot client and renew expiring certificates.
+
+<code>/etc/systemd/system/certbot.service</code>:
+<pre>
+[Unit]
+Description=Renew Let’s Encrypt leaf certificates
+
+[Service]
+Type=simple
+ExecStart=/path/to/certbot/certbot-auto renew --quiet --must-staple --post-hook 'systemctl restart nginx'
+</pre>
+
+We need to run this every day, so we will set up a timer to do so. The certbot client will only renew certs that are in their last month.
+
+<code>/etc/systemd/system/certbot.timer</code>:
+<pre>
+[Unit]
+Description=Renewal of Let’s Encrypt Certs
+
+[Timer]
+OnCalendar=daily
+RandomizedDelaySec=360
+Unit=certbot.service
+
+[Install]
+WantedBy=timers.target
+</pre>
+
+Next just enable and start the timer like you would a systemd service, <code>sudo systemctl enable certbot.timer && sudo systemctl start certbot.timer</code>.
+
+== Limitations ==
+__TOC__
+=== Requires control over your own server ===
+You have to have at least some control over your webserver.
+
+Domain aliasing is not supported, e.g. if you have your own domain and use WordPress.com to serve it. 
+
+Similarly your own domain on *.github.io.
+* E.g. {{mwunsch}} is unable to use LetsEncrypt on his own site markwunsch.com because it is hosted on GitHub.
+
+Both [[WordPress.com]] and [[GitHub]] do have wildcard certificates for their domain names, but those can't or won't work on your own domain name.
+
+=== Short renewal intervals ===
+A LetsEncrypt certificate is only valid for 90 days, since they aim for users to automate the renewal process as much as possible. If you can't run a LetsEncrypt client on your server (because you use shared hosting, where you only can upload certs manually) you therefore have to do a manual process more often than with CAs that give certs with longer lifespans.
+
+On the other hand, requiring that you renew your certs every 90 days (instead of the typical 1 year) encourages people to automate the process, or at least become more familiar with the process so that it doesn't become a thing you have to re-learn every year.
+
+== Self Description ==
+From their [https://letsencrypt.org/about/ about] site:
+
+----
+
+Let’s Encrypt is a free, automated, and open certificate authority (CA), run for the public’s benefit. Let’s Encrypt is a service provided by the Internet Security Research Group (ISRG).
+
+The key principles behind Let’s Encrypt are:
+
+* Free: Anyone who owns a domain name can use Let’s Encrypt to obtain a trusted certificate at zero cost.
+* Automatic: Software running on a web server can interact with Let’s Encrypt to painlessly obtain a certificate, securely configure it for use, and automatically take care of renewal.
+* Secure: Let’s Encrypt will serve as a platform for advancing TLS security best practices, both on the CA side and by helping site operators properly secure their servers.
+* Transparent: All certificates issued or revoked will be publicly recorded and available for anyone to inspect.
+* Open: The automatic issuance and renewal protocol will be published as an open standard that others can adopt.
+* Cooperative: Much like the underlying Internet protocols themselves, Let’s Encrypt is a joint effort to benefit the community, beyond the control of any one organization.
+
+----
+
+== See Also ==
+* [[HTTPS]]

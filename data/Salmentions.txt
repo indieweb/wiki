@@ -1,10 +1,11 @@
-http://indiewebcamp.com/Salmentions
+https://indieweb.org/Salmentions
 
 <!-- 
 
 By editing and/or contributing to this specification, you agree to make your contributions available under the http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0. 
 
 -->
+<span style="float:right;height:128px;font-size:128px;margin-top:48px">🐟</span>
 {{stub}}
 
 <span class="p-summary">'''<dfn>Salmentions</dfn>''' are a protocol extension to [[Webmention]] to [[comment-propagation|propagate comments]] and other interactions upstream by sending a webmention from a response to the original post when the response itself receives a response (comment, like, etc.). </span> The original post then checks the response to the original, parses the response to the response (e.g. comment on a comment) and then displays it as an additional response on the original post.
@@ -30,7 +31,7 @@ The name is a portmanteau of [[#Salmon]] and [[mention]].
 
 == Protocol ==
 === Sending Salmentions ===
-An implementation that sends and receives [[Webmentions]] can send Salmentions by doing the following:
+An implementation that sends and receives [[Webmention|Webmentions]] can send Salmentions by doing the following:
 
 When it receives and accepts a Webmention from a response to an original post:
 * Incorporate (or update) the response into the original post’s permalink by nesting the response inside the original, keeping track of whether any changes actually occurred.
@@ -40,7 +41,7 @@ When it receives and accepts a Webmention from a response to an original post:
 That act of resending those Webmentions when an original post is updated in response to responses is called “sending Salmentions”.
 
 === Receiving Salmentions ===
-An implementation that receives [[Webmentions]] can receive Salmentions by doing the following:
+An implementation that receives [[Webmention|Webmentions]] can receive Salmentions by doing the following:
 
 When it receives a Webmention, in addition to normal Webmention processing:
 * Store the contents of the source of the Webmention in such a way that it can be rechecked in the future for any changes.
@@ -66,23 +67,27 @@ In order of implementation
 * Recieving: https://acegiak.net/2015/06/09/not-necessarily-threaded-comments-like-reddit-but-i-think-theres-broad-consensus-that-if-you-reply-to-a-reply-it-would-be/
 * Sending: https://acegiak.net/2015/06/13/i-have-to-go-to-bed-now-if-this-works-or-not-so-i-hope-it-works/
 
+=== Known ===
+{{benwerd}} sneakily added suport for sending Salmentions on 2015-07-11[https://github.com/idno/Known/commit/005542d1617686fca7196dcf071ca82c503382d9].
+* Here's an example of a salmentioned comment received from a Known site: https://kylewm.com/2016/05/nice-you-were-a-good-test-case-for-woodwind-there
+
 === Ben Roberts ===
-{{benthatmustbeme}} supports sending Salmentions on his site since at least 2015-07-12 and built his support to help pass [[SWAT0]] as Player A.[https://aaronparecki.com/notes/2015/07/14/1/swat0]
+{{benthatmustbeme}} supports sending Salmentions on his site since at least 2015-07-12 and built his support to help pass [[SWAT0]] as Player A.[https://aaronparecki.com/notes/2015/07/14/1/swat0]   Support for receiving was added since then (date unsure) [https://ben.thatmustbe.me/note/2016/5/16/2/]
 
 === Aaron Parecki ===
-{{aaronpk}} supports receiving Salmentions on his site since 2015-07-12 and built this support to help pass [[SWAT0]] as Player B.[https://aaronparecki.com/notes/2015/07/14/1/swat0]
+{{aaronpk}} supports sending Salmentions since 2016-03-23, and receiving Salmentions on his site since 2015-07-12 and built this support to help pass [[SWAT0]] as Player B.[https://aaronparecki.com/notes/2015/07/14/1/swat0]
 
 == Issues ==
 * feel free to add a new issue here as its own subection: === Issue short name ===
 
 == Related ==
-=== ActivityPump ===
-{{main|ActivityPump}}
-[http://w3c-social.github.io/activitypump/#notification ActivityPump] describes a similar process to Salmention for propagating updates between systems. If one of your posts receives a mention (eg. as the target of a like, repost or inReplyTo, etc), your server should send the ''new post'' (the one that mentions you) to ''all recipients'' of your original post. (In ActivityPump, your server pushes your posts out to your followers, and retains a list of everyone posts are sent to, but this basically translates to sending a webmention to the original post).
+=== ActivityPub ===
+{{main|ActivityPub}}
+[[ActivityPub]] describes a similar process to Salmention for propagating updates between systems. If one of your posts receives a mention (eg. as the target of a like, repost or inReplyTo, etc), your server should send the ''new post'' (the one that mentions you) to ''all recipients'' of your original post. (In ActivityPub, your server pushes your posts out to your followers, and retains a list of everyone posts are sent to, but this basically translates to sending a webmention to the original post).
 
 === Salmon ===
 {{main|Salmon}}
-The [[Salmon]] protocol is a predecessor to [[#ActivityPump]] that broke useful conceptual ground but never gained widespread adoption. It's part of the [[OStatus]] protocol suite.
+The [[Salmon]] protocol is a predecessor to [[#ActivityPub]] that broke useful conceptual ground but never gained widespread adoption. It's part of the [[OStatus]] protocol suite.
 
 == See Also ==
 * [[comment-propagation]]

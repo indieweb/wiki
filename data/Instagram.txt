@@ -1,12 +1,13 @@
-http://indiewebcamp.com/Instagram
+https://indieweb.org/Instagram
 
-{{pagelogo|https://pbs.twimg.com/profile_images/1550954462/instagramIcon_200x200.png}}
+[[Category:silo]]
+{{pagelogo|https://pbs.twimg.com/profile_images/786681705981673472/T5OKNZ1-_400x400.jpg}}
 {{stub}}
 
-'''<dfn>[http://instagram.com/ Instagram]</dfn>''' is a popular image hosting [[silo]] most well known for square [[photos]] that have been processed with an image filter. In 2013, Instagram added support for 15 second [[video]] posts.
-
+'''<dfn>[http://instagram.com/ Instagram]</dfn>''' is a popular [[photo]] and short [[video]] hosting [[silo]] most well known for square [[photos]] that have been processed with an image filter. 
+{{clear}}
 == Why ==
-Why use Instagram?
+Should I join Instagram? Why use Instagram?
 === Indie photo posting client ===
 Some of us have found it to be a useful client for posting to your site via [[Micropub]] and [[ownyourgram]].
 
@@ -14,16 +15,35 @@ If your site supports receiving [[Micropub]] requests for publishing photos, you
 
 This technique of using a silo purely as a client to get content to your own site is also referred to as "silos as plumbing".
 
-=== PESOS ===
-==== Tantek ====
-{{t}} uses Instagram to publish photos from his iPod touch, manually [[PESOS]] them to his own site (tantek.com), and then uses [[Falcon]] to automatically [[POSSE]] his [[photo]] posts to [[Facebook]] & [[Twitter]] with [[Bridgy]] Publish, as well as link back to the Instagram copy as [[syndication]].
+See '''[[#PESOS|PESOS]]''' below for more details.
 
 == Features ==
 (this section is a stub and needs your contribution to complete it!)
-* post [[photos]] with:
+* [[photo]] post with:
+** reduced resolution photo, e.g. 1080x810
+** a caption (is just the first comment if it is by the author)
+** inline hyperlinked [[hashtags]] (in caption or any comment by author)
+** [[person-tags]] at locations (points) on the photo
+** [[venue]] (from [[Facebook]]'s venue database) 
+* [[multi-photo]] post ([https://www.instagram.com/p/BQ0mDB2gV_O/ since 2017-02-22])
+** even lower resolution than single photo posts, e.g.: 750x750, 640x640
 ** a caption (is just the first comment if it is by the author)
 ** inline hyperlinked [[hashtags]]
-** [[person-tags]] at locations (points) on the photo 
+** limitations: no photo editing (filters only), must be square cropped
+** [[venue]] (from [[Facebook]]'s venue database)
+* [[collection]] posts (beyond simple [[multi-photo]]s)
+** up to 10 of any combination of photos and/or videos total
+** per-photo [[person-tag]]s
+** limitations: no per-item name(caption), no person-tags on videos, no per-item location/venue.
+* [[video]] post (since 2013, initially 15 second length limit, extended to 30-60sec?)
+** note: [https://help.instagram.com/375691319209377 no person-tags on videos]
+* [[story]] (AKA "Your Story") singular post, one per profile (since mid-2016)
+** ephemeral photos and videos that disappear in 24h. The story feature allowed posting multiple photos (and/or videos) in a time sequence (shown in sequence one at a time) which many use to tell a story about their day. Access to individual story items disappear from other users' views within 24 hours.
+** positioned text labels (optional color/rotation/resizing) 
+** stickers on all photos and videos in a story.
+** [[hashtag]]s on all photos and videos in a story. 
+** [[person-tag]]s on all photos and videos in a story.
+** pin any label/sticker/tag to some thing in a video and have it follow that thing as it moves around
 * [[comment]] on photos
 * [[like]] photos
 * [[follow]] users
@@ -40,6 +60,12 @@ This technique of using a silo purely as a client to get content to your own sit
 ** website - but not another silo profile[http://techcrunch.com/2016/03/03/instagram-starts-blocking-deeplinking-to-other-social-media-profiles/]
 * [[who to follow]] - shown when you follow someone
 ** 3 suggested users to follow
+* settings
+** comments
+*** "Hide inappropriate comments: Hide comments that contain words or phrases often reported as offensive" toggle.
+*** "Custom keywords: Comments that contain any of the words or phrases above will be hidden. Add keywords, separated by commas."
+*** [[turn off commenting]]
+*...
 
 ==Exporting your data==
 [http://instaport.me/ Instaport.me] and [http://flickstagram.org flickstagram.org] let you export your Instagram photos.
@@ -47,6 +73,29 @@ This technique of using a silo purely as a client to get content to your own sit
 [http://www.freedom.io/ freedom.io] ([https://github.com/snarfed/freedom source]) can copy all of your Instagram photos and videos to [[WordPress]], [[Tumblr]], or [[Blogger]], creating a new blog post for each, with the original dates and all comments intact.
 
 Norm's [https://github.com/norm/instagram-backup instagram-backup] tool exports Instagram photos and metadata.
+
+=== Single Photo Bookmarklet ===
+If you view a single photo permalink page, the following bookmarklet will extract the permalink (trimmed), photo jpg URL, and photo caption and copy them into a text note, suitable for posting as a [[photo]] that's [[auto-link]]ed:
+
+For plain text:
+<pre>
+javascript:n=document.images.length-1;s=document.images[n].src;s=s.split('?');s=s[0];u=document.location.toString().substring(0,39);prompt('Choose "Copy ⌘C" to copy photo post:',s+' '+u+'\n'+document.getElementsByTagName("h1")[0].innerText.replace(/\n\.(\n\.)+/g,'\n'))
+</pre>
+
+For HTML (e.g. storage files. escapes & < >)
+<pre>
+javascript:n=document.images.length-1;s=document.images[n].src;s=s.split('?');s=s[0];u=document.location.toString().substring(0,39);prompt('Choose "Copy ⌘C" to copy photo post:',s+' '+u+'\n'+document.getElementsByTagName("h1")[0].innerText.replace(/\n\.(\n\.)+/g,'\n').replace(/\&/g,'&amp;amp;').replace(/\</g,'&amp;lt;').replace(/\>/g,'&amp;gt;'))
+</pre>
+
+Any questions, let me know! {{t}} (I used the second version ("For HTML") myself as part of my [[photo]] post authoring flow until 2017-085. -t).
+
+Drag and drop-able button version can be found [http://boffosocko.com/2016/08/28/instagram-single-photo-bookmarklet/ here]
+
+==== Bookmarklet improvements ====
+* remove errant username from start of caption text
+* support [[multi-photo]] posts (detecting, producing markup)
+* support [[video]] posts (detecting, producing markup)
+* support mixed multi-photo/video posts
 
 ==POSSE==
 Instagram does not have a photo upload API. <strike>However they do have comments delete / create APIs</strike>. <b>Sadly commenting via the API is not supported</b>. So here's how you can fake POSSE to Instagram:
@@ -56,7 +105,7 @@ Instagram does not have a photo upload API. <strike>However they do have comment
 # Your server copies the photo (in [[PESOS]] fashion) to your own server
 ## creating a permalink for the photo on your own server
 ## copying the location information, people tags, and caption
-## adding a link to the copy of the photo on Instagram with [[rel-syndication]]
+## adding a link to the copy of the photo on Instagram with [[u-syndication]]
 # Your server deletes the first comment on the Instagram photo
 # Your server creates a new first comment (thus caption) on the Instagram photo, as you, with:
 ## original caption contents followed by [[permashortlink]] for the photo on your server
@@ -65,18 +114,43 @@ And bingo, you've effectively created a POSSE copy of your photo on Instagram si
 
 At this point you can also use a service like [[Bridgy]] to [[backfeed]] comments on the photo from Instagram to your own site.
 
-=== IndieWeb Implementations ===
-* [[User:Aaronparecki.com|Aaron Parecki]]'s [[OwnYourGram]] service provides PESOS from Instagram for any site that supports micropub.
+=== POSSE responses ===
 * {{kylewm}} POSSEs likes for Instagram photos via the official Instagram API (which is read-only for everything except, inexplicably, for likes) [https://kylewm.com/2015/01/like-of-kristen-parks-cuba-bound-with-juliannarosed since 2015-01-03] 
 ** Added POSSE for comments via "unofficial" API (Selenium/PhantomJS browser automation) [https://kylewm.com/2015/07/yum-lechuga on 2015-07-12]
 * [[Bridgy]] Publish can POSSE [[likes]] to Instagram since 2015-01-07
 * ...
 
+=== POSSE via Workflow.is ===
+{{Sebsel}} uses the iOS app [[Workflow]] to semi-automate his photo posting workflow, including a post to Instagram. He documented his Workflow workflow on [[Workflow]].
+
+=== POSSE via SNAP with WordPress ===
+While {{chrisaldrich}} most often uses a [[PESOS]] workflow involving [https://wordpress.org/plugins/dsgnwrks-instagram-importer/ DsgnWrks Instagram Importer], he will occasionally use the pro version of the [[SNAP]] plugin for [[WordPress]] which is able to post photos directly to Instagram using their [https://www.nextscripts.com/snap-api-premium-for-wordpress/ custom API]. [https://www.nextscripts.com/instructions/instagram-auto-poster-setup-installation/ Instructions] for setting up SNAP to do this can be found on their site.
+
+=== POSSE as mobile browser ===
+Instagram recently updated their mobile web site to [https://www.theverge.com/2017/5/8/15562892/instagram-mobile-browser-photo-upload allow mobile web photo posts], thus it should be possible to have your server POSSE to Instagram for you by acting as your mobile browser.
+
+Also looking into this for Bridgy Publish support:
+* [https://github.com/snarfed/bridgy/issues/746 Publish: re-investigate POSSE to Instagram now with mobile browser photo posting]
+
+=== Manual POSSE ===
+==== gRegor Morrill ====
+{{gRegor}} posts photos on gregorlove.com first, manually posts the same photo and caption to Instagram, copies the Instagram URL and adds it as a [[syndication]] link on the original photo post.
+* since 2016-04-05 https://gregorlove.com/2016/04/polka-dots-in-my-backyard/
+* commonly will use [[Bridgy Publish]] to syndicate to [[Twitter]] as well.
+* originally was including my URL in the Instagram caption, but discovered Bridgy does not need that; the syndication link is enough for Bridgy [[backfeed]].
+* yes, this is a bit of slow process, so I don't post photos very often. :]
+
+==== Tantek ====
+{{t}} posts photos on [[Swarm]] (private account) for ease of mobile publishing, then uses those to create photo posts on tantek.com, and manually posts the same photo and (sometimes abbreviated) caption to Instagram, copies the Instagram URL and adds it as a [[syndication]] link on the original photo post.
+* since 2017-087: http://tantek.com/2017/087/t2/orange-curls-flower
+* uses Bridgy Publish to POSSE to FB, Flickr, Twitter also
+
 === Manual Notes ===
 <span id="Manual_Notes_POSSE">Some users manually</span> cross-post occasional [[notes]] posts to Instagram, e.g.:
 ==== Tweet text to Instagram ====
 * Original: https://twitter.com/ClaireWyckoff/status/532912362991648768 <blockquote>Worst way to die: you're mauled by a zombie and as you're about to turn you realize he's wearing Ed Hardy.</blockquote>
-* POSSE copy: [http://instagram.com/p/vWDDFlyTL8/ <img src="http://photos-e.ak.instagram.com/hphotos-ak-xpf1/10693307_1492129594399372_2131465102_n.jpg" style="width:256px"/>]
+* POSSE copy: http://instagram.com/p/vWDDFlyTL8/
+{{photosrcalt|1=https://scontent-sea1-1.cdninstagram.com/t51.2885-15/e15/10693307_1492129594399372_2131465102_n.jpg}}
 
 As of this edit:
 * the original has only *2* favorites. (2,346 followers on account)
@@ -89,12 +163,45 @@ Hypothesis: the Instagram [[reader]] experience is so much smoother and nicer th
 * Original: http://tantek.com/2016/001/t4/burn-very-brightly <blockquote>The light that burns twice as bright, <br/>burns half as long <br/>Life’s short, <br/>so burn very brightly</blockquote>
 * POSSE copy: [https://www.instagram.com/p/BABHGeGg9X9/ <img src="https://scontent-sjc2-1.cdninstagram.com/hphotos-xfp1/t51.2885-15/s480x480/e35/10261022_1943887429169134_703910364_n.jpg" style="width:256px"/>]
 
-==[[PESOS]]==
-Even though posting to Instagram is limited, retrieving you content is not impossible.
 
-Existing solutions for [[WordPress]]:
-* [https://wordpress.org/plugins/keyring-social-importers/ Keyring Social Importers] can will automatically create photo posts out of Instagram content once connected
-* [https://wordpress.org/plugins/dsgnwrks-instagram-importer/ DsgnWrks Instagram Importer] will do the same
+== PESOS ==
+* {{aaronpk}}'s [[OwnYourGram]] service provides [[PESOS]] from Instagram for any site that supports micropub.
+
+Additional approaches:
+* Solutions for [[WordPress]]:
+** [https://wordpress.org/plugins/keyring-social-importers/ Keyring Social Importers] can will automatically create photo posts out of Instagram content once connected
+** [https://wordpress.org/plugins/dsgnwrks-instagram-importer/ DsgnWrks Instagram Importer] will do the same
+* [https://github.com/johnholdun/instagram-feed John Holdun's Instagram Feed] for a locally-hosted mirror for your Instagram feed
+* Just do it manually
+
+=== Previously Tantek ===
+{{t}} uses his [[iPod]] Touch to publish photos to [[Swarm]] and Instagram for ease of posting from mobile device to the web.
+
+Previously:
+
+From [http://tantek.com/2015/244/t1/did-entire-npsf-trackattack 2015-244] to [http://tantek.com/2017/085/t2/droplets-leaf-tips-plants 2017-085], {{t}} did manual PESOS from Instagram to public posts on his own site (tantek.com), and then used [[Falcon]] to automatically [[POSSE]] his [[photo]] posts to [[Facebook]], Flickr, & [[Twitter]] with [[Bridgy]] Publish, as well as link back to the Instagram copy as [[syndication]].
+
+[http://tantek.com/2017/087/t2/orange-curls-flower Since 2017-087], {{t}} has been manually POSSEing to Instagram (see [[#Tantek]] above).
+
+==== cweiske ====
+{{cweiske}} uses [https://github.com/cweiske/instagram2micropub instagram2micropub] to archive private instagram posts to a self-hosted [[Known]] instance automatically.
+
+== backfeed ==
+
+You can use [[Bridgy]] to get some backfeed of responses from Instagram POSSE copies.
+
+(this section is a stub)
+
+* limitations with Brid.gy: only first 10 likes come through.
+** Scraping the public Instagram web pages only gives you the oldest 10 likes for a picture. After that, the UI says 'and X others' anyway. The property is called <code>edge_media_preview_like</code>, and includes a full count, but no names, pictures or URLs of the people who like it, other than the first 10. (You can't poll either, because they give you the first, not the last.)
+
+You can supposedly get your own API key (in sandbox mode) to do your own backfeed. (does anyone do this?)
+
+* Getting likes seems to be impossible without getting your app approved. Some endpoints work, others give a HTTP 200 status, but an empty array.
+** '''/users/self/media/recent''' works, probably because it contains you own pictures
+** '''/media/:id/likes''' does not work, probably because the likes are other people's content
+** '''/users/self/media/liked''' does not work, probably because your likes contain other people's content
+* Getting your app approved seems to be [https://www.instagram.com/developer/review/ hard].
 
 == API ==
 === Supposed Features and Limitations ===
@@ -111,7 +218,11 @@ According to [http://instagram.com/developer/endpoints/comments/#post_media_comm
 === Unofficial ===
 * Work has also been done on determining its unofficial API (which is against Instagram's terms of service, but allows you to post): https://github.com/mislav/instagram/wiki
 * Instagram Worm uploaded photos using private/undocumented API (needs citation)
-* Instagram private API changes affect unofficial apps and photos uploaded via unofficial apps http://www.theverge.com/2013/7/30/4570610/instagram-deleting-photos-from-instance-windows-phone-app
+* Instagram private API changes [http://www.theverge.com/2013/7/30/4570610/instagram-deleting-photos-from-instance-windows-phone-app affect unofficial apps and photos uploaded via unofficial apps]
+* Add <code>?__a=1</code> to the end of an Instagram profile, photo, or feed URL (e.g. <code>/</code>) to get JSON metadata. This JSON is also embedded in the normal HTML pages. [https://github.com/snarfed/granary/blob/1ca5995846f9b471fce0ff2cd9a06a55b11cc421/granary/instagram.py#L706 Example parsing code in granary.]
+** For feed URLs, the array of photo objects is in the <code>FeedPage.feed.media.nodes[]</code> element.
+** For profile URLs, the array of photo objects is in the <code>ProfilePage.user.media.nodes[]</code> element.
+** For photo URLs, the photo objects are the <code>PostPage[].media</code> element(s).
 
 === Permissions approval ===
 
@@ -157,19 +268,6 @@ Instagram drives more traffic to their site, at the cost of a worse experience f
 
 Using [[OwnYourGram]] or another method of PESOSing your photos out of Instagram, you can control how your photos are shared on other silos like Twitter. (e.g., by including Twitter metadata, or by posting the photos directly).
 
-===Downtime===
-* 2014-04-12 Instagram feeds were down as reported in this @Instagram tweet which itself has been deleted!
-** https://twitter.com/instagram/statuses/455025601553108993
-** <blockquote>We’re working to fix a feed delivery issue. Thank you for your patience.</blockquote>
-** see also: http://thenextweb.com/facebook/2014/04/12/instagram-confirms-that-its-service-is-down-due-to-a-feed-delivery-issue/
-
-* 2013-08-28 17:27-0400 EDT
-<a href="https://twitter.com/tessa/status/372834695391612928"><img src="https://pbs.twimg.com/media/BSyTLhLCAAAIF7o.png" width="300"></a>
-
-* 2014-08-22 various times throughout the day - "news" activity on photos feature was down with user-unfriendly [[nginx]] default error message:
-
-[[File:2014-234-instagram-502-nginx.jpg|frame|none|320px]]
-
 === Switch from Foursquare to Facebook venues ===
 Some time in 2014-05, Instagram switched from using [[Foursquare]]'s venue database (e.g. in the iOS app UI) to using [[Facebook]]'s places database.
 
@@ -195,6 +293,9 @@ It is relatively easy to figure out the approximate location of someone's work o
 
 ==== See Also ====
 * [[Flickr#Privacy]]
+* https://qz.com/878790/a-lawyer-rewrote-instagrams-terms-of-service-for-kids-now-you-can-understand-all-of-the-private-data-you-and-your-teen-are-giving-up-to-social-media/
+* https://www.theatlantic.com/technology/archive/2017/08/link-in-bio/537624/
+* [[InstaLooter]]
 
 === Uneditable Custom Locations ===
 When adding a photo at a venue that doesn't exist, it is possible to create a "custom location", which is unfortunately not editable from that point on. 
@@ -216,6 +317,8 @@ Instagram is establishing a history of censoring by removing (and sometimes rest
 : http://www.scoopwhoop.com/news/insta-photo/
 : http://www.cosmopolitan.com/sex-love/news/a38309/instagram-apologizes-for-removing-poignant-photos-of-a-woman-on-her-period/
 
+Article listing blocked/limited hashtags as of 2016-05-10: http://thedatapack.com/banned-instagram-hashtags-update/
+
 === DMCA ===
 * 2014-10-16 <cite>[http://justhugo.com/2015/10/16/freedom/ Your account has been deleted for not following our terms. You won’t be able to log into this account and no one else will be able to see it. We’re unable to restore accounts that are deleted for these types of violations.]</cite>
 
@@ -223,6 +326,29 @@ Instagram is establishing a history of censoring by removing (and sometimes rest
 Unlike [[Flickr]] (and your own site if you so choose!), there's no metadata for marking photos or indeed whole photostreams as licensed under Creative Commons licenses.
 
 [http://i-am-cc.org/ i-am-cc.org] lets you choose a CC license for your Instagram photographs, but you have to log into the service every three months to 'renew' the license grant.
+
+=== most locked-in and user-hostile ===
+From 2016-03-26 jwz post: [https://www.jwz.org/blog/2016/03/instagram-hates-the-internet/ Instagram Hates The Internet] <blockquote>Instagram is a dialup BBS. It is the most locked-in and user-hostile of the bunch, as I will now express through the medium of a &lt;TABLE&gt;</blockquote>
+(analysis therein)
+
+==Downtime==
+==== 2017-08-26 Outage ====
+<blockquote><p>Saturday morning turned out to be social-media-free for a number of Facebook and Instagram users, albeit involuntarily.</p><p>Some people reported difficulties accessing the two social platforms beginning at about 9 a.m. ET</p></blockquote> 
+from http://money.cnn.com/2017/08/26/technology/business/facebook-down/
+==== 2014-08-22 Outage ====
+2014-08-22 various times throughout the day - "news" activity on photos feature was down with user-unfriendly [[nginx]] default error message:
+
+[[File:2014-234-instagram-502-nginx.jpg|frame|none|320px]]
+
+==== 2014-04-12 Outage ====
+2014-04-12 Instagram feeds were down as reported in this @Instagram tweet which itself has been deleted!
+* https://twitter.com/instagram/statuses/455025601553108993
+* <blockquote>We’re working to fix a feed delivery issue. Thank you for your patience.</blockquote>
+* see also: http://thenextweb.com/facebook/2014/04/12/instagram-confirms-that-its-service-is-down-due-to-a-feed-delivery-issue/
+
+==== 2013-08-28 Outage ====
+2013-08-28 17:27-0400 EDT
+<a href="https://twitter.com/tessa/status/372834695391612928"><img src="https://pbs.twimg.com/media/BSyTLhLCAAAIF7o.png" width="300"></a>
 
 == See also ==
 * [[silos]]

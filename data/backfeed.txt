@@ -1,4 +1,4 @@
-http://indiewebcamp.com/backfeed
+https://indieweb.org/backfeed
 
 '''<dfn>Backfeed</dfn>''' is the process of syndicating [[interactions]] on your [[POSSE]] copies <em>back</em> (AKA <dfn>reverse syndicating</dfn>) to your original posts.
 
@@ -26,7 +26,6 @@ Specific "how to backfeed" documentation per silo API:
 * Search for <code>DOMAIN filter:links</code> with <code>result_type=recent</code>. See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L73 example code here] (and continued [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L149 here]). Only returns recent results, but otherwise works ok.
 * There's [http://stackoverflow.com/questions/2693553/replies-to-a-particular-tweet-twitter-api no official way] to get replies to a given tweet. If it's not too old, though, you can search for @-mentions of the original tweet's author, then look through the results for any whose <code>in-reply-to</code> field points to the original tweet. See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L113 example code here].
 * Otherwise, there's the unreliable, undocumented, unofficial 'related_results' endpoint.
-* There is [https://github.com/adriancrepaz/acTwitterConversation/ acTwitterConversation] PHP class made by [http://adriancrepaz.com/twitter_conversations_api Adrian Crepaz] that pulls the mobile version of twitter and parses the replies from there.
 
 ==== Facebook ====
 ===== [https://developers.facebook.com/docs/graph-api Graph API] =====
@@ -46,7 +45,7 @@ Similarly, to get likes for a post, use [https://developers.facebook.com/docs/gr
 
 ===== FQL =====
 * before Graph API 2.2, there was FQL that could be used as:
-* [https://developers.facebook.com/docs/technical-guides/fql/ FQL] makes this surprisingly easy. For example, here's a query to get all comments on the posts from a given user with links in them:
+* [https://developers.facebook.com/docs/reference/fql/ FQL] makes this surprisingly easy. For example, here's a query to get all comments on the posts from a given user with links in them:
   SELECT post_fbid, time, fromid, username, object_id, text FROM comment
     WHERE object_id IN (SELECT link_id FROM link WHERE owner = USER_ID)
     ORDER BY time DESC
@@ -76,10 +75,21 @@ Alternatively, you can support receiving [[webmentions]], and then use a proxy t
 [[User:Singpolyma.net|singpolyma]] syndicates posts out to Twitter and runs a cronjob that polls the replies/mentions (authenticated) API endpoint to pull in responses. (since ????-??-??)
 
 === Ryan Barrett ===
-{{snarfed}} uses [[Bridgy]] (see below) to backfeed comments, likes, and reposts from the silos to his own site. E.g. see Facebook and Twitter comments here:
+{{snarfed}} uses [[Bridgy]] (see below) to backfeed comments, likes, and reposts from the silos to his own site since 2011-12-02:
+* https://snarfed.org/2011-12-02_thoughts_on_writing_my_first_android_app#comment-1153466
+E.g. see Facebook and Twitter comments here:
 * http://snarfed.org/2013-12-06_new-app-engine-logo#comments
 See Facebook, Twitter, G+ comments, likes, +1s here:
 * https://snarfed.org/2015-04-21_introducing-color-genomics
+
+== Other Examples in the Wild ==
+
+=== Journalism ===
+* Buzzfeed [https://www.buzzfeed.com/bensmith/helping-you-see-outside-your-bubble?utm_term=.tkJv7j6gA#.br0DvEN8y on 2017-02-17 announced a backfeed related experiment] "called 'Outside Your Bubble,' an attempt to give our audience a glimpse at what’s happening outside their own social media spaces." An [https://www.buzzfeed.com/alexkantrowitz/twitter-is-now-temporarily-throttling-reach-of-abusive-accou?utm_term=.lfOGeyalA#.qyyBZqJlw example of the new feature] integrated into their site was also provided in the article. (See also [[filter bubble]].)
+
+=== Science Communications ===
+* [http://biorxiv.org/ BioRxiv] is using [http://biorxiv.org/content/early/2017/02/16/108977 backfeed of Tweets about a scientific article] to provide "social proof" of the reach and influence of scientific journal articles. See also: [http://www.nature.com/nature/journal/v464/n7288/full/464488a.html Let's make science metrics more scientific]. 
+* In some sense [https://www.altmetric.com/ Altmetric] operates like a commercial version of [[Bridgy]] for the scientific publishing community.
 
 == Service Implementations ==
 === Bridgy ===
@@ -89,12 +99,18 @@ See Facebook, Twitter, G+ comments, likes, +1s here:
 === Salmon Unofficial ===
 [https://salmon-unofficial.appspot.com/ salmon-unofficial] is an older, unmaintained alternative to [[Bridgy]] that uses the [[Salmon]] protocol instead of [[webmention]]. It discovers original source sites via LRDD, WebFinger, and XRD, as specified by Salmon. [https://github.com/snarfed/salmon-unofficial GitHub repo here.]
 
+=== Altmetric ===
+[https://www.altmetric.com/ Altmetric] operates somewhat like a proprietary commercial version of [[Bridgy]] for the scientific publishing community. It provides data via [https://www.altmetric.com/support/almetric-api/ API] for mentions of research on other platforms including Twitter, Weibo, Reddit, Facebook, Wikipedia, Google+, LinkedIn, Pinterest, and other research related platforms as well as blogs.
+
+=== OwnYourSwarm ===
+{{main|OwnYourSwarm}}
+[https://ownyourswarm.p3k.io OwnYourSwarm] is a service that sends your Swarm checkins to your website via Micropub, as well as sending [[webmentions]] for comments and likes on your checkins.
+
 == Server Implementations ==
 === WordPress Plugins ===
-* [http://wordpress.org/plugins/social/ Social]
+* [http://wordpress.org/plugins/social/ Social] - This was [https://github.com/crowdfavorite/wp-social/issues/213#issuecomment-282094259 shut down at the end of 2016], and due to a middle-ware proxy, may never function again.
 * [http://www.nextscripts.com/snap-features/auto-import-comments-from-facebook-and-twitter/ NextScripts SNAP]
-
-[http://jetpack.me/support/publicize/ Jetpack Publicize] is great, but doesn't yet implement backfeed.
+* [http://jetpack.me/support/publicize/ Jetpack Publicize] is great, but doesn't yet implement backfeed.
 
 == Discussion ==
 Do these responses ''belong'' on your indie page, at the original source of the content? There are storage, legal, data ownership, UX, and other questions.

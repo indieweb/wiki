@@ -1,10 +1,10 @@
-http://indiewebcamp.com/indieauth.com
+https://indieweb.org/indieauth.com
 
 {{stub}}
 <div style="float: right; clear:both; padding: 10px; margin: 0 0 0 auto; width: 240px; border: 1px #ccc solid; background-color: #fffee7;">IndieAuth.com Provider Status: {{indieauth.com-status}}</div>
 
 
-'''<dfn>indieauth.com</dfn>''' provides two services: for developers, it handles authenticating users via [[RelMeAuth]], and users can delegate to it as their [[authorization-endpoint|authorization server]].
+<span class="p-summary">'''<dfn>indieauth.com</dfn>''' provides two services: for developers, it handles authenticating users via [[RelMeAuth]], and users can delegate to it as their [[authorization-endpoint|authorization server]].</span>
 
 == For Developers ==
 
@@ -20,9 +20,135 @@ You can sign in to sites with indieauth.com by signing a challenge with your GPG
 
 https://indieauth.com/gpg
 
-== FAQ ==
+=== OpenID ===
+Using [[indieauth.com]] as an OpenID provider allows you to sign in to any site that [[OpenID#Consuming_Sites|consumes OpenID]] using your IndieAuth setup.
 
-https://indieauth.com/faq
+To use [[indieauth.com]] as an OpenID provider for the OpenID identifier of your site, add the following two link tags to the HTML (inside the <code>&lt;head&gt;</code> element) of your website, replacing "aaronparecki.com" with your domain of course.
+
+<pre>
+<link rel="openid.delegate" href="http://aaronparecki.com/" />
+<link rel="openid.server" href="https://openid.indieauth.com/openid" />
+</pre>
+
+== FAQ ==
+See Also: https://indieauth.com/faq
+
+=== Why is Twitter not working ===
+While there are several reasons why [[Twitter]] might not working for IndieAuth sign-in, here are some common things to look for:
+* Be sure you link from your site to your '''<kbd>https</kbd>''' (note the '''s''') Twitter profile URL. E.g.:
+** <kbd>https://twitter.com/indiewebcamp</kbd>
+* As of 2014-01 we are seeing occasional SSL errors trying to fetch profiles from twitter.com. Until this is resolved, you may wish to try using another provider such as Google+ or Github.
+
+=== Why is GitHub not working ===
+* If you get an error “The authentication provider replied with an error: csrf_detected” something went wrong in the cookie exchange.
+** In Safari go to Preferences → Privacy and chose to “Allow from websites I visit” instead of “Allow from current website only”.[http://indiewebcamp.com/irc/2015-05-31/line/1433111657562] Once you are logged in you can change it back.
+
+=== Why is Google+ not working ===
+* Ensure you add your website under your "Other Profiles" section on your Google+ profile. Google only adds the rel=me markup for your "Other Profiles"
+* Ensure that your "Other Profiles" section has permissions set to "Public"
+
+=== Why are IndieAuth.com and GitHub Pages not playing nicely? ===
+Are you getting a funny error when trying to log into IndieAuth with credentials hosted on your Github Pages powered website?  This is likely due to an outdated DNS record!  
+
+'''Quick fix:'''
+* '''Change your DNS record to point to the latest IP address that github pages uses.'''  For obvious security reasons, you are going to have to find the correct IP addresses on this page: https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-up-dns
+
+What is happening is that if your DNS record points to the old github pages IP address, it sometimes 301 redirects to `/` which is non-standard and IndieAuth does not currently support relative URLs when discovering credentials.  See this issue: https://github.com/aaronpk/IndieAuth/issues/46#issuecomment-34565297
+
+Github also wrote a blog post about this change, which many people missed: https://github.com/blog/1715-faster-more-awesome-github-pages
+
+=== How do I make my site do the authorization itself ===
+For how to do distributed or delegated IndieAuth, see [[distributed-indieauth]].
+
+=== Empty Session Errors ===
+If you are seeing strange error messages about empty sessions, you may have blocked cookies! Make sure you allow cookies from indieauth.com and whatever service provider you are using.
+
+=== Why is my https domain not working? ===
+Q: Why does entering just my domain name (which automatically redirects http to https) not work in IndieAuth?
+
+A: To log in with indieauth as a domain served over [[HTTPS]], you have to type the whole URL, including <kbd>https://</kbd>, otherwise most implementations will assume HTTP, and HTTP to HTTPS redirects are considered insecure (especially important for purposes of authentication!)
+
+=== Why am I getting "insecure redirect" errors? ===
+* If you get an error about an insecure redirect, check to see whether your silo link is going to https://yoursite which is in turn redirecting to http://yoursite.  (Dreamwidth is an example of a site that does this.)  If so, change the link to go directly to http://yoursite
+
+=== How do I use a specific other site for my IndieAuth ===
+See [[distributed-indieauth]].
+
+=== Is it good to delegate auth to 3rd parties ===
+''Is it good to delegate authentication to third parties like Facebook or Twitter for IndieAuth?''[http://indiewebcamp.com/irc/2013-10-30/line/1383149585]
+
+IndieAuth only relies on third parties for ephemeral authentication, once per IndieAuth login attempt. Because the reliance is only ephemeral/transactional, the delegation is ok.  It's not great, but it's ok, and certainly better than directly using (Facebook Connect) or the equivalents for other silos.
+
+IndieAuth also provides better UI flow and fallbacks than OpenID, while re-using the  OAuth flow that users are familiar with from Twitter, Github etc., so it's an incremental improvement over other open identity solutions.
+
+=== What if I have more than one domain ===
+IndieAuth requires symmetric rel=me links on your page and the OAuth provider profile page, and since most silos (like Github and Twitter) only allow you to put one rel=me link on your profile, you cannot use any one profile for multiple domains. There are a few alternatives:
+
+* use one account for one domain and another account for another domain. 
+* use an alternative method for as many domains as you control:
+** email (via emailed one time short code for the user to enter)
+** PGP key authorization 
+** TOTP
+
+=== Why not use a DNS TXT record ===
+Q: Why not allow configuring a rel=me link by adding a DNS TXT record to the domain?
+
+A: Two reasons:
+* '''Usability'''.  In order to use a DNS TXT record you would first need to be aware of how to create such an entry for your domain's DNS zone file - something most users have zero interest in or knowledge of, but you would also then need to put something like a PGP Public Key so that anyone trying to auth to your site would then be able to use to sign their request. Again, very few folks would be able to implement that.
+* '''Security'''. The main reason is that the TXT record would be a request to a different server that is not serving your domain and it would not be behind SSL. Whereas rel=me links in the HTML of a home page at least <em>can</em> be protected with [[https]], even if they're not to start with.
+
+=== Why not OpenID Email etc ===
+See: [[Why web sign-in]].
+
+=== Why not WebFinger ===
+''Why not add [[WebFinger]] support to IndieAuth?''
+
+<blockquote>"The problem is it's too easy to not own your email address (@gmail.com, etc) so it's not really an "indie" identifier. The point of IndieAuth is to encourage people to own their online identity."[http://aaronparecki.com/replies/2013/07/01/1/indieauth][https://twitter.com/aaronpk/status/351893272089735168]</blockquote>
+
+== Issues ==
+See Also: https://github.com/aaronpk/IndieAuth.com/issues
+
+=== Contact page support ===
+Some sites (which? list examples below) have a separate /about or /contact page where they list all their other profiles with [[rel-me]] links, and then link to that separate page from their home page with rel=me. This is a valid way to support [[web-sign-in]] per the [[RelMeAuth]] spec.
+
+However, IndieAuth does not currently support following one-deep rel-me links on people's sites to look for auth providers.
+
+^^ ''This should refer to "indieauth.com", or "the implementation used on indieauth.com", rather than "IndieAuth" itself, shouldn't it?''
+
+Note: Crawling the second level of links will add significant time to the "scan" part of indieauth. One optimization is to only crawl a second level link if it's on the same domain as the authenticating domain. This means you wouldn't be able to have the chain example.com -> about.me/example -> github.com/example, you'd have to have something like example.com -> example.com/about -> github.com/example. [[User:Aaronparecki.com|Aaronparecki.com]] 09:08, 1 September 2013 (PDT)
+* only the latter use-case has been seen (in microformats.org research) of <blockquote>example.com -> example.com/about -> github.com/example</blockquote>
+* a user may use about.me through a redirect, e.g.:
+** example.com --redirect--> about.me/example --rel=me link--> github.com/example
+
+'''Sites in the wild with a contact page separate to the homepage'''
+
+* ''Add sites you find here …''
+* Julian Foad (www.foad.me.uk) has rel=me links to & from a separate contact page (julian.foad.me.uk) which has the rel=me links to Twitter & Github.
+* Chris Roos tried (see https://github.com/aaronpk/IndieAuth.com/issues/48 )
+
+=== Better Error Handling ===
+
+My experience was that I had a slight URL mismatch when I first tried to set up IndieAuth, something like an http/https goof or having a trailing slash in one place and no trailing slash in the other.  Whatever the problem, it prevented sign-in.  I figured out that problem, but when I tried to sign back in, I got the error:
+
+<blockquote>Parameter "profile" must be one of the rel=me links in the site specified in the "me" parameter</blockquote>
+
+This didn’t make any sense to me, as a novice to IndieAuth.  After several failed retries, I finally realized that IndieAuth.com had cached my old URL and needed me to rescan to pick up the corrected information.  Once I did that, everything worked -- [[User:Meyerweb.com|Eric Meyer]]
+
+Two possible fixes here:
+
+# Be more aggressive about rescanning for a domain that’s never worked, or had recent errors.  (Perhaps limited to certain types of errors.)
+# Reword the error message to be less obscure and include some information about common ways to trigger the error and ways to address them.
+## Parameter 'profile' must be ..." is a debugging message, not an error message. There is no mention of "parameter" or "profile" in any other user-facing aspect interaction of IndieAuth. This message needs to be replaced ASAP with a description in terms of what the user is doing. - [[User:Tantek.com|Tantek]] 07:26, 18 September 2013 (PDT)
+## What the heck is *actually* going wrong? I don't even know - we need to capture a technical description of the problem(s) that may be causing this message to occur so we can attempt to craft an actual actionable error message for the user. - [[User:Tantek.com|Tantek]] 07:26, 18 September 2013 (PDT)
+
+== To do ==
+Want to help? See if you can contribute to one or more of the following:
+* '''<span id="tfa-support">Two Factor Auth (TFA) support</span>''' for providers that support it (e.g. Google)
+** See the [http://wordpress.org/extend/plugins/google-authenticator/ WordPress Google Authenticator plugin] for clues/patterns/source (PHP) showing how to do this.
+** See also [http://www.twilio.com/blog/2013/04/add-two-factor-authentication-to-your-website-with-google-authenticator-and-twilio-sms.html Add Two-Factor Authentication To Your Website with Google Authenticator] (Python examples)
+** Will Norris blogged about <cite>[https://willnorris.com/2012/06/indie-two-factor-auth indie two-factor auth]</cite>
+* Add support for one-level deep links like /contact (per [http://microformats.org/wiki/RelMeAuth#users_with_separate_contact_pages RelMeAuth: users with separate contact pages] algorithm and real world examples).
+* See also: https://github.com/aaronpk/IndieAuth.com/issues
 
 == See Also ==
 * [[IndieAuth]]

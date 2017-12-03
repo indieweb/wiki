@@ -1,0 +1,95 @@
+https://indieweb.org/Feedly
+
+[[Category:silo]]
+{{stub}}
+
+'''<dfn>[http://feedly.com/ Feedly]</dfn>''' is a [[feed reader]] service.
+
+== Features ==
+(this section is a stub)
+
+Feedly has common [[feed reader]] features:
+* Subscribe to [[feed file]]s ([[RSS]], [[Atom]], [[JSON Feed]])
+** how often does it poll?
+* ...
+
+== IndieWeb Examples ==
+
+Users — who uses Feedly.com?
+* {{kartikprabhu}}
+* {{chrisaldrich}}
+* ...
+
+== IndieWeb Friendly ==
+Does Feedly support any IndieWeb [[building blocks]]? Could it support [[webactions]]? (It has a huge number of integrations for syndicating to other [[silos]].)
+* ...
+
+Advocacy: we should test whether any of the following are supported (e.g. like [[Woodwind]] does!), and if not, ask them to!
+* Subscribe to [[h-feed]] feeds, including
+** parsing [[h-entry]] posts for all their properties
+** parsing <code>p-author [[h-card]]</code> for author name, image, home page
+*** Feedly does not detect [[h-feed]] markup on pages (-{{kartik}} as of 2017-01-26)
+* Receive [[WebSub]] notifications of feed updates
+* [[IndieAuth]] to sign-in to feedly.com
+*** Feedly does not allow [[Indieauth]] only Google, Facebook, Twitter, Windows, Evernote and a Feedly account (-{{kartik}} as of 2017-01-26)
+* [[Micropub]] to [[like]] or [[bookmark]] items in feeds, and have those actions be posted to your own site.
+* ...
+
+== Issues ==
+=== Fails To Handle Atom XHTML titles ===
+See bug report:
+* https://plus.google.com/110760594609453531817/posts/2J3wWDsJFnU
+** 2015-08-26 appears to be fixed? https://kartikprabhu.com/notes/re-feedly-title-fix
+
+Consider putting this for your [[Atom]] title element (inside the entry element) to help encourage users to encourage getting this bug fixed (and stay fixed! live regression tests are a good thing.)
+
+<code style="white-space:pre-wrap"><nowiki>
+<title type="xhtml">
+<div class="if-your-feed-reader-displays-this-then-it-is-violating-the-Atom-spec-RFC-4287-section-4.2.14" xmlns="http://www.w3.org/1999/xhtml">
+YOUR POST NAME GOES HERE
+</div></title>
+</nowiki></code>
+
+=== No Offline Support ===
+
+Feedly native app on Android (and iOS??) does not load anything when offline. So one cannot read posts even tough they had been previously downloaded.
+
+=== Home page is js dr ===
+(noticed 2017-026)
+
+http://feedly.com/ is blank if javascript is disabled or fails to load ([[js;dr]]).
+
+Upon loading it with JS, there's no reason the static logged-out content there couldn't be served directly from the server.
+<blockquote>Welcome to Feedly<br/><br/>
+The content you need to accelerate your research, marketing, and sales</blockquote>
+etc.
+
+=== Collapsed whitespace around HTML ===
+{{gRegor}}: I had a friend report that the spaces around links in my feed were being collapsed, and the inline style for a striked-out word did not come through. Testing with {{tantek}}'s feed also shows the collapsed whitespace around links.
+
+* From https://gregorlove.com/2017/02/100-words-on-hitrecord/
+[[File:Feedly-collapsed-whitespace1-2017-02-10.png]]
+
+* From http://tantek.com/2017/041/t2/seattle-davis-divest-wellsfargo-nodapl
+[[File:Feedly-collapsed-whitespace2-2017-02-10.png]]
+
+* {{gRegor}} reported this on the [https://plus.google.com/106706862599755558649/posts/Ztq86HeDy1m Feedly Google+ community] ([https://gregorlove.com/2017/02/it-appears-the-whitespace-around/ original note]), but has not heard back as of 2017-02-19
+
+== Down Messages ==
+https://pbs.twimg.com/media/BOL8QltCAAAwz07.png 
+
+"feedly is over capacity"
+
+via https://twitter.com/haxor/status/352121082813218816
+
+
+[[File:feedly-cloud-down-2014-03-25.jpg]]
+
+"Sorry! Feedly will be back soon. See blog.feedly.com for more information."
+
+via https://twitter.com/kartik_prabhu/status/448575516912541696
+
+== See Also ==
+* [[feed file]]
+* [[feed reader]]
+* [[Woodwind]]

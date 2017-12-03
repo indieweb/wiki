@@ -1,11 +1,11 @@
-http://indiewebcamp.com/summary
+https://indieweb.org/summary
 
 {{stub}}
 
-<p class="p-summary">A '''<dfn>summary</dfn>''' is short text that conveys a post's main point(s), or a plain text equivalent for kinds of [[posts]] like [[likes]] and [[RSVP]]s that use other properties to convey their meaning.</p>
+<p class="p-summary">A '''<dfn>summary</dfn>''' is short text that conveys a post's main point(s), a small representative section, a post excerpt, or a plain text equivalent for kinds of [[posts]] like [[likes]] and [[RSVP]]s that use other properties to convey their meaning.</p>
 
 == Why ==
-To explicitly indicate what part of the content of a post, or other text equivalent, should be used as a shorter description of the post in [[readers]], other [[link-preview]] use-cases for a displaying a post from elsewhere, providing an excerpt for [[POSSE]] purposes, and a plain-text fallback for special kinds of [[posts]] that the consuming code might not know to do anything special with.
+To explicitly indicate what part of the content of a post, or other text equivalent, should be used as a shorter description of the post in [[readers]], [[search]] results, other [[link-preview]] use-cases for displaying a post from elsewhere, providing an excerpt for [[POSSE]] purposes, and a plain-text fallback for special kinds of [[posts]] that the consuming code might not know to do anything special with.
 
 == How ==
 Add the class name "p-summary" to the element (e.g. <nowiki><p> or <span> etc</nowiki>) tag that you want used as the plain text summary for your post.
@@ -22,16 +22,32 @@ Manually adding summaries on http://kevinmarks.com Also, [[unmung]]will create s
 <blockquote>In general, Bridgy prefers to use p-summary if available, then the full e-content, and finally p-name, in that order. The one exception is original tweets (not @-replies) on Twitter: for those, it prefers p-name before e-content.</blockquote>
 
 == Brainstorming ==
-=== More text UI ===
+=== UI for authoring summary ===
 Why a summary UI: because you may not want the entirety of your original post going to [[silos]] like [[Facebook]] or [[Twitter]], and prefer to send a short summary to them and have readers there click through to your original post to see it in its entirety.
 
+==== Implied UI auto-summary ====
+Ideally it would be possible to create an algorithm that determined a summary (longer than a tweet, but not the whole thing) in a predictable enough way that you could "just" write your note, knowing that the (???) part of it would automatically become the summary.
+
+Some thoughts:
+* auto-excerpt:
+** first paragraph
+** first paragraph or list break after 140 characters
+* ...
+
+This could be highly personalized, that is, an algorithm that an author chooses (perhaps from a few choices) because they may be more familiar with their writing style and how effective any particular algorithm would be without having to alter their writing style.
+
+==== More text UI ====
 Why a new summary indicating UI: I wanted a better UI solution for authoring a p-summary than having to explicitly author <code>p-summary</code> markup, or have a separate text field for entering a summary. - {{t}}
 
 Thoughts ({{t}})
 * The author could simply put the explicit text content "More..." or "More:" in its own paragraph  as a way of indicating that everything in "content" before the "More" should be considered the summary.
 * The consuming code (your authoring tool) could remove the "More" text and automatically markup wrap the text before it with: <br/><code>&lt;span class="p-summary"&gt; ... &lt;/span&gt;</code>
 
+==== Summary for private posts ====
+When publishing certain private posts, one can use a summary to publish '''some''' information about the private post, announcing it's existence, but not publish the whole content.  Such a post can be identified as an [[iceberg post]].
+
 == See Also ==
 * [[h-entry]]
 * [[link-preview]]
 * [[featured]]
+* [[tagline]]

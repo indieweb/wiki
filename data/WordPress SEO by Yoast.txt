@@ -1,28 +1,45 @@
-http://indiewebcamp.com/WordPress_SEO_by_Yoast
+https://indieweb.org/WordPress_SEO_by_Yoast
 
 {{stub}}
 
-'''<dfn>[https://yoast.com/wordpress/plugins/seo/ WordPress SEO by Yoast]</dfn>''' is a plugin for WordPress that offers a variety of features intended to improve [[SEO]].
+'''<dfn>[https://yoast.com/wordpress/plugins/seo/ WordPress SEO by Yoast]</dfn>''' is a plugin for [[WordPress]] that offers a variety of features intended to improve [[SEO]].
+
+== IndieWeb Examples ==
+* {{gwg}} uses WordPress SEO by Yoast on his site.
+* . . .
 
 == Features ==
 * Additional fields "SEO Title" and "Meta Description" are added to each post. If filled in, the <code>title</code>, <code>meta</code>, and [[OGP]] meta elements will be filled in accordingly. WordPress uses its built-in title field to generate [[URL slugs]], so this separate set of fields can account for a different post title in the <code>title</code> element vs. the page heading and the URL slug. Reference [http://indiewebcamp.com/irc/2015-05-14#t1431637903639 discussion on 2015-05-14].
 * . . . 
 
-==WordPress Criticisms ==
+== Criticism ==
+=== WordPress Criticisms ===
 
 WordPress 4.1 introduced support for the [https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/ title-tag] in October of 2014.
 
-This resolved a four year old issue filed by Yoast, the creator of this plugin 
+This resolved a four year old issue filed by Yoast, the creator of this plugin.
 
-"Right now, title tags in themes are created by using wp_title and than adding on custom code, usually bloginfo('name'), sometimes other code. Because there's basically no way for a plugin to control the entire content of a title tag, all major SEO plugins resort to output buffering. "
+<blockquote>"Right now, title tags in themes are created by using wp_title and than adding on custom code, usually bloginfo('name'), sometimes other code. Because there's basically no way for a plugin to control the entire content of a title tag, all major SEO plugins resort to output buffering. "<cite>https://core.trac.wordpress.org/ticket/18548##Right+now,+title+tags</cite></blockquote>
 
 The solution is pending.
 
-"To maintain full forward compatibility, plugins can not check for theme support of title tags, and are discouraged from building functionality around it just yet. The long term plan is to enable users to manage document titles from their admin, independent of which theme they’re using. At that time it will also become more plugin friendly. To make sure this can be achieved however, it was important to rule out backwards compatibility concerns as much as possible."
+<blockquote>"To maintain full forward compatibility, plugins can not check for theme support of title tags, and are discouraged from building functionality around it just yet. The long term plan is to enable users to manage document titles from their admin, independent of which theme they’re using. At that time it will also become more plugin friendly. To make sure this can be achieved however, it was important to rule out backwards compatibility concerns as much as possible."<cite>https://make.wordpress.org/core/2014/10/29/title-tags-in-4-1/##To+maintain+full+forward</cite></blockquote>
 
-== Indieweb Examples ==
+As of August 2015, title tag support is required in all themes in the WordPress repository...<cite>https://make.wordpress.org/themes/2015/08/25/title-tag-support-now-required/</cite>.
 
-* {{gwg}} uses WordPress Seo by Yoast on his site.
+=== rel-canonical links ===
+The plugin adds [[rel-canonical]] links, but it does not assume that the <code>http</code> and <code>https</code> versions of a page are the same, so they will have different rel-canonical links by default. There does not appear to be any setting in the plugin to change this behavior.
+
+The plugin does have a filter, <code>wpseo_canonical</code>, so you can alter the canonical link before it's displayed. 
+
+For example, to make the canonical link always be https:
+
+<code><nowiki><?php add_filter('wpseo_canonical', function($url) { return str_replace('http://', 'https://', $url); }); ?></nowiki></code>
+
+<cite>https://yoast.com/wordpress/plugins/seo/api/</cite>
 
 == See Also ==
+* [[SEO]]
 * . . .
+
+[[Category:WordPress]]

@@ -1,0 +1,74 @@
+https://indieweb.org/Transformative
+
+'''<dfn>[https://github.com/barryf/transformative Transformative]</dfn>''' is {{barryf}}'s open source IndieWeb personal website software, in use at [https://barryfrost.com barryfrost.com] since 2016-11-10. All [https://github.com/barryf/transformative source code] is available on GitHub. Content and media are also stored in a git repository and any changes pushed via a webhook to the database cache.
+
+== IndieWeb ==
+
+=== [[Microformats]] ===
+* Accepts Microformats2: [[h-entry]], [[h-event]], [[h-cite]] and [[h-card]]
+* Stores all content in Microformats2 JSON format 
+** Examples: [https://github.com/barryf/content/blob/master/2016/11/colophon.json] [https://github.com/barryf/content/blob/master/2016/11/i-ll-be-happy-to-thanks.json] [https://github.com/barryf/content/blob/master/2016/08/england-v-pakistan-test-match-day.json]
+* [[reply-context]] (and Repost and Like contexts) parsed and stored as h-cites
+** Examples: [https://github.com/barryf/content/blob/master/cite/https/aaronparecki/com/2016/08/23/2/micropub-cr.json] [https://github.com/barryf/content/blob/master/cite/https/snarfed/org/2015-11-29/keep-bridgy-publish-dumb.json] [https://github.com/barryf/content/blob/master/cite/https/twitter/com/timblair/status/775932572765347842.json]
+* Webmention source parsed and stored as h-cites
+** Examples: [https://github.com/barryf/content/blob/master/cite/https/rmendes/net/2016/barryf-test-webmention-transformative-is-a-microblogging-engine-that-powers.json] [https://github.com/barryf/content/blob/master/cite/https/calumryan/com/note/382.json] [https://github.com/barryf/content/blob/master/cite/https/twitter/com/nstanley/status/796386564456771584.json]
+* Context and webmention authors parsed and stored as h-cards
+** Examples: [https://github.com/barryf/content/blob/master/card/https/aaronparecki/com.json] [https://github.com/barryf/content/blob/master/card/https/kylewm/com.json] [https://github.com/barryf/content/blob/master/card/https/snarfed/org.json]
+* Implements [[post-type-discovery]] (plus addition of proposed [[bookmark]] type)
+* Native entry types: 
+** Note
+** Article
+** Photo
+** Video
+** Bookmark
+** Reply
+** Repost
+** Like
+** RSVP
+** Check-in
+
+=== [[Micropub]] ===
+* Full Micropub endpoint
+* Create posts via form-encoded and JSON methods
+* Update, delete and undelete posts
+* Photos via media endpoint and multipart 
+* Query config, syndications and source
+* [https://micropub.rocks/implementation-report/server/30 Micropub implementation report for Transformative]
+
+=== [[Webmention]] ===
+* Webmentions are sent from all posts using [http://github.com/indieweb/mention-client-ruby mention-client-ruby]
+* Passes all 21 discovery tests on [https://webmention.rocks/ Webmention.rocks]
+* Sends and receives new, updated and deleted webmentions
+* Recognises replies, likes, reposts and RSVPs
+* [https://github.com/w3c/webmention/blob/master/implementation-reports/transformative.md Webmention implementation report for Transformative]
+
+=== [[POSSE]] ===
+* Syndication to Twitter of posts
+* Syndication to [[Pinboard]] of bookmarks via its API
+
+=== [[person-tag]] ===
+* Posts can be created with h-card URLs as categories
+* person-tag h-card is parsed and person's name is displayed as category (tag)
+
+== Features ==
+* Storage of all content in a public GitHub repository to view, fork and (pull-)request corrections
+** Example: [https://github.com/barryf/content]
+* Rebuildable database (only) used for caching/querying of MF2 JSON data
+* Media stored in GitHub and served from Amazon [[S3]]
+* [[WebSub]] pings sent after post creation/update
+* [[indie-action]] buttons to allow actions directly from a post
+* Forces all pages and content to be served over SSL
+* Location support: place names and geo: URLs
+* RSS and JSON feeds of posts
+* View posts by categories/tags
+* Monthly archive index pages
+* Navigate index pages using pagination
+
+== Requirements ==
+* Ruby 2.3.x
+* PostgreSQL 9.4 or newer
+* GitHub account 
+* AWS S3 bucket
+
+== See Also ==
+* [[projects]]

@@ -1,8 +1,45 @@
-http://indiewebcamp.com/location
+https://indieweb.org/location
 
 {{stub}}
 
 '''<dfn>location</dfn>''' is a key aspect of [[checkin]] and [[event]] [[posts]]. It's also sometimes an aspect of posts in general, e.g. where a [[note]] or [[photo]]/[[video]] was posted from. The aspect of location is sometimes referred to as [[geo]] for short.
+
+== Indieweb Software ==
+
+* Wordpress' [https://wordpress.org/plugins/simple-location/ simple location plugin] displays location data for posts
+[[File:wordpress-simple-location-frontend.png]]
+
+* [[Known]] supports [[checkin]]s and displays a map
+
+== Silo Examples ==
+* [[Instagram]] displays the location below the title on detail pages and links it to a location page on the platform.
+[[File:instagram_location.png]]
+
+* When you mention "place" in a post, [[Facebook]] will prompt you to add a location to the post. [[File:facebook-add-location-prompt.png]]
+
+== IndieWeb Examples ==
+=== Aaron Parecki ===
+* {{aaronpk}} displays location information with posts, e.g. https://aaronparecki.com/2016/09/19/18/
+[[File:location aaronpk.png]]
+
+=== Jeena Paradies ===
+* {{jeena}} displays a map in photo posts, e.g. https://jeena.net/photos/183
+[[File:location jeena.net.png]]
+
+=== Michael Bishop ===
+* {{miklb}} shows a small map in photo posts, e.g. https://miklb.com/social/2016/08/20/58448/
+[[File:location miklb.png]]
+
+=== Jeremy Keith ===
+* {{adactio}} on adactio.com [http://adactio.com/notes/6803/ since 2014-05-27] with a naked h-geo inside the note h-entry.
+[[File:location adactiocom.png]]
+
+=== Barnaby Walters ===
+* [[User:Waterpigs.co.uk|Barnaby Walters]] using [[Taproot]] on waterpigs.co.uk [http://waterpigs.co.uk/notes/285/ since 2012-09-22]
+[[File:location waterpigscouk.png]]
+
+=== Jonny Barnes ===
+* {{jonnybarnes}} does two things. If the post simply has co-ordinates, these are included in <code>data</code> tags, and a text representation derived from OpenStreetMap’s Nominatim service is displayed. The first example of this is from 2014-01-08. This is marked up with h-adr microformats. If there is an existing venue, then this is added to the note with a map and marked up with h-card microformats. The first time this was done was 2016-10-05. See https://jonnybarnes.uk/notes/CB and https://jonnybarnes.uk/notes/Bs
 
 == Enabling Technologies ==
 * Markup / microformats
@@ -12,12 +49,14 @@ http://indiewebcamp.com/location
 * Data exchange
 ** [http://geojson.org/ GeoJSON]
 * Location Services
-** [http://geoloqi.com Geoloqi]
+** <s>[http://geoloqi.com Geoloqi]</s> (now offline)
 ** OSM [[Nominatim]]
 * Venues database
 ** [https://wiki.openstreetmap.org/wiki/API OpenStreetMap API] and [https://wiki.openstreetmap.org/wiki/Databases_and_data_access_APIs data access]
 ** [http://www.geonames.org/export/ws-overview.html Geonames Web Services]
 *** findNearbyPlaceName used by StatusNet
+* Open Source
+** [https://github.com/aaronpk/Atlas Atlas] - APIs for looking up timezone information, geocoding, weather information, and generating static maps
 
 == How ==
 === How to determine the location of a microformat ===
@@ -31,6 +70,7 @@ In more detail (pseudocode):
 * let <var>location-sources</var> be a list of microformats, containing the following, in this order:
 ** <var>mf</var>
 ** if <var>mf</var> has a ''location'' property which is a microformat, that value
+*** 2017-06-06 addition: if that value has an ''adr'' property, that value
 ** if <var>mf</var> has an ''adr'' property which is a microformat, that value
 ** if <var>mf</var> has a ''geo'' property:
 *** if the geo property is a microformat, that value
@@ -47,6 +87,12 @@ In more detail (pseudocode):
 ** latitude
 ** longitude
 ** altitude
+
+==== issues ====
+2017-06-06 {{sknebel}} added an extra step to deal with the case that a ''location'' property is an [[h-card]] which itself has an ''adr'' property
+
+==== implementations ====
+[[mf2util]] – [https://github.com/kylewm/mf2util/pull/15] (used by [[granary]], [[bridgy]])
 
 == Motion ==
 Location information may also contain indication about motion, e.g. a person at a location, but in motion, by some method. Such information in practice includes things like:
@@ -72,6 +118,12 @@ The most common textual description is merely the locality, region, and country.
 From a Microformats point of view, once a location has a name(The Ray and Maria Stata Center, for example), it goes from an address to a venue(and a h-adr to a h-card).
 
 The utility of displaying coordinates is debatable. While having them available can be useful...for example, to allow location to be identified on a map, they do not, by themselves, enhance human conception of a where a person is.
+
+== Issues ==
+=== Beware of IP Mapping ===
+If you use "IP Mapping" to autogenerate or autosuggest a location for your posts, beware that may give you really bad artificial precision, thus implying you were somewhere you were not, e.g as illustrated by this article:
+* 2016-04-10 [http://fusion.net/story/287592/internet-mapping-glitch-kansas-farm/ How an internet mapping glitch turned a random Kansas farm into a digital hell]
+** 2016-04-12 Update: [http://fusion.net/story/290772/ip-mapping-maxmind-new-us-default-location/ This is the new digital center of the United States]
 
 == See Also ==
 * [[geo]]

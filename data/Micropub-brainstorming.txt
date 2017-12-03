@@ -1,23 +1,20 @@
-http://indiewebcamp.com/Micropub-brainstorming
+https://indieweb.org/Micropub-brainstorming
 
+[[Category:Micropub]]
 {{main|Micropub}}
 
+Questions posed here also can make good candidates for [[Micropub-extensions]], and there is currently some overlap with this page.
+
+== Brainstorming ==
+The following are various thoughts about how to use or extend Micropub, potentially beyond what the spec requires (additional details), or allows (additional features).
+
+If one of these brainstorms helps solve a problem you're working on (one of your own [[itches]]), please add to it, describing how and why!
+
 === Syndicating a Post ===
-{{section-stub}}
 
-After a post is already created, it is sometimes desirable to syndicate a copy of it elsewhere. For example if I first post a photo to my site, then want to syndicate it to Twitter and Facebook after the fact.
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;"> '''Syndication is [https://www.w3.org/TR/micropub/#syndication-targets described in the standard] – subsections that are covered by this have been moved to the [[#resolved]] section.'''</p>
 
-==== Simple Example ====
-A simple micropub request to syndicate an existing post may look like this:
-
-<pre>
-POST /micropub
-
-mp-url=http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp
-&mp-syndicate-to=https://twitter.com/aaronpk
-</pre>
-
-The micropub endpoint will retrieve the contents of the original post (including a photo if present) and syndicate it to the targets listed in the "syndicate-to" parameter.
+After a post is already created, it is sometimes desirable to syndicate a copy of it elsewhere. For example if I first post a photo to my site, then want to syndicate it to Twitter and Facebook after the fact. 
 
 ==== Custom Syndication Content ====
 
@@ -25,7 +22,7 @@ What if you want to provide custom text to the site you are syndicating to? For 
 
 This may look like a standard micropub request where there is just no h=entry value since it's not creating a new post on the author's site. This way we can include a "content" field.
 
-<pre>
+<pre style="font-size:80%">
 POST /micropub
 
 mp-url=http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp
@@ -35,7 +32,7 @@ mp-url=http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp
 
 TODO: Is this a reasonable alternative POST request to specify custom content for multiple silos? No implementations of this yet.
 
-<pre>
+<pre style="font-size:80%">
 POST /micropub
 
 mp-url=http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp
@@ -47,7 +44,7 @@ mp-url=http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp
 
 In PHP and Ruby, this is interpreted as the following object (shown as JSON for convenience):
 
-<pre>
+<pre style="font-size:80%">
 {
   "mp-url": "http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp",
   "mp-syndicate-to": [
@@ -60,6 +57,539 @@ In PHP and Ruby, this is interpreted as the following object (shown as JSON for 
   }
 }
 </pre>
+
+
+
+===== Scope =====
+A micropub endpoint may wish to restrict syndicating to some or all targets, only explicitly allowing it for specific clients. This can be accomplished with the "scope" parameter when the access token is obtained.
+
+=== Alternate Content Types ===
+Q: should a markdown-based client send the "content" field as markdown or rendered html? If the latter, should it send an auxiliary field with the raw markdown?
+* Backends that store posts as markdown will want the raw version.
+* Sending HTML means that even endpoints that don't use markdown could make use of a markdown editor for authoring.
+* {{aaronpk}} points out that this will not be very useful without the ability to fetch raw content, and resubmit an edited version (which will mean expanding the spec significantly)
+* {{benthatmustbeme}} a better method might be for the client to have some method to ask for content send format, then its not much change in the spec and its on the client to send in the correct format.  I use ?url=<permalink> for getting the raw source from the MP endpoint.  does not add much to the spec
+* {{sknebel}} 2017-04-09 Querying source is part of the spec and has been by now for quite a while: https://www.w3.org/TR/micropub/#source-content
+** the ability to specify that some content is specifically Markdown is still missing
+
+=== Micropub for Comments ===
+
+Goal: if Aaron is reading Barnaby's website, create an inline comment form on Barnaby's site that can post a comment directly to Aaron's website.
+
+If Aaron's site supports Micropub, Aaron's browser (or Barnaby's server) could make a Micropub request with the contents of the comment form directly to Aaron's website. However, Aaron cannot trust either Barnaby's comment form (it could have malicious hidden properties or change the request before submitting) or Barnaby's server.
+
+==== Trust-Less Micropub ====
+
+Rather than Aaron's server issuing an access token to Barnaby's server (which essentially would allow Barnaby's server to post content on Aaron's site as Aaron), "trust-less Micropub" describes a way to support posting content via Micropub without granting full access to the third party client.
+
+1. Aaron is reading a post on Barnaby's website and wants to comment. He fills out the comment form and clicks the "sign in to post" button. 
+
+TODO: screenshot mockup 
+
+2. Barnaby's site begins the IndieAuth "authentication" flow to discover Aaron's website and his micropub endpoint. The request only includes the "comment" (or maybe "preview"?) scope value, and not the "post" scope, since Barnaby's site is merely trying to identify Aaron, not obtain authorization to act as him.
+
+TODO: screenshot mockup 
+
+3. After successfully signing in, Barnaby's server now has an access token for Aaron's site and knows his Micropub endpoint.
+
+4. When Aaron submits the comment form, Barnaby's server (or Aaron's browser, it's equivalent) makes a POST request to Aaron's Micropub endpoint containing the following:
+* comment text
+* other required micropub fields (e.g. h=entry)
+* access token
+* redirect URI - where to redirect Aaron's browser to after the comment is posted
+
+5. Rather than immediately posting the comment, Aaron's browser is directed to Aaron's own website with a token in the URL corresponding to the comment request. Aaron's website authenticates Aaron however it wants, and displays the request of the action Barnaby's website is trying to take. This may look something like the following:
+
+TODO: screenshot mockup 
+
+6. After Aaron approves the request, his server posts the comment and then redirects his browser to the redirect URI specified in the original request, taking him back to Barnaby's post.
+
+
+See the [http://indiewebcamp.com/irc/2014-05-22#t1400801724 original IRC discussion].
+===== for edits =====
+This could also be useful to propose edits (e.g. spell fixes) to a blog post. Since MP has access to the source, this potentially could be a very nice way to offer and quickly accept them (similar to GitHub pull requests maybe)
+
+Would be an alternative to the proposed concept of [[edit_post]]s.
+
+==== Action Handler Discovery ====
+
+{{main|mp-config}}
+
+An alternative to [[indie-config]] for discovering the user's action handler URLs. This method does not require a JavaScript or a custom schema handler to be registered in the browser, but it does require the user to support micropub and be signed in on the site they are browsing.
+
+=== Query for other information ===
+{{benthatmustbeme}} - I currently support q= for several option: q=syndicate-to (mentioned on  [[Micropub]]), q=indie-config (for my [[indie-config]]), q=actions and q=json_actions ( see [[mp-config]]), and I have also suggested using q=config to update indie-config/mp-config.  There are also several other suggestions below.
+
+Perhaps we should add q=commands to get a list commands supported by q=
+
+Its also worth nothing that I am using <micropub endpoint>?url=<permalink> to request an actual post before rendering for editing/updating.  This should probably be moved do a ?q=get_post&url= or something like that
+
+==== Query for Webmentions ====
+It would be nice to be able to get a list of recent webmentions, or more fine grained like comments, likes, tags, etc.  (perhaps by q=webmentions, q=likes) so that an app can periodically poll for recent mentions and notify the user.
+* I think this is best left to parsing the HTML of the page that has the comments, since they are presumably there already. If you're talking about requesting the *source* of a particular comment for editing, then that is something to consider for the micropub endpoint. But fetching information that is already on the HTML page should not be something the micropub endpoint does. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 11:16, 5 January 2015 (PST)
+* They are on individual posts, I am talking about a method to poll notifications across all posts.  Most Silos, (Facebook, Twitter, G+) all have some system of when you login or refresh it will show an icon and # of unread notifications.  These can range from "you were tagged in a photo", "<person> commented on/replied to your post", "12 people liked your post", all containing links to corresponding posts/people.  This is not something that would usually be public posted.  {{benthatmustbeme}} 2:22, 5 January 2015 (EST)
+* I still think this is better left outside the scope of Micropub. For example, you could create an HTML page that requires authentication that lists all mentions. For example, I list all mentions I have received publicly at http://aaronparecki.com/mentions <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 09:23, 26 March 2015 (PDT)
+
+==== Query for contacts ====
+For apps to be able to autocomplete by known contacts we need some way to query these values.  q=contact&search=aaron would do a search for any field which matches .*aaron.* thereby allowing the client application to suggest autocompletions and insert links.  This would be very useful for [[person-tag]]
+
+==== Query for places ====
+I’m currently setup so that when I create a new note, I can add a place to that note. Therefore I need to query for already created nearby places to see if the place I want has already been created. I’m currently doing this by making my client query the micropub endpoint with a query like: <code>GET /micropub?q=geo:lat,lng</code>. Then only nearby places are returned by the endpoint.
+
+I think the above paragraph was from me. Got this working pretty well now. Also uncertainty is suported, i.e. <code>GET /micopub?q=geo=lat.lng;u=XX</code>. Currently this request needs an associated authentication token. My endpoint currently provides a JSON response that for each place contains a display name, and lat/lng value in order for the place to be diplayed on a map, and a URL. This URL can be used as the location value in the subsequent micropub request.
+
+[[User:Jonnybarnes.uk|jonnybarnes]]
+
+==== Query for software version ====
+While setting up a new micropub client I noticed [[Micropub/Servers#Implementation_status]]  This would be really helpful if I could fetch a version string of some sort from the endpoint and attempt to autoconfigure for that user's server software.  Not as ideal as discovering all supported fields, but would be a very simple addition that servers could easily return.
+
+==== Query for post list ====
+This would be super handy for clients wanting to present a list of posts to edit/delete/undelete.
+I have implemented an extension to the q=source query on my micropub endpoint, if no url is provided it returns a list of posts. I have not paginated it yet but that is the plan.
+
+Another advantage of this extension is that your micropub server is just responsible for storing and listing posts as microformats, rendering posts can be another bit of software's responsibility 
+
+<pre>
+{
+ "items": [
+  {
+    "type": [
+      "h-entry"
+    ],
+    "properties": {
+      "h": [
+        "entry"
+      ],
+      "like-of": [
+        "https:\/\/en.m.wikipedia.org\/wiki\/Poka-yoke"
+      ],
+      "uid": [
+        "20170820131258_59998adae54d0"
+      ],
+      "published": [
+        "2017-08-20T13:12:58+00:00"
+      ]
+    }
+  },
+  {
+    "type": [
+      "h-entry"
+    ],
+    "properties": {
+      "h": [
+        "entry"
+      ],
+      "photo": [
+        "https:\/\/media.j4y.co\/2017\/cfd007ec-c819-47da-99a2-daec2e91a41e.jpg"
+      ],
+      "published": [
+        "2017-08-19T18:30:40+00:00"
+      ],
+      "content": [
+        ""
+      ],
+      "category": [
+        ""
+      ],
+      "uid": [
+        "20170819175715_59987bfb72c4f"
+      ]
+    }
+  }
+}
+</pre>
+
+=== Alternative form markup first ===
+An alternative design approach would be form markup first rather than HTTP protocol first.
+
+See related:
+* http://microformats.org/wiki/hcard-input
+
+If we can figure out how a <code>&lt;form class="h-entry"&gt;</code> should work from a markup / posting UI perspective, then maybe we can derive a protocol from how that uses HTTP accordingly.
+
+(this section is a stub, feel free to expand with a complete form element code example that shows what a form for posting a new h-entry or editing an existing h-entry would look like in terms of minimal HTML markup, then we can figure out the HTTP interaction from that)
+
+=== Micropub for Multi-user Sites ===
+
+Added by: [[User:Kylewm.com|Kylewm.com]] 21:55, 30 May 2015 (PDT)
+
+Thinking about how to support multi-user (i.e. a site where each user does not have a unique (sub)domain) with indieauth/micropub. 
+
+Right now the best bet seems to be each user having a different path that is their unique URL identity, and having them log in to micropub services with this full path. To me this feels a bit awkward, since they are thinking "I want to use this service to post to <nowiki>mysite.com</nowiki>" not "<nowiki>mysite.com/profile/username</nowiki>".
+
+I'm wondering if the protocol can/should support the simpler login. Imagine a [[Known]] plugin that implements all three endpoints (authorization, token, and micropub). This plugin is deployed on <nowiki>http://mysite.com</nowiki> and has users "kyle" and "laura".
+
+* kyle logs into Woodwind with the URL <nowiki>http://mysite.com</nowiki>. Known's internal indieauth provider prompts for his password, and returns an authorization code and eventually access token. 
+** Woodwind registers a new account for the domain <nowiki>http://mysite.com</nowiki> where it stores kyle's access token, subscriptions, preferences, etc.
+* Later, laura logs into Woodwind with the URL <nowiki>http://mysite.com</nowiki>. Known's internal indieauth auths her, and gives back an access token that uniquely identifies her.
+** Woodwind overwrites kyle's information stored in the <nowiki>http://mysite.com</nowiki> account with laura's.
+
+One possible solution is to let the authorization_endpoint return a more specific "me" value than it was given. The user logs into Woodwind with <nowiki>http://mysite.com</nowiki>, it redirects to the authorization_endpoint which tells Woodwind their actual "me" value is <nowiki>http://mysite.com/users/kyle</nowiki>. 
+* I could use a sanity check on how safe this is. It's super important that the micropub client re-discover its authorization and token endpoints when validating the returned "me"+"code", but that's true anyway. 
+
+Alternatively, the authorization endpoint could return some more information to the micropub client, like an optional "user id". So in the example above Woodwind would store two different accounts with <nowiki>(domain=mysite.com, user id=kyle)</nowiki> and <nowiki>(domain=mysite.com, user id=laura)</nowiki>.
+* I would guess nobody wants indieauth/micropub to act like this.
+
+Also open to the possibility that this is out of scope or undesirable.
+
+==== Users using their own identities to log-in to a community blog. ====
+
+This may assume [[#Multiple_Micropub_Endpoints|Multiple Micropub Endpoints]] are a thing first. Though this isn’t a must.
+
+Say Alice and Bob both have their own [[homepage]], <code>alice.test</code> and <code>bob.test</code> respectively. Now they both want to use Micropub to post to a communal blog, say <code>microformats.org</code>. Both of them have added the Micropub endpoint for the blog on their homepage.
+
+Bob is using [[indieauth.com]] and the provided [[token-endpoint|token endpoint]] service <code>tokens.indieauth.com</code>. But Alice is hosting [https://github.com/barryf/acquiescence Acquiescence] herself because she wants to stay in charge of her own login flow and wants to be able to easily revoke tokens.
+
+In this situation it is impossible for Alice and Bob to use Micropub for the communal blog. They are required to use the same token endpoint. Although token endpoints are part of the IndieAuth protocol, in the case of Micropub they are tied to the Micropub endpoint and not to the individual user identity.
+
+Is there some way around this?
+
+* Think about it from the opposite perspective. The goal is to use a Micropub client to post to the Micropub endpoint at microformats.org. As such, that endpoint should be the one issuing and verifying tokens. How it *authenticates* users is up to that site.
+** Open a Micropub client such as Quill, and enter <code>microformats.org</code> into the login box
+** Quill will do the Micropub/IndieAuth discovery on microformats.org, and redirect the user to the login page on microformats.org
+** At that point, microformats.org can ask who is there, by performing [[indieauth-for-login]] (not authorization) and getting the identity of the user that way
+** microformats.org can respond to Quill with a <code>me</code> URL that is unique to the user who authenticated, so that Quill can store preferences per person.
+** When Quill makes the micropub request to the microformats.org micropub endpoint, it does so using a token that was issued by microformats.org, so it will know the user who made the post
+* <span class="h-card" style="white-space:nowrap">{{sparkline|https://aaronparecki.com/photo.jpg}} [[User:Aaronparecki.com|Aaron Parecki]]</span> 09:34, 22 November 2017 (PST)
+
+* {{martijnvdven}}: that makes sense, just needs a small mental recalibration. Instead of telling a Micropub client your identity, you tell it which website you want to log in to. That would also solve [[#Multiple_Micropub_Endpoints|Multiple Micropub Endpoints]] of course. Just wondering if I should bother with a token endpoint implementation linked from my homepage at all, if recommended practice is going to be that endpoints internally all implement their own.
+
+=== Explicit Post Types ===
+It may be benefitial in some situations to specify a post type when creating a post.  This is important when posts are organized by type or styled differently depending on type.  For example is a post with a location a note that is just tagging a location, or a checking with commentary?
+
+{{benthatmustbeme}} uses mp-type= to specify the type of post to be created in [[Postly]] and [[MobilePub]].
+
+=== Token Verification Endpoint ===
+To make it easier for a client to verify whether a token it possesses is valid or not for publishing at a Micropub endpoint a verification endpoint that just returns success or failure depending on whether its valid or not would be beneficial.
+
+{{voxpelli}} has added a "/verify" resource at his [https://github.com/voxpelli/node-micropub-express micropub endpoint] that to a GET request responds with a 200 or 400 code depending on whether the token is valid or not.
+
+* Note that there is already a "stub" in the spec for this, by making an HTTP GET request with no parameters to the micropub endpoint. It would need to be made explicit by returning a specific error code for invalid tokens, and document the exact parameters to be expected in the response. See: [[Micropub#Verification|Verification]]. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:16, 20 July 2015 (PDT)
+
+=== Multiple Micropub Endpoints ===
+Some people have expressed the desire to use their primary identity with multiple Micropub endpoints. (Note that you can already have multiple micropub endpoints by using different identities, such as a subdomain or subfolder of your website.) 
+
+In many cases, the wish is to not necessarily expose the additional Micropub endpoints on their home page as well.
+
+==== Use Cases ====
+Please document use cases here, along with your name. Feel free to add your name to any existing use cases that you are interested in as well.
+
+* Testing a micropub endpoint while signing in with your primary identity 
+** <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:41, 20 July 2015 (PDT)
+* Multi-author blogs, such as a company or community blog
+** <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:41, 20 July 2015 (PDT)
+* Sending content from a specific source to a different backend storage
+** I want all my iPhone and digital camera photos to be sent to a photo archive, a distinctly different system than my website. Currently they auto-upload to Flickr from my Eye-Fi card, but Eye-Fi is shutting that down soon and I want to store my own photo archive anyway. These are distinctly different kinds of photos than the ones that go in my main photo stream. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 13:36, 21 July 2015 (PDT)
+
+==== Possible Specs ====
+
+The Micropub client discovers the user's IndieAuth endpoint and token endpoint only, and does not look for the micropub endpoint in a rel value.
+
+The client directs the user to their authorization endpoint, where it gives them the authorization prompt.
+
+[[File:choose-micropub-endpoint-mockup.png]]
+
+The authorization prompt includes a list of possible micropub endpoints the user can choose. (Note that this list could be presented *after* the user authenticates, in case the user wants to keep the list confidential.) The mockup above is integrated with the indieauth.com service, but could be implemented at your own authorization server as well. 
+
+Once the user approves the request, it stores the micropub endpoint selection, generates the authorization code and redirects the user to the client.
+
+When the client exchanges the authorization code for an access token, the response also includes the micropub endpoint that the user selected. This means the token endpoint would return a response such as the following:
+
+<pre><code>
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "access_token":"xxxxxxxxx",
+  "scope":"create",
+  "me":"https://aaronparecki.com/",
+  "micropub_endpoint":"https://aaronparecki.com/micropub"
+}
+</code></pre>
+
+Notes:
+* If indieauth.com (or some other public authorization server) is going to present this list, then it will need a way to discover the multiple endpoint options, so the best way would be to advertise multiple "rel=micropub" endpoints on the user's home page, making it look not very different from the way it works now.
+* If your own authorization server is presenting the list, you can keep the list confidential, or have your own way of adding things to the list.
+
+==== Alternative Possible Spec ====
+
+The Micropub client may discover the Micropub endpoint separately from user's IndieAuth endpoint and token endpoint only. Either it may first prompt the user to enter a URL with a Micropub endpoint or a URL with an authorization endpoint.
+
+If the client decides to ask for a site with Micropub endpoint first and finds an authorization endpoint at the same site, then it would authorize using that endpoint. This is just how micropub works today -- the existence of a rel-authorization_endpoint indicates that that's the expected source of authorization. Otherwise it asks the user to provide another site where it can discover authorization details.
+
+If the client decides to ask the user for a site to get authorization through first and finds a Micropub endpoint there as well, then it would ask whether that's the place the user want to post or if the user wants to provide an alternative location. The reason to ask is that authorization is often discovered at personal sites that have Micropub endpoint themselves.
+
+If the user provides another site to post to then the client [http://indiewebcamp.com/micropub#Verification verifies] that the token it has gives that access before continuing.
+
+This flow is already possible with today's specification if clients were to implement this extended discovery practice.
+
+== Collections ==
+
+Micropub can be used to create [[collection]]s, as long as the server supports the Microformats "children" property, but we will need to define an extension in order to support updating collections.
+
+=== Create ===
+The following request would create a new collection with a name "Example Collection" that contains three posts referenced by their URLs.
+
+<pre>
+{
+  "type": ["h-entry"],
+  "properties": {
+    "name": ["Example Collection"]
+  },
+  "children": [
+    "https://example.com/post/a",
+    "https://example.com/post/b",
+    "https://example.com/post/c"
+  ]
+}
+</pre>
+
+This is already allowed in the [https://www.w3.org/TR/micropub/#json-syntax JSON Micropub syntax], since creating a post involves sending the parsed mf2 JSON representing the post.
+
+=== Update ===
+Since the [https://www.w3.org/TR/micropub/#update Micropub update syntax] doesn't explicitly scope the changes to the "properties" object, an extension to the spec is required in order to make changes to the "children" array.
+
+==== Add a new child URL ====
+<pre>
+{
+  "action": "update",
+  "url": "http://example.com/collection/100",
+  "children": {
+    "add": "http://example.com/post/d"
+  }
+}
+</pre>
+
+This would add the specified URL to the end of the list of children.
+
+==== Remove a child URL ====
+<pre>
+{
+  "action": "update",
+  "url": "http://example.com/collection/100",
+  "children": {
+    "delete": "http://example.com/post/b"
+  }
+}
+</pre>
+
+This would add the specified URL to the end of the list of children.
+
+After running the two operations on the collection, the collection would look like the following:
+
+<pre>
+{
+  "type": ["h-entry"],
+  "properties": {
+    "name": ["Example Collection"]
+  },
+  "children": [
+    "https://example.com/post/a",
+    "https://example.com/post/c",
+    "https://example.com/post/d"
+  ]
+}
+</pre>
+
+==== Reordering children ====
+A common operation will be specifying the order of the children, such as when ordering photos within an album. We can take some inspiration from the Flickr API for how to reorder photos with a simple API.
+
+The Flickr API endpoint <code>[https://www.flickr.com/services/api/flickr.photosets.reorderPhotos.html flickr.photosets.reorderPhotos]</code> serves the same function as we're looking for. The inputs to that method are the API key, photoset ID, and a list of photo IDs in the new order. "Ordered, comma-delimited list of photo ids. Photos that are not in the list will keep their original order." This has the benefit of not needing to assign new temporary IDs or refer to things by potentially unstable numeric offsets. As a Micropub request, this could look like the below:
+
+<pre>
+{
+  "action": "update",
+  "url": "http://example.com/collection/100",
+  "children": {
+    "order": [
+      "http://example.com/post/d",
+      "http://example.com/post/c"
+    ]
+  }
+}
+</pre>
+
+The resulting collection would then look like:
+
+<pre>
+{
+  "type": ["h-entry"],
+  "properties": {
+    "name": ["Example Collection"]
+  },
+  "children": [
+    "https://example.com/post/a",
+    "https://example.com/post/d",
+    "https://example.com/post/c"
+  ]
+}
+</pre>
+
+Note that the position of "a" wasn't changed since it wasn't included in the reorder request. This allows a UI to operate on a subset of items such as ones visible in a single page of a large collection, without needing to worry about how to specify which "page" or subset of items it's operating on.
+
+For example, with a collection of 15 items, and a UI showing only 5 at a time, the UI could send a request to specify the order of just the middle 5 items. An abbreviated example to illustrate:
+
+Before:
+<pre>a b c d e f g h i j k l m n o</pre>
+
+New order for a subset of items:
+<pre>j g h i f</pre>
+
+Resulting order:
+<pre>a b c d e j g h i f k l m n o</pre>
+
+
+== Past or other blog publishing APIs ==
+For past / reference purposes:
+* [https://en.wikipedia.org/wiki/MetaWeblog MetaWeblog API]
+* AtomPub (RFC)
+* WordPress API
+* ...
+
+== Provide end-user error messages ==
+
+Copied here from the original issue on GitHub: https://github.com/w3c/Micropub/issues/61
+
+In https://micropub.net/draft/#error-response it is specifically defined that any error message should not be shown to the end user, which means that any validation error or similar that may be due to special constraints in the micropub server – eg. enforcing some specific format of a slug or something – can't be communicated to the end user. The end user will only see something like <code>Invalid Request / An unexpected error has occurred</code> – which isn't very user friendly.
+
+Adding this as a follow up to [https://github.com/w3c/Micropub/issues/49 #49] as with this mechanism any such "errors" that's out of scope of Micropub could at least be handled in a graceful way through Micropub. Sorry for the late response.
+
+== Additional data formats ==
+
+At times interest has been expressed to be able to communicate in other formats than just plain text and HTML, for example to be able to save posts as Markdown. As an endpoint needs to know whether it should parse the content as Markdown or not it's not enough to save it as plain text – one needs to indicate to the endpoint that it's actually intended to be interpreted as Markdown, else some types of content – like code snippets – will easily get misinterpreted.
+
+Example plain text:
+
+<pre>
+@voxpelli I would do it like this: collection[key]('foobar');
+</pre>
+
+Which if wrongfully interpreted as CommonMark [http://spec.commonmark.org/dingus/?text=%40voxpelli%20I%20would%20do%20it%20like%20this%3A%20collection%5Bkey%5D(%27foobar%27)%3B results in]:
+
+<pre>
+@voxpelli I would do it like this: collection<a href="'foobar'">key</a>;
+</pre>
+
+There has been some suggestions to solve this + some issues:
+
+=== Suggestions ===
+
+==== Explicit new CommonMark format ====
+
+To mimic the current HTML data format to support [[CommonMark]] data by instead of "html" use "commonmark" as the key when saving the data.
+
+Enable discovery of supported formats by including a new "formats" key in ?q=config have that key, when set, include all supported formats: HTML, CommonMark and/or any format defined in the future.
+
+Example content:
+
+<pre>
+{
+  "content": {
+    "commonmark": "Some *markdown* content"
+  }
+}
+</pre>
+
+Example discovery:
+
+<pre>
+GET /?q=config
+
+{
+  "formats": ['commonmark', 'html']
+}
+</pre>
+
+
+==== Custom formats ====
+
+To define a new mechanism for expressing support for arbitrary kind of custom formats and supporting eg. CommonMark by it becoming a commonly defined such format.
+
+Example discovery and definition of custom format:
+
+<pre>
+GET /?q=config
+
+{
+  "custom-formats": [
+    {
+      "uid": "commonmark",
+      "name": "CommonMark",
+      "description": "A format using the standardized Markdown format CommonMark"
+    }
+  ]
+}
+</pre>
+
+Example use of custom format:
+
+<pre>
+{
+  "content": {
+    "formatted-value": "Some *markdown* content",
+    "format": "commonmark"
+  }
+}
+</pre>
+
+
+=== Possible specification issues ===
+
+* Non-HTML content required to be a string when fetching content: https://github.com/w3c/Micropub/issues/101
+
+* how to indicate support while Querying? (so non-supporting clients still see a plain-text version instead of getting an error) Are mp-… commands also allowed while querying to indicate support for this? Like e.g. <code>GET /micropub?q=source&mp-custom-formats=true&url=https://example.com/post/1000</code>
+
+=== Criticism ===
+
+Any reason not to add additional data formats?
+
+* Every time the spec provides multiple options to clients and servers, it decreases the likelihood that all clients and servers will be interoperable
+* If the ecosystem gets split between many main formats it increases the implementation effort needed for a new client or endpoint to get fully functional and thus makes the threshold for entry higher
+
+=== See more ===
+
+* Discussion that resulted in first version of this brainstorm: https://chat.indieweb.org/dev/2017-07-25#t1500997460917000
+* Micro.blog proposal to move to Markdown only: http://www.manton.org/2017/07/micro-blog-photos-from-marsedit.html
+
+== resolved ==
+=== Explicit CRUD ===
+
+This section has been incorporated into the spec.
+
+This is now solved by the JSON update/delete syntax. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 12:45, 24 June 2015 (PDT)
+
+* That should have been on the brainstorming page first.  But in any case, this leads to more complexity for endpoint implementer.  What do you do if edit-of and delete are both specified?  A single field for this would prevent these sorts of problems. {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} 20:14, 19 July 2015 (PDT)
+** Yes you're right, should have been on the brainstorming page first. While I don't agree that it adds complexity (it's a straightforward if/else check for edit-of vs delete-of), I realize now that it limits the addition of future actions such as "undelete-of". The "mp-action=delete" method means only one reserved property and allowing future actions to be defined. What do you think about updating that part of the spec? Basically changing the current "edit-of=http://..." to "mp-action=edit&url=http://..."? <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:50, 27 July 2015 (PDT)
+*** +1, I like this idea – would prefer to check for a mp-action=edit in my endpoint [[User:Kodfabrik.se|Kodfabrik.se]] 10:56, 27 July 2015 (PDT)
+
+Currently there is no field to specify delete.  Updates are implied by existence of a url= field.  Updates to content and adding a syndicate-to link simultaneously are not possible as it would be interpreted as syndication text.  I suggest we add a field to specify the CRUD operation.  [[Postly]] uses mp-action='create', mp-action='edit', mp-action='delete', and mp-action='undelete' (since deleting just removes from public view).
+
+* Since they are control parameters, <code>url</code> should be <code>mp-url</code>, and <code>syndicate-to</code> should be <code>mp-syndicate-to</code> [[User:Kylewm.com|Kylewm.com]] 17:02, 12 February 2015 (PST)
+
+* not sure that <code>mp-url</code> really makes sense.  <code>url</code> would appear in the post as its permalink, and would also appear as such in the microformats representation.  I don't think the mp- prefix would make sense here.  {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} 20:14, 19 July 2015 (PDT)
+
+=== Uploading files in separate requests ===
+Resolved through the existence of [[micropub media endpoint]]s
+
+[[micropub#Adding_Files]]
+
+Another approach to uploading files would work similar to one recommended in [[micropub#Nested_Microformat_Objects]], binary data gets send in first via one or multiple request while h-entry gets send later including links e.g. u-photo. This has another advantage of allowing to use different domain/endpoint for blobs like images/audio/video [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 04:35, 28 March 2015 (PDT)
+* I think any micropub endpoint creating h-entrys should be able to accept media like photo/audio/video as *both* a multipart-encoded file upload as well as a plain URL. I wouldn't want to require one or the other though. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 11:52, 4 April 2015 (PDT)
+
+
+=== syndication ===
+
+==== Simple Example ====
+A simple micropub request to syndicate an existing post may look like this:
+
+<pre>
+POST /micropub
+
+mp-url=http://aaronparecki.com/notes/2014/06/30/1/indiewebcamp
+&mp-syndicate-to=https://twitter.com/aaronpk
+</pre>
+
+The micropub endpoint will retrieve the contents of the original post (including a photo if present) and syndicate it to the targets listed in the "syndicate-to" parameter.
 
 
 ==== Syndicating likes, reposts, etc ====
@@ -174,14 +704,39 @@ Accept: application/json
 ===== Scope =====
 A micropub endpoint may wish to restrict syndicating to some or all targets, only explicitly allowing it for specific clients. This can be accomplished with the "scope" parameter when the access token is obtained.
 
-=== Alternate Content Types ===
-Q: should a markdown-based client send the "content" field as markdown or rendered html? If the latter, should it send an auxiliary field with the raw markdown?
-* Backends that store posts as markdown will want the raw version.
-* Sending HTML means that even endpoints that don't use markdown could make use of a markdown editor for authoring.
-* {{aaronpk}} points out that this will not be very useful without the ability to fetch raw content, and resubmit an edited version (which will mean expanding the spec significantly)
-* {{benthatmustbeme}} a better method might be for the client to have some method to ask for content send format, then its not much change in the spec and its on the client to send in the correct format.  I use ?url=<permalink> for getting the raw source from the MP endoint.  does not add much to the spec
+
+=== Multiple in-reply-to ===
+* This should be possible now with the form-encoded array syntax or JSON syntax. Servers should be able to accept multiple values for properties according to [[micropub#Syntax]]. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:22, 27 July 2015 (PDT)
+
+It would be nice to have multiple in-reply-to links posted in micropub.  With tags and syndicate-to, the values are given as a comma separated list.  However, "," is a valid URL character and even given as examples in [http://www.w3.org/TR/media-frags/].  This could potentially be a problem for syndicate-to as well.  POST methods already have a standard for passing arrays of values.  Perhaps we should be using those.
+
+PHP requires "[]" characters in the parameter name to be parsed as an array. Other languages (at least Python) do not, but it would probably make sense to make the [] part of the spec so that PHP implementations don't have to do their own special parsing. [[User:Kylewm.com|Kylewm.com]]
+
+
+=== form-encoded arrays vs csv fields ===
+
+This is now solved by the JSON update/delete syntax. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 12:45, 24 June 2015 (PDT)
+
+Right now a number of clients/endpoints support arrays in micropub post requests through the use of a csv fields.   This requires parsing of the form-encoded body, then further parsing the field values as CSV -> Array.  Most parsers support the notion of a form based array by appending [] to the end of keys that make up the array.  Supporting this would eliminate the extra step of parsing csv fields assuming everyone has access to a form-encoding parser that can support this.
+
+* http://indiewebcamp.com/irc/2014-09-25#t1411709579457
+* http://indiewebcamp.com/irc/2014-11-04#t1415123280010
+
+==== Parsers that support form arrays ====
+* [https://www.npmjs.org/package/body-parser body-parser.js]
+* ...
+
+=== HTML JSON Form Submission ===
+* 2017-04-09; moving this since this spec did not happen and we now have JSON syntax 
+
+Because handling arrays in form encoded POST requests is somewhat under defined, it may be nice to consider allowing a system similar to http://www.w3.org/TR/html-json-forms/ before json forms are adopted for browsers.
+
+* http://indiewebcamp.com/irc/2014-11-04/line/1415099806094
+* http://indiewebcamp.com/irc/2014-11-04/line/1415119586395
 
 === HTML Escaping ===
+*Explicitly marking content as "text" vs "html" has become part of the spec: https://www.w3.org/TR/micropub/#new-article-with-html
+
 Quill has two different interfaces for posting text content, one meant to post "notes" and the other for richly-formatted articles. 
 
 The note interface will pass text entered verbatim to the micropub endpoint in the "content" property. This means if you type HTML tags, they will not be escaped, and will be sent to the micropub endpoint, which if it does not escape HTML tags, will result in HTML tags in the final content. This is not good for plaintext notes when you may have typed "<3" for example. As such, it is recommended that micropub servers treat these properties as plaintext and escape the content (either when storing it or when displaying it).
@@ -260,227 +815,6 @@ h=entry
 
 * +1 to this proposal [[User:Kodfabrik.se|Kodfabrik.se]] 10:14, 27 July 2015 (PDT)
 * This is live on Quill as of 2015-09-09 [http://aaronparecki.com/notes/2015/09/09/1/]
-
-=== Micropub for Comments ===
-
-Goal: if Aaron is reading Barnaby's website, create an inline comment form on Barnaby's site that can post a comment directly to Aaron's website.
-
-If Aaron's site supports Micropub, Aaron's browser (or Barnaby's server) could make a Micropub request with the contents of the comment form directly to Aaron's website. However, Aaron cannot trust either Barnaby's comment form (it could have malicious hidden properties or change the request before submitting) or Barnaby's server.
-
-==== Trust-Less Micropub ====
-
-Rather than Aaron's server issuing an access token to Barnaby's server (which essentially would allow Barnaby's server to post content on Aaron's site as Aaron), "trust-less Micropub" describes a way to support posting content via Micropub without granting full access to the third party client.
-
-1. Aaron is reading a post on Barnaby's website and wants to comment. He fills out the comment form and clicks the "sign in to post" button. 
-
-TODO: screenshot mockup 
-
-2. Barnaby's site begins the IndieAuth "authentication" flow to discover Aaron's website and his micropub endpoint. The request only includes the "comment" (or maybe "preview"?) scope value, and not the "post" scope, since Barnaby's site is merely trying to identify Aaron, not obtain authorization to act as him.
-
-TODO: screenshot mockup 
-
-3. After successfully signing in, Barnaby's server now has an access token for Aaron's site and knows his Micropub endpoint.
-
-4. When Aaron submits the comment form, Barnaby's server (or Aaron's browser, it's equivalent) makes a POST request to Aaron's Micropub endpoint containing the following:
-* comment text
-* other required micropub fields (e.g. h=entry)
-* access token
-* redirect URI - where to redirect Aaron's browser to after the comment is posted
-
-5. Rather than immediately posting the comment, Aaron's browser is directed to Aaron's own website with a token in the URL corresponding to the comment request. Aaron's website authenticates Aaron however it wants, and displays the request of the action Barnaby's website is trying to take. This may look something like the following:
-
-TODO: screenshot mockup 
-
-6. After Aaron approves the request, his server posts the comment and then redirects his browser to the redirect URI specified in the original request, taking him back to Barnaby's post.
-
-
-See the [http://indiewebcamp.com/irc/2014-05-22#t1400801724 original IRC discussion].
-
-==== Action Handler Discovery ====
-
-{{main|mp-config}}
-
-An alternative to [[indie-config]] for discovering the user's action handler URLs. This method does not require a JavaScript or a custom schema handler to be registered in the browser, but it does require the user to support micropub and be signed in on the site they are browsing.
-
-=== Multiple in-reply-to ===
-
-It would be nice to have multiple in-reply-to links posted in micropub.  With tags and syndicate-to, the values are given as a comma separated list.  However, "," is a valid URL character and even given as examples in [http://www.w3.org/TR/media-frags/].  This could potentially be a problem for syndicate-to as well.  POST methods already have a standard for passing arrays of values.  Perhaps we should be using those.
-
-PHP requires "[]" characters in the parameter name to be parsed as an array. Other languages (at least Python) do not, but it would probably make sense to make the [] part of the spec so that PHP implementations don't have to do their own special parsing. [[User:Kylewm.com|Kylewm.com]]
-
-* This should be possible now with the form-encoded array syntax or JSON syntax. Servers should be able to accept multiple values for properties according to [[micropub#Syntax]]. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:22, 27 July 2015 (PDT)
-
-=== Explicit CRUD ===
-
-This section has been incorporated into the spec.
-
-<div style="color:#aaa;">
-This is now solved by the JSON update/delete syntax. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 12:45, 24 June 2015 (PDT)
-
-* That should have been on the brainstorming page first.  But in any case, this leads to more complexity for endpoint implementer.  What do you do if edit-of and delete are both specified?  A single field for this would prevent these sorts of problems. {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} 20:14, 19 July 2015 (PDT)
-** Yes you're right, should have been on the brainstorming page first. While I don't agree that it adds complexity (it's a straightforward if/else check for edit-of vs delete-of), I realize now that it limits the addition of future actions such as "undelete-of". The "mp-action=delete" method means only one reserved property and allowing future actions to be defined. What do you think about updating that part of the spec? Basically changing the current "edit-of=http://..." to "mp-action=edit&url=http://..."? <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:50, 27 July 2015 (PDT)
-*** +1, I like this idea – would prefer to check for a mp-action=edit in my endpoint [[User:Kodfabrik.se|Kodfabrik.se]] 10:56, 27 July 2015 (PDT)
-
-Currently there is no field to specify delete.  Updates are implied by existence of a url= field.  Updates to content and adding a syndicate-to link simultaneously are not possible as it would be interpreted as syndication text.  I suggest we add a field to specify the CRUD operation.  [[Postly]] uses mp-action='create', mp-action='edit', mp-action='delete', and mp-action='undelete' (since deleting just removes from public view).
-
-* Since they are control parameters, <code>url</code> should be <code>mp-url</code>, and <code>syndicate-to</code> should be <code>mp-syndicate-to</code> [[User:Kylewm.com|Kylewm.com]] 17:02, 12 February 2015 (PST)
-
-* not sure that <code>mp-url</code> really makes sense.  <code>url</code> would appear in the post as its permalink, and would also appear as such in the microformats representation.  I don't think the mp- prefix would make sense here.  {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} 20:14, 19 July 2015 (PDT)
-</div>
-
-=== HTML JSON Form Submission ===
-
-Because handling arrays in form encoded POST requests is somewhat under defined, it may be nice to consider allowing a system similar to http://www.w3.org/TR/html-json-forms/ before json forms are adopted for browsers.
-
-* http://indiewebcamp.com/irc/2014-11-04/line/1415099806094
-* http://indiewebcamp.com/irc/2014-11-04/line/1415119586395
-
-=== form-encoded arrays vs csv fields ===
-
-This is now solved by the JSON update/delete syntax. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 12:45, 24 June 2015 (PDT)
-
-Right now a number of clients/endpoints support arrays in micropub post requests through the use of a csv fields.   This requires parsing of the form-encoded body, then further parsing the field values as CSV -> Array.  Most parsers support the notion of a form based array by appending [] to the end of keys that make up the array.  Supporting this would eliminate the extra step of parsing csv fields assuming everyone has access to a form-encoding parser that can support this.
-
-* http://indiewebcamp.com/irc/2014-09-25#t1411709579457
-* http://indiewebcamp.com/irc/2014-11-04#t1415123280010
-
-==== Parsers that support form arrays ====
-* [https://www.npmjs.org/package/body-parser body-parser.js]
-* ...
-
-=== Query for other information ===
-{{benthatmustbeme}} - I currently support q= for several option: q=syndicate-to (mentioned on  [[Micropub]]), q=indie-config (for my [[indie-config]]), q=actions and q=json_actions ( see [[mp-config]]), and I have also suggested using q=config to update indie-config/mp-config.  There are also several other suggestions below.
-
-Perhaps we should add q=commands to get a list commands supported by q=
-
-Its also worth nothing that I am using <micropub endpoint>?url=<permalink> to request an actual post before rendering for editing/updating.  This should probably be moved do a ?q=get_post&url= or something like that
-
-==== Query for Webmentions ====
-It would be nice to be able to get a list of recent webmentions, or more fine grained like comments, likes, tags, etc.  (perhaps by q=webmentions, q=likes) so that an app can periodically poll for recent mentions and notify the user.
-* I think this is best left to parsing the HTML of the page that has the comments, since they are presumably there already. If you're talking about requesting the *source* of a particular comment for editing, then that is something to consider for the micropub endpoint. But fetching information that is already on the HTML page should not be something the micropub endpoint does. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 11:16, 5 January 2015 (PST)
-* They are on individual posts, I am talking about a method to poll notifications across all posts.  Most Silos, (Facebook, Twitter, G+) all have some system of when you login or refresh it will show an icon and # of unread notifications.  These can range from "you were tagged in a photo", "<person> commented on/replied to your post", "12 people liked your post", all containing links to corresponding posts/people.  This is not something that would usually be public posted.  {{benthatmustbeme}} 2:22, 5 January 2015 (EST)
-* I still think this is better left outside the scope of Micropub. For example, you could create an HTML page that requires authentication that lists all mentions. For example, I list all mentions I have received publicly at http://aaronparecki.com/mentions <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 09:23, 26 March 2015 (PDT)
-
-==== Query for contacts ====
-For apps to be able to autocomplete by known contacts we need some way to query these values.  q=contact&search=aaron would do a search for any field which matches .*aaron.* thereby allowing the client application to suggest autocompletions and insert links.  This would be very useful for [[person-tag]]
-
-==== Query for places ====
-I’m currently setup so that when I create a new note, I can add a place to that note. Therefore I need to query for already created nearby places to see if the place I want has already been created. I’m currently doing this by making my client query the micropub endpoint with a query like: <code>GET /micropub?q=geo:lat,lng</code>. Then only nearby places are returned by the endpoint.
-
-=== Alternative form markup first ===
-An alternative design approach would be form markup first rather than HTTP protocol first.
-
-See related:
-* http://microformats.org/wiki/hcard-input
-
-If we can figure out how a <code>&lt;form class="h-entry"&gt;</code> should work from a markup / posting UI perspective, then maybe we can derive a protocol from how that uses HTTP accordingly.
-
-(this section is a stub, feel free to expand with a complete form element code example that shows what a form for posting a new h-entry or editing an existing h-entry would look like in terms of minimal HTML markup, then we can figure out the HTTP interaction from that)
-
-=== Uploading files in separate requests ===
-[[micropub#Adding_Files]]
-
-Another approach to uploading files would work similar to one recommended in [[micropub#Nested_Microformat_Objects]], binary data gets send in first via one or multiple request while h-entry gets send later including links e.g. u-photo. This has another advantage of allowing to use different domain/endpoint for blobs like images/audio/video [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 04:35, 28 March 2015 (PDT)
-* I think any micropub endpoint creating h-entrys should be able to accept media like photo/audio/video as *both* a multipart-encoded file upload as well as a plain URL. I wouldn't want to require one or the other though. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 11:52, 4 April 2015 (PDT)
-
-=== Micropub for Multi-user Sites ===
-
-Added by: [[User:Kylewm.com|Kylewm.com]] 21:55, 30 May 2015 (PDT)
-
-Thinking about how to support multi-user (i.e. a site where each user does not have a unique (sub)domain) with indieauth/micropub. 
-
-Right now the best bet seems to be each user having a different path that is their unique URL identity, and having them log in to micropub services with this full path. To me this feels a bit awkward, since they are thinking "I want to use this service to post to <nowiki>mysite.com</nowiki>" not "<nowiki>mysite.com/profile/username</nowiki>".
-
-I'm wondering if the protocol can/should support the simpler login. Imagine a [[Known]] plugin that implements all three endpoints (authorization, token, and micropub). This plugin is deployed on <nowiki>http://mysite.com</nowiki> and has users "kyle" and "laura".
-
-* kyle logs into Woodwind with the URL <nowiki>http://mysite.com</nowiki>. Known's internal indieauth provider prompts for his password, and returns an authorization code and eventually access token. 
-** Woodwind registers a new account for the domain <nowiki>http://mysite.com</nowiki> where it stores kyle's access token, subscriptions, preferences, etc.
-* Later, laura logs into Woodwind with the URL <nowiki>http://mysite.com</nowiki>. Known's internal indieauth auths her, and gives back an access token that uniquely identifies her.
-** Woodwind overwrites kyle's information stored in the <nowiki>http://mysite.com</nowiki> account with laura's.
-
-One possible solution is to let the authorization_endpoint return a more specific "me" value than it was given. The user logs into Woodwind with <nowiki>http://mysite.com</nowiki>, it redirects to the authorization_endpoint which tells Woodwind their actual "me" value is <nowiki>http://mysite.com/users/kyle</nowiki>. 
-* I could use a sanity check on how safe this is. It's super important that the micropub client re-discover its authorization and token endpoints when validating the returned "me"+"code", but that's true anyway. 
-
-Alternatively, the authorization endpoint could return some more information to the micropub client, like an optional "user id". So in the example above Woodwind would store two different accounts with <nowiki>(domain=mysite.com, user id=kyle)</nowiki> and <nowiki>(domain=mysite.com, user id=laura)</nowiki>.
-* I would guess nobody wants indieauth/micropub to act like this.
-
-Also open to the possibility that this is out of scope or undesirable.
-
-=== Explicit Post Types ===
-It may be benefitial in some situations to specify a post type when creating a post.  This is important when posts are organized by type or styled differently depending on type.  For example is a post with a location a note that is just tagging a location, or a checking with commentary?
-
-{{benthatmustbeme}} uses mp-type= to specify the type of post to be created in [Postly] and [MobilePub].
-
-=== Token Verification Endpoint ===
-To make it easier for a client to verify whether a token it possesses is valid or not for publishing at a Micropub endpoint a verification endpoint that just returns success or failure depending on whether its valid or not would be beneficial.
-
-{{voxpelli}} has added a "/verify" resource at his [https://github.com/voxpelli/node-micropub-express micropub endpoint] that to a GET request responds with a 200 or 400 code depending on whether the token is valid or not.
-
-* Note that there is already a "stub" in the spec for this, by making an HTTP GET request with no parameters to the micropub endpoint. It would need to be made explicit by returning a specific error code for invalid tokens, and document the exact parameters to be expected in the response. See: [[Micropub#Verification|Verification]]. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:16, 20 July 2015 (PDT)
-
-=== Multiple Micropub Endpoints ===
-Some people have expressed the desire to use their primary identity with multiple Micropub endpoints. (Note that you can already have multiple micropub endpoints by using different identities, such as a subdomain or subfolder of your website.) 
-
-In many cases, the wish is to not necessarily expose the additional Micropub endpoints on their home page as well.
-
-==== Use Cases ====
-Please document use cases here, along with your name. Feel free to add your name to any existing use cases that you are interested in as well.
-
-* Testing a micropub endpoint while signing in with your primary identity 
-** <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:41, 20 July 2015 (PDT)
-* Multi-author blogs, such as a company or community blog
-** <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 14:41, 20 July 2015 (PDT)
-* Sending content from a specific source to a different backend storage
-** I want all my iPhone and digital camera photos to be sent to a photo archive, a distinctly different system than my website. Currently they auto-upload to Flickr from my Eye-Fi card, but Eye-Fi is shutting that down soon and I want to store my own photo archive anyway. These are distinctly different kinds of photos than the ones that go in my main photo stream. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 13:36, 21 July 2015 (PDT)
-
-==== Possible Specs ====
-
-The Micropub client discovers the user's IndieAuth endpoint and token endpoint only, and does not look for the micropub endpoint in a rel value.
-
-The client directs the user to their authorization endpoint, where it gives them the authorization prompt.
-
-[[File:choose-micropub-endpoint-mockup.png]]
-
-The authorization prompt includes a list of possible micropub endpoints the user can choose. (Note that this list could be presented *after* the user authenticates, in case the user wants to keep the list confidential.) The mockup above is integrated with the indieauth.com service, but could be implemented at your own authorization server as well. 
-
-Once the user approves the request, it stores the micropub endpoint selection, generates the authorization code and redirects the user to the client.
-
-When the client exchanges the authorization code for an access token, the response also includes the micropub endpoint that the user selected. This means the token endpoint would return a response such as the following:
-
-<pre><code>
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "access_token":"xxxxxxxxx",
-  "scope":"create",
-  "me":"https://aaronparecki.com/",
-  "micropub_endpoint":"https://aaronparecki.com/micropub"
-}
-</code></pre>
-
-Notes:
-* If indieauth.com (or some other public authorization server) is going to present this list, then it will need a way to discover the multiple endpoint options, so the best way would be to advertise multiple "rel=micropub" endpoints on the user's home page, making it look not very different from the way it works now.
-* If your own authorization server is presenting the list, you can keep the list confidential, or have your own way of adding things to the list.
-
-==== Alternative Possible Spec ====
-
-The Micropub client may discover the Micropub endpoint separately from user's IndieAuth endpoint and token endpoint only. Either it may first prompt the user to enter a URL with a Micropub endpoint or a URL with an authorization endpoint.
-
-If the client decides to ask for a site with Micropub endpoint first and finds an authorization endpoint at the same site, then it would authorize using that endpoint. This is just how micropub works today -- the existence of a rel-authorization_endpoint indicates that that's the expected source of authorization. Otherwise it asks the user to provide another site where it can discover authorization details.
-
-If the client decides to ask the user for a site to get authorization through first and finds a Micropub endpoint there as well, then it would ask whether that's the place the user want to post or if the user wants to provide an alternative location. The reason to ask is that authorization is often discovered at personal sites that have Micropub endpoint themselves.
-
-If the user provides another site to post to then the client [http://indiewebcamp.com/micropub#Verification verifies] that the token it has gives that access before continuing.
-
-This flow is already possible with today's specification if clients were to implement this extended discovery practice.
-
-== Past or other blog publishing APIs ==
-For past / reference purposes:
-* [https://en.wikipedia.org/wiki/MetaWeblog MetaWeblog API]
-* AtomPub (RFC)
-* WordPress API
-* ...
 
 == See Also ==
 * [[Micropub]]

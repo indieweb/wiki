@@ -1,5 +1,6 @@
-http://indiewebcamp.com/photo
+https://indieweb.org/photo
 
+[[Category:PostType]]
 <span style="float:right;height:128px;font-size:128px;margin:0 0 -64px">📷</span>
 
 {{stub}}
@@ -7,6 +8,8 @@ http://indiewebcamp.com/photo
 <div class="p-summary">A '''<dfn>photo</dfn>''' is a [[post]] whose primary content is a photograph or other image, with an optional caption. With multiple photographs it becomes a [[multi-photo]] post.</div>
 
 A [[photo upload]] is typically how photo posts are created.
+
+The term “photo” can also refer to a [[profile photo]].
 
 == Why ==
 You should own your photos like you own any other content you create. Many photos sites have [[site-deaths|gone down]] over the years, taking invaluable personal memories with them.
@@ -20,6 +23,46 @@ There are different approaches to posting photos. E.g.
 ** your primary webhost/domain
 ** a "photos." subdomain of your domain that maps to a cloud/CDN service like [[Amazon]] [[S3]] or [[Akamai]].
 ** as Creative Commons licensed content uploaded to [[Wikimedia]]
+
+=== How to markup ===
+(stub section)
+
+Be sure to markup your actual photo image (or hyperlink to higher quality image) with:
+<pre><code>class="u-photo"</code></pre>
+in order for it to be recognize as a photo post.
+
+(needs complete simple h-entry example also)
+
+(could be rephrased better) This also means, don't go marking up every random image in every random post with "u-photo", unless you really want every random post being mistaken for a photo post.
+
+=== Tagging ===
+Tagging (AKA annotating) photos, initially popularized by [[Flickr]], has become a key motivation for publishing photos. Here are a number of ways you can tag photo posts, both directly in a post, and as a response to a photo post!
+
+Implemented / in practice:
+* [[tag]] / [[tag-reply]] - tag a photo with a word or phrase
+* <span id="People_Tagging">[[person-tag]]</span> / [[person-tag-reply]] - tag a photo with a person
+
+Research / Brainstorming:
+* [[location]] / [[location-of]] - setting/suggesting the location of a photo is colloquially referred to as tagging a photo with a location. 
+* [[area-tag]] / [[area-tag#area_tag_reply|area-tag-reply]] - tagging a specific area of a photo, either with text, or a person-tag.
+Consider adding research from analyzing [[IIIF]] prior and current work.
+
+=== POSSEing ===
+[[POSSE]]ing photo posts makes sense certainly to photo [[silos]] like:
+* [[Flickr]] - as a backup, for Creative Commons distribution
+** Bridgy Publish [https://github.com/snarfed/bridgy/issues/432 supports POSSEing to Flickr]!
+* [[Instagram]] (as much as you can fake a POSSE post to Instagram using [[ownyourgram]] to PESOS then link back to the IG photo with [[u-syndication]])
+* [[Wikimedia Commons]] - as a [[commons]] rather than a silo, it may make sense to start POSSEing here as a backup/distribution/CDN mechanism
+
+In addition, it makes sense to POSSE to generic silos, despite the fact that they will only retain a (likely) lower resolution copy of your photo:
+* [[Twitter]] - as a native Twitter photo tweet  for your friends on Twitter to see your photos
+** using TwitterAPI, or
+** using Bridgy Publish[https://github.com/snarfed/bridgy/issues/85]
+* [[Facebook]] - similarly for your friends on Facebook to see your photos
+** using Bridgy Publish[https://github.com/snarfed/bridgy/issues/85] - which also supports copying over person-tags (of anyone person-tagged with their indieweb site who is signed up on Bridgy, or with Facebook profile URLs with profile IDs)
+
+==== POSSE person tags ====
+You should POSSE any [[person-tag]]s on your photo to any POSSE copy as well.
 
 == IndieWeb Examples ==
 Sorted by earliest photo posts first.
@@ -63,6 +106,11 @@ Sorted by earliest photo posts first.
 ** https://twitter.com/adactio/status/486617601167339521
 ** https://www.flickr.com/photos/adactio/14604446101
 
+=== Calum Ryan ===
+{{calumryan}} has been posting photos directly to his website and then syndicating to Twitter since 2015-07-19. Examples:
+* https://calumryan.com/note.php?noteId=115
+** POSSE copy: https://twitter.com/calum_ryan/status/622793683147091968
+
 === Kartik Prabhu ===
 [[User:kartikprabhu.com|Kartik Prabhu]] uses [[Bundle]] to publish photo posts [https://kartikprabhu.com/notes/dusty-rhodes-watershed since 2014-07-27], and [[multi-photo]] posts [https://kartikprabhu.com/notes/owen-engine since 2014-07-28]. He does the following:
 # Uploads the photo(s) to G+ albums purely for storage
@@ -79,10 +127,12 @@ Examples:
 
 === Tantek ===
 {{t}} uses [[Falcon]] to publish photo posts [http://tantek.com/2015/244/t1/did-entire-npsf-trackattack since 2015-244] which are [[note]] posts with an embedded image that have been auto-upgraded to being photo posts. He does the following:
-# Uses [[Instagram]] iOS client to post a photo there
+# Usually uses [[Instagram]] iOS client to post a photo there.
+#* Sometimes to Wikimedia commons instead.
+#* Sometimes to IndieWebCamp wiki instead.
 # Writes & posts a [[note]] on his own site that starts with a direct .jpg URL of the photo image, then a space/linebreak, then permalink of the Instagram post, then caption.
 # That "note" is auto-upgraded by [[CASSIS]]'s <code>auto_link</code> function into a photo post by putting the <code>u-photo</code> class name on the [[auto-embed]] <code>&lt;img&gt;</code> of the JPG, since it's the first URL in the "note".
-# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the photo as a photo post to both [[Twitter]] and [[Facebook]] ([http://tantek.com/2015/312/t2/yesterday-cat-mocha-caturday since 2015-11-08]), saving the resulting syndication URLs in storage.
+# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the photo as a photo post to [[Twitter]] & [[Facebook]] ([http://tantek.com/2015/312/t2/yesterday-cat-mocha-caturday since 2015-11-08] including POSSEing Facebook person-tags [http://tantek.com/2015/339/t2/w3c-social-web-working-group-mozilla since 2015-12-05]), and [[Flickr]] ([http://tantek.com/2016/032/t1/mothership-bowl-second-breakfast since 2016-02-01], manually [https://www.flickr.com/photos/tantek/23803704613/ since 2016-01-16] of a [http://tantek.com/2016/001/t1/gregorian-january-lego-calendar 2016-01-01 photo]), saving the resulting syndication URLs in storage.
 #* Previously: 2015-09-01: *optionally* manually [[Bridgy]] Publish to [[POSSE]] the photo as a photo post to [[Facebook]] ([http://tantek.com/2015/311/t3/indiewebcamp-mit-the-album until 2015-11-07]).
 Examples:
 * 2015-244 (09-01) http://tantek.com/2015/244/t1/did-entire-npsf-trackattack
@@ -101,17 +151,40 @@ Since this was an auto-upgrade change, it is likely that there are older notes t
 ** only first was POSSEd via Bridgy Publish to Twitter and Facebook
 * with person-tags: http://tantek.com/2015/352/t2/freedom-tower-np-nyc-winter
 ** though none of the person-tags made it through
+* 2015-346 (12-12) http://tantek.com/2015/346/t2/eiffel-tower-small-world
+** Photo posted/hosted at Wikimedia commons instead of Instagram
 
 === gRegor Morrill ===
 {{gRegor}} uses [[ProcessWire]] to occasionally publish photos.
-* First self-hosted photo: http://gregorlove.com/2015/08/i-found-some-silers/
-* Earliest example with photo hosted on Flickr: http://gregorlove.com/2014/07/ladies-via-sarah5/
+* First self-hosted photo: https://gregorlove.com/2015/08/i-found-some-silers/
+* Earliest example with photo hosted on Flickr: https://gregorlove.com/2014/07/ladies-via-sarah5/
 
-== Notes with photos examples ==
-Not quite photo posts, but similar, [[notes]] with embedded photos are another approach to photo-like posts.
+=== Ryan Rix ===
+
+{{rrix}} uses [https://indiewebcamp.com/User:Notes.whatthefuck.computer#Arcology Arcology] to publish photos through his site and syndicate them out to Facebook and Twitter using [[Bridgy]].
+
+=== Jay Robinson ===
+
+{{j4y_funabashi}} is backfilling his site with ~10 years worth of photos
+* I think this is the first photo I posted http://j4y.co/p/20160405164556_5703ddb45dbf0
+
+=== Marty McGuire ===
+
+{{martymcguire}} uses [[Quill]] with a custom micropub handler to post photos (with notes).
+* First example: https://martymcgui.re/2016/04/28/133049/
+
+Marty is also displaying interactive 360 photospheres (panoramic images in [https://en.wikipedia.org/wiki/Equirectangular_projection equirectangular projection], common in cameras like the [https://theta360.com/en/about/theta/ Ricoh Theta S]). In browsers with Javascript enabled, the panoramic images are upgraded to an interactive [https://github.com/google/vrview Google VR View].
+* First example: https://martymcgui.re/2016/08/28/114014/
+* Panoramas work like a regular photo post with a couple of exceptions:
+** The large image size can lead to failed uploads or server rejections
+** A panoramic photo is differentiated from a non-panoramic photo by EXIF XMP tag "ProjectionType=equirectangular"
+
+== Notes with image examples ==
+[[Notes]] with embedded photos that are not marked up with <code>u-photo</code> are similar to photo posts.
 
 === Barnaby Walters ===
 [[User:Waterpigs.co.uk|Barnaby Walters]] uses [[Taproot]] to post photos on [http://waterpigs.co.uk waterpigs.co.uk] since at least [http://waterpigs.co.uk/notes/686/ 2012-12-13] as notes with embedded images.
+* 2017-07-21: the image src in this post is dead currently
 
 == Discussion ==
 * {{gRegor}}: I don't understand the distinction between 'photo' and 'note with photo.' It was suggested in chat by [[User:Mowens.com|mko]] that a 'photo' post would be a photo with no other content. However, this page indicates caption text may follow the photo. Per discussion, the caption would be the p-summary/p-name of the photo post. This seems to make it no different than a regular note, then, as far as microformat parsing. Example: http://gregorlove.com/notes/2014/07/15/2/ — [http://indiewebcamp.com/irc/2014-07-15#t1405445144 IRC log]
@@ -119,7 +192,7 @@ Not quite photo posts, but similar, [[notes]] with embedded photos are another a
 
 * On a photo post, text is directly "related to the photo", where text in a note can be "conversational" or tangential. <blockquote>&lt;mko> Another example, from my own experience. I was the design lead at hi5. We did research into how users were using the Photos feature versus the Status Update feature (which had the ability to post a photo). Users posted photos without any text the vast majority of the time. When users posted status updates with photos, on the other hand, they almost never did so without accompanying text. On top of that, we found that when there was text accompanying a photo in the Photos section, it was almost always a caption related to the photo (with very few exceptions), whereas those in a status update that would go on the Friend Feed typically was conversational and not directly related to the photo.</blockquote>[http://indiewebcamp.com/irc/2014-07-15#t1405447134]
 
-* [[User:kartikprabhu.com| Kartik]]: I do not understand what would be the UI/UX difference in posting/reading a "photo with caption" vs "note with photo" ? Some examples (silo/indieweb) distinguishing these cases would be good.
+* [[User:kartikprabhu.com|Kartik]]: I do not understand what would be the UI/UX difference in posting/reading a "photo with caption" vs "note with photo" ? Some examples (silo/indieweb) distinguishing these cases would be good.
 ** [[User:Kylewm.com|Kylewm.com]]: I would consider [https://kylewm.com/note/2014/05/05/1 this post about going to a museum] a note with a photo that is not a photo post &mdash; The text stands alone; the image is secondary[[File:kylewm-note-with-photo-2014-07-15.png|none|thumb|A note with a photo]]
 ** [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] facebook  [https://www.facebook.com/social.w3.org/posts/869811893104078 example of posting with embedded photo, which in turn has its own description] [[File:posting+embedded-photo.png|none|thumb]]
 
@@ -145,46 +218,12 @@ More detail: [[POSSE_to_Facebook#Posting_Photos_via_the_Facebook_API]]
 
 == Brainstorming ==
 {{main|photo brainstorming}}
-=== People Tagging ===
-{{main|people tagging}}
 
-[[User:benwerd.com|Ben Werdmuller]] wondered if you could tag people in photos by linking to their profiles using HTML imagemaps (!) and marking up the imagemap links with microformats. That might look something like:
-
-<code><img src="some_photo.jpg" alt="Tantek, Aaron and Amber!" usemap="#peeps" class="u-photo">
-
-<map name="peeps">
-
-<area shape="circle" coords="124,58,8" class="microcard h-card u-url" href="http://tantek.com" alt="Tantek Çelik">
-
-<area shape="rect" coords="0,0,82,126" class="microcard h-card u-url"  href="http://aaronparecki.com" alt="Aaron Parecki">
-
-<area shape="circle" coords="90,58,3" class="microcard h-card u-url" href="http://caseorganic.com" alt="Amber Case">
-
-</map></code>
-
-However, because the HTML syntax of imagemaps sits outside the actual image tag, it may be worth adding a microformat to the map itself.
+=== People Area Tagging ===
+See: [[area-tag#person_tag_as_area_tag|person tag as area tag]]
 
 === POSSE ===
-[[POSSE]]ing photo posts makes sense certainly to photo [[silos]] like:
-* [[Flickr]]
-* [[Instagram]] (as much as you can fake a POSSE post to Instagram using [[ownyourgram]] to PESOS then link back to the IG photo with [[rel-syndication]])
-* [[Wikimedia Commons]] (as a [[commons]] rather than a silo, it may make sense to start POSSEing here as a backup/distribution/CDN mechanism)
-
-In addition, it makes sense to consider POSSEing to generic silos, despite the fact that they will only retain a (likely) lower resolution copy of your photo:
-* [[Twitter]] - as a native Twitter photo tweet, using TwitterAPI <code>update_with_media</code>
-* [[Facebook]]
-
-==== POSSE person tags ====
-Ideally you should POSSE any [[person-tag]]s on your photo to the POSSE copy as well.
-
-==== Bridgy Publish POSSE ====
-[[Bridgy]] Publish supports POSSEing photo posts to Twitter and Facebook!
-
-Unknown:
-* Does Bridgy Publish support POSSEing person-tags in photo posts to either Twitter or Facebook? If so, how?
-
-Feature requests:
-* [https://github.com/snarfed/bridgy/issues/432 Bridgy issue 432: POSSE photo to Flickr]
+More brainstorming about POSSEing photos!
 
 ==== Distinguishing Photos from Notes ====
 [[Bridgy]] Publish has a concrete use-case where it would be useful to mechanically differentiate posts where the photo is primary, vs. notes with an included image that is not the focus of the note. Photo posts should be POSSEd as '''native''' photo post types on [[Facebook]] and included as attached media on [[Twitter]]. POSSEd notes would prefer to link to the original post, and possibly include the image as a [[link-preview]].
@@ -222,7 +261,11 @@ Bridgy backfeed does not yet support backfeeding person tags from POSSE copies o
 Software you can install on your IndieWeb server to host your own photos
 
 * GNU [http://mediagoblin.org/ Mediagoblin]
-* [[Trovebox]] (formerly <span id="OpenPhoto">OpenPhoto</span>)
+* [[Photo Project]] (formerly Trovebox, and before that, <span id="OpenPhoto">OpenPhoto</span>)
+
+== Sessions ==
+IndieWebCamp sessions about photo posts and photos in general:
+* [[2016/Dusseldorf/photos]]
 
 == See Also ==
 * [[multi-photo]]
@@ -231,3 +274,4 @@ Software you can install on your IndieWeb server to host your own photos
 * [[posts]]
 * [[notes]]
 * [[video]]
+* [[photo comment]]

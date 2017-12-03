@@ -1,10 +1,22 @@
-http://indiewebcamp.com/venue
+https://indieweb.org/venue
 
+{{emojicon|📍}}
+[[Category:PostType]]
 {{stub}}
 
 A '''<dfn>venue</dfn>''' is a named [[location]] or address/[[geo]] that is typically used for [[checkins]].
 
 <dfn>indieweb venues</dfn> are the practice of self-hosting checkin venues (<dfn>self hosted venues</dfn>) on your own site with your own URLs.
+
+== Why ==
+You should host your own venues with your own URLs for all the usual [[longevity]] reasons, but also to give yourself the freedom of defining new venues by your own experience, not just by someone else’s map.
+
+== How to ==
+__TOC__
+=== How To Publish ===
+Give each venue a URL containing a basic [[h-card]].  In this regard, a venue is kind of a special case of a [[wiki-page]] in that it is more of a timeless page than a post that has an explicit published date.
+
+More "How to" TBD, see [[#Brainstorming]].
 
 == Indieweb Examples ==
 === Barnaby Walters ===
@@ -20,26 +32,36 @@ A '''<dfn>venue</dfn>''' is a named [[location]] or address/[[geo]] that is typi
 === rhiaro ===
 {{rhiaro}} has been publishing 'venues' on at [http://rhiaro.co.uk/locations rhiaro.co.uk/locations] since 2015-12-29. They're not real places, but a list of vague places I check in to (home, office, etc). Only contain name and description. Marked up with h-cards but also available as ActivityStreams2 Collections in [http://rhiaro.co.uk/locations?format=json JSON-LD] and [http://rhiaro.co.uk/locations?format=ttl turtle]. My checkin app [https://apps.rhiaro.co.uk/burrow burrow] reads this list to present me with buttons to tap to check in.
 
-== Past Examples ==
-Past examples of venues.
 === Kyle Mahan ===
-{{kylewm}} used [[Red Wind]] to publish venue data on kylewm.com from 2014-10-26 (and manually backported venues to older location-only checkins) [https://kylewm.com/2016/01/moving-kylewmcom-to-known-indieweb until 2016-01-19], e.g.
+{{kylewm}} uses [[Red Wind]] to publish venue data on kylewm.com from 2014-10-26 (and manually backported venues to older location-only checkins) [https://kylewm.com/2016/01/moving-kylewmcom-to-known-indieweb until 2016-01-19], and then live again since 2016-???, e.g.
 * https://kylewm.com/venues/mozilla-sf-san-francisco-california
 [[File:redwind-venue-permalink-2015.png|700px]]
+
 Consisting of venue properties:
 * name
 * "geo" - locality, region
 * map
 * list of links to other posts that reference that venue permalink, e.g. [https://kylewm.com/2014/08/at-mozilla-for-homebrew-website-club checkin] and [https://kylewm.com/2015/04/homebrew-website-club-1 event] posts.
+
 Red Wind maintains its own small database of venues (e.g. https://kylewm.com/venues). When creating a new checkin, it does a very simple exhaustive search to find the 10 nearest venues that have been checked into previously. e.g.,
 [[File:redwind-check-prompt-2015-04-10.png]]
 
-== How To ==
-=== How To Publish ===
-Give each venue a URL containing a basic [[h-card]].
+=== Prototype Examples ===
+IndieWeb sites publishing things resembling venues, but not quite separate venue posts yet.
 
-==== Extensions ====
-Possible extensions (encountered by indieweb community members in real world situations)
+==== Tantek ====
+{{t}} started posting a photo and searchable permalink for "Horizontal Control Mark" physical placements on 2016-10-10:
+* http://tantek.com/2016/284/t3/coyote-ridge-2-horizontal-control-mark
+** name and photo of the physical mark
+** information about lat/long and height
+
+Related itches / use-cases:
+* '''travel reminders''' - it can be particular useful to have your own easily refernceable an editable list of venues for any particular city you might travel, for the purposes of personal curation, places you want to see/try, or places you want to return to. Whether sites, museums, or cafes, restaurants, etc.
+
+== Brainstorming ==
+=== Brainstorming How To ===
+==== Brainstorming Publishing ====
+Possible publishing <span id="Extensions">extensions</span> (encountered by indieweb community members in real world situations)
 * hours open (related format effort: http://microformats.org/wiki/opening-hours )
 ** +1 [[User:Tantek.com|Tantek]]
 * subsets of hours open, i.e. more generally,  hours *foo*
@@ -62,6 +84,14 @@ Possible extensions (encountered by indieweb community members in real world sit
 *** Foursquare tips attached to those venues. 
 *** Indieweb transition strategy: import said Foursquare tips semi-automatically into indieweb venue URLs when said URLs exist and have rel-alternate URLs to equivalent Foursquare venues.
 
+=== Micropub Query for Venues and Locations ===
+
+A possible mp-venue query could be added to Micropub to support a client querying a site for venue URLs to display based on provided information(usually latitude, longitude, or keyword search). 
+
+See also:
+* https://snarfed.org/indie-checkin-flow
+* [https://github.com/snarfed/ownyourcheckin owndyourcheckin] / ownyoursquare
+
 === Cross-site Venue Checkin UX Flow ===
 # User A publishes a checkin on their indieweb site, with the venue marked up as an h-card (and possibly a link to a venue URI on the same site)
 # User B is in the same area and sees the checkin. They decide to go to the same place.
@@ -82,7 +112,7 @@ Potential enhancements:
 
 ...
 
-== Brainstorming ==
+
 === Finding silo venue equivalent ===
 How to find a silo venue URL equivalent, i.e. "How would you find the FB version of a venue?"[http://indiewebcamp.com/irc/2015-09-01#t1441139504221]
 
@@ -101,10 +131,6 @@ Possible solutions:
 * Start with "just add the markup to the text directly" UI[http://indiewebcamp.com/irc/2015-09-01/line/1441139610979]
 * 90% case: import your [[Foursquare]] and [[Facebook]] checkin history and create indie venues for all silo venues from the import. Then since most of the time you visit where you've already been, this handles the indie venue / silo venue connection for that part.
 * Interesting case: new venues
-
-See also:
-* https://snarfed.org/indie-checkin-flow
-* [https://github.com/snarfed/ownyourcheckin owndyourcheckin] / ownyoursquare
 
 == Centralized venues ==
 Examples:

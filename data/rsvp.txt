@@ -1,26 +1,86 @@
-http://indiewebcamp.com/rsvp
+https://indieweb.org/rsvp
 
+[[Category:PostType]]
 <span style="float:right;height:128px;font-size:128px;margin-top:48px">💌</span>
-{{stub}}
 
-An '''<dfn>RSVP</dfn>''' is a type of [[post]] that is a [[reply]] to an [[event]] post.
+An '''<dfn>RSVP</dfn>''' is a [[reply]] to an [[event]] post that says whether the sender is or is not attending, might attend, or is just interested in the event.
+
+* See '''[[rsvps]]''' for how to and examples of displaying RSVPs received on your events from other sites!
+
+== Why ==
+Why implement RSVP posts?
+
+'''Own your RSVPs!''' It’s empowering being able to RSVP (especially '''yes''' or '''maybe''') from your own site to the indie [[event]] posts, and via [[Bridgy]] Publish to Facebook events as well!
+
+'''Share your RSVPs with friends.''' For public events that you'd like your friends to attend, post RSVPs publicly on your own site. When your friends see that you're going or might go, it helps encourage them to also attend.
+
+'''Encourage friends to go even if you cannot.''' Why implement and post a RSVP '''no'''? A public RSVP '''no''' is a good way to share and promote an event you wish you could go to but can't make it to. 
+
+'''Why POSSE RSVPs?''' Because the sharing / encouraging aspect of publishing makes sense beyond the simple RSVP answers, it also makes sense to [[POSSE]] all your RSVPs as you would any other reply or [[note]] (e.g. to [[Twitter]] etc.) beyond just responding to the event.
 
 == How to ==
-How tos for RSVPs are very similar to the how tos for [[replies]] so we won't duplicate common info here.
-=== Publish an RSVP ===
-Post a [[reply]] and use the [http://microformats.org/wiki/h-entry#p-rsvp draft h-entry <code>p-rsvp</code> property] to post the RSVP status, e.g.:
-* <code>&lt;span class="p-rsvp">no&lt;/span></code> - however this assumes that you want "no" in your readable text. Otherwise you can also use the <code>data</code> element to express the meaning behind the literal p-rsvp value while providing your own visible human readable language:
-* <code>&lt;data class="p-rsvp" value="yes">I'm totally there, dude.&lt;/data></code>
+How-tos for RSVP posts are very similar to the how-tos for [[reply]] posts so we won't duplicate common info here.
+
+=== How to publish ===
+How to <span id="Publish_an_RSVP">publish an RSVP</span>:
+
+Use a tool that supports RSVP posts! E.g. 
+==== How to RSVP with Known ====
+If you use '''[[Known]]''': 
+
+As of the 0.99 release, Known includes an "Events" plugin by default. Once signed into your Known site, you may activate the Events plugin under the "Site Configuration" menu. Navigate to Plugins, scroll down to find the Events plugin, and click to enable the plugin.
+
+Once enabled, the action bar at top of the content area of your Known website should include an icon entitled "RSVP." Click the icon, and follow the instructions to send an RSVP. Once the RSVP post is created, Known will automatically send a [[Webmention]] to the supplied website address.
+
+==== How to RSVP with WordPress ====
+Once you've got [[webmention]] functionality set up in [[Getting Started on WordPress#Webmentions|WordPress]], there are several ways to RSVP to events using [[WordPress]]:
+* Use the "RSVP" javascript bookmarklet in the [https://github.com/pfefferle/wordpress-indieweb-press-this IndieWeb PressThis bookmarklet] (Once installed and activated, the bookmarklets can be found in the admin menu under "Tools"). Go to the page you want to RSVP to and click the bookmarklet in your browser to create an RSVP post.
+* Use the [[Post Kinds Plugin]] which includes RSVP functionality.
+** Set the Post Kind as RSVP, add the URL and Title of Event into the Post Properties box, and set the RSVP Property.
+* Create a traditional post and use [[rsvp#How_to_RSVP_with_HTML|HTML as described below]].
+
+==== How to RSVP with HTML ====
+Or if you're using another tool (like your own [[CMS]]) then: 
+
+'''1.''' Create a [[reply]] post and use the [http://microformats.org/wiki/h-entry#p-rsvp h-entry <code>p-rsvp</code> property] to specify your RSVP status. Here's a minimal RSVP post example:
+<pre>
+&lt;div class="h-entry"&gt;
+ RSVP &lt;span class="p-rsvp"&gt;yes&lt;/span&gt; 
+ to &lt;a href="http://example.com/event" class="u-in-reply-to"&gt;IndieWeb Example Event&lt;/a&gt;
+&lt;/div&gt;
+</pre>
+
+Note: If your theme already adds the <code>h-entry</code> class, then you will need to leave out the wrapper <code>&lt;div class="h-entry"&gt;</code> tag.
+
+See example as a whole page: http://codepen.io/iamjessklein/pen/rLXwOw
 
 Possible RSVP values: <samp>yes</samp>, <samp>no</samp>,  <samp>maybe</samp>, <samp>interested</samp>
 
-Send a webmention to the event post as you would for a reply to any post.
+'''2.''' Send a [[Webmention]] to the event post as you would for a reply to any post.
+
+'''3.''' You should include author information in your RSVP post so the event knows who is attending (and then send another Webmention so the event page gets the update).
+
+Here's another example with explicit author name and icon, in case your site or blog does not already provide that on the page.
+
+<pre>
+&lt;div class="h-entry"&gt;
+ &lt;a class="p-author h-card" href="http://mysite.example.org"&gt;
+   &lt;img alt="" src="http://mysite.example.org/icon.jpg"/&gt;
+   Supercool Indiewebauthor&lt;/a&gt;: 
+ RSVP &lt;span class="p-rsvp"&gt;yes&lt;/span&gt; 
+ to &lt;a href="http://example.com/event" class="u-in-reply-to"&gt;IndieWeb Example Event&lt;/a&gt;
+&lt;/div&gt;
+</pre>
+
 
 See [[reply#Make_a_comment]] for more general details on posting replies.
 
-(a complete h-entry + p-rsvp markup example would be nice too)
+You can also use the <code>data</code> element to express the meaning behind the literal p-rsvp value while providing your own visible human readable language:
+* <code>&lt;data class="p-rsvp" value="yes">I'll be there!&lt;/data></code>
+
 
 __TOC__
+
 ==== Multi RSVP ====
 If there are multiple copies of a single event (e.g. [[POSSE]] copies, or [[reposts]]), you can post a multi-RSVP, a single RSVP post that replies simultaneously to multiple event URLs.
 
@@ -30,7 +90,7 @@ The difference is:
 * A '''multi-RSVP''' must link to multiple event posts only when they all represent the '''same real world event'''.
 * A plain '''multi-reply''' may be replying to '''multiple different posts''', that just happened to be '''related by topic or thread'''.
 
-(a complete multi-RSVP markup example would be nice too)
+NEEDED: (a complete multi-RSVP markup example would be nice too)
 
 === Update an RSVP ===
 Similarly, update your RSVP and send another webmention.
@@ -42,21 +102,14 @@ Similarly, delete your RSVP, send another webmention, and be prepared to return 
 
 See [[reply#Delete_a_comment]] for more general details on deleting replies.
 
-== Why ==
-Why implement RSVP posts?
+=== Accept an RSVP ===
+RSVPs are sent to [[event]] posts, which should recognize that this type of response is a special RSVP response, and can use that to increment attending/not attending counters for example.
 
-First, so you can RSVP (especially '''yes''' or '''maybe''') from your own site to the [[event]] posts that indieweb community members (like {{aaronpk}}, {{benwerd}}, {{kylewm}}, etc.) post on their own sites!
-
-For public events that you'd like your friends to go, it especially makes sense to post RSVPs publicly, since seeing that a friend is going (or might go) to an event may help encourage other friends to go.
-
-=== Why RSVP no ===
-Why implement and post RSVP "no" posts?
-
-A public RSVP "no" post is a good way to share and promote an event you wish you could go to but can't make it to. Because the sharing / encouraging aspect of it makes sense beyond the simple "no" RSVP, it also makes sense to [[POSSE]] such a RSVP "no" post as a note/reply (e.g. to [[Twitter]] etc.) beyond just responding to the event.
+When you receive a webmention from a URL that is a [[reply]] (has an <code>in-reply-to</code> URL that is the event URL), also check if the entry contains an <code>rsvp</code> property.
 
 == IndieWeb Examples ==
 In datetime order of <span id="IndieWeb_Implementations">implementation</span> (earliest first)
-
+<!-- benwerd's RSVP appears to have lost its p-rsvp
 === Ben Werdmuller ===
 {{benwerd}} has implemented RSVP posts in [[idno]].
 
@@ -64,14 +117,14 @@ RSVP posts are marked up with the <code>p-rsvp</code> property from the [http://
 
 Example:
 * http://werd.io/view/51ca1213bed7de1e7763d71f
-
+-->
 === Bret Comnes ===
 {{bret}} has implemented RSVP posts on his site bret.io:
 
 RSVP posts are marked up with the <code>p-rsvp</code> property from the [http://microformats.org/wiki/rsvp-brainstorming#h-entry_plus_additions microformats2 h-entry plus proposal].
 
 Example:
-* http://bret.io/2013/06/25/t2/
+* 2013-06-25: http://bret.io/2013/06/25/t2/
 ** on event: http://werd.io/event/51c94deebed7de5c2386a1b4/unofficial-portland-post-indiewebcamp-meetup
 ** showed up via Bret doing a manual webmention (automation plan: simple shell script that does git push then send webmention)
 ** It should be noted that any webmention I do will be manual for the time being.  A likely scenario will be some kind of [[webmention.io]] integration when it supports the sending of web-mentions or pingbacks.  It might be possible with fancy JS as well, I am not sure.--[[User:Bret.io|Bret.io]] 18:23, 25 June 2013 (PDT)
@@ -82,7 +135,7 @@ Example:
 RSVP posts are marked up with the <code>p-rsvp</code> property from the [http://microformats.org/wiki/rsvp-brainstorming#h-entry_plus_additions microformats2 h-entry plus proposal].
 
 Example:
-* http://aaronparecki.com/replies/2013/06/25/3/indiewebcamp
+* 2013-06-25: http://aaronparecki.com/replies/2013/06/25/3/indiewebcamp
 ** on event http://werd.io/event/51c94deebed7de5c2386a1b4/unofficial-portland-post-indiewebcamp-meetup
 
 '''Multi-RSVPs published''' [http://aaronparecki.com/replies/2014/09/08/1/ since 2014-09-08]. E.g.
@@ -99,52 +152,248 @@ If a [[p3k]] user is creating a [[reply]] to a URL, [[p3k]]:
 ** prompts the user to select yes/no/maybe/other
 
 === Nick Doty ===
-{{npdoty}} implemented RSVP notes on his site npdoty.com:
+{{npdoty}} implemented RSVP notes on his site npdoty.com (since YYYY-MM-DD?)
 
 Example:
 * http://bcc.npdoty.name/post-facto-regrets-and-RSVP-microformat
 
 === Tantek ===
-{{t}} has implemented RSVP reply notes in [[Falcon]] deployed on his site tantek.com as of 2013-264.
+{{t}} has implemented RSVP reply notes in [[Falcon]] deployed on his site tantek.com as of 2013-264, and support for all RSVP values in [[Falcon]] as of 2017-016!
 
 RSVP posts' reply-contexts are marked up with the <code>p-rsvp</code> property from the [http://microformats.org/wiki/rsvp-brainstorming#h-entry_plus_additions microformats2 h-entry plus proposal].
 
 Examples:
-* http://tantek.com/2013/264/t1/indiewebcamp-breakfast-rsvp ('''RSVP yes''')
+* '''RSVP yes''': http://tantek.com/2013/264/t1/indiewebcamp-breakfast-rsvp
 ** on event: http://aaronparecki.com/events/2013/09/21/1/indiewebcamp-breakfast
-** showed up via Tantek doing a manual webmention (automation plan: have the Falcon posting UI perform webmentions when the user presses the "Post" button)
-** It should be noted that any webmention I do will be manual for the time being.
-* http://tantek.com/2015/042/t1/homebrew-website-club ('''RSVP maybe remote''', since 2015-042)
+** showed up via Tantek doing a manual webmention. Subsequently implemented automatic Webmention sending in Falcon when the user presses the "Post" button.
+** when hosting (explicitly with "hosting " phrasing [http://tantek.com/2017/135/t1/homebrew-website-club-mozsf since 2017-135])
+** when co-organizing (explicitly with "co-organizing " phrasing [http://tantek.com/2017/139/t1/organizing-indieweb-summit since 2017-139])
+* '''RSVP yes''' during event [http://tantek.com/2017/228/t1/attending-august-yimby-meeting since 2017-228].
+** using "attending " phrasing
+* '''RSVP yes''' after event ended [http://tantek.com/2016/336/t3/went-trails-motion-film-festival since 2016-336].
+** using "went to " phrasing
+* '''RSVP maybe''' in general [http://tantek.com/2017/016/t2/might-go-fastassam-run-depends since 2017-016]
+* '''RSVP maybe remote''', [http://tantek.com/2015/042/t1/homebrew-website-club since 2015-042]
 ** on event: https://kylewm.com/2015/02/homebrew-website-club-2015-february-11
-* http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people ('''RSVP no''', since 2015-043)
+** another: http://tantek.com/2016/346/t2/homebrew-website-club-godaddy-sf
+* '''RSVP no''', [http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people since 2015-043]
 ** on silo event: https://www.facebook.com/events/1540673402878317
+* '''RSVP interested''', [http://tantek.com/2017/014/t2/considering-yoga-journal-live since 2017-014]
 
 '''Multi-RSVPs published''' [http://tantek.com/2014/255/t3/going-indieweb-xoxo-breakfast since 2014-09-12]. E.g.
-* Multi-RSVP yes: http://tantek.com/2014/255/t3/going-indieweb-xoxo-breakfast - in-reply-to:
+* Multi-RSVP '''yes''': http://tantek.com/2014/255/t3/going-indieweb-xoxo-breakfast - in-reply-to:
 ** http://known.kevinmarks.com/2014/indieweb-xoxo-breakfast
 ** POSSE copy: https://www.facebook.com/events/1475412386074562/
 ** http://aaronparecki.com/events/2014/09/13/1/indieweb-xoxo-breakfast
-*Multi-RSVP no: http://tantek.com/2015/252/t2/homebrew-website-club-sf-pdx
+* Multi-POSSE-RSVP '''yes''' to two POSSE copies! http://tantek.com/2017/247/t1/going-to-serenity-movie-party - in-reply-to
+** tickets URL: https://drafthouse.com/sf/show/syfy-presents-serenity-movie-party
+** FB POSSE RSVP (via Bridgy): https://www.facebook.com/events/347630705664521
+** Tweet threaded reply: https://twitter.com/DrafthouseSF/status/904750941940932609
+* Multi-RSVP '''no''': http://tantek.com/2015/252/t2/homebrew-website-club-sf-pdx
 ** https://kylewm.com/2015/09/sf-homebrew-website-club
 ** POSSE copy: https://www.facebook.com/events/742074362604957/
 ** http://aaronparecki.com/events/2015/09/09/1/homebrew-website-club
+* Multi-RSVP '''no''' using text "missing " http://tantek.com/2017/011/t2/missing-first-indieweb-hwcs-go-now
+
+* all RSVPs have minimal reply-context which, in addition to RSVP yes/no/maybe/interested, just shows URL(s) of event(s) being replied to
+
+=== Kyle Mahan ===
+{{kylewm}} has posted RSVPs on his site since [https://kylewm.com/2014/04/rsvp-span-class-p-rsvp-yes-span-first-indie-rsvp-attempt-let-s-see 2014-04-08]. RSVP posts are just regular replies with a hand-authored p-rsvp property. Examples:
+* https://kylewm.com/2014/04/rsvp-span-class-p-rsvp-yes-span-first-indie-rsvp-attempt-let-s-see
+** reply context with name of event, domain of event linked to event permalink
+* Since 2016-03-08, I've posted a few RSVPs via [[Woodwind]]/[[micropub]].
+
+=== gRegor Morrill ===
+{{gRegor}} Has manually posted at least one rsvp on gregorlove.com as of 2014-06-26:
+* http://gregorlove.com/2014/06/yes-looking-forward-to-meeting/
+** reply-context with synthesized "post at domain" text linked to event permalink
+
+As of 2017-06-07, showing RSVP responses on events:
+* https://gregorlove.com/2017/05/homebrew-website-club/
+** RSVPs [[backfed]] from [[Facebook]]
+* https://gregorlove.com/2017/06/homebrew-website-club/
+** Backfeed and indie RSVP; not yet de-duplicated
+
+=== Jeena ===
+{{jeena}} implemented RSVP notes on his site jeena.net since 2016-??-??
+
+Example:
+* https://jeena.net/comments/627
+** multi-rsvp with reply-context that shows URLs of the events being responded to
+
+=== Tim ===
+{{webrocker}} implemented RSVP notes on his site www.webrocker.de since 2016-04-16
+
+Example:
+* https://www.webrocker.de/2016/04/16/indiewebcamp-nuremberg/
+** article with explicit RSVP markup 
+
+=== Ryan Rix ===
+{{rrix}} is able to publish RSVPs through [https://indiewebcamp.com/User:Notes.whatthefuck.computer#Arcology Arcology] since [http://notes.whatthefuck.computer/1461394620.0-note.html 2016-04-23] by attaching a p-rsvp property to any [[reply]]. This is syndicated out to non-indie events using [[Bridgy]]. E.g.
+* http://notes.whatthefuck.computer/1461394620.0-note.html
+** article with explicit RSVP markup
+
+=== Shane Becker ===
+{{veganstraightedge}} manually RSVPed from an Article to IndieWeb Summit 2016 on 2016-05-02.
+* http://veganstraightedge.com/articles/2016/05/02/rsvp-yes-to-indieweb-summit
+** article with explicit RSVP markup 
+
+=== Scott Gruber ===
+Manually RSVPed from a Note to IndieWeb Summit 2016 on 2016-05-23.
+
+Example:
+* https://scottgruber.me/notes/indiewebcamp
+** article with explicit RSVP markup 
+
+=== Sebastiaan Andeweg ===
+{{sebsel}} posted his first event on 2017-01-06 (an indie event for HWC 2017-01-11) and replied to it with an RSVP post a few hours later.
+
+* First RSVP: https://seblog.nl/2017/01/06/1/rsvp
+
+=== Martijn van der Ven ===
+
+{{martijnvdven}} has been RSVPing [https://licit.li/587642007b9fc since YYYY-MM-DD?] when confirming he was going to the first HWC of 2017 in the Netherlands. Example:
+* https://licit.li/587642007b9fc
+
+=== Eddie Hinkle ===
+
+{{eddiehinkle.com}} has been RSVPing [http://eddiehinkle.com/social/2017/03/rsvp-indieweb-march-22/ since 2017-03-11] when confirming he was going to his first HWC in Baltimore, MD.
+* Example:
+** http://eddiehinkle.com/social/2017/03/rsvp-indieweb-march-22/
+* RSVP Social Stream Example: 
+** http://eddiehinkle.com/social/rsvps/
 
 == Brainstorming ==
+=== RSVP buttons ===
+An RSVP post starts with some UI to create it, typically in the context of a specific event.
+
+==== RSVP Interested Going ====
+A [[reader]] could recognize a public event post, and present buttons for the user to RSVP (e.g. via [[micropub]] with their own site).
+
+Good start with minimal likely options:
+
+<pre>[ Interested ] [ Going ]</pre>
+
+Clicking either button would publish the respective [[RSVP]] to the user's site via micropub, and at a minimum could then:
+* Show confirmation: replace the buttons with static UI text that says <pre>✓ Interested</pre> or <pre>✓ Going</pre> depending on whichever the user chose. This state would not be stored anywhere except the current state of the browser.
+
+==== RSVP simple updates ====
+A reader that implemented the above <samp>[ Interested ] [ Going ]</samp> buttons could add just a tiny bit of browser-only code that allowed for undo and updates, as follows:
+
+Start with minimal likely options again:
+
+<pre>[ Interested ] [ Going ]</pre>
+
+But this time, if the user clicks a button, <em>only</em> that button turns into static text, e.g.:
+
+If the user clicks Interested:
+<pre>✓ Interested  [ Going ]</pre>
+
+If the user clicks Going:
+<pre>[ Interested ] ✓ Going</pre>
+
+If the user clicks on the static text with checkmark ✓, then delete the RSVP and show:
+
+<pre>[ Interested ] [ Going ]</pre>
+
+Similarly, if the user clicks on another button after clicking one, then update the RSVP accordingly and switch the display to that button being static checkmark UI text.
+
+==== RSVP buttons with state ====
+If a reader can keep track of the posts it has made on behalf of the user (keep a cache of the user's RSVP post permalink), then it could update the buttons accordingly (instead of just showing static UI text).
+
+If they chose "Interested", show a button drop down <pre>[ ✓ Interested v ]</pre> which when clicked shows:
+<pre>
+[   Going          ]
+[ ✓ Interested     ]
+[ --------------   ]
+[   Not Interested ]
+</pre>
+
+If they chose "Going", show a button drop down <pre>[ ✓ Going v ]</pre> which when clicked 
+<pre>
+[ ✓ Going     ]
+[   Maybe     ]
+[ ----------  ]
+[   Not Going ]
+</pre>
+
+And if they click any of those, the show Going as above, and:
+
+If they chose "Not Interested", delete the RSVP post and show (like before)
+<pre>[ Interested ] [ Going ]</pre>
+
+If they chose "Maybe", show a button drop down <pre>[ ✓ Maybe v ]</pre> which when clicked 
+<pre>
+[   Going     ]
+[ ✓ Maybe     ]
+[ ----------  ]
+[   Not Going ]
+</pre>
+
+If they chose "Not Going", update the RSVP post and show a button drop down <pre>[ ✓ Not Going v ]</pre> which when clicked 
+<pre>
+[   Going     ]
+[   Maybe     ]
+[ ----------  ]
+[ ✓ Not Going ]
+</pre>
+And again, when selected, update the RSVP post and show the updated button/dropdown.
+
+==== RSVP Going Maybe Cannot ====
+For private events and [[invitation]]s, a reader could instead display: 
+<pre>[ Going ] [ Maybe ] [ Can't Go ]</pre>
+
+Invitations to a private event typically have an expectation (from the host) of a stronger indication of intent of the invitee.  If you receive an explicit invite to a private event, it's more likely that the host wants an actual yes/no response vs a silent ignore.
+
+Some more reasoning (why the other options are less necessary for private events)
+* "interested" is there to be able to let others know of your potential interest in the event, but makes less sense on a private event since a private event doesn't need the "boost" of promoting it to a larger network.
+* "ignore". More likely to need the "ignore" button for public events since it's a lot easier to be "invited" to those because of the way Facebook encourages sharing events.
+
 === Text Design ===
 Similar to [[like]] brainstorming, it's useful to explore how to best represent RSVP posts as a '''notification''' (e.g. to the author of the [[event]] (and the [[invitation]]) that the RSVP is responding to), '''text only''' (e.g. SMS authoring/output or POSSEing to text only destinations), '''inline hypertext''' and markup for that.
 
 (stub)
 
-E.g. some p-rsvp value/prose equivalent possibilities to consider:
-* yes - "going to" (implemented in [[#Tantek]]'s RSVPs).
-* maybe - "might go to"
-* no - "not going to" (implemented in [[#Tantek]]'s RSVPs).
-* interested - "interested in"
-* tracking - "tracking"
+E.g. some p-rsvp value/prose equivalent possibilities to consider, as the start of a plain text [[reply]]
+* '''yes''' - "going to " (implemented in [[#Tantek]]'s RSVPs).
+** "attending " for an RSVP published during the event. (implemented in [[#Tantek]]'s RSVPs, {{t}} research: 2 of 3 past uses (once a year 2010-2012) of "attending …" in notes were RSVPs, and third was an implied RSVP).
+** "went to " for an RSVP published after the event's end time or has otherwise ended. (implemented in [[#Tantek]]'s RSVPs)
+** "hosting " for an RSVP to an event that you're actually hosting (implemented in [[#Tantek]]'s RSVPs)
+** "co-organizing " for an RSVP to an event that you're co-organizing, but perhaps not hosting (implemented in [[#Tantek]]'s RSVPs)
+** more possible variants: "co-hosting", "organizing"
+* '''maybe''' - "might go to " (implemented in [[#Tantek]]'s RSVPs).
+* '''no''' - "not going to " (implemented in [[#Tantek]]'s RSVPs).
+** "missing " - as an alias of "not going to " that reflects more of an implied desire to have gone. (implemented in [[#Tantek]]'s RSVPs).
+*** non-explicit-RSVP real-world example of "missing " at start of a [[note]] that does reflect this semantic: http://tantek.com/2015/255/t1/celebrate-ariel-matt-tonight (only example found of that text pattern match on his site)
+* '''interested''' - "considering tonight's ", "considering today's ", and "considering going to ", all of which provide enough specific context to imply an event (implemented in [[#Tantek]]'s RSVPs)
+** non-explicit-RSVP real-world example of "insterested " at start of a [[note]] that does reflect this semantic: http://tantek.com/2011/040/t4/long-now-live-longer-think-who-going (only example found of "considering " text pattern match on his site that applies to an event)
+** Rejected: "interested in " - seems too generic, never felt like using it in practice
 
 Remote variants? Only for some level of actual participation (yes, maybe).
-* yes - "remotely attending"
-* maybe - "might remotely attend" (implemented in [[#Tantek]]'s RSVPs).
+* '''yes''' - "remotely attending "
+* '''maybe''' - "might remotely attend " (implemented in [[#Tantek]]'s RSVPs).
+
+=== Remote Participation ===
+If an event has a remote-participation option (no idea how to represent that other than prose), then it makes sense to allow people to RSVP as a remote participant.
+
+This is useful for at least two reasons (use-cases), a remote RSVP ...
+* helps the event organizer plan for making sure the remote-participation setup is working
+* implies the organizer need not worry about any food/drink/seating in-person for that RSVP
+
+See [[#Tantek]]'s RSVPs for a couple of real world examples of prose publishing of remote RSVPs.
+
+==== What value could be used to? ====
+It is necessary to differentiate <code>yes</code> between remote and onsite, especially considering the second reason given above. Someone participating remotely will not be taking a seat and may not always count towards the total of guests allowed.
+
+Would it be useful to extend [http://microformats.org/wiki/h-entry#p-rsvp the possible values] from <code>yes</code>, <code>no</code>, <code>maybe</code>, <code>interested</code> to <code>yes</code>, <code>no</code>, <code>maybe</code>, <code>interested</code>, <code>remote yes</code>, <code>remote no</code>, <code>remote maybe</code>, <code>remote interested</code>?
+
+* with these double values, does the order matter? Should consumers pickup <code>yes remote</code> too? This makes consuming harder.
+** how hard would it be to define RSVP as a [https://html.spec.whatwg.org/multipage/common-microsyntaxes.html#unordered-set-of-unique-space-separated-tokens set of space separated values], much like <code>rel</code>-attribute values? In CSS selector terms <code>[value~="remote"]</code> would tell a consumer that the RSVP is remote. —{{martijnvdven}}
+* {{sebsel}}: <code>remote no</code> does not need it's own value, for <code>no</code> is 'no'. I'm not sure about <code>remote maybe</code> and <code>remote interested</code>, but if it turns out you don't need them, just <code>remote</code> (and implying 'remote yes') might be just enough.
+
+===== Examples of brainstorm implementations =====
+
+* {{martijnvdven}} [https://licit.li/5940f76f2f217 published] a <code>remote yes</code> RSVP to [[2017|IWS 2017]].
 
 === POSSE ===
 How and where should RSVP posts be [[POSSE]]d?
@@ -205,6 +454,10 @@ Attendees can also RSVP for multiple people, ie request multiple tickets, by pos
 During the event, there are a couple possible ways for host(s) to verify attendees. If you want to use traditional tickets, when the RSVP poster goes to the ticket link, they can authenticate in with indieauth to get the actual ticket proof, which may be printable, a QR code to display on the phone, or just a page you show to the doorkeeper.
 
 A more modern, IndieWeb way is to forego tickets entirely, digital or otherwise. If the host has followed the process above, they end up with a list of RSVPs and domains for those RSVPs. The host can then set up a page on their site that accepts IndieAuth logins. When an attendee arrives, they IndieAuth into that page with their domain, the host checks the domain against their RSVP list, and lets them in (along with any guests).
+
+== FAQ ==
+=== are rsvp-values case-sensitive? ===
+No. Per [http://microformats.org/wiki/h-entry#Core_Properties the h-entry specification], the values for p-rsvp are ''Case-insensitive values, normalized to lowercase.'', so <samp>yes</samp>, <samp>Yes</samp> or <samp>yEs</samp> are all valid and equivalent.
 
 == Silo Examples ==
 === Facebook ===

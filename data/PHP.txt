@@ -1,4 +1,4 @@
-http://indiewebcamp.com/PHP
+https://indieweb.org/PHP
 
 {{stub}}
 
@@ -6,11 +6,13 @@ http://indiewebcamp.com/PHP
 
 == Projects ==
 * [[Falcon]] - much of it is in [[CASSIS]] as well.
-* [[idno]]
+* [[Known]]
 * [[p3k]]
 * [[stapibas]]
 * [[Taproot]]
 * [[WordPress]]
+* [[ProcessWire]]
+* [[Kirby]]
 
 == Libraries ==
 * [https://github.com/indieweb/php-mf2 php-mf2] - Microformats 2 parser
@@ -23,6 +25,12 @@ http://indiewebcamp.com/PHP
 == Articles ==
 Articles about the use of PHP, especially for software that you are expected to download and install on your own domain:
 * http://rachelandrew.co.uk/archives/2013/10/17/unfashionably-profitable/
+
+== Silos ==
+[[Silo]]s using PHP:
+
+* Facebook
+* [https://engineering.tumblr.com/post/152998126990/php-7-at-tumblr Tumblr]
 
 == Troubleshooting ==
 === UTF8 ===
@@ -66,6 +74,23 @@ Possible resolutions:
 *** if you instead (or also) saw an error like: <blockquote><samp>httpd not running, trying to start <br/>(13)Permission denied: make_sock: could not bind to address [::]:80 <br/>(13)Permission denied: make_sock: could not bind to address 0.0.0.0:80 <br/>no listening sockets available, shutting down <br/>Unable to open logs</samp></blockquote> then you forgot to use <kbd>sudo</kbd>. Try again with the exact <kbd>sudo apachectl -k graceful</kbd> command above.
 ** 2014-08-07 {{t}}: These steps worked for me this past week using a Macbook Air running OSX 10.7 and default [[Apache]]/PHP. Please only edit these instructions if you are documenting how you actually solved a problem firsthand, not how it might or should be possible.
 * Hopefully that fixes the "Warning: session_start()" error. If not, please ask in [[IRC]] and document further description/details below this item.
+
+== Criticism ==
+=== Fatal error memory exhausted ===
+
+Can run out of memory on servers sometimes, and give a message like:
+
+* e.g. on http://yottabytes.info/?p=10497 (on 2014-06-08 15:28 EDT): <blockquote> Fatal error: Allowed memory size of 41943040 bytes exhausted (tried to allocate 32 bytes) in /home/johnkrol/public_html/wp-includes/post.php on line 1961</blockquote>
+* Examples on: WordPress [https://wordpress.org/support/topic/fatal-error-allowed-memory-size-of-33554432-bytes-exhausted-2], Drupal [https://www.drupal.org/node/76156], and Joomla [http://forum.joomla.org/viewtopic.php?t=275276]
+
+
+==== Recommendations ====
+
+To fully avoid this problem one needs to figure out what the maximum amount of memory ones PHP process can need, check what amount of memory that is available on ones server, subtract any non-PHP processes from that amount of memory and then divide the remaining memory with the maximum amount of memory ones PHP process can need. The resulting number is the maximum amount of PHP processes one should run at once and ones server should be configured to never accept more than that or else be at the hands of the even worse fate than the mentioned white screen of death: The eternal doom of swapping that results when processes starts to use swap memory and processes therefore take much much longer to run and as a result more and more requests piles up so that the server sometimes can't recover itself at all but needs to be shut down.
+
+Strict memory limits and limits on amount of parallel PHP processes are meant to avoid such swapping issues, but shared hosting often put very restrictive memory limits making it hard for larger and more demanding PHP applications like Drupal and WordPress to fit inside of that. The alternative is often to look at either managing a VPS oneself and configure that to fit ones application as just described or to get a managed offering from a hosting provider or a PaaS and ensure that it gets configured correctly.
+
+An added complication when it comes to the LAMP stack is that sometimes the MySQL server is run on the same server as the PHP is and then compete for the same memory, which makes it even harder to figure out how much memory each process can be allowed to consume with the result of much stricter memory limits to be on the safe side.
 
 == See Also ==
 * [[language]]

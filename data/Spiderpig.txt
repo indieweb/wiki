@@ -1,7 +1,17 @@
-http://indiewebcamp.com/Spiderpig
+https://indieweb.org/Spiderpig
 
 {{stub}}
 
-'''<dfn>Spiderpig</dfn>''' is a web crawler for archiving a website as static HTML files.
+'''<dfn>[https://github.com/aaronpk/spiderpig Spiderpig]</dfn>''' is a web crawler for archiving a website as static HTML files.
 
-https://github.com/esripdx/spiderpig
+Spiderpig addresses many of the limitations associated with typical "wget" based approaches.
+
+* Ensures all filenames on disk are called "index.html" so that the URLs to the content don't change (aside from sometimes adding a trailing slash).
+* Ensures URLs such as <code>/example</code> and <code>/example/1</code> do not conflict with each other, which they would if you were to write a file to disk named <code>/example</code> because then <code>/example</code> would be a filename and it would try to write a file named `1` into the folder `/example` which is a problem.
+* Spiderpig will parse CSS files looking for images referenced from the CSS file and download those images.
+* Keeps track of HTTP redirects it encounters, saving them to a file, so you can generate .htaccess or nginx rewrite rules to ensure all your existing redirects stay intact.
+* Query strings are ignored completely, since URLs with query strings can't be reliably served from disk. For some tips on handling sites that make heavy use of query strings for permalinks, see this post on [https://thenotepad.org/posts/flattening-to-html.html flattening websites].
+
+== See Also ==
+* [[site archive]]
+* [[archiving]]

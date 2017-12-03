@@ -1,10 +1,107 @@
-http://indiewebcamp.com/Internet_Archive
+https://indieweb.org/Internet_Archive
 
+__TOC__
 {{stub}}
 
 The '''<dfn>[http://archive.org Internet Archive]</dfn>''' is a non-profit organization that is building a digital library, including [[archival copy]] of much of the public web.
 
+== How to ==
+=== Trigger an Archive ===
+You can tell archive.org to crawl and archive a specific URL immediately.
+
+<code style="display:block;padding:1em"><nowiki>$ curl [[curl -I|-I]] [[curl -H|-H]] "Accept: application/json" https://web.archive.org/save/{url to archive} | grep Content-Location</nowiki></code>
+
+and you'll get a response like:
+
+<samp><nowiki>Content-Location: /web/20160715203015/http://indieweb.org</nowiki></samp>
+
+The response includes the path to the archived page on web.archive.org. Append this path to <kbd><nowiki>https://web.archive.org</nowiki></kbd> to build the final URL for the archived page.
+
+==== Trigger Archive in PHP ====
+PHP snippet to call the <code>curl_exec()</code> function with appropriate options/params to trigger an archive:
+
+<pre>
+$options = 
+array(CURLOPT_URL => ('https://web.archive.org/save/' . $url_to_save),
+      CURLOPT_HEADER => true,
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_HTTPHEADER => array('Accept: application/json'),
+      CURLOPT_USERAGENT => "YOUR_CMS_NAME_HERE");
+$ch = curl_init();
+curl_setopt_array($ch, $options);
+$response = curl_exec($ch);
+$info = curl_getinfo($ch);
+curl_close($ch);
+</pre>
+
+You can then check <code>$info['http_code']</code> for a numeric [[HTTP]] return code to see if there was an error (e.g. >= 400) and take action accordingly.
+
+==== Trigger Archive in Python (with requests) ====
+
+This method requires the 'requests' Python library.
+<pre>
+pip install requests
+</pre>
+
+<pre>
+import requests
+
+# fire and forget archive.org call
+try:
+    verify = requests.get(
+        '%s%s' % ('https://web.archive.org/save/', target),
+        allow_redirects=False,
+        timeout=30,
+    )
+except:
+    pass
+</pre>
+
+==== Trigger Archive in Ruby ====
+
+This is a Ruby method that triggers archiving by the Internet Archive for a given URL. It returns the URL that you can visit to see the archived page. It uses the <a href="https://github.com/rest-client/rest-client" title="Homepage of the REST Client Ruby gem">rest-client Ruby gem</a> to make a GET request.
+
+<pre>
+require 'rest-client'
+
+def web_archive(url)
+  archive_request_response = RestClient.get("https://web.archive.org/save/#{url}")
+  "https://web.archive.org" + archive_request_response.headers[:content_location]
+end
+</pre>
+
+=== Known ===
+{{new}} There is a [[Known]] plugin to auto-archive your posts and edits to your posts, as well as pages that you bookmark:
+* https://www.marcus-povey.co.uk/2017/02/02/archive-org-wayback-machine-support-for-known/
+* source: https://github.com/mapkyca/KnownWaybackMachine
+
+Limitation(?)
+* Appears to NOT archive the links in your posts, except for [[bookmark]] posts.
+** SHOULD: Archive all pages you link to, e.g. all pages that you (even attempt to e.g. do discovery on to) send Webmentions to.
+** Github issue: https://github.com/mapkyca/KnownWaybackMachine/issues/1
+
+=== WordPress ===
+There is a useful little plugin [https://wordpress.org/plugins/post-archival/ Post Archival in the Internet Archive] which will not only archive the user's post, but will also archive all the links within the post.
+
+== IndieWeb Examples ==
+=== Jeremy Keith ===
+{{adactio}} has been pinging web.archive.org/save to archive pages that adactio.com posts link to since 2016-09-26
+=== Aaron Parecki ===
+{{aaronpk}} has been pinging web.archive.org/save with every URL that a Webmention is sent to since 2016-09-26
+=== Tantek ===
+{{t}} implemented (2016-11-13) pinging web.archive.org/save with every URL in a link/reply-to and has been doing it from tantek.com [http://tantek.com/2016/320/t3/auto-archive-pages-link-reply since 2016-11-15].
+=== Chris Aldrich ===
+{{chrisaldrich}} implemented (2017-01-07) pinging the archive with URLs of both his own posts as well as links within posts using [https://wordpress.org/plugins/post-archival/ Post Archival in the Internet Archive].
+=== [[svgur]] ===
+{{kevinmarks}} implemented pinging the archive with URLs of the SVG display posts, and thus indirectly the SVGs themselves
+=== [[mention-tech]] ===
+{{kevinmarks}} implemented [http://known.kevinmarks.com/2017/day-2-saving-webmentioned-urls-to-archiveorg-100daysofindieweb (2017-01-24)] pinging the archive with both the source and target URLs of the webmention so that they get preserved too.
+
+== Requests ==
+* [[Telegraph]] support - https://github.com/aaronpk/Telegraph/issues/14 - should support auto-archiving for any sent Webmention
+
 == See Also ==
 * [[archival copy]]
 * [[indiearchive]]
+* [[archival_copy#Link_Archiver_on_Twitter|Link Archiver on Twitter]]
 * ...

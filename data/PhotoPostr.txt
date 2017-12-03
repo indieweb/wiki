@@ -1,0 +1,38 @@
+https://indieweb.org/PhotoPostr
+
+'''<dfn>PhotoPostr</dfn>''' is a [[Micropub]] client for posting [[photo-album|photo albums]]. It is available at [https://photo.postrchild.com photo.postrchild.com]
+
+== About ==
+
+PhotoPostr is created by [[User:Grant.codes|Grant Richmond]] using a simple [[node.js]] backend and a [[React]] frontend.
+
+PhotoPostr is able to handle very large photo albums. [[User:Grant.codes|Grant Richmond]] has successfully posted a 1.42GB album of 92 photos. [https://grant.codes/2017/11/23/5a172628023c9d2ae6fbbe9a View the created album]
+
+== Photo Handling ==
+
+PhotoPostr posts photos to the [[micropub media endpoint]] and will create an individual [[photo]] post for each post. Photos are created with the "gallery-photo" category, the user will probably want to hide these posts from their feeds and only show the actual album post.
+
+When uploading photos PhotoPostr will look at the [[Exif]] data of the photos it receives and maps some of the properties to the appropriate micropub properties. This includes:
+
+* Name from the filename 
+* Date from the exif original date
+* Location from the exif GPS latitude and longitude
+
+Users can then edit all these properties as well as the content of the [[photo]] post as well as drag and drop photos to reorder them.
+
+== Album Posts ==
+
+The [[photo-album|album post]] is created with a collection of children (the individual photo posts). At the time of writing since a lot of micropub endpoints do not handle children PhotoPostr also sends a collection property with the urls to the photo posts.
+
+Album posts will have the category "gallery".
+
+Album posts also support a name, content and slug.
+
+== Screenshot ==
+
+[[File:PhotoPostr-preview.png|400px]]
+
+== See Also ==
+* [[Micropub]] and [[Micropub/Clients]]
+* [https://photo.postrchild.com photo.postrchild.com]
+* [https://github.com/grantcodes/photo-postr Source code on GitHub]

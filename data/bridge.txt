@@ -1,0 +1,73 @@
+https://indieweb.org/bridge
+
+{{stub}}
+
+A '''<dfn>bridge</dfn>''' is software and or a service that connects (<dfn>bridges</dfn>) two (or more) sites (like personal indieweb sites or social media [[silos]] or both) by translating (<dfn>bridging</dfn>) data between them, typically using indieweb [[building blocks]] to do so.
+
+== POSSE ==
+{{main|POSSE}}
+[[POSSE]] is the technique of bridging [[posts]] from indieweb sites to social media [[silos]], implemented in CMS specific software that calls silo-proprietary [[API]]s to cross-post directly, or by standard protocols to services ([[Bridgy]] publish via [[Webmention]], [[silo.pub]] via [[Micropub]]) which then themselves call silo-proprietary [[API]]s.  
+
+== backfeed ==
+{{main|backfeed}}
+[[backfeed]] is the complement to [[POSSE]], the technique of bridging [[responses]] to copies of posts on social media [[silos]] back to their respective original posts on indieweb sites. [[Bridgy]] backfeed is a commonly used backfeed service.
+
+The combination of [[POSSE]] and [[backfeed]] techniques forms a two-way bridge between indieweb sites and [[silos]].
+
+== ActivityPub ==
+
+''Also see [[2017/ostatusbridge]].''
+
+At the [[2017|IndieWeb Summit 2017]] {{strugee}}, {{snarfed}} and [[2017/ostatusbridge#Participants|several other people]] came up with what we believe is a functional way to bridge ActivityPub networks with IndieWeb-compatible sites. There are a couple problems in this space we believe we have "solved":
+
+# [[Micropub]] client usage on ActivityPub sites
+# Mentions from ActivityPub to IndieWeb sites
+# Mentions/replies from IndieWeb sites to ActivityPub actors/posts
+
+=== Micropub ===
+
+This should be relatively straightforward. The bridge is just a website that the user signs into with their ActivityPub credentials and then points their Micropub client at. When they submit stuff, the site will translate Micropub submissions into ActivityPub <code>Create</code> activities.
+
+=== Mentions ActivityPub -> IndieWeb ===
+
+ActivityPub basically expects to see another ActivityPub actor at the other end. There are two ways that this bridging can be done: a "good UX" profile which needs some work on the IndieWeb side, and an "OK-but-not-great UX" which doesn't.
+
+First, the "good UX" way: {{strugee}} ''thinks'' that any IndieWeb site wishing to allow ActivityPub actors to mention them can put a static JSON file at the root of their site that looks like an AP actor, though this needs double-checking with the spec. The inbox and outbox URLs can then point to a bridge service, so AP servers will deliver activities to the bridge. The bridge can then send [[webmention|webmentions]], etc. as appropriate back to the IndieWeb site. The bridge will also be able to present mf2 markup representing the ActivityPub data, similar to how [[bridgy]] works.
+
+The UX in this case is in theory quite good: AP actors ''should'' be able to mention IndieWeb sites directly, without mangling URLs.
+
+Should an IndieWeb site not support this type of bridging, the ActivityPub site/user will be forced to use the "not so great UX" workflow, which basically means prefixing the IndieWeb URL with a bridge URL. The bridge will then present an ActivityPub actor (basically the same as would have been statically served in the "good UX" profile) that has inbox and outbox pointing at itself. The rest is the same.
+
+=== Mentions IndieWeb -> ActivityPub ===
+
+Options are not so great here. Like ActivityPub -> IndieWeb, there are two profiles:
+
+# "Good UX" profile, which requires (very small!) implementation changes from ActivityPub servers
+# "OK-but-not-great UX" profile, which requires ''no'' changes from AP servers
+
+With any generic ActivityPub server not implementing the "good UX", the workflow is this:
+
+# IndieWeb site wants to mention an ActivityPub post
+# IndieWeb site takes the AP post URL and appends the URL of a bridge service to it, then posts the mention with the modified URL
+# IndieWeb site's [[webmention]] implementation looks up the ''bridge's'' Webmention endpoint, then sends a webmention to the ''bridge''
+# The bridge sends a <code>Mention</code> activity (or whatever) to the server the ActivityPub post is on, with the actor set to a URL the bridge controls
+# If the ActivityPub server does a GET on the actor URL or something, the bridge presents JSON representing an AP actor with the data filled in based on the originating IndieWeb site
+
+This works, but the ugly part here is the URLs. Therefore, there's the "good UX" profile - basically, ActivityPub implementations can support better UX here by adding a configuration option allowing the administrator to specify a Webmention endpoint URL which will be included in all post pages. This allows the server admin to choose a service to provide bridging for their AP server, then add that bridge's Webmention endpoint into their server config.
+
+From then on, the URL rewriting step above can be skipped, so the workflow becomes:
+
+# IndieWeb site wants to mention an ActivityPub post
+# IndieWeb site posts the mention with the original ActivityPub URL
+# IndieWeb site's [[webmention]] implementation looks up the bridge's Webmention endpoint ''on the ActivityPub page'', then sends a webmention to the ''bridge''
+# (Continue as above)
+
+See [[Media:ostatusbridge-whiteboard.jpg]] for a drawing that includes this - the green line represents the "good UX" workflow.
+
+The hope is that this change is so small and easy to implement, ActivityPub implementations will be more easily convinced to add it.
+
+== See also ==
+* [[POSSE]]
+* [[backfeed]]
+* [[Bridgy]]
+* [[silo.pub]]

@@ -1,9 +1,25 @@
-http://indiewebcamp.com/HSTS
+https://indieweb.org/HSTS
 
 {{stub}}
 
-'''<dfn>HSTS</dfn>''' is short for [[HTTP]] Strict Transport Security, an extension to [[HTTPS]].
+'''<dfn>HSTS</dfn>''' is an acronym for [[HTTP]] Strict Transport Security, an HTTP header that indicates to browsers how long the website should only be accessible over HTTPS for. Requests and links during that window (typically 6 months) are forcibly rewritten by the browser to be HTTPS, which prevents an attack where the initial connection is over HTTP and an attacker subsequently strips the Location header to use the website over HTTPS.
+
+You should only apply HSTS if you are confident your HTTPS implementation is solid and won't go away anytime soon. HSTS is difficult to get rid of once it's been applied.
+
+To apply HSTS, add the HTTP header "Strict-Transport-Security" into your web server with a value "max-age=15768000" (where max-age indicates how many seconds). The value 15768000 is for half a year, which is the recommended minimum.
+
+You can also apply this to every subdomain like so:
+
+ Strict-Transport-Security: max-age=15768000; includeSubDomains
+
+Finally, you can request to be on the "preload" list which is included into web browsers. You should only do this once you've tested with HSTS and it works well. It's difficult to get off this list because users would need to update their browsers!
+
+ Strict-Transport-Security: max-age=15768000; includeSubDomains; preload
+
+Once you have the preload tag, simply add your domain to [https://hstspreload.org/ hstspreload.org] to be enrolled into the program.
 
 == See Also ==
 * https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security
 * [[HTTPS]]
+* https://hstspreload.org/
+* https://tools.ietf.org/html/rfc6797 (RFC6797 - HTTP Strict Transport Security (HSTS))

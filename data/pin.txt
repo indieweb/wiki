@@ -1,35 +1,80 @@
-http://indiewebcamp.com/pin
+https://indieweb.org/pin
+
+{{emojicon|📌}}
 
 {{stub}}
 
 '''<dfn>pin</dfn>''' or <dfn>pinning</dfn> is a feature that allows the author to choose a [[post]] to put at the top of their profile (or [[homepage]]) which is then called a <dfn>pinned</dfn> or <dfn>sticky</dfn> post.
 
 == Why ==
-Sometimes you want to pin a post that's temporally (or temporarily) relevant - e.g. before an [[event]] (human) or [[site-deaths|site shutdown]].
-
+Sometimes you want to bring attention to a post that's more currently relevant than just the most recent post in your stream, e.g.
+* before an imminent [[event]] (human) or [[site-deaths|site shutdown]]
+* a currently active event
+* fundraising campaign
+By "pinning" such a post to the top of your stream, you make sure any new readers (or returning readers) who visit your homepage or profile see that post first, and consider it as recently (or still) relevant even if it is not the most recent thing you have posted.
+__TOC__
 == IndieWeb Examples ==
-None so far.
+=== Aaron Parecki ===
+{{aaronpk}} supports pinned posts in tag pages [https://aaronparecki.com/2016/12/28/3/day-8-pinned-posts since 2016-12-28], e.g.:
+** https://aaronparecki.com/tag/100daysofindieweb
+
+=== ... add yourself! ===
+...
 
 == Software Support ==
 * [[WordPress]] has supported sticky posts since 2.7
 
 == Silo Support ==
 === Facebook ===
-[[Facebook]] has supported pinned posts on [[event]] posts, [[pages]] for quite some time.
+[[Facebook]] has supported pinned posts on [[event]]s, [[pages]], and [[groups]] for quite some time (the admin/creators of such posts/pages has the ability to (un)pin posts).
+* Noticeably absent: Facebook DOES NOT have the ability for a user to pin a post on their own profile/timeline.
+
+[[File:facebook-pinned-post-group.png]]
+
+Facebook pinned posts appear with a separate header from "recent activity" and look visually distinct from the chronological list of posts.
+
 === Twitter ===
 [[Twitter]]'s mid-2014 UI update added support for a pinned post on a user profile.
 
+[[File:twitter-pinned-tweet.png]]
+
+Twitter pinned tweets are marked with "pinned tweet", but otherwise are integrated into the primary list of tweets.
+
 == Brainstorming ==
-More thinking on pinned / sticky posts:
+More thinking on pinned / sticky posts. Various thoughts:
+
+=== first or just near top ===
 * You may not want it to be the first post in your profile - because that may give the illusion that there's nothing newer.
-* Possibly 1-2 normal in-stream posts display, then followed by the pinned post, almost like it is a promoted post for itself.
+* Possibly 1-2 normal in-stream posts display, then followed by the pinned post, almost like it is a [[promoted]] post for itself.
+* {{t}}: I'm pretty sure I want my pinned post to presentationally be the first post-like thing on my profile, in the stream of posts etc.
+** Note: {{aaronpk}} implements pinning as show as first post, and [[Twitter]], [[Facebook]] both also implement pinning as first post.
+
+=== special presentation ===
+Any special presentational considerations for pinned posts? Besides being shown "first" (see above)?
+
+* {{t}} - the pinned post should have some indication that it is pinned and not just the latest post.
+** minimum: text (and/or icon) above the post (content) like Twitter's "Pinned Tweet" or Facebook's "Pinned Post", or {{aaronpk}}'s little "pin" icon on a green triangle in the top right of a post block.
+** maybe a separate border around the post? especially if there is a header like "Recent Activity" after the pinned post but before the normal ordered stream of posts (FB does this)
+*** new template slot? a specific spot in a home page template for a pinned post may help move some presentational distinctions to just HTML+CSS, and leave the "engine" to just find and put a pinned post in the right spot in the template. The more presentation that can be done in HTML+CSS rather than procedural coding, the better. Since this may be engine specific, I’ll add more in: '''[[Falcon#pinned_posts]]'''
+
+=== markup details ===
+* {{t}} Just an [[h-entry]]. Should a pinned post have any different markup than a regular post? Only if there is a specific use-case need, otherwise, it's just a post.
+* {{t}} Still part of explicit (or implicit) [[h-feed]] on the page. Since a pinned post should only be shown once in a stream (instead of twice, at the top and in the stream in sort order), the pinned post h-entry should be either explicitly in the same h-feed, or at least at the same level (from a [[microformats2]] parser perspective) as the other h-entrys on the page, so that h-feed consuming code will just include it in the overall stream it presents to readers etc.
+
+=== tag or category specific ===
 * I want to be able to pin posts in different feeds, ie. on certain tag pages. So the post could still appear chronologically in places where it's not pinned. - {{rhiaro}}
+* Note: {{aaronpk}} has implemented this, e.g. https://aaronparecki.com/tag/100daysofindieweb
+
+=== pinning and feed files ===
 * I don't want a reader to treat a pinned post as always the most recent in a feed. Do readers sort things themselves by published date, or display things in the order they pull them from a feed? - {{rhiaro}}
+* {{t}} I would not do anything with pinning in feed files. Readers are likely to just display in dt-published order most recent first anyway.
+
+=== auto-unpinning ===
+{{t}} I am considering implementing pinned posts, but having them auto-unpin after some period of time like ~60 days. This will both make them easier to implement, and also provide an automatic way to not have to worry about unpinning something eventually. I like systems that by default clean-up after themselves.
 
 == Session ==
 Sessions about pinning:
 * [[2013/Hollywood/Pinning_Posts]]
 
 == See Also ==
-* [[Facebook]]
-* [[Twitter]]
+* [[one day banner]]

@@ -1,8 +1,94 @@
-http://indiewebcamp.com/Swarm
+https://indieweb.org/Swarm
+
+{{pagelogo|https://pbs.twimg.com/profile_images/634033341394583552/Nw3FE9VU_400x400.png}}
 
 {{stub}}
 
-'''<dfn>Swarm</dfn>''' is an app by [[Foursquare]] focused on [[checkins]] and showing nearby friends. 
+'''<dfn>Swarm</dfn>''' is a [[location]] app by [[Foursquare]] focused on [[checkins]] and showing nearby friends. 
+
+Previously Swarm had been a mobile only app, with no interactivity on its website which was simply a splash page with links to the mobile apps.  The link back provided was to the location (VenueURL) was on Foursquare's site. 
+
+Currently (as of at least early 2017) their website can't be used for [[checkin]]s, but now does allow login, viewing friend activity, viewing personal checkin history with Swarmapp permalinks (separate from the mirrored [[Foursquare]] permalinks which are also generated on their sister site), and a year in review.
+
+
+== How to POSSE ==
+* [[Known]] supports [[POSSE]]ing checkins from your Known website to Swarm.
+* Swarm [https://developer.foursquare.com/docs/checkins/add provides an API] for creating checkins, which can be used by software like Known
+
+== How to PESOS ==
+Checking in using the Swarm application is easy, and provides a good user experience, especially with their new "offline checkin" feature.
+
+The app supports "share" options, which will create a post on various supported [[silo]]s that have a permalink to your checkin. 
+
+Swarm has an API to [https://developer.foursquare.com/docs/users/checkins retrieve a user's checkins], along with photos and comments. There is also a [https://developer.foursquare.com/overview/realtime realtime API] which will proactively notify your server when a new checkin is created.
+
+=== OwnYourSwarm ===
+
+[[OwnYourSwarm]] is a [[micropub]] client that will send your Swarm checkins to your website by sending a Micropub request. It also supports sending webmentions for coins, likes and comments on your checkins. 
+
+=== OwnYourCheckin ===
+[[OwnYourCheckin]] is a micropub client based on [[OwnYourGram]]. This technically returns a [[Foursquare]] syndication URL instead of a Swarm specific one.
+* {{chrisaldrich}} has used OwnYourCheckin (since ~June 2016) in combination with the [https://wordpress.org/plugins/micropub/ WordPress micropub plugin] to own his checkins. He occasionally manually inputs the syndication links from the Swarm app post as well as the FourSquare version. Example: http://boffosocko.com/2017/03/22/checkin-basin-141/ Since OwnYourCheckin returns the GPS data of the location, he also uses the [https://wordpress.org/plugins/simple-location/ Simple Location] plugin to optionally display a map with the location as well. While one can upload as many as four photos to a checkin, OwnYourCheckin only allows the posting of one photo, the first one posted.
+
+=== [[IFTTT]] ===
+[[User:Davidjohnmead.com|David Mead]] uses an [[IFTTT]] recipe for [[WordPress]] to watch his [[Swarm]] checkins, using the [[Foursquare]] channel. When a new entry appears it creates a post on his [http://davidjohnmead.com/blog blog]. <br/>[[File:ss-swarm-link-davidmead.png|400px]]<br/> You can find his recipe at https://ifttt.com/recipes/365678-post-swarm-check-in-s-to-your-wordpress-blog.
+Note: the [https://wordpress.org/plugins/ifttt-post-formats/ IFTTT post formats] plugin can be used to automatically set the post format (for example to "Status") using this set up.
+
+* Example
+** Post on David Mead's blog - http://davidjohnmead.com/blog/2016/01/01/im-at-china-mountain-ii/
+** Original entry on Foursquare - https://foursquare.com/v/china-mountain-ii/4c34ff3e66e40f470681ca8b
+
+== Features ==
+(this section is a stub)
+
+Summary of Swarm's user features:
+* [[profile]]
+* [[friend]] other people
+* [[checkin]] posts at specific venues
+** optional: photo, comment, sticker
+** variant: offline checkins
+* [[responses]] to [[checkin]]s including:
+** [[like]]
+** [[comment]]
+** [[photo comment]]
+** [[sticker comment]]
+* [[notifications]]
+* [[on this day]]
+* ...
+
+== User Interface ==
+=== Check-in on iOS ===
+[[checkin|Checkin]] UI screen on iOS Swarm App (iPod6 touch, iOS10) both default, and if text field is unfocused somehow (e.g. multitask toggle out of the app and back in)
+
+[[File:2017-079-swarm-ipod6-ios10-checkin.png|320px]] [[File:2017-079-swarm-ipod6-ios10-checkin2.png|320px]]
+
+Checkin choose photos and checkin choose [[sticker]] variants:
+
+[[File:2017-079-swarm-ipod6-ios10-checkin-photos.png|320px]] [[File:2017-079-swarm-ipod6-ios10-checkin-stickers.png|320px]]
+
+=== Offline Check-in on iOS ===
+
+When there is no network connection, Swarm will prompt you to check in offline. Tapping the checkin button saves a bookmark of that location that can be used to create a full checkin later.
+
+[[File:swarm-offline-checkin-1.png|320px]] [[File:swarm-offline-checkin-2.png|320px]]
+
+Once your network connection returns, you will see a notice on the main Swarm feed saying that there are offline checkins to review.
+
+[[File:swarm-offline-checkin-3.jpg|320px]]
+
+Tapping that will reveal an interface for reviewing the one or more locations you previously saved. 
+
+[[File:swarm-offline-checkin-4.png|320px]] [[File:swarm-offline-checkin-4a.png|320px]] [[File:swarm-offline-checkin-5.png|320px]]
+
+In between selecting the place and confirming, you are given the opportunity to add a comment or photo to your checkin like in the normal checkin workflow.
+
+=== Profile ===
+* World map at top of profile shows your clustered checkins.
+*...
+
+On Android:
+
+[[File:2017-03-20-Swarm-profile-on-android.png|320px]]
 
 == Advertising use of friends photos ==
 2015-03-25 {{kevinmarks}} was [https://twitter.com/kevinmarks/status/580959376321572864 shown an advertisement] in his Swarm app: 
@@ -10,28 +96,37 @@ http://indiewebcamp.com/Swarm
 Note the first icon which is {{t}}'s icon on [[Foursquare]] (and thus Swarm), likely due to him having checked into CVS: "have been here".
 
 
-==[[PESOS]]==
-Checking in using Swarm, via their app, is easy but getting your content out is a little trickier. They do offer standard "share" options but nothing automatic.
-
-[[User:Davidjohnmead.com]] uses an [[IFTTT]] recipe for [[WordPress]] to watch his [[Swarm]] checkins, using the [[Foursquare]] channel. When a new entry appears it creates a post on his [http://davidjohnmead.com/blog blog].
-
-You can find his recipe at https://ifttt.com/recipes/365678-post-swarm-check-in-s-to-your-wordpress-blog.
-
-As Swarm is only an app (no website to log in to), the link back is to the location (VenueURL) on Foursquare's site.
-
-[[File:ss-swarm-link-davidmead.png|400px]]
-
-===Example===
-* Post on David Mead's blog - http://davidjohnmead.com/blog/2016/01/01/im-at-china-mountain-ii/
-* Original entry on Foursquare - https://foursquare.com/v/china-mountain-ii/4c34ff3e66e40f470681ca8b
-
 == Other Links ==
-* [http://techcrunch.com/2014/05/15/foursquares-swarm-and-the-rise-of-the-invisible-app/ Foursquare’s Swarm And The Rise Of The Invisible App] (techcrunch.com)
-* http://blog.foursquare.com/post/85826325458/swarm-is-ready-for-you-download-it-now
+* {{citation
+| title = Swarm: First Impressions
+| url = http://aaronparecki.com/articles/2014/05/15/1/swarm-first-impressions
+| author = {{aaronpk}}
+| published = 2014-05-15
+}}
+* {{citation
+| title = Foursquare’s Swarm And The Rise Of The Invisible App
+| url = http://techcrunch.com/2014/05/15/foursquares-swarm-and-the-rise-of-the-invisible-app/
+| author = Matthew Panzarino
+| published = 2014-05-15
+}}
+* {{citation
+| title = Swarm is ready for you! Download it now.
+| url = http://blog.foursquare.com/post/85826325458/swarm-is-ready-for-you-download-it-now
+| author = 
+| published = 2014-05-14
+}}
+* {{citation
+| title = Foursquare’s new Swarm app means the death of badges & mayors
+| url = http://venturebeat.com/2014/05/09/foursquares-new-swarm-app-means-the-death-of-badges-mayors/
+| author = Harrison Weber
+| published = 2014-05-09
+}}
 * [https://twitter.com/swarmapp @SwarmApp] on Twitter
-* [http://aaronparecki.com/articles/2014/05/15/1/swarm-first-impressions Swarm: First Impressions] (aaronparecki.com)
+
 
 == See Also ==
 * [[Foursquare]]
 * [[checkin]]
 * [[location]]
+* [[OwnYourCheckin]]
+* [[OwnYourSwarm]]

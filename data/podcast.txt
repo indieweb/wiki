@@ -1,4 +1,4 @@
-http://indiewebcamp.com/podcast
+https://indieweb.org/podcast
 
 {{stub}}
 
@@ -6,7 +6,7 @@ A '''<dfn>podcast</dfn>''' is an episodic series of [[audio]] and/or [[video]] p
 
 == Why ==
 Why should you have a podcast? Some people like listening to them when:
-* walking / running / [[exercising]] in general
+* walking / running / [[exercise|exercising]] in general
 * driving, e.g. on a roadtrip
 * commuting (by any method)
 
@@ -22,7 +22,7 @@ eg: <enclosure url="http://example.com/podcast01.mp3" length="259429328" type="a
 
 However, most podcasts also include a number of other iTunes specific tags to ensure itunes will subscribe to them easily, eg <itunes:summary>. Some of these itunes tags are usually just replications of the data in other tags in the item.
 
-Most podcast players both consume podcast feeds and play podcast audio. [[iTunes]] is the primary player on OS X and iOS. Other platforms have other players, e.g. [http://beyondpod.com/ BeyondPod] on [[Android]].
+Most podcast players both consume podcast feeds and play podcast audio. [[iTunes]] is the primary player on OS X and iOS. Other platforms have other players, e.g. [http://beyondpod.com/ BeyondPod] and [http://antennapod.org/ AntennaPod] on [[Android]]. (See also [[podcatcher]])
 
 Some podcasts only publish on iTunes. You can subscribe to them in other players with hacks like [http://picklemonkey.net/feedflipper-home/ Feed Flipper].
 
@@ -40,9 +40,37 @@ IndieWeb examples of personal podcast publishing and consuming
 === gRegor Morrill ===
 {{gRegor}} has published a podcast on http://latenighttoast.com using [[ProcessWire]]
 * First 2015-05-07: http://latenighttoast.com/episodes/001-episode-305/
+* Includes [[h-feed]] microformats
 * Generating the RSS feed [http://latenighttoast.com/xml-feed/] on the same domain so that we can control the canonical URL of the feed after submitting it to iTunes.
 * Using [[archive.org]] to host the MP3s.
 * Using URLs on the same domain that redirect to the archive.org MP3s, again so that we control the canonical URL of the MP3. This also gives us the ability to roughly track the number of streams/downloads of each episode.
+
+=== Jeenas Excellent Encounters ===
+{{jeena}} is publishing a podcast on https://jeena.net/pods
+* using his own implementation with Ruby on Rails
+* It's marked up with a h-feed h-entry and u-audio
+* It also has a RSS feed for iTunes and other podcast managers
+
+=== Marty McGuire ===
+{{ martymcguire}} is publishing a podcast at https://wehavetoask.com/
+* static site generated with [[Hugo]]
+* index marked up as an h-feed with h-entry and u-audio
+* Build process also creates an RSS feed for iTunes and other podcast managers
+Marty also hosts an IndieWeb-centric podcast [https://martymcgui.re/tag/this-week-indieweb-podcast/ This Week in the IndieWeb]
+
+=== Colin Walker ===
+{{colinwalker}} is publishing a twice-weekly microcast at https://colinwalker.blog/podcast
+* self-hosted using WordPress
+* episodes approx 3 minutes long, recorded on iPhone and posted using Workflow
+* includes h-feed, h-entry and u-audio markup
+* local RSS feed and via iTunes
+
+=== Aaron Parecki ===
+{{aaronpk}} publishes a podcast at https://percolator.today
+* self-hosted using home-built tools
+* episodes are about 3-6 minutes long
+* marked up with h-feed, h-entry and u-audio
+* has a local RSS feed published via iTunes and other podcast directories
 
 == Other Examples ==
 === Wavelist ===
@@ -66,7 +94,9 @@ Users of Huffduffer can then find your podcast by tag.
 ==== Submitting to iTunes for distribution ====
 See: [https://www.apple.com/itunes/podcasts/specs.html How to Submit a Podcast] at apple.com
 
-When submitting a podcast URL to iTunes, be sure to submit a URL on a domain that you control. For example, if using [[Libsyn]] to host your podcast mp3s, don't submit the RSS URL that they provide. Instead, host a page on your domain that sends a "302 Found" temporary redirect to the Libsyn URL. 
+When submitting a podcast URL to iTunes, be sure to submit a URL on a domain that you control. For example, if using [[Libsyn]] to host your podcast mp3s, don't submit the RSS URL that they provide. Instead, host a page on your domain that sends a "302 Found" temporary redirect to the Libsyn URL.
+
+The HTTP client that Apple uses to fetch your podcast feed does not support [[SNI]] or [[Letsencrypt]] certificates. If you don't have the ability to host an https URL on a dedicated IP address with an SSL cert from a supported CA, then you will have to give Apple a non-https URL for your podcast feed.
 
 == Changing podcast hosting providers ==
 
@@ -90,6 +120,64 @@ Essentially the process involves setting an additional property in the feed URL.
 {{main|unmung}}
 [[unmung]] will turn podcast feeds into playable HTML5 audio with microformats markup eg [http://feed.unmung.com/feed?feed=http%3A%2F%2Fdownloads.bbc.co.uk%2Fpodcasts%2Fradio4%2Fiot%2Frss.xml In Our Time]
 
+== Brainstorming ==
+=== How to podcast with h-feed ===
+{{aaronpk}} has an experimental podcast setup with h-feed.
+
+* http://transportini.com/
+** The top-level object is an h-feed with the podcast description
+** Each episode is an h-entry child of the h-feed 
+** Each episode h-entry has the following properties:
+*** name - the episode name
+*** length - duration of the episode, e.g. "PT12M40S"
+*** size - the file size of the audio file "17.43mb"
+*** audio - the link to the mp3 file of the episode
+*** url - permalink to the episode's HTML page
+*** published
+*** summary - episode summary, intended to be displayed in players
+
+{{martymcguire}} publishes a podcast with h-feed.
+
+* https://wehavetoask.com/
+** The top-level object is an h-feed. The podcast description is contained in the author property of the h-feed as an h-card:
+*** url
+*** name - name of the podcast
+*** note - summary description, similar to what appears in a podcast directory
+*** photo - poster image similar to what appears in a podcast directory
+** Each episode is an h-entry child of the feed, with the following properties:
+*** name - title of the episode
+*** summary - episode summary, intended to be displayed in players
+*** audio - the link to the mp3 file of the episode
+*** content - HTML with the summary text and <audio> element
+*** url - permalink to the episode's HTML page
+*** published
+
+{{gRegor}} publishes a podcast with h-feed:
+
+* http://latenighttoast.com/
+** The top-level object is an h-feed with properties
+*** name
+*** url
+*** author - nested h-card
+*** summary - podcast summary, similar to what appears in podcast directory
+*** photo - poster image similar to what appears in a podcast directory
+** Each episode is an h-entry child of the h-feed 
+** Each episode h-entry has the following properties:
+*** name - the episode name
+*** length - duration of the episode, e.g. "PT1H7M59S"
+*** size - the file size of the audio file "62.2 MB"
+*** audio - the link to the mp3 file of the episode
+*** url - permalink to the episode's HTML page
+*** dt-published
+*** summary - episode summary, intended to be displayed in players
+*** content - HTML contents of episode page. Includes summary + <audio> + length + download link. May be redundant, but may also serve as a fallback for readers that don't have special handling for [[audio]] posts
+
 == See Also ==
 * [[audio]]
 * [[video]]
+* [[microcast]]
+* [[podcatcher]]
+* [[podcasts about the indieweb]]
+* [[Indieweb Podcast Club]]
+* [[Screech]]
+* [[Audiogram]]

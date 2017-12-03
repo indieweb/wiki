@@ -1,22 +1,36 @@
-http://indiewebcamp.com/reacji
+https://indieweb.org/reacji
 
+[[Category:PostType]]
 {{stub}}
 
-'''<dfn>reacji</dfn>''' is an emoji [[reaction]], the use of a single emoji character in [[response]] to a [[post]], introduced as a feature by [[Slack]][http://slackhq.com/post/123561085920/reactions].
+'''<dfn>reacji</dfn>''' is an [[emoji]] [[reaction]], the use of a single emoji character in [[response]] to a [[post]], introduced as a feature by [[Slack]][http://slackhq.com/post/123561085920/reactions].
 
-== Slack reacji ==
-http://41.media.tumblr.com/1cd5f634bcbabce737c98db9e7429153/tumblr_inline_nr6ivvQaPg1tqy3dn_500.png
+For example:
 
-[[Slack]] was first to ship a built-in reacji feature that allows anyone to respond to any Slack message with a single emoji, which are then tallied like votes.
+[[File:slack many reactions.png]]
+
+The row(s) of buttons with icons at the bottom indicate the reacji that the post has received, with the numbers inside them showing the counts of how many of each reacji has been received.
+
 __TOC__
+
 == Why ==
-Why should you support receiving reacji and displaying them? So people can send you reacji and have it show up? E.g. a 🎂 for your birthday.
+Why should you support receiving reacji and displaying them? 
+
+So people can send you reacji and have it show up? E.g. a 🎂 for your birthday, or different kinds of reactions instead of just a "[[like]]".
 
 == How to ==
 === How to markup ===
 Markup a reacji response post as follows:
 
-Post a [[reply]] where the content is a single [[emoji]] character.
+Post a [[reply]] where the content is a single [[emoji]] character. Thus <code>[[u-in-reply-to]]</code> is required.
+
+Note: if there is HTML in the content property, it may mess with [[emoji]] detection, so you should use <code>p-content</code>, rather than <code>e-content</code> for reacji reply posts.
+
+(complete h-entry reacji code example would be nice here, perhaps with the 🎂 as noted above)
+
+In addition, if your reacji is at least a somewhat positive approval, you may want to add a <code>u-like-of</code> class (in addition to <code>u-in-reply-to</code>) to your link to the original post, so that even if the receiver only supports likes, they can count your response as a like, until they add support for receiving reacji.
+
+(complete h-entry reacji as a positive response code example would be nice here, perhaps with a thumbs-up or heart or smileyface emoji)
 
 === How to receive and display ===
 You can detect a reacji reply post by inspecting any incoming reply to see if it is a single emoji character.  
@@ -30,11 +44,13 @@ Once you have detected the reacji and what emoji it is, display it as a reaction
 
 == IndieWeb Examples ==
 Examples of receiving and displaying reacji:
+
 === Ben Roberts ===
 {{benthatmustbeme}} has reacji in [[Postly]] as of 2015-12-16 (his birthday, send him a 🎂) https://ben.thatmustbe.me/note/2015/12/8/2/
 
 === IndieWeb Reacji Posts ===
 [[reply]] posts consisting of a single emoji character.
+
 ==== Aaron Parecki ====
 {{aaronpk}} has been posting reacji [https://aaronparecki.com/replies/2015/12/16/2/ since 2015-12-16].
 * https://aaronparecki.com/replies/2015/12/16/2/
@@ -44,8 +60,27 @@ Examples of receiving and displaying reacji:
 * http://tantek.com/2015/350/f1
 ** is also a [[like]] post (hence the /f in the URL) for fallback purposes, so that targets that understand likes but not reacji at least get the positive sense of the reacji being communicated. This method only makes sense for like-like reacji, but that's an acceptable limitation.
 
+==== Sebastiaan Andeweg ====
+{{sebsel}} sends reacji since 2017-02-20 and displays received reacji in a [[facepile]] since 2017-03-12.
+* https://seblog.nl/2017/02/20/4/day-36-reacji
+* https://seblog.nl/2017/03/12/6/day-45-receiving-reacji
+
+==== Greg V ====
+{{myfreeweb}} has been displaying reacji [https://unrelenting.technology/notes/2016-03-23-11-16-48 since 2016-03-21].
+* https://unrelenting.technology/notes/2016-03-23-11-16-48
+
+==== Peter Molnar ====
+{{petermolnar}} used to display reacji with Wordpress, then had them removed; now they are back again, but since it's a static site, they are display with significant delays - 2017-06-01
+
 == Silo Examples ==
 Besides Slack, individuals have started to post reacjis on other silos.
+
+=== Slack ===
+Slack showing reactions:
+[[File:slack_reaction_display.png]]
+
+Emoji reaction selector:
+[[File:slack_emoji_response.png|200px]]
 
 === Twitter ===
 Twitter seems ready to roll out official support for 'reacji' in the near future: 
@@ -63,11 +98,26 @@ A tweet author can simulate a limited curated set of reacji by posting a [[surve
 * https://twitter.com/tomcoates/status/683055062873079808
 
 === Facebook ===
-[[Facebook]] has reacji ([[Path]]-style, as a small set of emoji-like graphics) as an extension of "Like" since 2016-02-24.
+[[Facebook]] has reacji ([[Path]]-style, as a small set of emoji-like graphics) as an extension of "[[like|Like]]" and calls them [[reactions]]. Supported since 2016-02-24 on posts, and since 2017-05-03 on comments. emoji and text (on hover) equivalents:
+* 👍 like
+* ❤️ love
+* 😆 haha
+* 😮 wow
+* 😢 sad
+* 😠 angry
+
+Articles:
 * https://newsroom.fb.com/news/2016/02/reactions-now-available-globally/
 * [https://medium.com/facebook-design/reactions-not-everything-in-life-is-likable-5c403de72a3f some concept/design background information]
 Examples:
 * https://www.facebook.com/tantek.celik/posts/10102142524051423 (requires login)
+
+2017-05-03 New feature prompt to "React to a [[comment|Comment]]":
+
+[[File:2017-05-03-fb-new-react-to-comment.png]]
+
+=== github ===
+* https://github.com/blog/2119-add-reactions-to-pull-requests-issues-and-comments
 
 === Path ===
 [[Path]] has had limited reacji, as a small set of emoji-like graphics, since (??? their launch) years ago, and was likely the first silo to do so.
@@ -77,6 +127,19 @@ Examples:
 == Implementations ==
 === Libraries ===
 * {{benthatmustbeme}} made a PHP library for determining if a string is a "single emoji" (a harder problem than it seems) available at https://github.com/dissolve/single-emoji-recognizer
+* [[granary]] can fetch and convert [[Facebook]] reactions to reacji.
 
+=== Services ===
+* [[Bridgy]] [[backfeed]]s [[Facebook]] reactions as of 2016-04-28. [https://github.com/snarfed/bridgy/issues/626 Details.]
+
+== Criticism ==
+* We should call this [[reactions]] instead of reacji. The rest of the industry already does - [[Slack]], [[Facebook]], [[GitHub]], etc. Common terminology is more valuable than minor semantic differences. (Lots more discussion [http://indiewebcamp.com/irc/2016-04-29#t1461959269173 in IRC].) - {{snarfed}}
+
+== History ==
+=== Slack reacji ===
+[[Slack]] was first to ship a built-in reacji feature that allows anyone to respond to any Slack message with a single emoji, which are then tallied like votes.
+
+[[File:slack many reactions.png]]
 == See Also ==
 * [[posts]]
+* http://www.kevinmarks.com/notinourstars.html

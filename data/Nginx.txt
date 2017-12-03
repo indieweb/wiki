@@ -1,4 +1,4 @@
-http://indiewebcamp.com/Nginx
+https://indieweb.org/Nginx
 
 '''<dfn>[http://wiki.nginx.org/Main Nginx]</dfn>''' is one of the two commonly used HTTPd server [[projects]] ([[Apache]] being the other).
 __TOC__
@@ -13,10 +13,11 @@ Please list any sites you know of that also use Nginx for their IndieWeb server.
 * [https://aaronparecki.com aaronparecki.com] uses Nginx with php-fpm to serve [[p3k]]
 * {{kylewm}} uses nginx and uwsgi to serve [[Red Wind]]
 * [https://indiewebcamp.com indiewebcamp.com] uses Nginx with php-fpm to run MediaWiki
-* [https://jonnybarnes.net jonnybarnes.net] uses Nginx with php-fpm to serve his Laravel powered website
+* [https://jonnybarnes.uk jonnybarnes.uk] uses Nginx with php-fpm to serve his Laravel powered website
 * {{rascul}} uses nginx for his site.
 * {{willnorris}} uses nginx for his site, and has written [https://www.google.com/search?as_sitesearch=willnorris.com&q=nginx a few posts about it].
 *[http://elliottucker.net elliottucker] uses Nginx with php-fpm and Varnish to run his [http://withknown.com Known] site.
+* [https://ascraeus.org ascraeus.org] uses nginx on a burgeoning collection of sites
 
 == How to ==
 === SSL Setup ===
@@ -204,15 +205,23 @@ server {
         try_files $uri $uri/ index.php?$query_string;
     }
 
-    location ~* \.php {
-        fastcgi_pass 127.0.0.1:9000;
+    location ~ ^(?<script_name>.+?\.php)(?<path_info>.*)$ {
+        try_files $uri $script_name =404;
         //or fastcgi_pass unix:/path/to/php5-fpm.sock
         fastcgi_index index.php;
         include /path/to/nginx/fastcgi_params;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param SCRIPT_FILENAME $document_root$script_name;
+        fastcgi_param SCRIPT_NAME $script_name;
+        fastcgi_param PATH_INFO $path_info;
+        fastcgi_param PATH_TRANSLATED $document_root$path_info;
+        fastcgi_param HTTPS $https if_not_empty;
+        fastcgi_split_path_info ^(?<script_name>.+?\.php)(?<path_info>.*)$;
+        fastcgi_pass 127.0.0.1:9000;
     }
 }
 </pre>
+
+Notice the <code>try_files</code> line in the first <code>location</code> block, we try to serve a static file, then a directory. And then instead of returning a 404, we now try the request as <code>index.php</code>. The next <code>location</code> block matches for .php and so then the php application accessed via <code>/path/to/website/files/index.php</code> can determine the appropriate response.
 
 === Using uWSGI with Ngnix ===
 

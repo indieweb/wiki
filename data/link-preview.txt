@@ -1,4 +1,4 @@
-http://indiewebcamp.com/link-preview
+https://indieweb.org/link-preview
 
 {{stub}}
 
@@ -7,13 +7,41 @@ A '''<dfn>link preview</dfn>''' is what posts show about one or more embedded li
 == Why ==
 Consider showing a link-preview so your reader has some expectation of what they're going to get when they click a link.
 == How ==
+=== How to publish ===
 By using an [[auto-embed]] function (like the [[CASSIS]] "auto_link" (not a typo) function), you can provide inline embedded images and videos in your plain text notes that have links.
+
+If you do the usual mark-up your posts with [[h-entry]], specifically:
+* <code>p-name</code>
+* <code>"p-author [[h-card]]"</code> (with at least <code>p-name</code>, <code>u-url</code>, <code>u-photo</code>)
+* <code>u-featured</code> (if any)
+And for [[photo]] posts, the usual:
+* <code>u-photo</code>
+Then link-preview parsers will be able to use those to generate link previews of your posts.
+
+See also: http://microformats.org/wiki/link-preview-brainstorming#publishing
+
+=== How to parse ===
+To parse a link for information to show in its link-preview, do the usual
+* parse for an [[h-entry]]
+Then get the following information from the following microformats parsed properties:
+* <code>name</code>
+* <code>summary</code> (if any), otherwise, text-only value of <code>content</code>, elided as necessary
+* <code>author</code> (<code>name</code>, <code>photo</code>, <code>url</code>)
+* image
+** from <code>featured</code> if any
+** else <code>photo</code> if any
+
+See also: http://microformats.org/wiki/link-preview-brainstorming#parsing
 
 == indieweb approaches ==
 A few indieweb sites are figuring out how to better support embedding:
 * [[User:Tantek.com|Tantek]]:  I'm thinking of improving the posting UI on my site, so that when I'm previewing a post before PuSHing and syndicating it out, the post preview UI retrieves the link preview(s) on the server, and then shows them to me as part of the overall post preview before I hit the "Publish" button. When I hit the "Publish" button, the same logic which makes a syndicated copy to Twitter (by calling the Twitter API), and then saves the Twitter copy permalink in my data store, can also save the link preview(s) in the same data store accordingly. just piggybacking the same data store write to file call.
 * This is similar to another thing I’ve had on my implementation list for a while, which is a better quoting UI. Specifically, my posting UI detects URIs in my content, loads up previews, allows me to D&D in for link previews, perhaps load the content and allow me to select, D&D for quotations --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:23, 7 March 2013 (PST)
 * {{kevinmarks}} built a [http://pageaspreview.herokuapp.com utopian idea] that iframes the site itself as a preview, relying on it using responsive design
+* {{martymcguire}} experimented with replacing bare URLs in the content of posts with an [[h-cite]] containing their link preview.
+** [https://martymcgui.re/2017/06/13/152026/ Example post]([https://web.archive.org/web/20170618001657/https://martymcgui.re/2017/06/13/152026/ archive.org version])
+** However, content within the h-cite would show up in subsequent link-previews of this post. [https://chat.indieweb.org/dev/2017-06-17/1497742260646000 IRC Example]
+** For now, moved link-previews outside of <code>p-name</code> and <code>e-content</code>. In markup terms, this means that a link-preview appears after the content that refers to it, and the original URL remains in place (converted to a clickable URL). This is similar to Twitter's link-previews.
 
 == Silo Examples ==
 Various <span id="existing silo support">social network silos</span> (e.g. Facebook, Twitter, Google+) show link previews underneath notes and comments that have one or more URLs, by extracting information from those URLs content and showing a title/summary/photo for those URLs underneath the posted note/comment.
@@ -46,14 +74,20 @@ There are third-party guidelines that does not follow Facebook's own though:
 
 === Twitter ===
 [[Twitter]] uses their own white-list-domain limited meta + [[OGP]] AKA "[[Twitter Cards]]" on the <em>last</em> link in a tweet, e.g.: [https://twitter.com/t/status/520773727370633217]
-* Ironically does not support showing a link-preview of a tweet link, e.g.[https://twitter.com/t/status/520758106838818816
+
+As of (2015?) Twitter *does* support showing a link-preview of a tweet link, e.g. https://twitter.com/t/status/520758106838818816 (they previously didn't)
+
+However, Twitter fails to show a link-preview for many links, resulting in odd link-only cross-posts from Facebook, where presumably the author did see a link-preview (because Facebook looks at far more information for the link-preview than Twitter does)
+
+[https://www.rmendes.net/2016/protip-dont-connect-your-twitter-account-to-facebook-or-your <img src="https://www.rmendes.net/file/7c3da11a1c4e0494ec0cc30c8315aecc" alt="" style="max-width:100%"/>]
 
 === Slack ===
-They call creating link previews “[https://api.slack.com/docs/unfurling unfurling]” a URL.
+They call creating link previews “[https://api.slack.com/docs/unfurling unfurling]” a URL.  They support [[oEmbed]] and [[OGP]] (including twitter extensions), as documented in [https://medium.com/slack-developer-blog/everything-you-ever-wanted-to-know-about-unfurling-but-were-afraid-to-ask-or-how-to-make-your-e64b4bb9254 this blog post].
+
 === ... ===
 * ... who's next to make up their own site-specific link preview markup convention?
 
-== prior link preview standards ==
+== other link preview standards ==
 There have been a couple of open standards created explicitly for information for link previews.
 * [[oEmbed]] - since 2009. However it requires an extra endpoint (URL, different language(s) etc.)
 * [[OGP]] - far more well established since it works in HTML, and [[Facebook]] immediately shows results using it.

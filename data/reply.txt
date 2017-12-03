@@ -1,5 +1,6 @@
-http://indiewebcamp.com/reply
+https://indieweb.org/reply
 
+[[Category:PostType]]
 <span style="float:right;height:192px;font-size:192px;margin-top:64px">💬</span>
 
 A '''<dfn>reply</dfn>''' (or '''<dfn>comment</dfn>''') is a kind of [[post]] that is a text (typically, though photos are possible too) response to some other post, that makes little or no sense without reading or at least knowing the context of the source post.
@@ -22,13 +23,37 @@ If the thing you're replying to lacks a webmention endpoint, you should automati
 
 == How To ==
 === Post a reply ===
-<span id="Make_a_comment">How to publish</span> an indieweb reply in response to an original post
-# '''Write a [[post]]''' (e.g. [[note]]) on your own site
-# '''Link to the original'''
-#* Add  <code>[[rel-in-reply-to|rel="in-reply-to"]]</code> to the link ''only'' on the post's permalink page.
-#* If you are using the [[h-entry]] microformat to mark up your comment (you should be), add <code>class="u-in-reply-to"</code> to that link as well 
-# '''Send a [[webmention]] from your server to the original's server
+<span id="Make_a_comment">How to publish</span> an indieweb reply in response to an original post:
+
+'''1. Write a [[post]]''' (e.g. [[note]]) on your own site
+
+'''2. Link to the original'''
+* If you are using the [[h-entry]] microformat to mark up your reply (as you should), add <code>class="u-in-reply-to"</code> to that link as well, e.g.:
+<pre>
+&lt;div class="h-entry"&gt;
+ &lt;a href="http://example.com/note123" class="u-in-reply-to"&gt;Some note with a point&lt;/a&gt;
+ &lt;div class="p-name p-content"&gt;Good point! Now what is the next thing we should do?&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+ 
+'''3. Send a [[webmention]]''' from your server to the original's server (as detailed below).
 Ideally your server/software should automatically do the '''(3) webmention''' for all links in your post.
+
+'''4. Include author information''' in your reply post so the original knows who is replying (and then send another Webmention so the original page gets the update).
+
+Here's another example with explicit author name and icon, in case your site or blog does not already provide that on the page.
+
+<pre>
+&lt;div class="h-entry"&gt;
+ &lt;a class="p-author h-card" href="http://mysite.example.org"&gt;
+   &lt;img alt="" src="http://mysite.example.org/icon.jpg"/&gt;
+   Supercool Indiewebauthor&lt;/a&gt;: 
+ in reply to:
+ &lt;a href="http://example.com/note123" class="u-in-reply-to"&gt;Some note with a point&lt;/a&gt;
+ &lt;div class="p-name p-content"&gt;Good point! Now what is the next thing we should do?&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
 
 __TOC__
 
@@ -41,13 +66,13 @@ Do proper webmention discovery:
 
 ==== POSSE a reply ====
 To <span id="POSSE_a_comment">POSSE replies</span>:
-# '''Set proprietary reply-to on POSSE copies'''. E.g. when [[Twitter#POSSE_Notes_to_Twitter|POSSEing notes to Twitter]] that are themselves @-replies (or you can find a POSSE'd copy on Twitter of the post that you're commenting on), set the <code>in_reply_to_status_id</code> to the id of tweet the @-reply is a response to. This too should be automatically handled by your server/software. For details see:
+# '''Set silo-specific reply-to on POSSE copies'''. E.g. when [[Twitter#POSSE_Notes_to_Twitter|POSSEing notes to Twitter]] that are themselves @-replies (or you can find a POSSE'd copy on Twitter of the post that you're commenting on), set the <code>in_reply_to_status_id</code> to the id of tweet the @-reply is a response to. This too should be automatically handled by your server/software. For details see:
 #* [[Twitter#POSSE_Replies_to_Tweets|POSSE Replies to Tweets]]
 #* [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to other posts to Twitter]]
-# '''Add [[rel-syndication]] link''' from original reply to POSSE copy
-# '''Send a [[webmention]]''' from original reply to the post it is in reply to. If you already sent a webmention before adding the rel-syndication link, send another webmention so the target has a better chance of deduplicating with any POSSE replies they've received, and preferring your original reply post.
+# '''Add [[u-syndication]] link''' from original reply to POSSE copy
+# '''Send a [[webmention]]''' from original reply to the post it is in reply to. If you already sent a webmention before adding the u-syndication link, send another webmention so the target has a better chance of deduplicating with any POSSE replies they've received, and preferring your original reply post.
 
-'''Setting the proprietary reply-to on POSSE copies''' helps silo readers better understand/follow what you're replying to When B posts a reply to A's post and sends a webmention, and both A and B POSSE their posts, wherever they happen to both POSSE to (e.g. on Twitter), their POSSE'd copies link-up there as well.  That way those on the silo (e.g. Twitter), will be able to follow the conversation, even when A and B are replying/linking directly peer-to-peer between their indieweb posts.
+'''Setting the silo-specific reply-to on POSSE copies''' helps silo readers better understand/follow what you're replying to When B posts a reply to A's post and sends a webmention, and both A and B POSSE their posts, wherever they happen to both POSSE to (e.g. on Twitter), their POSSE'd copies link-up there as well.  That way those on the silo (e.g. Twitter), will be able to follow the conversation, even when A and B are replying/linking directly peer-to-peer between their indieweb posts.
 
 '''Indieweb examples''' of a reply post that was automatically POSSE'd to Twitter with the in-reply-to-status-id set to the POSSE Twitter copy of the original post being replied to.
 * 2013-04-25: [[User:aaronparecki.com|Aaron Parecki]]: http://aaronparecki.com/replies/2013/04/25/1/indieweb-qs
@@ -114,7 +139,7 @@ For more details see: [[deleted#Handling|handling deleted posts]].
 
 === Accept a comment ===
 How to receive an indieweb comment replying to an original post
-# '''Listen for [[pingback]]/[[webmention]]''' on your server (have your server software support)
+# '''Listen for [[webmention]]''' on your server (have your server software support)
 # '''Link to it''' if it refers to a permalink on your site, and '''display it''' (or a summary) under your original post at that permalink.
 
 Additional support:
@@ -145,7 +170,7 @@ Beware if you receive and display comments, apparently spammers are now attackin
 
 == Reply ==
 === Reply distinction ===
-tl;dr: reply is the post type, a comment is a reply syndicated into the context of the original.
+tl;dr: reply is the post type, a [[comment]] is a reply syndicated into the context of the original.
 
 Is a "[[reply]]" (or are [[replies]]) just a special case of a comment?
 
@@ -158,7 +183,7 @@ Whereas comments only sometimes start with an explicit name reference.
 
 Another distinction (perhaps useful for indieweb discussions) is context:
 * A '''reply''' is the permalink to a reply post - (part) of the post that is being replied to might be displayed (typically abbreviated, simplified, or de-styled) in a [[reply-context]] 
-* A '''comment''' is the syndicated copy of a reply shown below (or otherwise adjacent to) the original post (that the reply is in-reply-to), likely copied there via a [[webmention]] notification and parsing [[microformats2]] [[h-entry]] markup at the reply permalink.
+* A '''[[comment]]''' is the syndicated copy of a reply shown below (or otherwise adjacent to) the original post (that the reply is in-reply-to), likely copied there via a [[webmention]] notification and parsing [[microformats2]] [[h-entry]] markup at the reply permalink.
 
 More evidence/distinctions/use-cases welcome.
 
@@ -224,15 +249,60 @@ Libraries:
 
 Silo Examples of comment UIs/UX on posts.
 
+=== Twitter ===
+Replies on [[Twitter]] have their own post [[permalink]], like any other post, and either @-mention who they are replying to explicitly in the content (typically at the start of the content), or explicitly as part of the [[reply-context]] above the reply content.
+
+(screenshot needed)
+
+=== Tumblr ===
+[[Tumblr]] replies must all be posted by the person replying to their own Tumblr, and have the form of "reblogged this and said ...".
+
+(screenshot needed)
+
 ...
 
 === Comments Embeds ===
-Some [[silos]] have a comments embed which is used by various sites to host comments elsewhere:
-* [[Disqus]] - their focus is to provide comments or ("discussion" - hence their name) sections on other pages.
-* [[Facebook]] - see [[Facebook#Comments_Embed|Comments Embed]]
+See:
+* [[comments#Comments_Embeds|comments: Comments Embeds]]
 
-Open source commenting embed:
-* [https://github.com/phusion/juvia Juvia] - a commenting system you can install on your own server similar to Disqus and Intense Debate
+== Issues ==
+
+Some people have criticized the idea that comments should be written in a space the author owns rather than written on the thing being commented. There are pros and cons of each method.
+
+=== each comment treated as a blog post ===
+
+* "Writing comments to Medium posts feels awkward because each comment is treated as a blog post." [https://arslan.io/2017/07/30/why-i-left-medium-and-moved-back-to-my-own-domain/]
+* "Trying to follow a comment chain on medium is frustrating as it only shows the first level, diving in switches pages, and often, a need to press a second "load all comments" button. Then the back button to wind your way back up." [https://news.ycombinator.com/item?id=14885733]
+
+=== replies showing up on your main website ===
+
+Many people (who? citation(s) needed) don't want their replies/comments to show up in the list of their normal posts. 
+
+Contrary prior art: The following systems/services established a UI (and culture of) requiring that reply posts be "in your own space/profile".
+* [[Tumblr]], [[Twitter]], [[Statusnet]], [[Diaspora]], [[Mastodon]]
+
+Solution: Don't include your comments on your home page feed
+* {{aaronpk}} does this, all replies are on a secondary page
+* [[Twitter]] does this by default on profiles, you have to explicitly choose the "with replies" tab to see them
+
+Solution: Use a separate folder or subdomain for comments
+* {{kevinmarks}} does this, using a separate [[Known]] install for commenting
+
+== Brainstorming ==
+
+=== Twitter @-replies versus quote tweets ===
+
+A summary of [https://chat.indieweb.org/dev/2017-04-11#t1491947851231000 IRC Chat on 2017-04-11] regarding how to emulate Twitter @replies versus quote tweets and how those might be syndicated to Twitter.
+
+There seems to be 3 different elements of a tweet that are distinguished by an @-reply versus a quote tweet.
+
+* Audience: An @-reply shows up in a Twitter User's Profile Page ([[firehose]]) and in the response section of the original tweet. A quote tweet shows up in the user's public tweet streams (showing up for users that follow that user).
+** For the IndieWeb this means making a post that doesn't show up in streams (except maybe a firehose) and including a u-reply-to with the link of the post being replied to.
+* Notification: An @-reply shows up as a specific reply post, where a quote tweet is more of a mention.
+** For the IndieWeb this could mean sending a reply webmention versus a [[person-tag]].
+* Context: An @-reply expects the reader to understand the context of the reply already, where as a quote tweet is embedding and showing the context of the previous tweet to bring other people into the conversation as well.
+** For the IndieWeb, this would relate to [[reply-context]]
+
 
 == FAQ ==
 
@@ -244,7 +314,7 @@ tl;dr: use u-in-reply-to everywhere, and rel=in-reply-to on [[post]] permalink p
 
 == See Also ==
 * [[reply-context]]
-* [[reply-chain]]
+* [[reply-chain]] (threads)
 * [[in-reply-to]]
 * [[multiple-reply]]
 * [[post]]
@@ -254,3 +324,5 @@ tl;dr: use u-in-reply-to everywhere, and rel=in-reply-to on [[post]] permalink p
 * [[notification]]
 * [[comments]]
 * [[responses]] - other (specialized) types of replies
+** [[RSVP]]
+* http://www.fastcompany.com/3067246/innovation-agents/the-unexpected-design-challenge-behind-slacks-new-threaded-conversations

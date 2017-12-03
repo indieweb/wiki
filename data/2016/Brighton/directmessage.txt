@@ -1,0 +1,101 @@
+https://indieweb.org/2016/Brighton/directmessage
+
+'''<dfn>Direct Messaging and Private Webmentions</dfn>''' was a session at [[2016/Brighton|IndieWebCamp Brighton 2016]].
+
+Notes archived from: https://etherpad.indieweb.org/directmessage
+----
+== Participants ==
+* Sven Knebel (sknebel)
+* aaronpk
+* sgreger
+
+== Notes ==
+
+=== motivation: finding people ===
+
+main issues:
+* how do people know which channel to use to get in touch? (motivated by challenges of yesterday's early bird meet-ups)
+* twitter does not allow DMs to non-reciprocal contacts unless they allow it (i.e.contacting in twitter is by default public, which may not always be desirable)
+* every medium is only being used by a sub-group of people
+
+long-standing convention: contact-page on the website
+* aaronpk: list in order of preference
+* manual, but efficient
+
+aaronpk has an automated indication of the current time zone he is in displayed (constant update from the smartphone)
+
+==== private priority channels ====
+
+pattern: private (unlinked) pages (tantek, sebastian greger)  for high-priority contacts
+* give out the URL in person, or on a business card
+
+sknebel has a separate email address he uses when traveling he gives to family and close contacts. checks that address more often when traveling and main address only occasionally.
+
+'''Issue''' as Twitter DMs above: might not know everybody that should have access before -> doesn't work well for remote/fleeting contacts.
+
+Webmention Vouch theoretically could help (e.g. trust an attendee listing page)
+
+==== contact forms: ====
+* could automatically send notifications to different channels
+* could offer an option to specify priority ("notify me", "I'll see it in the evening"), then the backend takes care of delivering the message based on my own preferences
+
+=== private webmentions ===
+
+'''Note:''' {{aaronpk}} wrote up more formalized spec of last variant on [[private-webmention]]
+
+previous attempts:
+* normal webmention to site with access control (has to be passable by webmention receiver)
+* indieauth flow?
+    
+who generates the token?
+
+==== receiver generates token ====
+* normal webmention
+* receiver generates token from own endpoint, passes it in request fetching source page. (potentially first fetch to discover auth is needed, if not indicated in extended WM)
+* source page discovers receivers token endpoint, verifies token, allows 
+
+'''Note:''' token would have to be scoped, otherwise sender could use token to read other posts send to receiver
+
+    
+==== sender, in URL ====
+* basically just posts with hard-to-guess private URLs
+* '''+''' works with static sites
+   
+==== sender: client logs in ====
+*    seperate token exchange
+*    sender sends webmention to receiver, 
+*    receiver fetches, notices that login required
+*    logs into senders page, gets token
+*    re-fetches with token
+*    '''+''' similar to how a user log ins
+*    '''+''' token could be reused for quick back-and-forth
+*   idea: webmention could contain authorization code (OAuth terminology) -> see next section
+
+'''Issue:'''    How to recognize authentication required and that the protocol is useable?
+'''Issue:'''    What does "receiver logins" actually look like internally?
+
+
+=== sender: client gets auth token ===
+
+*    sender sends webmention to receiver, with authorization code
+*    receiver sees authorization code -> needs exchange code for token
+*    fetch source page, get token endpoint (in http header of error page, maybe in some way in page source?)
+*    exchange authirization code to acces token
+*    fetch source page with Authorization header
+*    verify source page
+*    allow token reuse, but each request has to include new authorization code if necessary
+
+{{aaronpk}} wrote up more formalized spec on [[private-webmention]]
+
+Flow written down:
+[[File:2016-brighton-private-webmention.jpg|800px]]
+
+
+'''Issue''' token reuse: how to discover scope (is old token usable for this request)
+    
+discovery of endpoint should have support, for better UX
+
+
+
+[[Category:2016]]
+[[Category:2016 sessions]]

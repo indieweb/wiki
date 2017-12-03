@@ -1,4 +1,4 @@
-http://indiewebcamp.com/User%3ANotes.whatthefuck.computer
+https://indieweb.org/User%3ANotes.whatthefuck.computer
 
 == About Me ==
 
@@ -34,32 +34,53 @@ This page will progressively enhance supporting text-only www browsers like EWW 
 *** text posts
 *** u-photos and u-videos that can just get fed an Matrix photo (or a string like "last photo") and push it in to my blog
 
-=== mfblog.el ===
+=== Arcology ===
 
-[http://fort.kickass.systems:10082/cgit/personal/rrix/pub/mfblog.git/ mfblog.el] is an uninspiringly named static-site generator for [[Emacs]] [[Org-mode]]. It's pretty much entirely tailored to my usecases, and I am planning to refactor it in to a more generic engine a la [https://github.com/kelvinh/org-page org-page] below.
+[http://fort.kickass.systems:10082/cgit/personal/rrix/pub/mfblog.git/ Arcoloy] is a static-site generator for [[Emacs]] [[Org-mode]]. It's pretty much entirely tailored to my usecases, but could be useful to other human beings. Basically generate an index of posts, each is a heading in a single Org-mode file, pull metadata and generate pages annotated with [http://microformats.org/ microformats]. I have written about Arcology using Arcology [http://notes.whatthefuck.computer/1460753040.0-note.html here].
 
-Basically generate an index of posts, each is a heading in a single Org-mode file, pull metadata and generate pages annotated with [http://microformats.org/ microformats].
+==== How to Use ====
+
+Arcology is an Emacs library that was designed by and has only been used by me. As a result, it is probably really darn obtuse to use if you aren't me. In short, you should know roughly how to use Org-mode and the Emacs customize interface, and then know the obscure rules to markup your posts to be matched as various post-types in Arcology:
+
+* Arcology will only export headings or files that have an EXPORT tag.
+* Tagging is done with "Ctrl-c Ctrl-c"
+* Properties are set with "Ctrl-c Ctrl-x p"
+* Attaching files is done with "Ctrl-c Ctrl-x a"
+
+You'll want to create your own Templates, which unfortunately don't have inheritance, but it's a start.
+
+* Tag a post as READ to create a [[read]] post.
+* Tag a post as CHECKIN and call M-x arcology-checkin-get-venue-id while your cursor is inside of it to create a [[checkin]]
+* Create a post and add a P-RSVP property to it to create an [[rsvp]]
+* Video posts are created by either:
+** Adding a YOUTUBE-URL property with a full URL to a youtube video (the full URL with a ?watch in it like https://www.youtube.com/watch?v=RXQCrOEx1-g)
+** Attaching an ogv, mkv or mp4 file to an entry 
+* Tag a post as LIKE and have a U-LIKE-OF property pointing to the post to like.
+* Steps posts (how many steps you've walked) are STEPS tagged posts.
+* [[jam]] posts are created by adding JAM to a tag; it'll take the heading and shove it in to a YouTube search URL since my Memacs LastFM scraper only gives me MusicBrainz IDs
+* [[review]] posts are created by tagging a page as REVIEW with a P-RATING property with a number between 1 and 5, and a P-ITEM property with the full [[h-item]] markup to the item you are reviewing.
+* [[note]]s are entries without any body text
+* [[article]]s are entries with body text.
 
 ==== Functions ====
 
-* Copy static files (favicon, js, css)
-* Generate an index
+* [DONE] Copy static files (favicon, js, css)
+* [DONE] Generate an index
 ** List of post titles with permalinks to them
 ** [[h-card]] for [[IndieAuth]] &c
-* Generate post pages
+* [DONE] Generate post pages
 ** HTML title
 ** Clean <title> (don't use the HTML)
 ** Post HTML
 ** Support all IndieWeb post types possible
 *** h-entry
-**** support for u-photo, u-video, u-audio based on org-mode attachments
-**** support for u-in-reply-to, u-repost-of, u-like-of based on org-mode property table
-**** support for p-comment, p-rsvp based on org-mode property table
-*** h-review
-*** h-event can be inferred if a post has an [http://orgmode.org/manual/Timestamps.html Active Timestamp]
+**** [DONE] support for u-photo, u-video, u-audio based on org-mode attachments
+**** [NEXT] support for u-in-reply-to, u-repost-of, u-like-of based on org-mode property table
+**** [NEXT] support for p-comment, p-rsvp based on org-mode property table
+*** [DONE] h-review
+*** [NEXT] h-event can be inferred if a post has an [http://orgmode.org/manual/Timestamps.html Active Timestamp]
 * Generate post RSS Feeds
-** Takes a list of Org-mode tags, and generates an RSS feed for posts tagged with each tag (longform.rss, attach.rss, photos.rss, main.rss)
-* Syndicate an entry with bridgy
+* DONE Syndicate an entry with bridgy
 ** Automatically republish the entry with the rel=syndication links included.
 
 == Edit the IWC wiki with Emacs ==

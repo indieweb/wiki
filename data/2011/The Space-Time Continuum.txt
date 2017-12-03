@@ -1,0 +1,152 @@
+https://indieweb.org/2011/The_Space-Time_Continuum
+
+=Session Notes=
+
+==Notes from [[Amber Case]]==
+
+How to move from an aggregation system to a federation system that has data updating on both sides. - Audrey 
+
+Usually we're bringing in iCal or HCal. Both of these have events. 
+
+Reid - They have venues sometimes. They have events and we bring them into a box and publish them in a few sort of ways. We're using iCalendar with the VView Venuespec (or we stopped). 
+
+There's a normalization that comes in. 
+
+Audrey - this works really nicely as long as there is one unique event that comes in and one unique comes out. It becomes really difficult once someone comes in and says there is a change in the system and wants to send back out and updated event and publish it. 
+
+Reid - What I wanted to talk about ways to get publication tools into the hands of people and get them to make a semantically published event that is readable by a number of calendars. People usually just go to a place to publish an event and then send it out to people. 
+
+Amber - What would be good is to be able to publish an event to your site and then send it out to multiple events. 
+
+Reid - is that a one-time thing? or do we have the facilities to make those events up-datable. So say you change that event - does it go out and update those events out there that 
+
+Audrey - People don't even publish events in consistent ways. 
+
+Reid - We wanted to make an open-edit system where anyone could come to our site and edit any event -- leads to the issue that one person posts and event, another person updates, and we go to pull the original source that's been update, and we have conflicting information. 
+
+Audrey - And we have no conflict resolution system for that. 
+
+Amber - Do you show both of those? Both sets of information that's conflicting. 
+
+Reid - If you have a single plugin that's pushing to all of those services. The biggest challenge is building a system that updates events that have been syndicated across multiple spaces. Can we build some kind of service that is a publishing service for some type of event site. 
+
+"Here's an event, and here's what I want it to end up -- but managing truth is still hard". 
+
+Al Partridge: One of the things I think is the issue is that you need a system of record. For instance, I know something is right because it's this user. So if Calagator was the place that one wrote the event and export back out to all events.
+
+[[Aaron Parecki]]: Calagator has the clone tool, so Tantek was able to clone last week's beer and blog event and add the IndieWebCamp logo to it. 
+
+Reid: Calagator currently has no users - and if you logged in, and you were authenticated against other services, and you could push out to those services. But figuring out how to get information back from those services. There has been a lot of work trying to get information back from those services. I think it's a problem of publish and subscribe for certain data. 
+
+Audrey: I kind of hate that Calagator had to know anything about you unless you had to update some private information. 
+
+[[Amber Case]]: You should show that Bob from Plancast edited this session, and Amber from Facebook added to this information. 
+
+BenWard: You could use a subversion model where you would see a history of changes from each of those. And you as a subscriber could come in and resolve the conflict. 
+
+Audrey: We're close to that - we do have a history system. Something like a personal calendar where you update your own events and data. We actually want to use the duplicate event feature from Plancast in Calagator. We like the add ID basis behind it. 
+
+CEO Plancast - With event updates, We don't think of what system owns the event, but what system has the most updated information. If someone imports something from Meetup, we will then grab from Meetup every day to look for changes, (per field) and then after that event changes in Plancast, we no longer subscribe to the Meetup event version. 
+
+Audrey: Everyone working on these systems is hitting these problem from different angles. 
+
+BenWard: Persistent permalinks for all events. 
+
+Reid: Whenever we import from a certain short list of services we are doing specific list of importers from, we have namespace machine tags we're looking at in the system. When we import an event from PlanCast, we also grab the "plancast ID" with it, and then we know that we can grab Plancast attendees from the event, for instance. 
+
+Audrey: And then we run it through Max Ogden's JASONify. 
+
+CEO Plancast - we have that, but it's not documented. I'll show you more about it. 
+
+== Notes from Tantek ==
+See also from [http://microformats.org/wiki/events/2009-07-25-dev-camp microformatsDevCamp] the related project: [http://microformats.org/wiki/unified-rsvp unified RSVP] with the stated goal of:
+
+<blockquote>The goal is to create a client library which can be used to list all the attendees for an event across multiple sites which use hCalendar microformats and link rel="me". </blockquote>
+
+Various bits of code have made it to github and other locations:
+* https://github.com/reid/upcoming-attendees/wiki
+* http://www.montrics.com/Events/Attendants.htm#
+* <nowiki>http://nexpace.com/sandbox/microformats/rest/unique.hcards.rest.php?uris=ben-ward.co.uk,tantek.com,http://upcoming.yahoo.com/user/83829/&format=debug[&callback=function name]</nowiki>
+
+See the  [http://microformats.org/wiki/unified-rsvp unified RSVP] for details.
+
+
+==Etherpad (Kirsten/Aaron)==
+
+The Space-Time Continuum
+-@spinnerin & @reidab
+http://indiewebcamp.com/The_Space-Time_Continuum
+aka: What happens when you try to move event & venue data around
+
+Calagator.org
+
+Wanting to move from an aggregation system to a federated system
+
+Bring in iCal or hCalendar, both of these have events and sometimes venues. We import these into our box and republish them.
+
+It gets complicated when someone makes a change in their system, and tells us about the change and we want to publish the change. Need conflict resolution. There is a very manual way to do this.
+
+Can automate this more, and -
+anyone who is subscribing to the event will receive a notice that there is a conflict.
+
+There is a Recent Changes feed already.
+
+Needs to be a merge tool, there is a hideous find-duplicate tool.
+
+How do we provide tools for event publishers to create semantic data?
+
+Are there CMS integration or other tools to help?
+
+Is publishing an event a one-time thing, or is it editable?
+Problems:
+# We found that sites don't publish events in consistent ways
+# Calagator is editable by the community. If we pull the original event source & it has changed, there's a conflict if someone has also edited it on Calagator.
+
+There is no clean central venue database.
+
+Plancast provides an address string but not a venue
+
+Mark@plancast: all location data comes from Google. Our venue cache is really dirty, there are many duplicates.
+
+Can we build a service that is a publishing service for individual sites?
+
+If Calagator was the way to push to Plancast?
+Tantek wanted to publish Beer & Blog to Calagator & have it push out to Plancast etc, because Calagator has the "clone event" functionality.
+
+Calagator currently has no users & no concept of personal identity. Do we add some?
+
+Some of the work on getting activity streams mapped back applies to this.
+
+If someone wants to put out formatted data for Calagator, we should help them.
+
+Also what if someone wants to have their own copy of Calagator to keep their own personal calendar.
+
+Mark@plancast: Plancast doesn't keep track of the owner of the event. If they import from Meetup, and then someone edits it, they assume that the edited version is the most recent. It's per field. If the title gets edited, they will import the rest of the data from the latest Meetup data, but not pull the title anymore.
+
+It would be nice to visualize an event and where it came from. A version control system.
+
+As long as the data you're pulling has a last-modified date, you can put it in the correct chronological order.
+
+If Plancast gets an event from Meetup, does it pass on the Meetup identifier when Calagator imports it? No, not right now.
+
+Calagator has namespace machine tags, so it does keep track of where the data came from.
+
+Mark@plancast: Unlike other types of content on the web, events don't necessarily have an original source. 
+
+Rather than trying to find the canonical ID, you should try to find a collection of IDs representing the event. 
+Plancast location search uses Google search. Google has deprecated the API they're using, but luckily they won't shut down a deprecated API for 4 years. Less interested in having a page that shows all events at a specific venue, but possibly interested in showing all events in a neighborhood. Makes de-duplication of venues not necessary.
+
+Tantek: at microformats devcamp 2 years ago, we built a tool
+have an event, figure out what other versions there are of it, de-duplicating RSVPs.
+
+Create event, copy it out everywhere
+RSVP to an event, copy it out everywhere
+
+Reid: Plancast - when you create an event, you're not responsible for it, you're just saying there is this event, and you'll attend.
+
+Mark: We had a point early on to never use the word "event" on the site. On one hand, it democratizes, on the other, people can't have ownership over events.
+
+Reid: people want control when they use Calagator & say: "there will be people who want to sabotage our events" - but in 3 years there haven't been trolls who've done that.
+
+[[Category:Session Notes]]
+[[Category:2011]]

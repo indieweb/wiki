@@ -1,5 +1,6 @@
-http://indiewebcamp.com/event
+https://indieweb.org/event
 
+[[Category:PostType]]
 {{stub}}
 <span style="float:right;height:128px;font-size:128px;margin-bottom:-64px">📅</span>
 An '''<dfn>event</dfn>''' is a type of [[post]] that in addition to a post name (event title) has a start datetime (likely end datetime), and a location.
@@ -18,13 +19,28 @@ You should [[POSSE]] copies of your events to the [[silos]] where your friends w
 === How to markup ===
 Event posts must be <span id="Marking up">marked up</span> with [[h-event]].
 
-Optionally they can be wrapped in an [[h-entry]] as well (though it's not clear this is necessary). ''Parsers should be prepared to handle events without an h-entry tag.''
+Example of an h-event with an embedded [[h-card]] for the [[p-location]]:
+<pre style="line-height: 1.4em; padding: 1em; border: 1px solid #ddd; color: black; background-color: #f9f9f9; white-space: pre-wrap;">
+&lt;div class="h-event"&gt;
+  &lt;p&gt; &lt;a class="u-url p-name" href="https://indieweb.org/2017"&gt;IndieWeb Summit&lt;/a&gt; &lt;/p&gt;
+  &lt;p&gt; &lt;time class="dt-start" datetime="2017-06-24 09:30"&gt;June 24, 2017 9:30am&lt;/time&gt; to
+  &lt;time class="dt-end" datetime="2017-06-25 18:00"&gt;June 25, 2017 6:00pm&lt;/time&gt; at
+  &lt;span class="p-location h-card"&gt;
+    &lt;a class="u-url p-name p-org" href="https://wiki.mozilla.org/MozPDX"&gt;Mozilla&lt;/a&gt;, 
+    &lt;span class="p-street-address"&gt;1120 NW Couch St #320&lt;/span&gt;, 
+    &lt;span class="p-locality"&gt;Portland&lt;/span&gt;, 
+    &lt;span class="p-region"&gt;Oregon&lt;/span&gt;, 
+    &lt;span class="p-postal-code"&gt;97209&lt;/span&gt;, 
+    &lt;abbr class="p-country-name" title="United States"&gt;US&lt;/abbr&gt;
+  &lt;/span&gt;
+  &lt;/p&gt;
+&lt;/div&gt;
+</pre>
 
-(sample event post markup with a top level <code>h-event</code> would be nice!)
 
 === How to provide an RSVP UI ===
-Event posts should have [[webaction]] buttons for RSVP actions and inviting others. E.g.
-<code>[ Going ][ Maybe ][ Can't Go][ Invite ]</code>
+Event posts should have [[webaction]] buttons for RSVP actions and inviting others. E.g. some subset of:
+<code>[ Going ][ Maybe ][ Interested ][ Can't Go ][ Ignore ][ Invite ]</code> perhaps based on private vs. public events, if you've already RSVPd, or relationship with the person.
 
 See [[Facebook]]'s RSVP UI:
 * http://microformats.org/wiki/rsvp-examples#Facebook
@@ -60,14 +76,19 @@ In implementation order:
 * http://werd.io/2014/homebrew-website-club
 ** [[POSSE]] copy on [[Facebook]]: https://www.facebook.com/events/200590280142030/
 
+As of 2017-06-14, Ben's event posts have a h-event as the top level item.
+
 === Aaron Parecki ===
 {{aaronpk}} uses [[p3k]] on aaronparecki.com to post events since [http://aaronparecki.com/events/2013/07/09/1/speed-geeking-an-intro-to-oauth2 2013-07-08], which automatically accept RSVPs from other sites using [[RSVP]] webmentions. E.g.
 * index page of recent events: http://aaronparecki.com/events
 * http://aaronparecki.com/events/2013/07/09/1/speed-geeking-an-intro-to-oauth2
 * http://aaronparecki.com/events/2014/01/29/1/homebrew-website-club
 ** [[POSSE]] copy on [[Facebook]]: https://www.facebook.com/events/1453049941575679/
+* [[h-event]] as top-level microformat
 
 === Bret Comnes ===
+As of 2017-06-14 it appears {{bret}}'s old permalinks no longer work.
+
 [[User:Bret.io|Bret Comnes]] has implemented events inside of [[jekyll]] for bret.io since [http://bret.io/2013/07/25/t1/ 2013-07-25]. It supports receiving webmentions, but does not parse responses for RSVP status or display reply contexts at the moment. Example:
 *  http://bret.io/2013/07/25/t1/
 *  (bad) Example of data https://raw.github.com/bcomnes/bcomnes.github.io/master/_posts/notes/2013-07-25-t1.md
@@ -76,6 +97,7 @@ The event data is stored in the YAML which separates the final layout and the ev
 === Jeena ===
 {{jeena}} has implemented events on his website because he wanted to host HWC:s and it wouldn't look good without the possibility to RSVP to a indie event. The event page receives RSVP:s and displays them under the event. Example:
 *  https://jeena.net/events/2
+* [[h-event]] as top-level microformat
 
 === Ryan Barrett ===
 [[User:snarfed.org|Ryan Barrett]] is manually posting events inside [[article]] posts on snarfed.org [https://snarfed.org/2014-01-15_homebrew-website-club-tonight since 2014-01-15]. Examples:
@@ -87,6 +109,7 @@ The event data is stored in the YAML which separates the final layout and the ev
 ** Both tweet and G+ posts worked as proxy POSSE posts for Bridgy [https://snarfed.org/2014-06-16_homebrew-website-club-at-quip#comments backfeed interactions] (favorites, retweets, +1s etc.)
 * https://snarfed.org/2014-01-15_homebrew-website-club-tonight
 ** POSSE tweet: https://twitter.com/schnarfed/status/423586870144942080
+* As of 2017-06-14, [[h-entry]] is the top-level microformat with [[h-event]] nested. This appears to be a limitation of [[WordPress]] themes that include h-entry around all posts / plugins that don't yet support event posts.
 
 === Kyle Mahan ===
 {{kylewm}} added event posting with RSVPs to [[Red Wind]] on 2014-12-14. Example:
@@ -94,6 +117,7 @@ The event data is stored in the YAML which separates the final layout and the ev
 * POSSE facebook copy: https://www.facebook.com/events/736605033092500/
 * More recent event: https://kylewm.com/2015/04/homebrew-website-club-1
 ** has fixed the duplicate display of "is going" colored text vs. "is attending." default text summary from Bridgy (which the above 2014 example has)
+* [[h-event]] as top-level microformat
 
 === gRegor Morrill ===
 {{gRegor}} added event posts (sans RSVP) on 2015-10-01. Example:
@@ -101,24 +125,73 @@ The event data is stored in the YAML which separates the final layout and the ev
 * [[h-feed]] of upcoming events: http://gregorlove.com/events/
 * h-feed of past events: http://gregorlove.com/events/past/
 * Immediate use-case is that I want to log all concerts I attend.
-
+* [[h-event]] as top-level microformat
 
 === Shane Becker ===
 {{veganstraightedge}} uses [[Dark Matter]] on veganstraightedge.com to post events since 2016-01-10] sans RSVPs. Back-dated events were added at that time. Examples:
 
 * All events: http://veganstraightedge.com/events
 * Single event: http://veganstraightedge.com/events/2013/11/02/farmhouse-conf-5-collapse
+* [[h-event]] as top-level microformat
 
-=== IndieWeb Itches ===
-The following people either strongly want to implement events on their site, or are in the process of doing so, you may find some implementation clues in their notes
+=== Sebastiaan Andeweg ===
+{{sebsel}} published / hosted an HWC event at his site on 2017-01-06. It shows received RSVPs in a [[facepile]].
+* All events: https://seblog.nl/events
+* Single event: https://seblog.nl/2017/01/11/1/homebrew-website-club
+* [[h-event]] as top-level microformat
 
-==== Tantek ====
-{{t}}: event posts are a pretty big itch for me, but also a lot of specific work:
-* [[Falcon#event_posts]]
-Prototype event as a note:
+=== Calum Ryan ===
+{{calumryan}} added event posts on 2016-06-15. Open to RSVP via same Webmention.io Jekyll Plugin that's present for all blog posts. Further work planned to possibly separate RSVP from other replies. 
+
+UPDATE 2016-08-06 Since improved with separate events section modeled on Facebook events UI.
+
+* https://calumryan.com/event/hwc-20160824/
+** [[h-event]] as top-level microformat
+* https://calumryan.com/blog/homebrew-web-london/
+** with name, datetime, location, start, time end
+
+=== Tantek ===
+{{t}} added events support to [[Falcon]] on 2017-06-25 at [[2017|IndieWeb Summit 2017]]! Receives webmentions via webmention.io, still needs to process and display RSVPs etc.
+* http://tantek.com/2017/179/e1/homebrew-website-club
+** POSSE tweet: https://twitter.com/t/status/879242196284735488
+** POSSE FB: https://www.facebook.com/events/120457305222422 (created by "IndieWebCamp" page)
+** Webmentions received: https://webmention.io/api/links.jf2?target=http://tantek.com/2017/179/e1/homebrew-website-club
+* http://tantek.com/2017/183/e1/sunday-yoga-presidio
+** POSSE tweet: https://twitter.com/t/status/881540257631674369
+** POSSE FB: https://www.facebook.com/events/1935019616733708/
+** Webmentions received: https://webmention.io/api/links.jf2?target=http://tantek.com/2017/183/e1/sunday-yoga-presidio
+
+Details:
+* [[h-event]] as top-level microformat
+* additional properties beyond usual h-event: dt-created, dt-published
+
+Previously: Prototype event as a note:
 * http://tantek.com/2013/323/t5/event-note-homebrew-website-club
 ** with: name, datetime start, time end, how to RSVP
 ** POSSE tweet copy: https://twitter.com/t/status/403064607373537280
+
+More work to do: [[Falcon#event_posts]].
+
+=== Marty McGuire ===
+{{martymcguire}} added events support to his site [https://martymcgui.re/2016/09/19/184924/ 2016-09-19] in preparation for hosting the first [[Baltimore|Baltimore Homebrew Website Club]] meeting.
+* Receives webmentions via webmention.io. RSVPs for "going" and "maybe" are displayed as facepiles.
+* [[h-event]] as top-level microformat
+* Added support for [[featured]] image on [https://martymcgui.re/2016/10/12/004447/ 2016-10-12].
+** POSSE tweet copy: https://twitter.com/schmarty/status/786067342899970052
+** POSSE facebook copies are natively-created Facebook events.
+* Uses [[Slater]] to posts events to his site.
+
+=== Martijn van der Ven ===
+{{martijnvdven}} supports 2 separate methods for hosting indie events on his site:
+
+# An <code>[[h-event]]</code> nested within <code>[[h-entry]]</code> was implemented and first used to host [https://licit.li/593fa571d6b80 an event post] for [[events/2017-06-14-homebrew-website-club#European_time|the 2017-06-14 virtual Homebrew Website Club]].
+# Just an <code>[[h-event]]</code> was implemented later and first used to host [https://licit.li/596a1ac68a9b8 an event post] for [[events/2017-07-26-homebrew-website-club#Virtual_European_Time|the 2017-07-26 virtual Homebrew Website Club]].
+#* This used the <code>e-description</code> property instead of <code>e-content</code> to match with [http://microformats.org/wiki/h-event the current (as of 2017-07-16) <code>h-event</code> spec].
+
+The first method is officially deprecated as of 2017-07-15 when the second method became easy to do.
+
+=== IndieWeb Itches ===
+The following people either strongly want to implement events on their site, or are in the process of doing so, you may find some implementation clues in their notes
 
 ==== Amy Guy ====
 {{rhiaro}}: "events is my biggest itch currently"[http://indiewebcamp.com/irc/2015-03-04/line/1425508438873]
@@ -130,6 +203,25 @@ Staged implementation[http://indiewebcamp.com/irc/2015-03-04#t1425508589730]
 # longer term hopefully we can get something working so I can post an event on my site initially
 # POSSE (perhaps by sending a webmention) to opentechcalendar and have it create a public event copy
 
+== Consuming Tools And Services ==
+=== Quill ===
+[[Quill]] (site/service, open source) parses for h-event in particular to:
+* generate an event-aware [[reply-context]]
+* whether to show the [[RSVP]] dropdown to enable posting a RSVP post!
+
+=== IndieNews ===
+[[IndieNews]] (site/service) parses for h-event differently from h-entry
+* How? Why? Which Properties?
+
+=== This Week ===
+* The [[this-week]] newsletter (service, open source) generation code consumes h-event differently, specifically for:
+* start/end date info (for determining recent and upcoming events)
+* name/location - for display as such for an event
+* photo - for display and POSSEing
+
+=== mf2util ===
+[[mf2util]] (open source python library) parses specifically for h-event vs h-entry to determine post type, and provides cleaned data to applications using it (timestamps get converted to Python types, locations are normalized, ...). An application using this is the IRC bot by {{sknebel}} that announces new Indieweb livestreams on #indieweb, which parses /events to determine on which days IWCs happen.
+
 == Brainstorming ==
 As <span id="Design_Brainstorming">ideas</span> here are implemented, they should be moved to actual sections of their own with links to examples.
 
@@ -140,8 +232,10 @@ Such header images are often quite a good visual/emotional draw for the event. H
 
 If you're posting events, consider providing this option for yourself (in your event posting UI or otherwise as part of your publishing system) as part of your indieweb event posts as well.
 
-Since the photo would be deliberately chosen and associated with the event, we could extend [[h-event]] to represent the photo as well with:
-* <code>u-photo</code> (re-used from [[h-card]]).
+Since the photo would be deliberately chosen to represent the event, we could extend [[h-event]] to represent the photo as well with:
+* <code>u-featured</code> (re-used from [[h-entry]]).
+
+Note that <code>u-featured</code> is more appropriate for a header image than <code>u-photo</code>, since u-photo really should be used for photos of the event itself, taken at the event (We are now doing this with [[Homebrew Website Club]] photos, which gets them included in [[this-week]] in the IndieWeb).
 
 '''Screenshots needed'''
 
@@ -214,12 +308,20 @@ Event-aware destinations to consider:
 * Eventbrite also emails people when some number (2+?) of their friends are going to an event.
 
 ==== POSSE to Facebook ====
-[[Facebook]] - likely has broadest reach of people you might want to explicitly invite
-* Currently the [https://developers.facebook.com/docs/graph-api/reference/v2.1/event#publish Facebook API disallows creating, updating, or deleting events]
-** [https://github.com/snarfed/bridgy/issues/274 Bridgy feature request: publish Facebook events]
-* Creating a '''manual POSSE event copy on FB''' of an event on your site is still useful!
-** including copy a [[featured]] image from your indie event (e.g. [https://snarfed.org/2014-06-16_homebrew-website-club-at-quip photo of French press coffee on this event]) to the FB event's "Event Photo"
-* people's RSVPs on the FB event can send webmentions to your site via a [[Bridgy]], and thus display people's FB RSVPs  *on the event on your site* E.g.
+[[Facebook]] - likely has broadest reach of people you might want to explicitly invite. However, the [https://developers.facebook.com/docs/graph-api/reference/v2.1/event#publish Facebook API disallows creating, updating, or deleting events]. Thus you have to POSSE events to Facebook manually:
+
+* Create a '''manual POSSE event copy on FB''' of an event on your site
+*# copy name, description, start/end time, and location if applicable.
+*# re-use a [[featured]] image (if any) from your indie event (e.g. [https://snarfed.org/2014-06-16_homebrew-website-club-at-quip photo of French press coffee on this event]) as the FB event's "Event Photo"
+*# Add your indie event URL to the FB event description, e.g.: <blockquote>Originally posted at: URL-TO-YOUR-INDIE-EVENT</blockquote>
+
+* Support RSVPs from Facebook by setting up Bridgy to [[backfeed]] them for you
+*# Support receiving [[RSVP]] Webmentions on your site
+*# Support displaying [[RSVP]]s on your event posts
+*# Authenticate [[Bridgy]] with Facebook at https://brid.gy/ (click the Facebook button)
+
+
+RSVPs on the FB event will then send webmentions to your site via [[Bridgy]], and thus display people's FB RSVPs  *on the event on your site* E.g.
 * '''{{aaronpk}}''' is posting events using [[p3k]] on aaronparecki.com and manually POSSEing them to Facebook:
 ** original: http://aaronparecki.com/events/2014/01/29/1/homebrew-website-club
 ** POSSE copy: https://www.facebook.com/events/1453049941575679
@@ -229,6 +331,12 @@ Event-aware destinations to consider:
 * '''{{snarfed}}''' is posting events inside article posts on snarfed.org  and manually POSSEing them to Facebook: 
 ** original:  https://snarfed.org/2014-06-16_homebrew-website-club-at-quip
 ** POSSE copy: https://www.facebook.com/events/675481332531191/
+
+Check out the indie events above, and make note of the RSVPs that are from Facebook/Bridgy.
+
+
+Aside:
+* [https://github.com/snarfed/bridgy/issues/274 Bridgy feature request: publish Facebook events]
 
 ==== POSSE to Lanyrd ====
 [[Lanyrd]] - has an API for creating events, getting updates, backfeeding RSVPs
@@ -259,6 +367,19 @@ Despite not supporting event posts per se, [[Twitter]] is worth considering as a
 ** Should an event post with a featured/header photo be POSSEd to Twitter as a tweet with a photo?
 ** Should an event post without a featured/header photo, but with a location, be POSSEd to Twitter as a tweet with a photo which is just a static rendered image of the map view of the venue / location?
 ** What is the "engagement" or "response rate" is on tweets/events with header photos vs. events without? *guessing* that with photos is much higher
+
+IndieWeb Examples - real world IndieWeb experiments with POSSEing events to Twitter:
+
+===== Tantek POSSE to Twitter =====
+{{t}} automatically POSSEing event posts to Twitter
+* since [https://twitter.com/t/status/881540257631674369 2017-07-02] with explicit RSVP call to action (since RSVPs were in development, [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events implemented just 4 days later]!) tweet text format:
+** Event: (event name)
+** At: YYYY-MM-DD HH:MM @-[[venue]]-twitter-id (if any)
+** RSVP: ([[permashortlink]] to indie event)
+* and before that since [https://twitter.com/t/status/879242196284735488 2017-06-25] with tweet text format:
+** Event: (event name)
+** At: YYYY-MM-DD HH:MM @-[[venue]]-twitter-id (if any)
+** More: ([[permashortlink]] to indie event)
 
 === Events index ===
 Indieweb sites with event posts (and perhaps even just [[RSVP]] posts) could also provide an index of what events they're attending, e.g.
@@ -307,8 +428,47 @@ What about when an event is cancelled? Options:
 ** [[Facebook]] notifies you when an event you've indicated interest in has been cancelled, but then clicking that notification doesn't go anywhere - the event permalink itself just 404s.
 * ... other options?
 
+=== Calendar Reminders ===
+Some event hosting silos, such as [[Eventbrite]] offer "Add to Calendar" functionality which allow users to add event reminders to the calendar system of their choice. Some example export options include [[ICS]] for standalone calendar software such as Apple Calendar or Microsoft Outlook and links that pre-populate the event creation form for web-based calendars such as [[Google Calendar]].
+
+==== Marty McGuire ====
+{{martymcguire}} implements "Add to Calendar" functionality for each [[event]] post on his site since 2017-07-13, including options for [[ICS]] and [[Google Calendar]].
+
+[[File:martymgui.re_add_to_calendar_2017-07-13_at_1.19.07_PM.png|600px]]
+
+* [https://martymcgui.re/2017/07/13/123031/ Example post]. [https://martymcgui.re/2017/07/13/123031/calendar.ics ICS File].
+
 == Silo Examples ==
+=== Attending ===
+{{main|Attending}}
+
+Attending is a nice looking event silo that allows RSVPing via [[Twitter]], [[Facebook]], [[LinkedIn]], and [[email]].
+
 === Facebook ===
+This section describes '''viewing''' event posts on [[Facebook]]. You may also be looking for:
+* [[create#Facebook_Events|Creating events on Facebook]]
+* [[edit#Facebook_Events|Editing events on Facebook]]
+
+==== Redesign 2017 ====
+In early 2017 Facebook redesigned their event page presentation, putting everything to do with the event itself in a single main/primary column in the middle, with a menu of calendar options on the left, and ads / related events on the right.
+
+Event page:
+
+[[File:2017-03-03-fb-event-ui-page.png|480]]
+
+Single column specifics:
+
+[[File:2017-03-03-fb-event-ui-main.png]]
+
+==== Redesign 2015 ====
+Sometime in 2015, Facebook redesigned their events presentation again, which in many ways seemed to regress even more, especially in the mobile web view:
+
+'''Mobile Web UI:'''
+
+[[File:2016-03-15-facebook-event-mobile-web.png|500px]]<br/>
+[[File:2016-03-15-facebook-event-mobile-web-2.jpeg|500px]]<br/>
+[[File:2016-03-15-facebook-event-mobile-web-3.jpeg|500px]]<br/>
+
 ==== Redesign 2014-02-27 ====
 Here is what the 2014-02-27 redesign (limited rollout as of that date, but subsequently broadly rolled out) looks like: 
 
@@ -317,7 +477,7 @@ Here is what the 2014-02-27 redesign (limited rollout as of that date, but subse
 
 '''Mobile Web UI:'''
 
-[[File:2014-03-03-fb-event-new-ios-web-ui-1.jpg|500px]]]]<br/>
+[[File:2014-03-03-fb-event-new-ios-web-ui-1.jpg|500px]]<br/>
 [[File:2014-03-03-fb-event-new-ios-web-ui-2.jpg|500px]]<br/>
 [[File:2014-03-03-fb-event-new-ios-web-ui-3.jpg|500px]]<br/>
 
@@ -354,15 +514,28 @@ Here is a screenshot of the [[events/2014-02-12-homebrew-website-club|2014-02-12
 
 [[File:Screen_Shot_2014-02-27_at_4.05.00_PM.png|500px|Facebook pre-2014]]
 
+== Sessions ==
+[[IndieWebCamp]] sessions about events:
+* ...
+* 2016-03-14 [[2016/MIT|IndieWebCamp MIT]]
+** [[2016/MIT/birthday]]
+** [[2016/MIT/events]]
+* ...
 
 == See also ==
 * [[events list]]
 * [[datetime]]
+* [[birthday]]
 * [[rsvp]]
+** http://microformats.org/wiki/rsvp
+**  http://microformats.org/wiki/rsvp-brainstorming
+* [[invitation]]
 * [[webmention]]
 * [[posts]]
-* [[invitation]]
-* http://microformats.org/wiki/rsvp
-**  http://microformats.org/wiki/rsvp-brainstorming
-* http://microformats.org/wiki/hcalendar
+* [[h-event]]
+** http://microformats.org/wiki/h-event
 ** http://microformats.org/wiki/hcalendar-brainstorming
+
+== See Also ==
+
+* [[ICS]]

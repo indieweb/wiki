@@ -1,0 +1,66 @@
+https://indieweb.org/2017/Nuremberg/micropub
+
+'''<dfn>Building blocks 2: IndieAuth + Micropub</dfn>''' was a session at [[2017/Nuremberg|IndieWebCamp Nuremberg 2017]].
+
+Notes archived from: https://etherpad.indieweb.org/micropub
+----
+IndieWebCamp Nuremberg 2017
+
+Session: Building blocks 2: IndieAuth + Micropub
+
+When: 2017-05-20 14:30
+
+== Participants ==
+* [aaronpk] (session faciliator)
+* cweiske
+* jan
+* amber
+* tobi
+* dominic
+* jeremy cherfas
+* leo
+* ...add names and URLs
+
+== Remote participants ==
+* {{martijnvdven}}
+
+== Notes ==
+* How can we quickly make posts on my site without copying files around
+* Other people can build better interfaces, but I want to use them with my site - e.g. an iPhone app
+* https://quill.p3k.io/ is aaronpk's micropub client reference implementation
+
+=== What do we need? ===
+* Authorization endpoint that controls who may post to your site
+* Token endpoint is plumbing only
+* Micropub endpoint is storing the posts to your site
+** static site - micropub endpoint would need to creat those files
+* media endpoint for storing things like images to go with posts
+
+=== How do we do it? ===
+* POST request with a number of parameters
+* endpoint would need to use that data to create the static file or save to database
+** Known stores webmentions in database as posts
+* What if my website needs a different set of data?
+** A Micropub server will except anything that follows the microformat structure. If your website needs undocumented data, there is nothing in the Micropub specification that will stop you from sending it.
+
+=== Identity ===
+* How can we give people one-off identities? Or allow them to login to places without owning a domain?
+
+=== Logout security ===
+* quill is still able to post to my site when I logout from quill
+* I have to remove quill from my authorized application list
+* it is not possible to force an application to tell the access token endpoint that a user signed out. that's also not in the spec currently
+* oauth is the same, and indieauth is based on oauth
+
+=== Documentation issues ===
+* Authentication vs authorisation is particularly hard to explain.
+** How to make it clear what block is meant when saying “authorisation server”?
+* Token based auth.
+** Questions come up, but how much should IndieWeb document about OAuth?
+** Can questions about token validity be left unanswered?
+** What is “plumbing”, what is important for onboarding?
+
+== Video ==
+This session was broadcasted [https://www.youtube.com/watch?v=Ye4UDZD87J0 live on the IndieWebCamp YouTube channel].
+
+[[Category: 2017 sessions]]

@@ -1,0 +1,70 @@
+https://indieweb.org/2017/Berlin/bookmarks
+
+'''<dfn>Bookmarks & Archiving</dfn>''' was was a session at [[2017/Berlin|Indiewebcamp Berlin]] discussing mostly how to preserve pages you link to from your site.
+
+Import from https://etherpad.indieweb.org/bookmark
+
+* {{sgreger}} is feeding his bookmarks into his website but would like to also have a copy of whatever he bookmarked.
+* Different formats that could be use to store it MHTML, WARC, HAR. WARC and HAR store headers and things.
+* Dynamic pages are hard to fetch because what you saw might not be what your archiver will see seconds later.
+* For single-page implementations you will need something that includes JS.
+* Gerben: two ways to archive, high-fidelity (all transactions, scripts might be fetching other things and those need to be included).
+** https://webrecorder.io/ - record all HTTP traffic, enable “replay”. Would be high-fidelity.
+* Gerben’s freeze-dry solution (https://github.com/WebMemex/freeze-dry) grab the DOM as it is at that moment. This will mess-up scripts that update the DOM.
+** Saving as the browser allows will execute scripts but also store the DOM, could lead to double things.
+** Freeze-drying by Gerben removes scripts to create a static archived DOM version.
+** Single-file (browser extension) implements something like it. (https://github.com/gildas-lormeau/SingleFile)
+* MHTML and WARC are good examples of how several resources can be stored in a single file.
+* MHTML still has some support in big browsers.
+* Idea: two different versions of an archived page, both just the extracted text (e.g. for searching) and the full version with resources.
+* Full page screenshots and print to PDF are also options.
+* Things to think about with having a separate (headless) browser handle the archiving is that they do not have the same session data as your browser and may be fetching a different page.
+** Example: {{aaronpk}} makes screenshots for bookmarks and many of them display error messages because the server that runs the screenshotting engine doesn’t work with the current URL.
+* Ping archive.org to make the copy.
+** Cons: they don’t have you session, they are not under your control. Archive.org might hide copies. They may or may not keep to robot.txt.
+https://blog.archive.org/2017/04/17/robots-txt-meant-for-search-engines-dont-work-well-for-web-archives/
+** The Internet Archive copy might have the WARC available (?) which means we could ping them and then download the WARC for a local copy.
+* {{sgreger}}: what is practical? What should we be doing?
+* Gerben: need to mention http://amberlink.org/ for automatically keeping links working on your websites by rerouting them to archive copies of links.
+* {{sgreger}} is using a free screenshotting service for his bookmarks.
+** Could we OCR the screenshots? Probably, but grabbing the innertext of the page sotred next to the screenshot would be more exact.
+* https://github.com/wallabag/wallabag will try to do text extraction, a type of self-hostable Pocket.
+* Are there two different use-cases? 1) Bookmarks initiated by me, 2) links in my content to other parties. Case 1 has myself as target, case 2 might have visitors as target as my blogpost doesn’t lose value.
+* Makes sense to have Archive.org copies and a private copy. Archive.org is public, 
+*Memento protocol - format to make link for archived copies with time info http://www.mementoweb.org/guide/ http://robustlinks.mementoweb.org/
+** Memento is named with a plugin on https://indieweb.org/Indieweb_for_Journalism
+** Look at “robust link”.
+
+
+Summary:
+
+2 ways:
+* hi-fi archive (all the interactions, scripts etc.)
+* static copy of the dom
+
+use cases:
+* users who want to ensure having their own copy
+* users who want to ensure having their own copy even if the copy disappears from archive.org
+* investigative journalists who want to save a copy from the very moment they accessed a site
+
+two strategies where/when to make the static copy
+* doing it in-broswer: access to page as i see it
+* doing it headless or on server: possibly different rendering based on missing cookies etc., problematic as can break due to invalid requests etc.
+
+possible formats to archive bookmarked pages:
+* mhtml (can be unpacked into html5)
+* warc (headers etc. stored, good for archive purposes)
+* har
+* freeze-dry (screenshoting the rendered page)
+* singlefile browser extension
+* webrecorder.io (record all http traffic, then "replay")
+* "Save as" button in browser (broken, because executes scripts)
+* extract the text (e.g. using the readability extension)
+* save the entire body tag text content (useful for full-text search)
+* PNG (even works on headless browsers ff/chrome; does not have cookies/session data)
+* PDF, also via public APIs somewhere (?)
+* ping to archive.org (may be removed based on private request; robots.txt)
+* amberlink.org
+* external tools: wallabag, pocket?
+
+memento: robust link spec (href to original link, extra attribute with url of archived copy- or vice versa)

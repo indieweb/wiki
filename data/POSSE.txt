@@ -1,4 +1,4 @@
-http://indiewebcamp.com/POSSE
+https://indieweb.org/POSSE
 
 '''<dfn>POSSE</dfn>''' is an abbreviation for '''Publish (on your) Own Site, Syndicate Elsewhere''', a content publishing model that starts with posting content on your own domain first, then syndicating out copies to 3rd party services with [[permashortlinks]] back to the original on your site.
 
@@ -15,7 +15,7 @@ As such, POSSE is more important than [[federation]]. In addition, if federated 
 POSSE is considered a robust and preferable syndication model for the following reasons:
 
 * '''Ownership.''' By posting ''first'' on your own site, you create a direct ownership chain that can be traced back to you without any intervening 3rd party services (silos) TOS's getting in the way (which is a vulnerability of [[PESOS]]).
-* '''Reduce 3rd party dependence.''' By posting directly to your own site, you're not dependent on 3rd Party services to do so -- if you can access your site, you can publish your content
+* '''Reduce 3rd party dependence.''' By posting directly to your own site, you're not dependent on 3rd Party services to do so -- if you can access your site, you can publish your content. On the contrary with PESOS, [https://twitter.com/colinjohnston/status/772533151960707072 when the 3rd party site is down], you are unable to add content.
 * '''Own canonical URLs to your content.''' Canonical URLs to your content are on your domain.
 * '''Copies can cite the original.''' By posting content first to your own site (and thus creating a permalink for it), copies that you post on 3rd Party services can link or cite the original on your site (see [[syndication_formats]] and [[Twitter#POSSE_Notes_to_Twitter|POSSE Notes to Twitter]])
 * '''Discovery of your original content.''' [[discovery]] of your original content from the copies on 3rd party services is enabled by the permashortlinks to your originals posted on said services
@@ -49,7 +49,8 @@ See [[Twitter#POSSE_to_Twitter|POSSE to Twitter]] for details on how to POSSE bo
 {{main|POSSE to Facebook}}
 
 * API Access - New posts can be created through the API using the [https://developers.facebook.com/docs/reference/api/publishing/ Publishing API]
-* A web action endpoint (<code>https://www.facebook.com/dialog/feed</code>) is supplied by the Feed social plugin for semi-manual posting. Requires a facebook app id, but no authentication. It accepts a callback URL, to which it redirects with ?post_id GET param set, from which a URL can be constructed.
+* <s>A web action endpoint (<code>https://www.facebook.com/dialog/feed</code>) is supplied by the Feed social plugin for semi-manual posting. Requires a facebook app id, but no authentication. It accepts a callback URL, to which it redirects with ?post_id GET param set, from which a URL can be constructed.</s>
+** Appears to no longer be functioning as of 2016-03-13 --[[User:Waterpigs.co.uk|Barnaby Walters]] 04:38, 13 March 2016 (PDT)
 
 === Google Plus ===
 {{main|Google+#POSSE}}
@@ -57,14 +58,20 @@ See [[Twitter#POSSE_to_Twitter|POSSE to Twitter]] for details on how to POSSE bo
 * There are several endpoints which can be used as web action dialogs, but none of them support callbacks, so it’s trick to get the URL of the posted copy.
 ** Mobile App endpoint: <code>https://m.google.com/app/plus/x/?content=INSERT_MESSAGE_HERE_WITH_URL_IF_YOU_WANT&v=compose&hideloc=1</code>
 ** Share button endpoint: <code>https://plus.google.com/share?url=</code> (doesn’t support text injection as far as I can tell --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 14:41, 7 December 2012 (PST))
+* The WordPress plugin [https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/ Social Network Auto-Poster (SNAP)] utilizes a mobile web work around to POSSE WordPress posts to Google+. {{chrisaldrich}} tried it for a while in June 2016, but it requires deactivating second factor authentication on Google to work properly, so he abandoned the method.
 
 === Medium ===
 {{main|Medium}}
-* How does veganstraightedge.com do it? (some his articles are manually POSSEd to Medium)
+* You can create posts via [https://github.com/Medium/medium-api-docs the posts API]
+* Medium also supports manual POSSE via [https://medium.com/@Medium/import-all-the-things-578c8f9016f6#.e8mh2dyws the Import Post function], which preserves [[rel-canonical]] links to the original URL
+* {{shaners}} and {{benwerd}} manually POSSE to Medium
+* {{chrisaldrich}} uses the WordPress [https://wordpress.org/plugins/medium/ Medium Plugin] to POSSE to Medium. They also [https://help.medium.com/hc/en-us/articles/218572107-How-to-move-to-Medium support bulk migration] (aka mass POSSE) for porting across lots of posts after which posts can be POSSEd by means of their plugin.
+* {{aaron gustafson}} Wrote a [https://github.com/aarongustafson/jekyll-crosspost-to-medium Jekyll plugin] to POSSE to Medium.
 
 === WordPress ===
 {{main|WordPress}}
 * How does veganstraightedge.com do it? (all his articles are manually POSSEd to WordPress.com)
+* {{chrisaldrich}} uses a WordPress plugin [https://wordpress.org/plugins/wp-crosspost/ WordPress Crosspost] to POSSE from a self-hosted WordPress install to WordPress.com.
 
 === Plain Text Notes ===
 Some destinations (e.g. [[SMS]] or [[push notification|push notifications]]) may require a pure plain text representation.
@@ -186,7 +193,6 @@ Other partial POSSE sites:
 * '''[[User:Hupili.net]]''' implements a partial POSSE with the following setups:
 ** [[SNSAPI]] is a lightweight middleware to unify the data structure and interfaces of different social networking services. It gives the scripting flexibility for developer users to manipulate social silos. 
 ** [[SNSRouter]] is a web UI built upon SNSAPI where one can read an aggregated timeline from different sites, mass forward messages, and update statuses on all channels. 
-** Part of my daily usage is to go to my running SNSRouter, read messages and update statuses on it. The new status is written to the RSS feeds, http://hupili.net/feeds/all.xml , and other silos. ( This feed is indeed a mix of [[POSSE]] [[PESOS]] )
 ** As is said in one of the description paragraph above, this model is not truly POSSE. One can not (hardly) distinguish original/ syndicated status. I'm planning to put a page with permlink on my site upon each status update and then use SNSAPI to syndicate to other silos.
 
 == Other Approaches ==
@@ -220,7 +226,7 @@ Read as a verb is interesting when applied to POSSE.
 At a minimum, it's useful to implement storing links to syndicated copies of your content to provide for the future possibility of reading from downstream POSSE copies.
 
 See: 
-* [[rel-syndication]] for how to markup links to syndicated copies of your content
+* [[u-syndication]] for how to markup links to syndicated copies of your content
 * [[syndication-link-use-cases]] for why to do so
 
 Actual direct uses of Reading from downstream POSSE copies:
@@ -229,7 +235,7 @@ Actual direct uses of Reading from downstream POSSE copies:
 ** [[favorites]]/likes
 ** [[reposts]] (retweets)
 
-In addition, keeping a [[rel-syndication]] link to the POSSE copy enables deleting it to perform an Update or a Delete action, as described in the following sections.
+In addition, keeping a [[u-syndication]] link to the POSSE copy enables deleting it to perform an Update or a Delete action, as described in the following sections.
 
 === Update ===
 If a downstream service allows updates/edits, then when you edit your post, you could propagate that update to the downstream POSSE copy as well. (Any existing POSSE destinations that allow this?)
@@ -270,10 +276,10 @@ A: POSSEing without a backlink is considered a last resort, and has some costs a
 === POSSE or Send Webmentions First ===
 In short, '''[[POSSE]] first, then send [[webmentions]]'''.
 
-See: [[Webmention#POSSE_or_Send_Webmentions_First|Webmention FAQ: POSSE or Send Webmentions First]] for details and reasoning.
+See: [[Webmention-faq#POSSE_or_Send_Webmentions_First|Webmention FAQ: POSSE or Send Webmentions First]] for details and reasoning.
 
 == Background ==
-* 2010-05-26 POSSE first described online as a concept in <cite>[http://www.monkinetic.com/2010/05/26/tantek-celik-diso-20-brass-tacks Tantek Celik on DiSo 2.0: Down to Brass Tacks]</cite> : <blockquote>Publish on your own site, own your URLs, your permalinks, and <br/>Syndicate out to other sites. Your text updates to Twitter, your checkins to Foursquare, your photos to Flickr etc.</blockquote>
+* 2010-05-26 POSSE first described online as a concept in <cite>[https://steveivy.gitlab.io/tantek-celik-diso-20-brass-tacks.html Tantek Celik on DiSo 2.0: Down to Brass Tacks]</cite>(<cite>[https://web.archive.org/web/20130312135439/http://www.monkinetic.com/2010/05/26/tantek-celik-diso-20-brass-tacks archived monkinetic original]</cite>) : <blockquote>Publish on your own site, own your URLs, your permalinks, and <br/>Syndicate out to other sites. Your text updates to Twitter, your checkins to Foursquare, your photos to Flickr etc.</blockquote>
 * 2010-10-06 POSSE+backfeed conceptual architecture (predating the terms) [http://www.flickr.com/photos/tantek/5301870765/ http://farm6.static.flickr.com/5250/5301870765_80a1e06212.jpg] <br/>Note the arrows to/from the "Personal site" in the middle. Arrows outward are conceptually illustrating [[POSSE]], while those returning, [[backfeed]]. <br/> See 2011-01-10 post relating/expanding on it: [http://tantek.com/2011/010/b1/owning-your-data On Owning Your Data: Follow-up to @Zeldman and the #indieweb]
 * 2011-06-25 IndieWebCamp 2011 session: "[[2011/Publish_Then_Syndicate_and_Replicate|Publish Then Syndicate and Replicate]]" further explored POSSE conceptually.
 * 2012-06-21 <i>POSSE</i> term defined: http://tantek.com/2012/173/t1/posse-core-indieweb-approach
@@ -289,9 +295,17 @@ Articles and blog posts about POSSE, especially implementing it:
 
 * ...
 
+== POSSE as methodology for non-web scenarios ==
+
+=== POSSE git repositories ===
+As discussed #indieweb it is also possible POSSE your git repositories to git "silos", such as [[GitHub]] or [[GitLab]]. An easy way of doing this was described by {{cweiske}} at [https://chat.indieweb.org/2016-12-16#t1481891974356000].
+
+
 == See Also ==
 * Relevant session from [[2011]]: [[Publish Then Syndicate and Replicate]]
 * Documentation on [[syndication formats]]
+* [[POSSE reply]]
+* [[2014/SF/possepatterns]]
 
 == Related ==
 * [[PESOS]]
@@ -299,5 +313,7 @@ Articles and blog posts about POSSE, especially implementing it:
 * [[why]]
 * [[original post link]]
 * [[microsyntax]] for POSSEing to plain text destinations
+* [[rel-canonical]]
 
 [[Category:building-blocks]]
+[[Category:syndication]]

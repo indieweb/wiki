@@ -1,4 +1,4 @@
-http://indiewebcamp.com/webactions
+https://indieweb.org/webactions
 
 A '''<dfn>web action</dfn>''' is the interface and user experience of taking a specific discrete action, across the web, from one site to another site or application. [http://tantek.com/2011/220/b1/web-actions-a-new-building-block]
 
@@ -35,9 +35,15 @@ How to markup web actions on your posts:
 Use the <code>&lt;indie-action&gt;</code> tag to wrap any third party / [[silo]] action buttons/links you might already have on your site, e.g. "Tweet" / share / +1 buttons. Here is an example of wrapping an existing Tweet button (from [http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering an actual blog post]), whitespace/indenting added for readability.
 
 <pre><nowiki>
-<indie-action do="post" with="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering">
+<indie-action do="post" 
+ with="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering">
  <span class="tweet-button">
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering" data-text="IndieWebCamp 2014 — Thoughts Before The Gathering:" data-count="horizontal" data-via="t" data-related="html5now:microformats">Tweet</a>
+  <a href="http://twitter.com/share" 
+     class="twitter-share-button" 
+     data-url="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering" 
+     data-text="IndieWebCamp 2014 — Thoughts Before The Gathering:" 
+     data-count="horizontal" 
+     data-via="t" data-related="html5now:microformats">Tweet</a>
   <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
  </span>
 </indie-action>
@@ -46,6 +52,20 @@ Use the <code>&lt;indie-action&gt;</code> tag to wrap any third party / [[silo]]
 Note that everything inside the <code>&lt;span class="tweet-button"&gt;</code> is markup from Twitter, including the javascript. It's not required for web actions, just the markup that was there from before.
 
 The <code>&lt;indie-action&gt;</code> element is an example of a [http://w3c.github.io/webcomponents/spec/custom/ custom element], part of the [http://webcomponents.org/ web components] family of technologies. The element was initially <code>&lt;action&gt;</code>, but [http://w3c.github.io/webcomponents/spec/custom/#dfn-custom-element custom elements require a dash in the element name], hence <code>&lt;indie-action&gt;</code>.
+
+==== Wrap multiple silo post actions ====
+You can also wrap multiple silo actions meaning the same thing in a single webaction. Note this example also provides simpler silo action markup <em>without javascript</em>.
+
+<pre style="white-space:prewrap"><nowiki>
+<indie-action do="post" with="http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering">
+  <a href="https://twitter.com/intent/tweet?url=http%3A%2F%2Ftantek.com%2F2014%2F179%2Fb1%2Findiewebcamp-thoughts-before-gathering&text=IndieWebCamp%202014%20Thoughts%20Before%20The%20Gathering">
+   Tweet</a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering&title=IndieWebCamp%202014%20Thoughts%20Before%20The%20Gathering">
+   Facebook</a> 
+  <a href="https://plus.google.com/share?url=http://tantek.com/2014/179/b1/indiewebcamp-thoughts-before-gathering">
+   Google+</a>
+</indie-action>
+</nowiki></pre>
 
 ==== Wrap favorite reply retweet ====
 If you have Twitter "Favorite", "Reply", "Retweet" tweet action links, you can wrap those in  <code>&lt;indie-action&gt;</code> tags so that those with <code>&lt;indie-action&gt;</code> tag support will be able to automatically interact using their own site rather than a silo. Here's some sample markup (again [http://tantek.com/2014/175/t1/pdf14-why-need-indieweb-video-slides from an actual post]), note that text verbs have been updated to use the general [[like]], [[reply]], [[repost]] terms rather than Twitter's terms. Again whitespace added for wrapping/readability (and non-essential attributes removed)
@@ -78,7 +98,19 @@ If you have Twitter "Favorite", "Reply", "Retweet" tweet action links, you can w
 </nowiki></pre>
 
 ==== action markup ====
-Here is a simple outline of <code>&lt;indie-action></code> markup:
+1. Be sure to include these scripts (once per page is sufficient) to polyfill the <code>&lt;indie-action&gt;</code> tags in the <code>&lt;head&gt;</code> element of your site:
+
+<pre>
+<script type="text/javascript" src="/path/to/indieconfig.js"></script> 
+<!-- download from https://github.com/voxpelli/voxpelli.github.com/blob/master/js/indieconfig.js -->
+<script type="text/javascript" src="/path/to/webaction.js"></script>
+<!-- download from https://github.com/voxpelli/voxpelli.github.com/blob/master/js/webaction.js -->
+</pre>
+
+See: [[indie-config#How_to_consume]] for more details on the scripts (what each does etc.).
+
+
+2. Here is a simple outline of <code>&lt;indie-action></code> markup to use for each web action button:
 
 <pre><nowiki>
   <indie-action do="post" with="permalink">
@@ -308,7 +340,7 @@ The whole point to start with is to support (provide a better user experience fo
 === clientside conditionals ===
 Conditional showing of silo buttons could even be done in clientside javascript, because non-JS useragents certainly do not care about silo buttons (<code>&lt;action&gt;</code> markup should be sufficient for any crawlers etc. to infer general UI semantics).
 
-E.g. on the serverside, always provide a [[rel-syndication]] ("View on ..silo-name..") link to [[POSSE]] copies of posts, because they are useful for [[original-post-discovery]] and POSSE threading (e.g. threading POSSE tweets) and other [[syndication-link-use-cases]].
+E.g. on the serverside, always provide a [[u-syndication]] ("View on ..silo-name..") link to [[POSSE]] copies of posts, because they are useful for [[original-post-discovery]] and POSSE threading (e.g. threading POSSE tweets) and other [[syndication-link-use-cases]].
 
 Then in JS on the clientside, replace the ("View on ..silo-name..") link with web action buttons (using <code>&lt;action&gt;</code> tags), with respective silo-specific fallback inside (perhaps referrer conditionally as noted above).
 
@@ -404,6 +436,26 @@ When displaying a post:
 * if the user is logged into your site with micropub auth (should only be the owner of the site themselves)
 ** webaction buttons that do micropub directly
 
+=== follow with fallback ===
+As noted in '''[[webactions-verbs-brainstorming#New_Verbs]]''' and '''[[follow#Follow_Webaction]]''', follow makes sense as a webaction and should be implementable.
+
+Gotta try marking it up so others can experiment with the consuming side.
+* verb: follow
+* with: home page (or other subscribable page with [[h-feed]] to follow) URL
+
+Example:
+<pre>
+  <indie-action do="follow" with="http://tantek.com/">
+   <a href="https://twitter.com/intent/follow?screen_name=t">
+   Follow
+   </a>
+  </indie-action>
+</pre>
+
+IndieWeb Examples:
+* {{t}} has a "+ Follow" webaction on his home page (since 2017-09-26)
+* ...
+
 == Verbs ==
 We need a registry of common verbs to use with web actions. This should be built based on research into real world usage and brainstorming on top of that:
 
@@ -469,7 +521,7 @@ If you're a user of Adblock Plus, you can re-enable these by:
 * reload the page - the buttons / tweet actions should show up.
 
 == Drop Delegated Logins ==
-While delegated logins aren't necessarily seen as a web action, they are at least superficially similar, in that they typically consist of a button with a particular social site brand. MailChimp decided to drop theirs, read why:
+While delegated logins aren't necessarily seen as a web action, they are at least superficially similar, in that they typically consist of a button with a particular social site brand. [[MailChimp]] decided to drop theirs, read why:
 * http://blog.mailchimp.com/social-login-buttons-arent-worth-it/
 
 == Real-World Candidates for Web Actions ==
@@ -496,6 +548,39 @@ Benefits:
 === Apps which submit to to delegate URLs ===
 
 * '''[http://waterpigs.co.uk/pushups pushups]''' is a simple, standalone HTML+JS+CSS (download to clone) nose-activated pushup counting UI. Give it a URL, and when you’re done it delegates the data to the URL you provide, which is remembered using localstorage.
+
+== Issues ==
+=== leaks info to the target website ===
+The target website hosts the <code><nowiki><indie-action></nowiki></code> tag, and the browser replaces that tag with the UI of the user's choosing, so it all takes place under the domain of the target website. This means Javascript on the site can inspect what happened to the indie-action tag and learn information about the visitor. This takes place before the visitor has clicked on any buttons.
+
+Example target page:
+
+<pre><nowiki><div id="follow-button">
+  <indie-action do="follow" with="http://scratch.dev/">Follow</indie-action>
+</div></nowiki></pre>
+
+Then the following Javascript can be used to get the name of the button to learn what service the visitor uses:
+
+<pre><nowiki>document.querySelector("#follow-button button").title</nowiki></pre>
+
+This is based on the assumption that the browser will replace the indie-action tag with something containing a button, but it wouldn't be hard to do some more detailed inspection.
+
+Even worse is the fact that Javascript on the page can just run the "click" event of the button, opening up the target UI without the visitor clicking anything!
+
+<pre><nowiki>document.querySelector("#follow-button button").click()</nowiki></pre>
+
+=== action button design doesn't match website ===
+
+Since the browser plugin is responsible for turning the indie-action tag into something clickable, the UI of the clickable action will almost certainly not match the UI of the target website. For example, this is Tantek's home page with his "follow" button where the fallback of the indie-action tag contains a "follow" link matching the style of the rest of his website.
+
+[[File:tantek-follow-webaction-fallback.png]]
+
+With the [https://github.com/barnabywalters/web-action-hero-toolbelt Web Action Hero Toolbelt] installed, this is replaced with a button and looks like this:
+
+[[File:tantek-follow-webaction-button.png]]
+
+The extension replaced the <code><nowiki><a></nowiki></code> with a button, although a different extension may have left the <code><nowiki><a></nowiki></code> or replaced it with something else entirely. 
+
 
 == History ==
 === 2012 ===

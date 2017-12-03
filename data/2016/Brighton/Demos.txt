@@ -1,0 +1,150 @@
+https://indieweb.org/2016/Brighton/Demos
+
+[[2016/Brighton|IndieWebCamp Brighton 2016]] Demos!
+
+== Start Demos ==
+
+* Chat start: https://chat.indieweb.org/2016-09-24#t1474708281802000
+* Stream start: https://www.youtube.com/watch?v=Ot-Ji5nzL2k&t=19m44s
+
+{{stub}}
+
+== Hack Day Demos ==
+
+* Chat start: https://chat.indieweb.org/2016-09-25#t1474818042399000
+* Stream start: https://www.youtube.com/watch?v=W70wd56i0Bg&t=5m15s
+
+=== Martin Tomes ===
+
+[http://martin.tomes.org/ Martin] upgraded his [[Drupal]] back-end from 7 to 8. This caused some problems that had to be handled by hand, including alignment of images within his posts.
+
+He also implemented a [[PESOS]] flow for pulling his bookmarks from [[Pinboard]]. There were som problems with getting [[OAuth]] functioning with [[Twitter]], keeping him from setting that up.
+
+=== Glenn Jones ===
+
+[https://glennjones.net Glenn] was inspired by everyone talking about [[service worker|service workers]] and set out to optimise how caching can be done.
+
+He showed how JavaScript within a page can access caches through <code>window.caches</code>. Snippets of HTML can be cached this way and then loaded by the on-page JavaScript, and swapped out. This limits the amount of storage needed for the service worker to store multiple pages.
+
+Service workers are still needed for the caching itself, and the initial load of the containing page. After that the containing page uses <code>window.Request</code> to emulate server calls and access sub-parts of the site from its caches.
+
+Jeremy asked some insightful questions throughout.
+
+Glenn would like to create a single script that can be pointed at the DOM elements that are the “main content” and that way it could generate this entire caching system on the fly.
+
+=== Peter Molnar ===
+
+{{petermolnar}} started off by saying he had nothing web related to show. Instead he has been working on how he consumes content. He has been using several feed reading set-ups and  this weekend started to built his own parser.
+
+The parser takes any feed as input (hfeed or RSS/Atom) and then parses it for links. It will then fetch these links and parse them for content. The content is then emailed to him for reading and the linked-to article will be sent a webmention stating what feed linked to them.
+
+This could be used as webmentions as a service for static sites. Though it was demoed with Peter’s [https://petermolnar.net/category/note/ own notes] and is limited to not send too many unrelated mentions all over the web.
+
+=== Sven Knebel ===
+
+[https://www.svenknebel.de Sven] built a [[micropub]] endpoint so he can start using [[Quill]] to post to his website. He live demoed creating [https://www.svenknebel.de/posts/2016/9/7/ a post] through Quill.
+
+For this to work he worked on his post storage and found out that the YAML front-matter he was using could not be parsed by the YAML library – pyyaml – for Python he was using. The library could not parse its own output correctly.
+
+=== Martijn van der Ven ===
+
+{{martijnvdven}} finally got his blog domain going at <code>[https://licit.li licit.li]</code>, including [[HTTPS]]. He did not follow {{adactio}}’s advice from day 1 and decided to built his entire blog engine from scratch during this hack day.
+
+The engine sits on top of a generic library to store things in flat-file + sqlite format. Martijn is planning to use separate instances of this storage library to store other parts of his site, like [[webmentions]].
+
+The HTTPS was extremely easy to get going through tools provided by his hosting provider, Uberspace. The creation of config files for [[Let’s Encrypt]] and the moving around of newly generated certificate files was all handled by their command-line tools.
+
+Because of talk about [[LinkedIn]] during day 1, his personal page was updated to include a LinkedIn profile page link as well.
+
+=== Sebastian Greger ===
+
+[http://sebastiangreger.net Sebastian] was one of the people talking about LinkedIn on day 1, and has implemented a [[POSSE]] flow from [[WordPress]] to LinkedIn into his syndication WordPress plugin. The OAuth 2 dance was the biggest hurdle, after that the LinkedIn API was pretty easy to work with and resembled Twitter’s in some ways.
+
+LinkedIn – like Twitter – would allow images to be posted with posts, but Sebastian has not integrated that as he saw no use for it at this point.
+
+Next he worked on owning his bookmarks. He set-up [[Wallabag]] for testing using [https://blog.schiessle.org/2016/04/16/installing-wallabag-2-on-a-shared-web-hosting-service/ a guide for setting up a private instance] and was working to really integrate it into his bookmarking flow. At the same time he worke on <code>u-bookmark-of</code> webmentions, but for unknown reasons the custom post type used for bookmarks was not triggering the sending of webmentions at all.
+
+To better his own workflow he added highlighting for published posts while in private views. He also wants to add highlighting for tagged posts.
+
+=== Sebastian Lasse ===
+
+[http://sebastianlasse.de Sebastian] demoed an [[IndieAuth]] flow supported with protocol handlers.
+
+# Logging in to your own site will follow the same flow as people are used to. Other websites will not be able to detect this normally however.
+# After logging in the site will install a protocol handler if possible so it will handle all <code>web+indie:</code>-links. This installation will show a UI specific to your browser, because browsers like Chrome will hide protocol handler installation behind unintuitive icons.
+#* Because of browser support it is not currently possible to detect if a protocol is installed or not. There is a way to detect installation through an iframe onload event though.
+#* For testing it is noted that protocol handlers can be dergistered in Chrome through <code>chrome://settings/handlers</code>.
+# Visiting a website that would normally ask for a domain to log you in through IndieAuth can now instead trigger a check for the protocol and show a button for login.
+# The login button can instantly redirect you without having to ask for a domain name, as your personal domain will be handling the protocol link.
+
+The IndieAuth flow has not been changed much at the end, but some more privacy has been gotten as the second website no longer needs to be told about your domain name.
+
+Also noted he is working on a [[node.js]] “clone” of indieauth.com. And showed a logo for IndieAuth built to match the design of the IWC logo.
+
+=== Al Power ===
+
+[https://alpower.com Al] started looking into using [[Laravel]] for his back-end but decided to stick with [[Jekyll]], because rebuilding rebuiling everything on a completely new library turned out to be [[yakshaving]].
+
+Al worked his way through [[IndieWebify.Me]] for his site. Webmentions were added with {{voxpelli}}’s Heroku application. After that he looked into what he could do with photos, taking inspiration from {{adactio}}’s [https://gist.github.com/adactio PHP snippets] for pulling photos from Twitter et al.
+
+He also spotted [[Kirby]] now has a [http://getkirby-plugins.com/webmentions webmention plugin] and then went to set-up Kirby. He is trying to convert Jeremy’s Flickr code into a Kirby plugin and also downloaded all his [[Instagram]] pictures to be able to backfeed those later.
+
+=== Jeremy Keith ===
+
+{{adactio}} started by filling a text file with ideas. Making sure to always work on something small (so there would be something to demo) and then move on to the bigger ideas.
+
+[[File:2016-09-25-adactio-indiewebcamp-ideas-txt.jpg|180px|thumb|right|The list of ideas.]]
+
+He implemented pinging the [[Internet Archive]] when he is linking to things. When comparing the publish timestamp of [https://adactio.com/links/11240 a bookmark on adactio.com] and [http://web.archive.org/web/*/https://remysharp.com/2016/09/13/first-impressions-of-react the first copy in the Internet Archive], those will match.
+
+The next bookmark related thing on the list was handling bookmark-of webmentions. {{aaronpk}} bookmarked [https://adactio.com/articles/9843 an article] and sent a webmention for it. So Jeremy now displays the fact Aaron bookmarked that page, on the page itself. Taking a quick look at {{adactio}}’s source code, it turns out he is still using xfolkentry mark-up, next to h-entry/bookmark-of. A true blast from the past.
+
+He demoed his updated bookmarklet for bookmarking as well. Th bookmarklet mirrors functionality some other people (like Aaron) are already using where the note field will be prepopulated with whatever text is currently selected in the browser.
+
+Next he reworked how tag pages are working. There used to only be separate tag pages for links and journal feeds, but now there are tag pages that pull from both. Enabling someone to see both links and journal entries for the same topic in a single feed. These new pages have [sparkline]s to show activity over time, but are still lacking some other features like pagination.
+
+{{adactio}} had a bit of a back-and-forth about the PHP that generated the embedded SVGs for his sparklines with the room. Promises to look into sharing his code with us.
+
+=== Aaron Parecki ===
+
+{{aaronpk}} started by showing updates to his contact page. The page will now inform visitors of the local time where-ever he is. Then moves on to showing he now displays when people have bookmarked any of his posts. These are shown to work all the way back to posts from 2013!
+
+For a big part of the day {{aaronpk}} has been working on the specification for [[Private-Webmention|private webmentions]]. He calls on all of us to read and comment on this new spec.
+
+The specification describes a token authentication flow that should happen before the usual webmention flow. This way it can be a minimal addition to existing implementations and does not become a completely new spec. The specification describes the flow in three different ways: interleaved description of the two party’s actions, a “this is what you need to do” if you are the sending party, and a “this is what you need to do” if you are the receiving party. Both of the two latter are only 3 separate steps that need to be implemented.
+
+=== Andrea Rota ===
+
+[https://mey.vn Andrea] set-up [[Hugo]] on a [[Netlify]] [https://printer-bath-38758.netlify.com instance] to renew the way he is publishing his posts. All his old data has already been brought into it.
+
+* Sidenote: As Andrea was porting from WordPress, {{petermolnar}} called out that the WordPress exporter can have issues with bigger websites and people moving away from WordPress should double check if the export got everything.
+
+He also got a service worker running for caching, making his posts available without an internet connection. In case a page had not been visited / cached before, it will display a nice offline page. He hopes to get Hugo to automatically generate a list of resources he wants the service worker to cache.
+
+Next up Andrea hopes wants to merge his current website into this new system an finish his micropub endpoint. The latter was shown to be almost working, as Quill already detected the authentication flow.
+
+=== Ignacio Villanueva ===
+
+[http://ignaciodenuevo.com Ignacio] is generating his site using Jekyll and was missing the ability to display tags for his writing. He created a working [http://ignaciodenuevo.com/tags/ tags page] on his website.
+
+=== Erik Erskine ===
+
+[https://www.erskine.uk Erik] worked on service workers as well. He had done a lof ot it “in theory” but never put it in practice on his own site. For this he started setting-up HTTPS. After that a service worker was set-up to cache CSS files when it first gets installed so it could be delivered from cache on future revisits.
+
+He shared his observations about working with service workers with us:
+
+* The only way to remove a service worker is through the developer tools in the browser, you will have to be carefull with that.
+* He personally set the cache lifespan of the service worker to only 1 minute (<code>max-age=60</code>) for development, and is still wondering how long a browser should treat a service worker good for. Again with keeping in mind that visitors cannot easily get rid of old service workers when you want to roll out an update.
+* When developing multiple websites on a single hostname (Erik was working on 2 sites on <code>localhost</code>) their respective server workers will quickly get confused as they are registered on the hostname level. 
+
+=== Tantek Çelik ===
+
+{{tantek}} worked on creation timestamps (opposed to published timestamps)  for his CMS, [[Falcon]]. While he can supply the creation timstamp himself, the server will then record at what time it was actually posted to be displayed and POSSEd to Twitter.
+
+He demoed [[Falcon#Storage_format|the storage system]] behind Falcon and how there is a file he writes his posts to and then a file the server manages where extra metadata like Tweet URLs (and now published timestamps) are stored.
+
+Although the demo was a technical overview, as the implementation was not ready yet, it has since then been [http://tantek.com/2016/273/t1/finished-part-indiewebcamp-hack finished and pushed to his website]. The only visible difference for now being published dates on his posts with seconds, because the server knows to actual the second when a post was published.
+
+== See Also ==
+* [[2016/Brighton]]
+* [[2016/Brighton/Schedule]]

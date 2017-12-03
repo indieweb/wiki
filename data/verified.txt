@@ -1,21 +1,39 @@
-http://indiewebcamp.com/verified
+https://indieweb.org/verified
 
 '''<dfn>verified</dfn>''' refers to a content or profile that is verified to belong to a certain [[identity]]. Verified identities avoid the spoofing that is otherwise possible when determining [[authorship]].
 
+== IndieWeb Examples ==
+Distributed verification or proof that an account on one site is under the control of the same person as another site has been enabled by several sites or plugins. 
+* {{adactio}} has built [[Huffduffer]] to follow rel="me" links to show your connected social accounts without you having to enter them individually. 
+* {{kevinmarks}} built a [http://www.kevinmarks.com/distributed-verify.html browser plugin] which matches [[rel-me]] links on sites and provides either green checkmarks or red Xs to indicate a bi-directional link between the two.
+
 == Silo Examples ==
 Various <span id="existing silo support">social network silos</span> (e.g. Flattr, Google) has or has had verification of third party content on their sites.
+
 === Flattr ===
 [[Flattr]] uses internally mapped URL:s to known proprietary identities and then used proprietary OAuth API:s of other services, like Twitter and GitHub, to let user verify multiple identities per platform.
+
 === Google ===
 [[Google]]'s "Authorship in web-search" feature used [[rel-author]] and similar to establish [[authorship]] of a web page and then tried connecting that to a [[Google+]] profile, either directly or indirectly by following [[rel-me]] links to and from the authors profile and the Google+ profile. Google then presented a profile of that user in connection to the page in their search result.
+
 === Twitter ===
-[[Twitter]] offers a subset of users the option of a blue "verified" checkmark icon on their name/profile, intended to "establish authenticity of identities of key individuals and brands on Twitter."
+[[Twitter]] offers a subset of users the option of a blue "verified" checkmark icon on their name/profile, intended to "establish authenticity of identities of key individuals and brands on Twitter." 
+
+Twitter has come under increasing fire in 2016/2017 for having a relatively opaque process by which they verify users or not. Their verification is only available to certain (unknown) classes of users, despite their stated terms, which causes an imbalance of perceived power and influence on the platform.
+
+On [https://twitter.com/TwitterSupport/status/928654369771356162 2017-11-09] Twitter itself acknowledged this problem:
+<blockquote>Verification was meant to authenticate identity & voice but it is interpreted as an endorsement or an indicator of importance. We recognize that we have created this confusion and need to resolve it. We have paused all general verifications while we work and will report back soon</blockquote>
+
 * https://support.twitter.com/groups/31-twitter-basics/topics/111-features/articles/119135-about-verified-accounts
 * https://twitter.com/verified
- 
+
+=== Micro.blog ===
+[[micro.blog]] offers [[rel-me]] domain name verification. [http://help.micro.blog/2017/web-site-verification/]
+
 == Brainstorming ==
 === Authorship + Rel-Me ===
 First determine the [[authorship]] of a web page. If the author profile is on the same site (same host name) as the web page, and thus can be expected to not have been spoofed, then check for a bi-directional [[rel-me]] link between that author profile and the [[identity]] profile to verify it as.
+
 === Identity graph ===
 To enable verification of more complex [[rel-me]] identity links one would need to compile an entire identity graph, the identity's own subset of the full [[social graph]], and traverse the identity graph from the author profile, to the target and then back and ensure that the full chain of links exists and are valid. This would require something like [[identengine]] or [https://github.com/voxpelli/relspider RelSpider] .
 

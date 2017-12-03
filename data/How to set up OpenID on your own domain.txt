@@ -1,66 +1,52 @@
-http://indiewebcamp.com/How_to_set_up_OpenID_on_your_own_domain
+https://indieweb.org/How_to_set_up_OpenID_on_your_own_domain
 
-You must be ''this'' independent in order to contribute:
-# you must have your own domain, and 
-# have figured out how to set-up OpenID on it.
+Different methods to set up [[OpenID]] on your own domain.
 
-Here are a couple of options for #2.
-* Easy: delegate your domain to another OpenID provider like myOpenID
-* Harder: setup your server to be an OpenID provider
+= Delegate to external authenticator =
 
-__TOC__
+== Delegating to indieauth.com ==
+See [[OpenID#Setup]]
 
-== Delegating your domain to myOpenID ==
+== Delegating your domain to stackexchange ==
 
-''from https://www.myopenid.com/help#own_domain''
-
-You can use your own URL as your OpenID, and still use myOpenID as your OpenID server. To set this up, [https://www.myopenid.com/signup create an account], and add the following markup into your page's head section:
+You can use your stackexchange account as an authentication mean for your own website. To set this up, add the following markup into your page's head section:
 
 <pre>
-  <link rel="openid.server"
-        href="http://www.myopenid.com/server" />
-  <link rel="openid.delegate"
-        href="http://youraccount.myopenid.com/" />
-  <link rel="openid2.local_id"
-        href="http://youraccount.myopenid.com" />
-  <link rel="openid2.provider"
-        href="http://www.myopenid.com/server" />
-  <meta http-equiv="X-XRDS-Location"
-        content="http://www.myopenid.com/xrds?username=youraccount.myopenid.com" />
+  <!-- OpenID-2.0 delegated to stackexchange -->
+  <link rel="openid2.provider" href="https://openid.stackexchange.com/openid/provider" />
+  <link rel="openid2.local_id" href="https://openid.stackexchange.com/user/xxx-xxx-xxx-xxx-xxx" />
 </pre>
-(If you have a .name account through FreeYourID.com, substitute first.last.name for youraccount.myopenid.com above)
 
-That's it. You can now use your own URL to log into OpenID enabled sites with myOpenID as your OpenID server.
+Replacing xxx-xxx-xxx-xxx-xxx with whatever url corresponds to your user (log in into openid.stackexchange.com and select 'Use your own URL to log in' to find it out).
 
-Please note that you will not be able to log into myopenid.com with your own URL; you must use your myOpenID identifier.
+== Delegating your domain to openid.org.cn ==
 
-=== myOpenID Issues ===
-==== X-XRDS-Location not valid HTML5 ====
-* The following line no longer validates as valid html5.  A number of openID supported sites seem to work without the line.  Is it safe to remove it at this point? --[[User:Bret.io|Bret.io]] 23:51, 30 June 2013 (PDT)
-<pre><meta http-equiv="X-XRDS-Location" content="http://www.myopenid.com/xrds?username=youraccount.myopenid.com" /> </pre>
-** I'm pretty sure XRDS is optional and only used for fallback. So you can leave it out. - [[User:Tantek.com|Tantek]] 09:37, 1 July 2013 (PDT)
+<pre>
+  <!-- OpenID-2.0 delegated to openid.org.cn -->
+  <link rel="openid2.provider openid.server" href="http://openid.org.cn/server" />
+  <link rel="openid2.local_id openid.delegate" href="http://xxx.openid.org.cn/" />
+</pre>
 
-== Delegating your domain to Vidoop ==
-'''WARNING: Vidoop is no longer around, and their servers are running due to the grace of the new owners. They could be shut off at any point.[http://www.anotherblogger.com/2009/05/30/openid-delegation-makes-vidoops-failure-painless/] Consider switching OpenID providers ASAP.'''
+Replace xxx with your account name at openid.org.cn
 
-If you're using Vidoop as your OpenID provider, you can instead delegate from your own domain to Vidoop by placing these into the <code>&lt;head&gt;</code> of your [[home page]]:
+= Install authenticator on your own server =
 
-From: https://myvidoop.com/help/what-is-delegation
+This is the most secure setup as you'll be in control of the way you authenticate.
 
-<pre><nowiki>
-<link rel="openid2.provider" href="https://myvidoop.com/openid" />
-<link rel="openid.server"    href="https://myvidoop.com/openid" />
+== SimpleID ==
 
-<link rel="openid2.local_id" href="http://username.myvidoop.com" />
-<link rel="openid.delegate"  href="http://username.myvidoop.com" />
+One option is to install [http://simpleid.koinic.net/ SimpleID] on your server.
+It is a simple OpenID provider implemented in PHP, also packaged for popular free software distribution.
 
-<meta http-equiv="X-XRDS-Location" content="http://username.myvidoop.com/xrds" />
-</nowiki></pre>
+== GNU social ==
 
-Where "'''username'''" (in the latter 2 link elements and the meta element) should be replaced with your personal username on Vidoop.
+Another option is installing a [[GNU social]] node, which comes with an OpenID provider, and use that.
 
-== Installing on your own server ==
-One option is to install [http://siege.org/phpmyid.php phpMyID] on your server. It is a single file that you can drop on to your server to create an OpenID provider.
+== Wordpress ==
+
+[[Wordpress]] can behave as an OpenID provider with this plugin: https://wordpress.org/plugins/openid/
+
+== Other options ==
 
 You can read about some other options here:
 
@@ -68,9 +54,25 @@ http://www.intertwingly.net/blog/2007/01/03/OpenID-for-non-SuperUsers
 
 openid.net has further information for developers: http://openid.net/developers/
 
-== Troubleshooting ==
+= Troubleshooting =
 If even after setting up OpenID or delegation, signing-in doesn't appear to work:
 
 * If you're running WordPress - see if you have the WP-SuperCache plugin and delete the cache or turn off caching. 
 * Verify that when you load your site in your browser, you can view source and see the OpenID delegation <code>&lt;link&gt;</code> (and <code>&lt;meta&gt;</code>) tags.
 * Be sure that you've changed "username" in those tags to your own specific username on the OpenID service.
+
+= History =
+In early indieweb days, a strong point was made of [[selfdogfood]]ing to filter out unproductive conversation. At the time, setting up [[OpenID]] on your own domain was a key component of that.
+
+<blockquote>
+You must be ''this'' independent in order to contribute:
+# you must have your own domain, and 
+# have figured out how to set-up [[OpenID]] on it.
+
+Here are a couple of options for #2.
+* Easy: delegate your domain to another OpenID provider like myOpenID
+* Harder: setup your server to be an OpenID provider
+</blockquote>
+
+= See Also =
+* [[OpenID]]

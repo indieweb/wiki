@@ -1,0 +1,93 @@
+https://indieweb.org/home_server
+
+{{stub}}
+
+A '''<dfn>home server</dfn>''' is a machine you keep at home to host some of your services. Most people chose to run a machine dedicated to this, but it's also possible to use your everyday desktop/laptop computer.
+
+== Considerations ==
+
+=== Privacy ===
+
+Aiming for more privacy and technical autonomy, many people chose to host their personal data (such as blog and email) on machines they have physical control over.
+
+One of the main reasons is to ensure your private data is not accessed by people without your knowledge. If your data is sitting in your living room, you can be sure it's not going to be sold to third parties without your explicit content.
+
+Also, in many countries throughout the world, law enforcement requires a judicial order to penetrate your home and seize your data, while a machine hosted in a datacenter may be handed over to local authorities without any warning or warrant.
+
+=== Network ===
+
+Self-hosting requires a decent network speed (especially, upload speed) and a rather unfiltered (neutral) access to the Internet.
+
+An upload speed of 1 Mbit/s is a good starting point for hosting private services for your whole household, but is definitely not enough to (directly) serve a public blog with many readers.
+
+Many Internet Service Providers typically block ports (such as 53 to block outgoing emails) or filter content (to slow down Bittorrent). Make sure your ISP respects [https://en.wikipedia.org/wiki/Net_neutrality net neutrality].
+
+If you have a professional-grade fiber connection, you probably are safe in terms of both speed and neutrality.
+
+== How ==
+
+=== Hardware ===
+
+Your home server can be any machine you connect to the Internet, such as a phone, a desktop computer or a NAS.
+
+People usually use a dedicated machine out of security concerns. Sharing a machine for different services is not in itself a problem, but having your personal data sitting on a machine where you run unverified and potentially malevolent code (for instance, through a modern browser's Javascript engine) is highly unadvised.
+
+==== Second-hand hardware ====
+
+Second-hand hardware (whether desktop or laptop) is ideal for a home server. It doesn't take much CPU or RAM to host [[web hosting|web]], [[email]] and [[XMPP|instant messaging]] services.
+
+For equivalent power, hosting second-hand hardware as a home server will probably cost you just as much (in electricity) as would a VPS in a datacenter.
+
+An old laptop is perfect (built-in backup power and disk space), especially the ThinkPad T400/T500/X200 lines, since they are near silent, even if their fan is on. [[petermolnar]] is using his old T400 as a home backup server.
+
+==== Single-board computers ====
+
+If electricity where you live is scarce, expensive or unreliable, you may want to acquire in a low-power single-board computer, such as: RaspberryPi, BananaPi, Olimex.
+
+Contrary to second-hand hardware, single-board computers requires an initial investment of between 20$ and 200$. But their low power consumption (1-10W) makes them very cheap to operate in the long run (usually < 1$/month).
+
+The [https://internetcu.be Internet Cube] ([https://labriqueinter.net La Brique Internet] in French) is an [https://www.olimex.com/Products/OLinuXino/A20/A20-OLinuXIno-LIME2/open-source-hardware Olimex free-hardware board] pre-installed with [https://yunohost.org/ YunoHost], and is distributed by hackerspaces and non-profit Internet Service Providers throughout France and Belgium.
+
+If you're purchasing a single-board computer, it may be well worth considering finding second-hand solar panels and batteries to make your home server fully autonomous. There's examples throughout the country-side of non-profit ISPs (such as [https://ffdn.org FFDN] and [https://guifi.net guifi]) deploying autonomous relays and access points so that Internet access may still be available when the electricity is cut in your neighborhood .
+
+=== Software ===
+
+You can use a [[personal cloud]] to make it easier to administrate your server.
+
+=== Hosting services on a dynamic IP ===
+
+If your ISP does not provide you with static IP addresses (sometimes a paying option), you will need to use a dynamic DNS provider to update in real-time the IP addresses your [[personal-domain|personal domain]] points to.
+
+A reverse proxy serving your services (traversing your NATs, routers and firewalls) might also be an option.
+
+'''NOTE:''' It is highly unrecommended to host [[email]] services on a dynamic IP, even on top of a dynamic DNS provider, due to missing/problematic [https://en.wikipedia.org/wiki/Reverse_DNS_lookup reverse DNS]. You do need a proper static IP and reverse DNS configured to send emails without issues.
+
+There are many ISPs, hosting companies and hosting cooperatives providing dynamic DNS services, although only Digital Ocean is covered here. Don't hesitate to add links to tutorials/scripts for other providers as well!
+
+==== Digital Ocean as dynamic DNS profider ====
+
+[https://www.digitalocean.com/ Digital Ocean] offers this service for free and they have an API you can use to update the domain with your current IP. This may still be an issue due to potential frequent chances, but it can work.
+
+'''NOTE:''' This script was written for Digital Ocean API v1. However, [https://developers.digitalocean.com/documentation/v2/ API v2] is now in use. This script may be broken.
+
+Example script to be run from cron:
+
+    #!/bin/bash
+    
+    domain_id="DIGITAL OCEAN DNS DOMAIN ID"
+    record_id="DIGITAL OCEAN DNS ENTRY ID"
+    client_id="DIGITAL OCEAN CLIENT ID"
+    api_key="DIGITAL OCEAN API KEY"
+ 
+    ip=`wget -q -O- http://ipecho.net/plain`
+    api="https://api.digitalocean.com/domains/${domain_id}/records/${record_id}/edit?data=${ip}&client_id=${client_id}&api_key=${api_key}"
+    response=`wget -q -O- ${api}`
+    echo ${response}
+
+See the [https://developers.digitalocean.com/documentation/v1/ Digital Ocean Legacy API documentation] for all details.
+
+To get the domain & dns entry ID and obtain cliend id & keys:
+
+* generate access key & client ID at [https://cloud.digitalocean.com/api_access]
+* to read the json entry and get the domain id go to [https://api.digitalocean.com/v1/domains?client_id=(client_ID)&api_key=(api_key)]
+* to get the entry id, go to https://api.digitalocean.com/v1/domains/(domain_id)/records?client_id=(client_ID)&api_key=(api_key)]

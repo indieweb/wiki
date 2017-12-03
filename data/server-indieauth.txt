@@ -1,0 +1,44 @@
+https://indieweb.org/server-indieauth
+
+'''<dfn>server indieauth</dfn>''' is a way for a server to authenticate to another server, which can be used for a number of use cases including verifying webmentions from private posts, fetching feeds with private content, etc.
+__TOC__
+== Brainstorming ==
+[[File:server-to-server-indieauth-flow-diagram.png|500px]]
+
+Roles:
+* <code>alice</code> - Alice's web page, can be a static site
+* <code>alice.server</code> - some server-side code running for Alice, that is attempting to fetch private content from Bob's server
+* <code>alice.auth</code> - an endpoint of Alice's that is able to verify authorization codes
+* <code>bob</code> - Bob's web page, which has private content. This can also be a private blog post permalink, etc.
+* <code>bob.token</code> - Bob's token endpoint, which is able to issue an access token that can sent in the request to Bob's private URLs to retrieve the private content
+
+Flow:
+# Alice's server fetches the page with private content to discover the token endpoint. The token endpoint will be advertised in either an HTTP Link header or HTML &lt;link&gt; tag.
+# After finding the token endpoint, Alice's server makes a request for an access token. Alice's server first generates a temporary code and stores it somewhere that Alice's auth endpoint can retrieve it. The request includes "me" which is Alice's URL (home page URL, but this is fine as a subdomain or subfolder), the temporary code, and a callback URL where the final access token will be sent.
+# Bob's token endpoint receives the request and can queue it for processing asynchronously. The token endpoint looks at the "me" value, fetches the page, and discovers the auth endpoint it points to.
+# The token endpoint then verifies the temporary code with Alice's auth endpoint, by making a POST request containing the code. The endpoint will return either HTTP 200 or 400
+# Once Bob's token endpoint has verified that the code sent from Alice's server is verified by Alice's auth endpoint, Bob's token endpoint generates an access token and delivers it to the callback URL in a POST request with an access_token parameter, and optionally expires_in
+# Alice's callback URL receives the access token, and can then fetch the original URL using the access token
+
+=== TODO ===
+* Alice's server may need a way to include a "state" parameter to be able to associate the initial request it makes with the later request the token endpoint sends.
+* Check how this fits in with existing auth/token endpoint implementations to make sure this doesn't conflict
+* Is there a need for Bob's server to distinguish requests made from Alice's server without Alice present vs when Alice is making a request from a client where Alice is present at the computer?
+* Is there a need for distinguishing different servers / Apps used by Alice? For instance: Alice's reader does the auth, gets a token, Alice's private webmention does the auth, gets a new token. Bob wants to invalidate the old token, but then Alice's reader does not have access anymore, and re-authenticating Alice's reader would drop her webmention token.
+* If this is used for more then just reading posts (for instance a bot editing this wiki), scoped tokens might be a thing. Do we need those?
+* how to do resource-scoping ("this system can only read this subset of all the posts that are private and readable by me, the user", e.g. for multiple private webmention endpoints)
+
+* alice.server should get a <code>code</code> from alice.auth before step 1. Do we need to make that explicit or is it out of scope for this spec?
+
+=== Design Considerations ===
+* No part of this spec should require that either party makes a request that requires another HTTP request inside of it. Everything should be able to happen asynchronously, either with job queues or cron jobs.
+
+=== FAQ ===
+==== why have the extra step instead of skipping right to authenticating the request ====
+The [https://www.ietf.org/archive/id/draft-prodromou-dialback-00.txt dialback] spec outlines a similar mechanism for authenticating server-to-server. However in this step, each request made will require a new temporary code and verification of that code each time. By adding the extra step of using a temporary code and requesting a permanent access token, Alice's server can store the access token and reuse it in followup requests.
+
+== See Also ==
+
+* [[non-interactive IndieAuth]]
+
+[[Category:IndieAuth]]

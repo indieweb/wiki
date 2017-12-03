@@ -1,0 +1,28 @@
+https://indieweb.org/MediaWiki_upgrade
+
+{{stub}}
+
+'''<dfn>MediaWiki upgrade</dfn>''' is a project to upgrade the IndieWeb wiki to a modern version of MediaWiki.
+
+== Plugins ==
+We currently have the following plugins installed that will need to be upgraded or replaced. Some of these may not actually be in use, and it would be great to remove them if we are not actually using them. Please document pages that use each extension to evaluate whether we can remove the extension.
+
+* [http://www.mediawiki.org/wiki/Extension:Cite/Cite.php Cite]
+* raw - <nowiki>Adds <raw> tag to include arbitrary html</nowiki>
+* [http://www.mediawiki.org/wiki/Extension:MagicNoCache MagicNoCache]
+* <nowiki>NOTITLE</nowiki> - Adds a magic word to hide the title heading - Used when the MediaWiki default title based on page name generates an ugly page title
+** used on User pages, e.g., [[User:tantek.com]]
+* [http://www.mediawiki.org/wiki/Extension:ParserFunctions ParserFunctions]
+* PrivateBlocks - <nowiki>Adds <private> tag for hiding text to non-registered users</nowiki>
+* PublicBlocks - <nowiki>Adds <private> tag for hiding text to non-registered users</nowiki>
+* [https://gist.github.com/aaronpk/7de5b63c58bc00e9e2cda434432ed0d3 RelWebmention] - <nowiki>Adds <link rel="webmention"> tag to advertise a Webmention endpoint on every page</nowiki>
+* [http://www.mediawiki.org/wiki/Extension:SemanticHTML SemanticHTML]
+* [https://github.com/aaronpk/IndieAuth-MediaWiki IndieAuth] (Will be replaced by [https://www.mediawiki.org/wiki/Extension:Auth_remoteuser Auth_remoteuser])
+
+See also: [[Special:Version]]
+
+== Login ==
+Rather than upgrade or rebuild the IndieAuth plugin, we can use a simpler "external auth" mechanism to read login data from a cookie, and set that cookie from an external application that actually handles login. The new wiki login should use your delegated authorization endpoint if specified, otherwise can use indieauth.com to handle RelMeAuth.
+
+== Case insensitivity ==
+Find an extension that eliminates the common problem of being surprised that a page doesn't exist when it actually exists with a different capitalization, but still allows us to define proper capitalization (auto-redirect?).

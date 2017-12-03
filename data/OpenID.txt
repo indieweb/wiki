@@ -1,19 +1,21 @@
-http://indiewebcamp.com/OpenID
+https://indieweb.org/OpenID
 
 {{stub}}
 
-'''<dfn>[https://en.wikipedia.org/wiki/OpenID OpenID]</dfn>''' is a method of using an HTTP URL as an identity for signing into websites. OpenID has been superseded by [[web-sign-in]] / [[indieauth]].
+'''<dfn>[https://en.wikipedia.org/wiki/OpenID OpenID]</dfn>''' was a protocol for using a web address as an identity to sign-in to websites; it is losing support, is effectively dead (versions 1 & 2 are both deprecated, [[OpenID#Shutdowns|sites are dropping support]]), and has been replaced on the IndieWeb with [[web-sign-in]] and [[IndieAuth]].
+
+The OpenID Foundation has obsoleted OpenID and OpenID 2.0 in favour of [https://en.wikipedia.org/wiki/OpenID_Connect OpenID Connect] which unfortunately does not serve the same goal as OpenID did. 
 
 <div style="background:#ffe; padding:1em; font-weight:bold">
 * See: [[How_to_set_up_web_sign-in_on_your_own_domain#Setup_Instructions|How to setup web sign-in on your own domain]]
 </div>
 
 == Setup ==
-To use indieauth.com as an OpenID delegate for the OpenID identifier of your site, add the following two link tags to the HTML (inside the <code>&lt;head&gt;</code> element) of your website, replacing "aaronparecki.com" with your domain of course.
+To use [[indieauth.com]] as an OpenID delegate for the OpenID identifier of your site, add the following two link tags to the HTML (inside the <code>&lt;head&gt;</code> element) of your website, replacing "aaronparecki.com" with your domain of course.
 
 <pre>
 <link rel="openid.delegate" href="http://aaronparecki.com/" />
-<link rel="openid.server" href="https://indieauth.com/openid" />
+<link rel="openid.server" href="https://openid.indieauth.com/openid" />
 </pre>
 __TOC__
 
@@ -60,6 +62,7 @@ Precise date unknown, verified 2015-07-19:
 
 === 2014 ===
 * 2014-06 Typepad dropped support for logging in with OpenID (consumer) but Typepad blogs and profiles can still be used to log in elsewhere (provider). This was not announced but is evident from [https://www.typepad.com/secure/services/signin the signin page].
+** The OpenID support was dropped temporarily as part of mitigating [https://techcrunch.com/2014/05/19/typepad-claims-it-was-hit-by-another-ddos-attack/ a DDoS attack], but this then got caught up in the sale of the site to another company and so it was never restored; the fact that it's no longer working is actually essentially an accident of history, which is why it was never announced anywhere. Several of the login providers supported on that login page are actually still implemented using OpenID behind the scenes, and I strongly suspect it's mainly just the same code that was implemented [https://web.archive.org/web/20130308083804/http://www.sixapart.com/blog/2009/01/typepad-connects-to-google-aol.html back in 2009] apart from the hasty disabling of the generic OpenID login. I don't have real numbers but I can tell you that the total number of OpenID-using users (including the sites featured in the dropdown) was a drop in the bucket compared to the number logging in with Facebook and Twitter OAuth the last time I saw these stats, so nobody really cared about the OpenID consumer support for a long time. [[User:Martin.atkins.me.uk]]
 
 * 2014-02-01 '''myOpenID''' OpenID provider shutting down, site already doesn’t load as of 2013-09-04. No public notification yet, email quoted [http://waterpigs.co.uk/notes/4RsEr7/ here] and [http://p.cweiske.de/54 here in full]
 ** 2013-07-25 http://meta.stackoverflow.com/questions/190442/myopenid-no-longer-supported-add-alternative-login-method-to-your-account
@@ -110,6 +113,9 @@ As of 2015-05-16:
 * [[WordPress]] OpenID plugin "is no longer supported and incompatible with the current version of WordPress."[https://plus.google.com/+JoshuaMcGeekiest/posts/UKhAmcx4pNT]
 * Only '''one''' working [[PHP]] library, "and all they offer is an example server 'to give you an idea of how to write your own implementation.'"
 
+=== Hard to debug ===
+{{aaronpk}} as a developer of an OpenID provider (indieauth.com) has noted that OpenID is hard to debug. (#indieweb-dev 2017-10-29)
+
 == Consuming Sites ==
 List of websites that still consume OpenID:
 * [https://www.dreamwidth.org Dreamwidth]
@@ -117,7 +123,8 @@ List of websites that still consume OpenID:
 ** Works sporadically with indieauth bridge. Sometimes returns "Can't verify OpenID: naive_verify_failed_return: Direct contact invalidated ID provider response."
 * [http://opensourcebridge.org/sign_in Open Source Bridge]
 ** 2015-07-19 verified. [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
-* [http://openstreetmap.org/ OpenStreetMap]
+* [http://openstreetmap.org/ OpenStreetMap] (1.0, 2.0)
+** 2017-04-24 verified to work with indieauth.com OpenID-1.0 and OpenID-2.0. [[User:Strk.kbt.io|Strk.kbt.io]] 13:55, 24 April 2017 (PDT)
 ** 2015-07-19 verified. [[User:Tantek.com|Tantek]] 18:54, 19 July 2015 (PDT)
 * [http://stackoverflow.com/ Stack overflow]
 ** 2015-07-~~ WordPress OpenID plugin verified to work per {{snarfed}} in IRC.
@@ -131,6 +138,8 @@ List of websites that still consume OpenID:
 * http://vox.com/
 ** 2015-07-20 verified {{cweiske}}
 ** 2015-07-19 failed with "Sorry, there was a problem authenticating you with OpenId. Error: invalid_credentials" (maybe an IndieAuth provider issue?) [[User:Tantek.com|Tantek]] 23:15, 19 July 2015 (PDT)
+* http://try.gitea.io (OpenID 2.0 only)
+** 2017-04-24 verified [[User:Strk.kbt.io|Strk.kbt.io]] 13:57, 24 April 2017 (PDT)
 * ... any other OpenID consuming sites still functioning?
 
 Problematic consuming sites (if problems continue, and if no one can verify OpenID consuming actually works, these should be moved to Shutdowns above, with reason noted "neglect").
@@ -144,3 +153,4 @@ Problematic consuming sites (if problems continue, and if no one can verify Open
 * [[IndieAuth]]
 * [[How to set up OpenID on your own domain]]
 * [[Why_web_sign-in#Why_not_OpenID|Why not OpenID]]
+* [https://openid.net/developers/specs/ OpenID Foundation Specifications]

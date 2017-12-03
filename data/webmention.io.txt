@@ -1,31 +1,34 @@
-http://indiewebcamp.com/webmention.io
+https://indieweb.org/webmention.io
 
 {{stub}}
 
 <dfn>'''[http://webmention.io webmention.io]'''</dfn> is an open-source project and hosted service for receiving [[webmentions]] and [[pingbacks]] on behalf of your indieweb site.
 
 Sites currently using webmention.io to receive pingbacks on their behalf:
+* [https://aaronparecki.com aaronparecki.com]
+* [https://indiewebcat.com indiewebcat.com]
 * [http://bret.io bret.io]
-* [http://cyborganthropology.com cyborganthropology.com]
 * [http://developers.arcgis.com developers.arcgis.com]
 * [https://geoloqi.com geoloqi.com]
-* [http://indiewebcamp.com indiewebcamp.com] (this site)
+* [http://indieweb.org indieweb.org] (this site)
 * [http://oauth.net oauth.net]
 * [http://pdx.esri.com pdx.esri.com]
 * [http://tantek.com tantek.com]
+* [https://eddiehinkle.com eddiehinkle.com]
+* {{martymcguire}} on his site at [https://martymcgui.re martymcgui.re] and podcast at [https://wehavetoask.com/ wehavetoask.com]
 
 == Features ==
 
 === Accept webmention and pingbacks for any site by adding a simple html tag ===
 
 <pre>
-<link rel="pingback" href="http://webmention.io/username/xmlrpc" />
-<link rel="http://webmention.org/" href="http://webmention.io/username/webmention" />
+<link rel="webmention" href="https://webmention.io/username/webmention" />
+<link rel="pingback" href="https://webmention.io/username/xmlrpc" />
 </pre>
 
 === API to get a list of sites linking to your pages ===
 
-Example: http://webmention.io/api/links.jf2?target=http%3A%2F%2Fwebmention.io
+Example: https://webmention.io/api/links.jf2?target=http%3A%2F%2Fwebmention.io
 
 === Converts [[pingback|Pingbacks]] to [[webmention|WebMentions]] ===
 
@@ -34,14 +37,20 @@ You can use webmention.io to handle Pingback requests and send them to you as a 
 To use, add an html tag like the following, replacing example.com/webmention with your own webmention endpoint.
 
 <pre>
-<link rel="pingback" href="http://webmention.io/webmention?forward=http://example.com/webmention" />
+<link rel="pingback" href="https://webmention.io/webmention?forward=http://example.com/webmention" />
 </pre>
 
 Full Docs: https://github.com/aaronpk/webmention.io#webmention
 
+=== Sends [[Notification]] of Valid Webmentions via Web Hook ===
+
+You can have webmention.io send an HTTP notification for each received, valid webmention to a URL of your choice. You may specify a different endpoint for each domain.
+
+Optionally, you can configure a "callback secret" so that your HTTP endpoint can verify that the notification was sent by webmention.io.
+
 == How to Use ==
 
-If you want to use this right now, get in touch with [http://aaronparecki.com aaronpk] and request a demo account on his instance. While not yet a production service, it has an API that can be used to query a list of mentions for a site. 
+If you want to use this right now, you can sign in on the home page https://webmention.io
 
 You are more than welcome to use the pingback->webmention conversion service as described above. Or you can install this on your own server from the [https://github.com/aaronpk/webmention.io  source code on Github].
 
@@ -49,6 +58,17 @@ You are more than welcome to use the pingback->webmention conversion service as 
 [http://aaron-gustafson.com/ Aaron Gustafson] has written a [[Jekyll]] plugin for displaying content from webmention.io. 
 
 * https://github.com/aarongustafson/jekyll-webmention_io
+
+=== Notification Web Hooks ===
+* {{martymcguire}} has written a [[hubot|Hubot]] script to relay notifications to chat rooms. ([https://github.com/martymcguire/hubot-webmentionio-notify source], [https://martymcgui.re/2017/05/26/160758/ announcement])
+
+=== Display with javascript ===
+{{bret}} has written [https://github.com/resonance-cascade/webmention.js webmention.js]. Note it indicates that it "needs some work" and may not be actively maintained currently (last commit 2015-03-17).
+
+== Wish List ==
+* A tiny, no-dependencies js file which can fetch comment data from webmention.io and dump it into an element, enabling 2-step comment support:
+** Add a <link> to webmention.io
+** include this script and add some <code>&lt;div data-indiecomments data-url="blah"></div></code> element where you want them to appear
 
 == Developing ==
 

@@ -1,27 +1,186 @@
-http://indiewebcamp.com/authorization-endpoint
+https://indieweb.org/authorization-endpoint
 
 {{stub}}
 
-An '''<dfn>authorization endpoint</dfn>''' is an HTTP endpoint that [[micropub]] and [[IndieAuth]] clients can use to identify a user or obtain an authorization code to be able to post to their website. 
+An '''<dfn>authorization endpoint</dfn>''' is an HTTP endpoint that [[micropub]] and [[IndieAuth]] clients can use to identify a user or obtain an authorization code (which is then later exchanged for an access token) to be able to post to their website. 
 
-== Protocol ==
-An authorization endpoint has to implement the [[IndieAuthProtocol]].
+== Creating an Authorization Endpoint ==
 
-=== Identification header ===
-Every endpoint MUST return a
-<pre>IndieAuth: authorization_endpoint</pre>
-HTTP header in all responses.
+An authorization endpoint must be able to both generate authorization codes as well as verify the authorization codes it issues.
 
-This is used by clients to verify that the server understands the IndieAuth protocol.
+=== Web Sign-In Form ===
+The site contains a web sign-in form prompting the user to enter their personal web address to sign in.
+Upon submitting the form, the site begins the auth process by discovering the user's auth endpoint, e.g.:
 
+[[File:indieauth-web-sign-in.png]]
 
-== Software implementing the authorization endpoint spec ==
+See http://microformats.org/wiki/web-sign-in for more UI details / possibilities.
+
+=== Discovery ===
+The web application checks the user's website for a link with a rel-value of "<tt>authorization_endpoint</tt>":
+
+<pre>&lt;link rel="authorization_endpoint" href="http://indieauth.example.org/"&gt;</pre>
+
+Use this URL as endpoint for processing.
+
+=== Authorization Endpoint ===
+To start the sign-in flow, the user's browser will be redirected to their authorization endpoint, with additional parameters in the query string.
+
+Directing the user's browser to the auth endpoint is usually done via a HTTP <code>Location</code> header, but can optionally be an <code>&lt;a&gt;</code> tag with an href set to the authorization URL.
+
+==== Request ====
+
+Note: Values are shown with extra linebreaks and without URL encoding for readability.
+<pre>
+https://auth.example.org/auth
+    ?me=https://aaronparecki.com/
+    &client_id=https://webapp.example.org/
+    &redirect_uri=https://webapp.example.org/auth/callback
+    &state=1234567890
+    &response_type=id
+</pre>
+
+Parameters:
+;<tt>me</tt>
+: Full URI of the user's homepage
+;<tt>client_id</tt>
+: Full URI of the application's/website's home page. Used to identify the application. An authorization endpoint may show the application's icon and title to the user during the auth process.
+;<tt>redirect_uri</tt>
+: Full URI to redirect back to when the login process is finished
+;<tt>state</tt>
+: Web application-internal state variable; can contain anything
+: Optional. Auth endpoints MUST support them, though.
+;<tt>response_type</tt>
+: <tt>id</tt> (identification only) or <tt>code</tt> (identification + authorization)
+: Optional. Defaults to <tt>id</tt>.
+;<tt>scope</tt>
+: Not used and omitted in identification mode (<tt>response_type=id</tt>)
+: For authorization, the scope contains a space-separated list of scopes that the web application requests permission for, e.g. "create". Multiple values are supported, e.g. <tt>create delete</tt>
+
+==== Redirect URI verification ====
+;why is <tt>redirect_uri</tt> separate from <tt>state</tt>?
+: the callback URL shouldn't be dynamic per request so that callback URLs can be registered. "state" is allowed to vary per request
+;why should callback urls be registered?
+: without registration it's easier to perform a redirect attack. more background here: http://tools.ietf.org/html/rfc6749#section-3.1.2.2
+; how does the client website register the callback at the server?
+: haven't written this part up yet, but the idea is for the client to publish its registered redirect URIs on its web page with a <link> tag
+: since client IDs are always URLs, it's all discoverable that way
+: for client_id https://example.com/ a server can find its valid redirect URIs by looking for
+:: <tt><link rel="redirect_uri" href="https://example.com/callback"></tt>
+: at example.com
+
+==== Verify the user ====
+The authorization server should present an interface describing the request being made. It must indicate:
+
+: The <tt>client_id</tt> making the request
+:: Optionally the server can include the name and logo if an [[h-card]] is found on the <tt>client_id</tt> URL.
+: The <tt>scope</tt> if authorization is requested.
+
+[[File:p3k-auth-prompt.png|500px]]
+
+''TODO: Example. See [[h-x-app]].''
+
+=== Redirect to web application ===
+The authorization server presents the request information to the user, and if they approve, generates an authorization code and redirects the user to the redirect URI specified.
+
+<pre>
+HTTP/1.1 302 Found
+Location: https://webapp.example.org/auth/callback
+    ?code=xxxxxxxx
+    &state=1234567890
+    &me=https://aaronparecki.com/
+</pre>
+
+Parameters:
+;<tt>code</tt>
+: Authorization code
+;<tt>state</tt>
+: State variable sent by the web application
+;<tt>me</tt>
+: Full URI of the user's homepage
+: This may be different from the <tt>me</tt> parameter that the user originally entered, but MUST be on the same domain.
+
+=== Auth code verification ===
+For the sign-in flow, the web application will query the authorization endpoint to verify the auth code it received. The client makes a POST request to the authorization server with the following values:
+
+<pre>
+POST https://auth.example.org/auth
+Content-type: application/x-www-form-urlencoded
+
+code=xxxxxxxx
+&redirect_uri=https://webapp.example.org/auth/callback
+&client_id=https://webapp.example.org/
+</pre>
+
+After the authorization server verifies that <tt>redirect_uri</tt>, <tt>client_id</tt> match the code given, the response will include the "<tt>me</tt>" value indicating the URL of the user who signed in. The response content-type should be either <code>application/x-www-form-urlencoded</code> or <code>application/json</code> depending on the value of the HTTP Accept header.
+
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/x-www-form-urlencoded
+
+me=https://aaronparecki.com/
+</pre>
+
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "me": "https://aaronparecki.com/"
+}
+</pre>
+
+Parameters:
+;<tt>me</tt>
+: Full URI of the user's homepage
+: This may be different from the <tt>me</tt> parameter that the user originally entered, but MUST be on the same domain.
+: This MUST be the same as the <tt>me</tt> parameter that "redirect to web application" returned.
+
+==== Use by Token Endpoints ====
+When used in the flow for [[obtaining an access token]] that can create posts using [[Micropub]], the token endpoint will be making the request to verify the authorization code, rather than the client. In this case, the client will make the request described above to the token endpoint instead. If the token endpoint and authorization endpoint are part of the same software, then of course the token endpoint can verify the authorization code using a proprietary method, such as looking up the code from the same database that the authorization endpoint stored it in.
+
+== IndieWeb examples ==
+The following people have an authorization endpoint on their own domain:
+
+* {{aaronpk}} at https://aaronparecki.com/auth as of [https://aaronparecki.com/2016/04/13/8/indieauth 2016-04-13]
+* {{sebsel}} at https://seblog.nl/auth as of IndieWebWeek 2017 in Düsseldorf and Nürnberg.
+* {{martijnvdven}} at http://vanderven.se/martijn/auth/ as of 2017-06-30, [[selfdogfooding]] with [[selfauth]].
+* {{jeena}} at https://jeena.net/indieauth as of IndieWebCamp 2017 in Berlin
+
+== Other Examples ==
+Software implementing the authorization endpoint spec
+
+* [[commentpara.de]]
 * [[indieauth.com]]
 * [[indieauth-openid]]
 * [[indiecert]]
 * [[silo.pub]]
 
+== Using an Authorization Service ==
+You can use an existing authorization service such as [[indieauth.com]] if you don't want to build your own authorization service.
+
+== FAQ ==
+==== Why are auth codes verified with a POST instead of a GET ====
+If auth codes are sent as a GET request in the query string, they may leak to log files or the HTTP "referer". The decision was made by the OAuth 2.0 working group to use POST requests and the HTTP Authorization header for sending these sensitive tokens and auth codes.
+* http://tools.ietf.org/html/rfc6819#section-4.6.7
+* http://tools.ietf.org/html/rfc6819#section-5.4.1
+
+==== Can the authorization codes be used more than once ====
+No, the authorization code must not be used more than once. If the code is used more than once, the authorization server must deny the request.[http://tools.ietf.org/html/rfc6749#section-4.1.2] A maximum lifetime of 10 minutes is recommended for the authorization codes, although many implementations have a lifetime of 30-60 seconds.
+
+==== Can I add additional parameters for the authorization request ====
+No, but you can use the "state" parameter to encode or reference additional application-specific parameters. The state parameter will be passed around and was designed for this purpose as well as to [http://tools.ietf.org/html/rfc6749#section-10.12 prevent CSRF attacks].
+
+==== Does the auth server have to support the state parameter ====
+Yes, the state parameter can be used by the client to maintain state between the request and the callback, so the auth server must support it. It is also used to prevent [[CSRF]] attacks.
+
+==== What is IndieAuth: authorization_endpoint ====
+
+Previously, there was a recommendation to have authorization endpoints return an HTTP header <code>IndieAuth: authorization_endpoint</code>. It was thought that this was necessary in order to avoid false positive matching of endpoints on indieauth.com. After some thought, this is not a necessary step, so this recommendation has been dropped.
+
 == See Also ==
+* [[token-endpoint]]
+* [[obtaining-an-access-token]]
 * [[IndieAuth]]
 * [[micropub]]
 * [[auth-brainstorming]]

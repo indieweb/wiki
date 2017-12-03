@@ -1,44 +1,55 @@
-http://indiewebcamp.com/deleted
+https://indieweb.org/deleted
 
 <span style="float:right;height:128px;font-size:128px;margin-top:48px">🚮</span>
 
 {{stub}}
 
-A '''<dfn>deleted</dfn>''' is a post that has been removed. It may still have a permalink, for purposes of returning an HTTP 410 GONE status code, and a simple static HTML [[h-entry]] saying something like "This post has been deleted", and a dt-updated with a value of the date the post was deleted.
+A '''<dfn>deleted</dfn>''' is a post that has been removed. It may still have a permalink, for purposes of returning an HTTP 410 Gone status code, and a simple static HTML [[h-entry]] tombstone saying something like "This post is gone", and a <code>dt-deleted</code> with a non-empty value, perhaps the actual datetime of deletion (consider privacy concerns).
 
 == Why ==
-There are numerous reasons you may want to delete a post, and indicate to others that you want any copies deleted, e.g. hoping they will delete it from their servers eventually.
+There are numerous reasons you may want to delete a post, indicate to others that you want any copies deleted, and hoping they will delete it from their servers eventually.
 
-== Use Case ==
-A user deletes a post and wants any copies of that post (i.e. if it was a reply post) on other sites to also be deleted.
+Maybe you changed your mind, maybe you decided to retract your comment for further consideration, maybe you decided you did not intend to continue a discussion, etc.
 
 __TOC__
-== Handling ==
-How to handle deleted posts, i.e. implementation details:
+== How to ==
+How to <span id="Handling">handle</span> deleted posts, i.e. implementation details:
 
-* When a post is deleted by the user, implementations should:
-** send a webmention to all URLs that were in the post
-*When requested the permalink of a post that has been deleted, implementations should return:
-*# HTTP 410 GONE
-*# an HTML [[h-entry]] with prose noting the post has been deleted, and at least a link to the home page, or recent posts. You may want to consider returning a link to "nearby" (by date, topic) posts, if you're comfortable disclosing that kind of contextual information about the post that was deleted. This helps users because often posts that are deleted are subsequently "replaced" by new posts. It would be nice if those new related posts were discoverable from the deleted permalink. You could also include the date the post was deleted, marked up with dt-updated.
-*When a webmention is received and the URL returns a 410 GONE HTTP Status code, implementations should:
+=== How to publish ===
+When a post is deleted by the user, implementations should:
+* send a webmention to all URLs that were in the post
+* delete any [[POSSE]] copies of that post (perhaps with a delay, or "Confirm Delete" user prompt, or both).  See [[POSSE#Delete|POSSE Delete]] for details.
+
+When a user (re)loads a permalink of a deleted post:
+* When the permalink of a post that has been deleted is requested, implementations should return:
+*# HTTP 410 Gone
+*# an HTML [[h-entry]] with prose noting the post has been deleted, and at least a link to the home page, or recent posts. You may want to consider returning a link to "nearby" (by date, topic) posts, if you're comfortable disclosing that kind of contextual information about the post that was deleted. This helps users because often posts that are deleted are subsequently "replaced" by new posts. It would be nice if those new related posts were discoverable from the deleted permalink. You could also include the date the post was deleted, marked up with <code>dt-deleted</code>. See [[#Tombstoning|Tombstoning brainstorm]] for more details.
+
+When a user (or [[reader]]) (re)loads your stream/feed (and you have recently deleted a post):
+* When the primary stream/feed of a site that has recently deleted posts is requested, implementations should return:
+*# Tombstone posts in that stream/feed for each of the recently deleted posts, with a <code>dt-deleted</code> property set to a non-empty value, or even better, specifically the date (and time) of deletion (taking into consideration privacy considerations). See [[#Tombstoning|Tombstoning brainstorm]] for more details.
+
+=== How to receive deleteds ===
+*When a webmention is received and the URL returns a 410 Gone HTTP Status code, implementations should:
 **remove (or tombstone, e.g. by replacing author with "user" and content with "this comment was deleted by the author" or similar) any existing copies of that URL and any syndicated content from it from site receiving the webmention.
 
-We could informally refer to this '''indieweb delete protocol''' as the '''<dfn id="Pilgrim_Protocol">Pilgrim Protocol</dfn>''' in honor of Mark Pilgrim who was a strong advocate for proper use of the 410 GONE HTTP Status code, and who one day suddenly deleted his presence (indie and otherwise) from the web[http://en.wikipedia.org/wiki/Mark_Pilgrim_%28software_developer%29#.22Disappearance.22_from_the_Internet].
+== Naming ==
+We could informally refer to this '''indieweb delete protocol''' as the '''<dfn id="Pilgrim_Protocol">Pilgrim Protocol</dfn>''' in honor of Mark Pilgrim who was a strong advocate for proper use of the 410 Gone HTTP Status code, and who one day suddenly deleted his presence (indie and otherwise) from the web[http://en.wikipedia.org/wiki/Mark_Pilgrim_%28software_developer%29#.22Disappearance.22_from_the_Internet].
 
-=== DO NOT ===
+
+== DO NOT ==
 What not to do:
-==== 301 302 Redirect ====
+=== 301 302 Redirect ===
 DO NOT simply redirect deleted posts to your home page.
 
 This is bad usability, e.g. "especially for people who tend to open a bunch of links in background tabs while reading a twitterbookica stream, then start reading those tabs, and wonder why/when they opened the homepage of some news site..." - grawity in IRC, 2013-176 unlogged.
 
-==== 404 Not Found ====
+=== 404 Not Found ===
 DO NOT simply return a 404 not found for deleted posts. 
 
 Publishers should not return and display a 404 page for deleted posts because: <blockquote>The 410 (Gone) status code SHOULD be used if the server knows, through some internally configurable mechanism, that an old resource is permanently unavailable and has no forwarding address.[http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html]</blockquote>
 
-===== 404 Discussion =====
+==== 404 Discussion ====
 {{main|deleted-404-discussion}}
 Issue:  404 should be a valid response code for delete.
 
@@ -48,6 +59,8 @@ Reasons why we MUST NOT treat 404 as a delete:
 * '''Simpler design.''' A simpler protocol is better, and one way to do something is simpler than two. We already have 410 which, meaning "[http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5 permanently unavailable]" (RFC2616 10.4.5), in otherwords, deleted. No need to confuse publishers/consumers with another way of doing deletes (whether 404 or something else).
 
 == IndieWeb Examples ==
+Examples of indieweb sites publishing deleted posts.
+
 === Ben Werdmuller ===
 {{benwerd}} has implemented deleted posts support in [[Known]] (when it was [[idno]]) on his site werd.io [http://werd.io/view/51c94f6ebed7de537c45de63 since 2013-06-25] (per edit history of [[deleted]]).
 
@@ -55,6 +68,7 @@ Deleted posts are replaced (for now) with a very simple message in the form of a
 
 Example URL of a deleted post:
 * http://werd.io/view/51c94f6ebed7de537c45de63
+** as of 2016-05-02 this post returns a 410 but then immediately redirects via a 302
 
 === Aaron Parecki ===
 {{aaronpk}} has implemented deleted posts support in [[p3k]] on his site aaronparecki.com since at least [http://aaronparecki.com/notes/2014/08/03/1 2014-08-03].
@@ -63,7 +77,8 @@ Deleted posts are replaced with a simple message in the form of an h-entry with 
 
 Example URL of a deleted post:
 * http://aaronparecki.com/notes/2014/08/03/1
-
+** as of 2016-05-02 this post generates a 301 instead of a 410
+ 
 === Ben Roberts ===
 {{benthatmustbeme}} has impletement deleted posts support in [[postly]] on his site ben.thatmustbe.me.
 
@@ -71,6 +86,46 @@ Example URL of a deleted post:
 
 Example URL of a deleted post
 * https://ben.thatmustbe.me/note/2015/9/16/24/
+** as of 2016-05-02 this post returns a 410 but then immediately redirects via a 302
+
+=== gRegor Morrill ===
+{{gRegor}} implemented support on gregorlove.com as of 2014-07-01, though it broke when I switched CMS on 2015-07-12. Deleted posts are working again as of 2016-05-01.
+
+[[HTTP 410]] is returned along with a default h-entry with name "Deleted" and content "This post has been deleted."
+* http://gregorlove.com/2016/05/this-is-a-test-note/
+* http://gregorlove.com/2014/06/note-to-self-watch-generation-1/ First deleted post, manually re-created after fixing on 2016-05-01
+
+=== bear ===
+{{bear}} has implemented deleted posts support in [[kaku]] on his site bear.im since 2016-05-01.
+
+Deleted posts are replaced with a "This post has been deleted" page and sets '''<meta http-equiv="Status" content="410 Gone" />'''.
+
+Example URL of a deleted post:
+* https://bear.im/bearlog/2016/123/testing-delete
+
+=== Tantek ===
+{{tantek}} has implemented (some) deleted posts support in [[Falcon]] on his site tantek.com since 2016-05-08.
+
+Deleted posts are replaced with a "This post is gone." page and sets '''<meta http-equiv="Status" content="410 Gone" />'''.
+
+Example URL of a deleted post:
+* https://tantek.com/2016/128/t2
+
+Tombstones with "dt-deleted" set are provided in his [[homepage]] h-feed of updates.
+
+Deleted posts are completely removed from his Atom feed (until he figure out how to publish Atom entry tombstones in a way which is "correct" and preferably consumed/handled by feed readers).
+
+=== j4y_funabashi ===
+{{j4y_funabashi}} has implemented deleted posts in [[aruna]] on his site since 2016-10-17.
+Deleted posts are currently not shown in my feeds but I might change this to a tombstone in the future. The post's permalink shows a tombstone, e-content is replaced with "This post has been deleted" and dt-published is replaced with dt-updated which shows the date-deleted.
+
+e.g https://j4y.co/p/20161005121412_57f4ee949fc72
+
+== Reader Examples ==
+Examples of readers that support removing of deleted posts:
+=== SimplePie ===
+Per https://unicyclic.com/mal/2016-05-06-deleted_post_support_in_dobrado_indieweb, SimplePie looks for a deleted property inside h-entry and if it finds one, it sets the content and title to empty strings which triggers a reader view deletion.
+* Experimental support:  not pushed this change to official SimplePie yet, but you can test deleting a post and watching it get removed from a feed at unicyclic.com/indieweb. (no PuSH support, updates only occur once per hour.)
 
 == Silo Examples ==
 === Flickr ===
@@ -91,8 +146,9 @@ These messages indicate that a given Tweet has been deleted. Client code must ho
 
 == Brainstorming ==
 === HTML meta http-equiv for status ===
+{{main|meta http-equiv status}}
 If for some reason you are unable to configure your web server / content host to return a 410 response (e.g. [[GitHub#No_HTTP_Status_Code_Control|GitHub pages]]), perhaps a meta http-equiv could work. Since the status code is returned in code explicitly as a "Status:" header[http://tools.ietf.org/html/rfc3875#section-6.3.3], we can simply use meta http-equiv:
-* <code>&lt;meta http-equiv="Status" content="410 GONE"/></code>
+* <code>&lt;meta http-equiv="Status" content="410 Gone"/></code>
 
 No known servers support this, but there's no reason they couldn't, i.e.:
 * HTTP Servers should read the <code>&lt;head></code> of an HTML document before serving it, and use meta http-equiv Status for the status code to return in the HTTP Response Header, if one hasn't been set by other means of configuration (e.g. in .htaccess).
@@ -108,6 +164,8 @@ From [[ irc http://indiewebcamp.com/irc/2014-04-09]]:
 
 Captured:
 * http://microformats.org/wiki/microformats2-parsing-brainstorming#Add_meta_http-equiv_to_microformats2_parsing_model
+
+'''See the [[meta http-equiv status]] HTML extension specification for updates and details.'''
 
 === Tombstoning ===
 Even though a deleted post returns an HTTP status code of 410, it could also be useful to communicate the date of the deletion and/or a helpful human-friendly message, perhaps indicating why the post was deleted.
@@ -134,8 +192,29 @@ With microformats:
   </article>
 </pre>
 
+==== Time of deletion ====
+By adding a <code>dt-deleted</code> it would be possible to detect that the tombstone is a tombstone and when it became a tombstone thus distinguishing tombstones easily from non-tombstones and making it possible to handle and present them in special ways.
+
 === Date of deletion ===
 In {{aaronpk}}'s new version of p3k, it keeps track of the date the post was deleted, and also writes a "deleted" entry to the changelog stream. This means a deleted post knows the date it was deleted, and the delete action itself has a permalink.
+
+=== Notifying Responses ===
+* send a webmention to all [[responses]] to the post (so the responses can update their [[reply-context]], per [[reply-context#CRUD|reply-context CRUD]], possibly [[notify]] the responder so they can update or delete their response).
+** Note: this is subject to the [[reply-context#CRUD_Issues|issues documented re: reply-context CRUD]]
+
+===== Upstream Downstream Confusion =====
+Regarding sending webmentions to responses to a post:
+* This sounds like an experimental addition to me, [[webmentions]] are only sent upstream – never downstream. Sending webmentions downstream can, especially in the case of [[updates]], have side-effects for those not expecting such webmentions. I would say that one should _not_ do this. <span class="h-card" style="white-space:nowrap">{{sparkline|http://voxpelli.com/avatar.jpg}} [[User:Kodfabrik.se|Pelle Wessman]]</span> 04:43, 8 May 2016 (PDT) [06:03am]
+
+* This use of upstream/downstream makes no sense to me. Because AFAIK both are done "normally". An original post sends *downstream* webmentions to e.g. every link mentioned in the content body, person-tags etc. a *reply* post sends *upstream* webmention to the original post it is in reply to. so a *reply* post that itself has links inside its content sends BOTH *upstream* webmention(s) to the links it is in reply to (e.g. multi-reply) AND sends downstream webmentions to the links in its content. so this statement makes no sense: "webmentions are only sent upstream – never downstream." [[User:Tantek.com|Tantek]] 06:12, 8 May 2016 (PDT)
+
+* "things a post mentions" -> upstream, "things mentioning a post" -> downstream. That's at least how I've been looking at things. [[User:Kodfabrik.se|Pelle Wessman]]
+
+* threads have a notion of order and thus up/down. because threads have a notion of order and thus up/down. and an original post is at the top, and thus everything it mentions is "downstream". responses are the only things that send webmentions "upstream" because they are a response to something that came before. [[User:Tantek.com|Tantek]] 06:12, 8 May 2016 (PDT)
+
+* lets skip the specific terms of "upstream" and "downstream" then as that apparently adds confusion maybe due to language barriers or through something else, and lets talk about the difference between '''things a page mentions''' and '''things mentioning a page''' instead. I find the distinction between the two to be valuable and so far my impression is that webmentions has been focused on pinging '''things a page mentions''' rather than '''things mentioning a page''' <span class="h-card" style="white-space:nowrap">{{sparkline|http://voxpelli.com/avatar.jpg}} [[User:Kodfabrik.se|Pelle Wessman]]</span> 06:16, 8 May 2016 (PDT)
+
+* This is perhaps the core issue — I see no distinction in those two expressions '''things a page mentions''' and '''things mentioning a page'''. Pages link to pages, period, and any such link is worthy of a webmention.  [[User:Tantek.com|Tantek]] 06:19, 8 May 2016 (PDT)
 
 == Issues ==
 === Threaded Comments Problems ===
@@ -170,6 +249,7 @@ In {{aaronpk}}'s new version of p3k, it keeps track of the date the post was del
 ** This leads me to believe that update might be enough and we could skip the concept of delete altogether? -[[User:Www.sandeep.io|Www.sandeep.io]] 20:01, 7 July 2013 (PDT)
 
 == See Also ==
+* [[updated]]
 * [[posts]]
 * [[webactions]]
 * [[comment]]

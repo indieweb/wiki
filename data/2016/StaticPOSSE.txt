@@ -1,0 +1,96 @@
+https://indieweb.org/2016/StaticPOSSE
+
+'''<dfn>StaticPOSSE</dfn>''' was a session at [[2016|IndieWeb Summit 2016]].
+
+Notes archived from http://etherpad.indiewebcamp.com/2016StaticPOSSE
+
+----
+
+2016StaticPOSSE
+
+== Introductions ==
+* William or Salt 
+** building sites for seven years
+** uses middleman
+
+* Scott
+** Using Perch as a CMS
+** Interested in setting up POSSE
+
+* Emma
+** set up 2 indie sites
+** using neonblog and skein which she wrote and open source
+
+* Jesus
+** started jekkyl site several weeks ago
+** integrated microformats
+** want to add POSSE
+
+* Ed
+** has multiple sites
+** wants to see what to publish
+** sees POSSE as way to post on his sites
+
+Where are you hosting your static sites?
+* Salt. 
+** S3
+** thinking of github
+
+* Ed
+** Gitlab
+** netifly
+
+* Jesus
+** Lino
+
+* Emma
+** S3
+** Github publishing for proof of concepts
+
+POSSE
+* Salt
+** uses markdown
+** sending things to https://brid.gy
+** telegraph web mentions
+** silo.pub
+
+* Services to POSSE
+** https://brid.gy
+** https://silo.pub
+** https://telegraph.p3k.io
+
+* Brid.gy as tool to publish
+** https://brid.gy/about#publish
+** use interactive UI on your bridgy user page or send webmention
+** (bridgy publish uses webmention for automating, not micropub)
+
+* silo.pub
+** set up micropub endpoint
+*** micropub is a web service
+*** common interface to publish posts to create a standardized interface. 
+** https://indiewebcamp.com/micropub-endpoint
+** can use that endpoint for any service 
+** micropub is an API or protocol and silo.pub is a service
+
+* Where does links get added. in html or in header
+** usually in header
+** h-card in html
+** h-feed on body
+
+* Jekyll
+**  front matter at top of page, could add list of siloes to post to. 
+**  is there a way to avoid duplicates to republish when doing a build since all the pages get regenerated?
+**  how to differentiate content and metadata updates?
+**  side file to maintain state to avoid sending outbound webmentions during metadata only regeneration
+*** hint: Rakefile can use timestamps to customize build scripts to see if page changed then process outbound webmentions
+*** https://github.com/aarongustafson/jekyll-webmention_io has a Rakefile that can send webmentions based on a cache file that has links in post
+
+* webmentions and posse sent to the micropub
+** has separate server runs micropub endpoint
+** microdata stored in html file
+** https://github.com/bear/kaku <-- example of a dynamic python app to handle webmentions and micropub
+** webmention.io, silo.pub and brid.gy
+
+Thanks
+
+[[Category:2016 sessions]]

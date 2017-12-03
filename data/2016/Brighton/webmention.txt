@@ -1,0 +1,88 @@
+https://indieweb.org/2016/Brighton/webmention
+
+'''<dfn>What can Webmention learn from Email</dfn>''' was a session at [[2016/Brighton|IndieWebCamp Brighton 2016]].
+
+== Participants ==
+* aaronpk
+* petermolnar
+
+== Notes ==
+outline:
+* document what email has done, and what is fundamentally happening
+* how can we apply that to webmention
+
+=== what email has done ===
+* text analysis - bayesian filtering, etc, actually looking at the contents of the message to decide whether it's spam
+* blacklisting - blacklisting IP addresses of senders
+* greylisting - temporary reject, allow a retry to succeed
+* trust database - slowly allow a larger volume of email per sender depending on how many have been successfully delivered
+* no known open source solutions
+* SPF - these servers are allowed to send emails on behalf of this domain
+* DKIM
+"an email authentication method designed to detect email spoofing. It allows the receiver to check that an email claimed to come from a specific domain was indeed authorized by the owner of that domain." 
+* full public key is in the DNS record of the sender domain, so that the receiver can verify the received message against the public key
+* DMARC - sender publishes rules on how messages from it should be verified using SPF and DKIM
+* rules can contain actions (reject, notify, report)
+* can provide a hook back so the receiver can report spam it got to the place the spam reported to be from
+
+agari.com - collects DMARC reports and creates a blacklist from it
+
+=== what problems with webmention are we trying to address ===
+* amplification attack
+* find 100 websites that support receiving webmention
+* send a webmention to all of them with the source URL of your victim
+* victim is overwhelmed with requests
+* 
+
+=== third parties handling webmentions ===
+* having a third party receive your webmentions is no problem
+* having a third party sending webmentions for you has the same problem as email
+* how can a domain publish a list of trusted senders so that receivers know whether the sender IP is expected?
+
+
+=== how can this apply to webmention ===
+* text analysis
+* akismet is doing this
+* blacklisting 
+
+
+
+==== SPF is explicitly for this use case ====
+* we could take SPF as it is written and use it for webmention
+* is there any value in doing this, because webmention itself provides verification in the HTTP lookup?
+* yes there is, because this can help mitigate the amplification attack - tells the receiver whether or not to bother fetching the source URL
+
+prevents a receiver from fetching the source URL by first looking up whether the webmention request IP is allowed to send webmentions for the source domain
+
+
+==== DKIM ====
+* if two people are using the same webmention sending service (e.g. telegraph.p3k.io), then it's possible for attacker A to forge a webmention request from victim B, and have the SPF check still pass
+* DKIM mitigates the risk of bypassing the SPF check
+* however, webmention already prevents this attack from generating an actual webmention, since the receiver is going to fetch the source URL over HTTP, and the attacker can't make a web page on the victim's server anyway
+* therefore DKIM provides no additional value to webmention
+* the only thing we lose by not implementing DKIM (or DKIM-like things) is that we remove the amplification attack protection for the case where two people share a webmention sending service
+* might be a good idea to revisit this if a large-scale sender (like wordpress.com, amazon aws, etc) starts sending webmention
+
+is signing the webmention payload useful?
+* provides the ability to sign the webmention request (source & target) without needing to look at the post
+* a third party service can send signed webmentions without needing to see the contents of the post (works with private posts)
+* using the third party's private key
+
+DKIM itself is too specific to email, but some other signing mechanism could work
+
+there is less overhead involved in making a DNS request compared to an HTTP request
+* you can send a gzip bomb in HTTP but you can't in DNS
+
+
+==== DMARC ====
+* reverse hook in DMARC is useful
+* collect reports about bad actors
+
+in webmention terms:
+* when the receiver gets a forged webmention from source A (didn't pass SPF or DKIM), looks up the DMARC record of domain A
+* sends a web hook with a report of the invalid webmention
+
+
+[[Category:2016]]
+[[Category:2016 sessions]]
+__NOTITLE__

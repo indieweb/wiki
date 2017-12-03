@@ -1,8 +1,8 @@
-http://indiewebcamp.com/person-tag
+https://indieweb.org/person-tag
 
-{{stub}}
+{{emojicon|👤}}
 
-A '''<dfn>person tag</dfn>''' (AKA <dfn>people tag</dfn>) is a special kind of [[tag]] that refers to a specific person by URL rather than just a word or phrase, and is done as an explicit tag by the user, beyond just mentioning a person via hyperlink / h-card.
+A '''<dfn>person tag</dfn>''' (AKA <dfn>people tag</dfn>) is a [[person mention]] that is also a [[tag]] on a post that refers to a specific person by URL rather than just a word or phrase, and is done as an explicit tagging action by the user, beyond just mentioning a person via hyperlink / h-card / or @-name, autocompleted or not.
 
 == Example ==
 Here was a [http://2015.kylewm.com/2015/12/demoing-person-tags-with simple real world example] of a note that's been person-tagged:
@@ -13,6 +13,7 @@ Demoing person tags with<br/>
 December 3, 2015 9:42am PST 
 </blockquote>
 
+__TOC__
 == Why ==
 By supporting people tags in [[posts]], you can more explicitly/automatically notify people via [[webmention]] to their [[homepage]] at their URL that you have explicitly tagged a post as being about them, e.g. a [[photo]] post where they're in the photo.
 
@@ -81,10 +82,12 @@ That is, when you verify the webmention, if you see that the link to you is on a
 
 More recent examples have [[hovercards]] support added for example [http://www.kevinmarks.com/indiewebcampsf2015am.html indiewebcamp sf 2015] - this is done dynamically using a js script calling [[unmung]]'s hovercard endpoint.
 
+Thanks to [[webmention.herokuapp.com]] person tags to kevinmarks.com show up on his homepage as comments. [[bridgy]] echoing back twitter @ mentions make up most of these.
+
 === Ben Roberts ===
 {{benthatmustbeme}} has person-tags on his site using [[Postly]] since 2015-04-30.  This is done through any micropub endpoint simply entering a URL as a category.  The [[micropub]] endpoint fetches the URL to check for an h-card and, if available, will tag with the name and url extracted from that h-card.  Support for receiving tags and being tagged added on 2015-05-03.
 * https://ben.thatmustbe.me/note/2015/4/1/4/
-* subsequently Ben used his person-tagging support in [[mobilepub]] to be player A in passing [[SWAT0]] at IndieWebCamp [[2015]].
+* subsequently Ben used his person-tagging support in [[MobilePub]] to be player A in passing [[SWAT0]] at IndieWebCamp [[2015]].
 
 === Jeena ===
 {{jeena}} has person-tags on his photos from [[events/2015-07-29-homebrew-website-club|Homebrew Website Club 2015-07-29]]
@@ -106,20 +109,30 @@ More recent examples have [[hovercards]] support added for example [http://www.k
 Using two person-tags each with multiple other profiles.
 
 === Tantek ===
-{{t}} posts photos (at least one so far) with person-tags on tantek.com using [[Falcon]] since 2015-12-05, e.g.:
+{{t}} regularly posts photos with person-tags on tantek.com using [[Falcon]] since 2015-12-05, e.g.:
 * 2015-12-05 photo: [http://tantek.com/2015/339/t2/w3c-social-web-working-group-mozilla W3C Social Web Working Group meeting]
 ** [https://www.facebook.com/photo.php?fbid=10102003228929963 FB POSSE copy] including 3 person-tags from the original post, automatically via [[Bridgy]] Publish.
+* 2016-06-02 photo: [http://tantek.com/2016/154/t1/homebrew-website-club-mozilla-sf Homebrew Website Club SF]. See screenshot of person-tags display in post-footer: <blockquote>[[File:2016-06-03-tantek-person-tags-footer.png]]</blockquote>
+** [https://www.facebook.com/10102317495976283 FB POSSE copy]: <blockquote>[[File:2016-07-08-fb-posse-photo-person-tags.png]]</blockquote> including all seven person-tags from original: 
+<blockquote>[[File:2016-07-08-fb-possed-person-tags.png]]</blockquote>
 
+=== Ashton McAllan ===
+{{acegiak}} added person-tag receiving to her WordPress:
+* person-tags, though sent to the homepage, are shown on the [https://acegiak.net/about-acegiak/#comments about page]
+* blogroll entries have a json object stored in wordpress's "notes" field for the record. 
+* something like <code><pre>{'twitter':'@t','tumblr':'<a href="tantek.com">tantek</a>'}</pre></code>
+* Quickposse just checks to see if an @persontag has a matching blogroll entry and, if everything exists, looks in the json object to see if it has a property for the posse destination
 
-=== Peter Molnar ===
-{{petermolnar}} added auto-person-tagging for his WordPress:
-* people are stored in a hand-filled taxonomy with name + url
-* these names are auto matched against the post content
-* once a name is found, depending on enabled settings, the plugin tries to
-** store the found matches as taxonomy for the post
-** webmention the url for the person
-** replace the match with a generated h-card for presentation ( will not modify the post )
-The plugin: [https://github.com/petermolnar/wp-peoplemention wp-peoplemention]. It's under heavy testing and supported plain-text much better, than HTML posts.
+=== Jay Robinson ===
+
+{{j4y_funabashi}} can add person-tags to any post by adding a category of @persons-url
+* Currently I only show the url I enter as the category but I plan to do some sort of lookup to fetch the person's name as well
+* first note with person-tags http://j4y.co/p/20160621170659_576966231afbb
+
+=== Sebastiaan Andeweg ===
+
+{{sebsel}} added support for autolinking <code>@someone</code> as a mention, and soon after added autolinking <code>+someone</code> to person-tag that person (the same link, but with <code><nowiki>class="u-category h-card"</nowiki></code> on it.)
+* https://seblog.nl/2017/06/14/6/at-mentioning-people
 
 == Tool Support ==
 === Noterlive ===
@@ -127,10 +140,26 @@ The plugin: [https://github.com/petermolnar/wp-peoplemention wp-peoplemention]. 
 * {{kevinmarks}} uses Noterlive on www.kevinmarks.com to publish collections of live tweets.
 * ...
 === Mobilepub ===
-The micropub client [[Mobilepub]] has an interface for supporting person-tags on a post.
+The micropub client [[MobilePub]] has an interface for supporting person-tags on a post.
 
 === OwnYourGram ===
 [[OwnYourGram]] translates person-tags on Instagram (of their @-names) into person-tags of people's personal sites (assuming they link them on their IG profiles), when posting to your site via micropub.
+
+=== OwnYourSwarm ===
+[[OwnYourSwarm]] translates person-tags of Swarm users into a person-tag of that person's personal website if they also use OwnYourSwarm. (Swarm doesn't provide a "website" field in profiles). See https://ownyourswarm.p3k.io/docs
+
+=== Bridgy Publish ===
+[[Bridgy]] Publish consumes (parses) person-tags from your original post, and cross-posts them in POSSE copies to at least [[Facebook]] and [[Flickr]].
+
+Details:
+* Facebook person-tags work in one of two ways
+** Original post has a person-tag of an indieweb site who has signed up for Bridgy themselves with their Facebook profile (and thus connected the two)
+** Person-tag includes an explicit <code>facebook.com/facebookUserID</code> link where facebookUserID is the numerical id of the person being person-tagged (available in the source of their profile in an invisible fb://facebook.com/facebookUserID)
+
+Feature requests:
+* [[Twitter]] person-tag support
+** [https://github.com/snarfed/bridgy/issues/459 #459] - support person-tags (including to Twitter). Closed because no sign of API support now or soon.
+** [https://github.com/snarfed/bridgy/issues/547 #547] - support "fake" person-tags as in-tweet text. Unlikely as a lot of custom work, and should be prototyped with Indie Web (perhaps manual) POSSEing first.
 
 == IndieWeb Interest ==
 === Kyle Mahan ===
@@ -164,9 +193,27 @@ A person tag in stream view:
 
 [[File:twitter-person-tag-in-stream.png|400px]]
 
-A person tag on the tweet permalink:
+
+A person tag on the tweet permalink: (URL?)
 
 [[File:twitter-person-tag-permalink.png|400px]]
+
+
+Multiple person tags in permalink view from
+* https://twitter.com/oiselle_team/status/720354786466344960
+* one "photo" (separate apparent photos were stitched together manually)
+* three person-tags
+[[File:2016-04-14-twitter-person-tags-1.png]]
+<div>... excerpted for fair use ...</div>
+[[File:2016-04-14-twitter-person-tags-2.png]]
+<blockquote>👤 Jenn, Shaluinn and Heather Stephens</blockquote>
+* Note lack of Oxford comma, likely explicit but a design error on Twitter’s part
+** Lack of Oxford comma makes the latter two people errantly appear to be siblings, since second only has a given name, and third has both given and surnames. This is a good concrete example of why an algorithmic situation (such as a list of three people) should always automatically use an Oxford comma.
+
+==== Twitter limitations ====
+There is currently (2015-11-05) no API support for posting person tags on photos to Twitter.
+* See: https://github.com/snarfed/bridgy/issues/459#issuecomment-154229985 for details and more links
+
 
 === Swarm ===
 When writing a description/shout on a Swarm checkin, if you start typing the name of a person, the <span id="Foursquare">Foursquare</span> app Swarm will pop-up a UI to pick from friend's names matching what you've typed, which you can pick, or dismiss and keep typing text. 
@@ -266,6 +313,17 @@ An implementation strategy (if this is too specific for person-tag brainstorming
     else use indie domain as name
   end if
 </pre>
+
+==== auto-suggest separate field UI ====
+In addition to the above minimal separate field UI:
+
+* While you're typing, the code should check what you type with your [[nicknames-cache]], and suggest matching names.
+
+Advantages:
+* less typing for the user to type person-tag names
+* nicknames cache can provide URL and other profiles for a chosen name
+
+==== person tag presentation ====
 * presentation: in code that generates markup for a post
 ** retrieve user-tags from storage (or already have it retrieved when storage was loaded)
 ** use <code>auto_person_tag</code> to turn storage user-tags into HTML markup for output
@@ -378,7 +436,18 @@ tweet text:
 
 Note that none of these examples include a separate line (near the bottom) starting with "👤" because all the person-tags are indicated inline (since they were authored that way).
 
+==== Using + as autolink ====
+
+Instead of the syntax <code>#@someone</code>, the syntax <code>+someone</code> can also be used while autolinking. The plus-symbol resembles the "with" part of a person-tag: you explicitly say is with someone. (Silo's like Swarm or Facebook will also add that plain text "— with Someone" at the end of a post.)
+
+=== Basic Person Tagging example ===
+To suggest person-tags in someone else’s photo, post a person tag reply
+* As explained: [[tag-reply#person_tag_reply]]
+
+
 === HTML imagemaps ===
+Summary: HTML area tags could be used to area-person-tag people in photos, and could be parsed via mf2, however they lack a good/obvious mapping to micropub, which makes this approach '''problematic'''. Archived here for documentation purposes.  
+----
 [[User:benwerd.com|Ben Werdmuller]] wondered if you could tag people in photos by linking to their profiles using HTML imagemaps (!) and marking up the imagemap links with microformats. That might look something like:
 
 <code>&lt;img src="some_photo.jpg" alt="Tantek, Aaron and Amber!" usemap="#peeps" class="u-photo"&gt;
@@ -395,21 +464,7 @@ Note that none of these examples include a separate line (near the bottom) start
 
 However, because the HTML syntax of imagemaps sits outside the actual image tag, it may be worth adding a microformat to the map itself.
 
-: While this would work, and the parsing algorithm for Microformats2 added area tag support, the problem I hit was in mapping this in to micropub.  There are no fields to define coords or shape that would really fit.  It is essentially a set of embedded objects which micropub tries to avoid -  {{benthatmustbeme}}
-
-=== Basic Person Tagging example ===
-
-<pre><nowiki>
-<span class="h-entry">
- <a class="p-author h-card" href="http://a.example.com/">Alice</a> 
- tagged 
- <a href="http://b.example.com/" class="u-category h-card">Bob Smith</a> and 
- <a href="http://c.example.com/" class="u-category h-card">Cole Train</a> 
-  in 
- <a class="u-tag-of u-in-reply-to" href="http://s.example.com/permalink47">
-  <img src="http://s.example.com/photo47.png" alt="a photo of Bob and Cole" /></a>
-</span>
-</nowiki></pre>
+: While this would work, and the parsing algorithm for Microformats2 could add area tag support, the problem I hit was in mapping this in to micropub.  There are no fields to define coords or shape that would really fit.  It is essentially a set of embedded objects which micropub tries to avoid -  {{benthatmustbeme}}
 
 == FAQ ==
 === Should Twitter links be person-tags ===
@@ -421,8 +476,13 @@ A: No. Tagging a person is different from mentioning them. Twitter @-mentions ar
 People tagging was one of the steps of the [[SWAT0]] social web acid test developed / proposed in 2010.
 
 == See Also ==
+* [[person mention]]
 * [[tag]]
 * [[hashtag]]
 * [[tag-reply]]
+* [[h-card]]
+* https://aaronparecki.com/2017/03/20/8/day-90-ownyourswarm
+
 
 [[Category:building-blocks]]
+* [[untag]]

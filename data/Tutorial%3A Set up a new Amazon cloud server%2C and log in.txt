@@ -1,0 +1,137 @@
+https://indieweb.org/Tutorial%3A_Set_up_a_new_Amazon_cloud_server,_and_log_in
+
+<raw>
+<style>
+table.steps { width: 100% }
+table.steps td { vertical-align: top; }
+table.steps td:first-child { width: 30px; }
+</style>
+</raw>
+
+For this tutorial, we assume that you have access to an Amazon Web Services account.
+
+In this tutorial, we will create a virtual cloud server (what Amazon calls an "instance") that will host your Indie Website. We will be using the [https://ubos.net/ UBOS] Linux distribution, because it makes setting up a website and maintaining fairly simple.
+
+== Set up a new Amazon cloud server ==
+
+Here are the steps:
+
+{|class="steps"
+| 1.
+| Click on the icon to the right. This will open a new browser window in which you can interact with the Amazon Web Services website, while this tutorial remains open.
+| <raw><script id="ubos-amazon-ec2-image-latest" src="https://ubos.net/include/amazon-ec2-image-latest.js"></script></raw>
+|-
+| 2.
+| If you need to, log into the Amazon Web Services website.
+| [[File:aws-ubos-login.png|thumb]]
+|-
+| 3.
+| Don't be surprised by the title of the Amazon web page: "Step 2: Choose an Instance Type". You got to skip Step 1 because the UBOS / AWS logo you clicked on automatically filled in the first step for you.
+
+Now select how powerful/expensive or not-so-powerful/cheap you would like your cloud server to be. The selected default -- General-purpose, "t2.micro" -- is typically perfectly fine for personal websites. It is "Free tier eligible", which means you might not even have to pay for it for a full year. (Go to [https://aws.amazon.com/ec2/pricing/ Amazon EC2 price list].) So once you made your choice, click on "Next: configure instance details".
+| [[File:aws-ubos-select-instance-type.png|thumb]]
+|-
+| 4.
+| You can ignore the page "Step 3: Configure Instance Details" and just continue with "Next: Add Storage".
+| [[File:aws-ubos-configure-instance.png|thumb]]
+|-
+| 5.
+| And you can ignore page "Step 4: Add Storage" as well. Continue with "Next: Add tags"
+| [[File:aws-ubos-add-storage.png|thumb]]
+|-
+| 6.
+| "Step 5: Add Tags" is also not something you need to do. Continue with "Next: Configure Security Group"
+| [[File:aws-ubos-add-tags.png|thumb]]
+|-
+| 7.
+| But now you need to pay attention. In "Step 6: Configure Security Group", you need to tell Amazon that you want them to let visitors browse your site with http or https. You also want to log into your server with ssh.
+
+Check "Create a new security group", give it a name (like "UBOS website"), change the description if you like (like "Let visitors browse my site") and then have three rules in the section below by clicking "Add Rule" and filling out the form:
+
+# Rule 1: Type: "SSH"; Protocol: "TCP"; Port range: "22"; Source: "Custom", "0.0.0.0/0, ::/0"
+# Rule 2: Type: "HTTP": Protocol: "TCP"; Port range: "80"; Source: "Custom", "0.0.0.0/0, ::/0"
+# Rule 3: Type: "HTTPS": Protocol: "TCP"; Port range: "443"; Source: "Custom", "0.0.0.0/0, ::/0"
+
+If you are not certain, compare with the screen shot to the right.
+
+Amazon displays a warning: "Warning: Rules with source of 0.0.0.0/0 allow all IP addresses to access your instance..." Ignore the warning because the whole point of your new website is that anybody can read it!
+
+Click "Review and Launch".
+
+| [[File:aws-ubos-configure-security-group.png|thumb]]
+|-
+| 8.
+| In "Step 7: Review Instance Launch", we get another big warning about the same thing: "Your security group ... is open to the world". Yes, Amazon, that's exactly what we want.
+
+You can otherwise ignore this page, as it only shows what you have entered so far, and if you carefully followed this tutorial, you will have it all correct! (Right?)
+
+Note that in the center of this page, under "AMI details", the identifier you are seeing may not be "ubos-image-yellow-2017-11-03" but something slightly different. That will happen as soon as there's a new UBOS release after this tutorial was created.
+
+Click "Launch" to continue.
+| [[File:aws-ubos-review-launch.png|thumb]]
+|-
+| 9.
+| You would have thought that after giving you a "Launch" button, something would actually be launching, but Amazon pops up a dialog saying "Select an existing key pair or create a new key pair". This key pair will allow you, and only you, to log into your new virtual server. Think of it as a super-secure password that is hundreds of characters long! You don't have a key pair yet, so you need to create one:
+
+* Select "Create a new key pair".
+* Enter a name, such as "amazon-ec2".
+* Click "Download key pair".
+* Save the resulting file in a place that only you have access to. For example, on the Mac or on Linux, a good place is directory <code>ssh</code> or <code>.ssh</code> in your home directory.
+* Once you have saved your key to a file, change its access rights so that only you can access this file. Follow the instructions in the next step that apply to your operating system.
+|
+|-
+| 10a.
+| If you are on the Mac:
+* Using the Finder, open the directory into which you saved your key.
+* Select the file (<code>amazon-ec2.pem</code> in the screen shot) and then select "Get Info" from the "File" menu.
+* In the dialog, select the little lock icon at the bottom right, and log on.
+* Now, in the "Sharing & Permissions" section, select the row "Staff" and delete it by clicking on the minus button.
+* Then select the "everyone" entry and change the Privilege column to "No Access".
+
+Your screen should look like the screen shot to the right. Then you can close your Finder windows.
+| [[File:aws-ubos-mac-ssh-permissions.png|thumb]]
+|-
+| 10b.
+| If you are on Linux:
+* Using your desktop, open the directory into which you saved your key.
+* Click with your right mouse button on the file (<code>amazon-ec2.pem</code> in the screen shot) and select "Properties" from the popup.
+* In tab Permissions, allow the owner to Read and Write, but set "Group" to "Forbidden" and also set "Others" to Forbidden.
+| [[File:aws-ubos-linux-ssh-permissions.png|thumb]]
+|-
+| 10c.
+| If you are on Windows: it works rather similar to the Mac and Linux, but we currently don't have a Windows machine handy, and so we can't try it out. Sorry.
+|
+|-
+| 11.
+| Now you can finally click "Launch Instance" and Amaszon will create and turn on your new virtual server. The screen says "The following instance launches have been initiated:", followed by a code number. Click on that code number.
+|
+|-
+| 12.
+| Now you are at the main Amazon Web Services server management screen. It currently shows one server (an "instance") and its instance state. Just like your PC might be off, or booting, or ready to do some work for you, your virtual server can be running or not.
+
+Wait until the "Instance State" is "Running", the select the row with your running instance. Note the "IPv4 Public IP Address" address in the bottom-right: it looks like number-dot-number-dot-number-dot-number. In the screenshot to the right it is <code>54.209.39.87</code>, but yours will be different.
+
+| [[File:aws-ubos-instance-running.png|thumb]]
+|-
+| 13.
+| Finally, you can log in! To do that, run your favorite command-line terminal, like Terminal.app on the Mac, konsole on Linux, or an SSL terminal program on Windows.
+
+For example, on the Mac or in Linux, you would type:
+
+<code>ssh -i ~/ssh/amazon-ec2.pem -l shepherd 54.209.39.87</code>
+
+but only if the name of the file to which you saved your key earlier is <code>amazon-ec2.pem</code> in the <code>ssh</code> directory in your home directory, and the IPv4 address you got from Amazon is <code>54.209.39.87</code>. Make suitable changes to the command appropriate for your choices. Do not change the <code>ssh -i</code> or the <code>-l shepherd</code>.
+
+SSH, security-paranoid as it is, will say "The authenticity of host ... can't be established" etc. etc. That's fine, say "yes" to the question whether you want to continue connecting.
+
+And, the prompt <code>[shepherd@ubos-ec2 ~]$</code> is printed! You are connected to your remote Amazon virtual server, and all commands you execute in this terminal will be executed on that server, not on the machine that's running the terminal.
+
+| [[File:aws-ubos-instance-running.png|thumb]]
+|-
+| 14.
+| And we are done! To exit the terminal, type <code>exit</code>. To log back on, type the ssh command above again. And that's what we will do to actually install Wordpress.
+|-
+|}
+
+== See Also ==
+* [[Tutorial: Set up an IndieWebSite using WordPress on the Amazon cloud]]

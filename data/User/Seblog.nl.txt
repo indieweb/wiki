@@ -1,21 +1,72 @@
-http://indiewebcamp.com/User%3ASeblog.nl
+https://indieweb.org/User%3ASeblog.nl
 
 = <a class="h-card" href="http://seblog.nl">Sebastiaan Andeweg</a> =
 Hi, I'm Sebastiaan and I'm a Dutch writer who nerds in his spare time, more and more turning into a nerd who used to write stories. I’ve got my own site since 2006 (I was 16 years old and blogged about… 16-stuff) and even before I knew about IndieWebCamp, I was thinking of making my Seblog into a social media hub. Finding IndieWebCamp is so nice… now I know that what I wanted is possible :)
 
 == In the process of ==
-* Well, let's start with the thing: I want to get my data to my own site:
-** Twitter (already busy implementing / converting my archive)
-** Facebook (I quitted 2014-09-06, but I have my archive downloaded and I'm thinking about making private posts of it, so I have all my data in the same format at the same place, but not necessarily public to all)
-** Instagram (shouldn't be that hard?)
-** Blog archive (I've been blogging since 2006 [again, I was 16]. I want that data back on my site as well, but maybe marked private, like with my Facebookposts. My site used to run on a homemade thing, then Wordpress, then homemade again, and now I'm running on .txt files with Kirby. I want those different archives together, public or partly private, but in one place.)
-** Hyves (Dutch social network, was quite big, but then came Facebook. Luckly I downloaded all my data. Some of the data is actually older than my weblog, but still, maybe post it there?)
-** Misc. (Sometimes you post things on different places around the internet… I want to grab everything I can find and copy it :) )
-* Then, I also want all those cool things like likes and reply's and webmentions working. I already had them working, but then I changed my thoughts on URL-design…
+
+* I am buidling a <a href="https://github.com/sebsel/kirby-micropub">Micropub plugin</a> for [[Kirby]]. Not finished yet, but it's there.
+* I am also adding to the existing Webmentions plugin <a href="https://github.com/sebsel/kirby-webmentions">here</a>.
+
+== Remind myself about ==
+
+When you first look at it, Indieweb has a lot of things you 'need' to do in order to have an Indieweb-website: Webmentions, Microformats, Micropub, an Indiereader, likes and comments and posts about what you eat etc. etc.
+
+But all you need is your own domain with some HTML about you on it.
+
+Quotes about that by [https://chat.indieweb.org/2016-12-21/1482317136241000 Zegnat] and [https://chat.indieweb.org/2016-12-13/1481660554042000 Aaronpk]
+
+== How Seblog.nl works now ==
+
+It's a [[Kirby]] installation, with my own Micropub plugin and (an altered version of) Bastian Allgeiers Webmentions-plugin. I ditched the standard /panel/, because I have Micropub now, and my folder-setup didn't work great with the standard panel.
+As of writing this, not everything is finished nor working, but I have a site and I post things.
+
+Kirby stores it's data in .txt-files in a folder-structure, so that's how my posts are stored. Visible pages start with a number and a dash. I don't use those for days and years, but I use a `HHMMSS` timestamp on the post. For example:
+
+<code>/content/2016/326/154852-1/entry.txt</code>
+
+Translates to <https://seblog.nl/2016/11/21/1/vandaag-kwamen-de-blog-domeinen-vrij>
+
+I like [[User:Tantek.com|Tantek]]'s use of the number of the day in the year, but I want my url to have a 'traditional' date. The 'slug'-part of the url comes from the field <code>Url-key</code> in the .txt-file. (Due to Kirby's architecture that can't be 'slug'.) Kirby uses YAML-style fields inside the .txt file. Example:
+
+<pre>
+Location: geo:[...this is just for myself...];u=65
+
+----
+
+Text: Vandaag kwamen de .blog-domeinen vrij. Natuurlijk [...]
+
+----
+
+Published: 2016-11-21 15:48:52
+
+----
+
+Updated: 2016-11-21 15:48:52
+
+----
+
+Url-key: vandaag-kwamen-de-blog-domeinen-vrij
+</pre> 
+
+Since I ditched the standard /panel, I can also ditch the required 'Title' field and replace it with the Microformats' 'Name'. I needed to rename 'Content' to 'Text', because Kirby refers to all the fields as <code>$page->content()</code>. Other than 'text' for 'content', I use Microformats-property names.
+
+When the page has a 'Name' field, it's a blogpost, otherwise it's a note. Or, when it has a 'Like-of' field, it's a like, and with 'Photo' it's a photo post. Well, at this point I actually don't make a big distinction between those.
+
+Photo's are saved in the folder of the post itself, and then referenced by just the filename. 
+
+My homepage just selects the last 'day'-folder of the current year, grabs it's children, and if it doesn't have the required (20) posts yet, it recursively checks the day before it until there are 20. It works fine for queries that actually have posts, but is slow and demanding if it needs to search the archives all the way back to 2006. Need to fix that, but since I do not have many custom queries, it's ok for now.
+
+== POSSE and OwnYourData ==
+
+* '''Instagram'''' - as of 2016-11 I imported all my data to my site, including the likes I still could find through the API.
+** I documented how I post photo's to my site and Instagram with [[Workflow]].
 
 == Itches ==
 
 Here are some of the topics I am thinking about or want to think more about. And eventually do something about. About, that’s what it’s about.
+
+* Teach [[Bridgy]] how Strava works, so I can use that, once I imported and POSSE/PESOS my runs to my site/Strava
 
 === Private / Public posting ===
 
@@ -34,6 +85,14 @@ I still want to share little stories. But I also want to share more serious stuf
 When I start with IndieWeb, I have a topic to write about in English. I like that. But all my posts so far are in Dutch. I also have some basic knowledge about a few other European languages and I’m now quite seriously learning Japanese. I actually have some Japanese blogposts over on Lang-8.com. What to do with those? And what to do with possible future English posts?
 
 This boils down to a similar point as the previous one: how do I get multiple languages on my site, while still maintaining user experience.
+
+=== I want my data back from: ===
+* Twitter (already busy implementing / converting my archive)
+* Facebook (I quitted 2014-09-06, but I have my archive downloaded and I'm thinking about making private posts of it, so I have all my data in the same format at the same place, but not necessarily public to all)
+* <strike>Instagram</strike> done, 2016-11-26
+* Blog archive (I've been blogging since 2006 [again, I was 16]. I want that data back on my site as well, but maybe marked private, like with my Facebookposts. My site used to run on a homemade thing, then Wordpress, then homemade again, and now I'm running on .txt files with Kirby. I want those different archives together, public or partly private, but in one place.)
+* Hyves (Dutch social network, was quite big, but then came Facebook. Luckly I downloaded all my data. Some of the data is actually older than my weblog, but still, maybe post it there?)
+* Misc. (Sometimes you post things on different places around the internet… I want to grab everything I can find and copy it :) )
 
 
 == My username is a hashtag ==

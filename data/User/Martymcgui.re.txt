@@ -1,19 +1,301 @@
-http://indiewebcamp.com/User%3AMartymcgui.re
+https://indieweb.org/User%3AMartymcgui.re
 
 __NOTITLE__
-<span style="float:right;margin-left:1em"><img src="https://martymcgui.re/img/logo.jpg" style="width:128px"/></span>
-'''<span style="font-size:2em" class="h-card">[https://martymcgui.re/ Marty McGuire]</span>'''
+'''<span style="font-size:2em">[https://martymcgui.re/ Marty McGuire]</span>'''
 
-'''<dfn>Marty McGuire</dfn>''' is a freelance web developer in Baltimore, MD, USA.
+{{Infobox person
+|name = Marty McGuire
+|url = https://martymcgui.re/
+|photo_url = https://martymcgui.re/images/logo.jpg
+|summary = Marty McGuire is a freelance web developer in Baltimore, MD, USA.
+|elsewhere = [https://twitter.com/schmarty Twitter] [https://github.com/martymcguire GitHub]
+}}
 
-== Working on ==
-* making backend choices to support posting and POSSE for posts / images / notes. probably Flask?
+= My IndieWeb Setup =
+
+* https://martymcgui.re is my primary home where I post many things via [[micropub]], typically with [[Quill]]
+** [[notes]] and optionally [[POSSE]] either manually or via [[Bridgy]] Publish (often with slightly different content) to [[Twitter]] (https://twitter.com/schmarty), [[Facebook]] (https://www.facebook.com/marty.mcguire.54), [[Mastodon]] (https://mrt.al/@schmarty)
+** [[event|events]] posted via [https://github.com/martymcguire/slater Slater], a WIP micropub client
+*** Manually POSSE'd to Facebook, sometimes with slightly different content.
+*** Manually POSSE'd to Twitter w/ (different) short summary and link to post.
+** [[articles]] and optionally manually POSSE them (usually as name + permalink) to Twitter, Facebook, sometimes [[IndieNews]]
+** [[replies]], [[listen|listens]], [[RSVP|RSVPs]] and manually POSSE them to Twitter and Facebook.
+*** [[reply-context]] is automatically fetched, cached, and displayed by my site where possible. currently supports most mf2-enabled sites, twitter (via [[XRay]]), soundcloud.
+** [[like|likes]] and [[repost|reposts]], then POSSE'd to Twitter manually, usually via Bridgy Publish
+** [[photo|photos]], which I often do not syndicate elsewhere
+*** [[photo#Marty_McGuire|panoramic photos]] are posted by hand, not syndicated elsewhere.
+** [[video|videos]], which I manually upload to my micropub endpoint and create posts by hand. optionally POSSE by hand to e.g. Facebook
+** [[audio]] via [[Screech]], specifically [[this-week-in-the-indieweb#Podcast|This Week in the IndieWeb Audio Edition]].
+**# {{main|User:Martymcgui.re/this-week-indieweb-podcast}}
+**# Post via Screech.
+**# Manual POSSE to [[Huffduffer]]
+**# Manual POSSE to Twitter, Facebook, Mastodon
+**# Edit the original post with [[micropublish]] to add syndication links (via micropub update)
+
+* https://wehavetoask.com/ is a podcast website that I run "IndieWeb-style" where I post via [[micropub]].
+** [[audio]] posts are posted via [[Screech]]. Manual POSSE with different content to Twitter (https://twitter.com/wehavetoask) and Facebook (https://www.facebook.com/wehavetoask).
+*** Posting each episode is a multi-step process that involves:
+***# Creating the post via Screech
+***# POSSE
+**** # Twitter via brid.gy publish
+**** # FB manually
+***# Edit the original post with [[micropublish]] to add syndication links (via micropub update)
+***# Syndicate from my personal accounts
+***## Like and Share on Facebook
+***## Manually PESOS my FB post to my site via Quill. Add syndication link with [[micropublish]] via micropub update
+***## Send webmentions from my site with [[Telegraph]]
+***# Syndicate from the parent podcast network's social media accounts
+***#* Manually like and share on FB
+***#* Manually like and retweet on Twitter
+
+Syndication links are added manually for all POSSE copies for all of my sites.
+
+Webmentions for replies, likes, reposts, and general mentions are sent manually using [[Telegraph]].
+
+Likes (and other reactions), reposts, replies, and mentions from the IndieWeb as well as syndicated copies on Twitter and Facebook are automatically received by Brid.gy and [[webmention.io]]
+* I receive a notification for each webmention on my phone and laptop over [[Riot.im]] in a [[Matrix]] chat room which receives messages via a custom [[hubot]] [[webhook]] triggered by webmention.io.
+* They are automatically displayed on my site whenever it is re-built (either in response to a new post or when I trigger it manually).
+
+=== Silo Posting ===
+
+While I try to treat [[silos]] as purely places where I publish syndication, there are still some things I will post only to silos.
+
+* Twitter
+** Some likes, retweets, and even quick replies that I don't consider "long-term relevant" enough to keep on my site.
+* Facebook
+** I typically do not post FB reactions such as likes, loves, "haha", etc. to my site. In general I am trying to stop using Facebook reactions (because [https://motherboard.vice.com/en_us/article/how-our-likes-helped-trump-win dang] and [http://brucesterling.tumblr.com/post/159412046858/targeting-options-for-facebook-advertisers gosh]).
+** Responses to prompts from FB like encouragement to send birthday posts. I am also using these less and less.
+** Comments to other people's FB posts. Unless I started the thread, I generally don't think it's appropriate to copy it to my site.
+
+= Personal Site - martymcgui.re =
+
+[https://martymcgui.re martymcgui.re] is my personal website.
+
+== What Works ==
+
+* Identity h-card and [[RelMeAuth]]
+* [[micropub]] using a custom [[Flask]] endpoint, with [[indieauth.com]] for [[IndieAuth]] authorization.
+** File uploads go to a separate [https://www.w3.org/TR/micropub/#media-endpoint media endpoint], running on [https://github.com/martymcguire/spano Spano].
+** I typically post using [[Quill]], both from my desktop browser and via a homescreen bookmark on Android.
+** Audio content such as podcasts are posted using [[Screech]]
+* Content is served as a [[static-site]] compiled using [[Jekyll]]
+** [[permalinks]] are <code>/YYYY/mm/dd/HHMMSS/</code> (Eastern Time)
+** Custom plugin extracts the <code>data:</code> URLs that the Quill Editor uses to encode images.
+* [[short-domains|short domain]] mmg.re
+** [[permashortlinks]] using [[newbase60]] to convert permalink paths into 6 characters (3 for days-since-epoch, 3 for seconds-since midnight)
+** Custom Jekyll plugin makes these available to posts when rendering
+** Custom Flask endpoint resolves these when visiting mmg.re. Unparseable requests are redirected as-is.
+* Content
+** [[note|Notes]]
+*** text-only ([https://martymcgui.re/2016/07/01/102925/ example])
+*** with photo ([https://martymcgui.re/2016/08/27/114152/ example])
+**** "web-sized" versions served via [[image proxy]] (willnorris' [https://willnorris.com/go/imageproxy imageproxy])
+*** with 360 panoramic photospheres (using [https://github.com/google/vrview Google VR View]). ([https://martymcgui.re/2016/08/28/114014/ example])
+*** with video (rescued from [[Vine]]). ([https://martymcgui.re/2013/05/24/235116/ example])
+*** with [[audio]] ([https://martymcgui.re/2017/02/18/151503/ example])
+*** with [[mention|Mentions]] and [[reply|Replies]] with context ([https://martymcgui.re/2016/11/08/134804/ example])
+**** reply context supports posts with various markup
+***** with mf2 markup ([https://martymcgui.re/2016/11/29/131315/ example])
+***** with twitter (via [[XRay]]) ([https://martymcgui.re/2017/04/11/162245/ example])
+***** with soundcloud (via soundcloud's iframe embeds) ([https://martymcgui.re/2017/01/31/232032/ example])
+**** external author images proxied via [[image proxy]] (willnorris' [https://willnorris.com/go/imageproxy imageproxy])
+** [[article|Articles]] ([https://martymcgui.re/2016/10/19/211738/ example])
+** [[event|Events]] ([https://martymcgui.re/2016/10/12/004447/ example])
+*** <code>u-featured</code> poster image
+*** location is handled with a pseudo-[[nicknames-cache]]. Each post stores location as a string. If location is a URL that matches an entry in my  collection of common [[https://martymcguire/venues/]], it's dereferenced into an [[h-card]] when being rendered.
+*** Each event page has [[event#Calendar_Reminders|Calendar Reminders]] links for [[ICS]](iCal) format and [[Google_Calendar]].
+*** front page
+**** upcoming events that i post to my site appear on my front page
+**** upcoming events that I've RSVP'd to appear on my front page if the RSVP target has an h-event
+***** RSVP'd events have a specially stylized display that includes start date and time, or span of days if multiple days ([https://martymcgui.re/2017/04/07/211936/ example])
+** [[repost|Reposts]] ([https://martymcgui.re/2016/11/29/181404/ example], [https://martymcgui.re/2016/11/01/161344/ example])
+** [[bookmark|Bookmarks]] ([https://martymcgui.re/2017/04/25/105934/ example])
+** [[checkin|Checkins]] ([https://martymcgui.re/2017/06/23/171326/ example])
+*** PESOS from [[OwnYourSwarm]]
+*** with photo
+* POSSE via manual [[bridgy]] publish
+** to [[Twitter]]
+** to [[Facebook]]
+** display links to syndicated posts (added [https://martymcgui.re/2017/02/27/163638/ 2017-02-27])
+* accepting [[webmentions]] via [[webmention.io]]
+** each post page has a simple form for sending a webmention to the page by entering the source URL.
+** backfeed from Twitter and Facebook via bridgy
+** Displaying
+*** downloading and caching during Jekyll compile (inspired by [https://github.com/aarongustafson/jekyll-webmention_io aarongustafson/jekyll-webmention_io]) (added [https://martymcgui.re/2017/03/22/003710/ 2017-03-22])
+*** "Yes", "Going", and "Maybe" RSVPs from webmention.io
+**** [https://martymcgui.re/2017/03/21/211412/ example]
+*** Likes and Reposts
+**** [https://martymcgui.re/2017/03/21/211412/ example]
+*** Reply and Mention
+**** [https://martymcgui.re/2017/03/17/133511/ example]
 
 == Itches ==
-* POSSE to Twitter
-* PESOS from blogs / podcasts I contribute to
+
+=== Automating POSSE w/ bridgy publish and/or silo.pub ===
+** ✅ <s>micropub syndication query for Quill's syndicate-to feature</s>
+** ✅ <s>embed syndication links for POSSE via webmention</s>
+** send webmentions and save response to post's syndication section
+*** currently this is through Telegraph and is as many or more steps as manual POSSE and using micropublish.net to add the syndication links back
+*** want to automate this at some point
+**** a micropub client that supports the SE in POSSE with my workflow?
+***** queries for mp-syndicate-to URLs for a given post
+***** some support publishing via webmention and the wm request returns a reply w/ a permalink that could be sent back w/ a micropub update
+****** news.indieweb.org/en
+****** brid.gy also works for this
+***** harder: recognize other kinds of posts and do them.
+****** e.g. silo.pub requires micropubs, probably parsed from the h-entry on the post.
+
+=== Improved Handling of Webmentions ===
+
+Incoming
+* tool to slurp webmention.io data into static files suitable as Jekyll or Hugo data files
+* web hook to accept notifications from wmio and, add the new mention to the data store, and rebuild the site
+
+Outgoing - a service that...
+
+* subscribes to my site updates via websub
+** detects new posts
+*** finds "relevant" links to send notifications about
+**** a list of links to look for such as like-of, in-reply-to is obvious but not enough for just plain url mentions
+**** a list of links to ignore such as links in h-entry properties like author, syndication - maybe?
+**** probably a combo.
+*** sends webmentions and saves the results
+**** if given a status URL, save that too and check later. either on a job queue or manual, probably.
+** detects updated posts
+*** finds any new "relevant" links
+**** include any replies to the post
+*** re-sends webmentions, saving results again
+**** since wms can be sent multiple times, save a log incl response for each attempt.
+** UI to review webmentions
+
+=== Micropub client for posting 360 panoramas ===
+** poster image
+** some metadata that indicates it's a pano
+
+=== archives by month/year and other discoverability ===
+
+got a version of this for months, now. [https://martymcgui.re/2017/09/ example 2017-09].
+
+[http://v6.robweychert.com/blog/ inspiration from Rob Weychert]
+* great typography/layout!
+* also some great ways to browse
+** source / "also on"
+** type (e.g. movie review)
+** categories/tags
+** year/month
+
+ALSO: better next/prev navigation include keyboard nav for left/right.
+
+=== more coherent design including typography ===
+
+* move /posts to front page
+* more compact display of my own likes, reposts
+** support [[reacji]]! (e.g. "Marty reacted 👻 to AUTHOR'S POST")
+
+=== WebSub ===
+
+* does my websub... pub? what even subs web?
+* websub notifications for tag pages (already work for my /posts/ page)
+
+==== speed everything up ====
+
+Port to [[Hugo]] 😩. Big task.
+
+=== private posts ===
+
+* [https://stackoverflow.com/questions/22065003/in-jekyll-wants-to-skip-private-posts-to-be-rendered-while-listing-all-posts published: false] will prevent the page from being rendered at all. maybe good if I want to host those behind another domain or path w/ an access controller in front.
+
+* also: "not in main stream posts" that maybe get their own types.
+
+=== pinned posts for tag pages? ===
+
+*<s>first use-case - i want to be able to describe an h-feed on, e.g. the This Week in the IndieWeb podcast page as a stepping stone to mf2-to-RSS (or Atom) with enclosures and all that good stuff.</s>
+** implemented this with a separate "podcast" kind of jekyll. it's configured w/ all the podcast metadata as well as a tag to pull posts from.
+
+* need another use-case for this
+
+=== backfill old posts ===
+
+* [https://plus.google.com/+MartyMcGuire old G+ posts]
+* [https://www.goodreads.com/review/import goodreads data]
+* tweets!
+* [https://www.thingiverse.com/schmarty/designs Thingiverse things], [https://www.thingiverse.com/schmarty/makes makes], and [https://www.thingiverse.com/schmarty/likes likes].
+** difficulty: comments, likes, and makes <i>of my things</i>.
+
+=== track listens? ===
+
+* "[[listen]]-of" => 🎧, "Listened to this"
+
+* i use AntennaPod for listening to podcasts.
+** it seems to [https://github.com/AntennaPod/AntennaPod/issues/542 integrate with gpodder]. Possibly only syncing subscription list (OPML?) But possibly also supporting [https://gpoddernet.readthedocs.io/en/latest/api/reference/events.html per-episode events].
+** can self-host the [https://github.com/gpodder/mygpo gpodder server]
+** those events could become listen posts on my site
+
+=== better reply contexts ===
+
+* currently using [https://github.com/indieweb/microformats2-ruby/ the ruby microformats2 gem] to get mf2 data, XRay for twitter.com posts.
+* <s>would like to support posts with microdata markup [https://martymcgui.re/2016/11/17/161819/ example])</s>
+** that microdata was embedded in a JSONP-like call, yuck. instead, made a custom parser for Soundcloud that extracts the "sound ID" and creates an embed. not great but provides a reasonable reading experience at the moment.
+* would like to support posts with mf1 markup [https://martymcgui.re/2016/11/21/104043/ example])
+* would like to support posts with json-ld markup [https://martymcgui.re/2016/11/11/141225/ example])
+* probably going to use [[XRay]]?
+
+== No Longer Itches ==
+
 * <s>an [https://unhosted.org/ unhosted] evernote knockoff using [https://remotestorage.io/ remotestorage.io] as my backend</s>
 ** I'm happy enough with [https://laverna.cc laverna] at the moment, though I haven't yet migrated any old notes in and support for files/images is limited/broken.
 * <s>an internet archive style backup that snarfs pages that i want to bookmark into my notes</s>
-** I'm happy enough with [https://pinboard.in pinboard] at the moment. ¯\_(ツ)_/¯ 
-* my own goodreads to track my read/to-read (plus movies, podcasts, etc.)
+** I'm happy enough with [https://pinboard.in pinboard] at the moment. ¯\_(ツ)_/¯
+* <s>posting my own video without relying on silos</s>. I post these very rarely. Currently happy w/ an Automator action that sends files from my laptop to my media endpoint and making a new post with a video property that gets embedded.
+** micropub client for video!
+*** want to select a poster image, if possible
+*** and what else?
+** storage (happy enough w/ my micropub media endpoint, which I could set up with a CDN if desired
+*** <s>S3 as a CDN?</s>
+*** <s>[https://webtorrent.io/ WebTorrent]?</s>
+
+== Notes on Domains ==
+
+The [https://en.wikipedia.org/wiki/.re .re TLD] is a geographic top-level domain for the island of Réunion. I used [https://www.101domain.com/ 101Domain] as my registrar because they support setting up a business entity in the country (for a fee), a requirement for domain registration there.
+
+I also have a mirror of my site running as a [[Tor]] Onion Service at http://schmartyp7qtjzn7.onion/.
+
+= Podcast Site - wehavetoask.com =
+
+[https://wehavetoask.com We Have to Ask] is the site for a podcast I co-host. In addition to hosting an RSS feed for iTunes and Stitcher, we have been publishing episodes here and manually POSSE-ing them to Twitter and Facebook, because that's where the listeners are.
+
+== What Works ==
+
+* statically compiled website hosted on Amazon S3
+* h-card on home page, relmeauth
+* [[microformats|mf2]] for episodes
+** h-feed on front page
+** h-entry with u-audio
+* POSSE to Facebook and Twitter via bridgy publish. Syndication links displayed as "Join the discussion on {silo}".
+* Backfeed Twitter and FB interactions via bridgy and webmention.io
+
+== Working On ==
+
+* Automating POSSE with webmentions
+** Works well with Twitter. Need to automate handling brid.gy response. micropub update, possibly.
+** Doesn't work so well with FB. Facebook doesn't do the automatic link content extraction and embedding when posting this way. silo.pub?
+
+* Add representative images for each episode
+** [[Screech]] needs to support photo upload
+** Templates would also need to support it.
+
+== Itches ==
+
+* "Bake in" webmentions at compile time
+
+* consider cleaning up the iTunes feed?
+** http://www.unmung.com/feed?feed=http%3A%2F%2Fwehavetoask.com%2Fepisodes.rss
+
+* some aspirational stuff from other podcasts w/ proper mf2
+** http://pin13.net/mf2/?url=http%3A%2F%2Ftransportini.com%2F
+** http://pin13.net/mf2/?url=http%3A%2F%2Flatenighttoast.com%2F
+*** <code>rel=self</code>
+*** <code>rel=alternate</code> for RSS feed
+*** one of them has “length” attrib on episodes. one has “size” attrib.
+
+* micropub media endpoint so [[Screech]] can make progress while text etc. get written.

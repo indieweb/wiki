@@ -1,4 +1,4 @@
-http://indiewebcamp.com/Atom
+https://indieweb.org/Atom
 
 <img style="float:right; max-width: 200px; margin-top:-32px" src="http://dret.net/lectures/services-spring08/img/atom-logo.png"/>
 <!-- http://www.topdj.pl/www/grafika/wolne/atom-logo.gif -->
@@ -6,9 +6,12 @@ http://indiewebcamp.com/Atom
 
 {{stub}}
 
-'''<dfn>[http://atomenabled.org/ Atom]</dfn>''' is an XML format for publishing [[feeds]] that was developed as a more formally specified alternative to [[RSS]].
+'''<dfn>[https://indieweb.org/site-deaths#atomenabled.org Atom]</dfn>''' is an XML format and protocol for publishing [[feeds]] that was developed as a more formally specified alternative to [[RSS]]. Not to be confused with the open-source text editor [[Atom.io]] from GitHub.
 
 '''[[h-entry]]''' and '''[[h-feed]]''' are [[microformats2]] vocabularies based on Atom, which supersede the classic [[hAtom]] microformat.
+
+Atom is defined in [https://tools.ietf.org/html/rfc5023 RFC 5023] (format) and [https://tools.ietf.org/html/rfc4287 RFC 4287] (protocol). atomenabled.org was the canonical web site, [[site-deaths#atomenabled.org|but it died]].
+
 
 == IndieWeb Examples ==
 {{see_also|RSS#Indieweb_Examples|RSS Indieweb Examples}}
@@ -24,7 +27,7 @@ __TOC__
 * The feeds are automatically generated from the h-entry microformats on the page, so I only have to maintain the HTML which works for humans and machines rather than two copies. The endpoint I use for converting is open for anyone to use: [https://waterpigs.co.uk/services/microformats-to-atom/ microformats to ATOM] --[[User:Waterpigs.co.uk|Barnaby Walters]] 10:17, 10 February 2015 (PST)
 
 === Christian Weiske ===
-[[User:cweiske.de]]'s blog natively generates full-text atom feeds for tag-filtered and all posts
+{{cweiske}}'s blog natively generates full-text atom feeds for tag-filtered and all posts
 
 === Kyle Mahan ===
 {{kylewm}} publishes an Atom feed for all post feeds (most recent iteration since 2014-09-13).
@@ -39,12 +42,26 @@ __TOC__
 * http://gregorlove.com/articles.atom
 * Previously I was publishing an RSS 2.0 feed that was delivered by [[FeedBurner]]. I migrated back to a self-hosted feed due to the unsure future of FeedBurner, plus having more control of the feed since it is on my own domain again.
 
+As of 2016-03-08, I'm experimenting with [[Granary]] to convert my notes [[h-feed]] into an Atom feed.
+* http://gregorlove.com/notes.atom
+
 == Projects ==
-=== activitystreams-unofficial ===
-{{snarfed}}'s [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] fetches and converts [[Facebook]], [[Twitter]], [[Instagram]], and [[Google+]] data to and from Atom, as well as other formats like [[ActivityStreams]] and [[microformats2]] HTML/JSON.
+=== granary ===
+{{snarfed}}'s [https://github.com/snarfed/granary granary] fetches and converts [[Facebook]], [[Flickr]], [[Twitter]], [[Instagram]], and [[Google+]] data to and from Atom, as well as other formats like [[ActivityStreams]] and [[microformats2]] HTML/JSON.
+
+=== hfeed2atom ===
+[https://github.com/kartikprabhu/hfeed2atom hfeed2atom] converts h-feeds to atom feeds.
+
 === Unmung ===
-{{main|Unmung}}
+{{main|unmung}}
 * [[unmung]] generates an h-feed from any Atom or RSS one
+
+== Autodiscovery ==
+Atom feeds can be automatically discovered by feed readers if the homepage contains a link to it in its <tt><head></tt> tag:
+
+ <link rel="alternate" type="application/atom+xml" title="Feed" href="atomfeed.xml" />
+
+The title is important if there are multiple feeds linked, e.g. category and comment feeds.
 
 == Shutdowns ==
 See: [[feeds#Shutdowns|Feeds: Shutdowns]]
@@ -76,15 +93,10 @@ This section is a stub. For additional history see [http://en.wikipedia.org/wiki
 * 2003-09-30 Voting closed, "Atom" [http://www.intertwingly.net/wiki/pie/NameFinalVote clear winner] among [http://www.intertwingly.net/wiki/pie/ProjectNameProposals numerous proposals].
 
 === RSS Atom wars ===
-From 2003-2007 (at least) there was significant energy put into debating the merits of using [[Atom]] vs [[RSS]]. This quite heated ongoing debate earned the name of "<dfn>RSS Atom Wars</dfn>" or "<dfn>syndication wars</dfn>". A few articles during this time period help illustrate the tensions and conflicts:
-* 2003-06-29 Perhaps the opening shots fired in what would become the RSS/Atom wars, this polite post by Ben Trott declaring the technical underpinnings for why an alternative to RSS was needed: [https://web.archive.org/web/20140801155433/http://www.sixapart.com/blog/2003/06/why-we-need-ech.html Why We Need Echo],
-** The subsequent [https://web.archive.org/web/20140801155433/http://www.sixapart.com/blog/2003/06/why-we-need-ech.html#comments one polite defensive comment]
-** And then as of the second comment the patronizing begins, and escalates into full on rudeness, strawmanning, expression of interpersonal dislike, personal attacks, and a darkly prescient prediction: <blockquote>This whole discussion leads to BigCo's stepping in and profiting from the community's weaknesses.</blockquote> They just had no idea that the BigCo's that would step in and profit from this weakness had yet to be founded ([[Facebook]], [[Twitter]]).
-* 2004-03-10 CMSWire: [http://www.cmswire.com/cms/micro-cms/blog-format-wars-rss-vs-atom-let-there-be-rsspeace-000224.php Blog Format Wars, RSS vs. Atom, Let There be RSSPeace]
-* 2004-03-10 Seth Finkelstein: [http://sethf.com/infothought/blog/archives/000558.html RSS/Atom Wars - Peace In Our Time?]: <blockquote><p>How can you route around big media, revolutionize society, create new forms of participatory democracy, solve deeply complicated social problems ... when "we" '''CAN'T EVEN AGREE ON A FORMAT FOR WEB SITE CONTENT SYNDICATION?!'''</p><p>Really. Site syndication is a "little" problem. Nobody is going to literally die over it. Not like access to health care, or poverty, or world wars.</p></blockquote>['''ALL CAPS EMPHASIS''' is from original]
-* 2005-11-22 Jon Udell: [http://web.archive.org/web/20051124063153/http://weblog.infoworld.com/udell/2005/11/22.html Dueling simplicities][http://jonudell.net/udell/2005-11-22-dueling-simplicities.html]
-* 2006-11-28 Rogers Cadenhead: [http://workbench.cadenhead.org/news/3074/atom-and-rss-go-together-like-peanut-butter Atom and RSS Go Together Like Peanut Butter and Bananas] (see especially the comments)
-* 2007-07-25 Richard MacManus: [http://readwrite.com/2007/07/25/syndication_wars_2007_atom_rss20 Syndication Wars 2007: Atom's Time is Nigh, With Google on its Side]
+{{main|RSS Atom wars}}
+From 2003-2007 (at least) there was significant energy put into debating the merits of using [[Atom]] vs [[RSS]]. This quite heated ongoing debate earned the name of "<dfn>RSS Atom Wars</dfn>" or "<dfn>syndication wars</dfn>".
+
+See: [[RSS Atom wars]] for citations and quotes from articles during this time period that illustrate the tensions and conflicts.
 
 == See Also ==
 * [[RSS]]

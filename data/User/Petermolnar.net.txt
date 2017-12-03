@@ -1,0 +1,39 @@
+https://indieweb.org/User%3APetermolnar.net
+
+<span style="float:right;margin-left:1em"><img src="https://petermolnar.net/favicon.png" /></span>
+<span class="h-card">[https://petermolnar.net/ Peter Molnar]</span>
+
+== Current: static generator ==
+
+After spending months on arguing with myself, I finally decided to write my static generator and walk away from WordPress. It took me a long while, but I'm more or less ready. Summary and reasoning: [https://petermolnar.net/going-static Going Static]
+
+=== What, why, how ===
+
+; [[POSSE]]
+: My photos are POSSEd to [[Flickr]] via [[bridgy]], but I barely cross-post anything else these days.
+; [[PESOS]]
+: I recently started to embrace in-silo interactions, because I can pull all of them with a simple cron job to my site before I run the build process. Most of these require [[OAuth]] 1 or 2, therefore there is a tiny service running which handles callbacks and stores tokens.
+; [[Webmention]]s
+: I'm using an ancient Python library, [https://github.com/petermolnar/webmention-tools webmention-tools], which I altered a little to my needs; this is what's finding the webmention endpoints and sending the mentions on build. All the previously done mentions are stored in a JSON file.
+; [[Micropub]]
+: There is another microservice running, which shares only a minimal amount of code with the generation process; essentially it just receives incoming requests and writes them into YAML+Markdown.
+; [[search]]
+: The site builds a [https://whoosh.readthedocs.io/en/latest/ whoosh] index on generation by either updating or adding the documents' text. This is served by yet another small service.
+; image and image metadata handling
+: It all relies on [[exiftool]] for getting metadata from images, but all my tries for storing all the image related meta (including text and tags) failed due to the lack of a software capable of handling IPTC and XMP with reasonable UI, so I ended up using the same, post-like YAML+Markdown format, with the same name as the photos, therefore they are linked.
+; taxonomies: category and tag only
+: Category is the name of the folder the post is physically located in; the tags are hand applied. They all have archives per item and an index per taxonomy. 
+
+
+== Previously ==
+
+I used WordPress between 2007 and 2016, but in the end I was running a version where I had to apply patches to the core - I tried submitting them but most of them got neglected.
+
+Consider these as abandoned or on hold projects.
+
+* [https://github.com/petermolnar/wp-webmention-again wp-webmention-again] - an alternative webmentions plugin for WordPress. It's most probably broken by now.
+* [https://github.com/petermolnar/blogroll2email Blogroll2email]- turns the Blogroll part of WordPress to feed (atom, rss, mf2) parser to send entries as mail; supports [[granary]] json-mf2 format
+* [https://github.com/petermolnar/wp-shortslug wp-shortslug] - use pubdate epoch converted to base36 (0-9a-z) as short permalink
+* [https://github.com/petermolnar/wp-flatbackups wp-flatbackups ] - an auto-exporter for WordPress, creating a flat, directory based copy of YAML + Markdown (and/or HTML) of every post. This can't be imported, just servers as a fallback plan for [[longevity]].
+* [https://github.com/petermolnar/wp-url2snapshot wp-url2snapshot] - to have a backup copy of a linked website, the plugin pulls in an html-only version of every link it can find in any post content and stores it for potential future use. In case a link is not snapshotted yet and is not available on the web anymore, it tries to fall back to the last available version on archive.org.
+* [https://github.com/petermolnar/keyring-reactions-importer Keyring Social Importers] a reactions (like, fav, comment, etc ) importer for various silos

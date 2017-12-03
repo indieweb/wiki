@@ -1,0 +1,35 @@
+https://indieweb.org/loopback_address
+
+{{stub}}
+
+'''<dfn>loopback address</dfn>''' is an IP address that corresponds to the same machine that is making the request, also known as localhost. Requests made to this address bypass the network hardware, so are often used when testing websites while offline. The IPv4 space reserves all <code>127.*.*.*</code> IP addresses as loopback addresses. The IPv6 space reserves <code>0:0:0:0:0:0:0:1</code> (or <code>::1</code>) as loopback address.
+
+Any hostname can resolve to a loopback address, such as:
+
+* localhost.webmention.rocks -> 127.0.0.1
+* localhost6.webmention.rocks -> ::1
+
+== Security ==
+Special security considerations should be taken when handling external URLs that may resolve to loopback addresses.
+
+In a blog post titled [http://bouk.co/blog/hacking-developers/ How to steal any developer's local database], the author describes an attack where the browser is tricked into fetching data from locally running databases such as [[Redis]], [[Memcache]] and [[Elastic Search]], by having the browser access the services using a hostname that is remapped to a loopback address.
+
+For a proof of concept of this attack, try running this test: http://extractdata.club/ This link will actually fetch data from locally running services, although it will merely print the version number if it is able to connect.
+
+== How To ==
+{{gRegor}}: my experience here is limited, so feedback is welcome. Code samples below in [[PHP]].
+
+* Given a URL http://example.com/some/path, extract the domain name (example.com)
+** <code>$domain = parse_url($url, PHP_URL_HOST);</code>
+* Get the [[DNS]] records for the domain. 
+** <code>$records = dns_get_record($domain);</code>
+* Loop through the resulting DNS records, finding the ones where the host equals the domain, and the type is either "A" or "AAAA".
+** <code>if ($record['host'] == $domain && in_array($record['type'], ['A', 'AAAA']))</code>
+* For matching records, use the IP or IPv6 value for "A" and "AAAA" record types, respectively.
+** <code>$ip = ($record['type'] == 'A') ? $record['ip'] : $record['ipv6'];</code>
+* Check if the resulting IP is in the reserved range or not.
+** <code>filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_RES_RANGE);</code>
+** filter_var will return the IP address if it's valid and not in the reserved range, otherwise it returns boolean false.
+
+== See Also ==
+* [[localhost]]

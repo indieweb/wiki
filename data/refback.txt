@@ -1,0 +1,43 @@
+https://indieweb.org/refback
+
+{{stub}}
+
+'''<dfn>Refback</dfn>''' is a [[linkback]] method that works using the standard ''HTTP Referer header''.
+
+==Software Support==
+Refback has the benefit of not needing any support from the linking website. That means any website (ranging from dynamic WordPress blogs to html files written in Vim) has inherent support for it. You will need to implement support for it on your side, but this is usually simple to do.
+
+==Implementation Details==
+Refback is dead simple to implement. There are no specs that you need to read through. You can make your implementation as simple or as complicated as you like. Refback basically gives you a single piece of data, the URL that your visitor came from. There are numerous things you can do with this URL.
+
+* Save it in a database or log file
+** This allows you to manually inspect and discover places that are sharing your website/sending you visitors.
+** To make the huge amount of data easier to manually inspect, consider showing only unique referrers. If you are working with plaintext log files, you can use tools like <code>cut</code> and <code>sort</code>.
+
+* Show it on your website
+** If you want to pay back the courtesy and link back to people, you can put the [[linkback|linkbacks]] under your article in a ''Mentions'' section.
+** As with any user submissons, you should filter this for spam. Consider manually inspecting them after spam filters and modifications. Methods of linkback verification will be explained later.
+
+* Analyze the data to improve your website
+** You can analyze your Referrer data in order to determine the most important sources of your traffic. This will give you a good idea of which platforms you need to focus on.
+** You can use proprietary tools like ''Google Analytics''. It will provide valuable metrics about your visitors as well as a graph of your referrers (social networks and regular websites).
+** If you want to keep the data to yourself (which is a good idea), you can use open-source tools like ''AWStats'' and ''GoAccess''.
+
+==Linkback Verification==
+Even though you don't have to do it, you may find it useful to filter your Refbacks to cut down the false positives. One easy was of doing this is downloading the referring page and checking its HTML to see if it links to you. Doing this will cut down on both false positives and spam. Doing these checks asynchronously in the background is important to keep your pages from blocking.
+
+Here's an example code in Python that naively verifies linkbacks.
+
+ import requests
+ from bs4 import BeautifulSoup
+ 
+ def verify_linkback(source, target):
+     html = requests.get(source).text
+     soup = BeautifulSoup(html)
+     return len(soup.find_all("a", href=target)) > 0
+
+==See Also==
+* [[pingback]]
+* [[trackback]]
+* [[webmention]]
+* [https://gkbrk.com/2016/08/why-refback-still-matters/ Why Refback Still Matters?]

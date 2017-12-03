@@ -1,0 +1,131 @@
+https://indieweb.org/WordPress_with_Bridgy
+
+{{stub}}
+
+'''<dfn>WordPress with Bridgy</dfn>''' is a work-in-progress guide for how to setup your [[WordPress]] blog to work with [[Bridgy]] to both [[backfeed]] (have social media [[likes]], [[replies]], [[reposts]] show up on your original posts) and [[POSSE]] (cross-post your posts to social media) .
+
+If you're unsure what Bridgy is please take a moment to review the main [[Bridgy]] page.
+
+This page is under a lot of construction. 
+
+Below we'll detail some of the requirements for setting up Bridgy to work with your self-hosted [[WordPress]].com website. If you have questions/comments, please stop by in [https://indiewebcamp.com/irc/today#bottom chat]/[[IRC]] for assistance.
+
+== Overview of Bridgy's functionality ==
+
+Bridgy is a "magical" IndieWeb [[project]] built by {{snarfed}}, {{kylewm}}, and others and will help you to do two primary functions with your WordPress blog:
+# '''[[backfeed]]''' (or pulling back responses) - Bridgy connects [[silo]] services (presently Facebook, Twitter, Google+, Instagram, and Flickr) using their open APIs to add [[webmention]] support (at least until they choose to support them directly). This essentially means that [[likes]], [[replies]], and [[reposts]] from these services will be sent back as comments to your original post on your site.
+# '''[[syndication]]/publication via [[POSSE]]''' - Bridgy allows you to leverage your site's ability to send webmentions to trigger Bridgy to syndicate copies of your content to various silos like Twitter, Facebook and Flickr. (Sadly Google+ and Instagram don't allow publishing through their API). 
+
+These two functionalities are independent, so one can be used without necessarily configuring or using the other. The larger majority of people will probably be interested in [[backfeed]] functionality and may not need/use the syndication functionality, or may choose to use alternate methods of syndication ([[JetPack]], [[SNAP]], others).
+
+By itself, Bridgy doesn't do much--one might consider it a "translation tool" in a sense for talking to the social media silos. Bridgy is a third party application that allows a large group of individuals, programs, and [[CMS]]s to easily interact with the social silos it supports without requiring a much larger overhead (or development tax) of requiring each developer to set up and maintain codebase and APIs for each of these services individually.
+
+== Prerequisites ==
+Prior to beginning to set up Bridgy, know that it relies on some prior set up or installed plugins to allow you to easily interact with it. For the sake of the details below, we'll presume you've got the [https://wordpress.org/plugins/indieweb/ IndieWeb WordPress plugin] installed with the following minimal set of sub-plugins installed:
+* [https://wordpress.org/plugins/webmention/ Webmention plugin] - Bridgy will send your site comments/likes/interactions as comments using webmention; your site can also send webmentions to Bridgy's endpoint to allow you to use Bridgy Publish to publish on your behalf. (no configuration required beyond installing and activation)
+* [https://wordpress.org/plugins/semantic-linkbacks/ Semantic Linkbacks] - Generates richer WordPress comments (no configuration required beyond installing and activation)
+* [https://wordpress.org/plugins/syndication-links/ Syndication Links] - Allows you to link to copies of your posts elsewhere; Bridgy uses the URLs input into this field to properly parse your webpages to ensure the comments/likes are being sent to the correct page. Minimal configuraton beyond installation/activation; most additional options dictate options for how the URLs are displayed on your page.
+** Technically one can get away without this plugin, but it would require additional knowledge and some onerous (annoying?) handcoded HTML which isn't recommended
+* [https://github.com/pfefferle/wordpress-webmention-for-comments WebMention support for (threaded) comments] (technically not required, but recommended; requires no configuration)
+
+For additional details and help with this portion, see also [[Getting_Started_on_WordPress]] and [[WordPress/Plugins]]. Additional plugins within the IndieWeb suite can also be installed, but they won't have a direct effect with regard to Bridgy functionality.
+
+== Backfeed ==
+
+=== Connecting Social Services to Bridgy ===
+Bridgy attempts to be as helpful as possible in the set up process, so if you've got something missing or not configured properly, it will typically tell you what is wrong and include links and documentation for fixing them.
+
+Below, we'll walk through the set up of connecting Bridgy to one's Twitter account as an example with the presumption that setting up the other services (Facebook, Google+, Instagram, and Flicker) are entirely similar. Those with additional subtleties will be indicated below.
+
+'''Nota bene:''' On [http://brid.gy Brid.gy] self-hosted WordPress(.org) users will activate the social silos they're interested in connecting. They should '''not''' click on the WordPress.COM Brid.gy button as that is meant for those using the hosted version of WordPress on WordPress.com.
+
+==== Rel-me links ====
+Bridgy will look at both your website and the social silo you're setting up to make sure that there are [https://indieweb.org/rel-me rel-me] links on each one pointing back at the other. (If you haven't already [https://indieweb.org/Getting_Started_on_WordPress#Rel-me configured the IndieWeb Plugin, be sure to go back and do that].) Most social services have a URL field for your website that is automatically wrapped with a rel="me", so one only needs to input the URL in the settings page (Twitter works this way for example). Bridgy imputes a "virtual" rel-me on those without an explicit rel-me tag by virtue of specific fields which expect a user's website to be input (Facebook and Instagram work this way).
+
+Because Facebook and Instagram don't natively support rel-me, one needs to put one's personal website URL into (the logical) place for Bridgy to find it.  
+* On Facebook, from your personal profile page (https://facebook.com/username), click the "About" tab, then click "Contact and Basic Info" to be able to put your URL into the Website box listed under "Websites and Social Links". Note that you can add additional URLs to support more than one site if desired.
+* On Instagram, from your profile page, click on "Edit Profile" and add the URL to the "Website" field. If one wants to support more than one site, one can add an additional URL to the "Bio" field as well.
+
+==== OAuth and IndieAuth ====
+You're now ready to begin setting up Bridgy to interact with the silos.
+
+From the Brid.gy home page, click on the Twitter button to initiate the authentication to Twitter. If you're not signed into Twitter, do so on the resultant page. Otherwise, or next, click "Authorize App" which will redirect you back to your Twitter account page on Brid.gy. 
+
+* Need to include instructions here for IndieAuth for Instagram which doesn't support OAuth
+
+==== Managing Backfeed ====
+With your Twitter account authenticated you should now be set up for [[backfeed]] and will begin receiving webmentions from Bridgy because Bridgy defaults to this setting as indicated in the middle of the page by the phrase "Listening for responses." 
+
+(If you ever want to turn off backfeed, you can click the "Disable" button under "Listening for responses.")
+
+If you have blog posts you've syndicated to Twitter with backlinks on them, in a minute or two you should see the comments, likes and retweets from those in the pending comments section of the administrative interface of your WordPress blog. If you moderate comments in WordPress, you can then approve, spam, or trash them as necessary.
+
+If you haven't pre-configured any of the steps above properly, Bridgy should give you an error message with instructions and possible links for fixing the error. Once reconfigured, try re-connecting/re-authenticating with the service.
+
+Bridgy will work automatically at intervals to perform backfeed for your site. If you believe it isn't working for some reason or would like to trigger it automatically you can do one of the two following operations from any of the service specific pages for your accounts:
+* Crawl Now - You can click the "Crawl Now" button to have Brid.gy crawl your website looking for posts to which it can send responses. Bridgy will then automatically continue to crawl your pages looking for new posts at specified intervals.
+* Poll Now - Click this button to poll Twitter for new tweets on your accounts to send webmentions to your website(s).
+* <link> snippet if one's feed/blog aren't their front page, especially for Instagram
+
+==== Rel-syndication links ====
+Bridgy will look for [[u-syndication]] on your posts as an indicator of where they were syndicated. This allows Bridgy to know which post to send the appropriate webmentions to so that they appear as comments on the proper pages.
+
+The simplest method for including u-syndication links is by using the aforementioned [https://wordpress.org/plugins/syndication-links/ Syndication Links] Plugin. While it has support for several POSSE plugins, one can manually add the permalinks to POSSE copies into the syndication box. They'll automatically be wrapped in the correct microformats for Bridgy to be able to find them.
+
+One could also manually include the microformats and URLs in raw HTML on their pages, but this can be time consuming. Details for doing this can be found at https://brid.gy/about#link
+
+==== Spam ====
+Webmentions on WordPress can often be caught in one's spam folder. Presently there haven't been any reported instances of webmention spam. For those who would prefer to automatically mark all incoming webmentions explicity as not spam, you can add the following code snippet to your functions.php file in your theme (or preferably [[WordPress/Themes#Child_Themes|child theme]]).  
+
+<pre>
+/* functions.php code to accept all webmentions as not spam
+ * as suggested by snarfed at https://github.com/indieweb/wordpress-indieweb/issues/38
+ */
+function unspam_webmentions($approved, $commentdata) {
+  return ($commentdata['comment_type'] == 'webmention' ||
+	  get_comment_meta($commentdata['comment_ID'], 'semantic_linkbacks_type', true)
+	  ) ? 1 : $approved;
+}
+add_filter('pre_comment_approved', 'unspam_webmentions', '99', 2);
+</pre>
+
+==== Brainstorming ====
+Additional pieces this page could expand upon:
+* Suggestions/Help for funny looking webmentions
+* Details for setting up @mentions from Twitter to one's [[homepage]], [[mentions|mention page]], or [[archives]]. See also http://boffosocko.com/2017/04/15/mentions-from-twitter-to-my-website/
+* ...
+
+== Set up for Publishing ==
+With the basic set up for a Bridgy service taken care of (see above), one only need to click the social media button next to the text "Click to enable publishing" on the right hand side of the middle of the page. This will initiate an OAuth handshake to the intended service, so authorize the Bridgy app. Once you've been returned to Bridgy you're ready to go.
+
+To test the publication functionality, one can put a URL from a post on their site into the URL box (labeled "Enter post URL") for that Bridgy service and click "preview" to see what the post will potentially look like. Some of the appearance of the post will depend on your [https://indieweb.org/WordPress/Themes theme] and the markup and [[microformats]] on the page. Images within the post (or from the theme which are also included on the page) with the <code>u-photo</code> microformat will appear in the post along with the title of the post. If your test preview post doesn't look as you expect it, you may need to modify the markup either on the post itself, or within the theme.
+
+With Bridgy now set up, one could potentially manually publish all of their POSSE posts from the Bridgy interface for a particular service, but quicker means will be described below.
+
+=== Manual POSSE to Bridgy using HTML markup ===
+Outline for material to come:
+* details for manual POSSE using webmention
+* see also Bridgy documentation
+
+=== POSSE to Bridgy using Bridgy Publish Plugin ===
+While it can be instructive to handcode HTML to publish through Bridgy, it can be very time consuming. Toward that end {{GWG}} has created the [https://wordpress.org/plugins/bridgy-publish/ Bridgy Publish Plugin] for [[WordPress]]. With minimal configuration settings it provides a simple checkbox interface in the sidebar of the post editor for indicating where to send POSSE copies of one's post. 
+
+In conjunction with the Syndication Links plugin, it also automatically imports and saves the URL of the POSSEd copy both for possible display (see settings for Syndication Links) and to allow Bridgy to parse the post's page to allow for [[backfeed]] of comments, likes, etc.
+
+* Link to documentation
+
+== Bridgy with WordPress.com ==
+* Details and caveats for using Bridgy 
+* manual publishing since WordPress.com doesn't support plugins
+** suggestions for alternate methods (JetPack)
+
+
+
+{{WordPress}}
+
+== See Also ==
+* [[Bridgy]]
+* [https://brid.gy/about Bridgy Documentation]
+* [[POSSE]]
+* [[backfeed]]
+* ...

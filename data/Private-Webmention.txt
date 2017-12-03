@@ -1,0 +1,353 @@
+https://indieweb.org/Private-Webmention
+
+<!-- 
+
+By editing and/or contributing to this specification, you agree to make your contributions available under the http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0. 
+
+-->
+
+The '''<dfn>Private Webmention</dfn>''' protocol is an extension to [[Webmention]] that supports sending and verifying Webmentions for posts that require access control. This spec depends on understanding [[Webmention]]. Please read that first.
+
+;Status
+:This is a '''Living Specification''' yet mature enough to encourage [[#IndieWeb_Examples|implementations]] and [[#Issues|feedback]].
+;Latest Published Version
+:https://indieweb.org/Private-Webmention
+;Participate
+:[[#Issues|feedback]]
+:[[IRC]]: [irc://irc.freenode.net/indieweb #indieweb on Freenode]
+;Editors
+:[http://aaronparecki.com Aaron Parecki]
+;Authors
+:Other contributors: [https://indieweb.org/wiki/index.php?title=Private-Webmention&action=history revision history]
+;License
+:<small>Per [http://creativecommons.org/publicdomain/zero/1.0/ CC0], to the extent possible under law, the editor(s) and contributors have waived all copyright and related or neighboring rights to this work. In addition, as of {{CURRENTYEAR}}-{{CURRENTMONTH}}-{{CURRENTDAY2}}, the editor(s) and contributors (2016-09-25 onward) have made this specification available under the [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0].</small>
+
+__TOC__
+
+== Summary ==
+* Alice creates a private post on her site which is only accessible given proper authorization.
+* Alice sends a Webmention to Bob to notify him about this post.
+** The Webmention contains an additional parameter (code) that indicates to Bob this post requires authorization.
+* Bob's Webmention endpoint exchanges the code for an access token at Alice's Token Endpoint.
+* Bob's Webmention endpoint can then fetch Alice's post using the access token, and continue Webmention processing as normal.
+
+== Why ==
+The main Webmention spec only works with URLs that do not require authentication to access. In order for Webmention to work with private posts, we need to specify a mechanism by which the receiver can authenticate a request when verifying the Webmention.
+
+== Protocol ==
+<img src="https://indieweb.org/images/a/ad/private-webmention-flow-diagram.svg">
+
+=== Discovery ===
+The Sender [https://www.w3.org/TR/webmention/#sender-discovers-receiver-webmention-endpoint discovers] the Receiver's Webmention endpoint as normal.
+
+Note that any 401 status code (when sending a webmention '''to''' a private post) should not be considered an error when discovering the endpoint.
+
+=== Auth Code Generation ===
+Before sending the Webmention request, the Sender first generates a temporary authorization code. The authorization code MUST expire shortly after it is issued to mitigate the risk of leaks. A maximum authorization code lifetime of 10 minutes and minimum of 60 seconds is recommended. The sender SHOULD associate this authorization code with the intended recipient of the Webmention, and SHOULD generate a "realm" value that is unique to the intended recipient or audience. The code and realm values MUST NOT include characters outside of the ASCII ranges %x20-21 / %x23-5B / %x5D-7E.
+
+=== Sending the Webmention ===
+The Sender sends the Webmention request and includes an additional parameter "code" (and optionally "realm") containing the authorization code and realm values. For example:
+
+<pre>POST /webmention HTTP/1.1
+Host: barnaby.example
+Content-Type: application/x-www-form-urlencoded
+
+source=https://aaronpk.example/private-post&
+target=https://barnaby.example/another-post&
+code=zliNDUzZGY5ODYyNmFiODZiNmY4NTY3NTAxMm&
+realm=jNhYjI2NDEx</pre>
+
+=== Verifying the Webmention ===
+The Receiver receives a Webmention and checks for the presence of a "code" parameter. If it sees the "code" parameter, the Receiver knows that fetching the source URL will require authentication. 
+
+If the Receiver receives a Webmention containing a previously seen "realm" for which it already has a valid access token, the endpoint SHOULD skip the code exchange and use the existing token immediately to fetch the source URL and avoid generating a new access token.
+
+==== Obtaining an Access Token ====
+The Receiver then needs to exchange the authorization code for an access token. First, the receiver discovers the sender's Token Endpoint by making an HTTP HEAD (or optionally GET) request to the source URL, and looking for an HTTP <code>Link</code> header containing <code>rel="token_endpoint"</code>. For example:
+
+<pre>HEAD /private-post HTTP/1.1</pre>
+<pre>HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer
+Link: <https://aaronpk.example/token>; rel="token_endpoint"</pre>
+
+The Sender MUST return <code>401 Unauthorized</code> and the <code>WWW-Authenticate</code> header in addition to the <code>Link</code> header for URLs that require authentication to access. The <code>WWW-Authenticate</code> header MAY include a "realm" value indicating the realm of tokens that are valid, although some implementations may wish to not reveal this information to unauthenticated requests. The <code>Link</code> header specifying the token endpoint MAY be a relative URL.
+
+The Receiver makes a POST request to the token endpoint to exchange the authorization code for an access token. The request contains the parameter <code>grant_type=authorization_code</code> and the parameter <code>code</code> containing the authorization code given.
+
+<pre>POST /token HTTP/1.1
+Host: aaronpk.example
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&
+code=zliNDUzZGY5ODYyNmFiODZiNmY4NTY3NTAxMm</pre>
+
+<div style="padding:8px;background:#ffd;border:1px #eec solid;border-radius:4px;">Note: See [[Private-Webmention#Issues|Issues]] below</div>
+
+The Token Endpoint checks that the authorization code provided is valid and has not expired, and then issues an access token and sends the response. The following parameters are sent in the body of the response with the application/json media type. 
+
+* <code>access_token</code> REQUIRED. The access token issued by the authorization server.
+* <code>token_type</code> REQUIRED. The type of the token issued. For the flow described in this document, "bearer" is the only valid value.
+* <code>expires_in</code> RECOMMENDED. The lifetime in seconds of the access token. For example, if the value is 3600 it indicates to the Receiver that the access token is valid for one hour, and that the access token can be re-used within that timeframe. If the token does not expire, this parameter is omitted.
+
+<pre>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+  "access_token":"A0MTUxM2Q3MWZmNjI5YjYyMmNiYTMwYi",
+  "token_type":"bearer",
+  "expires_in":3600
+}</pre>
+
+=== Fetching the Source URL ===
+Now that the Receiver has obtained an access token, it can use that token to fetch the source URL and continue performing the rest of the Webmention verification.
+
+The Receiver includes the token in the HTTP <code>Authorization</code> header as a [https://tools.ietf.org/html/rfc6750#section-2 Bearer Token].
+
+<pre>GET /private-post HTTP/1.1
+Authorization: Bearer A0MTUxM2Q3MWZmNjI5YjYyMmNiYTMwYi</pre>
+
+The server verifies the access token is valid and returns the page.
+
+== How to Send Private Webmentions ==
+=== Create an access controlled page ===
+Using a method of your choosing, create a URL that will require authentication (in the form of an access token) to access.
+
+The URL must respond successfully when presented with a valid access token in the HTTP Authorization header:
+
+<pre>GET /private-post HTTP/1.1
+Authorization: Bearer A0MTUxM2Q3MWZmNjI5YjYyMmNiYTMwYi</pre>
+
+Your URL must respond with the following when unauthenticated requests are made to the page:
+
+* HTTP 401 Unauthorized header
+* <code>WWW-Authenticate: Bearer</code> header
+* <code>Link</code> header with rel=token_endpoint pointing to your token endpoint (see below)
+
+For example:
+
+<pre>HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer
+Link: <https://aaronpk.example/token>; rel="token_endpoint"</pre>
+
+=== Sending the Webmention ===
+Discover the target's endpoint using normal Webmention discovery.
+
+Generate a temporary authorization code, and store it somewhere that the token endpoint (described below) can find it. The authorization code should be a random string long enough to not be guessable. You will need some sort of association between the authorization code and the source URL you are about to send.
+
+Optionally, generate a "realm" value that the client can use to know whether it already has a valid access token for the realm. Typically the realm value can be associated with the people the post is directed to.
+
+Send the Webmention to the Webmention endpoint and include the additional parameters:
+
+<pre>POST /webmention HTTP/1.1
+Host: barnaby.example
+Content-Type: application/x-www-form-urlencoded
+
+source=https://aaronpk.example/private-post&
+target=https://barnaby.example/another-post&
+code=zliNDUzZGY5ODYyNmFiODZiNmY4NTY3NTAxMm&
+realm=jNhYjI2NDEx</pre>
+
+=== Generating Access Tokens ===
+The Receiver will recognize the Webmention will require authorization to access the source URL and will attempt to get an access token from your token endpoint. To create a token endpoint, it needs to be able to issue an access token when it receives a valid authorization code.
+
+A request will come to the token endpoint and will contain an authorization code.
+
+<pre>POST /token HTTP/1.1
+Host: aaronpk.example
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&
+code=zliNDUzZGY5ODYyNmFiODZiNmY4NTY3NTAxMm</pre>
+
+The token endpoint looks up the authorization code to find out which realm or posts the code is valid for, then generates an access token that can be used to retrieve the source URL. The access token should expire in the future, typically between a couple hours to a couple days. The endpoint returns the token to the Receiver in an HTTP JSON response:
+
+<pre>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+  "access_token":"A0MTUxM2Q3MWZmNjI5YjYyMmNiYTMwYi",
+  "token_type":"bearer",
+  "expires_in":3600
+}</pre>
+
+The Receiver will later use this token to fetch the source URL.
+
+== How to Receive Private Webmentions ==
+First, set up standard Webmention receiving, including advertising your Webmention endpoint and verifying Webmentions by fetching the source URL and looking for the link back. This is described in [https://www.w3.org/TR/webmention/#receiving-webmentions w3.org/TR/webmention].
+
+=== Recognizing private Webmentions ===
+When your Webmention endpoint gets a Webmention request, check for the presence of an HTTP parameter called <code>code</code>. If a code is present, this indicates that the source URL will require authorization to fetch.
+
+=== Discover the token endpoint ===
+Once you know you will need to obtain an access token, you first need to discover the token endpoint for the source URL. Make an HTTP HEAD (or GET) request to the source URL, and look for the HTTP Link header with <code>rel=token_endpoint</code>. The response will typically look like the below:
+
+<pre>HTTP/1.1 401 Unauthorized
+WWW-Authenticate: Bearer
+Link: <https://aaronpk.example/token>; rel="token_endpoint"</pre>
+
+Note that the Link header may be a relative URL so be sure to resolve that to a full URL using the source URL as the base when resolving.
+
+=== Exchange the code for an access token ===
+Make an HTTP POST request to the token endpoint containing the code you obtained in the initial Webmention request.
+
+<pre>POST /token HTTP/1.1
+Host: aaronpk.example
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&
+code=zliNDUzZGY5ODYyNmFiODZiNmY4NTY3NTAxMm</pre>
+
+You will get an access token as a response. The token may expire, so the lifetime in seconds of the access token will be included in the response.
+
+<pre>HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+  "access_token":"A0MTUxM2Q3MWZmNjI5YjYyMmNiYTMwYi",
+  "token_type":"bearer",
+  "expires_in":3600
+}</pre>
+
+You can store this token or just use it once to fetch the source URL.
+
+=== Fetch the source URL ===
+When your Webmention receiver fetches the source URL to verify the link there exists, you'll include the access token you were given along with the request. This is sent in an HTTP Authorization header like the below:
+
+<pre>GET /private-post HTTP/1.1
+Authorization: Bearer A0MTUxM2Q3MWZmNjI5YjYyMmNiYTMwYi</pre>
+
+=== Check for existing access tokens ===
+This is an optional optimization your endpoint can do to potentially avoid needing to generate tokens every time a private webmention is received.
+
+When you receive the Webmention, the request may also include a parameter named "realm". When you obtain an access token, store the token somewhere along with the associated realm. When you receive a future Webmention request and the realm is provided, check your token database to see if you already have a non-expired access token for the given source domain and realm.
+
+== IndieWeb Examples ==
+IndieWeb Examples of receiving and sending Private Webmentions, in order of implementation.
+
+=== Aaron Parecki ===
+{{aaronpk}} can send private webmentions [https://aaronparecki.com/2016/09/30/12/private-webmentions since 2016-09-30] and receive [https://aaronparecki.com/2016/10/20/6/private-webmentions-in-p3k since 2016-10-20]. ([https://aaronparecki.com/2016/09/30/15/ example])
+
+Private webmention responses are only visible to aaronpk when he's logged in to his website. However, the counter (number of likes, replies, etc) does increment publicly when a private webmention is received.
+
+[[File:aaronpk-private-webmention.png]]
+
+=== sknebel ===
+{{sknebel}} can receive private webmentions since 2016-10-01, and send them since 2017-05-21.
+
+First successful private webmention between independent implementations was sent 2016-10-01 from {{aaronpk}} to {{sknebel}}. Private post: https://aaronparecki.com/2016/09/30/15/
+
+=== gRegor Morrill ===
+{{gRegor}} can send private webmentions as of 2016-10-01.
+* [[private post]]: https://gregorlove.com/2016/09/this-is-a-test-private/
+* authorization code is a [[JWT]] that expires after 5 minutes, with keys
+** <code>me</code>: webmention source URL
+** <code>target</code>: webmention target URL
+* access token is a JWT that expires after 1 hour, with keys
+** <code>me</code>: same as authorization code
+** <code>nonce</code>: random nonce
+** <code>extra</code>: array of any of the extra parameters from the authorization code. Currently this only includes the <code>target</code>
+
+=== TheGillies ===
+{{TheGillies}} can send and receive private webmentions on an [http://github.com/tjgillies/indie elixir demo app]. He doesn't have a permanent site setup yet. Although, a test site can be found to be [http://tyler.cat:4000/private/test.html up periodically].
+
+=== Sebastiaan Andeweg ===
+{{sebsel}} can send private webmentions as of 2017-02-14, following {{gRegor}}s JWT style, but different:
+* authorization code is a [[JWT]] that expires after 2 minutes, with keys
+** <code>source</code>: webmention source URL
+** <code>target</code>: webmention target URL
+* access token is a JWT that expires after 1 hour, with keys
+** <code>me</code>: not the source but the target, because that's the 'me' from the visitors perspective.
+** <code>page</code>: the source of the webmention, so a page on my site, to which the token is scoped.
+** <code>nonce</code>: random nonce.
+* sucessfully tested 2017-05-19 against {{sknebel}}s endpoint. 
+
+Since 2017-05-21, he can also receive them. This was tested on the same day, again with {{sknebel}}s site.
+
+=== add yourself! ===
+
+== Design Considerations ==
+=== Rely on https for security ===
+The transport security of this spec is achieved through the use of https for all endpoints involved. If any of the four URLs involved in the flow do not support https, the security of the data cannot be guaranteed.
+
+By relying on https for security, we avoid needing to complicate the spec with cryptographic signing or encryption. Configuring https on a domain has many additional benefits, and so is a reasonable requirement to place on the parties involved.
+
+=== Limit scope to Webmention verification ===
+<span id="Limit_scope_to_Webmention_verification_rather_than_full_access_control"></span>
+This spec is intentionally limited to Webmention verification. 
+
+Specifically, this means that this spec does not describe a way for site A to obtain an access token to read posts on site B except when site B initiates the flow by sending a private Webmention. By having this limitation in place, we avoid a lot of security considerations that would otherwise apply with site A being able to arbitrarily request access tokens from site B.
+
+The result of this limitation is that this spec does not enable full access to private posts or feeds, and is only applicable to verifying a Webmention from a single private post.
+
+== FAQ ==
+
+=== how does this work with static sites ===
+Static websites typically don't have the ability to require authentication to access pages. Note however this is not always true, since you could have a "static site" (a collection of HTML files) that is hosted on a web server that provides authentication (e.g. Apache .htaccess file requiring HTTP Basic Auth).
+
+If your web server is unable to limit access to posts by requiring authentication, then your only other option is to use "secret" URLs (URLs with long random strings in them) as the source URL of your webmention. In this case, you don't even need to use this spec since receivers will be able to verify the webmention by fetching the source URL with no authentication as normal. This is only private in the sense that the receiver is the only one who knows the source URL you send them. This is often enough security for some implementations and often is not enough for others.
+
+=== is this the same as private or direct messaging ===
+While you <i>can</i> use this for direct messaging with another person, this spec was written assuming the use case of sending webmentions from posts that typically appear in a stream shared with one or more people. It is likely that there is a different spec more optimized for the specific use case of direct messaging.
+
+=== how do I know if a receiver supports private webmentions ===
+This spec does not currently provide a mechanism for the sender to know if the receiver supports private webmentions before sending. If you send a private webmention to someone who doesn't support them, the worst that happens is they fetch the source URL with no authentication and they are unable to verify the webmention. No data is leaked. The sender could also know that the sender doesn't support private webmentions if they notice that the source URL was fetched without authentication immediately after sending the webmention.
+
+=== can a receiver re-verify a private webmention ===
+The Webmention spec suggests that receivers may periodically re-verify Webmentions. The token exchange that occurs for private Webmention verification results in an access token that may expire after a relatively short time. This means the receiver may be in a situation in which it does not have a valid access token to access a previously-received private Webmention. This spec [[Private-Webmention#Limit_scope_to_Webmention_verification|intentionally leaves out]] unsolicited token exchange, so it is a known limitation that this spec may prevent private Webmentions from being re-verified at a later date.
+
+=== is there a privacy indicator in the posts themselves ===
+Problem: When a post is private/group-visible, replies most often should also have the same visibility. To avoid leaking private content in public responses, (micropub) clients and the reply-display-code on the user's website need to be able to find out that the user is responding to a private post.
+
+=== why is there an extra step of exchanging an auth code for an access token ===
+When you send a Webmention, you are sending an unsolicited payload to the receiver. The authorization code is not requested by the receiver, so you cannot guarantee they will be protecting it if they aren't expecting it. (It may be logged in intermediate proxy servers, written to log files on the server, etc.) If the receiver supports Private Webmentions, then they will be explicitly requesting an access token by exchanging the authorization code, so you can be more confident they will take measures to protect the access token. This way the access token is only delivered via an explicitly requested HTTPS connection to your server.
+
+=== should I send Webmentions for all links in my post ===
+Likely not. Since sending a private Webmention reveals the post to the receiver, the mention should only be sent to explicitly selected links. A clear example are links with <code>in-reply-to</code> -  a reply is addressed to the author of the post being replied to, so a private Webmention should be sent. If another URL is just mentioned in the post, it likely should not receive a Webmention. Implementers (at least {{sknebel}}, {{sebsel}}) have been using <code>in-reply-to</code> also for homepage mentions to start a conversation.
+* {{sknebel}}'s site automatically only sents mentions to replied-to posts for private posts
+
+<!-- 
+add questions by copying the template below 
+=== new question ===
+Problem: Describe problem here.
+-->
+
+== Issues ==
+
+=== specific parameters for token exchange ===
+When the receiver exchanges the authorization code for an access token, this is similar to the OAuth 2.0 auth code exchange.
+
+* Should the Receiver also include the source and/or target URL in this request? 
+** It would need to be a new grant type if so. 
+** Is there any additional security obtained? 
+** Does it help the token endpoint by indicating more explicitly that this request is from the webmention auth code?
+* Since OAuth 2.0 requires client_id if there is no other client authentication, should we require client_id here, or create a new grant type that doesn't require client_id?
+** OAuth 2.0 client_id is used for client identification, but in this case the sender doesn't know the client when it sends the webmention so the sender isn't expecting a particular value of client_id
+
+=== link rel value ===
+Currently this spec is re-using <code>token_endpoint</code> from [[IndieAuth]], which borrowed it from [http://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata OpenID Connect]'s provider metadata. There is however an OAuth 2.0 draft describing link relations for OAuth 2.0, which may be a better one to use. This would mean changing <code>token_endpoint</code> to <code>oauth2-token</code>.
+
+=== redirects ===
+Should redirects when fetching the post be allowed? If yes, the auth header has to be sent on subsequent requests.
+
+=== timing critical ===
+Since it relies on short-lived tokens, webmention receivers have to work quickly, and delays due to high-load situations, both accidential and malicious, increase in impact from slower service to actual loss of data.
+
+* {{martijnvdven}} can set his background task no quicker than once every 5 minutes on [https://www.binero.se/ Binero]. Risking that many short-lived <code>code</code>s will have timed-out.
+
+=== breaks asynchronised flows ===
+Verification of webmentions “should be handled asynchronously to prevent DoS (Denial of Service) attacks” [https://www.w3.org/TR/webmention/#webmention-verification], but putting a private webmention on a queue can easily reach the timeout for the <code>code</code>-value. Private webmentions cannot be prioritised by the TTL of the <code>code</code> either, as this value is only known to the sender.
+
+Access tokens “should expire in the future, typically between a couple hours to a couple days”, which should be plenty of time for asynchronised handling. Obtaining an access token however involves a POST request to fetch an unknown payload from a sender specified URL (the token endpoint). If everything is well, this should go really quickly and just return some JSON, but there are no guarantees.
+
+The POST request to the token endpoint can be equally dangerous as any other GET request done during verification. If verification should be done async, so should token retrieval. But because of the timing critical nature this is very hard to implement.
+
+== See Also ==
+* [[webmention]]
+* [[private posts]]
+* [[spam]]

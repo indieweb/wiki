@@ -1,4 +1,4 @@
-http://indiewebcamp.com/multi-photo
+https://indieweb.org/multi-photo
 
 {{stub}}
 
@@ -6,7 +6,8 @@ A '''<dfn>multi-photo</dfn>''' is like a [[photo]] post, except just with multip
 
 Not a multi-photo post:
 * photos interspersed with narrative text, use an [[article]] instead.
-* multiple photos paired with their captions, use a [[collection]] post
+* one ore more photos with one or more videos, use a [[collection]] post
+* multiple photos paired with their own captions (person-tags, etc.), use a [[collection]] post
 * someone else’s photos, use a [[repost]] instead, or at least wrap it in an [[h-cite]].
 See [[#Instead_use|Instead use]] for more on posts similar to multi-photo posts.
 
@@ -24,8 +25,11 @@ Examples:
 * https://snarfed.org/2003-11-20_were_not_in_kansas_any_more
 
 === collection ===
-If your photos are specifically delimited by their own captions, e.g. photo1, caption1, photo2, caption2, etc. then you're essentially posting a collection of entire photo posts, since each photo(n) + caption(n) pairing is its own photo post.
+If your photos are specifically delimited by their own captions (or person-tags), e.g. photo1, caption1, photo2, caption2, etc. then you're essentially posting a collection of entire photo posts, since each photo(n) + caption(n) pairing is its own photo post.
 * Use [[collection]] instead. Post each photo(n) + caption(n) as its own singular photo post at its own permalink, and include them all in a single [[collection]] post.
+
+If your one or more photos are in a set with one or more videos, then you need to use a collection to distinguish separate photos vs poster images for the videos.
+* Use [[collection]] instead. Post each photo or video (with optional poster-image photo) as its own singular post at its own permalink, and include them all in a single [[collection]] post.
 
 === repost or cite ===
 Especially for the above two cases, if you're posting photos which are not yours you should either
@@ -72,24 +76,93 @@ Examples:
 
 === Tantek ===
 {{t}} uses [[Falcon]] to publish multi-photo posts [http://tantek.com/2015/352/t1/building-lights-clouds-heels-cab since 2015-352] which are [[note]] posts with embedded images at the start. He does the following:
-# Uses [[Instagram]] iOS client to post photos there
-# Writes & posts a [[note]] on his own site that starts with a direct .jpg URL of the photo image, then a space/linebreak, then permalink of the Instagram post, then at least one more .jpg URL + permalink, then caption.
+# Uses [[Instagram]] iOS client to post a multi-photo there
+# Writes & posts a [[note]] on his own site that starts with a direct .jpg URL of the photo image, then a space/linebreak, then permalink of the Instagram post (auto-generated using the Instagram Bookmarklet), then at least one more .jpg URL + permalink, then caption.
 # That "note" is auto-upgraded by [[CASSIS]]'s <code>auto_link</code> function into a multi-photo post by putting the <code>u-photo</code> class name on the [[auto-embed]] <code>&lt;img&gt;</code> of the JPG, since it's the first URL in the "note", and auto-linking it with the subsequent URL, then including any immediately subsequent JPG+URL pairs into additional <code>u-photo</code> embeds.
-# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the multi-photo as a photo post to both [[Twitter]] and [[Facebook]] (thought currently only the first u-photo), saving the resulting syndication URLs in storage.
-* multi-photo: http://tantek.com/2015/352/t1/building-lights-clouds-heels-cab
+# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the multi-photo as a photo post to both [[Twitter]] (first 4 photos per their limit) and [[Facebook]] (only the first photo per limit), saving the resulting syndication URLs in storage.
+
+Examples:
+* http://tantek.com/2015/352/t1/building-lights-clouds-heels-cab
 ** has two photos
-** only first was POSSEd via Bridgy Publish to Twitter and Facebook
-* with person-tags: http://tantek.com/2015/352/t2/freedom-tower-np-nyc-winter
-** though none of the person-tags made it through
+** only first photo POSSEd via Bridgy Publish to Twitter and Facebook
+* http://tantek.com/2015/352/t2/freedom-tower-np-nyc-winter
+** has two photos, with person-tags
+** none of the person-tags made it through
+* http://tantek.com/2017/053/t6/homebrew-website-club-berlin-growing
+** has *five* photos!
+** first [https://twitter.com/t/status/834576777154543617 *four* photos POSSEd to Twitter] via Bridgy Publish! (only first photo to FB)
+** with person-tags for everyone in the first photo
+
+=== Malcolm Blaney ===
+{{mblaney}} uses [[dobrado]] and [[SimplePie]] on https://unicyclic.com to display multi-photo posts with a light box effect. The first photo found in the post is displayed, followed by a description containing the number of photos. Clicking on the photo brings up a light box and navigation options to view the rest of the photos.
+
+=== Aaron Parecki ===
+{{aaronpk}} uses [[p3k]] to publish and POSSE multi-photo posts since 2016-08-06. 
+* If the post has two photos, they are both 50% of the width of the post and a fixed height.
+* If the post has three photos, they are 33% of the width of the post, and a fixed height, smaller than the 2-photo post.
+* If the post has four or more photos, they are 50% of the width of the post, and a fixed height, slightly smaller than the 2-photo but larger than the 3-photo.
+* The photos are always cropped to a fixed size. Clicking on a photo opens up the photo in a lightbox. (If JS is disabled, this is just a regular link to the full res photo)
+
+Examples:
+* https://aaronparecki.com/2016/08/03/11/ post with two photos ([https://twitter.com/aaronpk/status/760953570623561728 posse copy])
+
+This post from 2009 was intended to be a "multi-photo" post, and was posted to Twitter, with three links to Tumblr posts.
+* original Tweet: https://twitter.com/aaronpk/status/5670555613
+* Tumblr posts: [http://miniblog.aaron.pk/post/242183331/more-fun-with-google-suggest] [http://miniblog.aaron.pk/post/242182736/fun-with-google-suggest] [http://miniblog.aaron.pk/post/242184600/fox-news-is]
+* Restored to indieweb website: https://aaronparecki.com/2009/11/13/1/
+
+== Supporting Services Projects ==
+(stub section, please expand with subheads and details (limitations) per project)
+
+The following services and projects support publishing multi-photos:
+* [[p3k]] on aaronparecki.com via [[Micropub]]
+* [[micro.blog]] via [[Micropub]]
+* [[WordPress Micropub Plugin]]
+* ...
 
 == Silo Examples ==
 === Instagram ===
-[[Instagram]] users frequently post collage images of multiple photos, often enough that Instagram even built their own separate app, ”Layout”, to help with the creation of these collage images (which are multi-photo posts arranged into a square or rectangle).
+[[Instagram]] added support for posting multiple (up to 10) square-cropped photos and videos in a single post [https://www.instagram.com/p/BQ0mDB2gV_O/ as of 2017-02-22], and as of 2017-03-10 (at least), allows [[person-tag]]ging per photo in the multi-photo.
+
+Limitations:
+* items must be square
+* no photo editing (e.g. rotation, trapezoidal adjustments) - filters only
+* as of at least 2017-09-03 it is possible to adjust and edit the individual photos while posting
+
+Launched with limitation (but no longer a problem)
+* no person-tags
+
+==== Implementation details ====
+
+The description below may be historical only. as of 2017-03-10 (probably earlier), at least on web, the individual photo permalinks now redirect to the multi-photo permalink.
+
+''Each photo or video in an instagram multi-photo has its own shortcode hidden in the [[Instagram#Unofficial embedded JSON]]. You can use them to get permalinks for the individual photos and videos, where you can comment and like them separate from the multi-photo, both on web and in the app.''
+
+''These individual photo/video pages aren't accessible through the web or app UI otherwise, so they seem to be an unintended implementation detail on Instagram's part. However, once you've liked an individual photo/video in a multi-photo, you can get to it in the app via "Posts you've liked."''
+
+''For example, looking at the [https://www.instagram.com/p/BQ0mDB2gV_O/ announcement multi-photo], the first individual video and photo are https://www.instagram.com/p/BQ0lyx9APPC/ and https://www.instagram.com/p/BQ0ly-bgMry/ , respectively.''
+
+[[Granary]] extracts and exposes these individual permalinks. For example, click the individual large pictures in this converted microformats2 HTML: https://granary-demo.appspot.com/instagram/mikeyk/@self/@app/BQ0mDB2gV_O?format=html
+
+Here's the corresponding mf2 JSON: https://granary-demo.appspot.com/instagram/mikeyk/@self/@app/BQ0mDB2gV_O?format=json-mf2
+
+==== Earlier ====
+
+Before this feature, Instagram users frequently posted collage images of multiple photos, often enough that Instagram even built their own separate app, ”Layout”, to help with the creation of these collage images (which are multi-photo posts arranged into a square or rectangle). Example:
+* 2017-02-22: https://www.instagram.com/p/BQ0mDB2gV_O/
 
 === Twitter ===
-[[Twitter]] added support for posting multiple (up to 4) photos in a single tweet (when?)
-* ... URLs to examples of multi-photo tweets needed!
+[[Twitter]] added support for posting multiple (up to 4) photos in a single tweet (when? 2016? 2015?)
+* https://twitter.com/aaronpk/status/760953570623561728
+* ... more URLs to examples of multi-photo tweets needed!
+
+=== Swarm ===
+[[Swarm]] sort of supports multi-photo posts as a secondary aspect of their [[checkin]] posts with up to 7 photos! 
+
+See: '''[[checkin#Swarm]]''' for more details (since that's the primary post type supported by Swarm).
 
 == See Also ==
 * [[photo]]
 * [[posts]]
+* [[album]]
+* [[multi-photo vs collection]]

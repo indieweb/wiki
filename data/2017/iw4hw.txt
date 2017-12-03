@@ -1,0 +1,96 @@
+https://indieweb.org/2017/iw4hw
+
+'''<dfn>IndieWeb for Hardware</dfn>''' was a session at [[2017|IndieWeb Summit 2017]].
+
+Notes archived from: https://etherpad.indieweb.org/iw4hw<br>
+Video at: https://www.youtube.com/watch?v=6tRfftl6j6k
+----
+When: 2017-06-24 15:00
+
+== Participants ==
+* [[User:Jenson.org|Scott Jenson]]
+* [[User:Sebastian.kip.pe|Sebastian Kippe]]
+* {{dougbeal}}
+* [https://www.jjuran.org/ Josh Juran]
+* [[User:Ashersilberman.com|Asher Silberman]]
+
+== Notes ==
+
+Diagram of the physical web:
+
+[[File:BTLE_Physical_Web.jpg|600px]]
+
+* New beacon standard: EddyStone (github.com/google/eddystone)
+* Problem 1: only 18 bytes data for URLs sent by beacon (simple compression scheme so https://www. is a single byte), everyone uses url shortener
+* Problem 2: bad actors, spam, phishing, etc.
+* http://indieweb.org/vouch
+* common case - url for device or url for store
+
+URL for this project: https://google.github.io/physical-web/
+
+Key issue with the physical Web: It requires a central server
+
+Initialy for caching
+
+but quickly became a ranking/authority engine
+
+<blockquote>I created the very thing I didn't want it to be! (A centralized web discovery system)</blockquote>
+
+This is the problem in a nutshell, you can't 'just show everything' as they are bad actors out there
+
+How can you provide some level of filtering/validation of websites out there?
+
+IndieWeb tie in: This doesn't apply to just the Physical Web but to all indieweb links
+
+Historically there are three(ish) solutions: Central authority, web of trust, reviews (which are kind of central authority)
+
+There is no clear way to have a DE-centralized web of authority (but it seems to be a core value of the internet in general)
+
+This makes me think of SSL, Google tried https://www.certificate-transparency.org/ (interesting!)
+
+If we can solve this, we solve a big problem but it seems untenable 
+
+The question can be how can we solve a corner of it
+
+Josh: If you were to have something physical in the museum to broadcast an 'authority url' it would validate what you can see
+
+This puts an authority at the location (vs a central authority)
+
+Ryan: In a sense another solution would be to reinvent PageRank (but again another central authority)
+
+Discussion around two web approachs:
+
+Start with me and who I know, follow those thinks to the target URL
+
+Start with the target URL and have it say who will vouche for it and  follow those links
+
+There is an open source python script at physical Web (https://github.com/google/physical-web/tree/master/web-service) that is an google app engine instance that shows this running (in a simple cache version)
+
+Ryan: Look into VOUCHE, it is a start to validating something. The big downsize is that it will likely have very very small coverage
+
+Scott: Building the Physical Web has taught us quite a bit, instead of coming up witha perfect solution, let's build something simple (and likely to fail) and see what we learn, baby steps...
+
+----
+
+Further notes during dinner:
+* Main goal is to thwart phishers/bad actors
+* Consider an approach that makes it hard for them to be seen
+* If the scanner was to initially not show new beacons
+* But only show ones that have got some 'traction'
+* This would require the scanner to have a means to show hidden beacons
+* Valid beacons would be sought out and clicked on
+* Clearly not perfect, naive approach could easily be gamed
+* However, how might we make it much harder (1 vote/MAC address, needs votes over a few days, etc)
+* LIke any security situation, there is no guarantee, only a 'hardening' the process that is easy for good actors, hard for bad ones)
+
+* Other solution was to provide a means of using a validation server
+* Mostly of use by professional companies (vs hobbiests)
+* But if there were to be 'rel=me' links from sites that would be trusted, it could create a CA style approach for at least big actors to 'level up' quickly
+    
+Creates a 2 prong approach:
+* a more complicated CA approad for professional users to rise quickly 
+* a much slower approach for personal use that will show up as they are used properly
+* But this requires a scanner 'more' option
+* But this has an additional benefit for hobbiests (which would turn on the more option temporarily when testing)
+
+[[Category: 2017 sessions]]

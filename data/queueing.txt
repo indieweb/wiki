@@ -1,25 +1,46 @@
-http://indiewebcamp.com/queueing
+https://indieweb.org/queueing
 
 {{stub}}
 
-== Message Queues ==
-* beanstalkd: Lightweight protocol based on memcached [http://indiewebcamp.com/irc/2014-03-26/line/1395898812]
-* gearman
+'''A <dfn>queue</dfn>''' is a method used to distribute work across machines or threads by defining a FIFO queue of work to be done.
+
+== Queue Systems ==
+* [[Amazon Simple Queue Service]]
 * [[Celery]] (in the Python world)
 ** easy to use, but quite large.
 ** can use Redis or RabbitMQ as the backend
-* Redis: a general key-value store that can store various data structures, including a FIFO queue.
+* [http://kr.github.io/beanstalkd/ beanstalkd] – lightweight protocol based on memcached [http://indiewebcamp.com/irc/2014-03-26/line/1395898812]
+* [http://gearman.org/ gearman] – historically been fairly commonly used in the PHP community
+* Google App Engine [https://cloud.google.com/appengine/docs/python/taskqueue/ Task Queue]
+* [[PostgreSQL]] – supports pub-sub broadcasting through [http://www.postgresql.org/docs/current/static/sql-listen.html LISTEN]/[http://www.postgresql.org/docs/current/static/sql-notify.html NOTIFY]
+* [[RabbitMQ]]
+** Highly scalable message queue system written in Erlang
+** Implements the AMQP standard.
+** Supports broadcasting as well as 1-to-1 messaging etc.
+* [[Redis]] – a general key-value store that can store various data structures, including a FIFO queue.
 * uWSGI spooler
 ** part of uWSGI
 ** Simple file-based spool, similar in concept to mail spools
 ** Processes 1 task every n-seconds, which means there is an unnecessary lag between queueing and processing. Probably more suitable for large background tasks.
 ** lacking documentation
 
-=== IndieWeb Examples ===
+== IndieWeb Examples ==
 IndieWeb users using this approach
 * {{aaronpk}} likes beanstalk, uses it in [[p3k]]  
-* {{kylewm}} uses Redis with [http://flask.pocoo.org/snippets/73/ this Python/Flask snippet], lightly modified.
+* {{kylewm}} uses [[Redis]] with [http://flask.pocoo.org/snippets/73/ this Python/Flask snippet], lightly modified.
 ** uwsgi spooler previously, polling every 30 seconds. It was simple and solid, but I didn't like that mentions weren't sent out right away, nor incoming mentions processed right away. Also no obvious way to query queued tasks for their status.
+* {{voxpelli}} uses [[PostgreSQL]] Pubsub in [[webmention.herokuapp.com]] as described in [http://voxpelli.com/2015/01/pubsub-with-postgres-and-node-js/ this blog post].
+* {{bear}} uses [[Redis]] PubSub to deliver events and a list to implement a FIFO queue.
 
 == Alternatives ==
-* Make an entry somewhere for the task and then have a cron do it. You could also use a [http://www.sitepoint.com/web-bugs-for-job-scheduling-hack-or-solution/ web bug].
+* Make an entry somewhere for the task and then have a [[cron]] do it. You could also use a [http://www.sitepoint.com/web-bugs-for-job-scheduling-hack-or-solution/ web bug].
+
+== Queues and Brokers ==
+
+Many message queues are also message brokers as they have to translate the incoming messages into other formats or protocols to allow the clients/consumers to receive them. [[RabbitMQ]] is a very common example of a Message Broker that is often called a Queueing System. At it's core RabbitMQ implements [[AMQP]] and then has quite a few delivery and filtering methods that enable consumers to receive messages.
+
+Another example of a broker that has queue like behaviour is [[Google PubSub]]. This [https://en.wikipedia.org/wiki/Message_broker Wikipedia page on brokers] has quite a good definition of the differences.
+
+== See also ==
+
+* Celery [http://celery.readthedocs.org/en/latest/getting-started/introduction.html#what-is-a-task-queue Task Queue] definition

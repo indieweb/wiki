@@ -1,11 +1,16 @@
-http://indiewebcamp.com/Falcon
+https://indieweb.org/Falcon
 
 <span style="float:right">https://pbs.twimg.com/profile_images/651194638/falcon_200x200.png</span>
 
 <span class="p-summary">'''<dfn>[http://tantek.com/w/Falcon Falcon]</dfn>''' is a personal publishing (tweeting, blogging, realtime syndicating) web application. There is an instance of Falcon running at [http://tantek.com/ tantek.com] and serving/syndicating [[notes]], [[articles]], and occasionally other types of [[posts]].</span>
 
 Attendees that are using it on their own site:
-* [[User:Tantek|Tantek Çelik]] ([http://tantek.com tantek.com], author (Falcon), actively developing and sharing portions as open source in http://cassisproject.com)
+* [[User:Tantek|Tantek Çelik]] ([http://tantek.com tantek.com], author (Falcon), actively developing and sharing portions as open source.
+
+Open source portions:
+* http://cassisproject.com/ - general string and datetime processing
+* https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/link_rel_parser.php — arbitrary link relationships from HTTP headers and HTML documents
+* https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/get_rel_webmention.php — uses the output of link_rel_parser.php functions to return a webmention endpoint and or a pingback endpoint if any
 * ...
 
 == Disclaimer ==
@@ -17,27 +22,29 @@ If some of this helps you with designing your own indieweb implementation, great
 
 Thanks, - [[User:Tantek.com|Tantek]] 19:37, 23 March 2013 (PDT)
 
-== Post Types ==
-Falcon supports the following 5 kinds of [[posts]].
-
-Note: auto-linking and auto-embedding for all types that support them is all accomplished with the open source [[CASSIS]] <code>auto_link</code> function.
+== Features ==
+Falcon supports:
 
 === In General ===
-All post types in general support the following features:
+All posts support the following features:
 * [[permalinks]], [[permashortlinks]], [[permashortcitations]]
 * [[h-entry]] + author [[h-card]]
 * [[custom post style]] (all posts except "like" posts) - which is rendered on the post permalink page, and as a post-scoped style sheet on both the homepage stream and any archive pages that contain the post, styling only the post itself on those pages.
 ** The custom post style must have style rules with at least the ".h-entry" selector in order to take effect on that post in when it's present in any context.
 
-=== Notes ===
-'''[[notes]]''' posts are supported with:
+Note: auto-linking and auto-embedding for all types that support them is all accomplished with the open source [[CASSIS]] <code>auto_link</code> function.
+
+Falcon supports the following specific kinds of [[posts]].
+
+=== Note ===
+'''[[note]]''' posts are supported with:
 * white-space (serial space characters, line-breaks, blank lines)
 * [[auto-link]]ing of URLs, @-names to [[Twitter]]
 * [[auto-embed]]ding of JPG/PNG/GIF/MP4/MOV/OGV and [[YouTube]]/[[Vimeo]] URLs
 * [[POSSE]] to [[Twitter]] of up to 118 chars with permashortid of original post, or first 110-113 chars with ellipsing/truncating and permashortlink to original post. (assuming 6 char personal short domain, e.g. ttk.me)
 * [[webactions]]: Favorite, Retweet, Reply with Twitter fallbacks
 
-=== Articles ===
+=== Article ===
 '''[[articles]]''' as blog posts are supported with:
 * [[POSSE]] to [[Twitter]] of up to 113 chars long article name with permashortlink of full post, or first 110-113 chars with ellipsing/truncating and permashortlink to original post. (assuming 6 char personal short domain, e.g. ttk.me)
 * [[webactions]]: Post with Twitter Tweet fallback.
@@ -54,20 +61,20 @@ All post types in general support the following features:
 ** multi-reply support provides a manual work-around for replying to an indieweb URL and also replying to the POSSE copy of that indieweb URL (and thus threading with it on Twitter).
 *** This gives me the ability to (but a bit inconveniently) post a reply to an indieweb post, and also post a POSSE'd @-reply that threads properly to the POSSE'd copy of the original indieweb post I'm replying to. There's two itches below for supporting replies either to POSSE tweets or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
 
-=== Likes ===
-'''[[like]]'''s are supported, and sequential likes are collapsed for presentational purposes on the main home stream.
+=== Like ===
+'''[[like]]''' are supported, and sequential likes are collapsed for presentational purposes on the main home stream.
 * automatic [[POSSE]] to [[Twitter]] of likes of tweets, using [[Bridgy]] Publish
 
 === RSVP ===
-'''[[rsvp]]''' notes are supported. RSVPs are similar to reply notes, but for RSVPing to indieweb [[event]] posts. (since 2013-264)
-* <code>p-rsvp</code> marked up with a <code>&lt;data&gt;</code> element in its [[reply-context]] where it says e.g. "RSVP something to", where something is yes, no, or maybe. E.g. [http://tantek.com/2013/264/t1/indiewebcamp-breakfast-rsvp].
+'''[[rsvp]]''' notes are supported. RSVPs are similar to reply notes, but for RSVPing to indieweb [[event]] posts. (since 2013-264, full RSVP values support since 2017-016!)
+* <code>p-rsvp</code> marked up with a <code>&lt;data&gt;</code> element in its [[reply-context]] where it says e.g. "RSVP something to", where something is yes, no, maybe, or interested. E.g. [http://tantek.com/2013/264/t1/indiewebcamp-breakfast-rsvp 2013-264 RSVP].
 * only works for indieweb [[event]] posts. no explicit POSSE reply threading support, though [[multireply]] RSVPs are supported for combined RSVPs to an indie event and silo POSSE copy.
-* only supports RSVP yes, maybe remote, no.
-** "yes" via text starting with: "going to "
-** "maybe" via text starting with: "might remotely attend " ([http://tantek.com/2015/042/t1/homebrew-website-club since 2015-042])
-** "no" via text starting with: "not going to " ([http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people since 2015-043])
-* assumes <em>first</em> in-reply-to URL in the note is the URL of the [[event]] post being RSVPed to.
-* [[webmention]](s) sent automatically (or pingbacks if no webmention endpoint) to the indie event being responded to. ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
+* Supports all RSVP values! yes, maybe, no, interested
+** "yes" via text starting with: "going to " (since first implementation) or "[[went]] to " ([http://tantek.com/2016/336/t3/went-trails-motion-film-festival since 2016-336])
+** "maybe" via text starting with: "might go to " (since 2017-016) or "might remotely attend " ([http://tantek.com/2015/042/t1/homebrew-website-club since 2015-042])
+** "no" via text starting with: "not going to " ([http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people since 2015-043]) or "missing "
+** "interested" via text starting with: "considering today", "considering tonight", "considering going to "
+* [[webmention]](s) sent automatically (or pingbacks if no webmention endpoint) to the indie events being responded to (multi-rsvp supported). ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
 * automatic [[POSSE]] to [[Facebook]] of RSVPs to FB events, using [[Bridgy]] Publish
 
 === Comics ===
@@ -75,18 +82,46 @@ All post types in general support the following features:
 * fallback markup inside the comic image describing the comic strip scene, actors, and dialog.
 ** including markup of the plain text post name (p-name) which is otherwise reflected in the comic image.
 
-=== Photos ===
+=== Photo ===
 '''[[photo]]''' posts are similar to notes, but start with a photo image URL which is then automatically marked up with <code>u-photo</code>. Supported [http://tantek.com/2015/244/t1/did-entire-npsf-trackattack since 2015-244] (though older notes starting with images may have been upgraded to photo posts). Full bleed photo styling on home page recent posts stream since 2015-346.
 
-* automatic [[POSSE]] to [[Facebook]] and [[Twitter]] by Falcon directly using [[Bridgy]] Publish (automatic since 2015-312; was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213]).
+* automatic [[POSSE]] to [[Facebook]], [[Flickr]], and [[Twitter]] directly using [[Bridgy]] Publish (automatic since 2015-312 ([[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
 
-=== Videos ===
+=== Video ===
 '''[[video]]''' posts are similar to photo posts, but start with a video URL which is then automatically marked up with <code>u-video</code>. Supported [http://tantek.com/2015/346/t3/world-of-laughter-tears-hopes-fears since 2015-346] (though older notes starting with videos (if any) may have been upgraded to video posts).
-* 2015-360 [[poster frame]] support added[http://tantek.com/2015/360/t2/best-starwars-speak-droid]. When the video URL is followed by an image URL, that image URL is used for the <code>poster</code> attribute of the <code>&lt;video&gt;</code> tag.
+* 2015-360 [[poster frame]] support added[http://tantek.com/2015/360/t2/best-starwars-speak-droid]. When the video URL is followed by an image URL, that image URL is used for the <code>poster</code> attribute of the <code>&lt;video&gt;</code> tag, per http://tantek.com/w/Markdown#Videowithposter
 
-* No automatic POSSE support yet.
+* automatic POSSE to [[Facebook]], [[Flickr]], and [[Twitter]] directly using [[Bridgy]] Publish (automatic since [http://tantek.com/2016/055/t12/fast-walk-hike-beach-video 2016-055])
+; manually POSSEing via silo UIs before that: since [[video#Tantek|2015-12-14 to Twitter]] and [https://www.flickr.com/photos/tantek/24235088549/in/datetaken/ 2016-025 to Flickr].
 
-== POSSE Details ==
+=== Event ===
+'''[[event]]''' posts are similar to article posts, but with explicit datetime start and optional datetime end, location (venue), and host. Supported [http://tantek.com/2017/179/e1/homebrew-website-club since 2017-06-25].
+* Automatic POSSE to [[Twitter]] (from there indirectly to [[Facebook]])
+** with automatic mapping of known venue URLs to their equivalent Twitter @-name
+* Optional manual POSSE to a Facebook event
+* Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06], including [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.dev/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])
+
+
+__TOC__
+== IndieWeb Friendly ==
+Falcon supports the following IndieWeb [[friendly]] interoperability and other best practices:
+=== Standards Support ===
+Standard publishing formats:
+* [http://tantek.com/2010/302/b1/xhtml-dead-long-live-xml-valid-html5 XML-valid HTML5] (<code>text/html</code>) in [[UTF-8]]
+* [[microformats2]] publishing including:
+** [[h-card]] - homepage, and as author on all post permalink pages
+** [[h-entry]] - on all post permalinks, and [[homepage]] posts, including respective post type specific properties:
+*** [[u-in-reply-to]], [[p-rsvp]], [[u-like-of]], [[u-photo]], [[u-video]]
+** [[h-feed]] - homepage [[composite stream]], and Recent Articles box
+
+Standard protocol support:
+* [[Webmention]] — Falcon automatically sends Webmentions for all links in notes & responses.
+* [[PuSH]] 0.4 notifications of homepage updates when posts are published using [[Superfeedr]]'s https://pubsubhubbub.Superfeedr.com/ hub (since 2015-03-18)
+
+=== Auto-archive links to Internet Archive ===
+Falcon automatically pings the [[Internet Archive]] to save a copy of any links in notes & responses (see: [[Internet_Archive#Trigger_Archive_in_PHP|Trigger Archive in PHP]] for details).
+
+=== POSSE ===
 Falcon currently supports automatically [[POSSE]]ing to:
 * '''[[Twitter]]: [[notes]], [[replies]], [[RSVPs]], [[like]]s*, [[photo]]s''' - first 112-120 characters (if applicable, depending on content), white-space preserved. *likes of tweets and posts with POSSE tweet copies are POSSEd as Twitter favorites.
 ** '''[[Twitter#POSSE_Notes_to_Twitter|POSSE Notes to Twitter]]''' - complete direct implementation ([https://twitter.com/t/status/8228455558 since 2010-026]) except "note with photos".
@@ -98,8 +133,6 @@ Falcon currently supports automatically [[POSSE]]ing to:
 ** [[photo]]s are automatically POSSEd to Facebook using [[Bridgy]] Publish (since 2015-312)
 ** *[[notes]] are POSSEd to [[Facebook]] indirectly via Twitter to Facebook bridge, per same limitations as POSSEing notes to Twitter.
 ** Occasionally longer notes are manually POSSEd directly in their entirety from tantek.com to Facebook using Bridgy Publish, and then the Falcon original is manually edited to link to the Facebook POSSE copy. Falcon then automatically displays the syndication link to the Facebook POSSE copy on the Falcon post permalink.
-
-__TOC__
 
 == FAQ ==
 === Open Source ===
@@ -150,17 +183,6 @@ Falcon publishing UI currently consists of the following:
 * review POSSE tweet preview
 * click "Post"
 
-== Publishing standards ==
-Falcon's publishing support includes:
-* [http://tantek.com/2010/302/b1/xhtml-dead-long-live-xml-valid-html5 XML-valid HTML5] (<code>text/html</code>)
-* [[UTF-8]] using standard [[PHP]] header support.
-* [[microformats2]]
-** [[h-entry]] for all posts 
-** [[h-feed]] for [[homepage]] stream of posts
-** [[h-card]] for authorship
-** [[u-in-reply-to]], [[p-rsvp]], [[u-like-of]], [[u-photo]]
-* [[PuSH]] 0.4 notifications of homepage updates when posts are published using [[Superfeedr]]'s https://pubsubhubbub.Superfeedr.com/ hub (since 2015-03-18)
-
 == PHP support ==
 Falcon has some code to support various [[PHP]] configurations (and sometimes misconfigurations, such as missing local session file path).
 
@@ -180,225 +202,128 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
-=== mobile design ===
-Update default CSS to look awesome on mobile / small displays, including:
-* [[homepage]]
-** better dividers between posts in-stream
-*** expand post footer beyond date published, e.g. with webactions
-*** indent the dividers between posts (wide layout only?)
-*** mobile: use vertical white-space (2 whole linebreaks) between posts
-and permalinks of:
-* [[note]] - better than Twitter
-* [[note]]+photo - better than IG
-** show photo full bleed to the edges of the screen
-*** Examples to consider: [[Instagram]], http://mobile.nytimes.com/* [[article]] - better than Medium
-* [[like]] - better than Twitter
-* [[like]] of a photo - better than IG
-* [[reply]] - better than Twitter
-* [[rsvp]] - better than FB
+=== Display RSVPs summary ===
+Display summary of number of people going and interested like:
+* "3 Going · 3 Interested"
+just above the facepile of RSVPs
 
-=== improve photo posts ===
-I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook.[http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter!
+Use Webmention.io API to retrieve # of people going, # of people interested, and turn it into HTML. (implemented per [https://github.com/aaronpk/webmention.io/issues/82 gh wmio #82])
 
-There are several key improvements (beyond the default mobile presentation - see above) that I want (and some that I explicitly postponed at the time).
+JSON API example:
+* https://webmention.io/api/count?target=http://tantek.com/2017/183/e1/sunday-yoga-presidio provides a result like:
+<pre>
+{
+  "count": 47,
+  "type": {
+    "invite": 26,
+    "like": 11,
+    "mention": 1,
+    "reply": 1,
+    "repost": 1,
+    "rsvp-maybe": 1,
+    "rsvp-yes": 6
+  }
+}
+</pre>
 
-==== person tags ====
-I really want to
-* tag people in the photos on my site using [[person-tag]]s 
-** to be able to do at least step 1 of [[SWAT0#A_must_support]] (requires more UI work, e.g. [[person-tag#minimal_separate_field_UI|person-tag minimal separate field UI]])
-*** in particular [[person-tag#With_other_profiles|with other profiles]] - to provide a real world example of that, to help with:
-* have Bridgy Publish propagate those person-tags to the POSSE copies on Twitter
-** rather than waiting for https://github.com/snarfed/bridgy/issues/547
-** prototype it via Bridgy-Publish-Twitter-only in-content person-tags so they look good on Twitter!
-*** per [[person-tag#tweet_text]]
-*** use that as input for solving [https://github.com/snarfed/bridgy/issues/547 Bridgy #547]
+* Need PHP/CASSIS to parse out the rsvp-maybe and rsvp-yes fields from that JSON into $rsvp_yes and $rsvp_maybe.
+* CASSIS to generate summary something like
+<pre>
+$rsvp_summary = strcat($rsvp_yes>0 ? strcat($rsvp_yes, ' Going') : '', 
+        $rsvp_yes>0 && $rsvp_maybe>0 ? ' · ' : '',
+        $rsvp_maybe>0 ? strcat($rsvp_maybe, ' Interested') : '');
+</pre>
 
-==== photo web action fallbacks ====
-(reprioritize "improve photo posts" at this point)
-Consider providing Instagram or Facebook web action fallbacks (options?) for photo posts, e.g. to
-* like a photo or 
-* person-tag it? e.g. [[tag-of]] response (postpone)
+=== Display Likes Reposts Facepiles ===
+Process my queue of [[webmentions]] at webmention.io and implement some sort of [[likes]] &amp; [[reposts]] presentation like [[facepile]]s to show them on my posts.
 
-==== auto POSSE photos to Flickr ====
-Why POSSE to Flickr?
+==== Display likes facepile on events ====
+As a small incremental step, display just a likes facepile, just on event posts.
 
-Apparently my Flickr photos get [https://www.flickr.com/photos/tantek/tags/press some notable re-use] due to better discoverability of Flickr photos, and CC licensing. Thus to encourage more notable re-use, I should POSSE my photos to Flickr.
+This will be a good way to experiment with presentational issues without impacting all posts.
 
-Notes:
+Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
 
-Manual Bridgy Publish POSSE attempts (move these details to [[Flickr#Tantek]])
-* photo: http://tantek.com/2016/001/t1/gregorian-january-lego-calendar
-** https://www.flickr.com/photos/tantek/23803704613/
-* video: http://tantek.com/2016/001/t3/stay-tuned-building-your-future-indieweb (video)
-** https://www.flickr.com/photos/tantek/24235088549/
-** need to fix:
-*** "a video" text at start of caption (likely from video tag fallback) - [https://github.com/snarfed/bridgy/issues/612 Bridgy #612]
-*** # hashtags in caption did not make it to Flickr tags automatically (added manually afterwards)
+==== Display reposts facepile on events ====
+Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
 
-Improvements: (make this into a separate lower priority itch / working-on)
+This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
 
-Either / both of these would be nice improvements over the current auto_tag hack in Falcon:
-* add international-aware auto-category markup to CASSIS auto_link, similar to auto @-name linking
-* [https://github.com/snarfed/bridgy/issues/604 Bridgy Publish to Flickr: detect hashtags and set Flickr tags #604]
+==== Display likes reposts all posts ====
+These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
+* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
+* Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]
 
-Future alternative: (make this into a separate lower priority itch / working-on)
+This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
+* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
 
-I could also try adding native Flickr POSSE support to Falcon using {{adactio}}'s code:
-* https://gist.github.com/adactio/a9c7e419b2913f318bd1
+Scaling display: How to handle a facepile with 100s of items?
 
-===== flip Instagram profile to private =====
-[[Instagram]] is becoming increasingly unfriendly (less open) with their API changes ([https://github.com/snarfed/granary/issues/65 details]).
+E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
+* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
+** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
+** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
+<pre>
+{
+  "count": 312,
+  "type": {
+    "like": 110,
+    "mention": 33,
+    "post": 2,
+    "reply": 36,
+    "repost": 128
+  }
+}
+</pre>
 
-Thus I want to flip my Instagram profile to private in response.
+Real world example:
+* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
 
-Why?
+----
+'''Homepage mentions'''
 
-To direct people to view my photos from my site/feed instead.
+Showing [[homepage]] mentions is an entirely different scale of design problem:
+* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
+<pre>
+{
+  "count": 101737,
+  "type": {
+    "like": 30,
+    "mention": 99995,
+    "post": 5,
+    "reply": 1660,
+    "repost": 4
+  }
+}
+</pre>
 
-I am tying that to getting automated POSSE to Flickr working, since Flickr has no such API shenanigans going on, and I plan to make a point of it.
+=== Display Received Webmentions ===
+Process my queue of [[webmentions]] at webmention.io and implement some sort of [[comments-presentation]] to show them on my posts.
+# simple date-time-ordered (oldest first) as comments below those facepiles
 
-It is also a key step moving toward a world where I primarily use Instagram as a client for posting photos to my site, rather than a place for others to see my photos.
+These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
+* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
+* Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]
 
-=== summary more text UI ===
-Implement [[summary#More_text_UI]] to:
-* enable excerpting my content for POSSEing
-* in particular when POSSEing to FB using [[Bridgy]]
-** so that I can switch to Bridgy for all my FB POSSEing and turn-off Twitter->FB auto-crossposting
-*** so that I don’t have to manually delete the Twitter->FB auto-crossposts for photo posts
-*** and Twitter->FB can be annoying[http://www.qwantz.com/index.php?comic=2906]: <blockquote>“Here's a friend crossposting from Twitter, so all these @ tags don't work.”</blockquote>
-** but often only want to post some of my notes text (not all of it) to FB
+This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
+* nonsense @-replies to POSSE tweet permalinks (happens often enough to be a problem, e.g. [https://twitter.com/t/status/887145302246993920 2017-07-17]
 
-Thoughts:
-* support "More..." text in its own paragraph in the content as the "UI" to designate a summary boundary
-* add a new [[CASSIS]] function or option to existing auto_link function to auto_summary based on that "UI"
-* update calls to auto_link in Falcon to use that new function/option to provide p-summary markup in permailnks (e.g. so Bridgy Publish can see them), and maybe on home page so [[reader]]s can see them.
+Some other ways to view webmentions received by tantek.com and permalinks:
+* https://waterpigs.co.uk/services/webmention-io-comments/?url=http://tantek.com/
+* https://waterpigs.co.uk/services/webmention-io-comments/?url=http://tantek.com/2014/084/b1/urls-people-focused-mobile-communication
+* https://waterpigs.co.uk/services/webmention-io-comments/?url=http://tantek.com/2017/253/b1/my-first-marathon
 
-=== repost support ===
-==== reposts of Instagram posts ====
-[[Instagram]] itself has no native "repost" feature. Thought there are some 3rd party apps that you can use to repost something on Instagram.
-
-I want to be able to repost others’ photos from Instagram to my own site, and then:
-* POSSE that photo to Twitter, with proper attribution to original author
-** requires Instagram -> Twitter identity correlation
-** document existing [[repost#Silo_Examples]] on Instagram using 3rd party tool, what graphical / textual conventions they use
-* POSSE that photo to Facebook, as photo post but with proper attribution to original author / permalink
-** figure out how to best use Bridgy Publish to post a photo post with custom text for a repost
-
-==== reposts of indieweb posts ====
-Implement [[reposts]] of indieweb posts, and POSSE syndicated copy:
-* ''Why?'' So I can repost native indieweb posts, and if they have a rel-syndication link to tweet, then as part of POSSEing my post, the tweet of the original can be retweeted!
-
-==== reposts of tweets ====
-Implement [[reposts]] of tweets:
-* ''Why?'' So I can retweet tweets from my own site (rather than directly on Twitter), keeping a copy of the retweet on my own site, while still POSSEing the retweet on Twitter, so the original tweeter sees that I've reposted/retweeted it.
-
-<strong id="simple_repost_of_tweets">simple repost of tweets</strong>:
-
-Recently (2014-06-04..05) I was at a conference where I wanted to retweet a quote someone else captured from one of the speakers rather than make a similar post myself.
-
-However this time I reached the point of not wanting to just retweet on Twitter any more - I wanted to retweet it from my site, thus keeping a copy on my site, while still [[POSSE]]ing a native retweet on Twitter.
-
-In short this means implementing:
-* '''Detecting storage''' of a <code>u-repost-of</code> property
-** treat first instance as canonical / primary, which can be loaded (following redirects) to get the original post
-** additional u-repost-of properties are assumed(required) to be the repost chain all the way to the original post.
-** keeping the retweet chain is useful in case one of the intermediate accounts is deleted
-* '''Posting UI''' - alter Posting UI accordingly for reposts of tweets
-** No character count
-** No ellipsing
-** '''Retweet''' rather than '''Tweet''' button
-* '''POSSE''' call [https://dev.twitter.com/docs/api/1/post/statuses/retweet/%3Aid Twitter retweet API] rather than update API
-* '''Save POSSE URL''' - save new retweet tweet id as rel=syndication into storage, so web action buttons work properly
-* '''Presentation''' for a repost
-** See [[2014/reposts#Repost_presentation]] for details of what and how to present a repost including:
-** icon of original poster
-** original tweet posting time.
-** some sort of retweet icon to indicate that it was retweeted by me 
-** time when retweeted (perhaps near retweet icon and an icon of myself)
-
-=== improve replies details ===
-==== show icon reply-context in-stream ====
-Prefix reply posts in a stream ([[homepage]] and [[archive]] lists) with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
-
-Why:
-* So [[reader]]s that consume only the [[h-feed]] of my homepage will be able to detect and optionally retrieve/show/disclose [[reply-context]]s for my [[reply]] posts.
-* Also a small visual cue to more clearly indicate replies (independent of starting with @-name), in a [[composite stream]], as distinct from [[note]]s and other types of [[posts]]
-** Current distinction is a bit subtle - and requires that I start replies with "@-name" references which is suboptimal - too Twitter-centric a design.
-
-Why not more reply-context?
-*Bigger / more extensive reply-contexts inline in a stream (especially composite stream) would add too much clutter/noise vs. value.
-
-Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
-* http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
-
-==== improve reply-context support ====
-(Reprioritize improve replies details section at this point)
-
-Improve reply-context support in reply posts (some of this is easier than the other improve replies features below)
-* ''Why?'' Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
-** Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
-* Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup). Necessary improvements:
-** Show @-username in reply contexts for replies to Tweets
-** Show [[reply-context#icon|icon in reply contexts]] for replies to tweets and indieweb posts
-*** Show icons for replies to indieweb posts using a [[nicknames-cache]] and their Twitter icon
-**** distinguish presentation of a [[multi-reply]] to the same post+POSSE copy, vs multi-reply to different people/posts.
-** vvv Rest of this his harder than other improve replies features, and doing reposts, so reprioritize the remaining "improve replies details" task when I get to this point. vvv
-** Store and show [[reply-context#published|dt-published]] of original post
-** Store and show [[reply-context#author_name|full name of author]] of original post
-*** Start with a [[nicknames-cache]] implementation
-*** Improve with implementing [[authorship]] algorithm
-** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
-
-==== post reply to any URL and auto POSSE ====
-Do '''[[rel-syndication]] discovery of POSSE tweets''' in posting form / UI to support [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to Twitter]]
-* Per:
-** [[rel-syndication#POSSE_threading|use-case description]]
-** [[rel-syndication#Discovery|discovery algorithm]]
-* Using:
-** [[php-mf2]] statically with
-*** <code>[https://github.com/indieweb/php-mf2#parsing-rel-and-relalternate-values ->parseRelsAndAlternates()]</code>
-* So I can:
-** enter just the URL of an original indieweb post I'm replying to into my posting storage (or UI),
-** have Falcon's posting UI automatically discover the link to the tweet copy of the post 
-** add an in-reply-to link from my post to the tweet I'm replying to
-** have my reply POSSE copy thread with the POSSE tweet of the original.
-* ''Why?''
-** automatically thread the POSSE copy of my reply with the POSSE copy of the original indieweb post that I was replying to.
-** remove step of me having to look for the "also on twitter" link on an indieweb post and explicitly copy/paste it into my storage/UI.
-** Provide better user experience for those reading my posts on Twitter by providing them the threaded context right there in their reading experience.
-
-==== post reply to any tweet and auto indie-post reply ====
-Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http://waterpigs.co.uk/services/original-post original post endpoint] from server)
-* So I can:
-** enter just the URL of a tweet I'm replying to into my posting storage (or UI),
-** have Falcon's posting UI automatically discover the link to the original post (that the tweet is a copy of)
-** add an in-reply-to link from my post to the original post I'm replying to, before the in-reply-to of the tweet
-** while still having my reply POSSE copy thread with the POSSE tweet of the original.
-* ''Why?'' 
-** automatically link from my posts to more indieweb posts instead of their Tweet POSSE copies - prefer linking to indieweb original content and URLs
-** remove stress of having to check a tweet manually to see if it has an indieweb original version - less thinking about having to find an original permalink myself manually.
-
-==== show webmention results ====
-* <span id="show-webmentions">'''show webmention results'''</span> - Perhaps show a list of outbound links with send result for each (no webmention/pingback endpoint found, or green checkmark webmention/pingback sent, or red webmention/pingback rejected, distinguish webmention/pingback for each)
-** ''Why?''
-*** UIs that provide feedback on actions instill more confidence that the actions took place (similar to providing the tweet permalink of a successful POSSE to Twitter).
-*** Debug/diagnose possible problems with other indieweb sites (may expand later into part of the whitelist, webmention+howyouknowme protocol/UI)
-*** Convenient UI to specifically check (click-on) links with successful webmentions to see if they parsed my reply into their comments section correctly or did something else with it.
-*** Might help discover sites with newly added webmention/pingback receiving support.
-*** Could help demonstrate/explain how webmentions work
-
-=== POSSE responses to Tumblr posts ===
-I've setup http://tantek-com.tumblr.com/ purely as a [[POSSE]] bridge for propagating my [[like]], [[repost]] (TBI), and [[reply]] posts to Tumblr posts, directly [[Tumblr#POSSE_to_Tumblr|into Tumblr]] so that the [[comments]] section on the Tumblr post says stuff like:
-* tantek.com likes this
-* tantek.com reblogged this from someoneTumblrUsername
-
-Ideally I'd like to automatically do so, e.g. [https://github.com/snarfed/bridgy/issues/272 via Bridgy Publish] (open github issue).
-
-Similar work: [[silo.pub]]
-* Might be able to re-use some of the open source: https://github.com/kylewm/feverdream to automatically post responses to Tumblr posts to Tumblr.
-** As of 2015-07-30: "can't actually publish native likes/reposts/etc. through silo.pub right now... even if you u-like-of a tumblr post, it still publishes a note with mf2 markup in it"[http://indiewebcamp.com/irc/2015-07-30/line/1438304553193]
-
-But until I get one of those approaches working automatically, I'll have to manually POSSE my responses to Tumblr posts into Tumblr.
+=== Payment Links ===
+Additional variants:
+* tantek.com/donate
+** Use-case: a dedicated donation page, perhaps even specific to donating for "suggested donation" yoga classes.
+* [[payment#Payment_page_with_amount|Payment page with amount]].
+** /pay/nn
+** Use-case: yoga teaching suggested donation $10
+** Use-case: messaging a friend a payment link for a specific amount to pay back
+* Payment page with amount and what for - if possible - to prefill URLs to payment services with amount and what
+** /pay/nn/what or /pay/nn/for/what or /pay/nn/for?=what
+** Use-case: similar to just amount e.g. /pay/10/for/yoga, with less typing / entering into the payment app
 
 === one-off person-tag response to photo ===
 Work on a sample [[person-tag]] reply post to 
@@ -443,6 +368,393 @@ Previous thoughts:
 ** (what's the name for the the article?)
 ** should instead be able to do with a note/reply, auto-converted
 
+=== pinned posts ===
+I want to implement [[pinned]] posts for the use-case of keeping a donation encouragement post at the top of my stream on my [[homepage]].
+
+See: [[pin#Brainstorming]] for some of my current thoughts.
+
+Storage:
+* global? a simple one pinned post on a homescreen could be stored as a global URL to the post permalink of the pinned post
+* per post property: better would be a per post "pinned" property which could take multiple values, either 
+** string of a tag name to pin on top of that tag page
+** perhaps "/" meaning homepage stream pin
+** or "/path/" arbitrary paths to pin the post (could be useful for pinning a post on a specific [[archive]] page etc.)
+
+POSSEing pins:
+* Ideally when you pin a post on your homepage, your server software should automatically pin any POSSE copies of that post on their respective silos, e.g. FB or Twitter
+* Similarly with unpinning
+
+=== event posts ===
+Improve support for publishing [[event]] posts (with presentation goal similar to [[event#Before_2014-02-07]]), essentially:
+* quick fixes
+** minimal calendar like design bits to better visually communicate "eventness"
+** (and move appropriate items below into sections above into post types supported)
+* p-name over a u-featured photo as background image if any
+
+Need to:
+* re-prioritize remaining what is not yet done
+
+Remaining:
+* features on permalink pages for events:
+** "Got an indie RSVP? Enter the URL here: ______" form that submits to [[wmio]]
+*** check [[event#IndieWeb_Examples]] for other indie event permalinks RSVP submission UI
+** static map of location, e.g. 640x160: https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15
+*** perhaps insert static img using JS on page from the <code>p-location</code> [[h-geo]] or [[h-card]]/[[h-adr]] of the event. To avoid having search spiders crawl the map embeds etc. Better for them to just directly use any geo-related microformats in the event.
+*** perhaps change color according to "how soon til event" color clues (e.g. [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-green-cutout&basemap=gray&width=640&height=160&zoom=15 green] before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-yellow-cutout&basemap=gray&width=640&height=160&zoom=15 yellow] day of, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15 orange] hours before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-red-cutout&basemap=gray&width=640&height=160&zoom=15 red] during, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-blue-cutout&basemap=gray&width=640&height=160&zoom=15 blue] when it's over). See [https://github.com/esripdx/Static-Maps-API-PHP Static-Maps-API-PHP documentation] for other options. 
+** possibly linked to equivalent Google map (to get directions)
+*** decided not to use [http://nominatim.openstreetmap.org/search?street=2+harrison+st&city=san+francisco&state=ca Nominatim equivalent], though that's another alternative
+** p-organizer - show first one
+*** optional: display more than one
+** event description
+** who is going/maybe/invited (h-cards)
+** event activity and responses (event creation, comments, likes) 
+*** receive webmentions for this (will likely keep using webmention.io to queue them up)
+*** manual acceptance / copy-pasting of RSVPs onto the event
+*** (semi-)automatic acceptance of RSVPs
+* home page: have them automatically appear as part of my stream/home page at the event start time 
+* upcoming box: have the next 3 upcoming [[event]]+[[RSVP]](yes|maybe) posts automatically appear on the "next 3 events" box on my home page
+
+==== process and show webmentions ====
+As part of implementing "event activity (event creation, comments, RSVPs)", Falcon will have to process all webmentions received, parse/store them (with appropriate caching), and make them available for posts to display (as [[likes]], [[reposts]], [[comments]], and [[RSVPs]]).
+
+Consider also:
+* '''[https://gist.github.com/otherjoel/9301d985622f0d3d1a09 webmention to email]'''[ (both as notification system, though XMPP would be preferred, and as a backup for webmentions - could format the emails similar to how [[Facebook]] formats its notification emails)
+
+==== POSSE events ====
+Events are a key post type to POSSE, to both reach friends not yet on the indieweb, and save myself time with copying event information to other locations. Four specific (semi-disjoint) use-cases:
+
+Always POSSE semi-public events to:
+* [[Twitter]] (event microsyntax shorthand) - serves as replacement for RSVP and its POSSE to Twitter
+Specific use-cases:
+* personal / social events (public gatherings, races)
+** POSSE to [[Facebook]] (if they don't already have a page)
+* community events (IndieWebCamp, Homebrew Website Club)
+** POSSE to IndieWeb Wiki [[Events]] page
+** POSSE to [[Facebook]]
+** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
+** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
+** POSSE IndieWebCamps in particular to [[Lanyrd]]
+* work standards meetings (W3C f2f meetings)
+** POSSE to [https://www.w3.org/wiki/ W3C Wiki] - custom per WG (if event doesn't already have a page)
+** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
+** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
+** POSSE W3C TPACs in particular to [[Lanyrd]]
+** POSSE W3C Social Web WG meetings to IndieWeb Wiki [[Events]] page
+* work talks at conferences
+** POSSE to [[Facebook]] (especially if they don't have their own)
+** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
+** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
+** POSSE to [[Lanyrd]] (if event doesn't already have a page)
+** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
+
+=== improve rsvp reply notes ===
+Improve [[rsvp]] reply notes:
+* implement p-rsvp options of "no", "maybe", and "tracking" (or "interested")
+* use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
+
+=== improve replies details ===
+* consider using [[Xray]] at post publish time (falconpost UI) to 
+** synchronously get reply-context information statically 
+** display richer reply-context in falconpost UI
+** save that reply-context info inside post storage alongside links to POSSE copies (Twitter, etc.)
+* re-evaluate below in the context of what XRay is able to 
+
+==== show icon reply-context in-stream ====
+Prefix reply posts in a stream ([[homepage]] and [[archive]] lists) with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
+
+Why:
+* So [[reader]]s that consume only the [[h-feed]] of my homepage will be able to detect and optionally retrieve/show/disclose [[reply-context]]s for my [[reply]] posts.
+* Also a small visual cue to more clearly indicate replies (independent of starting with @-name), in a [[composite stream]], as distinct from [[note]]s and other types of [[posts]]
+** Current distinction is a bit subtle - and requires that I start replies with "@-name" references which is suboptimal - too Twitter-centric a design.
+
+Why not more reply-context?
+*Bigger / more extensive reply-contexts inline in a stream (especially composite stream) would add too much clutter/noise vs. value.
+
+Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
+* http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
+
+==== improve reply-context support ====
+(Reprioritize improve replies details section at this point)
+
+Improve reply-context support in reply posts (some of this is easier than the other improve replies features below)
+* ''Why?'' Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
+** Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
+* Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup). Necessary improvements:
+** Show @-username in reply contexts for replies to Tweets
+** Show [[reply-context#icon|icon in reply contexts]] for replies to tweets and indieweb posts
+*** Show icons for replies to indieweb posts using a [[nicknames-cache]] and their Twitter icon
+**** distinguish presentation of a [[multi-reply]] to the same post+POSSE copy, vs multi-reply to different people/posts.
+** vvv Rest of this his harder than other improve replies features, and doing reposts, so reprioritize the remaining "improve replies details" task when I get to this point. vvv
+** Store and show [[reply-context#published|dt-published]] of original post
+** Store and show [[reply-context#author_name|full name of author]] of original post
+*** Start with a [[nicknames-cache]] implementation
+*** Improve with implementing [[authorship]] algorithm
+** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
+
+==== post reply to any URL and auto POSSE ====
+Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to support [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to Twitter]]
+* Per:
+** [[u-syndication#POSSE_threading|use-case description]]
+** [[u-syndication#Discovery|discovery algorithm]]
+* Using:
+** [[php-mf2]] statically with
+*** <code>[https://github.com/indieweb/php-mf2#parsing-rel-and-relalternate-values ->parseRelsAndAlternates()]</code>
+* So I can:
+** enter just the URL of an original indieweb post I'm replying to into my posting storage (or UI),
+** have Falcon's posting UI automatically discover the link to the tweet copy of the post 
+** add an in-reply-to link from my post to the tweet I'm replying to
+** have my reply POSSE copy thread with the POSSE tweet of the original.
+* ''Why?''
+** automatically thread the POSSE copy of my reply with the POSSE copy of the original indieweb post that I was replying to.
+** remove step of me having to look for the "also on twitter" link on an indieweb post and explicitly copy/paste it into my storage/UI.
+** Provide better user experience for those reading my posts on Twitter by providing them the threaded context right there in their reading experience.
+
+==== post reply to any tweet and auto indie-post reply ====
+Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http://waterpigs.co.uk/services/original-post original post endpoint] from server)
+* So I can:
+** enter just the URL of a tweet I'm replying to into my posting storage (or UI),
+** have Falcon's posting UI automatically discover the link to the original post (that the tweet is a copy of)
+** add an in-reply-to link from my post to the original post I'm replying to, before the in-reply-to of the tweet
+** while still having my reply POSSE copy thread with the POSSE tweet of the original.
+* ''Why?'' 
+** automatically link from my posts to more indieweb posts instead of their Tweet POSSE copies - prefer linking to indieweb original content and URLs
+** remove stress of having to check a tweet manually to see if it has an indieweb original version - less thinking about having to find an original permalink myself manually.
+
+==== show webmention results ====
+* <span id="show-webmentions">'''show webmention results'''</span> - Perhaps show a list of outbound links with send result for each (no webmention/pingback endpoint found, or green checkmark webmention/pingback sent, or red webmention/pingback rejected, distinguish webmention/pingback for each)
+** ''Why?''
+*** UIs that provide feedback on actions instill more confidence that the actions took place (similar to providing the tweet permalink of a successful POSSE to Twitter).
+*** Debug/diagnose possible problems with other indieweb sites (may expand later into part of the whitelist, webmention+howyouknowme protocol/UI)
+*** Convenient UI to specifically check (click-on) links with successful webmentions to see if they parsed my reply into their comments section correctly or did something else with it.
+*** Might help discover sites with newly added webmention/pingback receiving support.
+*** Could help demonstrate/explain how webmentions work
+
+=== RSVP reply-context ===
+Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
+
+Goals (in order of design need / ease of implementation)
+# display a nice mini-event reply-context (needs design)
+# use whatever information can be inferred from the prose of the RSVP post
+# parse event permalink for event information as [[h-event]] etc.
+
+Goals, show one or more of these, 
+* '''name''' of the event (perhaps inferred from (smart)quoted or titlecapped text following RSVP recognition prose (e.g. "going to ...")
+* '''date(s)''' of the event
+** default single day (not multiple)
+** default same day as RSVP post
+*** exception: "went to" assume day before RSVP post
+*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVPs)
+* '''start time''' and '''end time'''
+** default no specific time(s)
+** first n:nn or nn:nn text indicates start time
+** second n:nn or nn:nn text indicates start end time 
+* '''location'''
+** default no specific location
+** first @-reference possibly? indicates Twitter account of venue
+*** look it up in [[nicknames-cache]]?
+*** or just hardcode an array of common @-venues for now
+** if " at " in text, then use subsequent titlecapped text as location string
+** '''city'''
+*** imply from @-venue
+*** if titlecapped text, split on commas, work backwards from end
+**** note&drop country if any, note&drop state name/abbr if any, next chunk is city name
+**** use abbr title="city, state, country (if any)" and city
+
+=== Upcoming Events Based on RSVPs ===
+Find next three current/upcoming events by looking backwards through storage for RSVPs (max 3 bims? no RSVPs more than 6 months in advance AFAIK).
+* like most recent three articles box, except need to check RSVP for end-date if there is one, or if not then start-date, is today or later
+
+Use information inferred to create RSVP reply-contexts to generates summary events for "Upcoming Events" box.
+
+=== send webmentions for other links ===
+Send [[webmentions]] for other posted links (beyond links I'm [[in-reply-to|replying to]], e.g. mentions, likes, etc.)
+* ''Why?''
+** Key building block for indie likes, reposts, quotations and other response post types
+* ''Why also?''
+** To comment on IndieNews posts (assuming I have [[rel-in-reply-to]] links to IndieNews URLs implemented) as a proof of concept of an indieweb-friendly comment aggregator/threader.
+* ''Why?'' 
+** Enable syndicating posts to [[IndieNews]] (assuming I have [[u-syndication]] links to IndieNews implemented - perhaps as post option in my UI). Help demonstrate IndieNews as a proof of concept of an indieweb-friendly link aggregator.
+
+=== improve photo posts ===
+I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook.[http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter!
+
+There are several key improvements (beyond the default mobile presentation - see above) that I want (and some that I explicitly postponed at the time).
+
+==== document how and why photos ====
+Document on this page, the specifics '''how to do photo posting''' (current required user flow)
+
+New photo post process (as of 2017-088)
+
+# Any time: take photo(s) when the moment calls for it
+# Right after: quick checkin to Swarm (sticker only, no description/pix) to the venue where I took the photo(s) to record a spacetime coordinate
+# When bored: edit/curate photos locally on device
+# Later at fast wifi: upload (edited) photo(s) to respective Swarm checkins
+# Later on laptop: Create photo post (or multi-photo of same venue photos) using Swarm width960 jpg for display, link to full "original" 1920x1440 resolution
+#* Automatically POSSE to Facebook, Flickr, Twitter
+# Optionally manually POSSE to IG:
+#* Open Twitter app, go profile
+#* Tap photo POSSE copy
+#* Select all text, copy
+#* Open Instagram app, create photo post with local photo, paste description incl permashortlink copied from the POSSE tweet.
+#* On laptop: open Instagram profile, click on latest photo, copy URL, add "u-syndication" link to it on my original photo post, scp update the photo post
+
+'''Why post photos?''' Document the motivating use-cases for posting photos, publicly, privately, realtime-ish, after the fact, etc.
+
+Document some specific why material about the current design, and ongoing motivations for photo posting design:
+* Three motivating use-cases (the first two motivated me, third was an afterthought)
+*# Reduce annoyance/frustrations with the [[Instagram]] iOS app crashing repeatedly (since/on 2017-085)
+*#* why switched from manual IG PESOS to Swarm PESOS: I started to explore other mobile photo posting UIs, and discovered that [[Swarm]] posted photos have much higher resolution (original?) as compared to [[Instagram]].
+*# publishing photos with resolution high enough for laptop backgrounds / screensavers
+*# POSSEing of higher resolution photos (than the reduced resolution JPGs hosted by Instagram)
+*# wanting to publish more photos (on my site, POSSE Flickr etc) than on IG
+* low-latency / in-person interruption to photograph moments, capture location & time
+* no pressure to "insta"-post
+* option to provide high-res (1920x1440) pictures for desktop/screensaver use
+* minimize steps
+
+==== cluster photos ====
+Sequential photo posts that are related (typical) should be clustered.
+
+Wrote up some thoughts here on:
+* [[photo_brainstorming#Clustering|photo brainstorming: clustering]]
+
+==== person tags ====
+I really want to
+* tag people in the photos on my site using [[person-tag]]s 
+** to be able to do at least step 1 of [[SWAT0#A_must_support]] (requires more UI work, e.g. [[person-tag#minimal_separate_field_UI|person-tag minimal separate field UI]])
+*** in particular [[person-tag#With_other_profiles|with other profiles]] - to provide a real world example of that, to help with:
+* have Bridgy Publish propagate those person-tags to the POSSE copies on Twitter
+** rather than waiting for https://github.com/snarfed/bridgy/issues/547
+** prototype it via Bridgy-Publish-Twitter-only in-content person-tags so they look good on Twitter!
+*** per [[person-tag#tweet_text]]
+*** use that as input for solving [https://github.com/snarfed/bridgy/issues/547 Bridgy #547]
+
+I also really want to:
+* tag lots of people in a photo quickly, e.g. [http://tantek.com/2016/138/t1/bay-to-breakers-nov-project-rainbow this photo has ~40-50 people]
+** typing in all their names, URLs, etc., even copy/pasting them from a person-tags text file is too much work.
+** iterate on building [[person-tag#minimal_separate_field_UI]]
+** more UI work, e.g. [[person-tag#auto-suggest_separate_field_UI|person-tag auto-suggest separate field UI]].
+
+==== photo web action fallbacks ====
+(reprioritize "improve photo posts" at this point)
+Consider providing Instagram/Facebook/Flickr/Twitter web action fallbacks (options?) for photo posts, e.g. to
+* like a photo or 
+* person-tag it? e.g. [[tag-of]] response (postpone)
+
+=== Select Text Fragmention UI ===
+Add JS that enhances text selection by providing a fragmention link to copy to reference that specific selected text.
+* Script from {{kartikprabhu}}: https://github.com/kartikprabhu/fragmentioner
+
+=== Update Delete UI webmentions ===
+Webmention.rocks has helped motivate me to get a minimal UI working for updates and deletes! In particular in my Falcon posting UI:
+* Deletes
+** Detect when storage has a (new) delete of a post (compared to what was last posted)
+** Prompt user to "Confirm Delete"
+** Send Webmentions to links in last version of post before deletion
+** Update stored version of post to tombstone
+** Figure out deleting POSSE copies
+*** call Twitter API to delete POSSE tweet
+*** request Bridgy support deleting POSSE copies of FB, Flickr, Twitter etc.
+** Verify webmention.rocks Delete tests
+* Updates
+** Detect when storage has an update to a post (compared to what was last posted)
+** Prompt user to "Update Post"
+** Send Webmentions to links in previous version of post and new version of post
+** Update stored version of post
+** Figure out updating POSSE copies
+*** If update is within a minute(?) and text-only: delete previous POSSE tweet and rePOSSE updated post
+*** Updated photo posts: Bridgy won't rePOSSE same permalink
+*** FB: no update API / Bridgy support :/
+*** Flickr: update API (postpone) / no Bridgy support :/
+** Verify webmention.rocks Update tests
+
+=== mobile design ===
+Update default CSS to look awesome on mobile / small displays, including:
+* [[homepage]]
+** better dividers between posts in-stream
+*** expand post footer beyond date published, e.g. with webactions
+*** indent the dividers between posts (wide layout only?)
+*** mobile: use vertical white-space (2 whole linebreaks) between posts
+and permalinks of:
+* [[note]] - better than Twitter
+* [[note]]+photo - better than IG
+** show photo full bleed to the edges of the screen
+*** Examples to consider: [[Instagram]], http://mobile.nytimes.com/* [[article]] - better than Medium
+* [[like]] - better than Twitter
+* [[like]] of a photo - better than IG
+* [[reply]] - better than Twitter
+* [[rsvp]] - better than FB
+
+=== summary more text UI ===
+Implement [[summary#More_text_UI]] to:
+* Enable excerpting my content for POSSEing
+* in particular when POSSEing to FB using [[Bridgy]]
+** Switch to Bridgy for all my FB POSSEing and turn-off Twitter->FB auto-crossposting for these reasons:
+*** 1. Stop having to manually delete the Twitter->FB auto-crossposts for photo posts
+*** 2. Twitter->FB of notes can be annoying[http://www.qwantz.com/index.php?comic=2906] to others: <blockquote>“Here's a friend crossposting from Twitter, so all these @ tags don't work.”</blockquote>
+** Often only want to post some of my notes text (more than tweet POSSE but not entirety of note text) to FB
+
+Thoughts:
+* support "More..." text in its own paragraph in the content as the "UI" to designate a summary boundary
+* add a new [[CASSIS]] function or option to existing auto_link function to auto_summary based on that "UI"
+* update calls to auto_link in Falcon to use that new function/option to provide p-summary markup in permailnks (e.g. so Bridgy Publish can see them), and maybe on home page so [[reader]]s can see them.
+
+=== repost support ===
+==== reposts of Instagram posts ====
+[[Instagram]] itself has no native "repost" feature. Thought there are some 3rd party apps that you can use to repost something on Instagram.
+
+I want to be able to repost others’ photos from Instagram to my own site, and then:
+* POSSE that photo to Twitter, with proper attribution to original author
+** requires Instagram -> Twitter identity correlation
+** document existing [[repost#Silo_Examples]] on Instagram using 3rd party tool, what graphical / textual conventions they use
+* POSSE that photo to Facebook, as photo post but with proper attribution to original author / permalink
+** figure out how to best use Bridgy Publish to post a photo post with custom text for a repost
+
+==== reposts of indieweb posts ====
+Implement [[reposts]] of indieweb posts, and POSSE syndicated copy:
+* ''Why?'' So I can repost native indieweb posts, and if they have a u-syndication link to tweet, then as part of POSSEing my post, the tweet of the original can be retweeted!
+
+==== reposts of tweets ====
+Implement [[reposts]] of tweets:
+* ''Why?'' So I can retweet tweets from my own site (rather than directly on Twitter), keeping a copy of the retweet on my own site, while still POSSEing the retweet on Twitter, so the original tweeter sees that I've reposted/retweeted it.
+
+<strong id="simple_repost_of_tweets">simple repost of tweets</strong>:
+
+Recently (2014-06-04..05) I was at a conference where I wanted to retweet a quote someone else captured from one of the speakers rather than make a similar post myself.
+
+However this time I reached the point of not wanting to just retweet on Twitter any more - I wanted to retweet it from my site, thus keeping a copy on my site, while still [[POSSE]]ing a native retweet on Twitter.
+
+In short this means implementing:
+* '''Detecting storage''' of a <code>u-repost-of</code> property
+** treat first instance as canonical / primary, which can be loaded (following redirects) to get the original post
+** additional u-repost-of properties are assumed(required) to be the repost chain all the way to the original post.
+** keeping the retweet chain is useful in case one of the intermediate accounts is deleted
+* '''Posting UI''' - alter Posting UI accordingly for reposts of tweets
+** No character count
+** No ellipsing
+** '''Retweet''' rather than '''Tweet''' button
+* '''POSSE''' call [https://dev.twitter.com/docs/api/1/post/statuses/retweet/%3Aid Twitter retweet API] rather than update API
+* '''Save POSSE URL''' - save new retweet tweet id as rel=syndication into storage, so web action buttons work properly
+* '''Presentation''' for a repost
+** See [[2014/reposts#Repost_presentation]] for details of what and how to present a repost including:
+** icon of original poster
+** original tweet posting time.
+** some sort of retweet icon to indicate that it was retweeted by me 
+** time when retweeted (perhaps near retweet icon and an icon of myself)
+
+=== POSSE responses to Tumblr posts ===
+I've setup http://tantek-com.tumblr.com/ purely as a [[POSSE]] bridge for propagating my [[like]], [[repost]] (TBI), and [[reply]] posts to Tumblr posts, directly [[Tumblr#POSSE_to_Tumblr|into Tumblr]] so that the [[comments]] section on the Tumblr post says stuff like:
+* tantek.com likes this
+* tantek.com reblogged this from someoneTumblrUsername
+
+Ideally I'd like to automatically do so, e.g. [https://github.com/snarfed/bridgy/issues/272 via Bridgy Publish] (open github issue).
+
+Similar work: [[silo.pub]]
+* Might be able to re-use some of the open source: https://github.com/kylewm/feverdream to automatically post responses to Tumblr posts to Tumblr.
+** As of 2015-07-30: "can't actually publish native likes/reposts/etc. through silo.pub right now... even if you u-like-of a tumblr post, it still publishes a note with mf2 markup in it"[http://indiewebcamp.com/irc/2015-07-30/line/1438304553193]
+
+But until I get one of those approaches working automatically, I'll have to manually POSSE my responses to Tumblr posts into Tumblr.
+
 === meme posts ===
 Publish a sample [[meme]] post similar to my [[comics]] post support, with:
 * summary: text of the meme object (exact text that is overlaid on top of the meme image)
@@ -455,17 +767,23 @@ Publish a sample [[meme]] post similar to my [[comics]] post support, with:
 === quote posts ===
 I've been wanting to post [[quote]]s with minor secondary commentary / summary, and thus have been brainstorming a bit about how to do so.
 * based on a [[note]]
-* '''u-quote-from''' on link to source of quote (like "u-like-of")
+* '''u-quotation-from''' on link to source of quote (similar to "u-like-of")
+* storage: 
+** quoting part of: <code>&lt;blockquote class="u-quotation-from" cite="URL-of-quotation"&gt;TEXT-of-quotation&lt;blockquote&gt;</code>
+** quoting entirety of: <code>&lt;blockquote class="u-quotation-of" cite="URL-of-quotation"&gt;TEXT-of-quotation&lt;blockquote&gt;</code>
+* publishing:
+** similarly use u-quotation-from vs u-quotation-of
 ** write this up in [[quote]] "How to Markup"
-** better than: u-quote-of (implies quote of whole of destination)
-** consider using [[fragmentions]] when quoting from part of a specific paragraph
+** issue when to use vs u-quotation-of (implies quote of whole of destination)
+** use u-quotation-of when quoting an entire [[note]]/tweet
+*** detect that when POSSEing, and use [[quotation#Bridgy]] to POSSE instead of Twitter API 
+** use a [[fragmention]] when quoting from part of a specific paragraph; with a long enough fragmention, you could always provide a URL to the entirety of what you are quoting
 *** those that display [[marginalia]] can display "quotes from" responses too
 *** perhaps write up "How to display quotes from responses to your content"
 *** {{kartikprabhu}} says he could add a "quoted by" section in the responses section of posts (and perhaps similarly for paragraph marginalia - also for [[likes]]/[[reposts]] of paragraphs)
-*** FAQ from {{kevinmarks}} "Does a fragmention reference imply quote-of? No, fragmentions do not / should not imply quote-of - based on existing data/usage - fragmentions are mostly replies (e.g. see Kartik's examples) and some mentions."
+*** FAQ from {{kevinmarks}} "Does a fragmention reference imply a quotation-of? No, fragmentions do not / should not imply quotation-of - based on existing data/usage - fragmentions are mostly replies (e.g. see Kartik's examples) and some mentions."
 * automatically '''blockquote''' text surrounded by “ ” smart double quotes (keep the quotes)
-* '''POSSE quotes of tweets''' as an @-reply to the original tweet
-
+* '''POSSE partial quotations of tweets''' as an @-reply to the original tweet
 
 === auto Bridgy POSSE to FB ===
 Rather than manually using the publish form at https://www.brid.gy/facebook/214611#publishes,
@@ -478,10 +796,10 @@ For all:
 ** issue: [https://github.com/snarfed/bridgy/issues/334 Bridgy Publish does not yet return FB like permalink]
 that I post on my own site, <br/>
 when clicking the "Publish" or "Tweet it" button (which should be renamed, "PuSH and POSSE it" maybe?) :
-# if there is no rel-syndication link to FB on the post, display a <pre><a href="http://brid.gy/publish/facebook"></a></pre> link instead (so Bridgy sees that)
+# if there is no u-syndication link to FB on the post, display a <pre><a href="http://brid.gy/publish/facebook"></a></pre> link instead (so Bridgy sees that)
 # send a webmention to Bridgy publish like: <blockquote><nowiki>curl https://www.brid.gy/publish/webmention -i -d  "source=http://tantek.com/2014/210/t1/trackattack-warmup-laps-first-time-did-all&target=brid.gy/publish/facebook"</nowiki></blockquote> (need <code>https</code> and <code>www</code> to avoid redirect, which won't <code>POST</code>)
 # parse the results of the curl, e.g. something like <blockquote style="white-space:pre;font-family:monospace">{<br>  "url": "<nowiki>http://facebook.com/456_789</nowiki>",<br>  "type": "post",<br>  "id": "456_789"<br>}</blockquote>
-# save the [URL] in a rel-syndication hyperlink in storage on the post with the link text "Facebook post [id]", *after* the Twitter syndication link
+# save the [URL] in a u-syndication hyperlink in storage on the post with the link text "Facebook post [id]", *after* the Twitter syndication link
 
 Then anytime I "PuSH and POSSE" an article, note, or a reply/like of a FB post, a copy should automatically show up in my FB timeline.
 
@@ -627,97 +945,44 @@ While such silo specific webactions are not ideal - it provides at least:
 * some interaction/UX
 * visual cues that help the scrolling list of photos "feel" as nice as an Instagram stream of video posts
 
-
-=== event posts ===
-Support for publishing [[event]] posts (with presentation goal similar to [[event#Before_2014-02-07]]), essentially:
-* permalink pages for events with h-event as the root object for the page
-** p-name on top
-*** optional: over a u-featured photo as background image
-** dt-start in the future
-** static map of location, e.g. 640x160: https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15
-*** perhaps insert static img using JS on page from the <code>p-location</code> [[h-geo]] or [[h-card]]/[[h-adr]] of the event. To avoid having search spiders crawl the map embeds etc. Better for them to just directly use any geo-related microformats in the event.
-*** perhaps change color according to "how soon til event" color clues (e.g. [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-green-cutout&basemap=gray&width=640&height=160&zoom=15 green] before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-yellow-cutout&basemap=gray&width=640&height=160&zoom=15 yellow] day of, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15 orange] hours before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-red-cutout&basemap=gray&width=640&height=160&zoom=15 red] during, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-blue-cutout&basemap=gray&width=640&height=160&zoom=15 blue] when it's over). See [https://github.com/esripdx/Static-Maps-API-PHP Static-Maps-API-PHP documentation] for other options. 
-** possibly linked to equivalent Google map (to get directions)
-*** decided not to use [http://nominatim.openstreetmap.org/search?street=2+harrison+st&city=san+francisco&state=ca Nominatim equivalent], though that's another alternative
-** p-organizer - show first one
-*** optional: display more than one
-** event description
-** who is going/maybe/invited (h-cards)
-** event activity (event creation, comments, RSVPs) 
-*** receive webmentions for this (will likely use webmention.io to queue them up)
-*** manual acceptance / copy-pasting of RSVPs onto the event
-*** (semi-)automatic acceptance of RSVPs
-* home page: have them automatically appear as part of my stream/home page at the event start time 
-* upcoming box: have the next 3 upcoming [[event]]+[[RSVP]](yes|maybe) posts automatically appear on the "next 3 events" box on my home page
-
-==== process and show webmentions ====
-As part of implementing "event activity (event creation, comments, RSVPs)", Falcon will have to process all webmentions received, parse/store them (with appropriate caching), and make them available for posts to display (as [[likes]], [[reposts]], [[comments]], and [[RSVPs]]).
-
-Consider also:
-* '''[https://gist.github.com/otherjoel/9301d985622f0d3d1a09 webmention to email]'''[ (both as notification system, though XMPP would be preferred, and as a backup for webmentions - could format the emails similar to how [[Facebook]] formats its notification emails)
-
-==== POSSE events ====
-Events are a key post type to POSSE, to both reach friends not yet on the indieweb, and save myself time with copying event information to other locations. Four specific (semi-disjoint) use-cases:
-
-Always POSSE semi-public events to:
-* [[Twitter]] (event microsyntax shorthand) - serves as replacement for RSVP and its POSSE to Twitter
-Specific use-cases:
-* personal / social events (public gatherings, races)
-** POSSE to [[Facebook]] (if they don't already have a page)
-* community events (IndieWebCamp, Homebrew Website Club)
-** POSSE to IndieWeb Wiki [[Events]] page
-** POSSE to [[Facebook]]
-** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
-** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
-** POSSE IndieWebCamps in particular to [[Lanyrd]]
-* work standards meetings (W3C f2f meetings)
-** POSSE to [https://www.w3.org/wiki/ W3C Wiki] - custom per WG (if event doesn't already have a page)
-** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
-** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
-** POSSE W3C TPACs in particular to [[Lanyrd]]
-** POSSE W3C Social Web WG meetings to IndieWeb Wiki [[Events]] page
-* work talks at conferences
-** POSSE to [[Facebook]] (especially if they don't have their own)
-** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
-** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
-** POSSE to [[Lanyrd]] (if event doesn't already have a page)
-** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
-
-=== improve rsvp reply notes ===
-Improve [[rsvp]] reply notes:
-* implement p-rsvp options of "no", "maybe", and "tracking"
-* use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
-
-=== send webmentions for other links ===
-Send [[webmentions]] for other posted links (beyond links I'm [[in-reply-to|replying to]], e.g. mentions, likes, etc.)
-* ''Why?''
-** Key building block for indie likes, reposts, quotations and other response post types
-* ''Why also?''
-** To comment on IndieNews posts (assuming I have [[rel-in-reply-to]] links to IndieNews URLs implemented) as a proof of concept of an indieweb-friendly comment aggregator/threader.
-* ''Why?'' 
-** Enable syndicating posts to [[IndieNews]] (assuming I have [[rel-syndication]] links to IndieNews implemented - perhaps as post option in my UI). Help demonstrate IndieNews as a proof of concept of an indieweb-friendly link aggregator.
-
 === archives ===
-There is some support in Falcon for displaying archive pages but they need more work.
+There is some support in Falcon for displaying some date based archive pages but they need more work.
 ==== archive pages ====
+Need to add:
 * next/prev buttons on all archive pages
 ** similar to existing permalink page next/prev links with rel=next/prev
 ** action: navigates to next/prev of same granularity
-*** v0: even if empty
-*** v1: skip empty archive pages
+*** v0: even if empty archive page
+*** v1?: skip empty archive pages
 * need better CSS for pages of all posts from a particular
 ** [[bim]]
-** [[newmonth]]
-** [[day]]
-** [[day]] - only posts of a certain type (like only [[notes]])
+** [[newmonth]] (Gregorian month? see [[#Gregorian_month|below]])
+** [[newweek]] (Gregorian week? see "this week last year" below)
+** [[day]] 
+** type (like only [[articles]], [[notes]], or [[photo]]s)
 ==== archive navigation ====
 * need a UI for navigation across and into/out of archive pages. 
 * better than just a big list of years/months links that are all too common on blogs
 * consider including [[on this day]] as another navigation axis
+* ... maybe "this week last year" (showing 3 days before and after? next 6 days?)
+* related: 
+** [[friendiversary]] prompts
+** friend [[birthday]] prompts
 
 ==== archive templates ====
 * Each archive needs some sort of [[template]] solution. Probably need to document/explore all [[template#Falcon|Falcon template use-cases]] as part of this, beyond just archive pages.
 
+==== Gregorian month ====
+Gregorian month archive pages for:
+* archive URL sharing / reference with other more familiar with Gregorian months
+* possible user 2 - expected default archive month view preference
+
+==== Unix 3D archive views ====
+Just because. Using something like: 
+
+[http://fsv.sourceforge.net/ http://fsv.sourceforge.net/mapv-sample.png]
+
+Where posts are files in the diagram, and days / months / years are directories.
 
 === improve like posts ===
 While they're still fresh in my mind, improve [[like]] posts:
@@ -734,16 +999,6 @@ While they're still fresh in my mind, improve [[like]] posts:
 ** [[like#Brainstorming]] - how I went about it, the steps
 ** storage
 ** deployment
-
-=== indie comms Hello button ===
-Figure out and setup support for [https://wiki.mozilla.org/Loop Mozilla Hello] WebRTC client in my indie [[comms]] solution on /contact
-* to be able to "call" me [https://wiki.mozilla.org/Loop/Try_Loop#Clients on my FirefoxOS device]
-* get a URL to call me (and remember to refresh it every 30 days - or whenever it expires)
-* using [https://github.com/mozilla-b2g/firefoxos-loop-client/blob/master/app/style/images/icons/Icon_Hello%402.png official Hello icon]: https://raw.githubusercontent.com/mozilla-b2g/firefoxos-loop-client/master/app/style/images/icons/Icon_Hello@2.png
-
-More references:
-* https://etherpad.mozilla.org/loop-client-release (old: https://webrtc.etherpad.mozilla.org/26 )
-* https://wiki.mozilla.org/Loop/Try_Loop#Clients
 
 === mobile home template header icons folders ===
 Implement mobile home template header icons folders per [http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience#what-next Toward A People Focused Mobile Communication Experience: What Next]
@@ -787,6 +1042,49 @@ E.g. "Messages" should be "txt message", "Messenger" should be "FB message", "Ha
 
 <div style="border:.5em solid gray;float:left">[[File:mobile-personal-home-contact.jpg]]<br/>[[File:2013-346-tantek-home-posts.jpg]]</div><br style="clear:both"/>
 
+=== better post creation UI ===
+Iteratively incrementally improve Falcon post [[create|creation]] UI.
+
+Current: hand-editing flat file HTML+microformats storage file to add a new post.
+
+Improvements:
+# Stage 1: simplify/minimize post origin format as much as possible (to minimum that a UI would "submit")
+#* scheduled post heads-up / warning: prominent heads-up in the UI if dt-published is more than a whole minute in the future.
+#** e.g. "This post will be visible in xx days/hours/minutes"
+#** and disable "Publish" button (since no auto-POSSEing in the future support yet)
+#* warning if next post number (day scoped) is discontiguous (e.g. if next post is /t3 and previous was /t1)
+#* default/auto-add "with BBEdit" content/markup even if missing; simplifies post origin format
+#* store slug as visible content (instead of as part of uid)
+#** then auto-generate ordinal days and post number (from previous "s" file published post number)
+#** and post type: default "t", unless h-event then "e", or explicit h1 class="entry-title" then "b", or like-of then use "f"
+#* default/auto-add dt-published (even if missing "published"); simplifies post origin format
+# Stage 2: Save/publish form submission to storage file
+#* UI: Form with minimal fields to write notes, replies, likes, articles
+#* Server: "Save" submission to store in post origin storage (perhaps with dt-created)
+#* Server: "Publish" submission to do "Save" and current POSSE+PuSH support
+# Stage 3: Delete/undelete saved posts
+#* UI: Delete after Saving, Undelete after deleting
+#* Server: Handle delete saved unpublished post, undelete deleted unpublished post
+# Stage 4: Undo publishing
+#* UI: Undo after publishing
+#* Server: Handle undo after publishing -> saved state, plus delete any POSSE copies if any
+#* Server: Handle publish with 30(?) second delay, so undo can happen without having to delete any POSSE copies
+# Stage 5: Whatever else I have in my 5-6 year old UI flow sketches re: (auto-)save, delete/undelete, publish/undo
+# Stage 6: Implement micropub client and server support, figuring out what is missing for undo etc.
+
+=== auto POSSE photos to Flickr ===
+Improvements for auto POSSEing photos and videos to Flickr.
+
+Improvements: (make this into a separate lower priority itch / working-on)
+
+Either / both of these would be nice improvements over the current auto_tag hack in Falcon:
+* add international-aware auto-category markup to CASSIS auto_link, similar to auto @-name linking
+* [https://github.com/snarfed/bridgy/issues/604 Bridgy Publish to Flickr: detect hashtags and set Flickr tags #604]
+
+Future alternative: (make this into a separate lower priority itch / working-on)
+
+I could also try adding native Flickr POSSE support to Falcon using {{adactio}}'s code:
+* https://gist.github.com/adactio/a9c7e419b2913f318bd1
 
 
 === more ===
@@ -797,26 +1095,22 @@ Beyond that, I find my prioritization changes often enough that I just keep a lo
 
 === Indie Wiki ===
 Itches: 
-* feeling icky about hosting my personal wiki on the [[PBworks]] [[wiki]] [[silo]]
+* feeling icky about hosting my personal wiki on the [[PBWorks]] [[wiki]] [[silo]]
 * tired of not being able to edit it on mobile
 * disgusted with the ugly PBworks URLs
 * dislike the PBworks UI
+* PBworks latency too high
+* lots of "wiki-this" content in local text files where they're more convenient that dealing with a slow online service
+** feeling of creativity being heldback (by putting stuff in local files) per [https://twitter.com/scottjenson/status/714256272367886336] <blockquote>@scottjenson: Personal epiphany: Locking my creative output into opaque files and using the Finder to organize it is massively holding me back</blockquote>
 
 Scratch: have every page on my site by default be a wiki page made "wiki-like" by Falcon, where wiki-like means:
 * editable with web UI on any reasonably modern web browser, not requiring [[javascript]]
 * browsable version history (maybe with [[web sign-in]] only? no need to index version history)
 * browsable versions (maybe with [[web sign-in]] only? no need to index old versions)
+* some method of auto-syncing local text file copies of such pages (as simple as or better than [[Dropbox]] sync of a local folder)
 
 Brainstorm started here:
 * [[wiki-projects#Brainstorming|wiki-projects: Brainstorming]]
-
-=== Display Received Webmentions ===
-Process my queue of [[webmentions]] at webmention.io and implement some sort of [[comments-presentation]] to show them on my posts.
-# simple date-time-ordered (oldest first) as comments
-# display [[likes]]+[[favorites]] and [[reposts]] separately from comments
-
-=== Payment Links ===
-Similar to the mobile [[communication]] links, it would be good to have a set of [[payment]] links/buttons which show the user different ways to pay, in order of my preference, and then the user can choose which one they can and want to do.
 
 === Geo-tagged Notes ===
 I want my [[notes]] to optionally (opt-out?) have [[geo-tagging]] added to them in my (POSSE) posting UI.
@@ -899,7 +1193,11 @@ I've been abstracting what we've figured out so far into these pages, but much o
 More help/input/contributions/edits welcome!
 
 === client side search ===
-Google search results have been very poor for my posts starting sometime in 2013 to the present (2015).
+<s>Google search results have been very poor for my posts starting sometime in 2013 to the present (2016).</s><br/>
+Though I’ve [http://tantek.com/2016/311/t5/google-switched-to-duckduckgo-site-search replaced Google search results with DuckDuckGo] non-date-ordered site-search results (at [[2016/LA|IndieWebCamp LA 2016]]), and they’re better than Google’s non-date-ordered site-search, they still need improving:
+* Requires visible "site:tantek.com" in the search box which is both visually noisy, and prone to error (reader altering it), especially on mobile where the search box is smaller and tapping on it and typing will likely alter it.
+* Want date-ordered results
+* Want permalink-only results (not storage files or home page)
 
 Thus I am itching to build search into my own site.
 
@@ -996,10 +1294,26 @@ How:
 Consider implement [[Twitter#POSSE_note_with_photos_to_Twitter]]:
 * directly using Twitter API, and my existing tweet POSSE code
 
+=== improve photo plain text title name ===
+* consider: if the photo URL has alt text (per http://tantek.com/w/Markdown#Alttextforimages) show it instead of the photo URLs (and their fallbacks)
+
+Finished 2016-080:
+* create a new [[CASSIS]] function that creates a (better) plain text equivalent for photo (and video) posts
+* minimum: drop leading URLs from the start of a post that would not result in visible text content after an auto_link
+
+Use-cases:
+* Feed readers. Numerous folks have provided critical feedback that my photo posts have bad names/titles when shown in [[feed readers]], due to the URLs of the photo (and subsequent URL of what it should link to) showing up in the plain text view which is used in entry title in the [[Atom]] feed.
+* Facebook link preview. Also the [[link-preview]] of my photo posts on [[Facebook]] shows the URLs at the start of the post as text underneath the photo, which for long CDN jpg or mp4 URLs, fills the entirety of the text below the link-preview image.
+Both of these are together caused a sufficiently strong itch to fix ASAP.
+
+Rejected:
+* consider show <samp>[photo]</samp> instead of photo URLs (and their fallbacks), and <samp>[video]</samp> instead of video URLs (and their fallbacks)
+** unsure if this synthetic summary text is helpful, or noise
+** counter-use-case: Firefox tab names show the first part of the page <code>&lt;title&gt;</code>, thus better to avoid anything generic at the start of a post name
 
 == Implementation Design ==
 === Code Files ===
-Falcon consists of [[PHP]] code (some of which is [[CASSIS]]) to display posts and code to write/publish/syndicate posts. Falcon code consists of only three files ('''bolded'''), some additions to the root .htaccess, and the libraries [[cassis]], [[relmeauth]], and [[tmhOAuth]] in the following structure:
+Falcon consists of [[PHP]] code (some of which is [[CASSIS]]) to display posts and code to write/publish/syndicate posts. Falcon code consists of only three files ('''bolded'''), some additions to the root .htaccess, and the libraries [[cassis]], [[relmeauth.php]], and [[tmhOAuth]] in the following structure:
 
 URL routing and display: (live at http://tantek.com/ )
 * [[cassis.js]]
@@ -1013,7 +1327,7 @@ write/publish/syndicate: (live at http://tantek.com/falcon/ )
 * '''index.php'''
 * '''falconpost.php'''
 * lib - external libraries
-** [[relmeauth]]
+** [[relmeauth.php|relmeauth]]
 *** [[cassis.js]]
 *** [[tmhOAuth]]
 
@@ -1115,6 +1429,17 @@ Legacy feed requests are routed by '''.htaccess''' directives to '''falcon.php''
 <pre>
 RewriteRule ^updates\.atom falcon.php
 </pre>
+
+== Canceled Features ==
+=== indie comms Hello button ===
+Figure out and setup support for [https://wiki.mozilla.org/Loop Mozilla Hello] WebRTC client in my indie [[comms]] solution on /contact
+* to be able to "call" me [https://wiki.mozilla.org/Loop/Try_Loop#Clients on my FirefoxOS device]
+* get a URL to call me (and remember to refresh it every 30 days - or whenever it expires)
+* using [https://github.com/mozilla-b2g/firefoxos-loop-client/blob/master/app/style/images/icons/Icon_Hello%402.png official Hello icon]: https://raw.githubusercontent.com/mozilla-b2g/firefoxos-loop-client/master/app/style/images/icons/Icon_Hello@2.png
+
+More references:
+* https://etherpad.mozilla.org/loop-client-release (old: https://webrtc.etherpad.mozilla.org/26 )
+* https://wiki.mozilla.org/Loop/Try_Loop#Clients
 
 == Logo ==
 <span style="float:left">https://pbs.twimg.com/profile_images/651194638/falcon_normal.png</span> 

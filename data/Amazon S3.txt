@@ -1,4 +1,4 @@
-http://indiewebcamp.com/Amazon_S3
+https://indieweb.org/Amazon_S3
 
 {{stub}}
 
@@ -44,14 +44,26 @@ This setup allows to sync the pages using your operating system file manager usi
 
 This setup is quite slow because Fuse is slow, but it was made for someone not really tech savvy who had to update the HTML and push the files on S3. Since that person already had to learn HTML, it was decided to make the process easier by allowing the local copy
 
+=== [http://notenoughneon.com notenoughneon.com] ===
+{{emmak}} has been hosting her personal site on S3 since March 2015. She is using [[Skein]] to publish static html to S3.
+
 == Considerations ==
 
 * If your site has modest traffic then you will have a low hosting bill. There is no minimum cost per month.
 * Amazon is responsible for keeping the hardware and software running, and Amazon probably has more resources for fixing problems than you do :-)
 * Content on S3 is stored redundantly.
 * It is very difficult to serve custom HTTP status codes (e.g. 301 redirects): you must create a dummy file at the appropriate URL and then use Amazon’s web-based management system to set up the status.
+* It is not possible to serve HTTP Link headers for [[webmention]] or [[micropub]], you will need to use <code>&lt;link&gt;</code> elements in the html.
+* It is not possible to serve HTTPS directly from S3, you will need to use [[Cloudfront]].
 * It is not possible to perform advanced URL rewriting on the server.
 * You cannot run your own software (e.g. PHP or Perl scripts) server-side.
+
+== Outages ==
+Times when there was a noticeable S3 [[outage]]:
+* ...
+* 2017-02-28 Portions of S3 were down for quite a while, causing lots of sites to stop working. [https://www.engadget.com/2017/02/28/amazon-aws-outage/] [http://gizmodo.com/amazon-just-broke-the-internet-1792827856]. Sites that folks noticed were not working:
+** [[Strava#Downtime|Strava]]
+* ...
 
 == See Also ==
 * [[Amazon]]

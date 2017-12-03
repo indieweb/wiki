@@ -1,0 +1,207 @@
+https://indieweb.org/User%3AVanderven.se_martijn/IndieAuth
+
+'''<dfn>[https://indieauth.net/ IndieAuth]</dfn>''' is a way for doing [[Web sign-in]], where you '''use your own [[homepage]]''' to sign in to other places.
+
+IndieAuth was build on ideas and technology from existing proven technologies like [[OAuth]] and [[OpenID]] but aims at making it easier for users as well as developers. It also decentralises much of the process so completely separate implementations and services can be used for each part.
+
+== Why ==
+
+IndieAuth is part of taking back control of your online identity. Instead of logging in to websites as “you on Twitter” or “you on Facebook”, you should be able to log in as just “you”. We should not be relying on [[silos]] to provide our authenticated identities, we should be able to use our own [[personal domain|personal domains]] to log in to sites everywhere.
+
+You can use it right now to log in to this wiki and contribute to the [[community]], including doing common things like:
+* Adding yourself to [[IRC People]] after joining one of our [[discuss|discussion channels]], and
+* RSVP to [[events|an upcoming event]].
+
+IndieAuth is also used by many [[Micropub]] clients, so you can use your own website to log in to the tools you use to post content.
+
+== How To ==
+
+=== Set up using IndieAuth.com ===
+
+[[indieauth.com|IndieAuth.com]] is a service that allows you to sign in as your site by using your social media profiles. Your homepage and social media profiles need to link to each other for verification. Instead of registering for an account at indieauth.com, it uses your existing social media accounts to verify you own the URL you're signing in as.
+
+# Add [[rel-me]] links to your homepage for various ways to reach you,<br>e.g. <code><nowiki><a href="https://twitter.com/indiewebcamp" rel="me">Twitter</a></nowiki></code>.
+# Make sure any social media profiles you linked to have a link back to your homepage.
+# Finally, include <code><link rel="authorization_endpoint" href="https://indieauth.com/auth"></code> on your homepage.
+You are done. Try to <public>[https://indieweb.org/Special:UserLogin log in to the wiki]</public><private>[[Special:UserLogout|log out from the wiki]] and log in again</private>.
+
+== How It Works ==
+
+Basic flow with a User signing in to a (web)App
+
+# '''The User fills in his/her personal URL''' This is called [[Web sign-in]].
+# '''The App fetches the URL, looking for an Authorization Endpoint.''' For this, the user can use IndieAuth.com, but it can also be at their own domain. The App redirects the User to their AuthEndpoint.
+# '''The User authenticates at their own Authorization Endpoint.''' IndieAuth.com uses [[RelMeAuth]] to authorize users, but if a user uses an Authentication Endpoint on his/her own site, it can be a password, e-mail link, or any other authentication the AuthEndpoint provides. They prove their identity to their AuthEndpoint, the App waits.
+# '''The User gets a code from the AuthEndpoint''', in the form of a redirect to the App. (With this, the User gives the code to the App.)
+# '''The App checks the code with the AuthEndpoint''', and if the code is valid and if the User’s identifier matches the identifier the AuthEndpoint gives, the login is completed, and the User can enter and use the app.
+
+== The Three Parts of IndieAuth ==
+
+=== Discovery from the User’s Homepage ===
+
+A user should only have to communicate their own homepage URL to the website they are trying to log in to. This is the core idea of [[Web sign-in]]. This means a developer should in their turn be able to find everything they need on that one user supplied URL.
+
+IndieAuth defines two new [[rel-values|<code>rel</code> values]] for this. A user can simply link to the endpoints they want to use from their homepage, add the correct <code>rel</code> value and be done.
+
+An example would be to link to them in the <code><head></code> section of their HTML, like so:
+
+    <link rel="authorization_endpoint" href="https://example.com/auth">
+    <link rel="token_endpoint" href="https://example.com/token">
+
+Developers can use any way they want of finding these.
+
+=== The Authorization Endpoint ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[authorization-endpoint]]''' for implementation details.</p>
+
+The authorization endpoint is a page where applications can send users to and asking them to identify themselves. Because the user defines their own endpoint on their homepage, this can be part of their own website or a completely separate service. This is how the user provides proof they really operate the homepage URL they provided.
+
+An application can also ask the user to grant it certain rights by requesting them through the authorization endpoint. A [[Micropub]] client might ask to be allowed <code>create</code> rights. The user can then either accept these or not when they have been redirected to their endpoint.
+
+For developers the authorization endpoint also functions as a verification service. If they get a code from a user they can check its validity with the endpoint to make sure it was truly issued by the user.
+
+==== Third Party Services ====
+
+* [[IndieAuth.com]] has an authorization endpoint that wraps [[RelMeAuth]] and will let you use [[silo]] accounts like [[Twitter]] or simple alternatives like [[email]] as authentication options. Use the URL <code>https://indieauth.com/auth</code> as your value for <code>authorization_endpoint</code>.
+* [[commentpara.de]] allows anyone to (anonymously or pseudonymously) log in to websites supporting IndieAuth by using <code>https://commentpara.de/</code> as their homepage.
+
+==== Self-Hostable Implementations ====
+
+* [[selfauth]] is an authorization endpoint in [[PHP]] made to be easy to deploy.
+* [https://github.com/barryf/acquiescence Acquiescence] is an authorization endpoint in [[Ruby]] developed and used by {{barryf}}.
+* [[Known]] enables an authorization endpoint when the [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub IndiePub plugin] is turned on.
+
+=== The Token Endpoint ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[token-endpoint]]''' for implementation details.</p>
+
+The token endpoint is a service that creates access tokens for applications to store. This way a user can authorize a [[Micropub]] client to make posts without having to go through the authorization process every time.
+
+==== Third Party Services ====
+
+* [[IndieAuth.com]] has a token endpoint. Use the URL <code>https://tokens.indieauth.com/token</code> as your value for <code>token_endpoint</code>.
+
+==== Self-Hostable Implementations ====
+
+* [https://github.com/barryf/acquiescence Acquiescence] is a token endpoint in [[Ruby]] developed and used by {{barryf}}.
+* [[Known]] enables a token endpoint when the [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub IndiePub plugin] is turned on.
+
+== Supporting Sites and Clients ==
+
+There are a growing number of web sites that you can log into using IndieAuth and gain additional functionality:
+
+* [[Main Page|IndieWeb.org]]
+** This site! Signing-in with IndieAuth enables you to edit the wiki!
+* [https://telegraph.p3k.io/ Telegraph]
+** [[Telegraph]] allows people to send [[Webmentions]] after logging in.
+* [[Micropub for WordPress]]
+** This WordPress plugin allows users to use Micropub clients like [[Quill]] to login to a WordPress site using any IndieAuth endpoint.
+* …
+
+== IndieWeb Examples ==
+
+These people have linked their websites to IndieAuth endpoints and/or allow other people to login to their sites using IndieAuth.
+
+=== Martijn van der Ven ===
+
+{{martijnvdven}} has an <code>authorization-endpoint</code> on <code>http://vanderven.se/martijn/</code> as of 2017-06-30. Powered by [[selfauth]].
+
+== Issues ==
+
+This section is for issues with the IndieAuth protocol that are not specific to either [[authorization-endpoint]] or [[token-endpoint]]. Issues with how the protocol is presented, as well as security considerations can go here.
+
+=== Should the specification make recommendations on HTTPS? ===
+
+A token can be sent to an IndieAuth endpoint without [[HTTPS]] (the docs do not forbid this), such a request should be refused. In the case of an HTTPS redirect being in place for the domain the request should not be redirected to prevent DNS poisoning, MITM, and race-condition attacks.
+
+=== Need Simple Copy Paste How To ===
+
+The explanation in http://waterpigs.co.uk/articles/indiewebcamp-signin-ux/ provides a list of three lengthy descriptions of what you need to setup IndieAuth, which was then subsequently criticized as "this is not a straightforward process" in the post: http://aralbalkan.com/notes/on-evolving-indieauth/
+
+Thus we need a a simple copy paste how to that is not three lengthy descriptions.
+
+Any explanation of how to use IndieAuth needs to start with a 1-2 sentence summary. No more. 
+
+Compare with: 
+* Introduction to Twitter Sign-in: https://dev.twitter.com/docs/auth/sign-twitter
+* How Facebook Connect works: http://blog.facebook.com/blog.php?post=41735647130
+
+Explanations for IndieAuth need to be <em>at least as simple to understand</em> as those for Twitter Sign-in and Facebook Connect.
+
+=== IndieAuth using form-encoded responses instead of JSON ===
+
+IndieAuth uses standard form-encoding for requests and response because it has been a standard encoding format since the beginning of the web. If it were a JSON response, then 7 years down the road you'd be asking "why is the response in JSON instead of ____" where ____ is the next trendy thing that replaces JSON. (Remember when XML was the new hotness?)
+
+Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_changes_to_indieauth_protocol.html#content_negotiation &mdash; [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 02:26, 5 March 2015 (PST)
+
+* To me this would violate [[Postel's law]], requiring every implementation to publish many different formats. I don't care which format IndieAuth produces, but I do think we should settle on ''one'' canonical format. [[User:Kylewm.com|Kylewm.com]] 10:03, 5 March 2015 (PST)
+
+* Agreed that there should be only one format. The only valid argument for JSON is that the OAuth 2.0 spec defines the response as JSON. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:06, 5 March 2015 (PST)
+
+* OK I withdraw my objection to content negotiation. Agree it is a relatively small burden on a relatively small number of providers; it's worth supporting multiple formats for convenience to the large number of consumers [[User:Kylewm.com|Kylewm.com]] 12:06, 5 March 2015 (PST)
+
+* Just to be anti-inventing-new-formats (too many of them around and demanding attention), I'd go for form-encoded -- {{kartik}} 00:21 2015-03-06
+
+* I just never saw HTTP POST form encoded _responses_ anywhere, only POST url encoded form requests... Any link to other (REST) services that use this? e.g. XMLHttpRequest does not support form encoded responses at all... [[User:tuxed.net|fkooman]]
+
+=== Requesting additional user details ===
+
+The auth consumers may want to receive additional information about a user, and not just their homepage URL. Andy Baio raised some points in regard to this in a backer-only Kickstarter post, [https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812 Opening the Source and The Great Auth Debate], 2015-03-16, when deciding what authenticator to use for [[Upcoming.org]].
+
+* Silos may give the application access to the user’s social graph: who their friends are, who they are following.
+** This would require some IndieWeb format for [[following]].
+** This is great for applications like [[readers]] to start a user off.
+
+* Silos may give the application location information about the user.
+** This is great for applications like Upcoming.org that want to show relevant events.
+** May be possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
+
+== To do ==
+
+* create an Architecture Diagram for IndieAuth per [http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/ Mozilla Security Blog: Speeding Up Security Reviews]
+* create a Detailed Application Diagram for IndieAuth per the same[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
+* write-up Data flow enumeration per the same[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
+* write-up a Threat Analysis per the same[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
+
+== Talks and Demos ==
+* 2012-06-24: Aaron Parecki [http://opensourcebridge.org/sessions/856 gave a talk on IndieAuth] at Portland's Open Source Bridge 2012 conference! Tuesday June 26th at 4:45pm
+* 2013-08-13: Aaron Parecki [http://aaronparecki.com/presentations/2013/08/08/1/indieweb-w3c-workshop-on-social-standards gave a talk on IndieAuth] at the W3C Workshop on Social Business
+* 2014-05-06: Aaron Parecki [http://indiewebcamp.com/2014-05-06-iiw-indieauth held a session] at [http://www.internetidentityworkshop.com/ Internet Identity Workshop XVIII]
+* 2016-09-24 Sebastian Lasse [https://indieweb.org/2016/Brighton/Demos#Sebastian_Lasse had a demo] showing the use of protocol handlers to keep the "me" in the browser ([https://www.youtube.com/watch?v=W70wd56i0Bg&t=34m1s video]) at [https://indieweb.org/2016/Brighton IWC Brighton]
+
+== Articles ==
+* {{citation
+| title = IndieAuth
+| url = https://www.oauth.com/oauth2-servers/indieauth/
+| author = <a href="https://aaronparecki.com/" class="h-card">Aaron Parecki</a>
+| published = 2016-08-30
+| archiveurl = https://web.archive.org/web/20171026202106/https://www.oauth.com/oauth2-servers/indieauth/
+}} and sub-chapters on OAuth.com:
+** {{citation
+| title = IndieAuth Sign-In Workflow
+| url = https://www.oauth.com/oauth2-servers/indieauth/sign-in/
+| author = <a href="https://aaronparecki.com/" class="h-card">Aaron Parecki</a>
+| published = 2016-08-30
+| archiveurl = https://web.archive.org/web/20171026202346/https://www.oauth.com/oauth2-servers/indieauth/sign-in/
+}}
+** {{citation
+| title = IndieAuth Authorization Workflow
+| url = https://www.oauth.com/oauth2-servers/indieauth/authorization/
+| author = <a href="https://aaronparecki.com/" class="h-card">Aaron Parecki</a>
+| published = 2016-08-30
+| archiveurl = https://web.archive.org/web/20171026202415/https://www.oauth.com/oauth2-servers/indieauth/authorization/
+}}
+
+== See Also ==
+* [[IndieAuthProtocol]]
+* [[distributed-indieauth]]
+* [[Web sign-in]]
+* [[RelMeAuth]]
+* [[sign-in-use-cases|Web Sign-In Use Cases]]
+* [[indieauth-authorization-brainstorming|IndieAuth Authorization Brainstorming]]
+* [https://indieweb.org/images/2/2f/indieAuthProp.svg An (unofficial) proposal for an IndieAuth logo]
+
+[[Category:building-blocks]]
+[[Category:IndieAuth]]
+
+<raw><style>h3 { margin-top: 1em; font-size: 140%; } h2+h3 { margin-top: 0; } h4 {margin-bottom: .1em; }</style></raw>

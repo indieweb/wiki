@@ -1,4 +1,4 @@
-http://indiewebcamp.com/planet
+https://indieweb.org/planet
 
 {{stub}}
 
@@ -10,6 +10,17 @@ Similar to a [[public timeline]], a planet provides an easy way to get an overvi
 == How ==
 One way to build an indieweb-style planet is to use a [[reader]] that allows public access to view the page. This can be done using [[dobrado]], where an account is required to manage the subscription list but the page containing the feed list can be made public.
 
+=== markup ===
+Question {{sknebel}} 2017-03-24: How should posts on a planet be marked up? Should the planet [[repost]], or just produce an [[h-feed]] reproducing the posts (and u-uid and u-url pointing to the canonical source?
+
+* [[repost]] if full content is reproduced, [[h-cite]] otherwise, per [https://chat.indieweb.org/dev/2017-03-24#t1490387558605000 IRC discussion].
+* per later discussion, u-uid = original_post should be enough. also doesn't show up as repost on every post and is still detectable via Webmention. [https://chat.indieweb.org/2017-04-10#t1491837069346000]
+
+Atom specified a <code>source</code> property to indicate the original source of a post it republished. [https://tools.ietf.org/html/rfc4287#section-4.2.11]
+
+=== Webmention backfeed ===
+(accidential) interaction with the planet post instead of the original could be redirected by the planet’s webmention endpoint -> just re-send it to the original post’s, if wants to receive them it can add the URL of the syndicated copy to the list of URLs it accepts webmentions for.
+
 == Examples ==
 Example "planets":
 * http://planet.mozilla.org/
@@ -20,13 +31,21 @@ Example "planets":
 ** Subscribes to all feeds found from members of the community
 * ...
 
+
+== Software ==
+* [http://www.planetplanet.org/ Planet], Python
+* [http://intertwingly.net/code/venus Venus], Ruby
+* [https://github.com/ChimeraCoder/Pluto Pluto], Go
+* [http://feedreader.github.io/ (another) Pluto], Ruby
+* [https://github.com/chregu/planet-php/ Planet PHP], PHP
+
 == Brainstorming ==
 There have been various brainstorming discussions about planets, in particular, about the potential of building an IndieWebCamp Planet site, based on signups on this page:
 
 === IndieWebCamp Planet ===
 Welcome to the IndieWebCamp Planet sign-up page.
 
-Are you a member of the IndieWebCamp community and want your personal site [[feed]] aggregated into http://planet.indiewebcamp.com/ ? Add <em>your</em> personal site below (please don't add others' sites) and the aggregator will [[discover]] your feed and do the rest.
+Are you a member of the IndieWebCamp community and want your personal site [[feed]] aggregated into http://planet.indieweb.org/ ? Add <em>your</em> personal site below (please don't add others' sites) and the aggregator will [[discover]] your feed and do the rest.
 
 ==== Planet Sites ====
 Sites to aggregate into an IndieWebCamp Planet, sorted alphabetically by domain name:
@@ -44,10 +63,11 @@ Sites to aggregate into an IndieWebCamp Planet, sorted alphabetically by domain 
 Additional IndieWebCamp shared-community resources:
 * https://twitter.com/indiewebcamp
 * https://twitter.com/indiewebcampuk
-* http://news.indiewebcamp.com
+* https://news.indieweb.org
 
 == See Also ==
 * https://en.wikipedia.org/wiki/Planet_%28software%29
 * [[feed]]
 * [[discovery]]
 * [[IndieNews]]
+* http://www.planetplanet.org/

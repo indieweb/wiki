@@ -1,5 +1,6 @@
-http://indiewebcamp.com/Medium
+https://indieweb.org/Medium
 
+[[Category:silo]]
 {{stub}}
 
 '''<dfn>[http://medium.com Medium]</dfn>''' is an [[article]] hosting [[silo]].
@@ -45,10 +46,11 @@ Updates occur every 15 minutes
 # Click on Import story.
 # Paste in the URL.
 # Edit the post on Medium if it took in a footer or put content in the wrong place (a header into the Medium title, for example).
-# Add a link somewhere in your Medium post pointing to your article to show where you originally published it.
 
-=== WP Plugin ===
-Medium has released a [https://wordpress.org/plugins/medium/ plugin for Wordpress] that will syndicate a post on your blog, to Medium, when publishing. It does not update the version on Medium if you make changes on your blog.
+Medium will automatically add an “Originally published at” note to the bottom of the post. It will also add a <code>rel="canonical"</code> link to the page pointing to your original post, making it so parsers know to get the post from your website when they are looking for the canonical version.
+
+=== WordPress Plugin ===
+Medium has released a [https://wordpress.org/plugins/medium/ plugin for WordPress] that will syndicate a post on your self-hosted blog, to Medium, when publishing. It does not update the version on Medium if you make changes on your blog.
 
 Request entered on the [https://wordpress.org/support/topic/good-first-effort-but-will-probably-not-use-it-for-now?replies=6#post-7936953 plugin support page] to include rel="syndication" and "class="u-syndication" on the link added on your self-hosted post back to Medium.
 
@@ -78,13 +80,19 @@ He described his problems with the process in a follow up post that was first pu
 ** POSSE copy: https://medium.com/@davidmead/is-the-openweb-indieweb-still-for-anoraks-b1377a90594d
 
 === Other Examples ===
-Examples from people who have not specifically joined the IndieWeb.
+Examples from more people with independent sites:
 ==== Peter Gasston ====
 [http://www.broken-links.com Peter Gasston] started “[https://twitter.com/stopsatgreen/status/629633630491553796 experimenting with x-posting to Medium]” on 2015-08-07:
 * https://medium.com/@stopsatgreen/exploring-url-discovery-with-the-physical-web-85f9be9e7246
 ** POSSE copy: http://www.broken-links.com/2015/08/06/exploring-url-discovery-with-the-physical-web/
 
+=== POSSEing likes ===
+If you post a [[like]] of a Medium article, what is the best way to POSSE that like to Medium?
+
+* [[Bridgy]] Publish feature request: https://github.com/snarfed/bridgy/issues/712
+
 == Exporting your data ==
+=== Official Export ===
 [https://help.medium.com/hc/en-us/articles/214043918-Export-content Official documentation]. Export format is HTML of some kind (If you have done it, please expand with details!)
 
 * go to https://medium.com/me/export
@@ -94,6 +102,13 @@ Examples from people who have not specifically joined the IndieWeb.
 * these have a footer appended linking to the medium url that has the date exported
 * they break embedded tweets and youtube videos,
 * they replace external links with a redirect to a /r/?url= link that obviously doesn't work locally or on a server without you adding code
+
+=== Medium-to-Markdown ===
+[[Python]] script to output a Markdown version of a Medium post: https://github.com/markbiek/Medium-To-Markdown (If you have experience using this, please make notes here.)
+
+=== API is write-only ===
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/majelbstoat">@majelbstoat</a> is the medium API write only? There&#39;s no docs on fetching posts, only creating them.</p>&mdash; Kevin Marks (@kevinmarks) <a href="https://twitter.com/kevinmarks/status/712403179833430016">March 22, 2016</a></blockquote>
+<blockquote class="twitter-tweet" data-conversation="none" data-lang="en"><p lang="en" dir="ltr"><a href="https://twitter.com/kevinmarks">@kevinmarks</a> For the time being, yes. Going to approach that thoughtfully, recognising that lots of APIs have given and then taken away.</p>&mdash; Jamie Talbot (@majelbstoat) <a href="https://twitter.com/majelbstoat/status/712403836925640704">March 22, 2016</a></blockquote>
 
 == Issues ==
 === buggy rel-canonical implementation ===
@@ -105,24 +120,50 @@ If you set the rel-canonical for a post on Medium using their API, it both fails
 * 2016-03-03 the homepage returned the [[HTTP 500]] error below. The link "interesting to read" was to https://medium.com/top-100, which also failed intermittently.
 ** [[File:medium-down-2016-03-03.png]]
 
+=== Nagware ===
+As of ??? (at least 2017-08-19) Medium started occasionally showing a modal popup when viewing an article. The dialog tells you how many Medium posts you've read to guilt you into signing up.
+
+[[File:medium-modal-dialog.png|600px]]
+
 == Criticism ==
 TO DO: cluster these by primary area of criticism and add subheads!
-* 2010-07-10 http://iamshane.com/articles/2010/11/7/1/no-more-sharecropping
+* 2010-07-10 http://veganstraightedge.com/articles/2010/11/07/no-more-sharecropping
 ** POSSEd to Medium: https://medium.com/indieweb-thoughts/9d0e36524dbf
-* https://medium.com/surveillance-state/19a5db211e47 (currently 404s - anyone have an archive?)
-* 2013-07-08 <cite>The Problem With Medium: A Shiny Content Farm is Still a Content Farm</cite> https://medium.com/writers-on-writing/336300490cbb
-* 2013-07-10 https://twitter.com/t/status/355069622325747713
 * 2014-05-30 [http://indiewebcamp.com/irc/2014-05-30/line/1401478311 Medium doesn't support footnotes]
 * 2014-06-09 Medium does not appear to show the full published date in the visible content. Instead there is a [[The-Open-Graph-protocol|Open Graph Protocol]] meta element: <code>meta property="article:published_time" content="2014-01-16T08:59:18.300Z"</code>
 ** Example: https://medium.com/binary-times/use-your-own-product-or-die-ba3e2d738a55
 ** It appears that the year is displayed depending how recent the article is. A 2013 article linked above includes the year in the visible content, but as of this writing (2014-06), the example link only shows "Jan 16," because it is recently published, in the current year.
-* 2014-07-23 Medium rolls out [https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0 New Editor Features], marginalia comments are full of disappointment and criticism
-** "We wanted to be writers. you made us into designers." [https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0#1e9e-1fcb08f06651]
 * [https://twitter.com/JosephRooks/status/601546783630741504 2015-05-21 @JosephRooks]:<blockquote>@kevinmarks @ev the other key difference is that #IndieWeb isn't BSing people about "openness" to create phony feel-goodsies.</blockquote>
-* 2015-07-25 Avdi Grimm <cite>[http://devblog.avdi.org/2015/07/27/dear-medium-please-stop-hurting-the-web/ Dear Medium: Please stop hurting the web]</cite>
-* 2015-09-01 Peter Gasston <cite>[http://www.broken-links.com/2015/09/01/feeling-like-an-unwelcome-guest-on-medium-com/ Feeling Like An Unwelcome Guest on medium.com]</cite>
 * 2016-03-03 <cite>[http://www.bbc.co.uk/news/technology-35709680 I also think there's a lot of potential for premium or subscription or even user-paid content. Some sort of paywall or membership.]</cite>
+
+=== Walled Garden / Content Farm ===
+* 2015-07-25 <cite>[http://devblog.avdi.org/2015/07/27/dear-medium-please-stop-hurting-the-web/ Dear Medium: Please stop hurting the web]</cite> by Avdi Grimm
+* 2015-05-21 <cite>[http://known.kevinmarks.com/2015/the-web-is-the-network The Web is the network]</cite> by {{kevinmarks}}
+* 2013-07-08 <cite>[https://medium.com/writers-on-writing/336300490cbb The Problem With Medium: A Shiny Content Farm is Still a Content Farm]</cite> by Andrea Phillips
+
+=== Promoting App over Web ===
+* 2015-09-01 <cite>[http://www.broken-links.com/2015/09/01/feeling-like-an-unwelcome-guest-on-medium-com/ Feeling Like An Unwelcome Guest on medium.com]</cite> by Peter Gasston
+
+=== Lightweight Marketing Articles ===
+More of a criticism of *reading* Medium (e.g. clicking links through to Medium posts)
+* https://news.ycombinator.com/item?id=13570227: <blockquote>The articles on medium.com seem to be lightweight, designed for marketing purposes. All carbs, no protein.</blockquote> … <blockquote>Lately it seems they are very much marketing pieces</blockquote>
+** more criticisms there that could be extracted and quoted like bad TOR UX, 'they do signal "low-quality"' / "not enough real world depth of experience behind them", iOS app crashes "using an iphone 4s with ios8 and medium crashes"
+
+=== Other ===
+* https://medium.com/surveillance-state/19a5db211e47 (currently 410s - anyone have an archive?)
+* 2014-07-23 Medium rolls out [https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0 New Editor Features], marginalia comments are full of disappointment and criticism
+** "We wanted to be writers. you made us into designers." [https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0#1e9e-1fcb08f06651] (currently 410s - anyone have an archive?)(archive.org snapshot of article; does not contain the marginalia comments : http://web.archive.org/web/20150921033039/https://medium.com/the-story/new-editor-features-title-images-and-more-5588495ec3c0 )
+* 2013-07-10 https://twitter.com/t/status/355069622325747713 (these links {{t}} posted are already included here)
+
+== Articles ==
+* {{citation | title = Anywhere but Medium | url = http://scripting.com/liveblog/users/davewiner/2016/01/20/0900.html | author = [http://scripting.com Dave Winer] | published = 2016-01-20 | archiveurl = https://web.archive.org/save/http://scripting.com/liveblog/users/davewiner/2016/01/20/0900.html }} 
+* {{citation | title = Why I Left Medium | url = http://www.kennethreitz.org/essays/why-i-left-medium | author = [https://www.kennethreitz.org/ Kenneth Reitz] | published = 2013-07-31 | archiveurl = http://web.archive.org/web/20170825181740/https://www.kennethreitz.org/essays/why-i-left-medium }}
+* {{citation | title = Why I left Medium and moved back to my own domain | url = https://arslan.io/2017/07/30/why-i-left-medium-and-moved-back-to-my-own-domain/ | author = [https://arslan.io/ Fatih Arslan] | published = 2017-07-30 | archiveurl = http://web.archive.org/web/20170825182048/https://arslan.io/2017/07/30/why-i-left-medium-and-moved-back-to-my-own-domain/ }}
+* {{citation | title = Medium stumbling forward | url = http://www.manton.org/2017/08/medium-stumbling-forward.html | author = {{manton}} | published = 2017-08-25 | archiveurl = http://web.archive.org/web/20170825181533/http://www.manton.org/2017/08/medium-stumbling-forward.html
+}}
 
 == See Also ==
 * [[article]]
 * [[silos]]
+
+[[Category:WordPress plugins]]

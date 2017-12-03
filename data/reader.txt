@@ -1,6 +1,4 @@
-http://indiewebcamp.com/reader
-
-{{stub}}
+https://indieweb.org/reader
 
 A '''<dfn>reader</dfn>''' (or <dfn>indie reader</dfn>) in the context of the indieweb is the portion/feature integrated into an indieweb site that provides a way to read content from other indieweb sites, possibly including posts from the current site as well.
 
@@ -22,13 +20,13 @@ Reasons to have a personal reader (a reader integrated into your site for you to
 That's just the beginnings of what an indieweb reader can enable.
 
 
-== IndieWeb examples ==
+== IndieWeb Examples ==
 
 In datetime order of implementation (earliest first)
 
-=== acegiak ===
+=== Ashton McAllan ===
 
-[[User:acegiak.net|acegiak]] developed a [[Wordpress]] plugin, '''[[WhisperFollow]]''', which aggregates RSS/Atom and Microformats2 data from the pages linked to in your blogroll and displays those updates in a private page in your wordpress blog. It currently defaults to RSS/Atom only attempting to read MF2 if the separate feed isn't found. It also allows updates to be reblogged and commented on.
+{{acegiak}} developed a [[Wordpress]] plugin, '''[[WhisperFollow]]''', which aggregates RSS/Atom and Microformats2 data from the pages linked to in your blogroll and displays those updates in a private page in your wordpress blog. It currently defaults to RSS/Atom only attempting to read MF2 if the separate feed isn't found. It also allows updates to be reblogged, replied to, favourited, and commented on etc.
 
 === Barnaby Walters ===
 
@@ -41,13 +39,13 @@ Barnaby is using and developing [[Shrewdness]], a multi-column feed reader as of
 
 === Amber Case ===
 
-[[User:Caseorganic.com|Amber Case]] also uses [https://github.com/aaronpk/selfoss '''selfoss'''] with the Microformats2 plugin on caseorganic.com since [http://caseorganic.com/articles/2014/02/13/1/indiereader-subscribe-to-people-from-your-own-site 2014-02-13].
+[[User:Caseorganic.com|Amber Case]] also uses [[selfoss]] with the Microformats2 plugin on caseorganic.com since [http://caseorganic.com/articles/2014/02/13/1/indiereader-subscribe-to-people-from-your-own-site 2014-02-13].
 
 See: http://caseorganic.com/articles/2014/02/13/1/indiereader-subscribe-to-people-from-your-own-site
 
 === Andy Sylvester ===
 
-[[User:Andysylvester.com|Andy Sylvester]] also uses [https://github.com/aaronpk/selfoss '''selfoss'''] with the Microformats2 plugin on http://andysylvester.com/selfoss/ since [http://andysylvester.com/2014/03/01/howto-setting-up-the-selfoss-feed-reader-with-microformats-support/ 2014-03-01].
+[[User:Andysylvester.com|Andy Sylvester]] also uses [[selfoss]] with the Microformats2 plugin on http://andysylvester.com/selfoss/ since [http://andysylvester.com/2014/03/01/howto-setting-up-the-selfoss-feed-reader-with-microformats-support/ 2014-03-01].
 
 See http://andysylvester.com/2014/03/01/howto-setting-up-the-selfoss-feed-reader-with-microformats-support/ for instructions on how to set up the Selfoss reader.
 
@@ -66,11 +64,15 @@ Features:
 
 === Emma Kuo ===
 
-[[User:notenoughneon.com|Emma Kuo]] uses an experimental reader in [[neonblog]] since [http://notenoughneon.com/2014/7/26/1 2014-7-26].
+[[User:notenoughneon.com|Emma Kuo]] used an experimental reader in [[neonblog]] since [http://notenoughneon.com/2014/7/26/1 2014-7-26].
 
 * reply/like/repost buttons link to posting UI
 * only supports mf2
 * requires manual polling
+
+[[thready]], a thread reader created for Indieweb Summit 2016 hack day.
+
+* proof of concept of thread-crawling algorithm
 
 === Kyle Mahan ===
 
@@ -90,13 +92,27 @@ Features:
 * Subscribes to [[PuSH]] hubs of URLs that are added
 
 === Malcolm Blaney ===
-
-[[User:unicyclic.com_mal|Malcolm]] has added microformats support to his version of the SimplePie feed parsing library, which is available at https://github.com/mblaney/simplepie. This library is used in conjunction with [[dobrado]] to provide an easy to use reader.  It is deployed at https://unicyclic.com and includes:
+{{mblaney}} has added microformats support to the [[SimplePie]] feed parsing library, which is available at https://github.com/simplepie/simplepie. This library is used in conjunction with [[dobrado]] to provide an easy to use reader.  It is deployed at https://unicyclic.com and includes:
 
 * Sign up/login open to anyone via traditional username/password with email confirmation.
+* Login is also publicly available via [[IndieAuth]], and posts created via [[Micropub]] in this case.
+* When IndieAuth is used but Micropub is not available, [[indie-config]] is used for actions.
+* Supports displaying previous actions made by using the indie-config status protocol.
 * Supports multi-feed discovery via link tags or rel=feed. 
 * Supports subscribing to any page containing h-feeds or h-entry's (as well as xml feeds).
 * Supports in-line posting, likes, shares and replies.
+* Update notifications from both [[PubSubHubbub]] and [[rssCloud]].
+* Imports a list of feeds (OPML) from many other readers including: Google Reader, Feedly, Newsblur, inoreader.
+
+=== Chris Aldrich ===
+{{chrisaldrich}} installed the [https://wordpress.org/plugins/pressforward/ WordPress plugin] for [[PressForward]] to create an integrated feed reader into his [[WordPress]] site. While IndieWeb in flavor it could still stand to add a few pieces of additonal functionality. In conjunction with the [https://wordpress.org/plugins/indieweb-post-kinds/ Post Kinds plugin], the two together allow for a more coherent self-contained workflow. Features include:
+* The ability to privately [[bookmark]] posts (PressForward calls this functionality "nominate")
+* Easily reposting stories (including the full contents, photos, etc) or posting them as [[read]], [[bookmark]], like, favorite, etc. posts (one could also mark them as read privately).
+** Canonical URL use allows for the option of redirecting posts to the original story to properly attribute credit to the originating site
+* A bookmarklet for easily adding individual stories and or saving sources for subscribing to at a later date.
+* An integrated clean reading interface courtesy of [[Mercury]] (fka [[Readability]]).
+* The ability to save a full [[archival copy]] of the posts within the reader.
+Additional details can be found [http://boffosocko.com/2016/12/31/pressforward-as-an-indieweb-wordpress-based-rss-feed-reader-pocketinstapaper-replacement/ here].
 
 == Previous Examples ==
 
@@ -182,6 +198,15 @@ Technical challenges:
 Ideas:
 * Poll/refresh only when the item is clicked or asynchronous fetch when the item is viewed with live updates
 
+=== Post Presentation ===
+
+How should a reader display a post -- should it try to include the whole thing, or just an excerpt or summary?
+
+[[Woodwind]] includes an optional title ("name") followed by the "content" or "summary" if content is not provided.
+* In general Woodwind tries to show the full content of a post (which can be overwhelming), but because it only fetches the feed page, and not the individual permalinks, it only has access to the infomation in the feed.
+* On h-entry posts (as opposed to h-event), if there is a "name" but no "content" or "summary", the name is displayed as if it were content. In my experience, these posts tend to be note-length posts marked up with only p-name.
+* [[File:woodwind-presentation-2016-04-22.png|400px]]
+
 == Challenges ==
 === overload ===
 As Twitter, Tumblr, and other aggregators have demonstrated, keeping up with everything you've subscribed to is both challenging, and eventually unrewarding.  Thus some amount of smart filtering/pruning/batching is likely to be an essential part of making indie readers scale beyond following only a handful of people. See also:
@@ -222,5 +247,4 @@ After implementing an indie reader, you may find that you want to search all the
 * [[h-entry]]
 * [[notes]]
 * [[search]] / [[search#Social_search|social search]]
-Legacy:
-* [[feeds]] / [[feed reader]]
+* Legacy: [[feeds]] / [[feed reader]]

@@ -1,11 +1,32 @@
-http://indiewebcamp.com/authorship
+https://indieweb.org/authorship
 
-{{stub}}
+'''<dfn>authorship</dfn>''' is how to determine who the author(s) of a [[post]] are.
 
-'''<dfn>authorship</dfn>''' is a claim about who the author(s) of a [[post]] are.
+== Why ==
+If you write code which consumes [[h-entry]], e.g. your [[CMS]] receives [[Webmention]]s and you parse the source for post information including who the author is, '''authorship''' is how you determine from that information who the author(s) is/are.
 
-== Determining ==
-How to determine authorship of a post on a page - AKA the Authorship [[discovery]] algorithm / processing model for implementations.
+== How to ==
+=== How to publish ===
+Publishing your authorship of a post is designed to be both easy and flexible to adapt to a variety of publishing methods and designs. Any of the following are fine. 
+
+Choose whichever is the least work for you, your site, your theme(s), your code, and easiest for you to maintain!
+
+'''[[posts]]:'''
+* [[h-entry]] markup on your posts including an explicit <code>p-author</code> or <code>u-author</code> (can be enhanced with an [[h-card]])
+* OR [[rel-author]] link from your post to e.g. your home page where you have an [[h-card]] about you
+
+'''[[streams]] of posts''' (like on an [[archive]], [[homepage]], etc.) without explicit authorship per post:
+* [[h-feed]] markup including an explicit <code>p-author</code> or <code>u-author</code> (can be enhanced with an [[h-card]])
+* OR [[rel-author]] link from your stream page to e.g. your home page where you have an [[h-card]] about you.
+
+'''separate author description pages''' (e.g. when using <code>u-author</code> or <code>rel=author</code>)
+* [[h-card]] with information about you on your author description page (e.g. [[homepage]])
+
+'''Validate!''' Try this tool to validate your authorship markup - it will tell you how the authorship algorithm finds your author information on a permalink:
+* https://sturdy-backbone.glitch.me/
+
+=== How to determine ===
+How to <span id="Determining">determine</span> authorship of a post on a page - AKA the Authorship [[discovery]] algorithm / processing model for implementations.
 
 # start with a particular <code>[[h-entry]]</code> to determine authorship for, and no <code>author</code>. if no <code>h-entry</code>, then there's no post to find authorship for, abort.
 # parse the <code>[[h-entry]]</code>
@@ -24,12 +45,31 @@ How to determine authorship of a post on a page - AKA the Authorship [[discovery
 ## if the <code>h-entry</code>'s page has 1+ <code>[[h-card]]</code> with <code>url</code> ==  <var>author-page</var> URL, use first such <code>h-card</code>, exit.
 # otherwise no deterministic author can be found. Implementations are encouraged to document additional heuristics below for consideration for incorporation in to the authorship algorithm.
 
-Note: the steps of checking for "url == uid == page's URL" and "url that's also a rel-me" were incorporated inline from the steps for [http://microformats.org/wiki/representative-hcard-parsing parsing a representative h-card]. Some improvements have been made here due to feedback from implementations in practice, and those improvements should be incorporated into an iteration of representative h-card.
+Note: the steps of checking for "url == uid == page's URL" and "url that's also a rel-me" were incorporated inline from the steps for [http://microformats.org/wiki/representative-h-card-parsing parsing a representative h-card]. Some improvements have been made here due to feedback from implementations in practice, and those improvements should be incorporated into an iteration of representative h-card.
 
+==== Questions ====
+* In step 7, "if author-page has 1+ h-card...", can you clarify the meaning of "has"? In my implementation, I was checking for the presence of this h-card by iterating through all top-level "items" on the page and checking those. However, I believe I found an example where this fails. When the home page h-card is actually the "author" property of the top-level h-feed, my consuming code doesn't find this h-card. Is this sentence intended to match this case? If so, clarification on what it means to say a page "has" an h-card would be helpful. Parsing the HTML for h-card will easily find this h-card, but once you're working with the mf2 parsed result, it is buried a little deeper in the data structure. <span class="h-card" style="white-space:nowrap">{{sparkline|https://aaronparecki.com/photo.jpg}} [[User:Aaronparecki.com|Aaron Parecki]]</span> 06:45, 24 February 2017 (PST)
+** "has" like CSS <code>.h-card</code> - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 13:02, 26 July 2017 (PDT)
+** so, if you're working with the JSON structure, this means you have to iterate through every mf2 object and all levels of nesting to look for an h-card then? <span class="h-card" style="white-space:nowrap">{{sparkline|https://aaronparecki.com/photo.jpg}} [[User:Aaronparecki.com|Aaron Parecki]]</span> 08:43, 21 November 2017 (PST)
 
-=== Test cases ===
+* {{sknebel}} 2017-05-13: "if there is no author-page and the h-entry's page is a permalink page": What makes a page a permalink page? url == u-url? only one root h-entry on the page (and no feed)?
+** url of page == h-entry's u-url seems like a good start at that. <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 13:02, 26 July 2017 (PDT)
+
+* {{martijnvdven}} 2017-07-16: could this same authorship algorithm be applied to <code>h-feed</code>? [https://chat.indieweb.org/dev/2017-07-16#t1500238350593000 See chat.] Are there any obvious problems with this?
+** It would start at step 4.
+** Step 5 is done as normal.
+** Step 6 would need “the h-entry’s page” changed to “the h-feed’s page”.
+** Same for step 7.4.
+** (end algorithm summary)
+** Seems like a good idea, what are the consuming code use-cases for this? <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 13:02, 26 July 2017 (PDT)
+*** Consuming use-case would be looking for the author of a homepage feed. E.g. who authors <code>https://licit.li/</code>. {{martijnvdven}} 10:35, 12 August 2017 (CEST)
+
+* {{martijnvdven}} 2017-08-09: people are no longer only using h-entry for posts, but h-event as well. Should authorship be extended to also parse h-event?
+** The testing tool https://sturdy-backbone.glitch.me/ supports h-event [https://chat.indieweb.org/dev/2017-08-14/1502739756528000 as of 2017-08-14].
+
+==== Test cases ====
 * HTML files for testing out the above Authorship Algorithm (replace raw.github.com with rawgithub.com to serve the pages with text/html):
-** https://github.com/sandeepshetty/authorship-test-cases
+** https://github.com/sandeepshetty/authorship-test-cases (appears to need updates)
 
 == Issues ==
 
@@ -49,7 +89,12 @@ http://checkmention.appspot.com allows you to test receiving a spoofed webmentio
 === Does not implement standards ===
 The algorithm described above does only rely on new markup, but does not consider the page's head meta and link tags with <tt>rel="author"</tt>. They have been used since HTML 3.02 and are still defined in HTML5:
 * http://www.w3.org/TR/REC-html32#meta
+** meta tags long abandoned in practice (with few exceptions, not author). Lacking any real world indieweb examples that depend/need this, makes no sense to burden consuming code with unreliable legacy hidden metadata. Better to encourage the less-bad rel=author link to a page with visible author information marked up with h-card. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 12:56, 26 July 2017 (PDT)
 * http://www.w3.org/TR/html5/links.html#linkTypes
+** rel=author was already in algorithm at step 6.1 when issue noted. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 12:56, 26 July 2017 (PDT)
+
+=== multiple authors ===
+A lot of steps could be expanded (have discovery steps check for a list of authors, do "enrichment" steps for each of them individually) for dealing with multiple authors. Do we have examples of posts published with multiple authors?
 
 === Other theoretical ===
 Theoretical issues are grouped here for capturing purposes. If you find a real world example of one of these, feel free to promote it to an actual issue with its own === subhead.
@@ -57,6 +102,14 @@ Theoretical issues are grouped here for capturing purposes. If you find a real w
 * '''string-only author''': What to do if page h-entry has an author property which is not an h-card, but a string? Treat as empty and continue to fallback methods?
 ** Algorithm updated for handling a string-only author that is a URL. See 5.2.
 ** This probably isn’t worth discussing much as I can’t find a single example of this in the wild, but as it’s supported in the h-entry spec (“'''optionally''' embedded h-card(s)) it might be worth considering/specifying for when it does happen --[[User:Waterpigs.co.uk|Barnaby Walters]] 15:26, 17 January 2014 (PST)
+** {{aaronpk}}'s new site is now an example in the wild, e.g. https://aaronparecki.com/2016/04/06/15/ [[User:Kylewm.com|Kylewm.com]] 14:04, 7 April 2016 (PDT)
+* Step 7.4 looks for <code>h-card</code>s on the current page and will use the first one where the <code>url</code> property matches the author URL. The current page could have many such <code>h-card</code>s when minimal person cards are used for linking to other people (e.g. for [[person-tag]]s), and these <code>h-card</code>s may have been created by someone other than the currently sought after author. They could use a nickname for the person rather than the actual name they would have expected.
+** This is an acceptable problem when 7.1–7.3 have all failed, as the algo has tried to get a full name from the author’s own specified page. It [https://chat.indieweb.org/dev/2017-11-12#t1510515347917000 was discussed] moving 7.4 to before 7.1–7.3 which may highlight the trade-of.
+*** Checking whether the author page is [https://chat.indieweb.org/dev/2017-11-12/1510516706284000 on a different domain] could help against this. E.g. by not accepting an <code>h-card</code> on the current page if the current page is on a different domain from the author URL.
+*** Another option is to use 7.4 as a value [https://chat.indieweb.org/dev/2017-11-12/1510516583872000 until you get around] to parsing the external page as outlined by 7.1–7.3. Then [https://chat.indieweb.org/dev/2017-11-12/1510516569815000 the value will be updated] for its actually specified value but the overhead of the web request can be offloaded.
+** Applying the algo to <code>h-entry</code> objects for [[comments]] could potentially make for a bigger chance that a minimal person card has been used previously in source order. E.g. someone commenting on a post they were person tagged in.
+** Looking through the current document for <code>h-card</code>s in other places can help out when the document’s mark-up does not allow the <code>h-card</code> to be nested directly under the <code>h-entry</code>, [https://chat.indieweb.org/microformats/2017-11-20/1511137462728000 because of layout/DOM limitations]. See [https://chat.indieweb.org/microformats/2017-11-21#t1511277129777000 a discussion] on the <code>#microformats</code> [[discuss|IRC channel]]. (This time brought on by [[User:Keithjgrant.com|Keith J. Grant]].)
+*** Keith also wishes “there was a way to say the mf of element X is associated with the h-* defined by element Y.” [https://chat.indieweb.org/microformats/2017-11-21/1511278502855000] This is basically what is being done by having the <code>u-author</code> property map to any <code>h-card</code> on the page with a matching <code>u-url</code>. In the mapping use-case it makes sense to do so before retrieving external resources.
 
 == Use Cases ==
 === Name avatar display in comments ===
@@ -112,7 +165,7 @@ On such sites that use rel-author, they almost always point to a page that has a
 
 Only if the rel-author page lacks an h-card do we then fallback to looking for a likely smaller (if present) h-card on the post page itself that has a u-url of the same value as the destination of the rel-author, thus indicating that it is an h-card for the author.
 
-== Implementation heuristics ==
+== Implementations ==
 === php mf2 getAuthor ===
 [https://github.com/barnabywalters/php-mf-cleaner/blob/master/src/BarnabyWalters/Mf2/Functions.php barnabywalters/mf-cleaner getAuthor()] implements several extra steps whilst missing out the steps above which require fetching another URL — at the moment getAuthor completely lacks side effects:
 
@@ -127,8 +180,25 @@ Only if the rel-author page lacks an h-card do we then fallback to looking for a
 * First pass at the authorship algo: [https://github.com/converspace/converspace/blob/795a70965ede4cdbdacdb5858d3eb3863bd46d20/webmention.php#L66 get_h_card()] (announcement: http://www.sandeep.io/116)
 ** Should be extracting it into an independent lib soon -[[User:Www.sandeep.io|Www.sandeep.io]] 01:23, 24 July 2013 (PDT)
 
+=== XRay ===
+* The [[XRay]] library/API implements the authorship algorithm
+** Tests: https://github.com/aaronpk/XRay/tree/master/tests and test data: https://github.com/aaronpk/XRay/tree/master/tests/data/author.example.com
+
+=== ProcessWire Webmention ===
+* The [[ProcessWire]] Webmention plugin handles the authorship algorithm as of 2016-04-10 with the exception of step 4
+** {{gRegor}} runs this on gregorlove.com. I'm skipping step 4 for now because it's undecided what the desired behavior would be if an h-feed page sent a webmention.
+
+=== Dobrado ===
+* [[dobrado]] implements the authorship algorithm in it's Post module ReceiveWebmention function: https://gitlab.com/dobrado/dobrado/blob/master/install/Post.php#L841
+
+=== SimplePie ===
+* SimplePie implements the authorship algorithm in it's Parser class: https://github.com/simplepie/simplepie/blob/master/library/SimplePie/Parser.php#L440
+
+=== mf-obj ===
+* Implements authorship in getEntryFromUrl(): https://github.com/notenoughneon/mf-obj#getentryfromurl
+
 == Silo Implementations ==
-=== non currently ===
+=== none currently ===
 == Past Implementations ==
 === Google Search ===
 '''Support dropped 2014-08-28[http://searchengineland.com/goodbye-google-authorship-201975]'''
@@ -142,12 +212,11 @@ Only if the rel-author page lacks an h-card do we then fallback to looking for a
 *** then use that profile for authorship information
 
 [[File:googleplus-authorship.png]]
-
+[[Category:building-blocks]]
 == See Also ==
 * [[discovery]]
 * [[posts]]
 * [[h-entry]]
 * [[h-card]]
 * [[rel-author]]
-
-[[Category:building-blocks]]
+* https://sturdy-backbone.glitch.me/ – simple testing tool be {{sknebel}} showing how the algorithm plays out for a given URL

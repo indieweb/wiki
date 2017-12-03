@@ -1,4 +1,4 @@
-http://indiewebcamp.com/template
+https://indieweb.org/template
 
 {{stub}}
 
@@ -14,6 +14,14 @@ WordPress splits markup responsibility between their "core" code (in functions l
 This poses real world problems, e.g. updating WordPress blogs to use [[h-feed]] and [[h-entry]] instead of class microformats <code>hfeed hentry</code>
 
 Based on this real world experience, when designing your own template system, empower it with the full ability to change the markup of any pages, and do not hard code any markup in your core CMS code.
+
+=== ProcessWire ===
+:ProcessWire template documentation: http://processwire.com/api/templates/
+The [[ProcessWire]] template system associates a set of fields with the template and the page creation interface reflects that. For example, a template named "blog" might have fields: title, body, author, and date_published. When adding a page, you first select the template "blog" and the subsequent form would only contain those fields.
+
+In the associated PHP file for the template, the fields would be available as <code>$page->title</code>, <code>$page->body</code>, <code>$page->author</code>, and <code>$page->date_published</code> (the <code>$page</code> variable is part of the ProcessWire API). Template files are usually HTML with PHP tags to insert the content.
+
+* In my experience, this makes it relatively easy to add new [[post type]]s by adding new templates. It also allows for more specific posting interfaces for each type of content, rather than a longer form with many options. <span class="h-card">{{sparkline|https://gregorlove.com/site/assets/files/3473/profile-2016-med.jpg}}  [[User:Gregorlove.com|gRegor Morrill]]</span> 16:45, 14 November 2016 (PST)
 
 == Silo Examples ==
 Some silos have their own template formats which allow you to customize the look and feel of your blog on their site.
@@ -66,7 +74,7 @@ These are the few known HTML based template formats:
 * [http://camendesign.com/dom_templating Templating With DOM] uses class names
 ** but where is a simple markup example of an element that is repeated?
 ** and how a template specifies a count of how many times / instances are filled in?
-*** one possibility is for the template-filling code to count the children of the element to decide how many times to iterate. A single child could mean 'as many as you see fit' as a single-entry list is unlikely as a design. This has the advantage that the template looks closer to the desired layout. Alternatively, the last child coudl contain ... to signal to append more.
+*** one possibility is for the template-filling code to count the children of the element to decide how many times to iterate. A single child could mean 'as many as you see fit' as a single-entry list is unlikely as a design. This has the advantage that the template looks closer to the desired layout. Alternatively, the last child could contain ... to signal to append more.
 *** API is quite similar to jQuery in places
 * DOM Templating in Node.js
 ** [https://github.com/fgnass/express-jsdom JSDOM]: For creating DOMs in node or client apps

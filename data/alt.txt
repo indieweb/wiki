@@ -1,11 +1,50 @@
-http://indiewebcamp.com/alt
+https://indieweb.org/alt
 
 {{stub}}
 
 '''<dfn>alt</dfn>''' is a required attribute of the <code>&lt;img></code> element and should be provided in any use of images on indieweb pages from [[photo]] posts to [[featured]] and other images in [[articles]].
 
-For guidelines on good <code>alt</code> attribute authoring, see:
+== Guidelines ==
+Summary guideline for the alt attribute: 
+<div style="background:#EFE;border:solid 2px black">
+* Use alt text that makes sense when read out loud along with the context of any text before, and any text after the image.
+</div>
+
+For more decent guidelines on good <code>alt</code> attribute authoring, see:
 * https://html.spec.whatwg.org/multipage/embedded-content.html#alt
+
+Exception:
+=== Caption Title Legend related ===
+Exception: sometimes the WHATWG spec has bad or bad out-of-context advice, e.g. <blockquote style="background:#FEE;border:dashed 2px gray">"...the alt attribute's value should never contain text that could be considered the image's caption, title, or legend."[https://html.spec.whatwg.org/multipage/embedded-content.html#alt]</blockquote>
+
+This is poor advice because:
+* Using the phrase <em>should never</em> is "scare" advice (more likely to cause inaction than action)
+* More likely to result in empty alt attributes than anything useful
+* An empty string "" contains no "text that could be considered the image's caption, title, or legend", satisfies the WHATWG statement, yet adds little or no value.
+
+Instead, see the summary guideline for positive guidance. In particular for this case:
+<div style="background:#EFE;border:solid 2px black">
+* Alt text may perfectly reasonably contain text that could be used or considered part of an image's caption, title, or legend. If such text is already present in the context of the text before or after the image, no need to duplicate the text. Instead, use alt to add information or an additional detail or two about what is actually in the image.
+</div>
+
+== Issues ==
+Alt text on images in a post can cause issues when trying to display that post in a [[reader]].
+
+On adactio.com, the img alt text is the same as the post contents. Since alt text is included in the p-name parsed result, this results in duplicated text for the posts.
+
+Below is a screenshot showing a few recent posts from adactio.com as rendered in an IRC-based reader.
+
+[[File:adactio-posts-in-irc-reader.png|500px]]
+
+Below are two posts from tantek.com in the same reader. Note that the text of the first post includes "a jpg" which is the alt text of the image.
+
+[[File:tantek-posts-in-irc-reader.png|500px]]
+
+Currently the python mf2 parser does not include alt text in the parsed result, so these posts look fine in Woodwind. However, if it did, as the parsing algorithm suggests, this is how a post would look. (with more representative alt text)
+
+[[File:adactio-post-with-alt-text-in-woodwind.png|500px]]
+
+Woodwind has no way of knowing the first line of the name property came from the alt text.
 
 == See Also ==
 * [[photos]]

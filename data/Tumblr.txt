@@ -1,19 +1,9 @@
-http://indiewebcamp.com/Tumblr
+https://indieweb.org/Tumblr
 
-{{pagelogo|https://pbs.twimg.com/profile_images/378800000576211895/94a4a4b25f5d692cb836baf74b9e64b1_200x200.png}}
+[[Category:silo]]
+{{pagelogo|https://indieweb.org/img/freemyoauth/tumblr.jpg}}
 
 '''<dfn>[http://tumblr.com Tumblr]</dfn>''' is a popular content hosting [[silo]], especially for found [[images]] & [[video]], that explicitly supports multiple types of [[posts]], and through free domain mapping, a [[content hosting service]] as well.
-
-== Post types ==
-:''See also'': [[Posts#Kinds of Posts]]
-
-* text
-* photo
-* quote
-* link
-* chat
-* audio
-* video
 
 == How to ==
 There's a lot you can do with Tumblr and the IndieWeb, the "how tos" here are clustered into two chunks, first, as how to use Tumblr as an domain aliasing [[web hosting]] provider. The second cluster is for if/when you have your own site independent of Tumblr, and want to (still) interact with posts / people on Tumblr.
@@ -21,6 +11,7 @@ There's a lot you can do with Tumblr and the IndieWeb, the "how tos" here are cl
 These two major clusters are separated by how to "Export", which you'll want to use as part of switching from Tumblr as a web host, to more independent [[web hosting]], and subsequent usage of your Tumblr as merely a [[POSSE]]/[[backfeed]] proxy.
 
 === Use your own domain ===
+__TOC__
 See: https://www.tumblr.com/docs/en/blog_management#customdomain
 
 Some key things:
@@ -39,7 +30,7 @@ You can use this snippet to do so:
 <pre><code>
 {block:Description}
 <meta name="description" content="{MetaDescription}" />
--<a href=" --Link to Site Goes Here--" rel="me">--Site Name Goes Here--</a>
+<a href="http://yoursite.example.com/" rel="me">Your Site Name</a>
 {/block:Description}
 </code>
 </pre>
@@ -108,8 +99,6 @@ Tumblr doesn't have built in support for [[webmention]]s, but [[Bridgy]] can sen
 * See https://www.brid.gy/about#blogs for more.
 
 ==== Implementation Notes ====
- 
-
 * Be aware that brid.gy does not parse your h-entries but rather the RSS feed of your Tumblr. 
 * To check how your Tumblr looks in rss, add /rss behind the URL of your tumblr post. 
 * Make absolutely sure to disable the 'Truncate RSS feed' option inside your Tumblr Template Editor, otherwise URLs will not be shown in the RSS and thus in Brid.gy and no Webmention will happen! 
@@ -124,15 +113,19 @@ It is possible to use [[Micropub]] clients like Quill to post to blogs on Tumblr
 
 ----
 
-=== Export ===
-Tumblr's v1 read API is blissfully simple to use although now deprecated. It returns custom XML but it is fairly straightforward to transform this into HTML etc.
+=== How to export your data ===
+The Tumblr API provides XML and JSON for posts.  Tumblr's v1 read API is blissfully simple to use although now deprecated. It returns custom XML but it is fairly straightforward to transform this into HTML etc. The v1 API doesn't require authentication. 
+* [http://www.tumblr.com/docs/en/api/v1 v1 API documentation]
 
-See [http://www.tumblr.com/docs/en/api/v1 documentation].
-
-[[User:Tommorris.org|tommorris]] ported most of his content over from Tumblr.
+* [[User:Tommorris.org|tommorris]] ported most of his personal site content over from Tumblr.
+* {{chrisaldrich}} was able to export his data from Tumblr to [[WordPress]] using the [https://wordpress.org/plugins/tumblr-importer/ WordPress Tumblr Importer plugin] and display it on his site with little struggle. He now uses [[POSSE]] to selectively post content at his Tumblr site from his primary personal site.
 ----
 
-=== POSSE to Tumblr ===
+==== Feeds ====
+Public feeds are available of Tumblr sites at the path "/rss", e.g.:
+* http://tantek.tumblr.com/rss
+
+=== How to POSSE ===
 Tumblr used to be able to import an RSS feed; they removed this ability in 2011 according to [http://wiredpen.com/2011/06/21/tumblr-removes-rss-import-feature-becomes-far-less-useful/ "Tumblr Removes RSS Import Feature, Becomes Far Less Useful"].
 
 How are people [[POSSE]]ing to Tumblr today? Presumably using their API? Or email?
@@ -143,7 +136,7 @@ can automatically POSSE your posts to Tumblr.
 
 IndieWeb Examples:
 * {{kevinmarks}} has been manually POSSEing some of his personal Known site posts to his Tumblr [http://known.kevinmarks.com/2015/does-edit-ui-affect-writing-style since  2015-05-11]. Examples:
-* http://known.kevinmarks.com/2015/does-edit-ui-affect-writing-style (original, but lacks rel-syndication link to Tumblr copy)
+* http://known.kevinmarks.com/2015/does-edit-ui-affect-writing-style (original, but lacks u-syndication link to Tumblr copy)
 ** http://kevinmarks.tumblr.com/post/118736710410/does-editing-ui-affect-writing-style manual POSSE using [[Quill]] to Tumblr, lacks rel=original/canonical etc. [[permashortlink]] back to the original Known post.
 * {{kylewm}} maybe? (creator of silo.pub)
 
@@ -163,8 +156,8 @@ IndieWeb community members doing this:
 
 ==== POSSE Replies to Tumblr ====
 When you do a [[reply]] to an indieweb post:
-* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
-* if there is such a [[rel-syndication]] hyperlink with href linking to a Tumblr.com post URL
+* look for a [[u-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
+* if there is such a [[u-syndication]] hyperlink with href linking to a Tumblr.com post URL
 * then
 ** do a native reply of that Tumblr post URL on Tumblr itself
 * end if
@@ -185,8 +178,8 @@ Reblogging specifically has to be done through the [http://www.tumblr.com/docs/e
 
 ==== POSSE Reposts to Tumblr ====
 When you do a [[repost]] of an indieweb post:
-* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
-* if there is such a [[rel-syndication]] hyperlink with href linking to a Tumblr.com post URL
+* look for a [[u-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
+* if there is such a [[u-syndication]] hyperlink with href linking to a Tumblr.com post URL
 * then
 ** do a native repost of that Tumblr post URL on Tumblr itself
 * end if
@@ -205,8 +198,8 @@ IndieWeb Example(s):
 
 ==== POSSE Favorites to Tumblr ====
 When you post a [[favorite]] of an indieweb post:
-* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
-* if there is such a [[rel-syndication]] hyperlink with href linking to a Tumblr post URL
+* look for a [[u-syndication]] hyperlink on the indieweb post permalink page to a Tumblr.com post URL
+* if there is such a [[u-syndication]] hyperlink with href linking to a Tumblr post URL
 * then
 ** natively "like" that Tumblr post URL on Tumblr itself
 * end if
@@ -216,20 +209,12 @@ Getting data out of Tumblr is pretty easy as documented above. There is no need 
 
 This makes Tumblr a logical destination silo for a [[PESETAS]] setup.
 
-== Feeds ==
-Public feeds are available of Tumblr sites at the path "/rss", e.g.:
-* http://tantek.tumblr.com/rss
-
 == Porting to the IndieWeb ==
 === Challenges ===
 * porting over content and maintaining URL redirects
 * porting over comments
 * porting over reblogs
 * porting over likes
-
-=== Export Your Posts ===
-* The Tumblr API provides XML and JSON for posts. The v1 API doesn't require authentication. [http://www.tumblr.com/docs/en/api/v1 documentation]
-* ...
 
 ==== Mapping Tumblr post types ====
 Tumblr posts can be roughly mapped to IndieWeb posts as follows:
@@ -245,6 +230,18 @@ Tumblr posts can be roughly mapped to IndieWeb posts as follows:
 == Users own their content ==
 The [https://www.tumblr.com/policy/en/terms-of-service Tumblr TOS] assert that users retain ownership and copyright over all content and IP they post. Details in section 6, Content and Subscriber Content. (Checked 2014-07-21.)
 
+== Features ==
+=== Post types ===
+:''See also'': [[Posts#Kinds of Posts]]
+
+* text
+* photo
+* quote
+* link
+* chat
+* audio
+* video
+
 == UI/process documentation ==
 
 === Auto-syndication ===
@@ -255,13 +252,60 @@ Tumblr allows users to set-up auto-syndication of Tumblr posts to Twitter. The U
 
 In Tumblr's rich text editor, the formatting buttons appear when you highlight text. When the cursor is on a blank line, options to add media appear. Tumblr staff explained the thinking behind their editor in "[http://ministryofdesign.tumblr.com/post/116490088585/a-more-pleasant-post A More Pleasant Post]"; it launched sometime before [http://freyayuki.tumblr.com/post/110824604502/limitation-tumblr-text-post-editor 2015-02-13].
 
+== Brainstorming ==
+=== How to delete your account ===
+TBD.
+
+Has anyone deleted their Tumblr account? What's the process? How long do they hold your data anyway? Etc.
+
+See also: [[delete your account]]
+
 == Criticisms ==
 
-=== Tumblr's Great Termination ===
-"Over the next week, the terminated teens created a huge Facebook group chat; its thousands of messages are filled with anguish and denial and regret: “They took away our lives,” and “The worst part is that everything was just ripped out from under us.” " [https://newrepublic.com/article/129002/secret-lives-tumblr-teens]
+=== Involuntary Identity Reassignment ===
+Tumblr has (sometimes inexplicably) reassigned a username (and thus *.tumblr.com URL) to someone else, without explicit permission of the original owner / creator of the username and tumblr URL.
 
-=== Downtime ===
-* 2010-340 16:24:41-0800 (PST) "issue in ... [[database]] cluster" [http://www.flickr.com/photos/tantek/5331910087/ http://farm6.staticflickr.com/5046/5331910087_c25749d90b_z.jpg]
+Examples:
+* {{citation
+| title = Tumblr disappeared me…
+| url = http://www.zephoria.org/thoughts/archives/2011/04/27/tumblr-disappeared-me.html
+| author = [http://www.zephoria.org/ Danah Boyd]
+| published = 2011-04-27
+| archiveurl = http://web.archive.org/web/20170711203434/http://www.zephoria.org/thoughts/archives/2011/04/27/tumblr-disappeared-me.html
+}}
+** Follow-up {{citation
+| title = A Customer Service Nightmare: Resolving Trademark and Personal Reputation in a Limited Name Space
+| url = http://www.zephoria.org/thoughts/archives/2011/04/28/a-customer-service-nightmare-resolving-trademark-and-personal-reputation-in-a-limited-name-space.html
+| author = [http://www.zephoria.org/ Danah Boyd]
+| published = 2011-04-28
+| archiveurl = http://web.archive.org/web/20170711203744/http://www.zephoria.org/thoughts/archives/2011/04/28/a-customer-service-nightmare-resolving-trademark-and-personal-reputation-in-a-limited-name-space.html
+}}
+
+=== Releasing inactive accounts ===
+After some period of inactivity, Tumblr will send an email that requires user action, otherwise their username can be released, breaking permalinks. The message they send is:
+
+<blockquote><p>It's been a while since you've been on Tumblr, and we wanted to make sure that you're still interested in using the username [username]. If so, just hit this button:</p>
+
+<p>button: I'm still [username]</p>
+
+<p>If not, you don't have to do anything. If we don't hear from you within two weeks, we'll just give you a temporary username and release your old one back into the wild. You can come back and change your temporary name to whatever you want, whenever you’re ready. Your content will all still be here when you get back.</p></blockquote>
+
+Experiences:
+* {{gRegor}}: I've experienced this a few times, after at least one year of inactivity.
+* {{t}}: I have also experienced this (see screenshot below), after an unknown period of inactivity. Only <span id="Two_Weeks_Warning_To_Involuntary_Change">two weeks warning before an involuntary change</span> seems unreasonable.
+
+[[File:2017-07-26-tumblr-email-username-release.png]]
+
+This is obviously bad for [[longevity]], and makes Tumblr a less attractive free hosting option.
+
+If you do click the '''[I'm still Username]''' button in the email, you're taken to a web page that asks you to reset your password:
+
+[[File:2017-07-26-tumblr-welcome-reset.png]]
+
+When you click '''[ Alrighty ]''' it take you to another screen where it shows you your login email, and just one field to pick a new password. No old password, no confirm new password, and just accepts it without confirmation.
+
+=== The Great Termination ===
+"Over the next week, the terminated teens created a huge Facebook group chat; its thousands of messages are filled with anguish and denial and regret: “They took away our lives,” and “The worst part is that everything was just ripped out from under us.” " [https://newrepublic.com/article/129002/secret-lives-tumblr-teens]
 
 === Poor Quote Post Presentation ===
 In the dashboard view of your own [[quote]] post, it looks like you're quoting yourself, which is misleading:
@@ -280,8 +324,23 @@ Even worse, [[reblogs]] of a [[quote]] post look like they're being said by the 
 [[File:tumblr_terminater_screen.jpg]]
 
 === Blocked Feedreader Bloglovin ===
-* Tumblr has blocked at least one [[feed reader]] ([[Bloglovin]]) from accessing their [[feeds]] [http://venturebeat.com/2014/08/07/tumblr-blocks-bloglovin-fashions-number-one-rss-reader-with-25m-users/]
-** See [http://www.bloglovin.com/tumblr-update Tumblr blocks Bloglovin] (link dead on 2015-04-08)
+Tumblr has blocked at least one [[feed reader]] ([[Bloglovin]]) from accessing their [[feeds]]
+* {{citation
+| title = Tumblr blocks Bloglovin, fashion’s number-one RSS reader with 25M users
+| url = https://venturebeat.com/2014/08/07/tumblr-blocks-bloglovin-fashions-number-one-rss-reader-with-25m-users/
+| author = Harrison Weber
+| published = 2014-08-07
+| archiveurl = http://web.archive.org/web/20170726174047/https://venturebeat.com/2014/08/07/tumblr-blocks-bloglovin-fashions-number-one-rss-reader-with-25m-users/
+}}
+* {{citation
+| title = Tumblr blocks Bloglovin
+| url = http://www.bloglovin.com/tumblr-update
+| author = Mattias Swenson
+| published = 2014-08
+| archiveurl = http://web.archive.org/web/20141010065604/http://www.bloglovin.com:80/tumblr-update
+}}
+
+As of 2014-09-09, Bloglovin reported in a [https://www.facebook.com/Bloglovin/posts/10154583348070300 Facebook status] ([http://web.archive.org/web/20170726174848/https://www.facebook.com/Bloglovin/posts/10154583348070300 archived]) that Tumblr feeds were available again.
 
 === Primary vs Secondary blogs and contributors ===
 * Tumblr allows you to create multiple blogs from your account, but only the primary blog has the full features including follow, like, reply, ask, and submit. Secondary blogs cannot follow other blogs, like posts, ask questions to other users, or submit posts to other blogs.
@@ -292,6 +351,9 @@ Even worse, [[reblogs]] of a [[quote]] post look like they're being said by the 
 === Accessibility ===
 * Tumblr's "rich text" editor has no way to add <code>alt</code> text to pictures; you have to switch to the HTML editor and dig in their markup (as of at least 2015-04-17).
 * Search results (e.g. https://www.tumblr.com/search/Rich+Text+Editor) require Javascript, and tag pages (e.g. https://www.tumblr.com/tagged/rich_text_editor) appear broken without it, showing only a few entries (as of at least 2015-04-17).
+
+== Downtime ==
+* 2010-340 16:24:41-0800 (PST) "issue in ... [[database]] cluster" [http://www.flickr.com/photos/tantek/5331910087/ http://farm6.staticflickr.com/5046/5331910087_c25749d90b_z.jpg]
 
 == See Also ==
 * [[silos]]

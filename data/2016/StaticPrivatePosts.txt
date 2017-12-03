@@ -1,0 +1,39 @@
+https://indieweb.org/2016/StaticPrivatePosts
+
+'''<dfn>StaticPrivatePosts</dfn>''' was a session at [[2016|IndieWeb Summit 2016]].
+
+Notes archived from: http://etherpad.indiewebcamp.com/staticprivatepost
+
+----
+Private Posts for Static Websites
+
+Kinds of private posts:
+* shared drafts
+* this is only for me for all time
+* this is for me and some subset of people
+
+Use case:
+* wanted to RSVP to indieweb summit but not make my attendance public
+* "public" versus "publicized" - difference between who is able to access it, vs who it *should* be pushed to (hidden, draft, authenticated access ony) ?
+
+Authentication at the web server level
+* reads a list of domains that can view the post, the web server handles sending the HTTP headers for authentication
+
+How to easily share with more than one person?
+* create a URL for a group, add that URL as the audience for a post
+* webmention for the URL to each person in the group would happen
+* tie into rsvp?
+
+the audience for this post is twitter.com/willnorris
+* @willnorris can sign in with twitter to see the post
+* any URL equivalent to twitter.com/willnorris can also view the post (bidirectional rel=me links)
+
+Nginx Lua plugin to handle authentication at the web server level
+* https://www.stavros.io/posts/writing-an-nginx-authentication-module-in-lua/
+* where to store the access control list?
+* an implementation detail, but there are many options
+* a dot-file ACL where everything under that path is restricted to that audience
+* in Redis
+* in meta tags in the HTML (but then can't use this to protect images)
+
+[[Category:2016 sessions]]

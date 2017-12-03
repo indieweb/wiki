@@ -1,0 +1,54 @@
+https://indieweb.org/metaformats
+
+{{stub}}
+
+'''<dfn>metaformats</dfn>''' started as an April Fools joke concept to describe how to both publish using microformats class names and openly parse meta tags as a fallback for what should be in-the-body visible data, including backcompat with [[OGP]], [[Twitter Cards]], and meta author, description, and anything else real sites (like search engines) appear to consume.
+
+== use-cases ==
+Variants in markup being very plumbing-specific, the use-cases for metaformats are likely to also be plumbing-specific, that is, addressing existing markup publishing behaviors, more than any new user-level functionality.
+
+=== Repurpose existing meta ===
+Many sites have meta [[OGP]] markup, because the result of doing so is immediately visible when sharing links to such pages in [[Facebook]]. It's immediately testable, and provides immediate visible benefit. (in contrast, [[Twitter Cards]] require your site to be approved first, and it is unknown when any [[Google]] suggested metadata  will cause any actual specific impact in their search results)
+
+Repurposing existing meta OGP tags is also a positive reframing of avoid more duplication of information already present in meta OGP tags, in particular situations where:
+* a page has meta OGP info, but that info is not repeated anywhere in the visible page
+** E.g. [[Diaspora]] posts as hinted at in https://github.com/diaspora/diaspora/issues/7467
+* ...
+
+== Brainstorming ==
+There are a many ways to incrementally approach defining metaformats. Here are some that help address the use-case(s).
+
+=== Which approach first ===
+I'm in favor of first attempting to "define mf2 parsing for meta", as that provides more direct author / publisher control, and involves less special-casing in mf2 parsing code. It also allows migration to other non-OGP meta if/when implementations switch away from OGP to some other meta by some other vendor. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 15:24, 13 September 2017 (PDT)
+* Hmm, like the idea of not adding anything to mf2 parsing code.  My concern comes when we assume that mf2 will override OGP tags.  In other words, I would not want to assume '.h-*:first .p-name' to override a OGP title, as that might not be the intention.  OGP titles are, when set, known to be page-scoped, and the first h-* is not assumed to be that way.  Perhaps if there is only on h-* ? {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} 08:49, 14 September 2017 (PDT)
+
+=== Define mf2 parsing for meta ===
+If the [[microformats2]] parsing were updated to define how to parse microformats class names on meta elements, it may be possible to just add 'class' attributes to existing meta OGP tags as a way of making their information visible to mf2 parsers.
+
+Advantages:
+* Helps avoid DRY violation. By re-using content already being published in a meta OGP tag, even if invisible, the publisher avoids any need to duplicate that content into visible elements for mf2 consumers.
+* Publisher control over what meta OGP they want consumed in what way as which microformats and properties
+* Allows publishers to re-use non-OGP meta for certain properties if they wish, e.g. from [[Twitter Cards]], [[Dublin Core]], or other random meta that they are already publishing / keeping up to date for whatever reason.
+* Likely very easy to upgrade existing implementations.
+
+Disadvantages:
+* Publisher is burdened with understanding the mf2 class equivalents of existing OGP properties, thus using them
+** Possible mitigation: validators could check/compare the OGP property and the mf2 property (in the class attribute) and provide warnings if/when there are mismatches.
+* Only valid in HTML5, older strict validators could have an issue with this.
+
+=== Map meta OGP to mf2 ===
+Another approach is to treat meta OGP as a form of backcompat parsing for various mf2 vocabularies, to fallback to when there is no mf2 or mf1 version of that vocabulary on the page.
+
+Advantages:
+* Helps avoid DRY violation same as noted above.
+* Less work (burden) for publishers who "just use OGP".
+
+Disadvantages:
+* Only applies to meta OGP (absent additional work, other meta like Twitter Cards and Dublin Core would need separately defined mappings, as well as a prioritization to apply, which meta to use first for which property)
+* Inadvertently encourages meta OGP as a common format visible to FB and IndieWeb.
+* No publisher control over how OGP properties are re-interpreted as mf2
+
+This approach is not mutually exclusive with the previous approach, and maybe something to consider also doing, rather than versus.
+
+== See also ==
+* [[microformats2]]

@@ -1,16 +1,14 @@
-http://indiewebcamp.com/Neonblog
+https://indieweb.org/Neonblog
 
-Neonblog is an indieweb microblog developed by
-[[User:notenoughneon.com|Emma Kuo]] and running on
-[http://notenoughneon.com notenoughneon.com] until July 2015, when it was replaced by [[Skein]]. It uses
-microformats as its native data store.
+Neonblog is a PHP blog developed by
+{{emmak}} and running on [http://notenoughneon.com notenoughneon.com] until July 2015. It is no longer maintained. Neonblog uses html+microformats as its native data store.
 
 == Features ==
 
 * Post articles, notes, photos, replies, likes, reposts
 * Send/receive webmentions
 * [[RelMeAuth]] based login (using [https://indieauth.com indieauth.com])
-* [[Micropub]] endpoint
+* [[Micropub]] endpoint and embedded micropub client
 * [[oEmbed]]ded Youtube and Soundcloud players in notes
 * Experimental h-feed reader
 * Search
@@ -19,8 +17,7 @@ microformats as its native data store.
 
 [https://github.com/notenoughneon/neonblog github.com/notenoughneon/neonblog]
 
-Neonblog isn't recommended for general use, but if you want to
-try it, there are relatively few dependencies:
+Neonblog isn't recommended for general use, but if you want to try it, there are relatively few dependencies:
 
 * PHP 5.4 (json, curl, openssl, imagick)
 * Apache mod_rewrite
@@ -30,21 +27,12 @@ All configuration is in the file config.json.
 
 == Architecture ==
 
-Neonblog uses microformats as its native data store. Posts are
-written to html files and served as static content by Apache. When
-posts need to be updated, such as adding replies, the h-entries are
-parsed to an intermediate representation before being transformed
-back to html using a set of Mf2-aware templates.
+Neonblog uses [[PURR]] to use published HTML as its native data store. Posts are written to html files and served as static content by Apache. When
+posts need to be updated, such as adding replies, the h-entries are parsed to an intermediate representation before being transformed back to html using a set of Mf2-aware templates.
 
-The home page feed is generated with the help of an index that
-stores url, local filename, date and post type. This is persisted in
-a json file, with the intent to upgrade to SQLite if performance
-becomes an issue. The index is used to quickly locate the relevant
-posts to load, which are parsed for microformats and redisplayed in
-a feed format.
+The home page feed is generated with the help of an index that stores url, local filename, date and post type. This is persisted in a json file, with the intent to upgrade to SQLite if performance becomes an issue. The index is used to quickly locate the relevant posts to load, which are parsed for microformats and redisplayed in a feed format.
 
-Received webmentions are queued for either manual approval via UI or
-a bulk auto-accept running on a cron job. The index is used to
+Received webmentions are queued for either manual approval via UI or a bulk auto-accept running on a cron job. The index is used to
 determine if the target url is a valid post.
 
 OAuth tokens and queued webmentions are also stored using json.

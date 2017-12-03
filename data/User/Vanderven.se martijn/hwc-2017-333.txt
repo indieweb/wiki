@@ -1,0 +1,47 @@
+https://indieweb.org/User%3AVanderven.se_martijn/hwc-2017-333
+
+<span class="p-summary">'''<dfn>Notes from Virtual Homebrew Website Club, November 29, 2017</dfn>''' taken as the conversation flowed.</span> They don’t have any order to them other than time, and related items haven’t been grouped.
+
+Attendance: {{jeremycherfas}}, {{martijnvdven}}, and {{sknebel}}.
+
+* Martijn broke posting to his website and now has to finish implementing [[Micropub]] before he can blog again.
+* Jeremy started the work he discussed last time ’round, for posting to [[Grav]] without the Grav admin panel.
+** It works to create the files “manually”, and goes much faster than the Grav admin panel.
+** Creating all posts by hand now.
+*** Has to remember the folder for the item has to have a web friendly name, and the item title has to be human friendly.
+*** Using a service called “[http://junecloud.com/software/mac/junecloud-automator-actions.html#make-names-web-friendly make names web friendly]”
+**** First started using it (probably) for FTP uploading images.
+*** Wants to automate after getting familiar with all the steps
+* Sven is working on adding an [[Atom]] feed and [[Websub]] to his site, for [[Brdigy Fed]].
+** Started using Granary for the feeds, but available at his own URLs. His server will “proxy” the feed from Granary.
+*** Doesn’t fully trust readers to get redirects rights.
+*** Feeds will have a different link to self. HTTP headers are injected with the correct self link, and hopefully these will be picked up on instead.
+**** [[Pubsubhubbub]] might break on this, as the spec does not specify checking Link HTTP headers.
+* Martijn was almost at a point where his [[token endpoint]] goes live.
+** It is more configurable than [[selfauth]], as that was a often heard criticism.
+** It implements the HTTP side of the token endpoint spec and declares an interface for a class to handle the actual token creation/validation/revocation.
+** This way other services (e.g. [[Micropub]]) can use the exact same logic to validate a received token without having to talk to the token endpoint.
+* {{jeremycherfas}}: Did we talk about nvalt?
+** Been hoping for a version for multiple folders. Want to “archive” stuff that has been done.
+** Talked about his wishes in regards to [https://github.com/glushchenko/fsnotes FSNotes] and they implemented something like it.
+* {{martijnvdven}}: I like the monetisation of FSNotes - clone and compile or pay a small sum for a precompiled version from the app store.
+* {{martijnvdven}} and {{jeremycherfas}} gus a bit about [http://marked2app.com/ Marked2].
+* Discussing multi-user Micropub based blogs based on [[Micropub-brainstorming#Users_using_their_own_identities_to_log-in_to_a_community_blog]] a wiki conversation and [https://etherpad.indieweb.org/communityblogpub previous brainstorming by Martijn and Sven].
+** Asking what Jeremy thinks of the flows.
+** Jeremy never realised Quill (or any Micropub client) didn’t know he was the person who was logged in.
+** Jeremy doesn’t have any of the hang-ups Martijn was thinking about, and instead sees the question how Micropub endpoints are going to present a choice between multiple endpoints as the important one. The one-time authorization (or add endpoint to client) flow is much less important.
+* [MarsEdit]
+** http://www.manton.org/2017/07/micro-blog-photos-from-marsedit.html
+** http://www.manton.org/2017/10/core-intuition-299.html
+** Jeremy uses MarsEdit to manage https://agro.biodiver.se and the EatThis podcast posts.
+*** Maybe not the main posts, but the quick links and asides are likely coming from MarsEdit.
+*** MarsEdit also works well for doing after-the-fact edits, as it is more responsive than the big WordPress back-end.
+
+Interesting take-away: the CMS that implements Micropub (Known) has a good UI so he posts there through the admin interface, the CMS without Micropub (WordPress) is where he uses external posting clients. [https://stream.jeremycherfas.net/2017/horses-for-courses Jeremy made a not of this himself too.]
+
+* Jeremy previously felt strongly about leaving WordPress, but less so these days.
+** WordPress does what it needs to do for his use-cases, while other CMS are less developed.
+** The best podcasting solutions are made by other podcasters, but not necessarily open-source.
+*** Is {{aaronpk}}’s [[Percolator]] site open-source? No.
+*** https://10centuries.org/
+* Sven comes back to an early discussion on nested IndieAuth for multi-user blogs (per Aaron’s flow) and wonders if one could nest the tokens. This way a user could revoke a token on '''their''' token-endpoint and when a token is received by the blog it would not just check that token internally but also check if the outside user issued token is still valid.

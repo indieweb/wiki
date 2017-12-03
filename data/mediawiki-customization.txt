@@ -1,15 +1,74 @@
-http://indiewebcamp.com/mediawiki-customization
+https://indieweb.org/mediawiki-customization
 
-{{stub}}
+This page documents the customizations we've made to MediaWiki for our community.
 
-== installs ==
-Extensions:
-* Install the following extensions:
-** '''[https://github.com/BenWard/mediawiki-semantic-html SemanticHTML]'''
-** [https://github.com/aaronpk/IndieAuth-MediaWiki IndieAuth for MediaWiki]
-** ...
+== extensions ==
+=== download and install ===
+* '''[https://github.com/BenWard/mediawiki-semantic-html SemanticHTML]'''
+* notitle
+* [https://github.com/aaronpk/IndieAuth-MediaWiki IndieAuth for MediaWiki]
+* RelWebmention - add webmention endpoint to wiki pages
+* ...
 
-== see also ==
+=== enable ===
+<pre>wfLoadExtension("Cite");
+wfLoadExtension("ParserFunctions");</pre>
+
+== hacks ==
+* Add <code>'data', 'time', 'mark', 'a'</code> to the list of allowed HTML tags in <code>includes/Sanitizer.php</code> (search for htmlpairsStatic)
+
+== editable customizations ==
+
+See [[MediaWiki:Common.css]] for custom CSS used on this wiki.
+
+== configuration ==
+Add these to <code>LocalSettings.php</code>
+
+==== enable nice urls ====
+<pre>$wgScriptPath       = "";
+$wgScriptExtension  = ".php";
+$wgArticlePath = '/$1';
+$wgUsePathInfo = true;
+$wgCapitalLinks = false;</pre>
+
+==== user permissions ====
+<pre>$wgGroupPermissions['*']['read'] = true;
+$wgGroupPermissions['*']['edit'] = false;
+$wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['user']['move'] = true;
+$wgGroupPermissions['user']['movefile'] = true;
+$wgGroupPermissions['user']['delete'] = true;
+$wgGroupPermissions['user']['undelete'] = true;
+$wgGroupPermissions['user']['browsearchive'] = true;
+$wgGroupPermissions['user']['rollback'] = true;
+$wgDefaultUserOptions ['editsection'] = true;
+$wgAllowUserSkin = true;
+$wgAllowUserCss = true;</pre>
+
+==== copyright ====
+<pre>$wgEnableCreativeCommonsRdf = true;
+$wgRightsPage = "IndieWebCamp:Copyrights"; # Set to the title of a wiki page that describes your license/copyright
+$wgRightsUrl = "http://creativecommons.org/publicdomain/zero/1.0/";
+$wgRightsText = "a CC0 public domain dedication";
+$wgRightsIcon = "https://i.creativecommons.org/p/zero/1.0/88x31.png";
+$wgEnableCreativeCommonsRdf = true;</pre>
+
+==== allow more file uploads ====
+<pre>$wgFileExtensions[] = 'txt';
+$wgFileExtensions[] = 'svg';
+$wgFileExtensions[] = 'ai';</pre>
+
+==== others ====
+<pre>$wgNoFollowLinks = false;
+$wgAllowExternalImages = true;
+$wgAllowImageTag = true;
+$wgCookieExpiration = 180 * 86400;
+$wgSecureLogin = true;
+$wgCookieSecure = true;
+$wgPingbackEndpoint = 'https://webmention.io/indiewebcamp/xmlrpc';
+$wgWebmentionEndpoint = 'https://webmention.io/indiewebcamp/webmention';</pre>
+
+== See Slso ==
 See also [http://microformats.org/wiki microformats wiki]:
 * [http://microformats.org/wiki/mediawiki-customization microformats wiki mediawiki customization] - you might find some useful customizations here too.
 

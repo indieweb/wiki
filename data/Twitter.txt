@@ -1,11 +1,18 @@
-http://indiewebcamp.com/Twitter
+https://indieweb.org/Twitter
 
+[[Category:silo]]
 {{pagelogo|https://pbs.twimg.com/profile_images/530553072594874368/7f9QErOD_200x200.png}}
 '''<dfn>Twitter</dfn>''' (also known as <dfn>Twitter.com</dfn>) is a popular content hosting [[silo]] most well known for 140 character text [[notes]].
 
-== Data Export ==
-=== Download all your tweets ===
-__TOC__
+== Why ==
+Why use Twitter? Besides all the usual [[social media]] [[silo]] reasons like "everyone is on there", see what people come up with when they ask why am I using Twitter:
+* 2010-11-29 [https://aurorameyer.com/tag/why-am-i-using-twitter/ Why am I using Twitter?]
+* [https://twitter.com/search?f=tweets&vertical=default&q=%22why%20am%20I%20using%20twitter%22 Twitter search for "why am I using twitter"]
+
+== How to ==
+=== How to export your data ===
+==== Download all your tweets ====
+<span style="float:right; clear:right;max-width:40%">[http://bradcolbow.com/archive/view/the_long_slow_death_of_twitter/ <img src="http://bradcolbow.com/img/death-of-twitter-2.gif" style="max-width:100%" alt="Comic about the long slow death of Twitter"/>]</span>
 # Go to: https://twitter.com/settings/account 
 # near the bottom of the page there may be a "Your Twitter archive" section
 # See the (Request your archive) button? Click it. 
@@ -20,10 +27,10 @@ The most interesting things in the JSON twitter archive are:
 
 After you download your archive, you can update in using a Ruby Gem called [https://github.com/DeMarko/grailbird_updater GrailbirdUpdater].
 
-=== Download Direct Messages ===
+==== Download Direct Messages ====
 * You can use [http://www.jwz.org/blog/2014/01/psa-back-up-your-shit/ this method] to download DMs from Twitter. It is complicated to set up and involves registering a new Twitter application. It can only archive about a year's worth of DMs.
 
-=== Backup using t command line tool ===
+==== Backup using t command line tool ====
 See: https://github.com/sferik/t#using-t-for-backup
 
 You can also export your lists with the "t" command line tool:
@@ -31,6 +38,46 @@ You can also export your lists with the "t" command line tool:
 :t lists -l
 ;List all the members of a list, in long format
 :t list members -l following-`date "+%Y-%m-%d"`
+
+=== How to unlock your account ===
+If going to twitter.com or any Twitter profile page (e.g. [https://twitter.com/indiewebcamp @IndieWebCamp]) or any tweet permalink redirects you to https://twitter.com/account/access with a message like: '''Your account has been locked.''' then your account has been locked.
+
+<div style="clear:both">&nbsp;</div>
+
+If your account is locked (e.g. [[#New_accounts_locked_for_no_reason|a new account]]), try:
+
+* file a support request, explain what you did immediately beforehand, and 
+* reply to the email confirming your support request
+
+Note your personal experience here so we can track how effective this is:
+* 2016-10-27 [http://tantek.com/2016/301/t4/your-account-now-unlocked-twitter @PostTypeDisc unlocked]
+* ...
+
+
+DURING: steps you may want to take while waiting for your account to get unlocked:
+* Remove Twitter from your [[contact]] page (to avoid people sending DMs that you cannot access)
+* ...
+
+AFTER: steps you should take after your account is unlocked:
+* Re-authorize [[Bridgy]] (if you happen to use it)
+** Go https://brid.gy/twitter/ and click the buttons to enable listening and publishing
+* ...
+
+
+Details:
+
+<span style="float:left">[[File:2017-05-09-twitter-account-locked-nojs.png|240px]]</span> <p>You may have to enable [[JS]] on twitter.com and abs-0.twimg.com.</p>
+<div style="clear:both">&nbsp;</div>
+<span style="float:left">[[File:2017-05-09-twitter-account-locked.png|240px]]</span> <span style="float:left">[[File:2017-05-09-twitter-add-a-phone-number.png|240px]]</span> <p>There should be no reason to associate a phone number with your Twitter account, nor use insecure SMS for verification.</p>
+<div style="clear:both">&nbsp;</div>
+<span style="float:left">[[File:2017-05-09-twitter-options-help.png]]</span> Instead, click the "Options v" drop-down in the top right and choose "Help" which should take you to: https://support.twitter.com/articles/20171312 which has a bunch of different reasons why your account may have been locked. 
+<div style="clear:both">&nbsp;</div>
+
+From that page, scroll down to where it says either:
+* "If you need additional help unlocking your account, contact our support team [https://support.twitter.com/forms/signin here]." or
+* "If you feel that your account has been limited in error, you can appeal by contacting our support team [https://support.twitter.com/forms/general?subtopic=suspended here]."
+
+One of those two "here" links should take you to a support form so you can file a support request as noted above.
 
 == Porting to the IndieWeb ==
 === Implementations ===
@@ -62,12 +109,13 @@ It's rough and unpolished. [[User:Snarfed.org|Ryan]] eventually plans to polish 
 ***** 208 - $note exactly fits $maxlen and a retweet would be over and get truncated
 ***** 413 - (entity too large) $note is over $maxlen
 
+__TOC__
 == POSSE to Twitter ==
 While Twitter is still around and you still have friends on Twitter that you want to interact with, you should post your [[note]]s on your own site, and automatically syndicate them to Twitter ([[POSSE]] them) so your friends see and can interact with those copies. This section details how.
 
 In short, you have to either use:
 * Twitter's [[snowflake]] API
-* [[Bridgy]] Publish proxy
+* [[Bridgy]] Publish proxy (see: https://brid.gy/about#publishing for details)
 * [[silo.pub]] proxy
 to POSSE posts to Twitter. There are people in the IndieWeb community doing each of these.
 
@@ -76,7 +124,7 @@ There are particularly good ways to POSSE [[notes]] and [[articles]] to Twitter 
 
 Given Twitter's limitations:
 * 140 characters of content
-* links are t.co'd into 20 (or 21) characters for http (or https) links)
+* links are t.co'd into 23 characters for http or https links
 * local user (@-name) references only
 * local tag (#hashtag) references only
 
@@ -88,7 +136,7 @@ When POSSEing to Twitter:
 # translate indiewebsite people references into their Twitter local user @-name equivalents
 
 Once POSSE is successful:
-* construct a URL (https) for the POSSE copy tweet and link to it from the original post using [[rel-syndication]]
+* construct a URL (https) for the POSSE copy tweet and link to it from the original post using [[u-syndication]]
 
 The sections below contain details on how to do some of this for [[notes]] and [[articles]] in particular.
 
@@ -121,9 +169,9 @@ The whole point of POSSE is that you still care about your friends on Twitter (o
 Only provide permashortlinks as part of your POSSE tweets when they link to an the original post <em>with more content</em> than in the POSSE tweet copy. Otherwise use permashortcitations so that your original posts are still automatically discoverable using the [[original-post-discovery]] algorithm.
 
 ==== POSSE abbr note to twitter ====
-If your note (with permashortid) exceeds 140 characters, you should abbreviate your note to 117 (116) characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 117 (116) characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into 22 characters (23 characters for new <em>https</em> URLs). 
+If your note (with permashortid) exceeds 140 characters, you should abbreviate your note to 117 (116) characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 117 (116) characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into 23 characters. 
 
-When shortening to 117 (116) characters, you must count <em>other</em> http (https) URLs within that as 22 (23) characters (excepting schemeless pathless ccTLDs). You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace http (https) URLs in a string with 22 (23) character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
+When shortening to 116 (140-23-1) characters, you must count <em>other</em> http (https) URLs within that as 23 characters (excepting schemeless pathless ccTLDs). You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace http (https) URLs in a string with 23 character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
 
 You may want to put an ellipsis character at the end of your POSSEd note to Twitter before your perma(short)link. Be sure to leave room for the ellipsis too: instead of just 1 character for a space before your permashortlink, save 4 characters for "... ", or 2 characters for "… " (ellipsis entity character). Note Twitter now counts characters in a sensible fashion, they count codepoints in Unicode NFC: https://dev.twitter.com/docs/counting-characters. Ideally elide at a punctuation boundary (like sentence terminator or a comma - the above-mentioned CASSIS function does this too).
 Examples (which link to original posts after eliding with "... ")
@@ -214,7 +262,7 @@ If the original indieweb post that you're replying to has a POSSE tweet copy:
 When posting a comment which is a reply to another indieweb post, the POSSE tweet of your comment should attempt to set the <code>in_reply_to_status_id</code> to the POSSE tweet of the indieweb post you're replying to.
 
 This is similar to how you '''POSSE Replies to Tweets''' but with one extra step to discover the POSSE tweet of the original post:
-* You can discover the POSSE tweet of an indieweb post by look for a [[rel-syndication]] hyperlink from the indieweb post to a tweet.
+* You can discover the POSSE tweet of an indieweb post by look for a [[u-syndication]] hyperlink from the indieweb post to a tweet.
 * For more details, see: '''[[comment#POSSE_a_reply|How to POSSE a reply]]'''
 
 See also: [[in-reply-to]], [[comments]].
@@ -271,8 +319,8 @@ Example repost of a retweet:
 
 === POSSE Reposts to Twitter ===
 When you do a [[repost]] of an indieweb post:
-* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to twitter.com
-* if there is such a [[rel-syndication]] hyperlink with href linking to a tweet URL
+* look for a [[u-syndication]] hyperlink on the indieweb post permalink page to twitter.com
+* if there is such a [[u-syndication]] hyperlink with href linking to a tweet URL
 * then
 ** do a native retweet of that tweet URL on Twitter itself
 * else
@@ -287,16 +335,26 @@ Examples:
 
 === POSSE Favorites to Twitter ===
 When you post a [[favorite]] of an indieweb post:
-* look for a [[rel-syndication]] hyperlink on the indieweb post permalink page to a tweet
-* if there is such a [[rel-syndication]] hyperlink with href linking to a tweet URL
+* look for a [[u-syndication]] hyperlink on the indieweb post permalink page to a tweet
+* if there is such a [[u-syndication]] hyperlink with href linking to a tweet URL
 * then
 ** natively favorite that tweet URL on Twitter itself
 * end if
+
+=== POSSE Follows to Twitter ===
+When posting a [[follow]] of either a Twitter profile (@-name), or of an indieweb site that has has a verified (bidirectional) rel=me to a Twitter profile (@-name):
+* have your server call the Twitter API to follow that Twitter profile (@-name)
+** [[Bridgy]] Publish feature request (to call Twitter API on your behalf for this): [https://github.com/snarfed/bridgy/issues/550  POSSE following/friending someone new #550]
+
+== Backfeed from Twitter ==
+If you POSSE to Twitter, consider also [[backfeed]]ing (formerly called "reverse syndicating") the [[responses]] to your POSSE copies.
 
 === Reverse Syndicating At-Replies ===
 Per the [[POSSE]] model, you may want to reverse-syndicate @-replies on Twitter to the tweet-copies of your post as "comments" back into your post permalink page on your own site. 
 
 You can use the [[Bridgy]] backfeed service to automatically receive [[Webmention]]s when people @-reply to your tweet copies.
+
+Note that Brid.gy can link to more than one URL in Twitter. You can put an additional URL in the Bio field of the profile, in addition to the one in the website field.
 
 === Reverse Syndicating Other Responses ===
 Using the [[Bridgy]] backfeed service, you can also automatically receive Webmentions when people on Twitter like or retweet your tweet copies. When you receive these webmentions, display them as [[likes]] and [[reposts]] on the permalink of your content on your own site.
@@ -308,12 +366,12 @@ Twitter provides the following features currently:
 ** indieweb equivalent: [[signin]] via [[RelMeAuth]] or [[IndieAuth]], TBI multi-factor [[IndieAuth]]
 * [[follow]], [[mute]][https://support.twitter.com/articles/20171399], and [[unfollow]][https://support.twitter.com/articles/15355-how-to-unfollow-users-on-twitter]
 * [[reader]] UI with an integrated UI to:
-* [[post]] a [[note]] or [[reply]] (optionally attaching 1-4 [[photos]] optionally [[people-tagged]]) at a [[permalink]] with:
+* [[post]] a [[note]] or [[reply]] (optionally attaching 1-4 [[photos]] (max 5MB), 1 video or 1 animated GIF [https://dev.twitter.com/rest/media/uploading-media#keepinmind]) optionally [[people-tagged]]) at a [[permalink]] with:
 ** [[create]] tweet UI with
 *** [[character count]] display, live while entering text - actually characters <em>remaining</em> since Twitter has a 140 character per tweet limitation
 *** [[deduplication]] by disallowing exact same tweet text to be posted on same day.
 ** [[autolink]]ing of URLs, @-names, #-[[hashtags]] in note/reply
-** [[link-preview]] of (only one, the first) URLs in note/reply, including [[autoembed]]ding of [[YouTube]] and other whitelisted media hosting sites. See [[Twitter Cards]] for details.
+** [[link-preview]] of (only one, the last, in contrast to [https://dev.twitter.com/cards/getting-started#multiple what Twitter docs claim]) URLs in note/reply, including [[autoembed]]ding of [[YouTube]] and other whitelisted media hosting sites. See [[Twitter Cards]] for details.
 ** [[retweets]] count
 ** [[favorites]] count
 ** [[comments-display]] (@-replies to it)
@@ -323,6 +381,7 @@ Twitter provides the following features currently:
 ** author buttons: Delete post, [[Pin]] post to top of profile
 ** [[web actions]] for others to Reply, Retweet, Favorite
 ** [[citation]] UI to share tweet via email, or copy/paste as a blockquote
+** [[promoted|promote tweet]]
 * [[repost]] (called "retweet" on Twitter) and unretweet others' tweets
 * [[quote tweet]] - a [[reply]] variant available in their "retweet" UI that displays the [[reply-context]] of the entirety of the original tweet below the reply text. [https://blog.twitter.com/2015/tweettip-3-ways-to-tap-into-cultural-moments-on-twitter since 2015-04-06][http://techcrunch.com/2015/04/06/retweetception/]
 * [[like]] (called "favorite" on Twitter) and unfavorite any tweet
@@ -332,13 +391,15 @@ Twitter provides the following features currently:
 *** and those who [http://www.cnet.com/news/twitter-upgrading-direct-messaging-feature/ opt-in to anyone]
 ** view or delete your previous private messages sent and received as conversations per person
 ** show count of unread [[message]]s
-* [[search]] over
+* [[search]]
 ** all [[posts]] on Twitter
 *** only posts from those you follow
 *** only posts with media (e.g. [[photo]] or [[video]] even if just auto-embedded)
 *** only "top" posts ("top" undefined, some attempt at relevancy subset)
 *** only posts with [[location]] info that are "near you" ("nearness" undefined)
 ** authors (people) of posts
+** [[promoted|promoted hashtag]]
+* [[follow search]] (limited rollout as of 2017-08-25)
 * [[notification]]s (see Twitter [https://support.twitter.com/articles/20169398-activity-and-notifications notification viewer] details) of when others
 ** [[reply]] to your posts
 ** [[favorite]] your posts
@@ -365,6 +426,7 @@ Twitter provides the following features currently:
 ** [[followers you know]] - shown when other logged in users view your profile
 ** [[trends]] - location specific or global service-wide trending topics
 ** [[verified]] profiles for some users
+** [[promoted|promoted account]]
 * [[settings]] - lots of account settings, including:
 ** [[Facebook]] connection to [[POSSE]] tweets to there
 ** [[private account]] - toggle all posts public, or all private, then requiring approval for every follow request
@@ -373,6 +435,11 @@ Twitter provides the following features currently:
 ** viewing a list stream shows only tweets from those users
 ** can be private or public
 ** . . .
+* [https://dev.twitter.com/web/overview Twitter for Websites] for web developers to use on their own sites
+** [https://dev.twitter.com/web/embedded-tweets embedded Tweets] (no indieweb equivalent yet)
+** [https://dev.twitter.com/web/embedded-timelines embedded timelines] (tweets from a profile, list, collection, or search result) (no indieweb equivalent yet)
+** [[Tweet button]] (similar to a "post" [[webaction]])
+** [[follow#Follow_button|Follow button]] (like a "follow" [[webaction]])
 * [[API]] for developers including
 ** [[Twitter Cards]]
 ** [[Sign in with Twitter]]
@@ -393,6 +460,10 @@ At launch, Twitter provided the roughly following features:
 ** 160 character bio
 
 This list may be incomplete/imprecise and was done from ~8 year old memory. Please update if you have documentation of specifics!
+
+Screenshot of 2006 sign-in / sign-up screen:
+
+[http://makers.crew.co/chris-messina/ <img src="http://makers.crew.co/wp-content/uploads/2016/03/OG-Twitter.png" style="max-width:100%" alt="Screenshot of twttr.com" />]
 
 === Embedding Tweets ===
 Twitter offers copy/paste embed markup on its site that allows one to embed the appearance/text of a tweet in one's own page, as well as [[oEmbed]] option. As both the oEmbed and the embed markup include the text of the tweet in a blockquote, if Twitter shut down, this could continue to display the text minus the appearance.
@@ -450,33 +521,51 @@ The Twitter iOS client has an option to use a different API root, "intended for 
 
 It may be theoretically possible to re-implement enough of the Twitter API on your own site to set your own site as a "Twitter proxy server" and thus use the Twitter client as a client to post directly to your own site (and perhaps read from it as well).
 
-== Criticism ==
-Bad or failing behavior on the part of Twitter. Roughly sorted by most problematic / frequently so first.
 
-=== Poor handling of abuse ===
-Twitter unfortunately has a long, well documented, history of poor handling of abuse, from:
-* 2008-05-22: <cite>[http://arielwaldman.com/2008/05/22/twitter-refuses-to-uphold-terms-of-service/ Twitter refuses to uphold Terms of Service]</cite>
-to
-* 2014-08-12 <cite>[http://rhrealitycheck.org/article/2014/08/12/twitterfail-twitters-refusal-handle-online-stalkers-abusers-haters/ #TwitterFail: Twitter’s Refusal to Handle Online Stalkers, Abusers, and Haters]</cite>
+== Issues ==
+Correctable issues with Twitter.
+=== Fails to hide blocked comments ===
+If you [[block]] someone on Twitter (e.g. for abuse), their @-replies still show-up on your tweet permalinks when viewed by other people!
 
-Twitter's UX now makes it easier to post abusive content, than protect oneself from the same.
+Blocking only hides their @-replies from you.
+
+E.g. if your tweets are public, then any random person (not logged in) viewing your tweets will see abusive @-replies (even though you've blocked them).
+
+See: [[block#Twitter_fails_to_hide_blocked_comments]] for details and screenshots.
+
+=== Photo Upload Size Limit ===
+Twitter seems to only allow photos up to 5MB in size.
+
+If you attempt to upload a photo >5MB via the API (e.g. by using [[Bridgy]]) you will get a 400 error and a message like:
+
+<samp>"Image file size must be <= 5242880 bytes"</samp>
+
+In the JSON error structure that is returned.
+
+Related:
+* [https://github.com/snarfed/bridgy/issues/710 GitHub Bridgy issue 710]
 
 === Broken Without JS ===
 Some of Twitter's [[#Features]] are now (as of 2015-01-08 or before) broken or completely non-functional when JavaScript fails to load or is disabled.
 
 * '''[[follow]] button on profile broken.''' (Follow) button does nothing on profile pages, e.g. https://twitter.com/upcomingorg
 
+This is solvable by following modern [[progressive enhancement]] web development techniques.
+
 === Dogfooding Fail ===
 In a piece [http://eggsbacon.co.nz/twitter_mau Does Twitter's exec team even use Twitter?] (April 2015), a web developer ([https://twitter.com/sidawson @sidawson]) found that 7 of 11 top Twitter executives tweet less than once a day, and most did not use the service before working at Twitter.
 
-=== Downtime ===
-Live: http://downrightnow.com/twitter
+This is solvable by having their exec team actually actively use Twitter.
 
-Most recent first:
-* 2013-08-28 [https://twitter.com/veen/status/372842227195580419 Twitter was experiencing DNS issues] resulting in missing images and raw html for a number of hours.  This is likely due to DNS issues related to the [http://www.vice.com/read/the-syrian-electronic-army-talks-about-yesterdays-hacks syrian army hacks].  The site was nearly impossible to use in its raw html form. [[File:Screen_Shot_2013-08-28_at_5.12.26_PM.png|250px]]  
-* 2012-06-21 [http://gigaom.com/2012/06/21/twitter-outage-thursday-morning-frustrate-users/ Twitter was down: sporadic outages persist Thursday morning]
-* 2010-11-04 "Twitter server is down or being upgraded." [http://www.flickr.com/photos/tantek/5322875194/ http://farm6.staticflickr.com/5210/5322875194_908d728816_z.jpg]
-* 2009-09-16 "Twitter is over capacity" (AKA failwhale) [http://www.flickr.com/photos/factoryjoe/3927590515/ http://farm3.staticflickr.com/2571/3927590515_dcdac9ed95.jpg]
+=== New accounts locked for no reason ===
+Newly created Twitter accounts (as of some time in 2016) are locked very shortly after being created.
+
+E.g.:
+* 2016-10-27 @PostTypeDisc: 
+** locked: http://tantek.com/2016/301/t3/why-twitter-growth-stalled-broken-locked
+** unlocked an hour later: http://tantek.com/2016/301/t4/your-account-now-unlocked-twitter
+
+Currently this seems to be mostly a time-wasting inconvenience.
 
 === spammy cross-posting to facebook ===
 This may be a side effect of both Twitter and Facebook doing arbitrary photo cropping (FB likes square images, Twitter likes 16:9 wide ones, both often crop rather than fit to space with background).
@@ -489,30 +578,8 @@ When this was [https://www.facebook.com/kevinmarks/posts/10154414550240425 repli
 
 cropping the screenshot and requiring a clickthrough back to twitter to make it readable, with explicit text added by Twitter when cross-posting: <blockquote>Get the whole picture - <strong>and other photos from Kevin Marks</strong></blockquote> <strong>Emphasis</strong> added - which implies deliberate behavior of a spammy sort (using your cross-post to advertise broader use of Twitter than just that one permalink).
 
+Correctable by fixing cropping issue and spammy text copy.
 
-=== Developer Relations ===
-Twitter built their entire business on top of the developer community. Almost all Twitter features were originally from Twitter clients, such as Retweets and Hashtags. Closing sections of their API and RSS feeds has made the developer community lose trust in Twitter.
-* 2015-03-15 Sarah Kessler / FastCompany: <cite>[http://www.fastcompany.com/3043716/sxsw/twitter-only-gave-meerkat-2-hours-notice-before-cutting-access-to-the-social-graph Twitter Only Gave Meerkat 2 Hours Notice Before Cutting Access To The Social Graph]</cite> via [https://twitter.com/waxpancake/status/577634498193461248]
-* 2014-11-24 Marco Arment: <cite>[http://www.marco.org/2014/11/24/twitter-california-knife New Twitter search API won’t be available to third-party clients]</cite>
-* 2014-10-20 Marco Arment: <cite>[http://www.marco.org/2014/10/20/wsj-twitter-peace-offering Twitter’s “peace offering” to developers is meaningless]</cite>
-
-<div><p>Twitter to Offer New Tools for App Developers <br/><img src="https://pbs.twimg.com/media/B0cWScpCYAAgN2m.jpg" width="200" /></p>&mdash; Joël Franusic (@jf) <a href="https://twitter.com/jf/status/524412388745818113">October 21, 2014</a></div>
-
-=== Lack of Communities ===
-
-* [https://alexgaynor.net/2014/oct/30/i-hope-twitter-goes-away/ Alex Gaynor discusses his problems with twitter], which mostly center around the inability to define and interact within a self-moderating community, unlike most other social media (and IRC).
-
-<blockquote>
-Twitter has no mechanisms for <nowiki>[defining a community]</nowiki>. Every user floats by themselves, interacting with who they please. This denies us the ability to build communities, to set social norms, and to enforce them. Twitter has absolutely no way for me to share with others that someone isn't a person I want in my communities
-</blockquote>
-
-=== Lack of usernames ===
-Per https://twitter.com/webster/status/697984790323007488 the suggested usernames have become seemingly random long strings of letters and numbers:
-
-https://pbs.twimg.com/media/Ca-9ZNSVIAE6hEm.png
-
-== Issues ==
-Correctable issues with Twitter.
 === Email Identity Removal ===
 This 2013-05-17 screenshot seems to demonstrate an odd interaction and vulnerability on Twitter:
 
@@ -529,6 +596,66 @@ Appears to be an [[identity]] threat/vulnerability.
 Related posts:
 * http://tantek.com/2013/137/t3/scary-twitter-warning-removed-email-from-account
 * http://tantek.com/2013/137/b1/ux-learn-more-links-warning-boxes-three-things
+
+=== Cannot change username when account is suspended ===
+If your account is suspended, you cannot change your username. If you attempt to change your username, the web interface sometimes partially reflects the change, and a file <code>json.json</code> is downloaded containing the text: 
+
+<pre>{"errors":[{"code":64,"message":"Your account is suspended and is not permitted to access this feature."}]}</pre>
+
+=== Misprioritizing reply notifications ===
+Per 2016-03-10 {{kevinmarks}} <cite>[http://known.kevinmarks.com/2016/twitters-tragedy-of-the-comments Twitter's Tragedy of the Comments]</cite>: <blockquote>The most egregious of these was making @ replies the primary notification, and the Big Red Number on the app on iOS. Suddenly, it was another email inbox where others' priorities were ranked above your own choices.</blockquote>
+
+This may be resolvable by providing an option to only show e.g. unread direct messages as the Big Red Number, instead of all notifications, replies, @-mentions etc.
+
+== Criticism ==
+Bad or failing behavior on the part of Twitter that is unlikely to be resolvable. Roughly sorted by most problematic / frequently so first.
+
+Is it something that there's a possible and likely way that Twitter can resolve it? Add it to [[#Issues]] instead
+
+=== Poor handling of abuse ===
+Twitter unfortunately has a long, well documented, history of poor handling of abuse, from:
+* 2008-05-22: <cite>[http://arielwaldman.com/2008/05/22/twitter-refuses-to-uphold-terms-of-service/ Twitter refuses to uphold Terms of Service]</cite>
+to
+* 2014-08-12 <cite>[http://rhrealitycheck.org/article/2014/08/12/twitterfail-twitters-refusal-handle-online-stalkers-abusers-haters/ #TwitterFail: Twitter’s Refusal to Handle Online Stalkers, Abusers, and Haters]</cite>
+
+Twitter's UX now makes it easier to post abusive content, than protect oneself from the same.
+
+Past behavior here shows it is unlikely Twitter has sufficient incentive or ability to solve this problem.
+
+=== Developer Relations ===
+Twitter built their entire business on top of the developer community. Almost all Twitter features were originally from Twitter clients, such as Retweets and Hashtags. Closing sections of their API and RSS feeds has made the developer community lose trust in Twitter.
+* 2015-03-15 Sarah Kessler / FastCompany: <cite>[http://www.fastcompany.com/3043716/sxsw/twitter-only-gave-meerkat-2-hours-notice-before-cutting-access-to-the-social-graph Twitter Only Gave Meerkat 2 Hours Notice Before Cutting Access To The Social Graph]</cite> via [https://twitter.com/waxpancake/status/577634498193461248]
+* 2014-11-24 Marco Arment: <cite>[http://www.marco.org/2014/11/24/twitter-california-knife New Twitter search API won’t be available to third-party clients]</cite>
+* 2014-10-20 Marco Arment: <cite>[http://www.marco.org/2014/10/20/wsj-twitter-peace-offering Twitter’s “peace offering” to developers is meaningless]</cite>
+
+<div><p>Twitter to Offer New Tools for App Developers <br/><img src="https://pbs.twimg.com/media/B0cWScpCYAAgN2m.jpg" width="200" /></p>&mdash; Joël Franusic (@jf) <a href="https://twitter.com/jf/status/524412388745818113">October 21, 2014</a></div>
+
+Unlikely that Twitter will take any actions to resolve this long term trend.
+
+=== Lack of Communities ===
+* [https://alexgaynor.net/2014/oct/30/i-hope-twitter-goes-away/ Alex Gaynor discusses his problems with twitter], which mostly center around the inability to define and interact within a self-moderating community, unlike most other social media (and IRC).
+
+<blockquote>
+Twitter has no mechanisms for <nowiki>[defining a community]</nowiki>. Every user floats by themselves, interacting with who they please. This denies us the ability to build communities, to set social norms, and to enforce them. Twitter has absolutely no way for me to share with others that someone isn't a person I want in my communities
+</blockquote>
+
+=== Lack of usernames ===
+Per https://twitter.com/webster/status/697984790323007488 the suggested usernames have become seemingly random long strings of letters and numbers:
+
+https://pbs.twimg.com/media/Ca-9ZNSVIAE6hEm.png
+
+=== Amplifies low value content ===
+As criticized in this tweet (ironically)
+* https://twitter.com/AbrasiveGhost/status/639601942973562880 <blockquote>SON: Dad whats Twitter <br/><br/>ME: u know when one dog barks & every single one in the area starts howling? <br/><br/>SON: ya <br/><br/>ME: its like that but all day</blockquote>
+
+== Downtime ==
+Live: http://downrightnow.com/twitter
+
+Most recent first:
+* 2013-08-28 [https://twitter.com/veen/status/372842227195580419 Twitter was experiencing DNS issues] resulting in missing images and raw html for a number of hours.  This is likely due to DNS issues related to the [http://www.vice.com/read/the-syrian-electronic-army-talks-about-yesterdays-hacks syrian army hacks].  The site was nearly impossible to use in its raw html form. [[File:Screen_Shot_2013-08-28_at_5.12.26_PM.png|250px]]  
+* 2012-06-21 [http://gigaom.com/2012/06/21/twitter-outage-thursday-morning-frustrate-users/ Twitter was down: sporadic outages persist Thursday morning]
+* 2010-11-04 "Twitter server is down or being upgraded." [http://www.flickr.com/photos/tantek/5322875194/ http://farm6.staticflickr.com/5210/5322875194_908d728816_z.jpg]
+* 2009-09-16 "Twitter is over capacity" (AKA failwhale) [http://www.flickr.com/photos/factoryjoe/3927590515/ http://farm3.staticflickr.com/2571/3927590515_dcdac9ed95.jpg]
 
 == History ==
 === Early User Interface ===
@@ -566,6 +693,11 @@ Facebook on the left, new Twitter UI on the right.
 
 If you don't see the image inline above (e.g. only see the text Bl-chggIMAAGyBZ.png) then click on the Twitter link to see it on their site.
 
+=== 2017 Character Limit Increase to 280 ===
+In 2017, Twitter slowly rolled out the ability to post a tweet with up to 280 characters. Instead of counting down from 140, the new character counter is a circular progress bar that fills as you approach 280, turning into a countdown at 20 characters remaining.
+
+[[File:twitter-character-counter-2017.gif]]
+
 == Additional Resources ==
 === Profile Image URLs ===
 Programmatically, the official way to get a Twitter user's profile image is to use the
@@ -574,7 +706,7 @@ Programmatically, the official way to get a Twitter user's profile image is to u
 Unfortunately, those fields are absolute URLs for the *current* profile image, and usually break when the user changes their profile image.
 
 Unofficial alternatives: these both 302 redirect to the current profile picture. Replace <code>username</code> with the Twitter username without the @.
-* <code><nowiki>https://twitter.com/username/profile_image?size=original</nowiki></code>
+* <code><nowiki>https://twitter.com/username/profile_image?size=original</nowiki></code><br> ''WARNING: doesn't work on mobile as of 2016-05-03. Will probably break entirely soon.''
 * <code><nowiki>http://avatars.io/twitter/username</nowiki></code>
 
 If you omit <code>?size=original</code> from the former, or replace it with <code>?size=normal</code>, you get a 48x48 image instead of the original size.
@@ -586,11 +718,20 @@ Twitter profile images can also be found by choosing "View Image" on context men
 * or no "_" and just .png - actual uploaded size
 You can change any of the above suffixes to any others in order to get a few different sizes.
 
+== Brainstorming ==
+=== How to delete your account ===
+TBD.
+
+Has anyone deleted their Twitter account? What's the process? How long do they hold your data anyway? Etc.
+
+See also: [[delete your account]]
+
+
 == Defunct ==
 === Tweetcc ===
 As of 2015-12-15, <span id="CC_license_your_tweets">Tweetcc</span>(.)com redirects to a spam blog on [[Wordpress.com]].
 
-''Note, tweetcc's creators decided to take it down in July 2013."[https://twitter.com/Malarkey/status/361844728922259457]
+''Note, tweetcc's creators decided to take it down in July 2013.''[https://twitter.com/Malarkey/status/361844728922259457]
 
 '''We're looking into having tweetcc restored.'''[http://indiewebcamp.com/irc/2013-10-21/line/1382391670]
 
@@ -606,3 +747,7 @@ Etc. your tweets to do so, per that CC license (e.g. CC-BY, attributing you) ind
 * [[silos]]
 * [[notes]]
 * [[POSSE]]
+* [https://www.flickr.com/search/?user_id=25419820%40N00&view_all=1&text=twitter Screenshots of Twitter web site and app UIs posted to Flickr]
+* [https://www.flickr.com/photos/aaronpk/albums/72157633041808362 2007-era prototype personal Twitter clone by {{aaronpk}}]
+* [http://twitter.pbworks.com/ Original Twitter Fan Wiki] - lots of early Twitter history
+* 2017-11-03 Selina Wang (Bloomberg Technology) [https://www.bloomberg.com/amp/news/articles/2017-11-03/former-twitter-employee-says-fake-russian-accounts-were-not-taken-seriously Twitter Sidestepped Russian Account Warnings, Former Worker Says] / In 2015, a manager discovered a trove of accounts with Russian and Ukrainian IP addresses

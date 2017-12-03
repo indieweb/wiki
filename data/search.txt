@@ -1,12 +1,11 @@
-http://indiewebcamp.com/search
+https://indieweb.org/search
 
 <span style="float:right;height:128px;font-size:128px;margin:0 0 -64px">🔍</span>
-
-{{stub}}
 
 '''<dfn>search</dfn>''' in the context of the IndieWeb refers to being able to search your personal site for your own content. Personal site searchability is a requirement for [[IndieMark]] Level 1.
 
 == Why ==
+__TOC__
 Why should your site be searchable? 
 * You want your independently created and owned content to be found and preferably above and beyond content on [[silos]].
 
@@ -14,6 +13,12 @@ Why should your site have a search UI?
 * Convenient indieweb site search is a very commonly requested feature by readers / users of indieweb sites. 
 * They don't want to have to think to go to Google (and take the extra steps) to search your site. 
 * Make it easy for your friends that read your site to find stuff there by having a simple search box in the top right of every page (common UI convention) that allows the user to type something in and perform a search on your site. You can of course use 3rd party search engine to do this, even returning results directly from them. E.g. using a Google search box on your site.
+
+== Why Not ==
+There are sometimes reasons you don't want a particular page or section of your site to not be indexed for searching. E.g.
+
+* Private / private by obscurity URLs
+* Dynamic aggregations, e.g. [[tag]] aggregation pages, [[archives]] (by date etc.), because you'd rather that just the post permalinks themselves get indexed to reduce noise in search results.
 
 == How ==
 How to implement search on your site.
@@ -48,6 +53,7 @@ How to TBD.
 ==== Third Party Search Services ====
 * [https://www.google.com/cse Google Custom Search Engine]
 * [https://duckduckgo.com/search_box DuckDuckGo Search Box]
+* [https://www.algolia.com/ Algolia]
 * [https://swiftype.com/ Swiftype]
 * [http://tapirgo.com/ Tapir]
 
@@ -62,8 +68,12 @@ How to TBD.
 * [http://www.openwebspider.org/ OpenWebSpider], C#
 * [http://regain.sourceforge.net/ regain], Java,
 * [http://www.sphider.eu/ sphider], PHP
-* [http://git.cweiske.de/phinde.git phinde], PHP
+* [http://git.cweiske.de/phinde.git phinde], PHP - running on http://search.cweiske.de/ and https://indiechat.search.cweiske.de/
 * [http://www.tsep.info/ TSEP] The Search Engine Project, PHP
+* [http://dataparksearch.org/ DataparkSearch Engine]
+
+==== self-hacked engines ====
+* [http://wiki.sgripon.net/doku.php/self_hosted_search_engine Self hosted search engine] with elasticsearch, [https://github.com/romansanchez/Calaca Calaca] as frontend and [http://nutch.apache.org/ apache nutch] as crawler
 
 === client side search ===
 Possible level 5.
@@ -76,13 +86,21 @@ I.e.:
 * Feed them in structured form to lunr.js to build an index
 * Enhance your search box / form with JS to do it all clientside if you have a lunr.js search index available
 
+== How To Avoid ==
+For all the reasons above in '''[[#Why_Not|Why Not]]''', here's how to avoid having specific pages not be indexed:
+
+Put this in the head of your page you don't want indexed:
+<pre>
+<meta name="robots" content="noindex,follow" />
+</pre>
+
 == IndieWeb Examples ==
 IndieWeb sites that have search interfaces.
 === Tantek ===
 {{t}} has had a search interface on his site [http://tantek.com/ tantek.com] since [http://tantek.com/2012/188/t1/real-time-most-recent-first-search-push-indieweb-falcon 2012-07-06] which uses a simple static form that submits to Google search ([[indiemark#search|IndieMark search]] level 2).
 
 === Aaron Parecki ===
-{{aaronpk}} has had a search interface on his site [http://aaronparecki.com/ aaronparecki.com] since 2012-07 which uses a simple static form that submits to Google search scoped to the website and with query parameters that indicate to Google to return posts in reverse date order ([[indiemark#search|IndieMark search]] level 2).
+{{aaronpk}} has had a search interface on his site [http://aaronparecki.com/ aaronparecki.com] from 2012-07 until 2016-01 which uses a simple static form that submits to Google search scoped to the website and with query parameters that indicate to Google to return posts in reverse date order ([[indiemark#search|IndieMark search]] level 2). Since 2016-08 there is a search interface which searches a local index of posts, returning the list of matching posts rendered in normal list format in reverse date order ([[indiemark#search|IndieMark search]] level 4).
 
 === Ben Werdmuller ===
 {{benwerd}} has had a search interface on his site [http://werd.io/ werd.io] since (2013-06-20) which uses his own site's backend ([[MongoDB]] in particular). ([[indiemark#search|IndieMark search]] level 4).
@@ -101,9 +119,6 @@ http://waterpigs.co.uk/img/2014-03-01-indie-search-halsway.png
 
 Since I'm scanning various other sites for inbound links, I'd like to, at some point, index those other sites as well for additional search options.
 
-=== Emma Kuo ===
-{{emmak}} has implemented (since at least 2014-07-18) native search (level 4) on http://notenoughneon.com/ to find text matches in the filestore. Search results show a snippet of the relevant post, with matches highlighted.
-
 === Ben Roberts ===
 {{benthatmustbeme}} has a search box on his site since [https://github.com/dissolve/postly/commit/ca8f9718a191359e525ab7d70eff538bda463f05 2014-09-30] which simply submits to Google search ([[indiemark#search|IndieMark search]] level 2) ordered by most recent post.
 
@@ -118,9 +133,18 @@ In 2016-01, I converted my site to [[Known]], which uses MySQL full text search 
 Indie search level 4.
 
 ''phinde'' supports faceted browsing on tags, domain, language and file type. It indexes not only the blog but all linked URLs.
-Crawling, indexing and the HTML frontend are written in PHP, data storage and searching is dona in ElasticSearch.
+Crawling, indexing and the HTML frontend are written in PHP, data storage and searching is done in ElasticSearch.
 
 The search form is available on the [http://cweiske.de/tagebuch/ blog index] and [http://cweiske.de/tagebuch/tag/indieweb tag index] pages, as well on [http://cweiske.de/tagebuch/gimp-remove-watermark-lines.htm single blog posts].
+
+''phinde'' is also used for indieweb chat log search at https://indiechat.search.cweiske.de/
+
+=== gRegor Morrill ===
+{{gRegor}} added local search to gregorlove.com for articles and notes on 2016-06-05 ([[indiemark#search|IndieMark search]] level 4).
+
+* As of 2017-04-21, the search form has been moved to only appear at https://gregorlove.com/search. This page is linked from the footer of each page. I moved it in part because page footers were looking cluttered, and my usage of search is relatively infrequent. My current thinking is that it's fine to have it only on the /search URL.
+** Previously: The search form is the bottom of each page and has fields for filtering by before/after date.
+* Uses the [[ProcessWire]] API to search. Defaults to full-text queries, but uses like queries for shorter text.
 
 == Design ==
 If in doubt: copy Google.
@@ -178,7 +202,7 @@ And then provide results from their sites as well as your own site.
 
 === More brainstorms ===
 See additional brainstorms at:
-* http://p.cweiske.de/118
+* http://cweiske.de/tagebuch/phinde.htm#features
 
 == See Also ==
 * [[Getting Started]]

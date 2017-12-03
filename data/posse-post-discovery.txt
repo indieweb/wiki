@@ -1,4 +1,4 @@
-http://indiewebcamp.com/posse-post-discovery
+https://indieweb.org/posse-post-discovery
 
 '''<dfn>POSSE-Post-Discovery</dfn>''' is a way to find the canonical version of a post when a syndicated copy does not contain a link to the original.
 
@@ -23,7 +23,7 @@ This would also support [[original-post-discovery]] on older silo content that w
 * Look for <code><link rel="feed" type="text/html"></code> ([[h-feed#rel_feed]]). If found, consider this their unfiltered h-feed. If not, use the current page.
 * For each h-entry on the current page... (Ideally this page would be an h-feed, but if not just use top-level h-entries).
 ** Follow its u-url permalink to find its post permalink page.
-** Look for [[rel-syndication]] and u-syndication links on the current page. If the syndicated post is among them, then ''this'' is the original.
+** Look for [[u-syndication]] and u-syndication links on the current page. If the syndicated post is among them, then ''this'' is the original.
 ** Note: this is HTTP-request-intensive. To save time on the next lookup, store other discovered relationships for future lookup.
 
 == Bridgy ==
@@ -40,7 +40,7 @@ Bridgy would typically consider the linked article at wp.me to be the original, 
 
 == Set up your site ==
 
-If you publish rel-syndication links to syndicated content, your site may already support posse-post-discovery (Yay, standards!). 
+If you publish u-syndication links to syndicated content, your site may already support posse-post-discovery (Yay, standards!). 
 
 Publishers need to do the following things:
 
@@ -48,7 +48,7 @@ Publishers need to do the following things:
 * Make sure your indieweb site has '''<code>[[h-entry]]</code>''' markup on your posts
 * Optionally wrap an '''<code>[[h-feed]]</code>''' around the entries you want posse-post-discovery to see
 ** If this is not the same page as your profile URL, include a &lt;link rel="feed"&gt; that points to the page with your primary h-feed.
-* Include '''[[rel-syndication]]''' and/or '''<code>[[u-syndication]]</code>''' links on post [[permalink]] pages.
+* Include '''[[u-syndication]]''' and/or '''<code>[[u-syndication]]</code>''' links on post [[permalink]] pages.
 
 == Tradeoffs ==
 

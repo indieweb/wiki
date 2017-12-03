@@ -1,0 +1,129 @@
+https://indieweb.org/frontmatter
+
+{{stub}}
+
+    '''<dfn>frontmatter</dfn>''' is a common way to include metadata in plain text. Currently the most seen method is including YAML in front of Markdown content, but some document formats offer built-in support for front matter.
+
+== Support ==
+
+* most static generators support a variety of front matter; this is most commonly YAML, but some accept TOML or JSON.
+* [[Github]] displays front matter in Markdown files in a table: [https://github.com/spf13/hugo/blob/master/examples/blog/content/post/hello-hugo.md Hugo example]
+
+== Examples ==
+
+=== [http://asciidoc.org/userguide.html#X18 asciidoc] ===
+
+asciidoc has a built-in support for metadata. While this metadata is usually minimal, it is OK to extend it with custom variables. It does not seem to support structured data, making it's use a little limited, but since it's part of the format, it's not as alien as the more common methods.
+
+<pre>
+AsciiDoc User Guide
+===================
+Stuart Rackham <srackham@gmail.com>
+:Author Initials: SJR
+:toc:
+:icons:
+:numbered:
+:website: http://asciidoc.org/
+</pre>
+
+=== [https://jekyllrb.com/docs/frontmatter/ Jekyll] ===
+
+<pre>
+---
+layout: post
+title: Blogging Like a Hacker
+permalink: https://domain.com/post
+category: Meta
+excerpt: Hello World!
+---
+</pre>
+
+
+=== [https://gohugo.io/content/front-matter/ Hugo] ===
+
+Hugo supports YAML, TOML, and JSON, but they need to be separated by different separators. This is a YAML example.
+
+<pre>
+---
+title: "spf13-vim 3.0 release and new website"
+description: "spf13-vim is a cross platform distribution of vim plugins and resources for Vim."
+tags: [ ".vimrc", "plugins", "spf13-vim", "vim" ]
+lastmod: 2015-12-23
+date: "2012-04-06"
+categories:
+  - "Development"
+  - "VIM"
+slug: "spf13-vim-3-0-release-and-new-website"
+---
+</pre>
+
+
+=== [https://learn.getgrav.org/content/headers Grav] ===
+
+<pre>
+---
+title: Title of my Page
+slug: my-page-slug
+menu: My Page
+date: 01/01/2014 3:14pm
+published: true
+redirect: '/some/custom/route'
+template: custom
+taxonomy:
+    category: blog
+    tag: [sample, demo, grav]
+routes:
+  default: '/my/example/page'
+  canonical: '/canonical/url/alias'
+  aliases:
+    - '/some/other/route'
+    - '/can-be-any-valid-slug'
+author:
+    name: Sandy Johnson
+    twitter: @sandyjohnson
+    bio: Sandy is a freelance journalist and author of several publications on open source CMS platforms.
+---
+</pre>
+
+=== [http://docs.getpelican.com/en/3.6.3/content.html#file-metadata Pelican] === 
+
+Pelican is not following the usual method: it does not have the common separators. 
+
+==== reStructuredText ====
+<pre>
+My super title
+##############
+
+:date: 2010-10-03 10:20
+:modified: 2010-10-04 18:40
+:tags: thats, awesome
+:category: yeah
+:slug: my-super-post
+:authors: Alexis Metaireau, Conan Doyle
+:summary: Short version for index and feeds
+</pre>
+
+==== Markdown ====
+
+<pre>
+Title: My super title
+Date: 2010-12-03 10:20
+Modified: 2010-12-05 19:30
+Category: Python
+Tags: pelican, publishing
+Slug: my-super-post
+Authors: Alexis Metaireau, Conan Doyle
+Summary: Short version for index and feeds
+</pre>
+
+
+== Criticism ==
+
+=== No common set of basic variables === 
+
+None of the current static generators share the same keywords or syntax for even the most common variables, such as author, tags, publish date; with the exception of "title", though the case might vary here as well. (Title vs title ) - 2016-08-19 [[petermolnar]]
+
+
+=== Most parsers are not aware of it === 
+
+Since it's an alien format inside another format (YAML in Markdown most commonly ), therefore regular Markdown parsers are unaware of it and thus it will not be parsed accordingly. [[pandoc]] is an exception. - 2016-08-19 [[petermolnar]]

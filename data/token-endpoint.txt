@@ -1,4 +1,4 @@
-http://indiewebcamp.com/token-endpoint
+https://indieweb.org/token-endpoint
 
 A '''<dfn>token endpoint</dfn>''' is an HTTP endpoint that [[micropub]] clients can use to obtain an access token given an authorization code.
 
@@ -10,7 +10,7 @@ If you later want to switch to hosting your own token endpoint, you can do so wi
 
 == Creating a token endpoint ==
 
-Requests will be made to the token endpoint after the client finishes communicating with the authorization server and obtains an auth code.
+Requests will be made to the token endpoint after the client finishes communicating with the [[authorization-endpoint|authorization server]] and obtains an [[authorization-endpoint#Auth_code_verification|auth code]].
 
 A token endpoint must be able to both grant an access token as well as verify an access token.
 
@@ -23,15 +23,12 @@ Requests to the token endpoint will use the method POST and contain the followin
 * <code>code</code> - The authorization code previously obtained.
 * <code>me</code> - The user's domain name (e.g. http://example.com)
 * <code>redirect_uri</code> - the redirect URI used in the request to obtain the authorization code.
-* <code>client_id</code> - The client ID used in the initial request.
-* <code>state</code> - The state parameter used in the initial request.
+* <code>client_id</code> - The client ID used in the authorization request.
 
-The token endpoint needs to verify these values and then issue an access token in response.
+The token endpoint needs to verify these values and then issue an access token in response. If the token endpoint and authorization endpoint are part of the same system, they can use any proprietary method to communicate.
 
-The authorization endpoint can be used to verify these values. However you will first need 
-to determine which authorization server this user delegates to. This is done by looking 
-for a <code>rel="authorization_endpoint"</code> link on the user's home page, which is
-the "me" parameter.
+if the token endpoint and authorization endpoint are different systems, the following method can be used to verify the values. However you will first need 
+to [[authorization-endpoint#Discovery|determine which authorization server this user delegates to]]. 
 
 Once you know the authorization endpoint, you can make a <code>x-www-form-encoded</code> POST request with the parameters
 of this request:
@@ -40,16 +37,94 @@ of this request:
 * <code>me</code>
 * <code>redirect_uri</code>
 * <code>client_id</code>
-* <code>state</code>
 
-If the request is valid (the state, client_id, redirect_uri and code all correspond to the 
-authorization made by the user), the authorization endpoint will return a successful reply:
+If the request is valid (the client_id, redirect_uri and code all correspond to the 
+authorization made by the user), the authorization endpoint will return a successful reply in form-encoded or JSON format depending on the HTTP Accept header:
 
 <pre>me=https%3A%2F%2Faaronparecki.com&amp;scope=post</pre>
 
+<pre>{"me": "https://aaronparecki.com", "scope": "post"}</pre>
+
 This is how the token endpoint knows which scopes the user authorized
 
-==== Generating an Access Token ====
+See [[#Generating an Access Token]] for implementation notes.
+
+==== Access Token Response ====
+
+However you generate an access token, you now have a string ready to reply to the client.
+
+The token response must include three parameters:
+
+* <code>access_token</code> - The actual access token string.
+* <code>me</code> - The URL of the user.
+* <code>scope</code> - The list of scopes that the token represents.
+
+These should be returned as a www-form-encoded or JSON string in the response body, depending on the HTTP Accept header.
+
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/x-www-form-urlencoded
+
+access_token=XXXXXX&amp;scope=post&amp;me=https%3A%2F%2Faaronparecki.com%2F
+</pre>
+
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "access_token": "XXXXXX",
+  "scope": "post",
+  "me": https://aaronparecki.com/
+}
+</pre>
+
+The reason for returning the "me" value is that the app does not yet know which user
+the authorization is for, and will use this value to discover the Micropub endpoint
+to make a request with the access token.
+
+=== Verifying an Access Token ===
+
+A [[micropub-endpoint|micropub endpoint]] will make a request to the token endpoint to verify that an incoming access token is valid.
+
+: The URL of the token server must be known to the micropub endpoint in advance. The bearer token does not contain any information about the server address.
+: This means that the micropub endpoint dictates the token endpoint that the user links to on his homepage.
+
+The micropub endpoint will make a request like the following:
+
+<pre>
+GET https://tokens.indieauth.com/token
+Authorization: Bearer xxxxxxxx
+</pre>
+
+The token endpoint looks at the token in the authorization header and verifies it. How exactly it does this is up to the implementation, such as in the example below of using either a self-encoded token or a database of tokens. After verifying the token is still valid, the token endpoint returns the information about the token such as the user and scope, in form-encoded or JSON format depending on the HTTP Accept header:
+
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/x-www-form-urlencoded
+
+me=https://aaronparecki.com/&
+client_id=https://ownyourgram.com&
+scope=post
+</pre>
+
+<pre>
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "me": "https://aaronparecki.com/",
+  "client_id": https://ownyourgram.com",
+  "scope": "post"
+}
+</pre>
+
+The micropub endpoint will then inspect these values and determine whether to proceed with the request.
+
+{{note|Token-endpoints like https://tokens.indieauth.com that aim to interoperate with different micropub endpoint implementations MUST support this standard mechanism for verifying the token. However, if the token and micropub endpoints are tightly coupled (i.e. you control both implementations and expect them only to talk to each other), this verification can be done internally.}}
+
+== Implementation notes ==
+=== Generating an Access Token ===
 
 At this point, your token endpoint is ready to issue an access token to the app.
 
@@ -60,7 +135,7 @@ Since your token endpoint will be issuing the token, and your Micropub endpoint 
 the only thing that needs to validate tokens, how that works is entirely up to you, 
 and can even be changed later without any ill effects.
 
-===== Token Database =====
+==== Token Database ====
 
 A trivial way of creating access tokens is to use a database such as MySQL, Postgres,
 or Redis. Using this method, you would simply generate a long random string, and use
@@ -77,7 +152,7 @@ Unless you have a way of expiring and re-issuing tokens, your token database wil
 quickly grow in size and may eventually become unwieldy. Of course this also assumes
 that your website has a database to begin with, which is [[database-antipattern|not necessarily a safe assumption]].
 
-===== Self-Encoded Tokens =====
+==== Self-Encoded Tokens ====
 
 Self-encoded tokens are a way to create access tokens that doesn't require storing a 
 string in a database in order to look it up later. By encoding all of the token information
@@ -113,68 +188,41 @@ results in a string that is the access token.
 
 <pre>$token = JWT::encode($token_data, $encryption_key);</pre>
 
-==== Access Token Response ====
-
-However you generate an access token, you now have a string ready to reply to the client.
-
-The token response must include three parameters:
-
-* <code>access_token</code> - The actual access token string.
-* <code>me</code> - The URL of the user.
-* <code>scope</code> - The list of scopes that the token represents.
-
-These should be returned as a www-form-encoded string in the response body, as follows:
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-
-access_token=XXXXXX&amp;scope=post&amp;me=https%3A%2F%2Faaronparecki.com%2F
-</pre>
-
-The reason for returning the "me" value is that the app does not yet know which user
-the authorization is for, and will use this value to discover the Micropub endpoint
-to make a request with the access token.
-
-=== Verifying an Access Token ===
-
-Token-endpoints that aim to interoperate with different micropub endpoint implementations, like https://tokens.indieauth.com, MUST support this standard mechanism for verifying the token. However, if the token and micropub endpoints are tightly coupled (i.e. you control both implementations and expect them only to talk to each other), this verification can be done internally.
-
-A [[micropub-endpoint|micropub endpoint]] will make a request to the token endpoint to verify that an incoming access token is valid.
-
-The micropub endpoint will make a request like the following:
-
-<pre>
-GET https://tokens.indieauth.com/token
-Authorization: Bearer xxxxxxxx
-</pre>
-
-The token endpoint looks at the token in the authorization header and verifies it. How exactly it does this is up to the implementation, such as in the example above of using either a self-encoded token or a database of tokens. After verifying the token is still valid, the token endpoint returns the information about the token such as the user and scope:
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-
-me=https://aaronparecki.com/&
-client_id=https://ownyourgram.com&
-scope=post&
-issued_at=1399155608&
-nonce=501884823
-</pre>
-
-The micropub endpoint will then inspect these values and determine whether to proceed with the request.
 
 == IndieWeb Examples ==
 
 * https://tokens.indieauth.com provides tokens as a service, to help implementers bootstrap their micropub support.
-
+* [[commentpara.de]] implements its own token endpoint
 * [[Red Wind]] has its own token endpoint that issues JWT encoded tokens[https://github.com/kylewm/redwind/blob/a4ac9d6d14468e3e4b3ce433b8421d97eef861f6/redwind/micropub.py#L21]
 
 * [[Neonblog]] provides a token endpoint that uses [[indieauth.com]] as an auth server. [https://github.com/notenoughneon/neonblog/blob/master/token.php]
 
-* [[Skein]] provides a token endpoint along with its own auth server. [https://github.com/notenoughneon/skein/blob/master/apiserver.js]
+* [[Skein]] provides a token endpoint that issues JWT tokens. [https://github.com/notenoughneon/skein/blob/master/api.ts]
 
-* [[Silo Pub]] creates JWT encoded tokens based on authorization from its own auth service.
+* [[silo.pub]] creates JWT encoded tokens based on authorization from its own auth service.
+
+== Discussion ==
+
+=== Asking the token endpoint to invalidate a token ===
+
+Should there be a way to ask the endpoint to invalidate/cancel a previously requested token? E.g. a user could select a log-out button in their [[Micropub]] client and the client would then ask the token endpoint to invalidate its specific token.
+
+Currently users of external token endpoints will have to manage token blacklists on the token-accepting end of the chain, e.g. inside their Micropub server. Is it a good idea to have a standard that splits up the token management that way?
+
+* 💬 {{martijnvdven}}: I realise this can be solved by hosting your own token-endpoint, but that feels counter intuitive to the idea of using interchangeable token services. On the other hand, making this part of the spec makes managing a stateless token-endpoint a lot harder (nay impossible?).
+
+On IRC {{aaronpk}} [https://chat.indieweb.org/dev/2017-10-28/1509199984503000 notes] the existence of [https://tools.ietf.org/html/rfc7009 RFC 7009] for Token Revocation within OAuth. A revocation according to that spec may be handled through a request like:
+
+<pre>
+POST https://tokens.indieauth.com/token
+Content-Type: application/x-www-form-urlencoded
+
+token=xxxxxxxx
+</pre>
+
+The spec defines a new token revocation endpoint, but leaves the method of discovering the endpoint out of scope of the spec. For IndieAuth, we could either reuse the existing token endpoint, since a POST request with a <code>token</code> parameter is not currently used for anything else, or we could more explicitly make a "new endpoint" by appending a query string parameter to the token endpoint such as <code>action=revoke</code>. 
+
+In that case, the IndieAuth extension to RFC7009 would say that the token revocation endpoint is found by taking the <code>rel=token_endpoint</code> URL and appending a query string parameter <code>action=revoke</code>.
 
 == See Also ==
 

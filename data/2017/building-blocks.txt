@@ -1,0 +1,178 @@
+https://indieweb.org/2017/building-blocks
+
+{{stub}}
+
+'''<dfn>Dev intro to indieweb building blocks</dfn>''' was a hack day introduction session at [[2017|IndieWeb Summit 2017]].
+
+Notes archived from: https://etherpad.indieweb.org/building-blocks<br>
+Video at: https://www.youtube.com/watch?v=-DZGjilN__Q
+
+----
+
+When: 2017-06-25 10:00
+
+== Participants ==
+* {{aaronpk}} session facilitator
+* {{martymcguire}}
+* [https://www.jjuran.org/ Josh Juran]
+* [http://jackjamieson.net/ Jack Jamieson]
+* {{gRegor}}
+* {{grantcodes}}
+* [http://www.michellejl.com/ Michelle JL]
+* [https://podviaznikov.com/ Anton Podviaznikov]
+
+== Notes ==
+aaronpk is going to go through several building blocks of IndieWeb. In an hour.
+
+=== Microformats ===
+Starting w/ microformats. Foundation of our interop.
+
+microformats.io is a nice intro site thanks to {{veganstraightedge}}.
+* if you have HTML already for a blog post or address or whatever, what is the least amount of info you could add to give structure to that HTML?
+** h-card example from microformats.io
+
+prefixes are parser instructions, everything else is vocabulary
+* h- is the object wrapper
+* within the h-card there's properties: street-address, locality, etc.
+
+* shows php.microformats.io parser example by pasting in the h-card example HTML
+** h-card tells us everything inside it is an item
+** p- means use plaintext value of element
+** u- means use the URL value; for &lt;a>, href, &lt;img> it's src
+** dt- time attribute
+
+When you're consuming an HTML page you can completely forget that it's HTML, parse it with mf2 and it's a JSON structure. Parsing HTML is hard, but don't have to worry about it since parsing mf2 makes it a nice data structure.
+
+Q: What does "h" mean?
+
+A: Tantek: microformats started with hCard and hCalendar for events, because they were based on vCard and iCalendar, so the "h" stands for HTML version of those.
+
+Several parsers in multiple langes. What's your preferred language? Production-ready parsers linked on microformats.io; there's more that are in-development, linked on microformats.org
+
+Josh: Any interest in Perl parser?
+
+Tantek: There's an old mf1 parser for Perl that was very thorough; good starting point.
+
+Aaron shows live example of mf2 on aaronpk.com
+* h-entry with e-content, [[note]] (post with no title)
+* dt-published
+* p-category
+* runs his URL through pin13.net/mf2
+
+Why is this useful?
+* When I reply to a post on {{benwerd}}'s site I put the URL I'm replying to, pull out the photo, URL, text of Ben's post and show it as a [[reply-context]]
+
+Shows [[h-entry]]
+* Only a handful of core properties you'll typically use, the rest can be easily looked up on microformats.org as needed
+
+Shows [[posts]]
+* including experimental properrties and post types
+
+Grant: What's the best way to make something machine-readable while not necessarily showing it?
+* Can hide it with CSS, but kind of a hack
+* Aaron: First Q, why do you want to make it not visible, and are you sure?
+** When it's not visible it's easy to bit rot. When it's visible it's easily inspected and bugs caught.
+* Aaron: on his posts he doesn't have his photo and name visible in the h-entry. His author h-card is in the footer of the page, so he has a hidden &lt;a class="u-author"> link with no text so [[authorship]] algorithm can parse his author info
+** Also shows location name but doesn't show lat/lng because unless you're a super map geek you probably don't care to see it
+
+=== Webmention ===
+http://w3.org/TR/webmention
+
+Webmention is basically "this URL linked to that URL"
+
+Aaron made a URL on his site in reply to Ben's URL.
+
+First have to discover Ben's webmention endpoint. That's proably the hardest part of the spec.
+
+In Ben's HTML is a &lt;link> with rel=webmention.
+
+There's a couple other ways to advertise it; can be in HTTP header Link: tag. So you can advertise in non-HTML URLs (images, JSON, etc)
+
+Once we know the WM endpoint we can send the payload.
+
+Demonstrating with cURL, because it's just a form POST
+* source = Aaron's URL target = Ben's URL 
+* Ben's response is 202 Accepted "Got it, going to do something with it later"
+
+Receiver
+* Typically first: Verify the source link exists and links to target, to avoid obvious spam
+* Then usually parse the source content async
+
+Josh: How do we know when a 202 Accepted response has finished processing?
+* Aaron: one option is return a status URL with HTTP 201, then the sender can check the status URL
+** Shows sending a junk webmention to his own endpoint, returns 201 with a Location: header of webmention.io's status URL
+* Would like to see an extension that specifies the content of status URLs so sender can reliably consume it; doesn't exist yet
+
+Extensions
+* [[Vouch]]
+* [[Salmention]]
+* [[Private Webmention]]
+
+=== WebSub ===
+http://w3.org/TR/websub/
+
+Way to subscribe to changes of things.
+
+Aaron posts new things on his homepage, if you want to know when he updates you can subscribe by WebSub. Other option is to poll periodically.
+* Usually it can be used for lists of things, but it can be for a single thing.
+* As a publisher, links to the hub.
+** Shows his hub in the HTTP header of aaronpk.com. Link: with rel=hub and current page URL with rel=self
+* The hub maintains list of subscribers
+* When Aaron tells the hub his URL is updated, it will read the page and send the payload to subscribers
+
+Doesn't care the content type of the page. HTML, Atom, JSON, whatever.
+
+In indieweb HTML+mf2 pages are commonly used.
+
+Initially PubSubHubub was used with XML feeds only but it's expanded to generic content types
+
+Q: Grant: Is there anything in place if you have 1M subscribers?
+* The hub separation helps. Aaron's hub URL is on switchboard.p3k.io not his own site, so the hub has to handle it. Superfeedr is another example.
+* If you don't think you'll have 1M subscribers, you could host your own hub on your domain
+
+Q: Marty: If the post appears in multiple feeds, does each feed URL need to have a notification sent? e.g. aaronpk's tag feeds vs main feed (tag: biketown)
+* Yes, as publisher you need to know which feeds are updated and send all of those URLs in your WebSub notification.
+
+Shows [[Woodwind]] as example consumer of WebSub
+
+Subscribers will usually poll periodically (much less frequently) as a fallback in case something goes wrong with WebSub notifications
+
+Q: Anton: How do I as a user know looking at your site that you support WebSub?
+* Aaron: From an end-user perspective you don't really need to know, because you can get the updates regardless of whether it's WebSub or polling?
+* Sub-question: how do you know you can consume the site at all. e.g. kind of like a [[follow]] button.
+** Not well-explored yet, but some options. SubToMe.com buttons, aaronpk's follow button experiment.
+
+=== Micropub ===
+
+Let's do [[Micropub]] in 3 minutes!
+
+Client-server API.
+* Client-side apps (web, native, etc.) can use to create posts on a server.
+
+Aaron doesn't have any place on his site to create posts. Has to use external services.
+* Mostly uses [[Quill]]
+* Signs in, fills out form, submits, MP client makes a POST request to his site, his site processes and posts, sends WebSub notifications, etc.
+
+You no longer need to be responsible for creating posting UIs; you can use other clients / UIs
+
+[[OwnYourGram]] and [[OwnYourSwarm]] use MP to post app silo content back to your site ([[PESOS]])
+
+Probably the best way to get started is Quill or micropub.rocks
+* When you try it and it doesn't find endpoitns, it walks you through the steps you need: authorization, token endpoint, micropub endpoint
+** You can skip auth endpoint and token endpoint if you want to use the provided services
+
+Creating MP endpoint
+* Client is going to send a few well-defined POST request params
+** params come from mf2
+
+Q: How does MP interpret Authorization: Bearer HTTP header
+* Not explicitly part of the spec. tokens.indieauth.com verifies tokens; good starting point
+
+[[micropub.rocks]] is the test suite for Micropub
+
+== See Also ==
+* [[tools]]
+* ...
+
+[[Category: 2017 sessions]]
+[[Category:building-blocks]]

@@ -1,4 +1,4 @@
-http://indiewebcamp.com/wget
+https://indieweb.org/wget
 
 {{stub}}
 
@@ -28,6 +28,22 @@ wget will fetch the first page then recursively follow all the links it finds (i
 
 You can then browse through all the site's files, and most links should work, since the <code>--convert-links</code> option will rewrite the links it finds in the HTML to the local version. You can also configure a local web server to serve this folder at a URL.
 
+To download everything, including images, javascripts, etc, use:
+
+<pre>wget \
+-e robots=off \
+--timeout=360 \
+--no-clobber \
+--no-directories \
+--adjust-extension \
+--span-hosts \
+--wait=1 \
+--random-wait \
+--convert-links \
+--page-requisites \
+--directory-prefix=[dir to save to] \
+[url]</pre>
+
 ==== Serve the archive with nginx ====
 <pre>
 server {
@@ -41,3 +57,5 @@ server {
 
 == See Also ==
 * [[archive]]
+* [[Spiderpig]]
+* [[indie map]]

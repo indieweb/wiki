@@ -1,10 +1,16 @@
-http://indiewebcamp.com/area-tag
+https://indieweb.org/area-tag
 
 {{stub}}
 
 An '''<dfn>area-tag</dfn>''' is a special kind of [[tag]] that tags a specific area or region of a post which can be used to tag a [[photo]] post with [[person-tag]]s at specific locations/areas where each person appears in the photo.
 
+== Why ==
+Use area tags to indicate who is who or what is what in a photo.
+
 == How to ==
+TBD. See [[#Brainstorming]]
+
+== Brainstorming ==
 All examples are contextually inside an h-entry.
 
 === area tag with note ===
@@ -17,9 +23,25 @@ Area tag with a note:
 === person tag as area tag ===
 [[person-tag]] as an area-tag:
 <pre><nowiki>
-<area class="p-category h-card" shape="rect" coords="..." 
+<area class="u-category h-card" shape="rect" coords="..." 
       alt="Ben Roberts" href="http://ben.thatmustbe.me/"/>
 </nowiki></pre>
+
+{{benwerd}} wondered if you could tag people in photos by linking to their profiles using HTML imagemaps (!) and marking up the imagemap links with microformats. That might look something like:
+
+<code><img src="some_photo.jpg" alt="Tantek, Aaron and Amber!" usemap="#peeps" class="u-photo">
+
+<map name="peeps">
+
+<area shape="circle" coords="124,58,8" class="u-category h-card" href="http://tantek.com" alt="Tantek Çelik">
+
+<area shape="rect" coords="0,0,82,126" class="u-category h-card"  href="http://aaronparecki.com" alt="Aaron Parecki">
+
+<area shape="circle" coords="90,58,3" class="u-category h-card" href="http://caseorganic.com" alt="Amber Case">
+
+</map></code>
+
+However, because the HTML syntax of imagemaps sits outside the actual image tag, it may be worth adding a microformat to the map itself.
 
 === area tag reply ===
 Area tags can be placed inside a [[tag-reply]] to tag some ''other'' post with area-specific tags, including person-tagging people at specific points/areas in someone else's photo post.
@@ -35,6 +57,7 @@ Once someone has implemented publishing an area tag reply on their own site, in 
 * 2008-01-06 - Karl Dubost, [http://www.w3.org/blog/2008/01/rdfa-and-html-imagemap/ RDFa and HTML imagemap], W3C Blog
 
 == See Also ==
+* [[media fragment]]
 * http://alistapart.com/article/imagemap
 * http://en.wikipedia.org/wiki/Image_map#Server-side_image_map for area tag creation UI w/o JS 
 * [[tag]]

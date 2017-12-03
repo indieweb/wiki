@@ -1,18 +1,60 @@
-http://indiewebcamp.com/language
+https://indieweb.org/language
 
-{{stub}}
+'''<dfn>language</dfn>''' may refer to human (or natural) languages or computer (often [[programming language|programming]]) languages.
 
-'''<dfn>language</dfn>''' may refer to human (AKA natural) languages or computer (often programming) languages.
+==  Why marking up ==
 
-== Programming languages ==
-* [[JavaScript]]
-* [[PHP]]
-* [[Python]]
-* [[Ruby]]
-* [[Go]]
-* [[Haskell]]
-* [[Elixir]]
+Before you consider marking up your page with the appropriate language-tags, consider why you are marking up. Don't just mark up because you can markup.
 
-== Human languages ==
-See:
-* [[other-languages]]
+=== Filtering ===
+
+When marking up a h-entry of a post with a <code>lang</code> attribute, you enable users of a [[reader]] to filter out a certain language they don't speak. Thus making it possible to follow a user only in a specific language you speak.
+
+<blockquote>{{voxpelli}} [https://chat.indieweb.org/2017-01-14#t1484415297550000 on chat]: "on Twitter I often don't follow people that tweet too much in a language I don't understand and I hold back on tweeting in swedish because I know it might likewise annoy others"</blockquote>
+
+Twitter does filter on language in Search, but not on the timeline.
+
+=== Screen readers / text to speach ===
+
+When someone uses a [[screen reader]], the marked up language can be used to select the right pronunciation rules.
+
+* [https://seblog.nl/2016/02/21/1/sjiphol-leedies-djentelmen-sjiphol This post] by {{Sebsel}} is a Dutch transcription of English and would thus be best marked up as 'nl', to guide screen readers toward the right pronunciation.
+* {{martijnvdven}} used to mark up his name with <code>lang="nl"</code> to guide screen readers towards the right pronunciation of his name.
+
+=== Translations ===
+
+Translation software can translate certain posts or texts if it knows the language.
+
+* Most translation software can probably detect the language too?
+
+
+== How to mark up ==
+
+You can specify the language of a [[HTML]] document, or a part of it, by using the <code>lang="??"</code> attribute, where <code>??</code> is the language-code for your language. For English, this is <code>en</code>, <code>en-GB</code> or <code>en-US</code>.
+
+HTML also allows you to mark the language of the target of a hyperlink using the <code>hreflang</code> attribute.
+
+HTML 5 has also introduced a [https://www.w3.org/TR/html5/dom.html#attr-translate <code>translate</code> attribute] that allows you to specify that a piece of text ought to not be automatically translated.
+
+* There are [http://microformats.org/wiki/microformats2-parsing-brainstorming#Parse_language_information thoughts] on how to parse <code>lang</code> in Microformats.
+
+=== Language detection ===
+* PHP: http://pear.php.net/package/Text_LanguageDetect/
+* Python: https://pypi.python.org/pypi/langdetect/
+* JS: https://github.com/wooorm/franc
+
+{{cweiske}} uses language detection to automatically create the <tt><html lang="??"></tt> attribute for blog posts from the post's title.
+
+==== FAQ ====
+'''Q''': Why detect instead of adding manually? 
+* Less tedious, less prone to errors
+'''Q''': Why detect yourself, if others can detect too? 
+* Because sometimes they don't, but do things with the lang-attribute.
+* Detect once while publishing vs. detect again and again and again and again
+
+== See Also ==
+* [[programming language]]
+* [[other-languages|This Wiki in other languages]]
+* https://www.w3.org/TR/html401/struct/dirlang.html
+* [[i18n]]
+* [[multilingual blogging]]

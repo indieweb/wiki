@@ -1,8 +1,81 @@
-http://indiewebcamp.com/pagination
+https://indieweb.org/pagination
 
 {{stub}}
 
 '''<dfn>pagination</dfn>''' is a [[UI]] pattern for [[navigation]] across (typically chronologically) sequential [[page]]s that show one or more [[posts]] such as [[permalink]] post pages, [[archives]], [[search]] results, and lists of [[tag]]ged posts.
+
+== IndieWeb Examples ==
+
+=== Date Based Pagination ===
+* {{aaronpk}} uses date-based pagination on aaronparecki.com. This means each page's URL is based off of the published date of the top post on the page, so this URL will always show the same set of posts, even as new posts are added. The pages in this way become permalinks, rather than dynamically changing.
+** e.g. https://aaronparecki.com/tag/indieweb?before=20160930T143128-0700
+
+* {{kartik}} uses date-based pagination on kartikprabhu.com. [[Articles]] are paginated by year whereas more-frequent [[Notes]] by month.
+** e.g. https://kartikprabhu.com/articles/2015 and https://kartikprabhu.com/notes/2016-09
+
+== APIs ==
+
+=== Slack ===
+https://api.slack.com/docs/pagination
+
+Slack uses a cursor-based pagination mechanism. An API call that returns a subset of a list of items will also return a cursor string which can be used to retrieve the next page of results. The cursor string is opaque to the client, and only has significance to the server.
+
+* Paginated methods accept limit and cursor parameters.
+* Paginated requests include a top-level response_metadata object including a next_cursor when additional results can be retrieved.
+* Present the cursor parameter on subsequent requests to navigate the collection.
+* An empty, null, or non-existent next_cursor indicates no further results.
+
+=== Facebook ===
+https://developers.facebook.com/docs/graph-api/using-graph-api/#paging
+
+Facebook supports multiple pagination mechanisms, but encourages the use of cursor-based pagination. Facebook returns two cursors, "after" and "before" to traverse both directions in a list.
+
+The "before" cursor points to the start of the page of data. The "after" cursor points to the end of the page of data. To request the previous or next page of data, you can pass these strings in the "before" or "after" query string parameter of the API request.
+
+=== MediaWiki ===
+MediaWiki's web interface for contributions, recent changes, etc. use query params with:
+* offset=YYYYMMDDHHMMSS and
+* limit=n
+e.g.:
+* https://indieweb.org/wiki/index.php?title=Special:Contributions&offset=20171028210936&limit=100&target=Tantek.com
+
+MediaWiki's API for recent changes uses start/end timestamp-based parameters, where each parameter name starts with the prefix for the method group, e.g. "rcend" for "recent changes end". There is an additional parameter to indicate whether to return results sorted by 
+* rcdir = older or newer
+* rcstart=YYYYMMDDHHMMSS
+* rcend=YYYYMMDDHHMMSS
+* https://www.mediawiki.org/wiki/API:RecentChanges#Parameters
+
+
+The Mediawiki API uses cursor-style pagination:
+* https://www.mediawiki.org/wiki/API:Query#Continuing_queries
+
+=== Google Web Search ===
+[[Google]]'s web search uses query params for paginating search results with:
+* start=n
+e.g.:
+* https://www.google.com/search?q=indieweb&start=100
+
+=== Twitter ===
+https://developer.twitter.com/en/docs/tweets/search/api-reference/get-search-tweets
+
+Most of Twitter's APIs for returning tweets use a paging mechanism built around their use of [https://developer.twitter.com/en/docs/basics/twitter-ids always-increasing numeric tweet IDs]. Their IDs are based on the timestamp rather than being sequential, but are guaranteed to be sorted by the time the tweet was created.
+
+Paging in the Twitter API involves using either the <code>since_id</code> or <code>max_id</code> parameters to return tweets newer or older than the specified tweet respectively.
+
+Twitter also has a section of their documentation about their cursor-based API.
+
+https://developer.twitter.com/en/docs/basics/cursoring
+
+API responses include <code>next_cursor</code> and <code>previous_cursor</code>, and will return "0" if there are no more results.
+
+==== Twitter Ads API ====
+https://developer.twitter.com/en/docs/ads/general/guides/pagination
+
+The Twitter Ads API uses cursor-based pagination using the <code>cursor</code> and <code>count</code> parameters. Traversing 
+
+<blockquote>If a response has more than <code>count</code> entities, these endpoints will now return the first <code>count</code> entities and a <code>next_cursor</code> key in the response JSON.</blockquote>
+
+<blockquote>If less than <code>count</code> entities are returned in the current page of the result set, the <code>next_cursor</code> value will be null.</blockquote>
 
 == Sessions ==
 IndieWebCamp sessions that discussed pagination:
@@ -14,3 +87,4 @@ IndieWebCamp sessions that discussed pagination:
 * [[search]]
 * [[archives]]
 * [[tag]]
+* http://cweiske.de/tagebuch/pager.htm

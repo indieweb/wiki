@@ -1,14 +1,14 @@
-http://indiewebcamp.com/audio
+https://indieweb.org/audio
 
-<span style="float:right;height:128px;font-size:128px;margin:0 0 -64px">🎤</span>
-
+[[Category:PostType]]
+{{emojicon|🎤}}
 {{stub}}
 
 '''<dfn>audio</dfn>''' is a sound recording indieweb [[post]] that is spoken or otherwise created by the author of a site.
 
 == Why ==
 Audio posts, especially spoken word like [[podcasts]], can be very personal and emotionally compelling. In many ways a high quality audio post has a very different impact on the listener than the equivalent as a text note.
-
+__TOC__
 == How ==
 Use an [[h-entry]] as always, and then an HTML5 <code>&lt;audio&gt;</code> element with class name <code>u-audio</code> and <code>src</code> attribute of the URL of the audio file, e.g.
 
@@ -18,6 +18,8 @@ alternate text content - like a transcript
 </audio>
 </nowiki></pre>
 
+An [[album]] cover could be marked up as [[featured]].
+
 == IndieWeb Examples ==
 === Ben Werdmuller ===
 {{benwerd}} uses [[Known]] to post audio to his site [http://werd.io werd.io] since [http://werd.io/2014/a-little-indieweb-audio-while-i-wait-for-my-flight 2014-06-27]. Example:
@@ -26,13 +28,54 @@ alternate text content - like a transcript
 {{benthatmustbeme}} posts audio to his site [https://ben.thatmustbe.me/ ben.thatmustbe.me] since [https://ben.thatmustbe.me/audio/2015/1/9/8/ 2015-01-09]. Example:
 * https://ben.thatmustbe.me/audio/2015/1/9/8/
 * More: http://werd.io/content/streamingmedia/
+=== Aaron Parecki ===
+{{aaronpk}} posts audio to his site using [[p3k]] since [https://aaronparecki.com/2015/01/18/13/ 2015-01-18].
+Publishing:
+* https://aaronparecki.com/2015/01/18/13/
+** The audio file is rendered in an <code><audio></code> tag with a class of "u-audio", so that the browser shows an audio player. 
+* https://aaronparecki.com/2017/02/17/9/day59
+** The audio is paired with a video and thus rendered in <code><video><source src="" class="u-video">...</code>, but also provided in a fallback link inside with u-audio so the post can still be used to create an audio podcast feed
+
+Consuming: [[p3k]] also consumes the u-audio property (since at least 2017-02-18) for example when posting a [https://aaronparecki.com/2017/02/18/10/ repost of another audio post].
+
+=== Marty McGuire ===
+{{martymcguire}} posts audio to his site [https://martymcgui.re/ martymcgui.re] since [https://martymcgui.re/2017/02/18/151503/ 2017-02-19]. Example:
+* https://martymcgui.re/2017/02/18/151503/
+
+[https://www.w3.org/TR/media-frags/#naming-time Temporal media fragments] are supported, using [https://github.com/aaronpk/clone-media-fragment Aaron Parecki's javascript implementation]. Example:
+* https://martymcgui.re/2017/02/18/151503/#t=54
+
+Marty also runs an IndieWeb-enabled site for his comedy podcast [[User:Martymcgui.re#Podcast_Site_-_wehavetoask.com|We Have to Ask]] which has been posting an h-feed of h-entrys with u-audio since ~August 2016. Example:
+* https://wehavetoask.com/episodes/2017-01-31/ (example episode)
+* More: http://wehavetoask.com/
 
 == Silo Examples ==
-Soundcloud is a silo for audio  posts; as well as the audio file, it also expects a poster image to go with it, both for on-site presentation and for creating previews on other silos like facebook. 
+=== SoundCloud ===
+[[SoundCloud]] is a silo for audio posts; as well as the audio media file itself, it also expects a poster image to go with it, both for on-site presentation and for creating previews on other silos like facebook. 
 For example [https://soundcloud.com/the-marksist/marks-mix-21-about-damn-time this mix] has an [http://i1.sndcdn.com/artworks-000128719033-zpa2wf-t500x500.jpg image] that is exported in facebook, twitter, oembed and schema markup to cat as a preview.
+
+== Brainstorming ==
+=== How to cite and webmention ===
+Citing and sending a [[Webmention]] for/to an entire audio post is no different than citing any other post in general.
+
+However there are some interesting cases:
+* '''A [[repost]] of an [[audio]] post''', e.g. https://aaronparecki.com/2017/02/18/10/
+** has an h-cite with u-url of the original and and embedded u-audio of the full audio media file
+** webmentions work normally for this like any other [[repost]].
+* '''A [[podcast]] using part of an audio post''', e.g. https://martymcgui.re/2017/02/18/151503/
+** links to several audio posts on aaronparecki.com, and for each, the martymcgui.re podcast post:
+** SHOULD link to a [[media fragment]] indicating the time start and end offsets (as specified in the [https://www.w3.org/TR/media-frags/#naming-time temporal dimension]) for the (presumably continuous) portion of the original audio post used in the podcast.
+** SHOULD send a Webmention with:
+*** "source" URL of the podcast post with a media fragment indicating the offset into the podcast where the audio post was used / incorporated
+*** "target" URL of the audio post with aforementioned time start and end offsets
+
+=== Support media fragments ===
+An audio post permalink should support [https://www.w3.org/TR/media-frags/#naming-time temporal media fragments] on the end of its permalink to a specific time offset by cueing up the playback of audio to that specific time (and auto-playing if the audio post would auto-play from the start normally).
 
 == See Also ==
 * [[jam ]]
-* [[video]]
+* [[video]] uses an 
 * [[posts]]
 * [[podcast]]
+* [[collection]]
+* [[Screech]], a simple app for posting audio content to your site

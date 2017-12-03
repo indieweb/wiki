@@ -1,0 +1,347 @@
+https://indieweb.org/Micropub/Servers
+
+'''<dfn>Micropub servers</dfn>''' are existing endpoint implementations of [[Micropub]].
+
+== IndieWeb Examples ==
+
+Examples of IndieWeb sites that support the micropub API (in order of deployment).
+
+=== Aaron Parecki ===
+{{aaronpk}} supports publishing various post types on aaronparecki.com using micropub since 2013-12-25.
+* 2013-12-25 [[note]] micropub publishing support added
+* 2013-12-28 [[pushup]] micropub publishing support added
+* 2014-02-24 [[photo]] micropub publishing support added
+* 2014-09-17 [[bookmark]] micropub publishing support added
+* 2014-11-07 [[repost]] micropub publishing support added
+* 2014-12-22 [[like]] micropub publishing support added
+
+=== Barnaby Walters ===
+[[User:WaterPigs.co.uk|Barnaby Walters]] posts [[notes]] and [[replies]] on [http://waterpigs.co.uk waterpigs.co.uk] ([[Taproot]]) since 2014-03-10 using [[Shrewdness]] and [[Taproot]] as micropub clients
+
+=== Emma Kuo ===
+[[User:notenoughneon.com|Emma Kuo]] posts [[notes]], [[replies]] and [[photos]] on [http://notenoughneon.com notenoughneon.com] since 2014-04-28 using [[Neonblog]] and [[OwnYourGram]].
+
+=== Kyle Mahan ===
+{{kylewm}} uses micropub to post [[photos]] on [https://kylewm.com his personal site] ([[Red Wind]]) since [https://kylewm.com/2014/05/the-hunter-2 2014-05-17]. As of 2015-02-10, he also posts [[replies]] and [[likes]] using [[Woodwind]] as a Micropub client.
+
+=== Kartik Prabhu ===
+[[User:Kartikprabhu.com|Kartik]] posts [[notes]] on [https://kartikprabhu.com kartikprabhu.com] via micropub using [[Quill]] since 2014-05-24
+
+=== Postly ===
+[[User:ben.thatmustbe.me|Ben Roberts]] posts to his [[Postly]] site via micropub.  Photos are posted using [[OwnYourGram]] and Notes, Replies, and Articles are posted using his own [[Postly]] Client.  Deleting entries via micropub added 2014-09-28.
+
+=== Jeremy Keith ===
+[[User:adactio.com|Jeremy Keith]] supports posting notes and photos via micropub [https://adactio.com/journal/7698 since 2014-10-21]. He shared an example of his PHP source code, [https://gist.github.com/adactio/8168e6b78da7b16a4644 minimal micropub endpoint].
+
+=== Bear ===
+{{bear}} supports micropub since 2015-01-01.
+* 2015-01-01 [[note]] support added
+* 2015-01-01 [[article]] support added
+
+=== rhiaro ===
+{{rhiaro}} supports micropub since [http://rhiaro.co.uk/2015/04/minimum-viable-micropub 2015-04-04], used with [[Quill]] and [[Teacup]], with various hacks:
+* Supports any post types by passing all metadata in the 'content' param as <!--- key: value\n --> and inferring post types from it (so all a client needs is a content field).
+* Supports edit over POST via resending content (+ metadata) and the slug of the post to be edited.
+
+=== Pelle Wessman ===
+{{voxpelli}} supports basic micropub publishing of articles on voxpelli.com [https://github.com/voxpelli/voxpelli.github.com/commit/f01d4e3fafa2a5eec5e6c5625cdcceddce6780d0 since 2015-07-10]
+
+=== Shane Hudson ===
+[[User:shanehudson.net|Shane Hudson]] supports micropub for notes (with geo) only [https://shanehudson.net/2015/07/11/1347 since 2015-07-11]. Twitter syndication and photo support are on the to-do list.
+
+=== Jeena Paradies ===
+{{jeena}} supports micropub for notes (with syndication and reply-to) only [https://jeena.net/notes/375 since 2015-07-12]. Posting photos works too since 2015-07-24. And now even person tagging for notes and photos since 2015-07-30.
+
+=== kongaloosh ===
+{{kongaloosh}} supports micropub since [http://kongaloosh.com/e/2015/7/22/heres-a-t 2015-04-04], used with [[Quill]] and Own Your Gram.
+* Supports any post types by and inferring post types.
+
+=== Harry Reeder ===
+{{tbrb}} supports publishing with micropub since 2015-07-26. Currently [[note]] type only, with more on the to-do.
+
+=== Daniel Goldsmith===
+{{dgold}} supports publishing with micropub [https://ascraeus.org/micro/1500061827/ since 2017-07-14].
+
+Uses [[nanopub]], a php script which is [https://github.com/dg01d/nanopub available on Github]. Script handles the following indieweb post-types:
+* 2017-07-21 [[note]]  
+* 2017-07-21 [[replies]]
+* 2017-07-21 [[article]]
+* 2017-08-04 [[checkin]] support [https://ascraeus.org/micro/1501876190/ added] 
+* 2017-10-20 deleting and undeleting added
+* 2017-10-20 updating support
+
+nanopub supports [[POSSE]] to [[Twitter]] and [[Mastodon]], including POSSE link acquisition, with framework to add further silos.
+
+== CMS Software ==
+[[Micropub]] has been added to the following CMS software and blog publishing tools for additional server support.
+
+=== Known ===
+[[User:werd.io|Ben]] has written a [[Known]] plugin that logs in via [[IndieAuth]] and publishes content via micropub. It's designed to work so that all indieweb post types - notes etc - are passed to the content plugin registered to handle them. [https://github.com/idno/indiepub]
+
+=== WordPress ===
+[[WordPress]] supports Micropub via {{snarfed}}'s [[Micropub for WordPress]] plugin.
+
+[https://github.com/snarfed/wordpress-micropub wordpress simple-location] plugin needed to display location info.
+
+=== Drupal ===
+[http://stefan-auditor.de Stefan Auditor] wrote a Drupal module to add a Micropub endpoint to Drupal installs on 2015-05-10. https://github.com/sanduhrs/micropub
+
+=== Craft ===
+[[User:shanehudson.net|Shane]] has written a [[Craft]] plugin for Micropub. It currently only works with notes and requires some configuration to setup. It has also only been tested with Quill so far, as of 2015-07-11. https://github.com/ShaneHudson/Micropub_Craft
+
+=== Jekyll ===
+{{voxpelli}} has written a self-hosteable service that exposes a Micropub endpoint and then performs the instructions sent to that endpoint by committing [[Jekyll]] formatted data to a [[GitHub]] repository for the Jekyll site. Modular built and would be possible to extend to support other systems like Jekyll as well. https://github.com/voxpelli/webpage-micropub-to-github
+
+=== Kirby ===
+
+{{Sebsel}} wrote a Micropub plugin for [[Kirby]]. As of 2016-12-12 it supports posting with FormEncoded and JSON, and has a branch for update (replace and add) that needs some cleaning and 'delete' support before it can be merged. (I'm selfdogfooding it anyway now) https://github.com/sebsel/kirby-micropub
+
+=== Dobrado ===
+
+[[dobrado]] can publish posts received via Micropub since 2017-02-05.
+
+== Services ==
+
+=== Silo.pub ===
+In April 2015, {{kylewm}} created [https://github.com/kylewm/feverdream Feverdream] aka [https://silo.pub/ silo.pub] to provide a Micropub endpoint to create posts on hosted blogs like [[Tumblr]], [[WordPress.com]], [[Blogger]], [[twitter]], [[Facebook]] and [[Flickr]]
+
+=== ownyourresponses ===
+{{snarfed}}'s [http://github.com/snarfed/ownyourresponses ownyourresponses] is [[PESOS]] as a service for [[Twitter]] favorites, retweets, and replies and [[Instagram]] likes. It polls your accounts periodically for new activity via the APIs and creates corresponding like, repost, and reply posts on your site via Micropub.
+
+The original motivation is described in [https://snarfed.org/2015-01-22_pesos-for-bridgy-publish PESOS for Bridgy Publish].
+
+
+=== anoweco ===
+{{cweiske}}'s ''anoweco'' project (that powers [[commentpara.de]]) can be filled via micropub only.
+
+== Implementation status ==
+How much of the [http://micropub.net/draft/ Micropub specification] is implemented by open source software projects.
+
+{| class="wikitable"
+! Feature
+! [[commentpara.de|anoweco]]
+! Known
+! Wordpress
+! [https://github.com/voxpelli/webpage-micropub-to-github Jekyll]
+
+|-
+! Syntax
+
+|-
+| form-encoded
+| ✔
+| ✔
+| ✔
+| ✔
+
+|-
+| JSON
+| ✔
+| no
+| [https://github.com/snarfed/wordpress-micropub/issues/25 no]
+| ✔
+
+|-
+| [http://micropub.net/draft/#error-response JSON errors]
+| ✔
+| ✔<ref name="latestgit">with latest git version</ref>
+| ✔<ref name="latestgit">with latest git version</ref>
+| ?
+
+|-
+! Configuration
+
+|-
+| <code>q=config</code>
+| ✔
+| no
+| no
+| ?
+
+|-
+| <code>q=source</code>
+| no
+| no
+| no
+| ?
+
+|-
+| <code>q=syndicate-to</code>
+| no
+| ✔
+| ✔
+| ?
+
+|-
+! Actions
+
+|-
+| Create
+| ✔
+| ✔
+| ✔
+| ✔
+
+|-
+| Update
+| no
+| [https://github.com/idno/Known/issues/1517 no]
+| no
+| (partly)
+
+|-
+| Delete
+| no
+| ✔<ref name="latestgit">with latest git version</ref>
+| ✔
+| no
+
+|-
+| Undelete
+| no
+| no
+| no
+| no
+
+|-
+! File uploads
+
+|-
+| form-encoded/multipart
+| no
+| [https://github.com/idno/Known/issues/1508 (✔)]
+| ✔
+| ✔
+
+|-
+| url only
+| no
+| ✔
+| ?
+| ?
+
+|-
+| media endpoint
+| no
+| no
+| no
+| no
+
+|-
+! [[:Category:PostType|Post types]]
+
+|-
+| [[bookmark]]
+| no
+| ✔<ref name="latestgit">with latest git version</ref>
+| ✔
+| ?
+
+|-
+| [[note]]
+| no
+| ✔
+| ✔
+| ✔
+
+|-
+| [[rsvp]]
+| no
+| ✔<ref>With the "Events" plugin</ref>
+| ✔
+| ?
+
+|-
+! Properties
+
+|-
+| in-reply-to
+| ✔
+| ✔
+| ✔
+| ?
+
+|-
+| like-of
+| ✔
+| ✔
+| ?
+| ?
+
+|-
+| repost-of
+| no
+| ✔
+| ?
+| ?
+
+|-
+| name
+| ✔
+| ✔
+| ✔
+| ?
+
+|-
+| content
+| ✔
+| ✔<ref name="latestgit">with latest git version</ref>
+| ✔
+| ✔
+
+|-
+| content[html]
+| ✔
+| ✔
+| ✔
+| ✔
+
+|-
+| category
+| no
+| ✔<ref name="latestgit">with latest git version</ref>
+| ✔
+| ?
+
+|-
+| published
+| ✔
+| ✔
+| ✔
+| ?
+
+|-
+| updated
+| no
+| no
+| no
+| ?
+
+|-
+| [[location]]
+| no
+| [https://github.com/idno/Known/issues/290 no]
+| [https://github.com/dshanske/simple-location/issues/5 (✔)]
+| ?
+
+|-
+| slug
+| no
+| [https://github.com/idno/Known/issues/1515 no]
+| ✔
+| ?
+
+|-
+| [[u-syndication|syndication]]
+| no
+| ✔<ref name="latestgit">with latest git version</ref>
+| ?
+| ?
+|}
+
+<references />
+
+== Other ==
+* [http://p.cweiske.de/363 Minimal micropub media endpoint in PHP]
+
+[[Category:Micropub]]

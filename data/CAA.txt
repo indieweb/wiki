@@ -1,0 +1,31 @@
+https://indieweb.org/CAA
+
+{{stub}}
+
+'''<dfn>CAA</dfn>''' is an acronym for Certification Authority Authorization, a DNS record type that indicates what Certificate Authorities are allowed to issue certificates for a domain. It supports whitelisting certificates, wildcards, and can also send reports of attempted requests that were blocked.
+
+CAA defines three record types: '''issue''', '''issuewild''', and '''iodef'''. You can have multiple entries for all of these, one per CA you want to whitelist. The value for issue and issuewild is the domain of the CA, for example, "letsencrypt.org". The value for iodef is a URI of either http:, https:, or mailto:. The first two will POST an object that conforms to the IODEF standard ([https://tools.ietf.org/html/rfc6546 RFC6546]).
+
+== Sample CAA Records ==
+
+You should use [https://sslmate.com/caa/ a generator] to help you make these records. This is provided as an example only:
+
+ example.com.	IN	CAA	0 issue "letsencrypt.org"
+ example.com.	IN	CAA	0 issuewild ";"
+ example.com.	IN	CAA	0 iodef "mailto:you@example.com"
+
+== Why? ==
+
+Checking for and honoring CAA records is mandatory for Certificate Authorities, but is, at the time of writing, not checked by browsers or any TLS intercepting middle-boxes. CAA records are a defense-in-depth tool to make it harder for an attacker to get a legitimate certificate for your domain by white listing what CAs you trust. An attacker cannot use an exploit in the hundreds of widely trusted CAs. It also provides you with notifications so you know someone is trying to intercept your website's traffic.
+
+If an attacker had access to the private key for a CA, they could issue valid certificates for your website -- CAA records help close some attacks that you could otherwise do without server access, such as confusing a poorly written ACME implementation, or registering a trusted email address on a website.
+
+CAA records are an easy way to add more security to the PKI landscape.
+
+== See Also ==
+
+* https://gist.github.com/roycewilliams/1710ade469c05eb0b090d268470aa741 (List of supported DNS software and hosting providers)
+* https://scotthelme.co.uk/certificate-authority-authorization/
+* https://sslmate.com/caa/ (CAA record generator for a variety of DNS server software)
+* https://blog.qualys.com/ssllabs/2017/03/13/caa-mandated-by-cabrowser-forum
+* https://tools.ietf.org/html/rfc6844 (RFC6844 - DNS Certification Authority Authorization (CAA) Resource Record)

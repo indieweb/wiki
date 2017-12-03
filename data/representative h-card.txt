@@ -1,13 +1,10 @@
-http://indiewebcamp.com/representative_h-card
+https://indieweb.org/representative_h-card
 
 {{stub}}
 
 The '''<dfn>representative h-card</dfn>''' for a page is an h-card on that page that represents that page, if any, as not all pages are about a person or organization, a page might not have a representative h-card.
 
-See and read with translating hCard to h-card inline as you read:
-* more info: http://microformats.org/wiki/representative-hcard
-* how to publish: http://microformats.org/wiki/representative-hcard-authoring
-* how to parse: http://microformats.org/wiki/representative-h-card-parsing
+* For more info see: http://microformats.org/wiki/representative-hcard and read with translating hCard to h-card inline as you read.
 
 == Use Cases ==
 * How to discover a person's name and image from their [[homepage]] URL, e.g.:
@@ -15,13 +12,30 @@ See and read with translating hCard to h-card inline as you read:
 ** After signing in with [[indieauth]], finding the person's name and profile image
 
 == How To ==
-=== How To Set Up WordPress ===
+=== How To Publish ===
+See:
+* how to publish: http://microformats.org/wiki/representative-hcard-authoring
+
+==== How To Publish With WordPress ====
 * '''Twenty Fifteen / Twenty Fourteen theme'''
 ** If you are using the Twenty Fifteen or Twenty Fourteen theme as a single-author site, you can edit the theme file <code>/twentyfifteen/inc/template-tags.php</code> or <code>/twentyfourteen/inc/template-tags.php</code>
 *** Search for the line with <code>author vcard</code>
 *** On the same line, find the link <code>a class="url fn n"</code>
 *** Add <code>rel="me"</code> to that link, so it looks like: <code>a class="url fn n" rel="me"</code>
 *** Save the template file
+
+==== Test ====
+* Indiewebify.me has [https://indiewebify.me/validate-h-card/ a test that validates representative h-card].
+
+=== How To Discover ===
+Either:
+* Implement: http://microformats.org/wiki/representative-h-card-parsing
+OR:
+# Use a [[microformats2]] parser to parse the page / site homepage into JSON
+# Process that JSON with https://github.com/indieweb/representative-h-card-php which will return a small JSON structure with the representative h-card for the page 
+
+== Libraries ==
+* https://github.com/indieweb/representative-h-card-php - Given a parsed mf2 document, returns the representative h-card for the page 
 
 == See Also ==
 * [[microformats]]

@@ -1,0 +1,66 @@
+https://indieweb.org/image_metadata
+
+{{stub}}
+
+    '''<dfn>image metadata</dfn>''' is information captured along with an image beyond the actual pixel data. It can include details such as the type of device used to capture the image, the location and orientation of the device, the date and time when the image was captured, and more..
+
+
+== Existing formats/vocabulary ==
+
+* [[EXIF]] (supported by nearly every camera)
+* [[IPTC]] (older, ASCII-only, non-strictly camera data)
+* [[XMP]] (more professional workflows)
+
+== presentation ==
+Typical post attributes like location, time created or a title apply to photos as well (and could be the post attributes in the case of [[photo]] posts).
+
+Photographer-centric sites ([[Flickr]], private blogs) show also technical details (gear used, aperture, exposure, ...) in a sidebar or overlay.
+
+== Working with image metadata ==
+
+=== Reading/writing ===
+
+* [http://www.sno.phy.queensu.ca/~phil/exiftool/ exiftool]
+
+=== Metadata integrity vs image libraries ===
+
+* [http://www.imagemagick.org/ imagemagick] by default, always keeps metadata, even for resized and cropped images
+* [https://boutell.com/gd/ GD] cannot keep metadata
+* many default libraries of programming languages completely strip metatada; eg. [http://pythonware.com/products/pil/ PIL] and [https://pypi.python.org/pypi/Pillow pillow] of [[Python]], [https://boutell.com/gd/ GD] of [[PHP]]
+
+== Brainstorming ==
+=== relationship with photo posts ===
+Right now it is assumed that the post attributes of a photo post apply to the picture. This works well for photos immediately shared, but does not express the notion of "I am now at time X sharing this photo taken at Y". Similarly for the location: the location of a photo is not necessarily the location it is posted from. Does this need markup, and if yes how is it best expressed?
+* images could be nested h-entries, with their own set of attributes
+* images could be posted as (possibly backdated) entries of their own and then reshared with updated context
+
+* {{sknebel}} noticed this issue when posting photos as a recap of a trip exactly one year earlier, e.g. [[https://www.svenknebel.de/posts/2016/4/12/]]
+
+=== photos in larger posts ===
+In larger posts (e.g. a travel report) that contain multiple photos post-level attributes can not apply to only individual images.
+
+=== extended attributes ===
+How to map EXIF/XMP data to microformats? Is markup needed for any information that is not already covered by possible attributes for h-entry? (E.g. is there value in markup for the focal lens of the lens used?)
+
+== Why does an IndieWeb site care? ==
+=== privacy ===
+Data embedded in image files is not readily visible and thus easily missed while posting. Many smartphones embed location metadata in photos. Posting tools or sites should either clearly show existing metadata or sanitize it to avoid accidental disclosures.
+
+=== useful data ===
+Embedded metadata can map to post data and be automatically extracted, saving work steps. If data like "when was this taken", "what license is this under" is already posted marking it up could make search for it easier if needed.
+
+=== [[DRY]] ===
+If the data, such as content, published data, title, tags, etc. are already present in the image, it's violating DRY principles to create yet another version of this data. It can either be generated or pulled directly from the image instead.
+
+== Criticism ==
+
+XMP is a great idea, but currently the image viewers and editors support is a complete mess. The one that covers most is probably [https://www.digikam.org/ digiKam] but if you touch the metadata with more, than one editor, it's a lost cause. It's also hard to version control the embedded data, and so I personally recommend using [https://en.wikipedia.org/wiki/Sidecar_file sidecar] XMP files instead of embedded data for anything that is not EXIF or contains non ASCII characters (or, god forbid, arrays, like tagging in XMP) - {{ petermolnar }}
+
+== See Also ==
+
+* [[metadata]]
+* [[licensing]]
+* http://cweiske.de/tagebuch/exif-url.htm
+* http://metadataworkinggroup.org/
+* http://www.iptc.org/std/photometadata/documentation/userguide/index.htm
+* http://www.metadataworkinggroup.com/specs/ (that WG is Adobe, Apple, Canon, Microsoft, Nokia, and Sony) is the spec that has an XMP extension for tagging people’s faces with their names within photo metadata

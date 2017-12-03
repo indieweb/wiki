@@ -1,0 +1,267 @@
+https://indieweb.org/chat
+
+{{stub}}
+
+'''<dfn>chat</dfn>''' is informal [[messaging]] offered by numerous services, a few of which interoperate or bridge with each other, and also a set of brainstorms for what an amazing indieweb [[friendly]] chat web app/site could do.
+
+For '''indieweb community chatrooms''':
+* See: '''[[discuss]]'''
+
+[https://xkcd.com/1810/ https://imgs.xkcd.com/comics/chat_systems.png]
+
+== Why ==
+The dictionary definition of the verb `chat` is "talk in a friendly and informal way", [https://en.wikipedia.org/wiki/Online_chat wikipedia defines only `online chat`] and it's real-time aspect:
+
+<blockquote>Online chat may refer to any kind of communication over the Internet that offers a real-time transmission of text messages from sender to receiver. </blockquote>
+
+Indieweb chat should embrace the ability for people to own their messages and to create them using the tools available.
+
+== How ==
+We already have people who are posting to their own domain with [[mf2]] and [[micropub]] and then using [[POSSE]] to distribute those items to the [[silo]] of their choice. This should apply to chat just as it applies to photos, notes, fitness, etc. With [[micropub]] and [[webmention]] ([[salmention]] even) we should be able to use the existing data flow and apply it to the chat problem.
+
+We don't want to start with any [[API|Architecture Astronaut]] or plumbing just yet ... let's get the problems defined first and then iterate on possible implementations!
+
+== IndieWeb Examples ==
+None so far. See and contribute to the [[#Brainstorming]] below, and try implementing something on your site, perhaps to bridge to the #indieweb [[IRC]] channel!
+
+== Examples In General ==
+Organizers of [[Virtual_HWC|Virtual HWCs]] have considered and used several online audio / video chat [[apps]], sites, and software. Notes and impressions are below. 
+
+(Please contribute if you have positive or negative experiences with any of these!)
+
+== Stateless Examples ==
+The following examples do not appear to keep any state information about you or your calls, thus they do not really qualify as a silo (they are not siloing any data of yours).
+
+=== appear.in ===
+[https://appear.in/hwc appear.in] has been used by the vHWC CEST with success.
+
+Looks extremely similar to Talky in both features and technology.
+
+{{pros-cons
+| pro1 = Works directly from modern browsers without set-up (through [[WebRTC]]).
+| pro2 = Ability to share your screen for demos.
+| con1 = [[P2P]] technology means relatively high data usage.
+| con2 = Audio can be laggy.
+}}
+
+=== Talky ===
+[[Talky]] was often used for IndieWebCamp remote participation, and was used for the virtual meet-ups on Central European Time.
+
+{{pros-cons
+| pro1 = Works directly from modern browsers without set-up (through [[WebRTC]]).
+| pro2 = Ability to share your screen for demos.
+| con1 = [[P2P]] technology means relatively high data usage (according to {{Zegnat}} it is worse than other WebRTC things)
+}}
+
+=== Mumble ===
+
+[[Mumble]] is being looked into as a viable tool for future virtual meet-ups.
+
+{{pros-cons
+| pro1 = Native clients available for most systems.
+| pro2 = Very low data usage.
+| pro3 = Third-party browser client available.
+| con1 = Audio only. No webcam or stream sharing.
+| con2 = Requires a server hosted or rented by the organiser.
+}}
+
+==== Notes ====
+
+* Jonas Herzig’s open-source [https://github.com/Johni0702/mumble-web mumble-web] can be used in a browser, taking away the need for native clients. It requires a custom proxy in front of the mumble server set-up and will thus not work with all servers out-of-the-box.
+* [https://guildbit.com/ GuildBit] offers free temporary servers on demand, with a choice of region, and might be a good option for impromptu meet-ups.
+
+== Silo Examples ==
+These all keep some sort of information, chat logs, contacts, etc.
+
+=== Slack ===
+[[Slack]] is a chat silo, and often popular user-friendly replacement for [[IRC]].
+
+You can use Slack to access the IndieWeb IRC channels:
+* https://chat.indieweb.org/slack
+
+=== Google Hangouts ===
+[[Hangouts]] was used for the [[HWC]] virtual meet-ups on Pacific Time.
+
+{{pros-cons
+| pro1 = Hangouts On Air allows streaming the meet-up to [[YouTube]], creating an archive.
+| con1 = Requires the use of Google Accounts. (this requirement is supposed to have been dropped, need to test this to make sure)
+}}
+
+=== Discord ===
+[[Discord]] is being looked into as a viable tool for future virtual meet-ups.
+
+{{pros-cons
+| pro1 = Both native and web clients available.
+| pro2 = Useable without registering an account beforehand.
+| con1 = Audio only. No webcam or screen sharing.
+| con2 = Creates a [[Slack]] like environment with multiple text and audio rooms that need navigating.
+}}
+
+==== Notes ====
+* Video and screen sharing is in beta as of 2017-08-10: https://medium.com/@discordnelly/were-testing-video-chat-and-screen-share-with-5-of-players-today-c8ddb108ca31
+
+== Brainstorming ==
+In [[IRC]] or [[XMPP]] a message is a single line that is sent to the server, marked up with the sender, the channel and the date/time of the message. The server then distributes it to anyone currently connected and "listening" to the channel.
+
+* Can we map what a [[note]] is and use it for a single post to a chat group?
+* Can we use [[webmention]] to have the post be sent to a group or feed
+* Can we use a [[feed]] to represent a group or channel
+* chat messages are logged and searchable
+** this seems to be orthogonal to the initial problem of describing what is chat
+
+=== datetime stamps ===
+* Publication date and time -- when the message was posted
+* Update date and time -- when the message was updated
+
+A concern I have is making sure that date and time stamps allow for proper presentation of messages as a stream. If Fido is posting to a channel but their system clock is skewed then messages from them may appear out of sequence to others.
+
+Do we allow an aggregating server to apply another timestamp to the message? If so what would that be called? `dt-syndicated` ?
+
+=== message URL ===
+
+* Identifies the message
+* Identifies the message owner's [[h-card]]
+** use [[mf2]] [[authorship]] rules?
+
+=== distribution ===
+
+distribution becomes a function of the sender deciding where to syndicate the message to - this can be based on [[h-feed]] [[category]] or anything the sender wants.
+
+* polling
+** have a chat server pull from an [[h-feed]] with a defined syndication target
+* webmention publish ala brid.gy
+* [[pubsubhubbub]] or superfeedr
+** suggestion by Kevin: "What if the webmention was for join/leave and that triggered the pubsubhubbub following? Kind of how #indieweb works on twitter now. So any post with #indieweb goes to the channel"
+
+=== example ===
+
+<pre>
+<p class="h-entry">
+  <a href="https://bear.im/20160625_1ffc64309451" class="u-url">
+    <time class="dt-published" datetime="2016-06-25T09:20:18-04:00">
+      Sat, Jun 25, 2016 9:20am -04:00
+    </time>
+    <span class="e-content">
+      yep, a chat message
+    </span>
+  </a>
+</p>
+</pre>
+
+== dragons lurk below ==
+
+=== reactions ===
+
+http://indiewebcamp.com/irc/2016-06-25#t1466894946795
+
+<pre>
+[18:49:06]  <@aaronpk>	it kind of sounds like chat is nothing more than an aggregation of an h-feed
+[18:49:19]  <bear>	that is what i'm trying to aim for as a first pass
+[18:49:27]  <@aaronpk>	like if we all syndicated posts to news.indiewebcamp.com in rapid succession it would act kind of like a chat room
+[18:49:53]  <bear>	when I thought hard about it - it always devolved into that
+[18:50:01]  <bear>	it's a quick updating list of notes
+[18:50:02]  <@aaronpk>	at which point it really becomes more of a UI challenge than a protocol challenge
+[18:50:09]  <bear>	yes
+[18:50:28]  <bear>	there is some plumbing items for say a chat service
+[18:50:33]  <@aaronpk>	that's where Monocle is evolving towards, based on https://aaronparecki.com/2015/08/29/8/why-i-live-in-irc
+[18:50:38]  <Loqi>	[Aaron Parecki] Why I Live in IRC
+[18:51:00]  <bear>	yea, I have a similar evolution - I just never wrote about it
+[18:51:03]  <@aaronpk>	turns out i prefer reading feeds in a chat-like interface vs something like google reader or twitter
+
+...
+
+[18:53:38]  <sknebel>	what is the important difference between "chat-interface" and "traditional" readers for you? more compact presentation? different notion of read/unread (read as soon as you've seen the headline, not on interaction?)
+[18:53:48]  <@aaronpk>	good question
+[18:54:12]  <bear>	for me it really boils down to decades of seeing data flow across a terminal
+[18:54:26]  <bear>	my whole habit is wired towards being able to process that
+[18:54:27]  <@aaronpk>	for me, one aspect that differs from traditional readers is that i segment my chat channels by topic rather than by source
+[18:55:18]  <bear>	yea, I have a filter that allows me to have a "important" channel and it puts different items into it based on who or where the item comes from
+[18:56:52]  <sknebel>	that sounds like something a traditional reader-like system could implement as well, it's just easier to DIY/script in chat tools you are used to hacking on?
+[18:57:14]  <bear>	oh sure, I imagine someone else would do a much better version of this
+[18:57:36]  <bear>	I just have xmpp tools in python that let me add features quickly
+[18:57:57]  <bear>	it's all this feature-rich content that has made me want to change
+[18:58:18]  <@aaronpk>	sknebel: yeah sure but for whatever reason, none have
+[18:58:33]  <@aaronpk>	and similar for me with IRC
+[18:58:50]  <bear>	I am just not a fan of the magazine style UI
+[18:58:52]  <@aaronpk>	but now wanting features like inline images, inline action buttons, emoji responses, all are not possible within the IRC protocol
+[18:59:02]  <bear>	(which is my bad way of describing what I think of most readers)
+[18:59:31]  <bear>	technically it's not within XMPP except with some not fully supported extensions
+[18:59:50]  <bear>	an XMPP MUC message is a simple text field
+[19:00:05]  <bear>	html tags are not supposed to be present
+[19:00:23]  <sknebel>	aaronpk: yeah, traditional readers are fairly bad at filtering
+[19:00:35]  <@aaronpk>	it's more than "filtering" is my point
+</pre>
+
+=== prototype chat flow ===
+
+Prototype of a chat message flow:
+
+# Fido crafts a message: `hey, just posted about my latest kibble recipe` 
+# Fido uses [[micropub]] to post a chat item with the tag `#indieweb`
+# The client adds the note to Fido's site
+# The micropub processing code knows that a chat item needs to be syndicated and crafts a [[webmention]] to the group associated with the tag `#indieweb`
+# The [[webmention]] is sent and the item is sent to the feed (hand wavy bits here)
+# Everyone who follows the group can
+## get an update when the process the [[h-feed]] of the group
+## receive a push message from the group
+## get updated when something like [[bridgy]] handles the [[webmention]]
+# Flo gets the update and then either crafts a chat to the group or references the URL of Fido's post
+# rinse-and-repeat
+
+==== raw conversation in IRC ====
+http://indiewebcamp.com/irc/2016-06-24/line/1466814050453
+
+'''Please help process the below into individual sections on features / phases etc.!'''
+
+<pre>
+17:20 tantek bear what do you think of our "chat" as "a tool incubated at/by indieweb community" rather than just "a tool of the indieweb community"
+17:20 bear then loqi could be a consumer of any chat feed
+17:20 tantek ?
+17:20 Loqi who, me?
+17:21 bear I like the idea
+17:21 tantek interesting. so it's not completely crazy then.
+17:21 bear it allows chat to become another stream of data that can be liberated from silos
+17:21 bear as IRC is as much a silo as facebook is
+17:21 tantek ^^^ that's a super powerful perspective
+17:21 bear which fits into a thing i've been chasing/chewing on for quite a while now
+17:22 tantek like what would it mean to connect to chat.indieweb.org via XMPP for example?
+17:22 bear yes!
+17:22 bear wiring up other chat protocols becomes a translation layer
+17:22 aaronpk The only redeeming quality IRC has is that it's a relatively standard protocol so there are at least multiple clients you can use to connect to a server like freenode
+17:22 tantek agreed
+17:22 bear same can be said of XMPP
+17:23 tantek XMPP doesn't seem to have survived / gotten adopted as much for group chats
+17:23 tantek especially persistent / logged group chats
+17:23 bear so by having indieweb chat have two well known and mature endpoints - web, irc and xmpp -- you have a lot of flexibility
+17:23 tantek or maybe I'm missing the parallel universe of folks using XMPP the way so many open source devs use IRC
+17:23 bear you don't see them but they are there
+17:23 bear yes
+17:24 bear we just got done with a series of xmpp summits just around the MUC part of the spec
+17:24 tantek I think I've seen that episode of startrek tng
+17:24 bear good/bad spock
+17:25 tantek the one where they're out of phase and can't see each other or something
+17:25 bear ahh - yes
+17:26 bear i've always thought that if IRC -> really simple text or json blob ... then a lot of things can consume that
+17:26 bear and it's bidirectional
+17:26 bear toss in microformats... and you have the makings of a lot of flexibility
+17:27 bear aaronpk is probably over there watching the feature creep and just moaning
+17:27 aaronpk lol
+17:27 aaronpk onthe contrary
+17:27 bear (which is why I'm itching to help with this)
+17:28 aaronpk I have a lot of ideas on how I want to make http chat a thing
+17:28 bear and I have a core use for it - my work just had to deal with 4 hours of no slack access
+17:28 bear which meant that we lost contact with our ops bot
+17:28 aaronpk ouch
+17:28 bear so I'm all about having multiple paths to any chat endpoint
+17:29 bear yea, http chat in this case becomes a web socket (or whatever) of small json blobs
+17:29 bear with microformats -- so you have identity built in
+17:29 bear async chat can be over webmention
+17:29 bear or micropub
+17:30 bear and unlike a lot of past attempts to force a round chat peg into a square protocol hole... I don't see any oddities with that
+17:31 bear with indieweb chat - each line already has a distinct url
+17:32 bear that's been like a version 4 dream of mine - to have a chat conversation have replies or notes or comments from multiple sources and be threaded
+</pre>
+
+== See Also ==
+
+* [[remote participation]]

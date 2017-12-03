@@ -1,4 +1,4 @@
-http://indiewebcamp.com/Content-Security-Policy
+https://indieweb.org/Content-Security-Policy
 
 __TOC__
 {{stub}}
@@ -63,10 +63,10 @@ IndieWeb Examples:
 
 == IndieWeb Examples ==
 === Tantek ===
-{{t}} on tantek.com since 2015-08-28 has used the following CSP on his home page and post permalinks:
+{{t}} on tantek.com since 2015-08-28 has used the following CSP (updated 2016-108) on his home page and post permalinks:
 
 <blockquote><code><nowiki>
-Content-Security-Policy: default-src 'self'; img-src *; media-src *; script-src 'self' 'unsafe-inline' https://platform.twitter.com; style-src 'self' 'unsafe-inline'; frame-src https://player.vimeo.com https://www.youtube.com platform.twitter.com; child-src https://player.vimeo.com https://www.youtube.com platform.twitter.com;
+Content-Security-Policy: default-src 'self'; img-src *; media-src *; script-src 'self' 'unsafe-inline' https://platform.twitter.com; style-src 'self' 'unsafe-inline'; frame-src *; child-src *;
 </nowiki></code></blockquote>
 
 Based on the '''[[#Allow_Anywhere_Media_Whitelist_Iframes|Allow Anywhere Media Whitelist Iframes]]''' example above, with the following additions for the following reasons:
@@ -75,7 +75,7 @@ Based on the '''[[#Allow_Anywhere_Media_Whitelist_Iframes|Allow Anywhere Media W
 ** with <code><nowiki>https://platform.twitter.com</nowiki></code> to allow Twitter [[webaction]] tweet button with tweeted count to work on my [[article]] posts.
 * <code>style-src 'self' 'unsafe-inline'</code> - because I still have some inline style sheets and style attributes that I didn’t want to take the time to fix before, but now have motivation to do so.
 * <code>frame-src</code> - for backcompat with Safari 8.0.7 (and before?) which is latest version on OSX 10.10.4, and Microsoft Edge (tested as of 2015-08-28 Microsoft Edge build).
-* <code><nowiki>child-src platform.twitter.com</nowiki></code> - to also allow Twitter tweet buttons as noted above. <br/>Note: <code><nowiki>child-src platform.twitter.com</nowiki></code> instead of <code><nowiki>child-src https://platform.twitter.com</nowiki></code> (which would be better) because the current platform.twitter.com/widgets.js, even if referenced via https, has one spot where it does an iframe embed that is parent page protocol relative, and thus ends up embedding an http iframe. To be able to use only the child-src https, I need to either:
+* <code>child-src *;</code> (as of 2016-108) necessary to support [[indie-config]]. Previously: <code><nowiki>child-src platform.twitter.com</nowiki></code> - to also allow Twitter tweet buttons as noted above. <br/>Note: <code><nowiki>child-src platform.twitter.com</nowiki></code> instead of <code><nowiki>child-src https://platform.twitter.com</nowiki></code> (which would be better) because the current platform.twitter.com/widgets.js, even if referenced via https, has one spot where it does an iframe embed that is parent page protocol relative, and thus ends up embedding an http iframe. To be able to use only the child-src https, I need to either:
 ** Get Twitter to fix platform.twitter.com/widgets.js to always embed its iframe with https, OR
 ** Switch my site to using https so the protocol relative iframe src will also be https, OR
 ** Drop the "Tweet" button from my [[article]] posts (in which case I could drop the <code><nowiki>platform.twitter.com</nowiki></code> from the <code>child-src</code> and <code>frame-src</code> completely.)
@@ -122,6 +122,7 @@ For more on the general concept see: [https://en.wikipedia.org/wiki/Defence_in_d
 * 2012-06-15 (updated 2015-05-08) Mike West <cite>[http://www.html5rocks.com/en/tutorials/security/content-security-policy/ An Introduction to Content Security Policy]</cite>
 * https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Introducing_Content_Security_Policy
 * https://developer.mozilla.org/en-US/docs/Web/Security/CSP/Using_Content_Security_Policy
+* http://githubengineering.com/githubs-csp-journey/
 
 == See Also ==
 * [[HTTPS]]

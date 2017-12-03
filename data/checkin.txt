@@ -1,5 +1,6 @@
-http://indiewebcamp.com/checkin
+https://indieweb.org/checkin
 
+[[Category:PostType]]
 <span style="float:right;height:128px;font-size:128px;margin-top:48px">🚩</span>
 {{stub}}
 
@@ -43,12 +44,13 @@ I've just arrived at a busy place/event, and I want to see if other people I thi
 === why not to checkin ===
 * home. Frequent checkins at home can be annoying to your friends that see your checkins.[http://indiewebcamp.com/irc/2015-04-14#t1429040851035]
 * work. Similarly, if you mostly checkin to work at the same time every day, that too can be annoying to your friends.(from personal experience with early Dodgeball usage).
+* [[privacy]]. Some people won't checkin to maintain privacy or are worried about potential stalkers and/or harassment. Checkin after the fact may be a potential solution. See also [[postsquare]].
 
 == How ==
 === Publish ===
 How to markup a checkin post: ...
 * [[h-entry]]
-** p-location [[h-card]] for the venue
+** u-checkin [[h-card]] for the venue
 * ...
 
 === POSSE ===
@@ -64,7 +66,14 @@ Can likely call Facebook API to get a list of [[venues]] at a geo location.
 Could also create a Bridgy Publish feature that looked checkin post with a Facebook venue URL and then POSSE the checkin to FB.
 * https://github.com/snarfed/bridgy/issues/317
 
-
+=== PESOS ===
+For those not using [[POSSE]] yet.
+==== PESOS from Foursquare ====
+{{main|OwnYourCheckin}}
+[http://wirres.net/ Felix Schwenzel] modified [[OwnYourGram]] by {{aaronpk}} to allow PESOS of checkin on [[Foursquare]] (really [[Swarm]]) via [[micropub]] using [[OwnYourCheckin]].
+==== PESOS from Swarm ====
+{{main|OwnYourSwarm}}
+[[OwnYourSwarm]], also by {{aaronpk}}, PESOSes your Swarm check-ins, [[photo]]s, and "with..." [[person-tag]]s to your own site via [[micropub]].
 
 == IndieWeb Examples ==
 In rough launch/implementation order:
@@ -106,8 +115,7 @@ In rough launch/implementation order:
 ** <code>[[h-entry]] h-as-article</code> with <code>u-featured</code> (broken due to using class attribute) image and nested:
 *** <code>h-as-checkin</code> with <code>p-location h-card</code> (URL, name), with nested:
 **** <code>[[h-event]]</code> (just URL, name)
-** Note 1: The h-as-checkin should be on the same class as h-entry, not a child, so that the p-location h-card is directly on the h-entry.
-** Note 2: We haven't specified how to check-in at an event (something [[Swarm]] lets you do at some venues, like movie theaters), so this is an interesting prototype to further analyze.
+** Note 1: We haven't specified how to check-in at an event (something [[Swarm]] lets you do at some venues, like movie theaters), so this is an interesting prototype to further analyze.
 * '''checkin with [[photo]]''': https://snarfed.org/2014-11-24_11741
 ** same as previous, but no u-featured, and a "u-photo" property on the photo img inside the h-entry instead
 * '''checkin with a person''': https://snarfed.org/2014-12-07_11859
@@ -123,6 +131,30 @@ In rough launch/implementation order:
 {{benthatmustbeme}} is using google maps static map to generate display in [[Postly]] since 2014-12-24.  e.g.:
 * https://ben.thatmustbe.me/checkin/2014/12/19/3/
 
+=== Chris Aldrich ===
+{{chrisaldrich}} began owning his checkins on [http://stream.boffosocko.com/2015/checked-into-din-tai-fung 2015-02-15] using [[Known]] while also syndicating to [[Foursquare]]. On [http://boffosocko.com/2016/04/03/hanging-out-here-while-palmer-park-is-under-construction/ 2016-04-03] he began owning his checkins using [[micropub]] to his [[WordPress]] site using [[OwnYourCheckin]] and [[Post_Kinds_Plugin|WordPress Post Kinds]].
+
+=== Ryan Rix ===
+{{rrix}} can post checkins from [https://indiewebcamp.com/User:Notes.whatthefuck.computer#Arcology Arcology]] since [http://notes.whatthefuck.computer/1460582880.0-note.html 2016-04-13] by creating a post with the CHECKIN tag on it and then calling a function `arcology-checkin-get-venue-id' which calls out to the [[Foursquare]] API to pull and cache the information for a venue.
+
+=== Martijn van der Ven ===
+{{martijnvdven}} posted his [https://licit.li/58518f473dfa6 first checkin] during [https://indieweb.org/events/2016-12-14-homebrew-website-club HWC 2016-12-14] based on [https://chat.indieweb.org/dev/2016-12-14/1481739707226000 a discussion of the format on IRC].
+
+=== Sebastiaan Andeweg ===
+{{Sebsel}} also posted a [https://seblog.nl/2016/12/14/1/checkin checkin] during [https://indieweb.org/events/2016-12-14-homebrew-website-club HWC 2016-12-14], from the same venue as {{martijnvdven}}. His CMS recognises the 'checkin' field now and renders it as a <code>p-checkin.h-card</code> with <code>.p-name</code> and <code>.u-url</code>. No real posting UI or venues yet.
+* 2017-05-19: changed my storage of checkins to a full embedded h-card (instead of just a name and url field) to support [[OwnYourSwarm]], to use [[Swarm]]/[[Foursquare]]'s posting UI and venues.
+
+=== Aaron Parecki ===
+{{aaronpk}} added support for posting checkins using [[p3k]] on 2017-03-18. 
+* https://aaronparecki.com/2017/03/07/19/
+
+=== Barry Frost ===
+{{barryf}} posted his [https://barryfrost.com/2017/03/at-cloud-expo-europe first checkin] via [[Micropublish]] on 2017-03-15 to his [[Transformative]] site. He then used [[OwnYourSwarm]] to post his [https://barryfrost.com/2017/03/20-175718 second checkin] on 2017-03-20.
+
+=== Eddie Hinkle ===
+{{eddiehinkle.com}} added support for posting checkins using [[abode]] on 2017-04-21. This is powered by using [https://ownyourswarm.p3k.io OwnYourSwarm], and He is importing previous Swarm posts as well.
+* https://eddiehinkle.com/2017/04/21/1/checkin/
+
 === Prototypes ===
 Some folks have experiments or prototypes of posts resembling or approximating checkins but are lacking key information in some way, e.g. explicitly marked up location information.
 ==== Tantek ====
@@ -136,7 +168,7 @@ Past discussion sessions on indieweb checkins:
 * 2012-181 OSBridge BarCamp Day: [http://opensourcebridge.org/wiki/2012/Foursquare_is_down! Foursquare is down! Let's figure out IndieWeb Checkins!]
 * 2012-182 IndieWebCamp [[2012]]: [[2012/Open_Checkins|Open Checkins]]
 * 2016-023 IndieWebCamp [[2016/NYC]]: [[2016/NYC/Venues_and_Checkins|Checkins, Locations, Venues]]
-
+* 2017-133 IndieWebCamp [[2017/Düsseldorf]]: [[2017/Düsseldorf/checkins|Checkins]]
 Pretty good notes in there that could be abstracted and captured in general form in new sections here.
 
 == questions ==
@@ -191,6 +223,8 @@ You just checked in with friend F at location A, your friend F just checked in a
 Like other types of [[posts]] (e.g. [[likes]]), it makes sense to figure out a plain text design for checkins, for various contexts.
 
 Examples:
+* Foursquare provides a plaintext version of checkins when viewing a user's history page.
+** "aaronpk checked in at Laurelhurst Theater & Pub for Whiskey Tango Foxtrot" [https://foursquare.com/aaronpk/checkin/5726ac07498e0b4f0901592a]
 * {{snarfed}}'s page of checkins: https://snarfed.org/?s=checked shows a plain text equivalent (summary) for each individual checkin, e.g.
 ** "Checked into Pleasanton Ridge Regional Park with Vanessa Barrett and Richard Barrett."
 *** "checked into" venue, "with" person "and" person
@@ -207,10 +241,121 @@ Workaround:
 * {{t}} I will often take a photo at a location where I want to checkin but lack connectivity (yet somehow the photo gets close-enough location info from SSID triangulation etc.), and then later use [[Instagram]] to post the photo with an explicit [[venue]] and cross-post from there to [[Swarm]] to do a "Postsquare" checkin.
 ** Problem: Instagram's venues database (since 2014?) is based on Facebook's venues which is of very poor quality in comparison to [[Foursquare]]/[[Swarm]]’s venue database.
 
-== see also ==
+=== after-the-fact checkins ===
+*{{chrisaldrich}} I'll often either forget to checkin or purposely not checkin for social reasons (i.e. not wanting to be rude in pulling my phone out and spending the time checking in when friends, colleagues, etc. are around). In these cases it would be nice to check in after-the-fact. To some extent, [[Swarm]] allows this functionality--see the documentation below. This could potentially be done in stages on one's own site, either by [[POSSE]] or potentially [[PESOS]]. As an example, at an event like a birthday party, I might like to checkin when I arrive (to indicate presence), then take photos (of drinks, food, atmosphere, other participants) as the event proceeds (which could be uploaded in real time, or if phone battery, connectivity, other social circumstances dictate they could be uploaded afterward). Finally, it would be nice to have the ability to checkout, or alternately provide a timestamp for when I left the location/event. Most [[silo]] checkin services only have a single timestamp for the checkin (and not necessarily for the actual arrival/departure times.)
+
+=== verified checkins ===
+* https://aaronparecki.com/2016/10/14/20/verified-checkins
+
+* Re: fake checkins likelihood: <blockquote>{{aaronpk}}: If checkins weren't posted on Foursquare, but instead were posted on each person's own website, the possibility of fake checkins is much greater.</blockquote> {{t}}: I disagree with this premise and expect the opposite is true based on existing silo vs indie posting. People post all kinds of lower quality (e.g. sometimes fake) content on silos, and when the same people start posting to their own site, typically the quality improves, perhaps because they feel their identity is more (publicly) tied to it, or for private posts, why bother lying to yourself on your own site? With checkins I would expect the same, higher quality checkins (fewer fakes) on a personal site than a silo.
+** The fake checkin example was more about [[spam]] than fake checkins on legitimate websites. <span class="h-card" style="white-space:nowrap">{{sparkline|https://aaronparecki.com/photo.jpg}} [[User:Aaronparecki.com|Aaron Parecki]]</span> 14:10, 15 October 2016 (PDT)
+
+* Re: four digit code on a TV at the venue: <blockquote>{{aaronpk}}: The venue's TV screen always displays a 4-digit code and instructs people to include that code in their checkin post on their website.</blockquote> {{t}}: The extra 4-digit code thing sounds like "work", and as a user I'd always just blow it off, or blow off anything that required it, unless there was a very good incentive to bother with it (e.g. coupon / discount at the venue). Concrete example of the 4 digit code laziness problem. Coffee Bean & Tea Leaf (California based coffee / cafe chain) used to have a 4 digit code on their TVs for logging into their captive portal for their free wifi. They eventually got rid of it.
+
+=== Checking in to Events ===
+Swarm provides a feature that allows users to check in for an event while checking in to a location.
+* Venue managers add events to a schedule. When a user checks in during the time of the event, Swarm prompts the user to also check in for that event after choosing the venue.
+* The checkin on Swarm and Foursquare shows the venue as well as the event name in the checkin.
+
+How should this be displayed and represented on an indieweb site?
+
+=== Abandoned Brainstorms ===
+The following ideas were iterated on, perhaps even in the wild, but have been abandoned for various reasons.
+==== h-as-checkin explicit object ====
+As a result of a brainstorming session about [[ActivityStreams]] and [[microformats]] at the [[Federated_Social_Web_Summit#San_Francisco_2012|2012 Federated Social Web Summit in San Francisco]] there was [https://www.w3.org/2005/Incubator/federatedsocialweb/wiki/Federated_Social_Web_Summit_2012/notes#as-mf2 a proposal to use <code>h-as-*</code>] prefixed (sub)types for posts as a way of representing ActivityStreams post types explicitly in microformats.
+
+One of those was <code>h-as-checkin</code>.
+
+As use of explicit post types have been gradually abandoned in various UIs (being replaced by generic posts with any number of user-optional properties), the use of explicit types in markup has similarly been abandoned (UI leading/driving the plumbing as it were), including h-as-checkin.  [[post type discovery]] shows some current thinking regarding post types.
+
+Bottom line: '''Avoid using h-as-checkin.'''
+
+== Silo Examples ==
+=== Swarm ===
+[[Swarm]], formerly [[Foursquare]] and still made by the company by that name, is a popular checkin client.
+
+==== Swarm Stream View ====
+[[File:2016-swarm-checkin-stream-with-photo-and-description.png|320px]]
+[[File:2016-swarm-checkin-stream-with-people-and-movie.png|320px]]
+
+==== Swarm Permalinks ====
+[[File:2016-swarm-checkin-permalink-with-photo.png|320px]]
+
+NEED SCREENSHOTS
+
+==== Swarm Posting UI ====
+Swarm has a single "post" button in the middle of the row of buttons at the bottom of the default homescreen iOS dsiplay that looks like a map drop pin where the outline of the pin has a small arrow on the lower left side.
+
+NEED SCREENSHOT
+
+Tapping it opens the [[create]] checkin post UI, which shows:
+
+<span style="float:left; margin-right:2em">[[File:2017-079-swarm-ipod6-ios10-checkin.png|320px]]</span>
+
+* your icon in the top left
+* the auto-chosen [[venue]] to check-into
+* "Change location v" drop-down menu
+* camera icon (which you can tap and then choose from existing photos or take new photos in the app) 
+** to post up to 7 photos (a [[photo]] or [[multi-photo]]) as a secondary aspect of your check-in post
+* series of four "[[badge]]" or "[[sticker]]" icons you can choose from (or tap again to toggle off), some of which apply multipliers to your check-in points, with a "…" ellipsis to open up a menu of more stickers to choose from.
+* auto-focused text field to enter a checkin [[note]], prompted with the default text "What are you up to?"
+* +(person) icon to add others to your checkin
+* lock icon to set a private checkin
+* [[Facebook]] icon toggle to cross-post your checkin to Facebook
+* [[Twitter]] icon toggle to cross-post your checkin to Twitter
+* ( Cancel ) and ( Check In ) buttons
+
+<div style="clear:both; padding-top:1em">Choose photos checkin UI variant, and choose [[sticker]] checkin UI variant:</div>
+[[File:2017-079-swarm-ipod6-ios10-checkin-photos.png|320px]] [[File:2017-079-swarm-ipod6-ios10-checkin-stickers.png|320px]]
+
+===== Checkin after-the-fact =====
+[[Swarm]] will occasionally provide notifications in its mobile app to remind you to checkin at places you may have previously missed. This functionality can also be accessed from the user's profile screen typically with the label "#+ to confirm" where the # is the number of locations not checked in at. The list of places visited can be either accepted by clicking on the green location pin icon or the ... "more" indicator can be chosen to modify the location of the checkin; indicate one was there, but not be checked in; or remove the item from one's timeline. 
+
+<span style="margin-right:2em">[[File:checkins_to_confirm.png|320px]]</span><span style="margin-right:2em">[[File:places_visited.png|320px]]</span><span style="margin-right:2em">[[File:change_location.png|320px]]</span>
+
+===== Checked in by =====
+
+Swarm allows you to check in your friends if they've enabled the feature. When you tag someone in your checkin, a new checkin on their account is created. This is a separate post from your post.
+
+When you check in to a place where you have been checked in by a friend, the post gets updated with the text, photo's and sticker you chose. 
+
+[[File:swarm-checked-in-by.png|320px]]
+
+=== Facebook ===
+[[Facebook]] supports checkin posts.
+
+NEED SCREENSHOTS
+
+== Former Silo Examples ==
+Silos that support checkins (checkin silos) that have either gone away ([[site-deaths]]), or dropped checkin as a feature.
+
+=== Brightkite ===
+[[Brightkite]] was a checkin silo.
+
+NEED SCREENSHOTS
+
+=== Fire Eagle ===
+Fire Eagle was a checkin silo created by the Yahoo! Brickhouse team in [https://www.theguardian.com/media/2008/aug/13/yahoo.digitalmedia August 2008]. It stored a user's location and shared it with other authorized services and inspired other future location services. A user could authorize other services and applications to update or access data via API, allowing a user to update their location once and then use it on any Fire Eagle enabled-website. The intention of Fire Eagle was to serve as a central broker for location data. Services which supported Fire Eagle included Pownce, Dopplr, [[Brightkite]] and Moveable Type. It was one of the first sites to use the OAuth protocol to connect services together. The service closed circa February 2013.
+
+NEED SCREENSHOTS
+
+=== Gowalla ===
+[[Gowalla]] was a checkin silo.
+
+NEED SCREENSHOTS
+
+=== Dodgeball ===
+[[Dodegeball]] was one of the earliest popular checkin silos (if not the first?). It was acquired by Google in 2005 and shut down in 2009 being replaced by Google Latitude.
+
+NEED SCREENSHOTS
+
+
+== See Also ==
 * [[geo]]
 * [[location]]
 * [[media checkin]]
 * [[POSSE]]
 * [http://aaronparecki.com/2012/296/article/1/creating-content-on-the-indie-web Creating Content on the Indie Web] ([[User:Aaronparecki.com|aaronparecki.com]])
 * [[exercise]]
+* https://chat.indieweb.org/dev/2016-12-14
+* [[postsquare]]

@@ -1,0 +1,57 @@
+https://indieweb.org/cookie
+
+{{stub}}
+
+'''<dfn>cookie</dfn>''' is a bit of data stored by the [[browser]] that gets send with every request to a website.
+
+== Security ==
+
+Cookies can have multiple optional flags set to instruct a browser what it should and should not allow to happen.
+
+* <code>Secure</code>: when this flag is set, the browser is told to not send this cookie unless the connection between it and the web server is secure. If your site is available on both [[HTTPS]] (secure) and HTTP (not secure) you can use this to make sure cookies containing user data are only sent to the HTTPS version, making it a lot harder for external parties to hijack e.g. login states.
+
+* <code>HttpOnly</code>: when this flag is set, the browser is told not to allow scripts (e.g. [[JavaScript]]) to access this cookie. This is great for things like session cookies as a browser still identifies itself with it every time it makes a request to your web server, but scripts loaded on the page cannot access or change it.
+
+[https://www.owasp.org/index.php/OWASP_Periodic_Table_of_Vulnerabilities_-_Cookie_Theft/Session_Hijacking Cookie Theft/Session Hijacking] is such a prevalent problem it has made it to [https://www.owasp.org/index.php/OWASP_Periodic_Table_of_Vulnerabilities#Periodic_Table_of_Vulnerabilities the OWASP Periodic Table of Vulnerabilities]. A lot of this can be fixed by proper use of the above optional cookie flags. “Apply Secure and HttpOnly flags” is the first rule they define for any generic cookie framework, letting the developer explicitly overwrite it if they need less security.
+
+Note that **many frameworks default to less secure**. Example: PHP’s session cookies default to both flags turned off [http://nl1.php.net/manual/en/session.configuration.php] and need a developer to turn them on, counter to OWASP’s advice.
+
+=== Discussion ===
+
+* Using the <code>Secure</code> flag is a great way of offering a read-only version of your site without HTTPS. It will make sure no cookies are accidentally send without protection when people view the read-only version. This came up [https://chat.indieweb.org/2017-08-07#t1502117771956000 on IRC].
+
+=== How to ===
+==== PHP ====
+There are two main ways cookies get used in PHP. Possibly the most important to get security right on is the session cookie.
+
+If you have access to the server’s php.ini, you can set [https://secure.php.net/manual/en/session.configuration.php#ini.session.cookie-secure <code>session.cookie-secure</code>] and [https://secure.php.net/manual/en/session.configuration.php#ini.session.cookie-httponly <code>session.cookie-httponly</code>] and be done. Otherwise you will need to configure your session cookies using the [https://secure.php.net/manual/en/function.session-set-cookie-params.php <code> session_set_cookie_params</code>-function]. The function requires you to also set all the other configuration options. We can set ''only'' the <code>Secure</code> and <code>HttpOnly</code> flags with the following:
+
+<pre>$currentSettings = session_get_cookie_params();
+session_set_cookie_params(
+    $currentSettings['lifetime'],
+    $currentSettings['path'],
+    $currentSettings['domain'],
+    true,
+    true
+);</pre>
+
+The second method by which you are likely to use cookies is when you set them yourself using [https://secure.php.net/manual/en/function.setcookie.php <code>setcookie</code>-function]. The function accepts 7 arguments, and the last two are for enabling <code>Secure</code> and <code>HttpOnly</code> respectively. As an example, the following sets a cookie with the name <code>name</code> and the value <code>data</code> (arguments 3, 4, and 5 are kept as their defaults):
+
+<pre>setcookie('name', 'data', 0, '', '', true, true);</pre>
+
+In all cases, make sure you read the PHP manual carefully. Or depend on a framework that handles security for you.
+
+== Limiting cookies ==
+
+Limiting the amount of cookies a website sets in the user's browser is one of many strategies to lower the implications of existing an upcoming regulatory privacy legislation; ideally even allowing to eliminate the need for a "cookie consent" pop-up as often required in the EU.
+
+How to disable cookies in various applications:
+Piwik [https://piwik.org/faq/general/faq_157/ in the JS code]:
+<pre>_paq.push(['disableCookies']);</pre>
+Wordpress [http://azuliadesigns.com/disable-comment-cookies-wordpress/ in functions.php]
+<pre>remove_action( 'set_comment_cookies', 'wp_set_comment_cookies' );</pre>
+
+== See Also ==
+
+* https://www.troyhunt.com/c-is-for-cookie-h-is-for-hacker/
+* For security there is also the proposed [https://www.owasp.org/index.php/SameSite SameSite], see [http://httpwg.org/http-extensions/draft-ietf-httpbis-cookie-same-site.html HTTP WG draft] (and [http://rfc6265.biz/tests/ tests]).

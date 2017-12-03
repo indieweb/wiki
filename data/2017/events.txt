@@ -1,0 +1,123 @@
+https://indieweb.org/2017/events
+
+'''<dfn>Indie events</dfn>''' was a session at [[2017|IndieWeb Summit 2017]].
+
+Notes archived from: https://etherpad.indieweb.org/events<br>
+Video at: https://www.youtube.com/watch?v=fYYBcYwHYRs
+----
+When: 2017-06-24 15:00
+
+== Participants ==
+* {{tantek}}
+* {{martijnvdven}}
+* [http://johnfallsopp.com/ John Allsopp]
+* {{anomalily}}
+* {{schmarty}}
+* {{sebsel}}
+* {{strugee}}
+* {{aaronpk}}
+
+== Notes ==
+What was annoying or awkward about doing an Indie RSVP for this event?
+
+* David accidentally marked up the RSVP wrong and put it in the wordpress plugin, screwing up some other people 
+* LK accidentally double looped because she pasted the h-entry into wordpress
+* Seb was able to use Quill live to RSVP via his site to 2017.indieweb.org, using the Quill UI (just had to paste in URL of the event)
+* AJ did not do any of the above because he was not able to, so instead he put the HTML in markdown on his blog, had to look on the blog for "how to send a webmention with CURL" Eventually he looked at the 2017 source and found that there was a manual webmention endpoint via PHP; agreed all around this is "Unideal"  
+* Above and beyond still didn't work. 
+** Jim accidentally RSVP'd twice. Wrote a custom web service to try to send a "delete" of one of them. The delete didn't work.
+
+-----
+
+anomalily wants private events / RSVPs. Facebook doesn't allow this. Currently indie events / RSVPs also require public posts.
+* private RSVPs a use case for https://indieweb.org/private-webmention ? they are not adopted, however.
+* private events requires private posts.
+* also required: private invitations (e.g. private homepage webmention)
+** site would need to recognize tag mentions to event posts as "invitation" posts.
+
+----
+
+Seb shows us the user flow of
+* find the event
+* fetch the link
+* copy it
+* click Reply in Quill
+* enter the event URL
+* pop-up pick RSVP answer
+* optional, comment, tags, slug, syndicate, location. post
+
+Tantek: I want a simple solution for one button RSVP.
+
+Aaronpk: we don't have a one button UI solution, because it is a technical challenge
+
+Tantek: but Woodwind has one-button UI for responses!
+
+Aaronpk: because with Woodwind, you've signed in and granted it access to post to your site, and then you view the event on Woodwind, so the trust relationship with the reader is established and that's where the button is
+
+Marty: I have a two-click solution, bookmarklet, that sends current page URL to the Reply UI of Quill
+* sending the webmention for the RSVP is an extra step b/c he doesn't automatically send WMs. Uses another bookmarklet to Telegraph for this.
+
+AJ: Seems like a good opportunity for a Webextension
+
+
+Lilly usecases:
+* wanted an easy link to share
+* something that can be printed
+* using a subdomain that's easily memorable, but not on her home page so randos don't show up
+* using tito to collect RSVPs connected to real email addresses
+* using tito also can put a one-click button in a rich email
+* works in both wordpress and static HTML
+* wanted discovery support for
+* all of the links to get things on google calendar and icalendar after you register
+* would like to receive indie RSVPs in addition to tito RSVPs
+* would like to get emails along with indie RSVPs
+* had to also make a Facebook event because for many people it's not "real" to them unless their is a FB event
+* Tito can look at FB RSVPs that aren't linked to actual RSVPs so she can go bug them
+would be nice:
+* "network chain" - e.g. the way Eventbrite works
+
+John Allsopp:
+* runs a lot of conferences
+* built their own system 10 years ago
+* integrated with their CRM
+* redesigning it now
+* wants workflows all the way from "would love to go" to "ready to pay" to "booking tickets for 7 people / team of 5 or 10 people", sometimes 10 tickets not knowing for whom.
+* booking tickets, deferred payments
+* you want the simplest thing to say "Yes", and worry about other things later
+
+Other requirements:
+* vegetarian meal?
+* child care?
+
+Tito allows to easily tweak what information you require.
+https://commentpara.de/ allows for anonymous indieweb replys.
+
+AJ: main challenge was actually sending the webmention. I posted an RSVP on my site, could not send the webmention.
+Would like a field on an indie event, where I can paste my RSVP URL?
+
+Aaron: I have a "Have you writte an response to this?" field to enter your URL with the post.
+
+Martijn: Some people have it on their event pages!
+
+
+AJ: The other part is, if there was a "sendawebmention dot com" and you could go to that
+
+Wants a link to Telegraph at the top of /Webmention, except Telegraph needs an Indieauth login
+
+Lilly: I just sent a webmention to someone and it's not showing up on their page, how much more energy am I going to make to see if they get the response?
+
+Seb: like on seblog.nl, has a URL field to enter an RSVP on his event posts https://indieweb.org/File:seblog.nl-RSVP-ui.jpg
+
+Examples of people with form submissions on events:
+* https://jeena.net/events/25
+* https://seblog.nl/2017/01/11/1/homebrew-website-club
+
+How do you present "invitations" on an indie event?
+
+Marty: I post events, POSSE to FB, then hide "invitation" web mentions
+
+Wrap up:
+* tantek: I want to implement indie events tomorrow
+* AJ: a way to the event page microformats to ical etc.
+
+[[Category: 2017 sessions]]

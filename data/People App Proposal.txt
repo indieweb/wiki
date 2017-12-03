@@ -1,0 +1,91 @@
+https://indieweb.org/People_App_Proposal
+
+__TOC__
+
+== Proposer ==
+
+{{veganstraightedge}}
+2016-06-30 16:30 -0700
+
+== tl;dr ==
+
+Prototype running at [https://h-card-as-a-service.herokuapp.com h-card-as-a-service.herokuapp.com].
+
+# I propose that we use this app to '''[[DRY]]''' up our personal profile information on indieweb.org.
+# It would replace: [[irc-people]] and [[User:Veganstraightedge.com | Wiki user profiles]]
+# It would be the canonical place for contact info for other things like: wiki signatures (<nowiki>~~~~</nowiki>), RSVPs and <nowiki>{{username templates}}</nowiki>.
+# I propose that we run it on a subdomain. people.indieweb.org.
+
+== Problems ==
+
+# Our use of the wiki for a person's profile information is not DRY. Ie, it's often duplicated in a few different places.
+# A person's profile information easily gets stale or out of sync with their current information (other sites or most importantly, their personal website).
+# A person is expected to enter all of their contact personal information by hand even though it is often already in their [[h-card]].
+# A person is expected to enter all of their contact personal information using [[MediaWiki]] syntax which is often their first experiencing such syntax.
+# A new person in the chat channel is asked to add themselves to [[irc-people]] often as their first act on the wiki.
+# Some people make <nowiki>{{username templates}}</nowiki>, some don't. It's not super obvious how or why to do it to new people.
+# Not all of the profile information for each person is machine readable.
+# A big blob of unstructured (MediaWiki syntax) text is not a good user experience. Especially for information that is conventional across several users (name, url, photo, etc).
+
+It is my opinion that the entirety of this is at best bad user experience and at worst user hostile, '''especially''' to new people.
+
+== Proposal ==
+
+I am proposing that:
+
+# we use an app that I built called [[h-card_as_a_service]] as a replacement for [[irc-people]] and wiki user profiles ([[User:Veganstraightedge.com | like mine here]]).
+# we use [[h-card_as_a_service]] as the source to lookup profile information in <nowiki>{{username templates}}</nowiki>, RSVPs, wiki signatures (<nowiki>~~~~</nowiki>) and [[Loqi]] lookups about people ("who is ____?", a person's gender for responses '''!tell''' commands: "Ok, I'll tell her next time I see her.", etc).
+# we run [[h-card_as_a_service]] on a subdomain: '''people.indieweb.org'''.
+## Because it is a separate app.
+## It simplifys deployment and running.
+## It's not MediaWiki or PHP.
+## It would allow for much better URLs / paths.
+### '''people.indieweb.org/veganstraightedge.com''' or '''people.indieweb.org/@shaners''' (for my chat username), instead of
+### '''indieweb.org/User:Veganstraightedge.com''' (current wiki profile URLs) or '''indieweb.org/people/veganstraightedge.com''' (if we tried to stick this app underneath some URL namespace within the wiki site).
+
+You can see it running try it out at [https://h-card-as-a-service.herokuapp.com h-card-as-a-service.herokuapp.com].
+
+=== Benefits ===
+
+# It is a much easier first time experience for new people.
+# A well designed simple form is easier to fill out than a big empty MediaWiki syntax text field.
+# The resulting profile pages would be machine-readable [[h-card]] pages (which could be used by [[Loqi]], etc).
+# The form auto-populates from a person's h-card on their personal website when they enter their URL (saves typing, [[DRY]]er, easier, faster).
+# A scheduled job could run every night (or hour or whatever) to update all of the information for everyone based on their h-cards on their personal websites (keeping the wiki profile information in sync with their current information).
+# It already includes a big free form text field at the bottom on every profile form that would continue to all for exploration and experimentation. As we see new conventional patterns emerge, we can extract them into codified fields or forms.
+
+=== Known Issues ===
+
+The obvious missing features are:
+
+# sign in with indieauth / shared with wiki sign in via cookie.
+## Right now the prototype just acts like everyone is signed in all of the time.
+# proper h-card/authorship discovery
+## Right now the prototype only discovers top level h-cards.
+# scheduled job to auto update all of the h-cards fields (except '''note''').
+## Right now the prototype only imports an h-card at the time of creation. It can be manually updated, but it doesn't happen automatically.
+
+Those are all known quantities and easy enough to implement. I'll implement them if the community adopts this proposal and agrees to move forward on using this app as a replacement for all of the other profile information on the wiki.
+
+== History ==
+
+# At IndieWebCamp [[2014]], I built and [[2014/demos|demo]]ed an h-card builder/editor app called Homesteading Contacts. (I have since [https://twitter.com/darkmatterappco/status/686312361632776194 abandoned] the name "Homesteading" because of its historical baggage. So the /homesteading org is no long on GitHub. And I didn't migrate it to the /darkmatterapp org because I wasn't using it anywhere yet.) It was a general purpose contacts app that I had plans to wire into Homesteading to do name lookups for natively links/mentions in syndicated copies of posts. I never did.
+# 2016-06-19 {{aaronpk}} and I spent the whole day talking about what all needed to be done to migrate from indiewebcamp.com to indieweb.org. We also talked about some things that could be done at the time or of the migration or after the fact. One of those things was making some conventional patterns more codified, more machine readable and easier to create/update by both people and machines.
+# 2016-06-20 {{aaronpk}} wrote up a proposal to try to quickly capture most all of the things we talked about. There was a lot of response to the overal proposal. But very little response to the idea of a people app, in particular.
+# 2016-06-20 I started building [[h-card_as_a_service]].
+# 2016-06-23 I announced it to the channel and asked for feedback. http://indiewebcamp.com/irc/2016-06-23#t1466732666688
+# Over the next few days, I got feedback from channel, fixed their found bugs, added their requested features and added notes to the TODO on [[h-card_as_a_service]].
+# 2016-06-29 At [[events/2016-06-29-homebrew-website-club | HWC SF]], I demoed [[h-card_as_a_service]] to {{t}}, {{kevinmarks}}, Ross, Dmitri Shuralyov @shurcool, Grant Burningham @granteb. https://indiewebcamp.com/events/2016-06-29-homebrew-website-club#San_Francisco_2
+# 2016-06-30 I wrote up this proposal.
+
+== Feedback ==
+
+Please leave your feedback here and refer to the section heading and item number that you're responding to.
+
+* {{t}} I think this problem is perhaps our biggest actual longterm challenge:
+** "2. A person's profile information easily gets stale or out of sync with their current information (other sites or most importantly, their personal website)."
+** AND: solving this requires some form of automatic (polling?) retrieval / updating from person's current info on their website. Otherwise we just create another copy that "easily gets stale or out of sync with their current information".
+** +1 to solving the auto-updating problem
+** -1 to outright replacing User: pages with different URLs. They're integrated into all sorts of MediaWiki places, have much more functionality than just "info" (e.g. "Contributions" links), and that seems a lot of effort with not much (if any gain).
+*** Alternative: make a {template} that can easily embed some form of the info from such a people app into a user page, and auto-create user pages with that (the template can prompt people to create their info on the people app if it's missing). Then the rest of their user page (e.g. existing user pages) can contain all the current free form stuff they do today.
+*** Worse: adding a *new* way (editing the "note" stuff in the app) to add free form content beyond what the wiki does already.

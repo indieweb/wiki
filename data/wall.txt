@@ -1,4 +1,4 @@
-http://indiewebcamp.com/wall
+https://indieweb.org/wall
 
 {{stub}}
 
@@ -6,6 +6,45 @@ http://indiewebcamp.com/wall
 
 Since its launch, Facebook has renamed the "wall" feature to "timeline", but the term has been in use so long that it's still used.
 
+== IndieWeb Examples ==
+* none so far
+
+== Silo Examples ==
+=== Facebook ===
+Posts from others written to/for your [[Facebook]] timeline appear to be authored by the person who posted them, and include a right pointing triangle and then your name.
+
+[[File:facebook-posted-on-your-timeline.png]]
+
+Both names (in blue) are linked to their respective profiles.
+
+== Brainstorming ==
+=== Posting to another wall ===
+{{t}} from an indieweb user perspective, posting on someone's wall (on their own site) could be like syndicating to it perhaps the way syndicating to [[Bridgy Publish]] or [[IndieNews]] works.
+
+However syndication implies that the destination is "just" a copy, whereas when posting to another wall, there is an intent of that being the primary version of the post, not a copy. This is conceptually challenging since indieweb posts in general has the implication that the primary version is the one you have on your own site.
+
+Or perhaps this conceptual dissonance doesn't matter to the user model of cross-site wall-posting. Opinions welcome!
+
+=== Markup ===
+In addition to "just" being a normal "h-entry" post, there has to be some way to indicate whose or which wall you are posting to.
+
+The obvious thing to do would be to have your post link to person whose wall you're posting to, and it's clear from the FB screenshot above, that you could do so by hyperlink the second person's name to their wall (or maybe it's just their homepage).
+
+But then what property should we use?
+
+Does it make sense to re-use <code>u-syndication</code> ?
+
+Or is it deserving of a new u-* property, and if so, how is it functionally different from syndication if at all?
+
+The markup has to work as something that can be recognized as a wall post from the receiver of the webmention to someone else's wall/homepage, and from there, there has to be enough for the receiver to create and show the cross-site wall post on their own homepage / composite stream.
+
+=== Bridgy support ===
+See [https://github.com/snarfed/bridgy/issues/316 Issue 316: backfeed FB wall posts from other people]
+
+For Bridgy to support backfeeding of FB wall posts to your own site, Bridgy needs to know what mf2 markup to use for it to construct a synthetic post with which to webmention your site.
+
 == See Also ==
+* [[guest book]]
 * [[stream]]
 * [[homepage]]
+* [[checkin#Checked_in_by|Swarm Checked in by feature]] similarly allows someone else to create a post on your checkin timeline (wall)

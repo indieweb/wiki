@@ -1,0 +1,87 @@
+https://indieweb.org/non-interactive_IndieAuth
+
+{{stub}}
+
+'''<dfn>non-interactive IndieAuth</dfn>''' is a future way of using [[IndieAuth]] to [[authenticate]]/[[authorize]] services against other services, without a human user confirming things. Possible use cases include [[private-webmention]], bots editing the wiki and [[readers]] for private feeds.
+
+== motivating examples ==
+=== private Webmentions ===
+The current proposal for [[private-webmention]] includes an authorization code in the Webmention request, which then can be exchanged at the token endpoint for an actual access_token. Security is provided by transport security (HTTPS) and short TTLs on the tokens. 
+
+In contrast to IndieAuth, the identity of the fetcher (=the webmention endpoint receiving the private webmention) is not relevant or verified: Everything required to gain access is included in the Webmention payload.
+
+If instead the fetcher could prove their identity the strict time limits might not be necessary.
+
+
+== proposal: simple flow ==
+Simple cases, where an automated system wants to log in under it's own identity, can basically already be handled by the current IndieAuth flow. An example use case would be [[Loqi]] logging into the Indieweb.org wiki using the identity http://loqi.me/ to make edits for IRC users.
+
+The basic login steps of the normal IndieAuth flow are as follows (for details, see beginning of [[obtaining-an-access-token]]), where a '''User''' logs into an '''App''':
+
+# User enters their URL into a form on the App's site and clicks "login"
+# App fetches URL, looks for authentication endpoint
+# App redirects User's browser to the auth endpoint (including state, callback URL and scope/purpose information)
+# auth endpoint identifies user, presents confirmation dialog to them, and if satisfied redirects Browser to App callback URL, including an auth code.
+# App receives browser request, fetches auth code from there, verifies it against the auth endpoint directly
+# The app returns the protected resource directly, but more often also sets a Cookie in the users' browser to identify them in further requests.
+
+The only ''interactive'' pieces in this flow are 1. and 4. To make this non-interactive, the following modifications are needed:
+
+All redirects '''MUST''' happen using HTTP redirects (Status code <code>302</code>), not via JS, or meta-tags (technically, meta-tags could be parsed, but I don't see a good reason for them).
+
+For 1., the Bot (replacing the User) has to be able to discover how to submit it's identity url. This could be solved by a standardized name for the URL parameter (<code>me=https://...</code>?) and a Link value to discover the endpoint to submit it to. (<code><link href="https://example.com/login" rel="IndieAuth-start" /></code>?)
+
+For 4., the Bot can (since it owns the identity used) receive the redirect and take the information from it. It can then use this information to generate a valid access code and call the completed callback to the App. This could either be done by integrating the auth endpoint into the bot (it only is required to confirm the validity of the token later), or by using some unspecified protocol to authenticate to the auth endpoint and obtain the token.
+
+In 6. a Cookie is set in the browser use case. This can be used for non-interactive use cases as well (this is e.g. done by the Mediawiki API), but a more familiar approach would be to return an access token instead, which the Bot then can use for further requests. Similar to the current private webmention approach, a token could also be gotten from the token endpoint and then used in an Authorization header.
+
+
+4. is also the point for further extension, where a bot could get limited permission to act as a user only for a few purposes, restricted by the users auth endpoint.
+
+=== implementation in [[User:kaja.sknebel.net|Kaja]] for login to this wiki ===
+I ({{sknebel}}) implemented this to allow my bot to login to the wiki. Some notes:
+
+'''Discovery''': it knows the login page and looks for a form there that has a <code>me</code> parameter.
+
+'''no interaction required''': The wiki does IndieAuth through [[indieauth.com]]. Indieauth.com normally shows a [[js;dr]] screen to let the user pick the authentication method, but if there are no rel=me links, only an [[authorization-endpoint]] ''and it has this information cached on the server'' it does an immediate 302 redirect. The cache can be filled by calling <code>https://indieauth.com/auth/supported_providers.json?me=</code> (which normally is triggered by JS), but this is obviously IndieAuth.com specific and not even part of it's public API. Maybe a special header to request synchronous, JS-less handling could solve this.
+
+'''authCode handling''': shared database between authorization endpoint and client logging in, instead of following the redirect to the auth endpoint the client creates a new auth code in the database (with the <code>client_id</code>, <code>me</code> and <code>redirect_uri</code> associated to it) and then calls the redirect URI itself. The authentication endpoint only is called when IndieAuth.com calls back to confirm the auth code.
+
+'''authentication for further requests''': The wiki uses long-living session cookies, which are captured and then used to authenticate for requests to the MediaWiki API.
+
+=== ideas for verification of private webmentions ===
+The basic flow above has to be extended by a way of telling the receiving webmention endpoint that it is supposed to authenticate and which identity to use, and probably should include a way to limit access/scope somehow.
+
+'''What identity could be used?'''
+* root domain etc. of webmention target is not an option, since it could be under different control or at least from a different software system
+* author identity - can be discovered on posts with mf2, but when it is on a different domain tricky to handle - presumably the receiving site should be able to handle this on it's own?
+* exact URL of the target page - would require each page to have an authorization (and possibly token-) endpoint
+* "identity" of the webmention endpoint - this would allow the webmention endpoint to be a third-party/independent system. it could announce it's own auth/token endpoint when queried with a GET request and/or include it in it's responses (TODO: check if that is valid with responses including a Location: header). The sending system has to identify the endpoint anyways when sending the WM
+
+'''How to communicate the identity?'''
+* similar to how IndieAuth uses <code>me=</code>, <code>you=</code> could be included in the WM
+
+'''How to limit access?'''
+* a specific scope could be required (<code>webmention-verification</code>?)
+** get a token for that, send as <code>Authorization: Bearer ...</code> header
+** include realm like in current private webmention for token scope for reuse if token not expired?
+** '''downside:''' most private post implementations I've seen relied on simple log-in, without a scope and no token-endpoint being involved, and it would be cool to leverage that. Is the specific step of aquiring a scope useful?
+* if not the authors "homepage identity" is used, there is also no overlap with potential rights granted to the User behind the page
+
+
+Combined:
+*Post is created on sender site
+*sender site runs discovery for webmention endpoint on receiver site
+*sender site adds webmention endpoint URL to list of those allowed access
+*sender sends webmention to receiver webmention endpoint, with additional you=<webmention endpoint URL> parameter (and required scope?)
+*receiver fetches source post for verification
+*sees 401 error, looks for link with rel="indieauth_start"
+*appends me=<webmention endpoint url> to that link, runs indieauth
+*if with scope: converts access code into token
+*requests source post again, this time with Authorization: Bearer header
+
+== See Also ==
+
+* [[server-indieauth]]
+
+[[Category:IndieAuth]]

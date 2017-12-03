@@ -1,21 +1,120 @@
-http://indiewebcamp.com/federation
+https://indieweb.org/federation
 
-{{stub}}
+'''<dfn>federation</dfn>''' in the context of the indieweb refers to services and features on indieweb sites that work directly with other indieweb sites peer-to-peer, without having to setup or create accounts in both places, and without being bottlenecked by any kind of centralized service or [[silo]].
 
-'''<dfn>federation</dfn>''' in the context of the indieweb refers to services and features on indieweb sites that work directly with other indieweb sites peer-to-peer, without being bottlenecked by any kind of centralized service or [[silo]]. 
-
-A protocol or format can be said to support federation if it can be supported by multiple sites (preferably with multiple implementations) to interact directly with each other without the use of any third party sites, or centralized bottlenecks.
-
-== DNS Exception ==
-[[DNS]] Exception: In the context of the indieweb, and the web in general, the centralized/hierarchicial architecture of DNS is accepted as an exception to the abovementioned federation requirement of no centralized bottlenecks. That being said, there are ongoing efforts to figure out how to replace DNS with a peer-to-peer system. 
-
-== Indieweb Focus ==
-Focus: for day-to-day practical purposes, the indieweb community is not working on addressing the DNS centralization issue/exception and is instead focusing on [[design]] (UI/UX) of how user-level features can and should federate.
-
-== Related terms ==
 Related terms:
 * decentralization / decentralized
 * distribution / distributed
+
+== Why ==
+You should support federation on your site so you can:
+* Use your site to mention people on other sites and respond to their posts
+* Show mentions and responses from other sites to your posts, on your site
+* Allow other sites to subscribe to (follow) your site, preferably in realtime
+* Subscribe to (follow) other sites from your site
+
+== How to ==
+To support federation on the indieweb, support the following:
+
+=== How to federate posts and responses ===
+You (and your site) get federation benefits from implementing each of these smaller steps, so see the following for the specific how to instructions:
+# [[h-entry]] markup on your posts
+#* makes your posts machine-readable
+#* Implement: '''[[h-entry#How_to_publish|How to publish h-entry]]'''
+# [[Webmention]] sending
+#* Makes your comments appear on websites that receive Webmentions
+#* Implement: '''[[Webmention-developer#How_to_implement_sending|How to send Webmentions]]'''
+# [[Webmention]] receiving
+#* Allows your site to receive comments
+#* Implement: '''[[Webmention-developer#How_to_implement_receiving|How to receive Webmentions]]'''
+# [[h-entry]] consuming
+#* Parse the text at comment URLs to display comments on your posts
+#* Implement: '''[[h-entry#How_to_consume_h-entry|How to consume h-entry]]'''
+
+=== How to federate mentions ===
+Federating mentions is a special somewhat simpler case of federating posts, except using home page URLs rather than post permalins:
+# To notify others when you mention them
+#* Implement [[Webmention]] sending to all links, including links to people's [[homepage]]s
+# To receive notifications when others mention you
+#* Support receiving [[Webmention]]s on your [[homepage]]
+
+=== How to federate following ===
+There are incremental following federation benefits to each of these smaller steps, and thus you should implement them as described:
+# [[h-feed]] markup on your primary (composite) [[stream]] of updates (like on your [[homepage]]), and other streams
+#* Allows people to find all the posts on your home page or other stream pages
+#* Implement: '''[[h-feed#How_to_markup|How to publish h-feed]]'''
+# Publish notifications with [[WebSub]]
+#* Enables realtime notifications to subscribers when you make a new post
+#* Implement: '''[[How_to_publish_and_consume_WebSub#How_to_Publish|How to publish WebSub]]'''
+# Follow and subscribe via [[WebSub]]
+#* Subscribe to other feeds and receive realtime notifications of new posts
+#* Implement: '''[[How_to_publish_and_consume_WebSub#How_to_Subscribe|How to subscribe to WebSub]]'''
+# [[h-feed]] consuming
+#* Parse the list of posts on a page to display in a reader
+#* Implement: '''[[h-feed#How_to_consume|How to consume h-feed]]'''
+
+== Social Media ==
+From a social media user perspective, federating across social media sites means two people can [[post]], [[reader|see]] each others posts, and [[reply|respond]] to each other, each using a different site or service, each without having to use or setup the other site or service.
+
+Contrast this with say two [[silos]] like [[Facebook]] and [[Twitter]], where if you want to post something so that it is seen by users of the other service, you have to create an account on that other service, set it up to automatically receive your posts, and even then responses will not federate back to whichever service you posted on.
+
+== Discussion ==
+=== DNS Exception ===
+[[DNS]] Exception: In the context of the indieweb, and the web in general, the centralized/hierarchicial architecture of DNS is accepted as an exception to the abovementioned federation requirement of no centralized bottlenecks. That being said, there are ongoing efforts to figure out how to replace DNS with a peer-to-peer system. 
+
+=== Indieweb Focus ===
+Focus: for day-to-day practical purposes, the indieweb community is not working on addressing the DNS centralization issue/exception and is instead focusing on [[design]] (UI/UX) of how user-level features can and should federate.
+
+== Protocols and formats ==
+A protocol or format can be said to support federation if it can be supported by multiple sites+ with multiple implementations++, to interact directly with each other without the use of any third party sites, or centralized bottlenecks.
+* +multiple sites because one site only is a [[silo]]
+* ++multiple implementations* because one implementation only is a [[monoculture]], based on (evolving) code, not a dependable protocol or format (when in conflict, the single codebase wins over any spec).
+
+Examples:
+* [[Webmention]] + [[h-entry]] - supported by [https://webmention.net/implementation-reports/summary/ numerous implementations] and nearly every IndieWeb site
+* [[WebSub]] + [[h-feed]] - supported by many IndieWeb publishers, and many [[readers]]
+
+== History ==
+There have been many attempts and limited deployments of various social web federated systems using various protocols and formats.
+
+This section is a stub and could 
+
+=== Pingback and h-entry ===
+In the IndieWeb in particular, the first federated comment thread was built using:
+* [[Pingback]] + [[h-entry]]
+
+See: 
+* 2013-04-23 [http://tantek.com/2013/113/b1/first-federated-indieweb-comment-thread The First Federated #Indieweb Comment Thread]
+* 2013-04-19 [https://web-beta.archive.org/web/20150320090209/https://eschnou.com/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html Testing #indieweb federation with @waterpigs.co.uk, @aaronparecki.com and @indiewebcamp.com !]
+** 2015-07-12 latest Internet Archive snapshot of the first multi-implementation #indieweb federation interaction. Broke [https://web-beta.archive.org/web/20151228132743/http://eschnou.com:80/entry/testing-indieweb-federation-with-waterpigscouk-aaronpareckicom-and--62-24908.html on 2015-09-06], and in 2016 started redirecting to his home page.
+
+This first indieweb federation test demonstrated:
+* federated [[mention]]s in the original post to others's indieweb [[homepage]]s
+* federated [[comments]] from the people mentioned and others's sites
+
+Webmention itself had barely been started on a github repo and wiki page, these are the latest versions as of 2013-04-19:
+* 2013-04-10 version of [http://indieweb.org/wiki/index.php?title=Webmention&oldid=2319 Webmention wiki page]
+* 2013-02-20 version of [https://github.com/converspace/webmention/blob/598427683583d50a12af0d73c32b0d01b9c57652/README.md Webmention draft spec on Github]
+
+=== OStatus ===
+{{main|OStatus}}
+
+(stub section)
+
+Does anyone have any (Internet Archive) links to the first federated OStatus posts and a cross-site thread? Presumably from circa 2010 (or earlier?)
+
+=== XMPP ===
+{{main|XMPP}}
+As a non-web attempt at Federation, [[XMPP]] is worth looking at to see how it addressed all the challenges with federating across disparate systems.
+
+=== Email ===
+[[Email]] is often held up historically as a successful federated system.
+
+There are many barriers that are not only preventing more decentralization in email, but ironically incentivizing and causing more centralization in a handful of large servers/services such as [[Gmail]].
+
+There is so much server specific configuration / setup that is needed to get your message accepted by other servers that email in practice is becoming a less-than-fully-federated system. Like if you have to contact help@ some domain (Gmail, Yahoo, etc.) to get them to configure their mail servers to accept mail from your server, then it's become a step down from the full sense of "federation" that email launched and became popular with.
+
+There has been some anecdotal reports of the increasing difficulty to setup any form of usable mail server. {{petermolnar}} runs his own server, and yet found difficulty (e.g. with messages making it to their destinations) just with switching it from its existing well established domain name to a new domain name.
 
 == Articles ==
 Articles about federation and federated social networks.
@@ -30,3 +129,4 @@ Articles about federation and federated social networks.
 * [[formats]]
 * [[protocols]]
 * [[DNS]]
+* [[indieweb network]]

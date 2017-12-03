@@ -1,8 +1,8 @@
-http://indiewebcamp.com/PostgreSQL
+https://indieweb.org/PostgreSQL
 
 {{stub}}
 
-'''<dfn>PostgreSQL</dfn>''' is a database used by some IndieWeb sites.
+'''<dfn>PostgreSQL</dfn>''' is a database used by some IndieWeb sites. [[Known]], an indie [[CMS]], has had Postgres support since Jul 29, 2015.[https://github.com/idno/Known/pull/991]
 
 == IndieWeb Examples ==
 IndieWeb community members that use PostgreSQL on their personal sites:
@@ -22,16 +22,27 @@ IndieWeb community members that use PostgreSQL on their personal sites:
 
 '''Regarding [[database-antipattern]]:''' I moved Flutterby.com from HTML files to PostgreSQL in February of 2000. The database lets me easily track comment revisions, throw around ideas faster. Backups to dump files have been as robust as plain text, and even with text files I'd still need to keep some sort of index to find particular locations within those text files ("grep"ping the entire database dump these days takes a quarter of a second, too slow to keep up with the site).
 
+=== Greg V ===
+{{myfreeweb}}'s personal site https://unrelenting.technology ([[sweetroll]]) used to be powered by [https://github.com/myfreeweb/gitson JSON files in Git], but switched to [https://github.com/myfreeweb/mf2sql JSON in Postgres]. Stored procedures in the database are used to extract embedded entries (comments, in-reply-to contexts, etc.) into their own records when writing content and to embed them back when reading. And to build [[feed]]s. Also listen/notify is used for change notifications (a trigger fires a notification on update, the frontend app picks it up and sends as webmentions/WebSub/etc.)
+
+
+'''Regarding [[database-antipattern]]:''' Postgres gave me amazing flexibility — I was able to very quickly implement tags and full text search. It is ''possible'' to implement indexes for flat files, or use both flat files and a database, but that was too tedious for me to implement and I implemented nothing.
+
+=== Jonny Barnes ===
+{{jonnybarnes}}’s personal site https://jonnybarnes.uk been using PostgreSQL in conjunction with [[PostGIS]] to allow for geo functionality.
+
 == Secondary Data Storage ==
 IndieWeb sites that use PostgreSQL to store secondary data, i.e. not content that they authored, but content from elsewhere.
 
 === Pelle Wessman ===
-[[User:Kodfabrik.se|Pelle Wessman]]'s (VoxPelli) [https://webmention.herokuapp.com/ webmention.herokuapp.com] uses [[SQL]]/[[PostgreSQL]] for storing received webmentions.
+{{voxpelli}} uses PostgreSQL for storing received [[Webmentions]] etc. on [[webmention.herokuapp.com]].
 
 == Future Projects ==
 Projects which either can or will be able to use PostgresSQL, but which aren't yet in use on an IndieWeb site day-to-day.
 
 == See Also ==
+* Installing PostgreSQL v10: https://jonnybarnes.uk/blog/2017/10/installing-postgresql-v10
+* [https://barryfrost.com/2017/10/postgres-json-sequel Using JSON in Postgres with Ruby and Sequel] by {{barryf}}
 * [[MySQL]]
 * [[database]]
 * [[database-antipattern]]

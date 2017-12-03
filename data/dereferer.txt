@@ -1,0 +1,22 @@
+https://indieweb.org/dereferer
+
+    A '''<dfn>dereferer</dfn>''' is a (commonly server-side) script that prevents a linked website to see what page the link was clicked on by either replacing or removing the [https://en.wikipedia.org/wiki/HTTP_referer|HTTP referer]. The technique is commonly used to keep internal URLs private or to prevent sensitive data to leak into other server's log files (e.g. outgoing links from e-mail applications etc.)
+
+For details on when HTTP referers are sent and common workarounds, see https://en.wikipedia.org/wiki/HTTP_referer#Referer_hiding
+
+== W3C-recommended solution ==
+With up-to-date browsers, this can be achieved by setting a [https://w3c.github.io/webappsec-referrer-policy/#referrer-policy-delivery|Referrer Policy] on
+* HTTP header
+* meta element
+* referrerpolicy content attribute on an a, area, img, iframe, or link element
+* noreferrer link relation on an a, area, or link element
+* implicitly, via inheritance
+
+== Script implementations ==
+* JS solution: https://stackoverflow.com/questions/8893269/what-is-the-most-reliable-way-to-hide-spoof-the-referrer-in-javascript/8957778#8957778
+* PHP solutions commonly involve linking first to a "dereferer" URL which then forwards the user to the final target (in consequence, URLs in the HTML do not contain their real destination URL)
+
+== 3rd party services ==
+Third-party services providing link redirection to obscure the referer:
+* https://dereferer.me/
+* http://www.dereferer.de/

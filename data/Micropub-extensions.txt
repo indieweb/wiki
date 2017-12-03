@@ -1,0 +1,62 @@
+https://indieweb.org/Micropub-extensions
+
+This page is for brainstorming, discussion, and other questions and explorations about extensions to [[Micropub]].
+
+== Server Commands ==
+The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
+
+=== Slug ===
+Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
+
+[[File:wordpress-customize-slug.png]]
+
+This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
+ 
+* <code>mp-slug=</code>
+
+The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
+
+==== Implementations ====
+* Clients
+** [[Quill]]
+** [[Micropublish]]
+* Servers
+** [[p3k]]
+** [[Transformative]]
+
+== New Properties ==
+
+=== Post Status ===
+* <code>post-status=published</code> (or no post-status set) - The post is published, or when the published date is in the future, the post is scheduled.
+* <code>post-status=draft</code> - The post is a draft, and should not be shown in lists. (Of course it's up to the implementation whether it wants to use a capability URL for draft posts or actually restrict it to logged-in users.)
+
+==== Implementations ====
+* Clients
+** [[Quill]]
+* Servers
+** [[p3k]]
+
+=== Visibility ===
+* <code>visibility=public</code> (or no visibility set)
+* <code>visibility=private</code>
+
+[[Wordpress]] supports password-protected posts, however, passwords are inherently insecure and also not very user friendly, and there are likely better solutions to the problem. Essentially the goal of password-protected posts on Wordpress is to provide "guest access" to posts, where the viewer does not need an account at the site. Flickr accomplishes this with something they call "guest passes".
+
+== Query ==
+Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
+
+* [[mp-config]]
+* [[venue]] - not yet implemented suggestion of a venue query for a client to retrieve venues as part of check-in functionality.
+* [[category]] - [https://chat.indieweb.org/2017-01-18#t1484741717234000 suggestion] to get existing tags/categories in the client
+* extended markup formats – right now it is relatively dependent on the server implementation how text content is treated (1:1, basic processing like linking URLs, Markdown, ...). A query could expose information about this (and maybe even be part of a way to choose for the user)
+* media endpoint history – query recent uploads to the media endpoint, e.g. the last X photos uploaded from a phone
+
+=== Questions ===
+
+* According to the current spec (2017-01), a <code>GET ?q=config</code> should also include the <code>syndicate-to</code> property. If the collection of supported properties grows, is this still a thing to hold on to? Venues and tags can make the response potentially large. {{Sebsel}}
+
+== See Also ==
+* [https://micropub.net/draft/ Latest Editor's Draft]
+* [[Micropub]]
+
+[[Category:Micropub]]

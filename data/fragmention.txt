@@ -1,4 +1,4 @@
-http://indiewebcamp.com/fragmention
+https://indieweb.org/fragmention
 
 A '''<dfn>fragmention</dfn>''' is an extension to URL syntax that links and cites a phrase within a document by using a URL fragment consisting of the phrase itself, including whitespace.
 
@@ -14,7 +14,7 @@ Example:
 __TOC__
 
 == Behavior ==
-Fragmentions find the first matching word or phrase in a document and focus its closest surrounding element. The match is determined by the case-sensitive string following the # (or ## double-hash). The closest surrounding element may be a span, paragraph, heading, button, input, or any other container.
+Fragmentions find the first matching word or phrase in a document and focus its closest surrounding element. The match is determined by the case-sensitive string following the # The closest surrounding element may be a span, paragraph, heading, button, input, or any other container.
 
 == Previous URL style ==
 The first draft of this used double hash anchors <code>##</code> and escaped the spaces in the fragment with <code>+</code> signs. Experimentation shows that this causes problems with URL parsing in some cases as double-hash is an invalid URL, and plus signs in fragments are not escaped as spaces, only in the query string. 
@@ -31,6 +31,7 @@ As id's and anchors are not able to contain spaces, this extra markup is unneces
 * [http://disquotational.appspot.com/ Disquotational] is a web service (and bookmarklet) for making fragmention links by [http://www.purelytheoretical.com/ Darryl McAdams]
 * [https://github.com/myfreeweb/indieweb-components fragmention-target] is a Web Component for displaying fragmention links - the paragraph and the highlighted text.
 
+
 == IndieWeb Examples ==
 <span id="Implementations">Implementations</span> on IndieWeb sites.
 * [http://www.kevinmarks.com/fragmentions.html initial discussion] and [http://www.kevinmarks.com/poemfragmentions.html follow-up] explaining the idea more generally
@@ -42,7 +43,7 @@ As id's and anchors are not able to contain spaces, this extra markup is unneces
 * [http://indiewebcamp.com/fragmention##this+wiki this wiki] itself! Thanks [http://aaronparecki.com/ Aaron]
 
 * [http://nerd.vasilis.nl/linking-fragments-page/##a+few+lines+of+CSS Styled with a tiny CSS animation] by Vasilis van Gemert
-* [https://kartikprabhu.com/article/marginalia##fragmentions+come+in Kartik's Site] - custom CSS for the highlights the paragraph in gray.
+* {{kartik}} supports fragmention on all pages on kartikprabhu.com using CSS to highlight the referred paragraph in gray. Also, selecting text gives a popup link with the corresponding fragmention using [https://github.com/kartikprabhu/fragmentioner fragmentioner].
 
 * {{t}} supports fragmentions on all tantek.com post permalinks [http://tantek.com/2014/207/t1/iteration-tech-proposals-cc0-wiki-preferred since 2014-07-26] using the <code>fragmention.min.js</code> open source polyfill, and CSS that highlights the element containing the fragmention in <span style="background:yellow">yellow</span> and fades to <span style="background:#ffffe0">very light yellow</span>.
 
@@ -50,13 +51,21 @@ As id's and anchors are not able to contain spaces, this extra markup is unneces
 
 * {{bret}} supports fragmentions and animated background highlighting on the upcoming [https://github.com/bcomnes/base base] jekyll boilerplate site.  [http://bret.io/base/2014/11/01/photo-article/##article example]
 
+* {{chrisaldrich}} supports fragmentions on [http://boffosocko.com/about/website-philosophy-structure/#I+try+to+follow http://boffosocko.com] since [http://boffosocko.com/2015/07/21/boffosocko-com-now-supports-fragmentions/ 7/21/15]. For [https://hyp.is/W0KbHmtfEeaEl_cs7CftkQ/boffosocko.com/about/website-philosophy-structure/ comparison] it also supports [[Hypothes.is]] [[annotation]]s and [[highlight]]s as of [http://boffosocko.com/2016/04/03/boffo-socko-now-supports-hypothes-is-annotations/ 4/3/16].
+
 == Silo Examples ==
 * [http://epeus.blogspot.com/2003/02/googles-origins-hint-about-blogger.html##for+annotation Kevin's blogger blog] by adding the fragmention JS to the template
-* [http://bthdonohue.com/post/85643490431/instapaper-fragmentions Instapaper Support] 
+* [http://bthdonohue.com/post/85643490431/instapaper-fragmentions Instapaper Support](original post is unavailable as of 2016-12-21; [https://web-beta.archive.org/web/20160324083325/http://bthdonohue.com/post/85643490431/instapaper-fragmentions Archived link at archive.org])
 ** creates fragmention URLs for highlights and POSSEs them to twitter, tumblr, facebook etc. 
 ** Adds fragmention support to the Instapaper browser plugins for Chrome and Safari
+* [https://opensource.google.com/docs/releasing/#process+for+releasing Google's "Open Source" website] supports fragmentions as of 2017-03-30
 
+== UI for Fragmention-generation ==
+Examples of user-interfaces for generating a fragmention from some selected text
 
+* [https://github.com/kartikprabhu/fragmentioner fragmentioner] by {{kartik}} is a [[Javascript]] utility which gives a pop-up link with the fragmention URL to a piece of selected text.
+
+* {{adactio}} on [https://resilientwebdesign.com/ Resilient Web Design] updates the URL in the browser with the fragmention when some text is selected using [[Javascript]].
 
 == Challenges ==
 While most find the idea of fragmentions delightful, there are differing ideas on how they should work. We ask contributors to justify feature requests with concrete real world examples, as tests in the wild may reveal best practices. Otherwise, any of these challenges could be appended with, ''“So, uh, what do you think?”''
@@ -134,6 +143,21 @@ CSS selectors have deeper browser support and more widespread dev knowledge, but
 
 SVG allows arbitrary fragments with a <code>#viewBox(x<sub>1</sub>,y<sub>1</sub>,x<sub>2</sub>,y<sub>2</sub>)</code> syntax, so a sister <code>#select()</code> method could be an option.
 
+=== Generating fragmention from a selection across multiple elements ===
+What is the expectation from a [[fragmention#UI_for_Fragmention-generation|fragmention-generating UI]] when the selected text is across mulitple elements? Examples:
+
+* this fragmention https://kartikprabhu.com/static/demo/fragmention.html#he%20looked.%20%22What%27s%20happened%20to%20me?%22 across the first 2 paragraphs is clearly useless as it picks the whole document
+
+* this fragmention https://kartikprabhu.com/static/demo/fragmention.html#UTF%20non-breaking%20space%20in which crosses across a <code>&lt;strong&gt;</code> element is clearly useful
+
+{{sknebel}}: The first example would work better if the algorithm selected not the closest surrounding element, but only those children of the closest surrounding element that contain parts of the selected text (=the first two paragraphs). I think the second would behave the same. [[https://chat.indieweb.org/2016-12-21/1482310222531000 via IRC]]
+
+{{kartik}}: The current implementation only selects one element similar to URL fragments. Whether it should be more flexible about this is a good question.
+
+=== Should an element selected by fragmentioned URL be focussed? ===
+
+{{kartik}}: AFAIK for usual fragment URLs the browser will put the focus on the element selected so that tabbing works nicely. Should fragmention implementations do the same?
+
 == Related work ==
 The NY Times has [http://open.blogs.nytimes.com/2011/01/11/emphasis-update-and-source/ a tool for annotating articles], but it makes a very complex anchor and requires a very specific algorithm. [https://github.com/NYTimes/Emphasis source here]
 
@@ -149,19 +173,15 @@ There is a w3c spec for addressing [http://www.w3.org/TR/media-frags Media Fragm
 
 [http://www.gerv.net/software/fragment-search/ Fragment Search] by [http://blog.gerv.net/2007/02/fragment_search/ Gervase Markham] in 2007 is  the same idea, with a more complex syntax #!s!search%20term and #!s3!search%20term for 3rd occurrence.
 
-
 [http://zesty.ca/crit/draft-yee-url-textsearch-00.txt Text-Search Fragment Identifiers] E.g., <nowiki>http://example.com/index.html#:words:(distinguish)</nowiki> and <nowiki>http://example.com/index.html#:words:serve-as-context-to-(distinguish)</nowiki> and <nowiki>http://example.com/index.html#:words:context-to-(distinguish)-multiple-occurrences</nowiki>
-
 
 [http://dret.net/netdret/docs/wilde-ht2005-textfrag.pdf Fragment Identiﬁers for Plain Text Files] E.g., <nowiki>http://example.com/text.txt#line=10,20</nowiki> and <nowiki>http://example.com/text.txt#match=[rR][fF][cC]</nowiki>
 
-
 [http://internet-apps.blogspot.in/2007/11/using-urls-to-pass-parameters-to-web.html Using URLs to pass parameters to web applications, widgets and gadgets] proposes #meta(). E.g., <nowiki>http://www.google.com/reader#meta(width=900,height=500,autohide,position=top)</nowiki>
-
 
 [https://github.com/mhausenblas/addrable Addrable] E.g., table1.csv#where:city=Berlin,person=Richard
 
-[https://hypothes.is/blog/fuzzy-anchoring/ Hypothes.is fuzzy anchors] and [https://github.com/hypothesis/h/wiki/robust-anchors robust anchors] have some good discussion of the broader area, and some code too.
+[https://hypothes.is/blog/fuzzy-anchoring/ Hypothes.is fuzzy anchors] and [https://github.com/hypothesis/h/wiki/robust-anchors robust anchors] have some good discussion of the broader area, and some code too. In April 2016, Hypothes.is also provided the ability to create [https://hypothes.is/blog/direct-linking/ direct links] either with their browser extension enabled or via a proxy.
 
 [https://medium.com/@bbirdiman/lets-please-use-hashtag-terms-to-create-_arbitrary_-deep-links-f9185d5da2f0 Bowerbird proposed # for words in december 2013]
 
@@ -171,9 +191,17 @@ See also: http://en.wikipedia.org/wiki/Fragment_identifier#Proposals
 
 The Guardian has [https://twitter.com/wblau/status/529713139961827329 a way to tweet the selection]
 
+W3C annotations selectors have proposed ways of [https://www.w3.org/TR/2017/NOTE-selectors-states-20170223/#frags being encoded in fragments]
+
 == Discussion ==
 
 * Alternative proposal: use quoted string literals. Example: <nowiki>http://example.com/index.html#"string to search"</nowiki>. &mdash;[[User:Sandeep.io|Sandeep.io]] 20:11, 23 April 2014 (PDT)
 **On thinking about this a little, it doesn't sound like a good idea (for various reasons including the fact that the href attribute is quote delimited), but I like conveying the idea of "search for string literal" &mdash;[[User:Sandeep.io|Sandeep.io]] 20:30, 23 April 2014 (PDT)
 * [http://betterlink.io/posts/better-fragmention.html Betterlink] is a proprietary alternative that doesn't like [http://betterlink.io/posts/better-fragmention.html##Not+Targeting+the+Selection not highlighting the selection] and a [http://betterlink.io/posts/better-fragmention.html##Not+All+Browsers bug report about browser variations]
 ** As far as I can see, all these 'objections' are of fragmention.js (the particular javascript polyfill) and not of fragmention (the idea of using text with ## to link to arbitrary phrases); which is a better linking method than Betterlink's confounding URLs e.g. http://epeus.blogspot.com/2003/02/googles-origins-hint-about-blogger.html?bl-sid=97  -- [[User:Kartikprabhu.com|Kartik]] - 2014-07-13
+
+== See Also ==
+* [[marginalia]]
+* [[comments]]
+* [[interactions]]
+* [[highlight]]

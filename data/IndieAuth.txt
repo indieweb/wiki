@@ -1,44 +1,40 @@
-http://indiewebcamp.com/IndieAuth
+https://indieweb.org/IndieAuth
 
-<div style="float: right; clear:both; padding: 10px; margin: 0 0 0 auto; width: 240px; border: 1px #ccc solid; background-color: #fffee7;">IndieAuth.com Provider Status:<br/> See '''[[indieauth.com]]'''</div>
+'''<dfn>IndieAuth</dfn>''' is a way for doing [[Web sign-in]], where you '''use your own [[homepage]]''' to sign in to other places.
 
-'''<dfn>IndieAuth</dfn>''' is a way to '''use your own domain name''' to sign in to websites — it's like [[OpenID]], but works with services you likely already use, and is much easier to setup.
-* This wiki uses '''[[indieauth.com]]''' which implements IndieAuth.
+IndieAuth was build on ideas and technology from existing proven technologies like [[OAuth]] and [[OpenID]] but aims at making it easier for users as well as developers. It also decentralises much of the process so completely separate implementations and services can be used for each part.
 
-IndieAuth was built to make it as easy as possible for users and for developers to start using this new way of signing in on the web, without the complexities of OpenID.
-
-IndieAuth is an implementation of [[web sign-in]] and additional sign-in methods (email (via [[Persona]]), [[GPG]]).
-
-It works by linking your website to one or more authentication providers such as [[Twitter]] or [[Google]], then entering your domain name in the login form on websites that support IndieAuth.
-
-IndieAuth setup on your [[personal domain]] is a requirement for [[IndieMark]] Level 1.
+<div style="padding: 10px; border: 1px #ccc solid; background-color: #fffee7;"><p>'''Note:''' IndieAuth is often conflated with the [[indieauth.com|IndieAuth.com]] service provider. The first is the subject of this page: ''the way login works''. The second is ''an implementation'' that most people will be familiar with because it is used on this wiki.</p>
+<p>Work to address this naming issue is [[#naming_confusion|discussed below]].</p></div>
 
 == Why ==
-IndieAuth is part of taking back control of your online identity. Instead of logging in to websites as "you on Twitter" or "you on Facebook", you should be able to log in as just "you". We should not be relying on Twitter or Facebook to provide our authenticated identities, we should be able to use our own domain names to log in to sites everywhere.
 
-The #1 reason to setup IndieAuth is because you've found this wiki, and setting up IndieAuth will allow you to login and contribute to the [[community]], including doing common things like:
-* Add yourself to [[irc-people]]
-* RSVP to IndieWebCamp [[events]]
+IndieAuth is part of taking back control of your online identity. Instead of logging in to websites as “you on Twitter” or “you on Facebook”, you should be able to log in as just “you”. We should not be relying on [[silos]] to provide our authenticated identities, we should be able to use our own [[personal domain|personal domains]] to log in to sites everywhere.
 
-There are also some [[IndieMark]] features that are built upon having IndieAuth support on your site (e.g. private [[messaging]]).
+You can use it right now to log in to this wiki and contribute to the [[community]], including doing common things like:
+* Adding yourself to [[IRC People]] after joining one of our [[discuss|discussion channels]], and
+* RSVP to [[events|an upcoming event]].
+
+IndieAuth is also used by many [[Micropub]] clients, so you can use your own website to log in to the tools you use to post content.
+
+== How it works ==
+Basic flow with a User signing in to a (web)App
+# '''The User fills in his/her personal URL''' This is called [[Web sign-in]].
+# '''The App fetches the URL, looking for an Authorization Endpoint.''' For this, the user can use IndieAuth.com, but it can also be at their own domain. The App redirects the User to their AuthEndpoint.
+# '''The User authenticates at their own Authorization Endpoint.''' IndieAuth.com uses [[RelMeAuth]] to authorize users, but if a user uses an Authentication Endpoint on his/her own site, it can be a password, e-mail link, or any other authentication the AuthEndpoint provides. They prove their identity to their AuthEndpoint, the App waits.
+# '''The User gets a code from the AuthEndpoint''', in the form of a redirect to the App. (With this, the User gives the code to the App.)
+# '''The App checks the code with the AuthEndpoint''', and if the code is valid and if the User’s identifier matches the identifier the AuthEndpoint gives, the login is completed, and the User can enter and use the app.
 
 == How to ==
-=== Set up ===
+=== Set up using IndieAuth.com ===
 * Add a link on your home page to your various social profiles with the attribute <code>rel="me"</code>
 * Ensure your profiles link back to your home page
 * Enter your domain in a "Web Sign-In" box to begin using your own domain as your online identity!
 
 See: [https://indieauth.com/setup full setup instructions]
 
-=== Use IndieAuth for your OpenID ===
-Using [[indieauth.com]] as an OpenID delegate allows you to sign in to any site that [[OpenID#Consuming_Sites|consumes OpenID]] using your IndieAuth setup.
-
-To use [[indieauth.com]] as an OpenID delegate for the OpenID identifier of your site, add the following two link tags to the HTML (inside the <code>&lt;head&gt;</code> element) of your website, replacing "aaronparecki.com" with your domain of course.
-
-<pre>
-<link rel="openid.delegate" href="http://aaronparecki.com/" />
-<link rel="openid.server" href="https://indieauth.com/openid" />
-</pre>
+=== Use IndieAuth.com for your OpenID ===
+See [[indieauth.com#OpenID]]
 
 == Users ==
 === IndieWeb Examples ===
@@ -53,158 +49,35 @@ Many [[Micropub]] implementations use IndieAuth for authentication, including:
 (This section is a stub and needs expansion!)
 
 There are a growing number of web sites that you can log into using IndieAuth and gain additional functionality:
-* https://indiewebcamp.com/
+* https://indieweb.org/
 ** This site! Signing-in with IndieAuth enables you to edit the site!
-* https://monocle.p3k.io/
-** Sign-in with IndieAuth to [[Monocle]] to use it as a reader, edit your subscription list, etc.
-* https://aaronparecki.com/
-** Signing-in with IndieAuth enables you to see private posts intended for you.
 * ...
 
 == Details ==
-* IndieAuth is an implementation of [[Web sign-in]]/[[RelMeAuth]] with an HTTP API
-* [[indieauth.com]] is the primary authorization server implementation used by most people currently
-* [[indiecert]] implements authentication with [https://github.com/aaronpk/IndieAuth.com/issues/77 client certificates]
+* [[IndieAuth.com]] is an implementation of [[Web sign-in]]/[[RelMeAuth]] with an HTTP API
+* [[IndieAuth.com]] is the primary authorization server implementation used by most people currently
+* [[indiecert]] implements authentication with [https://github.com/aaronpk/IndieAuth.com/issues/77 client certificates] for https explicitly specified when entering one's web address, and only with manually setting state parameter from querystring to arbitrary value after getting "400 Bad Request", when using indieauth login.
+* [[commentpara.de]] allows login to IndieAuth enabled sites anonymously
+* [https://github.com/barryf/acquiescence Acquiescence] is a simple IndieAuth authorization and token endpoint. It is currently limited to [[GitHub]] for authorization. {{barryf}} uses Acquiescence on his website.
 
 == Table of Contents ==
 <div style="width:100%;float:left">
 __TOC__
 </div>
 
-== FAQ ==
-=== Why is my https domain not working? ===
-Q: Why does entering just my domain name (which automatically redirects http to https) not work in IndieAuth?
-
-A: To log in with indieauth as a domain served over [[HTTPS]], you have to type the whole URL, including <kbd>https://</kbd>, otherwise most implementations will assume HTTP, and HTTP to HTTPS redirects are considered insecure (especially important for purposes of authentication!)
-
-=== Why is Twitter not working ===
-While there are several reasons why [[Twitter]] might not working for IndieAuth sign-in, here are some common things to look for:
-* Be sure you link from your site to your '''<kbd>https</kbd>''' (note the '''s''') Twitter profile URL. E.g.:
-** <kbd>https://twitter.com/indiewebcamp</kbd>
-* As of 2014-01 we are seeing occasional SSL errors trying to fetch profiles from twitter.com. Until this is resolved, you may wish to try using another provider such as Google+ or Github.
-
-=== Why is GitHub not working ===
-* If you get an error “The authentication provider replied with an error: csrf_detected” something went wrong in the cookie exchange.
-** In Safari go to Preferences → Privacy and chose to “Allow from websites I visit” instead of “Allow from current website only”.[http://indiewebcamp.com/irc/2015-05-31/line/1433111657562] Once you are logged in you can change it back.
-
-=== Why am I getting "insecure redirect" errors? ===
-* If you get an error about an insecure redirect, check to see whether your silo link is going to https://yoursite which is in turn redirecting to http://yoursite.  (Dreamwidth is an example of a site that does this.)  If so, change the link to go directly to http://yoursite
-
-=== Why is Google+ not working ===
-* Ensure you add your website under your "Other Profiles" section on your Google+ profile. Google only adds the rel=me markup for your "Other Profiles"
-* Ensure that your "Other Profiles" section has permissions set to "Public"
-
-=== Why is IndieAuth and GitHub Pages not playing nicely? ===
-Are you getting a funny error when trying to log into IndieAuth with credentials hosted on your Github Pages powered website?  This is likely due to an outdated DNS record!  
-
-'''Quick fix:'''
-* '''Change your DNS record to point to the latest IP address that github pages uses.'''  For obvious security reasons, you are going to have to find the correct IP addresses on this page: https://help.github.com/articles/setting-up-a-custom-domain-with-pages#setting-up-dns
-
-What is happening is that if your DNS record points to the old github pages IP address, it sometimes 301 redirects to `/` which is non-standard and IndieAuth does not currently support relative URLs when discovering credentials.  See this issue: https://github.com/aaronpk/IndieAuth/issues/46#issuecomment-34565297
-
-Github also wrote a blog post about this change, which many people missed: https://github.com/blog/1715-faster-more-awesome-github-pages
-
-=== How do I make my site do the authorization itself ===
-For how to do distributed or delegated IndieAuth, see [[distributed-indieauth]].
-
-=== How do I use a specific other site for my IndieAuth ===
-See [[distributed-indieauth]].
-
-=== Is it good to delegate auth to 3rd parties ===
-''Is it good to delegate authentication to third parties like Facebook or Twitter for IndieAuth?''[http://indiewebcamp.com/irc/2013-10-30/line/1383149585]
-
-IndieAuth only relies on third parties for ephemeral authentication, once per IndieAuth login attempt. Because the reliance is only ephemeral/transactional, the delegation is ok.  It's not great, but it's ok, and certainly better than directly using (Facebook Connect) or the equivalents for other silos.
-
-IndieAuth also provides better UI flow and fallbacks than OpenID, while re-using the  OAuth flow that users are familiar with from Twitter, Github etc., so it's an incremental improvement over other open identity solutions.
-
-=== What if I have more than one domain ===
-IndieAuth requires symmetric rel=me links on your page and the OAuth provider profile page, and since most silos (like Github and Twitter) only allow you to put one rel=me link on your profile, you cannot use any one profile for multiple domains. There are a few alternatives:
-
-* use one account for one domain and another account for another domain. 
-* use an alternative method for as many domains as you control:
-** email (Persona) 
-** PGP key authorization 
-** TOTP
-
-=== Why not use a DNS TXT record ===
-Q: Why not allow configuring a rel=me link by adding a DNS TXT record to the domain?
-
-A: Two reasons:
-* '''Usability'''.  In order to use a DNS TXT record you would first need to be aware of how to create such an entry for your domain's DNS zone file - something most users have zero interest in or knowledge of, but you would also then need to put something like a PGP Public Key so that anyone trying to auth to your site would then be able to use to sign their request. Again, very few folks would be able to implement that.
-* '''Security'''. The main reason is that the TXT record would be a request to a different server that is not serving your domain and it would not be behind SSL. Whereas rel=me links in the HTML of a home page at least <em>can</em> be protected with [[https]], even if they're not to start with.
-
-=== Why not OpenID Email etc ===
-See: [[Why web sign-in]].
-
-=== Why not WebFinger ===
-''Why not add [[WebFinger]] support to IndieAuth?''
-
-<blockquote>"The problem is it's too easy to not own your email address (@gmail.com, etc) so it's not really an "indie" identifier. The point of IndieAuth is to encourage people to own their online identity."[http://aaronparecki.com/replies/2013/07/01/1/indieauth][https://twitter.com/aaronpk/status/351893272089735168]</blockquote>
-
-=== Why is the IndieAuth verification response form-encoded instead of JSON ===
-IndieAuth uses standard form-encoding for requests and response because it has been a standard encoding format since the beginning of the web. If it were a JSON response, then 7 years down the road you'd be asking "why is the response in JSON instead of ____" where ____ is the next trendy thing that replaces JSON. (Remember when XML was the new hotness?)
-
-Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_changes_to_indieauth_protocol.html#content_negotiation &mdash; [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 02:26, 5 March 2015 (PST)
-
-* To me this would violate [[Postel's law]], requiring every implementation to publish many different formats. I don't care which format IndieAuth produces, but I do think we should settle on ''one'' canonical format. [[User:Kylewm.com|Kylewm.com]] 10:03, 5 March 2015 (PST)
-
-* Agreed that there should be only one format. The only valid argument for JSON is that the OAuth 2.0 spec defines the response as JSON. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:06, 5 March 2015 (PST)
-
-* OK I withdraw my objection to content negotiation. Agree it is a relatively small burden on a relatively small number of providers; it's worth supporting multiple formats for convenience to the large number of consumers [[User:Kylewm.com|Kylewm.com]] 12:06, 5 March 2015 (PST)
-
-* Just to be anti-inventing-new-formats (too many of them around and demanding attention), I'd go for form-encoded -- {{kartik}} 00:21 2015-03-06
-
-* I just never saw HTTP POST form encoded _responses_ anywhere, only POST url encoded form requests... Any link to other (REST) services that use this? e.g. XMLHttpRequest does not support form encoded responses at all... [[User:tuxed.net|fkooman]]
-
-=== Empty Session Errors ===
-
-If you are seeing strange error messages about empty sessions, you may have blocked cookies! Make sure you allow cookies from indieauth.com and whatever service provider you are using. 
-
-=== More FAQ ===
-See [http://indieauth.com/faq Frequently Asked Questions] for more FAQs.
-
 == The IndieAuth.com Service ==
-The IndieAuth.com service lets you support [http://microformats.org/wiki/RelMeAuth RelMeAuth] logins without writing all the OAuth code for each provider! It also supports a few additional non-OAuth providers such as Email, SMS and GPG.
+The IndieAuth.com service lets you support [http://microformats.org/wiki/RelMeAuth RelMeAuth] logins without writing all the OAuth code for each provider! It also supports a few additional non-OAuth providers such as Email and GPG.
 
 [https://indieauth.com/developers Read the full documentation]
 
 === Source Code ===
 The [https://github.com/aaronpk/IndieAuth.com IndieAuth.com source code] is available on GitHub. Feel free to fork it and submit pull requests if you make any changes!
 
-== Feature Requests ==
-=== Followings ===
-Auth consumers (e.g. [[Upcoming.org]]: <span class="h-cite"><span class="p-author">Andy Baio</span> <cite class="p-name">Opening the Source and The Great Auth Debate</cite>, <time class="dt-published">2015-03-16</time>, <span class="u-url">https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812</span></span>) want to quickly allow users to to follow people and organizations they're already interested in, e.g. their lists of followings from their personal website.
-* Note: this requires a format or protocol for at least retrieving a list of [[followings]] from an indieweb site, and possibly adding to it if you decided to follow someone's events on Upcoming.
-** Which an Indie [[reader]] would/should also use both for initial reading list, and updating (writing to) when someone follows more people / orgs / sites.
-
-For events in particular, people are likely to want to attend events with friends.
-
-=== Location Information ===
-Auth consumers (e.g. [[Upcoming.org]]: <span class="h-cite"><span class="p-author">Andy Baio</span> <cite class="p-name">Opening the Source and The Great Auth Debate</cite>, <time class="dt-published">2015-03-16</time>, <span class="u-url">https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812</span></span>) want location information for users. Knowing a user's current location is critical information for event sites, e.g. getting current city at login time (for onboarding, or showing events near you).
-
-This could be done via a user's [[homepage]] profile h-card, or it could also use recent [[checkins]].
-
 == Issues ==
-Please open specific bugs and action items on the [https://github.com/aaronpk/IndieAuth/issues?state=open IndieAuth Github project]. This page is for collecting thoughts that may not yet be action items or for things that apply to the IndieAuth protocol in general rather than the indieauth.com implementation.
-
-=== Contact page support ===
-Some sites (which? list examples below) have a separate /about or /contact page where they list all their other profiles with [[rel-me]] links, and then link to that separate page from their home page with rel=me. This is a valid way to support [[web-sign-in]] per the [[relmeauth]] spec.
-
-However, IndieAuth does not currently support following one-deep rel-me links on people's sites to look for auth providers.
-
-Note: Crawling the second level of links will add significant time to the "scan" part of indieauth. One optimization is to only crawl a second level link if it's on the same domain as the authenticating domain. This means you wouldn't be able to have the chain example.com -> about.me/example -> github.com/example, you'd have to have something like example.com -> example.com/about -> github.com/example. [[User:Aaronparecki.com|Aaronparecki.com]] 09:08, 1 September 2013 (PDT)
-* only the latter use-case has been seen (in microformats.org research) of <blockquote>example.com -> example.com/about -> github.com/example</blockquote>
-* a user may use about.me through a redirect, e.g.:
-** example.com --redirect--> about.me/example --rel=me link--> github.com/example
-
-'''Sites in the wild with a contact page separate to the homepage'''
-
-* Add sites you find here
-* …
+This section is about issues with IndieAuth-the-[[building block]], not [[indieauth.com|IndieAuth'''.com'''-the-service]]. Please open specific bugs and action items for the latter on the [https://github.com/aaronpk/IndieAuth.com/issues?state=open IndieAuth.com Github project]. Issues below should be specifically about IndieAuth as a protocol.
 
 === Security ===
-* The token can be sent to IndieAuth without TLS (or the docs make it appear so) such a request should be refused (*not* redirected) to prevent DNS poisoning, MITM, and race-condition attacks.
-* TOTP method is not terribly secure compared with all other methods. [http://btmb.me/s/2q ben.thatmustbe.me's criticism]
+* The token can be sent to IndieAuth without TLS (or the docs make it appear so); such a request should be refused (*not* redirected) to prevent DNS poisoning, MITM, and race-condition attacks.
 
 === Need Simple Copy Paste How To ===
 The explanation in http://waterpigs.co.uk/articles/indiewebcamp-signin-ux/ provides a list of three lengthy descriptions of what you need to setup IndieAuth, which was then subsequently criticized as "this is not a straightforward process" in the post: http://aralbalkan.com/notes/on-evolving-indieauth/
@@ -219,92 +92,96 @@ Compare with:
 
 Explanations for IndieAuth need to be <em>at least as simple to understand</em> as those for Twitter Sign-in and Facebook Connect.
 
-=== Selectively Displaying rel-me Info ===
-Selectively Displaying rel-me Info (e.g. hiding your phone number).
+=== IndieAuth using form-encoded responses instead of JSON ===
+IndieAuth uses standard form-encoding for requests and response because it has been a standard encoding format since the beginning of the web. If it were a JSON response, then 7 years down the road you'd be asking "why is the response in JSON instead of ____" where ____ is the next trendy thing that replaces JSON. (Remember when XML was the new hotness?)
 
-Tantek points out that he would like to be able to use SMS auth on IndieAuth, but doesn't want his cell phone number public on his site. [http://indiewebcamp.com/irc/2013-08-31/line/1377987957]
+Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_changes_to_indieauth_protocol.html#content_negotiation &mdash; [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 02:26, 5 March 2015 (PST)
 
-Ideally your site would know that the request was coming from an (your?) IndieAuth server, and only render your phone number if so.
+* To me this would violate [[Postel's law]], requiring every implementation to publish many different formats. I don't care which format IndieAuth produces, but I do think we should settle on ''one'' canonical format. [[User:Kylewm.com|Kylewm.com]] 10:03, 5 March 2015 (PST)
 
-This would require either
+* Agreed that there should be only one format. The only valid argument for JSON is that the OAuth 2.0 spec defines the response as JSON. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:06, 5 March 2015 (PST)
 
-# some sort of pre-registration with the indieauth server so your site could verify a shared secret
-# crypto signing with public keys so that pre-registration is not required
+* OK I withdraw my objection to content negotiation. Agree it is a relatively small burden on a relatively small number of providers; it's worth supporting multiple formats for convenience to the large number of consumers [[User:Kylewm.com|Kylewm.com]] 12:06, 5 March 2015 (PST)
 
-==== 1 pre-registration ====
-Here is a potential example flow.
+* Just to be anti-inventing-new-formats (too many of them around and demanding attention), I'd go for form-encoded -- {{kartik}} 00:21 2015-03-06
 
-* Sign in once to your IndieAuth server
-* Click a "generate shared secret" button, which is some 128-bit string that the IndieAuth server stores internally on your user record.
-* You take the string and add some code like this to your home page:<br /><code>if header['IndieAuth-Secret'] == shared_secret<br />&nbsp;&nbsp;&nbsp;&nbsp;echo '<link rel="me" href="tel:+15035551212">'<br />end</code> which checks to see if the secret is passed in an HTTP header called "IndieAuth-Secret".
+* I just never saw HTTP POST form encoded _responses_ anywhere, only POST url encoded form requests... Any link to other (REST) services that use this? e.g. XMLHttpRequest does not support form encoded responses at all... [[User:tuxed.net|fkooman]]
 
-==== 2 public key ====
+=== Requesting additional user details ===
 
-* The IndieAuth server publishes its public key in its own [[h-card]] like <code><a href="" class="u-key"></a></code>
-* When the IndieAuth server makes a request to fetch the HTML of your home page, it also adds an HTTP header which is a signature of the IndieAuth server hostname, your domain name and the timestamp. It would send three additional headers:
-** <code>IndieAuth-signature: [[signature of indieauth.com;example.com;1378052578]]</code> (Format is a placeholder, in reality we might use something closer to the JSON web token format or something)
-** <code>IndieAuth-server: indieauth.com</code>
-** <code>IndieAuth-nonce: 1378052578</code>
-* When your server gets the request for your home page, it can read the IndieAuth-server header to discover which server is making the request, then go fetch its public key.
-* It would then compute the signature of the three pieces of information and verify that the signature passed in the header matches, at which point it can render the private info.
+The auth consumers may want to receive additional information about a user, and not just their homepage URL. Andy Baio raised some points in regard to this in a backer-only Kickstarter post, [https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812 Opening the Source and The Great Auth Debate], 2015-03-16, when deciding what authenticator to use for [[Upcoming.org]].
 
-Please document here if there is some other existing mechanism that can solve this!
+* Silos may give the application access to the user’s social graph: who their friends are, who they are following.
+** This would require some IndieWeb format for [[following]].
+** This is great for applications like [[readers]] to start a user off.
 
-==== potential workaround ====
+* Silos may give the application location information about the user.
+** This is great for applications like Upcoming.org that want to show relevant events.
+** May be possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
 
-A potential workaround is putting your phone number in a <code><link></code> tag in your HTML head so that it isn't visible to viewers of your web page. (Currently [http://aaronparecki.com aaronparecki.com] does this.) While this doesn't actually prevent a person from seeing your phone number, it is at least an unlikely place for them to look.
+=== naming confusion ===
 
-=== Better Error Handling ===
+There has been ongoing confusion between IndieAuth(-the-protocol), IndieAuth.com and RelMeAuth.
 
-My experience was that I had a slight URL mismatch when I first tried to set up IndieAuth, something like an http/https goof or having a trailing slash in one place and no trailing slash in the other.  Whatever the problem, it prevented sign-in.  I figured out that problem, but when I tried to sign back in, I got the error:
+Most people use IndieAuth by using IndieAuth.com as their authorization_endpoint, which then does RelMeAuth to authenticate them, which has people conflate IndieAuth with rel=me-links.
 
-<blockquote>Parameter "profile" must be one of the rel=me links in the site specified in the "me" parameter</blockquote>
+Some might also just have rel=me links set up and only log in to sites which use IndieAuth.com (or other services that support RelMeAuth directly) to handle login for them, which means they are using RelMeAuth, but '''not''' IndieAuth(-the-protocol), while thinking they are using IndieAuth.
 
-This didn’t make any sense to me, as a novice to IndieAuth.  After several failed retries, I finally realized that IndieAuth.com had cached my old URL and needed me to rescan to pick up the corrected information.  Once I did that, everything worked -- [[User:Meyerweb.com|Eric Meyer]]
+* One problem with the indieauth.com site being called just "indieauth.com" is that people then think that IndieAuth is somehow centralized around this service. 
+** {{aaronpk}} plans to rename the two services that IndieAuth.com provides (an authorization_endpoint for people who want their site to support the IndieAuth protocol, and handling signing in users for sites like this wiki) to different names to lessen this confusion
+** See https://github.com/aaronpk/IndieAuth.com/issues/138 for name finding, and https://github.com/aaronpk/IndieAuth.com/milestone/1 and https://github.com/aaronpk/IndieAuth.com/milestone/2 for goals for the two separate services
+** <p>This seems to be '''resolved'''. '''[https://chat.indieweb.org/meta/2017-07-19/1500481059573000 IndieAuth.com will become IndieLogin.com.]'''</p><p>The scope for IndieLogin.com is defined as “a service that developers use to log users in to a website. you create a web sign-in form that asks for their domain, and it directs people to indielogin.com to authenticate. users can authenticate by linking to Twitter/GitHub/email address/PGP key, and then they are asked to authenticate at one of those when signing in.” [https://chat.indieweb.org/meta/2017-07-19/1500481422110000] Making a clear distinction between IndieAuth and any external login services.</p>
+* In in-person conversations about IndieAuth/RelMeAuth/OAuth with people, I've found that most people think of RelMeAuth when they are talking about IndieAuth. {{aaronpk}}
+** Another possibility is to rename the IndieAuth protocol (which is an extension of OAuth 2.0) to make it clear that the OAuth 2.0 extension has nothing to do with RelMeAuth
+*** {{martijnvdven}}: I think renaming the protocol is your call, {{aaronpk}} as the author of said protocol, but I feel it would be unnecessary. Especially if [[indieauth.com]] is getting renamed. This feels like an education issue, possibly a documentation issue (which we are already solving with wiki-gardening!). We don’t go and rename [[microformats]] because people have been writing blog posts where they used the word “microformats” and then described some other system like Microdata. Instead we educate on what the name microformats is.
+**** {{sknebel}}: +1, I think that'd lead to even more confusion
+** {{martijnvdven}}: Note that '''no implementers have made the mistake'''. [https://github.com/barryf/acquiescence Acquiescence], [[commentpara.de]], [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub Known], [[selfauth]] all talk about IndieAuth as the protocol.
+*** {{aaronpk}}: This is a great point, and convinces me the name of the spec is fine.
+** <p>{{martijnvdven}}: And '''no consumers advertise it wrong''' as far as I can find. Are there any implementations that use only [[indieauth.com]] and claim to be IndieAuth? That means not using something like [https://github.com/indieweb/indieauth-client-php indieauth/client] and using the service as a fallback, but really using only the service?</p><p>This wiki is an example of that, but also does not claim to use IndieAuth in any way! It describes its login as [[web sign-in]] and not IndieAuth. It mentions IndieAuth as ''an alternative'' for people who do not want to use their social media accounts, that’s a very correct description:</p><p>[[File:indieweblogin.png]]</p>
+*** {{sknebel}} Indeed, web-sign in seems like a fitting term here (given that the definitions talk about the general concept of using your homepage URL to sign in, and reference both RelMeAuth and IndieAuth as implementations)
+** {{sknebel}} I've been explaining IndieAuth at HWC Berlin to people from "has written an endpoint following [[authorization-endpoint]]" over "has logged into the wiki" to "IndieAuth, never heard of it". One of the first category wasn't quite clear on the status of non-Indieauth.com implementations of sites to log-in to (since they'd only used it with sites using Indieauth.com, primarily the wiki), second wasn't necessarily aware of a difference between service and protocol. Explaining the difference (and how RelMeAuth fits in) wasn't an issue, but had to be explicitly mentioned. I believe a different name for IndieAuth.com would go a long way there.
+* The wiki pages for IndieAuth don't always make this distinction clear, work has begun during IndieWebWeek (2017-05) to improve this
+** Work continued 2017-07-19 by moving FAQ and Issue items from this page to the pages they were about: [[RelMeAuth]] or [[indieauth.com]].
+** New copy for this wiki page was written in a separate sandbox page where the focus was on explaining IndieAuth and its 3 parts. See [[User:Vanderven.se martijn/IndieAuth]].
+*** {{sknebel}} +1, to me this is just clarifying and extending existing documentation (e.g. the different endpoints, that currently only have their separate pages, and clearly separating .com from the protocol)
 
-Two possible fixes here:
+=== how to should include endpoint definition ===
 
-# Be more aggressive about rescanning for a domain that’s never worked, or had recent errors.  (Perhaps limited to certain types of errors.)
-# Reword the error message to be less obscure and include some information about common ways to trigger the error and ways to address them.
-## Parameter 'profile' must be ..." is a debugging message, not an error message. There is no mention of "parameter" or "profile" in any other user-facing aspect interaction of IndieAuth. This message needs to be replaced ASAP with a description in terms of what the user is doing. - [[User:Tantek.com|Tantek]] 07:26, 18 September 2013 (PDT)
-## What the heck is *actually* going wrong? I don't even know - we need to capture a technical description of the problem(s) that may be causing this message to occur so we can attempt to craft an actual actionable error message for the user. - [[User:Tantek.com|Tantek]] 07:26, 18 September 2013 (PDT)
+This would make sure first time users do not have to try and figure this out themselves. Example:
 
-== Edge Cases ==
-=== What About RDFa Problems ===
-If you use <span id="RDFa">RDFa</span> and are having problems, see [[rel-me#What_About_RDFa_Problems|rel=me: What about RDFa Problems]].
+<raw><figure>
+<blockquote cite="https://ascraeus.org/embracing-the-indieweb/">Getting myself validated through IndieAuth was already taken care of by the <code>rel="me"</code> links, but some services needed me to declare IndieAuth as my <code>authorization endpoint</code>; <i>[…]</i></blockquote>
+<footer>— <cite class="title"><a href="https://ascraeus.org/embracing-the-indieweb/">Embracing the IndieWeb</a></cite> by <cite class="author"><a href="https://ascraeus.org/">Daniel Goldsmith</a></cite></footer>
+</figure></raw>
+
+Here “IndieAuth” refers to [[indieauth.com]]-the-service. The discussion above is about clearing up the name issue, this is only about including the endpoint declaration in HTML. Daniel ran into services that offered him to login with IndieAuth and required him to declare the authorization endpoint, completely according to how IndieAuth works. (As documented above, most implementers stick to the spec when they talk about IndieAuth.) This is currently completely left out of the how-to and new users are left to figure it out for themselves.
+
+The wiki leaves users hanging who try to login using IndieAuth outside of the wiki. This how-to issue is documented here specifically because {{t}} wondered [https://chat.indieweb.org/meta/2017-07-18#t1500393757490000 why an extra step was needed].
+
+* I say this is a mistake in the How-to that needs to be addressed. —{{martijnvdven}}
+* agreed, instructions about IndieAuth should explicitly include the endpoint —<span class="h-card" style="white-space:nowrap">[[User:Www.svenknebel.de|sknebel]]</span>
 
 == To do ==
-Want to help? See if you can contribute to one or more of the following:
-* '''<span id="tfa-support">Two Factor Auth (TFA) support</span>''' for providers that support it (e.g. Google)
-** See the [http://wordpress.org/extend/plugins/google-authenticator/ WordPress Google Authenticator plugin] for clues/patterns/source (PHP) showing how to do this.
-** See also [http://www.twilio.com/blog/2013/04/add-two-factor-authentication-to-your-website-with-google-authenticator-and-twilio-sms.html Add Two-Factor Authentication To Your Website with Google Authenticator] (Python examples)
-** Will Norris blogged about <cite>[https://willnorris.com/2012/06/indie-two-factor-auth indie two-factor auth]</cite>
-* Add support for one-level deep links like /contact (per [http://microformats.org/wiki/RelMeAuth#users_with_separate_contact_pages RelMeAuth: users with separate contact pages] algorithm and real world examples).
 * create an Architecture Diagram for IndieAuth per [http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/ Mozilla Security Blog: Speeding Up Security Reviews]
 * create a Detailed Application Diagram for IndieAuth per the same[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
 * write-up Data flow enumeration per the same[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
 * write-up a Threat Analysis per the same[http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/].
 
-== Talks ==
+== Talks and Demos ==
 * 2012-06-24: Aaron Parecki [http://opensourcebridge.org/sessions/856 gave a talk on IndieAuth] at Portland's Open Source Bridge 2012 conference! Tuesday June 26th at 4:45pm
 * 2013-08-13: Aaron Parecki [http://aaronparecki.com/presentations/2013/08/08/1/indieweb-w3c-workshop-on-social-standards gave a talk on IndieAuth] at the W3C Workshop on Social Business
 * 2014-05-06: Aaron Parecki [http://indiewebcamp.com/2014-05-06-iiw-indieauth held a session] at [http://www.internetidentityworkshop.com/ Internet Identity Workshop XVIII]
-
-== Articles ==
-* 2013-08-26 [http://waterpigs.co.uk/articles/squarespace-web-sign-in/ How to set up Web Sign In on your @squarespace website]
-* 2013-08-31 [http://waterpigs.co.uk/articles/indiewebcamp-signin-ux/ On the Indie Web Camp Sign In UX Barrier]
-* 2013-08-31 [http://aralbalkan.com/notes/on-evolving-indieauth/ On evolving IndieAuth]
-** [[On Evolving IndieAuth Followup]]
+* 2016-09-24 Sebastian Lasse [https://indieweb.org/2016/Brighton/Demos#Sebastian_Lasse had a demo] showing the use of protocol handlers to keep the "me" in the browser ([https://www.youtube.com/watch?v=W70wd56i0Bg&t=34m1s video]) at [https://indieweb.org/2016/Brighton IWC Brighton]
 
 == See Also ==
 * [[IndieAuthProtocol]]
 * [[distributed-indieauth]]
 * [[Web sign-in]]
 * [[RelMeAuth]]
-* [[microformats]]
 * [[sign-in-use-cases|Web Sign-In Use Cases]]
 * [[indieauth-authorization-brainstorming|IndieAuth Authorization Brainstorming]]
-* [https://github.com/aaronpk/IndieAuth.com/issues indieauth.com issues]
+* [https://indieweb.org/images/2/2f/indieAuthProp.svg An (unofficial) proposal for an IndieAuth logo]
 
 [[Category:building-blocks]]
 [[Category:IndieAuth]]
+* [[Facebook Connect]]

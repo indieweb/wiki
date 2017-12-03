@@ -1,6 +1,6 @@
-http://indiewebcamp.com/webmention-implementation-guide
+https://indieweb.org/webmention-implementation-guide
 
-== Sending Webmentions ==
+== Sending [[Webmention|Webmentions]] ==
 
 The beauty of simple protocols is that you can do most of this manually very easily.
 <span id="rel_webmention"></span>
@@ -18,6 +18,39 @@ This will send the webmention in a single command:
 
 See also this gist for sending pingbacks manually: https://gist.github.com/aaronpk/5744879
 
+=== Endpoint Discovery in PHP ===
+The following code is a set of simple short & flat functions for doing discovery of webmentions in PHP.
+
+Automatic discovery could be implemented in PHP by:
+* look for a link header using a HTTP request library to get the rels
+** [https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/link_rel_parser.php link_rel_parser.php] :
+*** use <code>head_http_rels($url)</code> to curl a HEAD request and from the return value <var>info</var> get back HTTP <var>info["status"]</var> and <var>info["rels"]</var> as a <var>rels</var> array if any.
+*** if you already have the raw HTTP header, use <code>http_rels($h)</code> to get a <var>rels</var> array
+** and then lookup <var>rels["webmention"]</var> for webmention endpoints
+* if no Link: for webmention found AND info["type"] == "text/html" or "application/xhtml+xml" then
+** use PHP DOMDocument to search the retrieved document for the first <nowiki><link rel="webmention"></nowiki> element (or first that matches selector: <code>link[rel~=webmention]</code> ) e.g.: 
+<pre>
+$w = 0;
+$c = curl_init($url);
+curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
+curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+$s = curl_exec($c);
+
+$dom = new DOMDocument();
+$dom->loadHTML($s);
+$domx = new DOMXPath($dom);
+$ws = $domx->query(xphasrel('webmention')); // except with link instead of *
+if ($ws) {
+  $w = $ws->item(0)->getAttribute('href');
+}
+// if ($w!=0) then it has a webmention endpoint.
+// this code could be changed into a html_webmention_rel($url) function,
+// to be called only if head_http_rels($url) returns no "rels" array 
+//   or has no "webmention" item(s) in said array
+</pre>
+
+
+Alternatively see [https://github.com/indieweb/mention-client-php mention-client-php] for an object-oriented implementation.
 == Accepting Webmentions ==
 
 Currently the easiest way to test consuming webmentions is to implement sending them, then send yourself mentions.
@@ -26,7 +59,14 @@ Once you’re ready to test integration with another site, you can either ask so
 
 For example [http://indiewebcamp.com/irc/2014-02-18/line/1392748409 this IRC line] links to http://caseorganic.com/notes/2014/02/18/1/. Pasting the URL for the IRC line into [http://indiewebify.me/send-webmentions the indiewebify.me webmention sender] will send webmentions for all the links on the page. Then you can check your page or your server logs to see if the webmention was successful — in this case the comment [http://caseorganic.com/notes/2014/02/18/1/#external_http_indiewebcamp_com_irc_2014-02-18_line_1392748409 successfully showed up] on the target page.
 
+
 == Resources ==
-* [https://github.com/pfefferle/node-webmention-testendpoint Node Webmention Testendpoint] - Generates a sample post and creates and endpoint you can use to test your webmention sending
-* [https://github.com/voxpelli/node-webmention-testpinger Node Webmention Testpinger] - pings your site with a variety of source URLs that contain real-world markup
-* [https://checkmention.appspot.com/ Checkmention] - This site lets you test your webmention implementation on your indieweb site, and whether it robustly detects certain types of XSS attacks.
+
+==== checkmention ====
+https://checkmention.appspot.com/ lets you test your webmention implementation on your indieweb site, and whether it robustly detects certain types of XSS attacks. It also allows you to test  for [[authorship#Spoofing|authorship spoofing]].
+
+==== node-webmention-testpinger ====
+[https://github.com/voxpelli/node-webmention-testpinger node-webmention-testpinger] is a tool to ping your site with a variety of [[webmentions]] markup. Contains copies of a couple of real world examples of mentions that it enables you to ping locally to a development copy of your site.
+
+==== node-webmention-testendpoint ====
+[https://github.com/pfefferle/node-webmention-testendpoint node-webmention-testendpoint] is tool to test your [[webmentions]] client. Generates a demo-post and a demo-endpoint to test if your client parses the webmention-endpoint correctly and to check if the ping body is transmitted correctly.

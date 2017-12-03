@@ -1,0 +1,112 @@
+https://indieweb.org/bandwidth
+
+{{stub}}
+
+'''<dfn>bandwidth</dfn>''' is defined by [[hosting provider]]s as the amount of network traffic sent and received by your web site during a billing period (like a month) and by ISPs as the maximum rate of network traffic allowed per minute.
+
+Your host will usually have a bandwidth limit of 50 Gigabytes per month while an ISP will have a bandwidth limit of 20 Megabits per second (20Mbps).
+
+== Troubleshooting ==
+=== Bandwidth Limit Warning ===
+If your website uses a significant percentage of your bandwidth limit (like 80%+), you may receive a warning from your hosting provider with information like:
+<blockquote>
+CURRENT DATA TRANSFER USAGE: 40.1271 GB<br/>
+MONTHLY DATA TRANSFER LIMIT: 50 GB
+</blockquote>
+
+What happens next depends on your hosting agreement:
+* (free) suspend your account/site when the monthly bandwidth limit is reached
+* (?$$$) automaticly invoice you for the overages
+
+If you are just hosting text files like HTML, CSS, JS, and not hosting media (actual audio/photo/video files), it is unusual for a website to require so many gig of bandwidth per month, thus you may want to look into what is causing your site to use so much bandwidth.
+
+=== Determining Excessive Bandwidth Use ===
+(stub)
+
+==== Find your web site stats ====
+To determine what is the cause of your site using excessive bandwidth, start by looking at any aggregate web site usage statistics/[[metrics]] that your hosting provider makes available to you.
+
+* Sign-into your hosting provider's control panel for your website, and look for something like "Usage", e.g. "March Usage" (per name of current month), or "Usage History".
+* Click on whatever Usage summary you find and see if you can find a link for the current month's usage.
+* If you cannot find a link for the current month, you may have to look at last month's usage, and edit the URL to look at the current month.
+* You may also find information under "Web Site Statistics"
+* If you cannot find current usage information (e.g. you can find usage information but only for past months or years), file a support ticket with your hosting provider asking for them to provide it.
+
+From these summary stats, you should be able to see what files / resources are using the most bandwidth when being served (either because of the larger size of the files, or the higher frequency they are being requested, or both).
+
+If your hosting provider does not offer usage numbers you may need to explore running a web server log analyzing tool to find out what requests are being made for your site and then see which type of files are the offenders. A list of Open Source web analytics software can be found on [https://en.wikipedia.org/wiki/List_of_web_analytics_software Wikipedia: List of web analytics software]
+
+==== Look for IPs bots files ====
+Your web site statistics should show you sorted (most to least requests / bandwidth) lists of:
+* IP addresses making requests
+* User agents (including [[bots]])
+* Files on your server (e.g. "/" is your home page)
+
+Make a note of all three of these and then follow-up with each accordingly as noted below.
+
+===== Dealing with IPs =====
+Go through the top IPs requesting traffic from your site and see what you can figure out about them.
+
+TBD: how to look up info about IPs (who, where, what etc.)
+
+You may be able to use tools like https://whoisip.ovh/blacklist/ to check to see if an IP address is being abusive beyond your site.
+
+Note: Be aware that any single IP source of traffic could be a TOR exit node, a service doing proxy work for others or something like a Feed Reading service. In these cases you will need to review the GET requests in your access logs to find who is making the most calls by User Agent, not just by IP
+
+If the IP seems abusive (e.g. hitting your home page or feed every five seconds), consider blocking it.
+
+You can block an IP by whichever of these methods is appropriate for your server:
+* An [[htaccess]] RewriteCond %{REMOTE_ADDR} "w\.x\.y\.z" RewriteRule .* - [F,L] # where w.x.y.z is the IP address
+* ...
+
+... to be continued
+
+===== Dealing with bot user agents =====
+Go through the top bot [[user-agent]]s requesting traffic from your site and see what you can figure out about them.
+
+See [https://github.com/snarfed/huffduff-video/#understanding-bandwidth-usage huffduff-video: Understanding bandwidth usage] for determining top user agents via S3 access logging for example.
+
+Common ways bots misbehave:
+* Fail to read your [[robots_txt|robots.txt]]
+* Disobeying your robots.txt (e.g. requesting DENYed things, more often than frequency limits)
+* Requesting misformed URLs (e.g. by failing to properly reconstruct relative URLs)
+* ...
+
+TBD: how to look up info about user agents
+
+You can block a bot user agent by whichever of these methods is appropriate for your server:
+* An [[htaccess]] RewriteCond %{HTTP_USER_AGENT} BAD_ROBOT RewriteRule .* - [F,L] # where BAD_ROBOT is the user agent string of the misbehaving robot
+* In [[nginx]] use the server's [http://nginx.org/en/docs/http/ngx_http_map_module.html#map Map Variable Structure] to serve a 444 response to Bots.
+{{dgold}} wrote about this process in [https://ascraeus.org/bot-blocking-for-fun-and-profit/ Bot Blocking for Fun & Profit]
+
+... to be continued
+
+===== Dealing with files =====
+Go through the top files being requested (and causing traffic) to your site.
+
+Common files that are frequently requested:
+* / - your [[homepage]]
+* your [[feed file]]s (e.g. Atom or RSS)
+* ...
+
+Figure out how to make your home page size smaller.
+
+Minimize the size of any feed files you host, e.g. consider only returning items posted in the past 24-72 hours, presuming that any feed file fetching software is fetching your feed at least once a day.
+
+Make sure your webserver is serving commonly fetched text content (homepage, feed files) with compression. Many servers do not compress dynamically generated files by default, or might be missing rules for more unusual content types. You can check this by fetching the files with your browser and check the HTTP headers in dev-tools for "Content-Encoding" headers.
+
+... to be continued
+
+=== Site is inactive please contact billing ===
+If you see a message on your (or a) site like: <blockquote>This web site is currently inactive. Please contact billing to reactivate your account.</blockquote> then it is possible that site has been automatically suspended by your (presumably shared) hosting provider due to reaching a monthly bandwidth limit as noted above.
+
+If this is your site, you should file a support ticket with your '''[[web_hosting#Shared_Hosting|shared hosting provider]]''' to re-activate your site, and immediately figure out how to block abusive traffic like from bots or IP addresses that are making excessive requests (like many times a second or minute of the same unchanging URLs).
+
+Note: be sure to use an email address NOT on the domain that is suspended / showing that error message.
+
+Other effects. It is possible that suspending of your website goes beyond it and to suspending your entire domain and hosting account as a whole, so you may also be:
+* missing email sent to your suspended domain
+* unable to sign-in to the control panel of your hosting provider using your domain / account that has been suspended.
+
+== See Also ==
+* [[web host]]

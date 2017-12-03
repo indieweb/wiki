@@ -1,0 +1,64 @@
+https://indieweb.org/2016/Brighton/goingstatic
+
+'''<dfn>Going Static</dfn>''' was a session at [[2016/Brighton|IndieWebCamp Brighton 2016]].
+
+Notes archived from: https://etherpad.indieweb.org/goingstatic
+----
+
+IndieWebCamp Brighton 2016
+Session: Going Static
+
+Description: 
+
+== Participants ==
+* petermolnar (leading)
+* adactio
+* 
+
+== Notes ==
+* interests and whys
+** longetivity
+** adactio want to combine database relation usage with longetivity
+** resiliency
+** option to use CDNs - geo-distribution
+** any end-user-friendly SaaS solution for static generators?
+*** webfaction ?
+** security - there's nothing to hack
+** most personal sites receive infrequent updates; no need for always-on dynamicity
+
+* webmentions for static sites
+** 3rd party or hosted "dynamic" part is necessary
+*** receive  webmentions
+*** interact with other sites
+** potential hybrid solution:
+*** on build, pull the existing mentions/comments
+*** plus pull the not yet baked in ones via JS
+
+* currently used sw
+** jekyll
+
+* large binary content issue
+** static sites text can go into version control repositories, but pushing eg. photos is a problem
+** the text and the binary can be separated and upload with commit hooks, for example
+
+* how do you transition from a dynamic site to a static content
+** Wordpress to Jekyll exporter: https://github.com/benbalter/wordpress-to-jekyll-exporter
+** spiders to go throught the site
+*** generate transitions (static content) on the fly
+*** try to lookup this intermediate static file and only go to the DB if this fails
+*** once done, switch to complete static genetor?
+
+* storage formats
+** Markdown
+*** problems with raw Markdown documents:
+**** not enough metadata
+**** no relation storage
+*** solutions:
+**** frontmatter (YAML)
+**** intermediate database with metadata
+** h-entry (HTML)
+*** benefits of included metadata
+** aaronpk is using YAML version of the h-entry data as frontmatter in front of the content
+
+[[Category:2016]]
+[[Category:2016 sessions]]

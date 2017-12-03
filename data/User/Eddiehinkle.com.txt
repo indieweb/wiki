@@ -1,0 +1,70 @@
+https://indieweb.org/User%3AEddiehinkle.com
+
+__NOTOC__
+<span class="h-card">[https://eddiehinkle.com/ <img src="https://eddiehinkle.com/images/profile.jpg" style="width:137px;float:right;margin-left:1em"/>'''<span style="font-size:2em">Eddie Hinkle</span>''']</span> is a software engineer, avid reader, aspiring writer living just north of D.C. in Frederick, MD
+
+* https://eddiehinkle.com
+* [https://twitter.com/eddiehinkle @eddiehinkle on Twitter]
+* [https://github.com/edwardhinkle edwardhinkle on GitHub]
+
+= Projects =
+* [[abode]] is my IndieWeb personal website software built with a blend of TypeScript Node.js and Jekyll. It is in use at [https://eddiehinkle.com eddiehinkle.com] since February 2017. 
+* [[indigenous]] (Under Development) - A [[iOS]] and [[macOS]] share extension that sends data to a [[Micropub]] endpoint. You will download the app, login with [[IndieAuth]], then you can send micropub to your site by using the iOS or macOS share sheet.
+
+= Working On =
+
+== Currently on my mind ==
+* [[indigenous]]
+* rebuild https://eddiehinkle.com in Angular Universal rather than Jekyll
+* Implement a microsub server
+* New app scanning compass database and suggesting checkins after the fact with GPS coordinates recorded based on long pauses at a single location. Allow to tag people, places and add photos and comments based on Micropub querying. Add new locations through foursquare database.
+* Add Apple Watch support to [[Overland]]
+* Build TV/Movie queue/tracking web app that supports importing via mf2 and posting via micropub
+
+== Itches ==
+* Finish [[PESOS]] reading data from Goodreads to my site, set up [[PESOS]] import of [[Kindle]] Highlights, build a [[read]] page to be my central portal for my reading information. (OwnYourReads?)
+* Add support for sending [[Webmentions]] automatically.
+* Explore [[watch]] post type for logging TV and Movies, with /watch portal page.
+* Improve person tag support
+* Track /[[listen]] posts for podcasts with media fragments
+* Track /[[listen]] posts for audiobooks with progress.
+* Move [[video]] posts from YouTube to [[POSSE]]
+* Build a Year-in-Review page that shows listen, watch and read stats, words written in blog posts, # of replies, # of likes, etc.
+* Import all the old Tweets, Instagram and Facebook posts after filtering out the irrelevant posts I don't want to keep.
+
+== Random Brainstorm Ideas for Future ==
+* Inscribe, a Micropub Media Check-in Web App. Start with TV show and Movie check ins. Then move on to books. Allows the user to search for Episodes of a TV show, a Movie or a Book and mark the status as “Interested, In Progress or Finished”. Eventually, maybe it can be expanded to support moving Interested items to In Progress and In Progress items to Finished.
+* A video service that uses IndieAuth and Webmentions to invite other users into a private WebRTC video rooms.
+* A service that allows you to login via IndieAuth, enter sites that you want to follow via H-Feed and it will send you a daily Kindle newsletter with any new posts from sites you want to follow.
+* Lifestream Micropub Syncing app. An iOS app that syncs the Healthkit data that you choose up to your micropub endpoint.
+* Explore Read-It-Later style app that utilizes h-feed and micropub with private [[read]] posts from your site.
+* Explore JavaScript IndieWeb Interactions versus Web Actions.
+* What would a modern web browser look/feel like? How do you navigate? How would it integrate with microformats, micropub, etc?
+
+== Completed ==
+* Begin [[POSSE]] processes starting with [[notes]]
+* Track /[[read]] posts for online articles
+* Create person-mentions/person-tags
+* Build a [[Micropub]] Endpoint based on <span>[https://github.com/voxpelli/node-micropub-express Node-Micropub]</span>
+* Created [[watch]] posts for tv shows, movies and web videos that I’ve watched or am interested in watching.
+* Created [[listen]] posts for podcasts that I’ve listened to or am interested in listening to.
+* Add support for receiving and displaying [[webmentions]]
+* Add support for replying/citing posts
+* Converting current posts into different collection types that match IndieWeb post types.
+* Marked up site content with [[microformats]]
+* Added basic level of [[PESOS]] for [[Goodreads]] currently reading and recently read books.
+* Set up Web Sign In
+* Own my own domain
+
+= Implementation Design =
+* [https://eddiehinkle.com EddieHinkle.com] is a standard [[jekyll]] site.
+** Currently my site contains the following post types: [[article]], book review (see [[read]]), [[photo]], [[video]] and [[RSVP]]s.
+** I have two types of Jekyll collections: [[note]] and media.
+*** Note is the general all purpose collection type. Using different attributes based on [[post-type-discovery]], Jekyll uses different template includes to emulate different post types.
+*** The media collection is for the [[read]]/[[watch]]/[[listen]] post types. I created this as a different collection type because it’s an area that I plan to do a lot of experimenting in and don’t want to lock myself into anything or mess up my other post types while experimenting. I no longer use posts within Jekyll.
+** [[video]] is currently just a link to YouTube. #IndieWebFail. That needs to be fixed.
+* [[node.js]] scripts run in the background to [[PESOS]] Goodreads content to my /data directory and periodically rebuilds my Jekyll site with fresh data.
+* The goal is to always have a static site as much as possible, with [[node.js]] micro services that update my static files as need be. Eventually, if needed, having [[node.js]] store data in a database and then whenever data is updated, re-publish static files. I would like to stick with [[jekyll]] as long as possible, but if that ever gets to the point that it is too complicated, the goal is to build a [[node.js]] module that exports HTML through a template language like Jade.
+
+
+''(This page is syndicated from: [https://eddiehinkle.com/indieweb/ https://eddiehinkle.com/indieweb/])''

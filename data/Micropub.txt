@@ -1,6 +1,11 @@
-http://indiewebcamp.com/Micropub
+https://indieweb.org/Micropub
 
-'''<dfn>Micropub</dfn>''' is an open API standard that is used to create posts on one's own domain using third-party clients. Web apps and native apps (e.g. iPhone, Android) can use Micropub to post short [[notes]], [[photos]], [[event]]s or other [[posts]] to your own site.
+'''<dfn>Micropub</dfn>''' is an open API standard ([[W3C]] Recommendation) that is used to create, update, and delete posts on one's own domain using third-party clients, and supersedes both [[MetaWeblog]] and [[AtomPub]]. Web apps and native apps (e.g. iPhone, Android) can use Micropub to post and edit [[article]]s, short [[note]]s, [[reply|comments]], [[like]]s, [[photo]]s, [[event]]s, or other kinds of [[posts]] to your own site.
+
+{{new}} '''Submit an implementation report for Micropub to help the specification advance at W3C!'''
+* Start here: https://micropub.rocks/
+
+[[File:w3c-spec-REC.svg]]
 
 __TOC__
 
@@ -14,7 +19,7 @@ Similar to how [[microformats]] has a relatively small ruleset for parsing HTML 
 
 The Micropub syntax describes how to interpret HTTP POST and GET requests into a useful action the server can take.
 
-The full specification can be read at http://micropub.net/draft/
+The full specification can be read at https://www.w3.org/TR/micropub/
 
 === Overview ===
 
@@ -58,19 +63,19 @@ The authorization server must indicate to the user any scopes that are part of t
 For example, most Micropub servers require clients to obtain the "post" scope in order to create posts. However, some servers may require more granular scope requests, such as "delete" or "post:video". See [[scope]] for more details and a list of all currently used values for scope.
 
 === Verification ===
-(''This section is a stub'')
+A micropub client can verify that an access token is still valid (and other details) by querying the user's [[token endpoint]]. 
 
-When a Micropub client obtains an access token, it may need to be able to verify the access token is valid and retrieve the URL of the user it belongs to. Micropub endpoints must implement a method that returns basic information about the access token.
+Issues:
 
-Access tokens can be verified by making an empty GET request to the Micropub endpoint with the access token in the header. If the access token is valid, the Micropub endpoint must reply with at least the "me" parameter, and may also return scope, client_id, and expiration date.
-
-Note: This may not be appropriate for the micropub endpoint and may be better handled by the token endpoint.
+* this does not cover the case where the server has decided not to accept it anymore, e.g. because the user's access to the site has been removed
+** if a micropub endpoint plans on rejecting a token in the future, it should ensure the token endpoint also rejects the token. For systems where the token endpoint and micropub endpoint are part of the same software, this is an implementation detail. If the token endpoint and micropub endpoint are on different systems, there needs to be a mechanism for the micropub endpoint to expire the token at the token endpoint. This is what's known as token revocation, and has been written up for OAuth 2: https://tools.ietf.org/html/rfc7009
 
 === Form-encoded Microformats Representation ===
 For the simplicity of writing clients and servers, all Micropub endpoints must handle the standard form-encoded format. At a most basic level, you should be able to write an HTML form and set the form action to your own endpoint and use it to post to your site.
 
 
 === Examples of Creating Objects ===
+How to create some of the common [[:Category:PostType|post types]]
 
 ==== Indicating the object being created ====
 
@@ -91,21 +96,21 @@ The following properties may be included in a request to create a new [[h-entry]
 * published
 * updated
 * category = tag1, tag2, tag3 (sent as array syntax: <code>&category[]=tag1&category[]=tag2</code>)
-* slug 
 * location
 ** as a [http://tools.ietf.org/html/rfc5870 Geo URI], for example <code>geo:45.51533714,-122.646538633</code>
+*** GeoURIs allow [https://tools.ietf.org/html/rfc5870#section-6.4 additional parameters] that may be used to include the title of a location: <code>geo:1,2;name=Somewhere</code>
 ** as a URL that contains an [[h-card]]
 ** My micropub client currently has a map to mark the specific location in LatLng values, and a text input for an actual place name. So my client is sending a request of the form "&location=1.23,%40-4.56:An%40Address" [[User:Jonnybarnes.net|Jonnybarnes.net]] 07:57, 10 June 2014 (PDT)
 * in-reply-to
 * repost-of
 * syndication
 ** Pass one or more URLs pointing to places where this entry already exists. Can be used for [[PESOS]] implementations.
-* mp-syndicate-to = https://myfavoritesocialnetwork.example/aaronpk, https://archive.org/, etc.
+* [[mp-syndicate-to]] = <nowiki>https://myfavoritesocialnetwork.example/aaronpk, https://archive.org/</nowiki>, etc.
 ** This property is slightly different from the others since it is giving a command to the server rather than describing an object, which is why it is prefixed with "mp-".
 
 ===== New Note =====
 
-Posting a new note with tags, syndicating to myfavoritesocialnetwork:
+Posting a new [[note]] with tags, syndicating to myfavoritesocialnetwork:
 
 * content
 * category
@@ -140,7 +145,7 @@ curl https://example.com/micropub -d h=entry -d "content=Hello World" -H "Author
 
 ===== New Reply =====
 
-Posting a new reply, syndicating to myfavoritesocialnetwork
+Posting a new [[reply]], syndicating to myfavoritesocialnetwork
 
 * content
 * in-reply-to
@@ -160,7 +165,7 @@ h=entry
 
 ===== New Repost =====
 
-Posting a new repost, and adding additional tags.
+Posting a new [[repost]], and adding additional tags.
 
 * repost-of
 * category
@@ -177,7 +182,7 @@ h=entry
 
 ===== New Article =====
 
-Posting a new article 
+Posting a new [[article]]
 
 * content
 * name
@@ -197,7 +202,7 @@ h=entry
 
 ===== New Bookmark =====
 
-Posting a new bookmark with name, quote, and tags.
+Posting a new [[bookmark]] with name, quote, and tags.
 
 * bookmark-of
 * name
@@ -230,7 +235,15 @@ In PHP, these files are accessible using the <code>$_FILES</code> array:
 
 see also: [[Micropub-brainstorming#Uploading_files_in_separate_requests]]
 
-Note that there is no practical way to upload a file when the request body is JSON encoded.
+Note that there is no practical way to upload a file when the request body is JSON encoded. The [[media-endpoint|media endpoint]] needs to be used in that case.
+
+curl example: 
+
+ $ curl -H 'Authorization: Bearer abc'\
+        -F 'h=entry'\
+        -F 'content=an image!'\
+        -F 'photo=@/home/cweiske/Bilder/openid-id.bogo.png'\
+        'http://known.bogo/micropub/endpoint'
 
 ==== h-event ====
 
@@ -343,148 +356,14 @@ For example, creating a new "weight" measurement post as an h-entry with h-measu
 
 If you think you have found a case that requires a nested object, please document it on [[Micropub-brainstorming]] and feel free to drop in the [[IRC]] channel to discuss it.
 
-== Examples ==
+== Servers ==
+Examples of Micropub endpoints are listed at [[Micropub/Servers]].
 
-=== IndieWeb Examples ===
+== Clients ==
 
-Examples of IndieWeb sites that support the micropub API (in order of deployment).
+{{main|Micropub/Clients}}
 
-==== Aaron Parecki ====
-{{aaronpk}} supports publishing various post types on aaronparecki.com using micropub since 2013-12-25.
-* 2013-12-25 [[note]] micropub publishing support added
-* 2013-12-28 [[pushup]] micropub publishing support added
-* 2014-02-24 [[photo]] micropub publishing support added
-* 2014-09-17 [[bookmark]] micropub publishing support added
-* 2014-11-07 [[repost]] micropub publishing support added
-* 2014-12-22 [[like]] micropub publishing support added
-
-==== Barnaby Walters ====
-[[User:WaterPigs.co.uk|Barnaby Walters]] posts [[notes]] and [[replies]] on [http://waterpigs.co.uk waterpigs.co.uk] ([[Taproot]]) since 2014-03-10 using [[Shrewdness]] and [[Taproot]] as micropub clients
-
-==== Emma Kuo ====
-[[User:notenoughneon.com|Emma Kuo]] posts [[notes]], [[replies]] and [[photos]] on [http://notenoughneon.com notenoughneon.com] since 2014-04-28 using [[Neonblog]] and [[OwnYourGram]].
-
-==== Kyle Mahan ====
-{{kylewm}} uses micropub to post [[photos]] on [https://kylewm.com his personal site] ([[Red Wind]]) since [https://kylewm.com/2014/05/the-hunter-2 2014-05-17]. As of 2015-02-10, he also posts [[replies]] and [[likes]] using [[Woodwind]] as a Micropub client.
-
-==== Kartik Prabhu ====
-[[User:Kartikprabhu.com|Kartik]] posts [[notes]] on [https://kartikprabhu.com kartikprabhu.com] via micropub using [[Quill]] since 2014-05-24
-
-==== Postly ====
-[[User:ben.thatmustbe.me|Ben Roberts]] posts to his [[Postly]] site via micropub.  Photos are posted using [[OwnYourGram]] and Notes, Replies, and Articles are posted using his own [[Postly]] Client.  Deleting entries via micropub added 2014-09-28.
-
-==== Jeremy Keith ====
-[[User:adactio.com|Jeremy Keith]] supports posting notes and photos via micropub [https://adactio.com/journal/7698 since 2014-10-21]. He shared an example of his PHP source code, [https://gist.github.com/adactio/8168e6b78da7b16a4644 minimal micropub endpoint].
-
-==== Bear ====
-{{bear}} supports micropub since 2015-01-01.
-* 2015-01-01 [[note]] support added
-* 2015-01-01 [[article]] support added
-
-==== rhiaro ====
-{{rhiaro}} supports micropub since [http://rhiaro.co.uk/2015/04/minimum-viable-micropub 2015-04-04], used with [[Quill]] and [[Teacup]], with various hacks:
-* Supports any post types by passing all metadata in the 'content' param as <!--- key: value\n --> and inferring post types from it (so all a client needs is a content field).
-* Supports edit over POST via resending content (+ metadata) and the slug of the post to be edited.
-
-==== Pelle Wessman ====
-{{voxpelli}} supports basic micropub publishing of articles on voxpelli.com [https://github.com/voxpelli/voxpelli.github.com/commit/f01d4e3fafa2a5eec5e6c5625cdcceddce6780d0 since 2015-07-10]
-
-==== Shane Hudson ====
-[[User:shanehudson.net|Shane Hudson]] supports micropub for notes (with geo) only [https://shanehudson.net/2015/07/11/1347 since 2015-07-11]. Twitter syndication and photo support are on the to-do list.
-
-==== Jeena Paradies ====
-{{jeena}} supports micropub for notes (with syndication and reply-to) only [https://jeena.net/notes/375 since 2015-07-12]. Posting photos works too since 2015-07-24. And now even person tagging for notes and photos since 2015-07-30.
-
-==== kongaloosh ====
-{{kongaloosh}} supports micropub since [http://kongaloosh.com/e/2015/7/22/heres-a-t 2015-04-04], used with [[Quill]] and Own Your Gram.
-* Supports any post types by and inferring post types.
-
-==== Harry Reeder ====
-{{tbrb}} supports publishing with micropub since 2015-07-26. Currently [[note]] type only, with more on the to-do.
-
-=== CMS Examples ===
-Micropub has been added to the following CMS software and blog publishing tools for additional server support.
-
-==== Known ====
-[[User:werd.io|Ben]] has written a [[Known]] plugin that logs in via [[IndieAuth]] and publishes content via micropub. It's designed to work so that all indieweb post types - notes etc - are passed to the content plugin registered to handle them. [https://github.com/idno/indiepub]
-
-==== WordPress ====
-[[WordPress]] supports Micropub via {{snarfed}}'s [https://wordpress.org/plugins/micropub/ wordpress-micropub] plugin, including:
-* [[#Create]]
-* [[#Editing]]
-* [[#Delete]]
-
-==== Drupal ====
-[http://stefan-auditor.de Stefan Auditor] wrote a Drupal module to add a Micropub endpoint to Drupal installs on 2015-05-10. https://github.com/sanduhrs/micropub
-
-==== Craft ====
-[[User:shanehudson.net|Shane]] has written a [[Craft]] plugin for Micropub. It currently only works with notes and requires some configuration to setup. It has also only been tested with Quill so far, as of 2015-07-11. https://github.com/ShaneHudson/Micropub_Craft
-
-=== Services Examples ===
-
-==== Silo.pub ====
-In April 2015, {{kylewm}} created [https://github.com/kylewm/feverdream Feverdream] aka [https://silo.pub/ silo.pub] to provide a Micropub endpoint to create posts on hosted blogs like [[Tumblr]], [[WordPress.com]], [[Blogger]], [[twitter]], [[Facebook]] and [[Flickr]]
-
-==== ownyourresponses ====
-{{snarfed}}'s [http://github.com/snarfed/ownyourresponses ownyourresponses] is [[PESOS]] as a service for [[Twitter]] favorites, retweets, and replies and [[Instagram]] likes. It polls your accounts periodically for new activity via the APIs and creates corresponding like, repost, and reply posts on your site via Micropub.
-
-The original motivation is described in [https://snarfed.org/2015-01-22_pesos-for-bridgy-publish PESOS for Bridgy Publish].
-
-=== Clients ===
-Sites and client applications that publish via micropub. Alphabetically sorted.
-
-==== Editorial ====
-The iOS text editor [http://omz-software.com/editorial/ Editorial] can publish its documents to Micropub through a couple of third party Workflows created by {{voxpelli}}. Two for [http://www.editorial-workflows.com/workflow/5227209878929408/JZrTPYnXAiY authorizing] and [http://www.editorial-workflows.com/workflow/5300464841129984/cghZUwlSP2k deauthorizing] with an IndieAuth endpoint and one for the [http://www.editorial-workflows.com/workflow/5833229495959552/tO76Z7cIfTU Micropub publishing]. Shown in action in [https://www.youtube.com/watch?v=U7hUR7flTAY this video].
-
-==== Jonnybarnes.uk ====
-[[User:jonnybarnes.uk|JonnyBarnes]] post UI is publicly available at https://jonnybarnes.uk/notes/new
-
-==== Micropublish ====
-[https://micropublish.herokuapp.com Micropublish] is {{barryf}}'s simple Micropub client. Supports Note, Article, Bookmark, Reply, Repost and Like post types. Barry uses this to post all content on his site. Ruby [https://github.com/barryf/micropublish source code] is available on GitHub.
-
-==== micropub-xmpp-bot ====
-In September 2015, {{kylewm}} created [[micropub-xmpp-bot]], an experimental XMPP chat bot for posting notes, replies, likes, and reposts via micropub. Notably, it uses an out-of-band redirect_uri handler that prompts the user to copy/paste their auth code. Give it a shot by XMPP chatting with micropub@kylewm.com. (If it's offline, ping "kylewm" on [[IRC]]).
-
-open source: https://github.com/kylewm/micropub-xmpp-bot/
-
-==== MobilePub ====
-[[MobilePub]] is a mobile phone micropub client app written by [[User:ben.thatmustbe.me|Ben Roberts]].  The app can take and upload photos, video, and audio as well.  
-
-==== Monocle ====
-[[Monocle]] is a [[reader]] that supports posting likes and reposts to the user's Micropub endpoint.
-
-==== Neonblog ====
-[[User:notenoughneon.com|Emma]]'s [[Neonblog]] post UI creates notes and articles via micropub.
-
-==== OwnYourGram ====
-[[User:aaronparecki.com|aaronpk]]'s [http://ownyourgram.com/ OwnYourGram] is a tool to reverse-syndicate instagram photos to your personal site, using micropub. 
-* The signup process contains lots of useful documentation and debugging information to help get new micropub implementations working.
-
-
-==== Postly ====
-[[User:ben.thatmustbe.me|Ben Roberts]]' [[Postly]] creates notes and articles via micropub and can add syndication links after posting. synditate-to links are passed as a php readable array field not a comma separated list. Postly can also edit posts when passing mp-action=edit [https://ben.thatmustbe.me/new Publicly Available UI]
-
-==== PushupCounter ====
-[[User:aaronparecki.com|aaronpk]]'s [https://github.com/aaronpk/PushupCounter-iOS PushupCounter-iOS] is an iOS client for publishing exercise data.
-
-==== Quill ====
-[[Quill]] is a reference Micropub client developed by {{aaronpk}}, you can use it to post [[notes]], [[articles]], [[bookmarks]] and [[likes]] to your site.
-* The signup process walks you through configuring your website to accept Micropub requests from apps like this.
-
-==== Shrewdness ====
-[[Shrewdness]] - indieweb [[reader]]
-
-==== Taproot ====
-[[User:waterpigs.co.uk|Barnaby]]'s [[Taproot]] publishes notes via micropub. [http://waterpigs.co.uk/notes/new/ The post UI] is publicly accessible, and you can use it to make posts on your own website. As of 2014-06-12 it’s also marked up with h-product and h-x-app markup so that authorization UIs can provide a better experience whilst authorizing, without having to pre-register apps and upload logos
-
-==== Teacup ====
-[[Teacup]] is a Micropub client for posting various types of food posts.
-
-==== unmpc ====
-[[unmpc]] - an experiment by [[User:Wwelves.org_perpetual-tripper | elf Pavlik]] which implements Micropub client +[[reader]] as [[Unhosted]] web app (HTML5 running fully in a web browser - [[noBackend]])
-
-==== Woodwind ====
-[[Woodwind]] has optional support for posting replies and likes via Micropub. Includes toggles for syndicate-to endpoints as of 2015-02-10.
+Click through to the main article for a list of sites and client applications that publish via Micropub as well as a table indicating implementation statuses. 
 
 == Libraries ==
 <span id="Open Source"></span>
@@ -493,24 +372,27 @@ Open source libraries & <span id="Implementations">implementations</span> used t
 * [https://github.com/taproot/authentication taproot/authentication] '''PHP''' library used in [[Taproot]], implements both client app and resource provider authentication
 * [https://github.com/snarfed/wordpress-micropub wordpress-micropub]: [[WordPress]] plugin for server endpoint
 * [https://github.com/kylewm/flask-micropub flask-micropub]: [[Flask]] ([[Python]]) plugin that makes it easy to add IndieAuth authentication and Micropub authorization to a client application.
-* [https://github.com/voxpelli/node-micropub-express micropub-express] '''Node.js''' library created and used by {{voxpelli}} for voxpelli.com's micropub endpoint
+* [https://github.com/voxpelli/node-micropub-express micropub-express] '''Node.js''' server library created and used by {{voxpelli}} for voxpelli.com's micropub endpoint
+* [https://www.npmjs.com/package/micropub-helper micropub-helper] '''Node.js''' client library created and used by [[grant.codes]]
 
 == Issues ==
-Please use the [https://github.com/aaronpk/Micropub/issues Github repo] for issues and discussion related to the spec.
+Please use the [https://github.com/w3c/Micropub/issues Github repo] for issues and discussion related to the spec.
 
 For issues that have been discussed and are ready to consider for inclusion in the spec, use the [[Micropub-brainstorming]] page to collect examples and iterate on the ideas.
 
 == See Also ==
 * [http://micropub.net/draft/ Latest Editor's Draft]
 * <span id="Brainstorming">[[Micropub-brainstorming]]</span>
+* [[Micropub-extensions]]
 * [[post]] - [[h-entry]]
 * [[event]] - [[h-event]]
 * [[obtaining-an-access-token]]
 * [[token-endpoint]]
-* [[auth-brainstorming]]
 * [[micropub-endpoint]]
 * [[access_token]]
 * [[incremental authorization]]
+* [[micropub media endpoint]]
 
 [[Category:IndieAuth]]
 [[Category:building-blocks]]
+[[Category:Micropub]]

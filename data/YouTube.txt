@@ -1,15 +1,35 @@
-http://indiewebcamp.com/YouTube
+https://indieweb.org/YouTube
 
 {{stub}}
+<div style="float:right;margin-top:-8em">{{pagelogo|https://twitter.com/youtube/profile_image}}</div>
 
 '''<dfn>[http://youtube.com YouTube]</dfn>''' is a [[video]] hosting [[silo]] that has known [[#Issues|issues]].
 
-== Feeds ==
-Does YouTube have feeds for users to download their content?
+== How to ==
+=== How to export your data ===
+Youtube has the following content from users:
+* video posts
+* list of subscriptions to YouTube channels
+* [[comment]]s on videos
+* [[like]]s of videos
+* history of videos [[watch]]ed
 
-== Example UI ==
+Has anyone successfully exported all of these? In what format(s)? 
+
+Any luck importing to your own site (PESOS)? Or start POSSEing instead?
+
+Export:
+* There was a watch history in the API, but this [https://developers.google.com/youtube/v3/revision_history#september-15-2016 was removed September 15, 2016]. A partial history can still be downloaded through [https://www.google.com/settings/takeout Google Takeout].
+* Export on-YouTube subscriptions as an [[OPML]] file that can be imported/used by [[feed reader|feed readers]]. This export option can be found in [https://www.youtube.com/subscription_manager the subscription manager]. 
+Limitation: the OPML just links to XML feeds (not sure if it contains actual data about the channels you are subscribed to)
+[[File:youtube_export_subscriptions.png|700px]]
+
+Feeds:
+* Does YouTube have feeds for users to download their content?
+
+== Features ==
 === Permalink UI ===
-Here's an example screenshot of YouTube's UI as of 2013-286 
+Here's an example screenshot of YouTube's UI as of 2013-286 with apparent features
 [[File:YouTube video permalink 2013-10-13.png]]
 
 Live permalink: http://youtu.be/0NUbLJ-Q3Ck
@@ -33,6 +53,36 @@ With:
 * '''Comments''' section with count in parentheses next to heading "(0)"
 ** '''Sign in''' link prompt "to post a comment!"
 
+=== Atom feeds ===
+Unlike many silos, YouTube makes atom [[feed|feeds]] available for all channels. 
+
+Feed discoverability has been a problem, but URLs are [https://github.com/feedbin/feedbin/blob/98210709ff9a3a4f15d66d9dc027a24456af5103/app/models/youtube_options.rb easily mapped] to their feed equivalents by hand:
+
+* <code><nowiki>https://www.youtube.com/channel/</nowiki><b>ID</b></code> → <code><nowiki>https://www.youtube.com/feeds/videos.xml?channel_id=</nowiki><b>ID</b></code>
+* <code><nowiki>https://www.youtube.com/user/</nowiki><b>ID</b></code> → <code><nowiki>https://www.youtube.com/feeds/videos.xml?user=</nowiki><b>ID</b></code>
+* <code><nowiki>https://www.youtube.com/playlist?list=</nowiki><b>ID</b></code> → <code><nowiki>https://www.youtube.com/feeds/videos.xml?playlist_id=</nowiki><b>ID</b></code>
+
+=== Subtitle Editor ===
+YouTube provides tools for creating subtitles and translations for videos.
+
+Videos can accept community contributions of subtitles or translations. After a translation is submitted, the owner can review the contribution and request changes, make changes themselves, or publish it.
+
+[[File:YouTube-review-subtitle-contributions.png|600px]]
+
+== Brainstorming ==
+=== How to delete your account ===
+TBD.
+
+Has anyone deleted their YouTube account? What's the process? How long do they hold your data anyway? Etc.
+
+See also: [[delete your account]]
+
+=== How to POSSE ===
+TBD.
+
+Is anyone [[POSSE]]ing to YouTube?
+
+
 == Issues ==
 === Content Deletion ===
 YouTube has been known for deleting content that has been posted there:
@@ -41,12 +91,27 @@ YouTube has been known for deleting content that has been posted there:
 YouTube has also re-appropriated content without permission, transferring ownership to big media companies claiming copyright:
 * http://waxy.org/2012/03/youtube_bypasses_the_dmca/
 
+=== Content ID ===
+
+YouTube's [https://support.google.com/youtube/answer/2797370?hl=en Content ID] system automatically scans all uploads against a database of content submitted by "content owners".
+
+This system has been [https://www.eff.org/deeplinks/2015/05/congrats-10-year-anniversary-youtube-now-please-fix-content-id subject to] [https://www.eff.org/deeplinks/2016/02/content-id-and-rise-machines many kinds of abuse].
+
 ==== Copyright Claim ====
+
 ===== Copyright claim on unmatched audio =====
 * on 2015-08-07 {{aaronpk}} livestreamed an event which was recorded to Youtube
 * on 2015-08-10 Aaron noticed that Youtube placed ads on the video because of a copyright claim.[http://indiewebcamp.com/irc/2015-08-10#t1439224857562] The part of the video in question was from timecode [https://youtu.be/uJov2cohGvQ?t=5s 0:05 to 1:56], the very beginning of the livestream, where the video is mostly dead air.
 * the same day, Aaron filed a dispute on the claim
 * on 2015-09-02 Aaron checked back on Youtube (since no notifications were being sent about any of this) and noticed that the copyright page now showed a link "Appeal rejected dispute". He submitted an appeal to the rejected dispute. [http://indiewebcamp.com/irc/2015-09-02#t1441223499446] [https://farm1.staticflickr.com/624/21094658515_faf9bbd510_o.png]
+
+===== Copyright claim on video =====
+* on 2016-01-03 {{aaronpk}} posted [https://www.youtube.com/watch?v=K9hF3PO-S90 a video] on Youtube that was original music with a mashup of The Office trailer and scenes from 
+* within minutes, Youtube sent a notice that the video was no longer available for viewing due to a copyright claim on the contents of the images
+* the same day, Aaron filed a dispute on the claim based on "fair use"
+* within a few hours, NBC Universal responded to the claim
+
+[[File:youtube-claim-released.png]]
 
 ===== Copyright claim on licensed work =====
 * http://petapixel.com/2015/10/25/sony-filed-a-copyright-claim-against-the-stock-video-i-licensed-to-them/
@@ -71,8 +136,12 @@ Videos do not play if javascript is disabled. No message or alternate player is 
 Example from http://tantek.com/2015/266/t2/we-jammin-hope-jam-gonna-last:
 [[File:Youtube-embed-js-disabled.png]]
 
+
+
 == See Also ==
 * [[silos]]
 * [[photos]]
 * [[videos]]
 * [[why]]
+* you need 100 subscribers in order to get a youtube username now
+* Criticism: YouTube blocks Amazon Echo from playing videos: https://www.theverge.com/2017/9/26/16371292/google-youtube-amazon-echo-show

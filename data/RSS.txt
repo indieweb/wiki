@@ -1,18 +1,22 @@
-http://indiewebcamp.com/RSS
+https://indieweb.org/RSS
 
-{{stub}}
+'''<dfn>RSS</dfn>''' is a set of XML [[feed file]] formats of varying degrees of use for syndicating time-stamped content from web sites, and sometimes used to refer more broadly to [[feed file]] formats as a whole including [[Atom]], or even more broadly in vernacular as a synonym for feed file or even feeds or syndication as a concept. <abbr>RSS</abbr> is an acronym that stands for: Rich Site Summary (originally RDF Site Summary, often dubbed Really Simple Syndication)[http://en.wikipedia.org/wiki/RSS]. [[Atom]] is an alternative XML format for [[feeds]].
 
-'''<dfn>RSS</dfn>''' typically loosely refers to a set of XML [[feed file]] formats of varying degrees of use for syndicating typically time-stamped content from web sites. <abbr>RSS</abbr> is an acronym that stands for: Rich Site Summary (originally RDF Site Summary, often dubbed Really Simple Syndication)[http://en.wikipedia.org/wiki/RSS]. [[Atom]] is an alternative XML format for [[feeds]].
+RSS formats are fairly widely used, from news sites to blogs (both self-hosted and services/silos), through ecommerce or classified sites such as Craisglist, though there have been [[#Shutdowns|shutdown]]s in recent years.
 
-RSS formats are fairly widely used, from news sites to blogs (all blogging platforms support, self-hosted or share-cropped), through ecommerce or classified sites such as Craisglist, though there have been [[#Shutdowns|shutdown]] in recent years.
-
-RSS formats are fairly open (development/licensing processes/openness varies across variants) yet all encourage an open feed file ecosystem across the web which means that every application can produce or consume RSS feeds, without relying on terms of service, agreements or service-centric API.
+See [[feed file]] for a list of RSS formats and those often lumped in with RSS.
 
 == IndieWeb Examples ==
 {{see_also|Atom#IndieWeb_Examples|Atom IndieWeb Examples}}
 
 === Dan Lyke ===
 {{danlyke}}'s site flutterby.com has an RSS 1.0 (RDF) feed at http://www.flutterby.com/main.rdf 
+
+=== Jason Garber ===
+{{jgarber}} publishes auto-discoverable RSS 2.0 feeds using [[FrancisCMS]] on [https://sixtwothree.org sixtwothree.org] since 2016-01-14 for each content type:
+* https://sixtwothree.org/posts.rss
+* https://sixtwothree.org/links.rss
+* https://sixtwothree.org/photos.rss
 
 === Known ===
 All [[Known]] sites provide an RSS 2.0 feed for any page or feed by adding ?_t=rss to the URL. e.g. 
@@ -21,11 +25,20 @@ All [[Known]] sites provide an RSS 2.0 feed for any page or feed by adding ?_t=r
 === Malcolm Blaney ===
 [[User:Unicyclic.com_mal|Malcolm]]'s site unicyclic.com provides RSS feeds for new posts and comments. It also supports [[rssCloud]] to register for updates. Any feed will only show updates for the last 24 hours, with the expectation being that subscribers and aggregators will store historical content if they want to. A period of 24 hours was chosen so that feed items could be edited by the author and re-syndicated.
 
+=== Chris Aldrich ===
+{{chrisaldrich}}'s [[WordPress]] [http://www.boffosocko.com site] provides the standard RSS feeds for both posts and comments. In late 2016, I added and [http://boffosocko.com/2016/12/18/rss-feeds-a-follow-up-on-my-indieweb-commitment-2017/ documented] some additional human readable feeds for common indieweb post types as well. These are also done so that feed readers scraping the site will be able to offer these options to potential subscribers. I did this particularly as with increasing varieties of content and content types on my site, I don't expect that everyone will necessarily want the "firehose" feed, but may prefer to read subsections of content by post types, categories, or tags. I was also able to add links to RSS feeds from other sites I own as well to make my personal homepage a more central hub for my content.
+
 === ... add more ... ===
-Add yourself . . .
+{{addyourself}}
 
 == Projects ==
-* {{snarfed}}'s [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] fetches and converts [[Facebook]], [[Twitter]], [[Instagram]], and [[Google+]] data to and from RSS, as well as other formats like [[ActivityStreams]] and [[microformats2]] HTML/JSON.
+In response to social silos turning off or removing access to their RSS Feeds, some groups have created work-arounds or alternate means of re-enabling RSS feeds. Some of these are listed below:
+* {{snarfed}}'s [https://github.com/snarfed/granary granary] fetches and converts [[Facebook]], [[Flickr]], [[Twitter]], [[Instagram]], and [[Google+]] data to and from RSS, as well as other formats like [[ActivityStreams]] and [[microformats2]] HTML/JSON.
+* [https://github.com/RSS-Bridge/rss-bridge RSS Bridge]
+* https://twitter-atom.appspot.com/
+* https://facebook-atom.appspot.com/
+* https://instagram-atom.appspot.com/
+* https://plusstreamfeed.appspot.com/
 
 == Silo Examples ==
 === [[Flickr]] ===
@@ -53,17 +66,17 @@ http://USERNAME.tumblr.com/rss
 
 ===  [[WordPress]] === 
 
-WordPress ( both .com and hosted sites ) nearly always have RSS feeds for the site, for the categories, the tags; even for comments, sitewise and per entry.
+WordPress ( both .com and hosted sites ) nearly always have RSS feeds for the site, for the categories, the tags; even for comments, sitewise and per entry. More details [https://codex.wordpress.org/WordPress_Feeds here].
 
 Examples:
-full site feed
-    http://USERNAME.wordpress.com/comments/feed
-full comments feed
-    http://USERNAME.wordpress.com/comments/feed
-category feed
-    http://USERNAME.wordpress.com/category/CATEGORYNAME/feed
-post specific comments feed
-    http://USERNAME.wordpress.com/URL/TO/THE/POST/feed
+;full site feed
+:http://USERNAME.wordpress.com/comments/feed
+;full comments feed
+:http://USERNAME.wordpress.com/comments/feed
+;category feed
+:http://USERNAME.wordpress.com/category/CATEGORYNAME/feed
+;post specific comments feed
+:http://USERNAME.wordpress.com/URL/TO/THE/POST/feed
 
 === [[Blogspot.com]] === 
 
@@ -94,19 +107,36 @@ http://ws.audioscrobbler.com/1.0/user/USERNAME/recenttracks.rss
 
 For other feeds, like loved tracks, see [http://www.last.fm/api/feeds].
 
-== Praise ==
-Praise for RSS, example uses:
-* 2013-03-14 Brent Simmons: <cite>[http://inessential.com/2013/03/14/why_i_love_rss_and_you_do_too Why I love RSS and You Do Too]</cite>
+
+== Autodiscovery ==
+RSS feeds can be automatically discovered by feed readers if the homepage contains a link to it in its head:
+
+ <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml"/>
+
+The title is important if there are multiple feeds linked, e.g. category and comment feeds.
 
 == Issues ==
 === Problems Consuming RSS ===
 There are many known problems consuming RSS feeds. See [[feed#Criticism]] for an extensive listing.
+
 === Ambiguous Usage ===
 Use of the term "RSS" in conversation, whether online or in-person, has been ambiguously and interchangeably used to mean:
 * RSS 2.0 in particular (implying all other versions of RSS aren't actually RSS, or are ignorable, or both)
 * RSS feed files of any version
 * RSS feed files of any version AND Atom feed files of any version
 * as a synonym for a feed file of any format
+
+=== Items appearing as new again ===
+When the [[GUID]] for an item in an RSS feed changes, old items that have already been read will appear again as new. With a [[podcast]] feed, this means software will try to download episodes you've already listened to again.
+
+{{gRegor}}: I've experienced this several times with podcast feeds. Some of the feeds have 50 episodes in them, so suddenly my podcast software is trying to queue up a lot of episodes I've already heard, and I have to manually remove them.
+
+[[File:RSS-old-is-new-again-2017-05-22.png|320px]]
+* Screenshot of [[Overcast.fm]] queueing up previously listened podcast episodes
+
+== Praise ==
+Praise for RSS, example uses:
+* 2013-03-14 Brent Simmons: <cite>[http://inessential.com/2013/03/14/why_i_love_rss_and_you_do_too Why I love RSS and You Do Too]</cite>
 
 == Criticisms ==
 === Causes Plumbing Misfocus ===
@@ -137,7 +167,7 @@ Instead of publishing/consuming RSS:
 * Consume [[h-entry]], e.g. with a [[microformats2]] parser
 * Use a tool like [[unmung]] to convert RSS into h-feed.
 
-When using such alternatives, you should consider RSS or Atom's ubiquituous nature. Very few readers support Microformats at this point, compared to the thousands of self-hosted RSS feed readers.
+When using such alternatives, you should consider RSS or [[Atom]]'s ubiquituous nature. Very few readers support Microformats at this point, compared to the thousands of self-hosted RSS feed readers.
 
 == Shutdowns ==
 {{main|feed#Shutdowns}}
@@ -162,6 +192,7 @@ This section is a stub, please add to it to expand it to include notable events 
 * 
 * 2003-2007 [[Atom#RSS_Atom_wars|RSS Atom Wars]]
 * ...
+
 
 == See Also ==
 * [[h-entry]]

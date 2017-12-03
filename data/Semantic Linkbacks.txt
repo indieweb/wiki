@@ -1,4 +1,4 @@
-http://indiewebcamp.com/Semantic_Linkbacks
+https://indieweb.org/Semantic_Linkbacks
 
 '''<dfn>[https://github.com/pfefferle/wordpress-semantic-linkbacks Semantic Linkbacks]</dfn>''' is a [[WordPress]] plugin that upgrades the presentation of linkback notifications (like Trackback, Pingback, or Webmention*) from the ugly default pingback presentation of <samp>"[…] random text excerpt […]"</samp> to a much more meaningful and user-friendly display as [[comments]], [[reposts]], [[likes]], and [[favorites]], detected using [[microformats2]] markup from the source of the linkback.
 
@@ -38,17 +38,35 @@ All fields beginning with _ like:
 
 == Semantic Comments ==
 
-The [https://github.com/dshanske/semantic-comments Semantic Comments] plugin is an attempt by {{gwg}} to use the type indicator of the Semantic Linkbacks plugin to display mentions as a [[facepile]].
+The [https://github.com/dshanske/semantic-comments Semantic Comments] plugin was an attempt by {{gwg}} to use the type indicator of the Semantic Linkbacks plugin to display mentions as a [[facepile]]. It is not currently maintained.
+
+Semantic Linkbacks has two functions which are wrappers for <code>get_comments</code> you can use in your theme. Both <code>get_linkback()</code> and <code>get_linkback_number()</code> need <code>$type</code> and <code>$post_id</code> passed to the function.
+
+Example:
+<code><pre>
+<?php 
+// Get the global `$wp_query` object.
+$id = get_the_ID();
+	// Get the semantic_linkbacks_type 'like'.
+$comments = get_linkbacks( 'like', $id );
+?></pre></code>
+Then you can just loop through <code>$comments</code> however you want to markup your [[facepile]].
+
+A full [https://gist.github.com/miklb/4ba5ea34dc7ad8031afea9414d477bce comment template] separating out likes and reposts from replies example.
 
 == Related Plugins ==
 
 === Webmention Plugin ===
 <nowiki>*</nowiki>WordPress supports Pingback and Trackback by default; for Webmention support, you must install the separate [[Webmention Plugin]] which is very nicely complementary to the [[Semantic Linkbacks]] plugin.
 
+
+{{WordPress}}
+
 == See Also ==
-* [[WordPress]]
 * [[reply]]
 * [[repost]]
 * [[rsvp]]
 * [[like]]/[[favorite]]
 * [[webmention]]
+
+[[Category:WordPress plugins]]

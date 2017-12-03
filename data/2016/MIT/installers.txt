@@ -1,0 +1,42 @@
+https://indieweb.org/2016/MIT/installers
+
+'''<dfn>Installers</dfn>''' was a session at [[2016/MIT|IndieWebCamp MIT 2016]].
+
+Notes archived from: http://etherpad.indiewebcamp.com/installers
+----
+Participants:
+* Aaron (session facilitator)
+* Amy
+* Tantek
+* ... more, please add yourself if you were here!
+
+wordpress has its "5 minute install" but this ignores the longer setup of the database.
+
+The other option is sqlite, but then you might not even know you are using a database.  You don't know to back it up.  (backups should be empahsized more anyway).
+
+Amy uses Docker successfully for one of her sites.
+
+First level is that index.php has to know if its installed or not, so it should redirect to the installer.
+
+Some installers ask for root password to your DB, so it will create the database for you.  
+
+Many hosting providers support a one-click install now. Write a version for cpanel and you will support a bunch of hosts.
+Some others like Dreamhost have their own one-click install mechanism
+
+== [[Falcon]] ==
+* three (updated) source files, each maintained fairly independently, can update one without the other usually
+** cassis
+** falcon.php - serves all views of the website
+** falconpost.php - posting UI - would like to merge with the main php file
+** also dependent on tmhOauth.php and relmeauth.php
+* goal is to keep the deploy phase as one file to be easy to install and update
+* all data is stored in the filesystem, folders and files created as needed
+* haven't yet figured out: 
+** modifications to htaccess
+** configuration constants in the source files - twitter client credentials
+
+php .phar files, allow you to package a php app in a single file
+
+in general, minimize number of files and dependencies to reduce long-term maintenance
+
+[[Category:2016 sessions]]

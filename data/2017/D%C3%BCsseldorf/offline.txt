@@ -1,0 +1,63 @@
+https://indieweb.org/2017/D%C3%BCsseldorf/offline
+
+'''<dfn>Offline with Service Workers</dfn>''' was a session at [[2017/Düsseldorf|IndieWebCamp Düsseldorf 2017]].
+
+Notes archived from: https://etherpad.indieweb.org/iwcdus17_serviceworker
+
+[https://twitter.com/calum_ryan/status/863327614609575936 {{photosrcalt|https://pbs.twimg.com/media/C_sn45mXcAAeeXI.jpg|Jeremy Keith presents some ideas for implementing offline support with service workers}}]
+
+[https://www.youtube.com/watch?v=Wp3XXyAH4qs ▶️43:43 video]
+
+----
+IndieWebCamp Dusseldorf 2017
+
+Session: Service Workers
+
+When: 2017-05-13 11:00
+
+== Participants ==
+* adactio.com
+* andreasnebiker.com
+* seblog.nl
+* aaronpk.com
+* calumryan.com
+* jansauer.de
+* ...
+
+== Notes ==
+
+How to get a service worker running
+Step 0: HTTPS
+Step 1: Write your service worker
+
+
+'The way to think about it is launching a MITM attack on your own site.'
+
+It's a set of instructions where the browser has to look for the files of your site. It intercepts requests.
+
+
+What are good things to use this for IndieWeb?
+Nobrainers:
+* Having an offline page with basic contact
+* Caching static assets (JS, CSS)
+NextLevel (ideas)
+* Offline Index: "You're offline, but here's what we've cached'.
+* Lie-fi (crappy connection)
+** Race cache vs network
+** In some (crazy good) network conditions, the network response is faster than the cache response
+* Queing (non GET-requests)
+** post notes via an HTML-form, intercept with ServiceWorker, no connection, so post it when you're back online (next time you visit the page).
+NextNextLevel
+* 'service worker side rendering': render only the diffs
+** Glenn (citation needed) has an approach where he uses the cache to store css selectors (via virtual urls) into the cache. Since the cache api is accessible from the browser (where a dom exists) a browserside js can then read partials from that cache (via the virtual urls) and update these partials on the page.
+* Background sync
+
+The creepyness of service workers
+* When an offline page tells you 'i know exactly what pages you browsed on my site'
+* When an iframe on pagea.com to pageb.com loads a whoooole lot of content from pageb.com
+
+Boilerplates / Tools / Input
+* Google's SW-Toolbox
+* Serviceworke.rs    
+
+[[Category: 2017 sessions]]

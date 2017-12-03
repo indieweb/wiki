@@ -1,0 +1,64 @@
+https://indieweb.org/InkBlot
+
+'''<dfn>InkBlot</dfn>''' is an open source blogging platform currently under development by [[User:ben.thatmustbe.me|ben.thatmustbe.me]].
+
+== Description ==
+InkBlot is based on a fork of system libraries from [http://www.opencart.com OpenCart], an eCommerce software.  InkBlot uses a simple MVC architecture and uses [[PHP]] and [[MySQL]].
+
+Source code is publicly available [https://github.com/dissolve/inkblot on GitHub].
+
+=== Goals ===
+InkBlot aims to be a platform for easy development of new features.  The hope is to have a highly customizable system that will allow for addition of as many indieweb projects as possible while keeping complexity low.
+
+== Roadmap ==
+
+=== Current Features ===
+# Microformats marked up template (based on SemPress)
+# Support for multiple post types. currently articles, notes, photos, drafts, replies, rsvps, bookmarks, likes, and checkins. 
+# [[micropub]] client for creation, deleteion, and editing of posts.
+# Simple routing management (routes.php config file)
+# [[webmention]] send and receive (Now with [[vouch|Vouch]]!)
+# Syndication/backfeed to Twitter and FB through [[Bridgy]]
+# Additional Contact Information for whitelisted users.
+# Full [[reply-thread]] to posts
+# Receive and process webmention edits/deletes of replies (untested)
+# All URLs are https (easily configurable)
+# public whitelist to make site vouch friendly.
+
+=== Planned Features ===
+# Expand to other post types (checkins and events are next)
+# New default theme
+# IndieAuth Host
+# Private posts to authenticated users.
+# Private contact list parsed from other indie web users as well as silos
+# grouping and managing contacts as well as setting what information is shared to what contact groups.
+
+A more detailed todo list is kept on [[User:ben.thatmustbe.me|My User Page]]
+
+== Brainstorming ==
+
+===Searching for a domain to use for a vouch===
+The hardest part of sending webmentions is finding the vouch URL.  This can be tricky but here is how it is implemented in InkBlot.
+* Record all incoming referer entries and store these to a queue.
+* Asynchronously parse this list to check that the URL is actually linking to you without a rel=nofollow, if it is valid, add it to a list of Vouch URLs, call that list V
+* When sending a webmention: use function F that takes a URL and boolean (r)  F(T, R = true)
+*# check to see if the target URL's domain (dT) is in list V (does V(dT) return a value?)
+*#* if it is available then V(dT) is your vouch URL (the site directly refers to you and vouch should not be needed, but send it anyway), stop processing
+*# look at all URLs on page T (for U in T)
+*## if U does not have rel=nofollow
+*##* look up domain of U (dU) in V   
+*##* if this return a value then V(dU) is your vouch, stop processing
+*## if R, we are to recurse on this page, then
+*##* if U has a rel=me AND it is on the same domain as T (dU == dT) 
+*##*  then we found another page on T and we run F(U, false) 
+*# if we have not found a vouch, and we are to recurse, we check the domain base page
+*# run F(dT, false)
+*# if we still have not found a vouch, we give up and fall back to traditional webmention
+
+
+=== [[File-Storage]] ===
+* While InkBlot is currently being developed in [[MySQL]], there are database drivers for other SQL based databases.  It is theoretically possible to create a driver for file based storage.  The driver would have to know how to parse SQL queries however.
+* Hard Disk caching is used to store a serialized version of most DB queries.  As long as all changes clear the cache, it is theoretically possible to maintain the cache indefinitely thereby becoming a backup flat-file storage.  This is already discussed in [[database-antipattern#Database_with_export]].
+
+=== [[Micropub]] issues ===
+* While I have gotten rid of the admin interface, I feel there needs to be some type of management console when logged in.  The most important peice would be for updating links on the main page (which are stored in the DB).  Allowing the site admin (when logged in through indieauth) to edit these could lead to a person removing all their rel=me links that have indieauth support and thus break their own admin login. There would have to be some manual way to fix that situation, but would have to be simple enough for end-users to use.

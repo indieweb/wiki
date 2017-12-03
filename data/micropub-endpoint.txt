@@ -1,4 +1,4 @@
-http://indiewebcamp.com/micropub-endpoint
+https://indieweb.org/micropub-endpoint
 
 A '''<dfn>Micropub endpoint</dfn>''' is an HTTP endpoint that [[micropub]] clients use to create new posts on a [[personal domain]].
 
@@ -23,10 +23,9 @@ The request will contain the following POST parameters:
 * <code>h=entry</code> - Indicates the type of object being created, in this case an <a href="http://indiewebcamp.com/h-entry">h-entry</a>.
 * <code>content</code> - The text content the user entered, in this case the caption on the Instagram photo.
 * <code>published</code> - An ISO8601 formatted date string representing the date the photo was published.
-* <code>category</code> - A comma-separated list of hashtags the user included in the caption.
+* <code>category[]</code> - A list of hashtags the user included in the caption.
 * <code>location</code> - A "geo" URI including the latitude and longitude of the photo if included. (Will look like `geo:37.786971,-122.399677`)
-* <code>place_name</code> - If the location on Instagram has a name, the name will be included here.
-* <code>photo</code> - The photo will be sent in a parameter named "photo". There will only be one photo per request.
+* <code>photo</code> - The photo will be sent in a file upload parameter named "photo". There will only be one photo per request.
 
 The request will also contain an access token in the HTTP <code>Authorization</code> header:
 
@@ -69,14 +68,12 @@ micropub endpoint so that it can also create text posts.
 At a bare minimum, a Micropub request from [[OwnYourGram]] will contain the following:
 
 * <code>h=entry</code>
-* <code>photo</code> or <code>content</code> (or both)
-
-If a photo is part of the request, then the content is optional.
+* <code>photo</code>
+* <code>content</code> if a photo caption was entered on Instagram
 
 If there's no <code>published</code> date, then the endpoint should set the published date to now.
 
-The access token must also contain at least the "post" scope.
-
+The access token must also contain at least the "create" or "post" scope.
 
 
 === The Response ===
@@ -105,5 +102,6 @@ and optionally an HTML or other body with more information. Below is a list of p
 * [[User:Kartikprabhu.com|Kartik Prabhu]] has a [https://kartikprabhu.com/micropub micro pub endpoint] on his site since 2014-05-25
 *{{bret}} uses [https://github.com/bcomnes/gitpub Gitpub]: A node + git static site robot. Supports Micropub.
 * {{bear}} has a Micropub endpoint on his site since 2015-01-01
+*{{dgold}} has a micropub endpoint on his site, using [[nanopub]] since [https://ascraeus.org/making-it-micropub/ 2017-07-21]
 
 [[Category:IndieAuth]]

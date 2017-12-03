@@ -1,13 +1,13 @@
-http://indiewebcamp.com/App.net
+https://indieweb.org/App.net
 
 {{pagelogo|https://pbs.twimg.com/profile_images/378800000173471968/3e29d2f6ae34138d34d62dbb50fcc900_200x200.png}}
 {{stub}}
 
-'''<dfn>App.net</dfn>''' (ADN) is a microblogging [[silo]] similar to [[Twitter]] for posting [[notes]] of up to 256[http://developers.app.net/docs/resources/post/#post-fields] characters in length.
+'''<dfn>App.net</dfn>''' (ADN) was a microblogging [[silo]] similar to [[Twitter]] for posting [[notes]] of up to 256 [http://developers.app.net/docs/resources/post/#post-fields] characters in length. It closed 2017-03-14. [http://blog.app.net/2017/01/12/app-net-is-shutting-down/]
 
 When it launched, App.net had pay-to-use model. Since launch they've added a free registration option.
 
-App.net has a proprietary snowflake API similar to Twitter.
+App.net has a proprietary [[snowflake]] API similar to Twitter.
 
 == How to ==
 === Export your data from ADN ===
@@ -15,13 +15,35 @@ Data can be exported from this page: https://account.app.net/settings/content/
 
 App.net then sends an email with a link to a ZIP file which contains all posts, messages etc. in JSON files that have the same format as their (snowflake) API.
 
+=== Archive ===
+Before the service shut down [http://www.manton.org/2017/03/app-net-archive.html Manton Reece created an archive of all of App.net's posts]. It's possible he may make some of this data portable into [[micro.blog]].
+
+== Open Source Components ==
+As part of [http://daltoncaldwell.com/a-response-to-brennan-novak Dalton Caldwell's response] to [[User:Brennannovak.com]] about his plans with App.net he claimed a "Commitment to coordinate between internal and external parties to create and support open-source lightweight clients..."
+
+App.net has held true to this claim and have thus far open sourced the code for the private messaging clients Omega.app.net which is built on the App.net platform. Additionally ADN posted their entire documentation for their platform which makes it much easier for developers operating outside the eco-system to easily build / contribute tools that will interface with them in a more IndieWeb friendly fashion.
+
+* [https://github.com/appdotnet/ohe Omega.app.net client]
+* [https://github.com/appdotnet/api-spec App.net Documentation]
+
+== IndieWeb Friendly Components ==
+App.net had promised support for various open [[social web standards]]. They rolled out some indieweb [[friendly]] support:
+
+* 2013-04-29 [[rel-me]] support launched[https://twitter.com/microformats/status/328992420463271936] as the key [[building block]] for App.net [http://blog.app.net/2013/04/29/announcing-domain-verification/ Domain Verification]
+** making it a supported authentication provider for [[Web Sign-in]] and [[IndieAuth]]
+* 2013-08-07 added [[microformats2]] support[http://waterpigs.co.uk/notes/4RQD3V/]
+** [[h-entry]] and [[h-card]] [http://tantek.com/2013/219/t23/best-social-web-news-appdotnet-supports-microformats2]
+
+== History ==
+Previous <span id="Posts_about">Posts about</span> app.net and other <span id="Uncertain_Future">history</span>.
+
 === POSSE to ADN ===
 ==== PourOver ====
-App.net provides a utility called [https://adn-pourover.appspot.com/ PourOver] for syndicating posts into app.net from an RSS feed. You can read their [http://blog.app.net/2013/07/15/pourover-for-app-net-is-now-available/ blog post announcement]. Using this utility, you can syndicate in a feed in real time since PourOver will subscribe to your PubSubHubbub-enabled feed.
+App.net provided a utility called [https://adn-pourover.appspot.com/ PourOver] for syndicating posts into app.net from an RSS feed. You can read their [http://blog.app.net/2013/07/15/pourover-for-app-net-is-now-available/ blog post announcement]. Using this utility, you could syndicate in a feed in real time since PourOver will subscribe to your PubSubHubbub-enabled feed.
 
-This method also automatically adds the "crosspost" annotation, which is App.net's way of indicating the [[rel-canonical|canonical]] version of a post. This makes the posts look like native App.net posts and also provides a link back to your canonical post on your domain. You can see an example of a syndicated post [https://alpha.app.net/aaronpk/post/8309152 from @aaronpk here].
+This method also automatically added the "crosspost" annotation, which is App.net's way of indicating the [[rel-canonical|canonical]] version of a post. This makes the posts look like native App.net posts and also provides a link back to your canonical post on your domain. You can see an example of a syndicated post [https://alpha.app.net/aaronpk/post/8309152 from @aaronpk here].
 
-IndieWebCamp community members who are doing this: 
+IndieWebCamp community members who did this: 
 * [[User:Aaronparecki.com|Aaron Parecki]]
 
 ==== IFTTT ====
@@ -34,7 +56,7 @@ POSSE to ADN flow description:
 * Determine what the ADN URL is for each original post permalink URL by looking at link elements like this:<br/><code>&lt;atom:link href="PERMALINK" type="text/html" rel="source" /></code><br/>where PERMALINK is the actual http(s) permalink URL to your post.
 * Update the posts on your site to link to the ADN syndication copy with [[rel-syndication]].
 
-IndieWebCamp community members who are doing this: 
+IndieWebCamp community members who did this: 
 * [[User:Tommorris.org]] uses [[IFTTT]] to syndicate ([[POSSE]]) copies of his posts to App.net. Very simply, this is done by having a [http://tommorris.org/posts.xml?syndication=app.net custom Atom feed] that publishes the body content of each entry. IFTTT then republishes this to app.net.
 ** Since ADN provides the capability to set the  "from" of a post, which Tom sets to the original permalink of his post using rel="source" in his feed as noted above. E.g.
 *** [https://alpha.app.net/tommorris/post/4656089 ADN post] links with text "from tommorris.org" to the [http://tommorris.org/posts/8198 original article]
@@ -42,41 +64,31 @@ IndieWebCamp community members who are doing this:
 *** [https://gist.github.com/tommorris/5364658 Code used to poll app.net feed and update original posts in Ferocity] to link to their ADN syndicated copies with rel=syndication.
 * ...
 
+This is now deprecated as of 2016-03 as IF have removed the App.net channel.
+
 ==== API Access ====
-If you want to pay for an ADN API key, your site can send a copy of your posts directly to ADN using their API (instead of using and waiting for IFTTT to do so, and then polling for the ADN syndication permalink after the fact).
+If you had paid for an ADN API key, your site could send a copy of your posts directly to ADN using their API (instead of using and waiting for IFTTT to do so, and then polling for the ADN syndication permalink after the fact).
 
-Using this method you can also send the canonical link to your post at the same time you create the post on App.net. To do this, use the [https://github.com/appdotnet/object-metadata/blob/master/annotations/net.app.core.crosspost.md crosspost] annotation field.
-
-== Open Source Components ==
-
-As part of [http://daltoncaldwell.com/a-response-to-brennan-novak Dalton Caldwell's response] to [[User:Brennannovak.com]] about his plans with App.net he claimed a "Commitment to coordinate between internal and external parties to create and support open-source lightweight clients..."
-
-App.net has held true to this claim and have thus far open sourced the code for the private messaging clients Omega.app.net which is built on the App.net platform. Additionally ADN has also posted their entire  documentation for their platform which makes it much easier for developers operating outside the eco-system to easily build / contribute tools that will interface with them in a more IndieWeb friendly fashion.
-
-* [https://github.com/appdotnet/ohe Omega.app.net client]
-* [https://github.com/appdotnet/api-spec App.net Documentation]
-
-== IndieWeb Friendly Components ==
-App.net has promised support for various open [[social web standards]]. They have rolled out some indieweb [[friendly]] support:
-
-* 2013-04-29 [[rel-me]] support launched[https://twitter.com/microformats/status/328992420463271936] as the key [[building block]] for App.net [http://blog.app.net/2013/04/29/announcing-domain-verification/ Domain Verification]
-** making it a supported authentication provider for [[Web Sign-in]] and [[IndieAuth]]
-* 2013-08-07 added [[microformats2]] support[http://waterpigs.co.uk/notes/4RQD3V/]
-** [[h-entry]] and [[h-card]] [http://tantek.com/2013/219/t23/best-social-web-news-appdotnet-supports-microformats2]
-
-=== Issues ===
-
-* As of 2013-09-23, App.net reply permalink pages ([https://alpha.app.net/schmidt_fu/post/11451834 example]) mark up the reply context and actual reply using h-entry, but on the same level, leading to mis-parsing ([http://waterpigs.co.uk/notes/4SBMou/ example]) The reply context h-entry should be changed to a h-cite, and made a child of the main h-entry on the u-in-reply-to property (e.g. with a class attribute like <code>class="u-in-reply-to h-cite"</code>), as detailed at [[reply-context#Markup]] --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 15:05, 23 September 2013 (PDT)
+Using this method you could also send the canonical link to your post at the same time you create the post on App.net. To do this, you used the [https://github.com/appdotnet/object-metadata/blob/master/annotations/net.app.core.crosspost.md crosspost] annotation field.
 
 === IndieWeb Friendly Potential ===
-App.net has a developer community of [https://directory.app.net/ apps] and specifically  [https://directory.app.net/apps/integrations/ integrations] that allow for interesting indieweb friendly potential:
+App.net had a developer community of [https://directory.app.net/ apps] and specifically  [https://directory.app.net/apps/integrations/ integrations] that allowed for interesting indieweb friendly potential:
 
 * [https://directory.app.net/app/118/customwebapps-pubsubhubbub-for-adn/ PubSubHubBub Integration Client]
 * [https://directory.app.net/app/178/appnetdav/ WebDAV file replication app]
 * ...
 
-== Developer Incentive Program ==
+=== 2017 ===
+It was announced on 2017-01-12 that [http://blog.app.net/2017/01/12/app-net-is-shutting-down/ the site would be shut down].
 
+The site became completely unavailable on 2017-03-14.
+
+=== 2014 ===
+On May 6th, 2014 App.net has published a "State of the Union" blog post in which they have announced a team layoff and end of the Developer Incentive Program due to low subscription renewal rates: http://blog.app.net/2014/05/06/app-net-state-of-the-union/
+
+They explicitly stated that the service would keep on running "on an indefinite basis". (However 2017-01-12 (see above) shut down was announced)
+
+==== Developer Incentive Program ====
 Also of interest is that App.net offers a developer incentive program for developers who build apps that interact on the App.net platform. Each month paying App.net customers are asked to vote on the quality of the apps they use. The total scores of the most highly ranked apps then receive a relative percentage of the $30,000 monthly pool. Read more about it here:
 
 * [http://blog.app.net/2012/09/27/announcing-the-app-net-developer-incentive-program/ Announcing Developer Incentive Program, Sept 27 2012]
@@ -86,14 +98,6 @@ This seems like a ripe opportunity for a talented IndieWebDev to build a "hub" t
 
 The Developer Incentive Program was shut down with the SOTU announcement of 2014 (see below).
 
-== Uncertain Future ==
-
-On May 6th, 2014 App.net has published a "State of the Union" blog post in which they have announced a team layoff and end of the Developer Incentive Program due to low subscription renewal rates: http://blog.app.net/2014/05/06/app-net-state-of-the-union/
-
-They have explicitly stated though that the service keeps on running "on an indefinite basis".
-
-== Posts about ==
-Posts about app.net
 === 2013 ===
 * 2013-08-20: http://www.wired.com/gadgetlab/2013/08/the-great-app-net-mistake/
 * 2013-08-07: http://tantek.com/2013/219/t23/best-social-web-news-appdotnet-supports-microformats2
@@ -105,6 +109,9 @@ Posts about app.net
 * 2013-03-28: http://aaronparecki.com/articles/2013/03/28/1/an-open-challenge-to-app-net
 ** 2013-03-31: http://aaronparecki.com/articles/2013/03/31/1/a-response-to-replies-i-received-on-my-post-an-open-challenge-to-app-net
 * ...
+
+==== Issues ====
+* As of 2013-09-23, App.net reply permalink pages ([https://alpha.app.net/schmidt_fu/post/11451834 example]) mark up the reply context and actual reply using h-entry, but on the same level, leading to mis-parsing ([http://waterpigs.co.uk/notes/4SBMou/ example]) The reply context h-entry should be changed to a h-cite, and made a child of the main h-entry on the u-in-reply-to property (e.g. with a class attribute like <code>class="u-in-reply-to h-cite"</code>), as detailed at [[reply-context#Markup]] --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 15:05, 23 September 2013 (PDT)
 
 === 2012 ===
 * https://social-igniter.com/blog/2012/08/why-we-support-app-dot-net

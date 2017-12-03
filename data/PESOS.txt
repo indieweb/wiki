@@ -1,4 +1,4 @@
-http://indiewebcamp.com/PESOS
+https://indieweb.org/PESOS
 
 '''<dfn>PESOS</dfn>''' is an acronym/abbreviation for '''Publish Elsewhere, Syndicate (to your) Own Site'''. It's a [[syndication-models|Syndication Model]] where publishing flow starts with posting to 3rd party services, then using some infrastructure (e.g. feeds, pingbacks, [[webhooks]]) to create an archive copy under your domain.
 
@@ -7,27 +7,55 @@ The opposite (and preferable) approach is [[POSSE]], whereby a user publishes or
 == Implementations ==
 === IndieWeb Examples ===
 
-* Laurent Eschenauer pulls content in from various silos:
-** [[Twitter]] ([http://eschnou.com/entry/rt-teabass-there-are-now-four-upcoming-nodecopter-events-in-the-uk-this--24948-8866935.html example])
-** likes from [[Vimeo]] ([http://eschnou.com/entry/domaine-de-chambord-filmy-en-drone-pour-france-2-24946-9661.html example]) and [[YouTube]] ([http://eschnou.com/entry/its-not-about-the-nail-24947-138521.html example])
-** photos from [[Flickr]] ([http://eschnou.com/entry/tilff-se-prypare-y-la-fyte-ambiance-vacancez-sous-ce-beau-soleil-24937-1608210.html example])
-* '''[[User:Hupili.net]]''' pulls content from multiple silos and present them in his own sites (currently only in form of an RSS feed) using SNSAPI https://github.com/hupili/snsapi
-** Facebook
-** Twitter
-** Renren, the large OSN in China. It's a Facebook like model: http://www.renren.com/
-** SinaWeibo, ("weibo" in Chinese means "micro-blog"). It's a twitter like model: http://weibo.com/
-** TecentWeibo. It's another micro-blogging service in China. Due to the broad production line of Tecent, TecentWeibo has some unique access point (e.g. WeChat from a mobile device). http://t.qq.com/
-** The aggregated status update from those silos: http://hupili.net/feeds/all.xml  . It's currently a mix of all materials. I'll separate the English and Chinese messages later.
-* '''[[User:Www.flutterby.net_user:danlyke|danlyke]]'''
-** Used Twitter export to back-patch Twitter IDs into posts originally syndicated out to Twitter but for which the Twitter ID wasn't originally recovered from the API.
-** Uses [https://support.google.com/calendar/answer/37111?hl=en the Google calendar export] to backup calendar data in his own repository
-* Add yourself and a list of the silos you PESOS from
-* …
+==== '''[[User:Hupili.net]]''' ====
+Pulls content from multiple silos and present them in his own sites (currently only in form of an RSS feed) using SNSAPI https://github.com/hupili/snsapi
+* Facebook
+* Twitter
+* Renren, the large OSN in China. It's a Facebook like model: http://www.renren.com/
+* SinaWeibo, ("weibo" in Chinese means "micro-blog"). It's a twitter like model: http://weibo.com/
+* TecentWeibo. It's another micro-blogging service in China. Due to the broad production line of Tecent, TecentWeibo has some unique access point (e.g. WeChat from a mobile device). http://t.qq.com/
+* The aggregated status update from those silos: http://hupili.net/feeds/all.xml  . It's currently a mix of all materials. I'll separate the English and Chinese messages later.
+
+==== '''[[User:Www.flutterby.net_user:danlyke|danlyke]]''' ====
+* Used Twitter export to back-patch Twitter IDs into posts originally syndicated out to Twitter but for which the Twitter ID wasn't originally recovered from the API.
+* Uses [https://support.google.com/calendar/answer/37111?hl=en the Google calendar export] to backup calendar data in his own repository
+
+==== '''{{petermolnar}}''' ====
+
+PESOS for interaction only:
+
+* pulling favorites from [[Flickr]] as [[favorite]]
+* pulling bookmarks from [[Hacker_News]] as [[bookmark]]
+* pulling likes from [[Tumblr]] as [[favorite]]
+* pulling favorites from the Favorites gallery from [[500px]] as [[favorite]] (note: 500px used to have fav and like buttons, but they got rid of the fav button and replaced it with collections. It not possible to get a list of likes - [https://support.500px.com/hc/en-us/articles/236067827-Where-can-I-view-my-Likes- "Users can review the images added to a Gallery, but not the images that they have simply Liked"]
+* pulling favorites from the Favorites gallery [[deviantart]] as [[favorite]] (note: DA doesn't really have a 'like'; it's a special collection that every user have by default)
+
+
+( Add yourself and a list of the silos you PESOS from )
 
 === Software ===
+
+
+* For [[WordPress]] plugins see [[WordPress/Plugins#PESOS_Plugins]]
 * [http://ownyourgram.com/ OwnYourGram.com] is a service which streams your Instagram photos to your own site in real-time. {{main|OwnYourGram}}
-* [https://github.com/snarfed/ownyourresponses ownyourresponses] PESOSes your Facebook, Twitter, and Instagram [[interactions]]/[[responses]] to your site via [[micropub]].
+* [https://github.com/snarfed/ownyourresponses ownyourresponses] PESOSes your Facebook, Twitter, and Instagram [[interactions]]/[[responses]] to your site via [[Micropub]].
 * [https://github.com/snarfed/ownyourcheckin ownyourcheckin] PESOSes Facebook checkins to your WordPress site via the [https://developer.wordpress.com/docs/api/ WordPress REST API].
+* [https://github.com/cweiske/instagram2micropub instagram2micropub] PESOSes [[Instagram]] posts to your site via [[Micropub]].
+
+=== Micropub ===
+When creating posts via [[Micropub]], set the [[u-syndication|<code>syndication</code>]] property to the post's original URL. This defines the new post as canonical (original) version of the post.
+
+If you see the new post as the copy of the silo URL, then [[u-syndication|<code>syndication</code>]] is the wrong property - better would be to [[repost]].
+
+== Advantages ==
+
+* '''more API options:''' difference in restrictions in APIs for content creation and content retrieval: sometimes it's possible to pull data which can't be pushed, eg. Facebook comments
+* '''native interactions''': the native interfaces are sometimes quite well done for silos
+* '''prevents you from oversharing''' the same content to every network (no, that is not good, usually different networks attract different audience and not every content should be shared with everyone)
+* '''implementations will be async''':
+** breakage in your site/POSSE layer will not prevent you from posting to a silo (those breakages are not as uncommon as one would like them to be)
+** static generators can use it as well without losing real-time ability in silos
+** circumvents limitations on automated content posting ( [https://premium.wpmudev.org/blog/how-to-increase-your-traffic-from-facebook-by-650-in-5-seconds/ WPMUdev experiment on automated vs manual post audience reach on Facebook] )
 
 == Disadvantages ==
 PESOS is considered less robust and inferior to [[POSSE]] for the following reasons:
@@ -39,15 +67,22 @@ PESOS is considered less robust and inferior to [[POSSE]] for the following reas
 * '''Non-canonical.''' Copes archived to your domain are not a canonical copy
 * '''Lower quality.''' Pulling in from 3rd Party Services can reduce the quality of content, e.g.
 ** character limits (e.g. 140 character [[Twitter]] posts, 200 character Foursquare shouts/tips).
+*** this is completely silo-dependent; if your post was intended for a certain silo, there is no quality difference - 2017-06-08 {{ petermolnar }}
 ** link-wrapping (e.g. Twitter hides all links behind their t.co link-wrapper)
+*** links can be followed and extracted, but that requires extra work - 2017-06-08 {{ petermolnar }}
 
 == Background ==
 * 2012-06-22 <i>PESOS</i> term defined: http://tantek.com/2012/174/t2/opposite-posse-pesos-publish-elsewhere
 
+
 == See Also ==
 * Relevant session from [[2011]]: [[Publish_Then_Syndicate_and_Replicate]]
+* [[syndication-models]]
+
 
 == Related ==
 * [[POSSE]]
 
+
 [[Category:building-blocks]]
+[[Category:syndication]]

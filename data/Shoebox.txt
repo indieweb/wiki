@@ -1,0 +1,61 @@
+https://indieweb.org/Shoebox
+
+{{stub}}
+
+'''<dfn>Shoebox</dfn>''' is the name of an in-progress [[p3k]] application that manages files and acts as a [[micropub]] media endpoint. This page currently exists to collect brainstorming ideas and requirements for the project and document its progress.
+
+== Views ==
+The main application will have the following primary views for interacting with media.
+
+=== Recently Added / Uncategorized ===
+* Show recent files added, grouped by source
+** Screenshots from laptop
+** Photos from phone
+** Photos from camera (eye-fi card?)
+** Scanned documents
+* Provide an interface that allows quick selection of multiple files and add tags to the selection
+* Mark files as "complete" to remove them from this view
+
+=== Tag View ===
+
+
+== File Details ==
+The following file types are supported natively. Any other file can be uploaded, although Shoebox will not know how to present it or generate thumbnails and will just appear as an unknown file.
+
+* Images (jpg, png, gif)
+* Video (mp4)
+* Audio (mp3, wav, m4a)
+* PDFs
+* txt
+
+=== Properties ===
+* Name
+* Description
+* Transcription (text of a PDF, video, audio. used for search)
+* Tags
+* Associated with one or more URLs
+** e.g. when used in a blog post or photo post
+
+== Micropub Support ==
+This application can also be used as a Micropub media endpoint.
+
+== Brainstorming ==
+Unorganized braindump thoughts that should be pulled out into separate sections later.
+
+* A file's unique identifier is the hash of its contents
+* The file can live anywhere on the filesystem. This is specifically so that the user can rearrange the files on disk however makes sense, and Shoebox will be able to find it again.
+* The DB index knows where to find the file data by looking up the hash in the table
+* Associated files (thumbnails, etc) can be stored on disk named with this hash
+* Automatic tagging of images like Flickr
+** Might need to send photos to a third-party API for tagging, such as https://developer.clarifai.com/
+** Could upload a backup to Flickr as well, and pull down the automatic tags they add
+* Consider using [[git lfs]] to handle storing and hashing the large files
+
+== Todo ==
+* How to handle multiple versions of a file? 
+** Probably only worry about storing the latest
+** Does the file URL change based on the version or based on ...?
+
+== See Also ==
+* [[p3k]]
+* [[micropub]]

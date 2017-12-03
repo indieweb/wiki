@@ -1,0 +1,59 @@
+https://indieweb.org/printing
+
+{{stub}}
+
+'''<dfn>printing</dfn>''' is a method of creating something offline from something online.
+
+== Printing websites ==
+
+Many websites don't consider making their content printer-friendly, [http://www.theatlantic.com/technology/archive/2016/05/archiving-a-website-for-ten-thousand-years/482385/ which can be useful for archival reasons]. It can also help people who might be less technical and would want paper overviews of data [http://indieweb.org/irc/2016-05-07/line/1462610647450].
+
+== Styling prints with CSS ==
+
+=== Add a stylesheet for print screen only ===
+Add this to the <header> section of your site:
+
+    <style type="text/css" media="print">[CSS goes here]</style>
+
+=== Use an easy to read and/or easy to print font ===
+
+Monospace can prevent confusing 0-s with O-s, l-s with 1-s, and so on.
+
+    html {
+        font-family: monospace;
+        font-size: 9pt;
+        line-height: 1.2em;
+    }
+
+=== Display URLs of hyperlinks ===
+
+    a, a:visited, a:link {
+        color: #000;
+        text-decoration:underline;
+    }
+
+    a:after {
+        content: "(" attr(href) ")";
+        display: inline-block;
+        width: auto;
+        text-decoration: none;
+        margin-left: 0.3em;
+        font-style:italic;
+    }
+
+=== Hide all elements not needed for a print ===
+
+Decorative images, those which are not part of the content, should not be printed to prevent waste.
+
+    .element {
+        display: none;
+        visibility: hidden;
+    }
+
+=== Avoid low contrast and colours ===
+
+While these may look stylish, they are hard to read and some printing methods do not support printing colours at all.
+
+== See Also ==
+
+* https://uxdesign.cc/i-totally-forgot-about-print-style-sheets-f1e6604cfd6

@@ -1,0 +1,592 @@
+https://indieweb.org/Microsub-spec
+
+The '''<dfn>Microsub</dfn>''' spec provides a standardized way for clients to consume and interact with feeds collected by a server.
+
+The Microsub server is responsible for managing the accounts you follow, retrieving updates from them, and the Microsub endpoint provides the feed entries in a normalized format for easy consumption by clients.
+
+;Status
+:This is an early '''Editor's Draft''', and feedback is encouraged.
+;Participate
+:Wiki ([[#Feedback|Feedback]], [[#Issues|Open issues]])
+:[[IRC]]: [irc://irc.freenode.net/indieweb #indieweb on Freenode]
+;Editor
+:{{aaronpk}}
+;License
+:<small>Per [https://creativecommons.org/publicdomain/zero/1.0/ CC0], to the extent possible under law, the editor(s) and contributors have waived all copyright and related or neighboring rights to this work. In addition, as of {{CURRENTYEAR}}-{{CURRENTMONTH}}-{{CURRENTDAY2}}, the editor(s) and contributors (2017-04-09 onward) have made this specification available under the [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0].</small>
+
+__TOC__
+<div style="clear:both;"></div>
+
+== Design Goals ==
+The goal of Microsub is to simplify the process of building a [[reader]], since there are many moving parts when consuming external content. 
+
+In general, when subscribing to a feed, a reader should use [[WebSub]] if the feed is enabled with it, but may need to fall back to polling if not. Depending on the format of the feed, there can be many variations in the actual data available at the feed. For example, there are several different ways an [[h-entry]] can represent the author of the entry, described at [[authorship]]. There are also multiple ways a list of [[h-entrys]] can appear in an [[h-feed]].
+
+The role of the Microsub server is to normalize the data in the wild and turn it into a simpler format for displaying in clients. Clients should never have to second guess or doubt any data they receive from the Microsub server. The assumption is that the server has done all the verification and normalizing of the data, and it is ready to display to the user. The fewer checks and conditionals that clients have to write the better.
+
+== Endpoints ==
+
+The Microsub endpoint is where the client will make all API requests. All API requests require authentication with a Bearer access token that the client needs to obtain. If the client does not have a preexisting relationship with the server, then the following method of discovery and authorization should be used to obtain an access token and discover the Microsub endpoint.
+
+It is possible for a client to be pre-configured with a Microsub endpoint, or to use other methods of obtaining an access token if there is a preexisting relationship between the client and the server providing the Microsub endpoint.
+
+=== Discovery ===
+
+The client first performs discovery on the user's profile URL to find the Microsub endpoint and authorization endpoint. Given a user's profile URL, perform an HTTP GET request and look for either a <code>&lt;link rel="microsub"&gt;</code> or HTTP <code>Link</code> header with a <code>rel</code> value of <code>microsub</code>. Additionally, look for links with rel values <code>authorization_endpoint</code> and <code>token_endpoint</code>.
+
+<pre>
+Link: &lt;https://aaronpk.example/auth>; rel="authorization_endpoint"
+Link: &lt;https://aaronpk.example/token>; rel="token"
+Link: &lt;https://aaronpk.example/microsub>; rel="microsub"
+</pre>
+
+<pre>
+&lt;link rel="authorization_endpoint" href="https://aaronpk.example/auth">
+&lt;link rel="token" href="https://aaronpk.example/token">
+&lt;link rel="microsub" href="https://aaronpk.example/microsub">
+</pre>
+
+The Microsub endpoint URL MUST NOT contain a fragment, and MAY contain query string components. If the URL contains a query string, then any GET requests MUST properly append the additional parameters to the query string, and POST requests MUST NOT send the query string properties in the post body. e.g. making a GET request with the additional query string component "action=config" to the endpoint "/endpoints?type=microsub" would result in a URL of "/endpoints?type=microsub&action=config"
+
+(Note: The client will likely want to also find the [[Micropub]] endpoint for the user so that the client can post replies and other interactions to the user's website.)
+
+=== Authentication and Authorization ===
+
+Authorization is handled the same way as [[Micropub]], using [[IndieAuth]] to [[obtaining-an-access-token|obtain an access token]].
+
+== Channels ==
+
+Channels are described by the following properties:
+
+* <code>uid</code> - a string representation of a user-specific unique ID for the channel. This uid will be unique for each user, but may be duplicated across different users. Some implementations will use constant strings such as "example", while others may use database IDs such as "15029932", or a URL such as "<nowiki>http://user.example.com/channel/foo</nowiki>". The valid characters for a uid are any URL-safe character. 
+* <code>name</code> - the display name for the channel. This may include any valid UTF-8 sequence. The client should use this name when displaying the name of the channel in the interface.
+
+<pre>
+{
+  "uid": "indieweb",
+  "name": "IndieWeb"
+}
+</pre>
+
+In addition to any channels listed by the server, all Microsub servers have two channels with the uid <code>default</code> and <code>notifications</code>. Clients should display these with the localized names "Home" and "Notifications". Some users may not have any additional channels.
+
+Some actions may want to apply to every channel, so the uid of <code>global</code> is reserved for this purpose. Actions such as <code>mute</code> that want to mute a user across every channel should use the channel uid of <code>global</code>.
+
+== Users ==
+
+All users are identified by profile URLs, with some constraints. User profile URLs MUST use either the <code>http</code> or <code>https</code> scheme, and MAY contain path and query string components, and MUST NOT contain fragments.
+
+== Actions ==
+
+All operations in Microsub are considered "actions", and are specified with a query string or form body parameter of <code>action</code>.
+
+* channels
+* search
+* preview
+* follow / unfollow
+* timeline
+* mute / unmute
+* block / unblock
+
+Actions that operate within the context of a channel can accept a query string or form body parameter of <code>channel</code> specifying the <code>uid</code> of the channel to use. If no channel is specified, then the <code>default</code> channel is assumed.
+
+=== Timelines ===
+
+<code>action=timeline</code>
+
+'''GET'''
+
+Retrieve the entries in a given channel.
+
+Parameters:
+* action=timeline
+* channel (optional)
+* after={cursor}
+* before={cursor}
+
+The response will include a property <code>items</code> with an array of post objects. See below for documentation on the format of items.
+
+<pre>
+{
+  "items": [
+    { ... },
+    { ... }
+  ],
+  "paging": {
+    "after": "xxxxx",
+    "before": "xxxxx"
+  }
+}
+</pre>
+
+See [[#Paging]] for more details on the paging mechanism.
+
+=== Search ===
+
+<code>action=search</code>
+
+The "search" action exists to provide a UI for the server to respond with the full URL of possible things to subscribe to. For example, a user should not be expected to type the exact URL of a feed to subscribe to, but instead should be able to enter partial matches, e.g. entering <code>aaronparecki.com</code> should return the full URL of <code>https://aaronparecki.com/</code>.
+
+Using the "search" action, a client can provide a single text field where the user can enter either partial URLs or even arbitrary search terms, and the server can reply with a list of URLs that can actually be subscribed to. This also provides the ability to have a confirmation step where users can see a preview of what they will be subscribing to before they actually do so.
+
+If the search term is a URL or partial URL, the Microsub server SHOULD fetch the URL if not already known, and discover any feeds at that URL that can be subscribed to. The server may also return feeds that are already known that match the search term, for example if another user on the server has previously subscribed to a matching URL.
+
+'''POST'''
+
+Request 
+
+* action=search
+* query=
+
+<pre>POST /microsub
+Content-type: application/x-www-form-urlencoded
+
+action=search&query=aaronparecki.com
+</pre>
+
+Response
+
+<pre>HTTP/1.1 200 Ok
+Content-type: application/json
+
+{
+  "results": [
+    {
+      "type": "feed",
+      "url": "https://aaronparecki.com/",
+      "name": "Aaron Parecki",
+      "photo": "https://aaronparecki.com/images/profile.jpg",
+      "description": "Aaron Parecki's home page"
+    },
+    {
+      "type": "feed",
+      "url": "https://percolator.today/",
+      "name": "Percolator",
+      "photo": "https://percolator.today/images/cover.jpg",
+      "description": "A Microcast by Aaron Parecki",
+      "author": {
+        "name": "Aaron Parecki",
+        "url": "https://aaronparecki.com/",
+        "photo": "https://aaronparecki.com/images/profile.jpg"
+      }
+    },
+    { ... }
+  ]
+}</pre>
+
+The response results are a [[jf2]] version of the [[h-feed]] vocabulary. The only required properies are the type and URL.
+
+* type - (required) <code>feed</code>
+* url - (required) the URL of the result which can be used in a follow action to follow the feed
+* name - the display name of the feed
+* photo - a photo or icon representing the feed
+* description - a description of the feed, either as reported by the feed or generated by the Microsub server
+* author - a [[jf2]] [[h-card]] describing the author of the feed. For multi-author feeds this may be an h-card representing the organization, or may be omitted
+
+TBD: It might be nice to show an approximate frequency of posts, e.g. [[:File:feedly-search-for-url.png|Feedly]], and https://aaronparecki.com/follow
+
+==== Searching for Content ====
+TBD: implementing a search API for searching past posts that the Microsub server has indexed.
+
+* action=search
+* channel=
+* query=
+
+The presence of the "channel" parameter indicates to the server that the client wants to search for posts rather than search for feeds. The channel parameter can be set to an individual channel such as "default" or a channel ID, or "global" to search across all channels.
+
+=== Preview ===
+
+<code>action=preview</code>
+
+The "preview" action exists so that the client can display a preview of a URL to the user before the user wants to create a subscription for it. The preview should show as much about the URL as the server can determine, such as basic profile information about the user, and a few recent entries by the user. There should be no permanent side effects created by previewing a URL, and as much as possible, the URL being previewed should not be provided with identifying information of the user who is previewing the URL.
+
+The response includes the list of items in the feed if available, in the same format as returned by the [[#Timelines]] API call.
+
+=== Following ===
+
+<code>action=follow</code>
+
+'''GET'''
+
+Retrieve the list of feeds being followed in the given channel.
+
+Response
+
+<pre>{
+  "items": [
+    {
+      "type": "feed",
+      "url": "http://tantek.com/"
+    }
+  ]
+}</pre>
+
+The feed items may contain additional properties that describe the feed, see http://microformats.org/wiki/h-feed.
+
+
+'''POST'''
+
+Follow a new URL in a channel. 
+
+<pre>POST /microsub
+Content-type: application/x-www-form-urlencoded
+
+action=follow&channel=indieweb&url=http://tantek.com/
+</pre>
+
+When a request to the follow endpoint is made, the Microsub server registers the follow action, and begins delivering content at that URL into the channel. The Microsub server can subscribe to the target URL via any mechanism available, but most often will attempt a [[WebSub]] subscription for its HTML+Microformats, or Atom/RSS feed, and fall back to polling if that fails.
+
+New entries at the followed URL will appear in the channel when fetched from the channel's timeline. The Microsub server may fetch existing entries in the feed and add them to the channel at its discretion.
+
+The response is a JSON representation of the channel, the same as is returned when listing all feeds followed in a channel.
+
+<pre>{
+  "type": "feed",
+  "url": "http://tantek.com/"
+}</pre>
+
+=== Unfollowing ===
+
+<code>action=unfollow</code>
+
+'''POST'''
+
+Unfollow a feed from a channel.
+
+<pre>POST /microsub
+Content-type: application/x-www-form-urlencoded
+
+action=unfollow&channel=indieweb&url=http://tantek.com/
+</pre>
+
+The Microsub server may remove all of this feed's items from the channel, or may leave them in place, at its discretion. If you are used to treating these channels as an IRC or Slack timeline, it would be more appropriate to leave the old items in the channel, just stop delivering new ones. However if you are more used to treating these channels as a Twitter or Facebook feed, then you may want the server to remove them from the channel.
+
+=== Muting ===
+
+<code>action=mute</code>
+
+Clients should provide a "mute" option in the interface. This allows the user to mute someone's profile, hiding all posts with the muted user's profile URL as the author from being displayed.
+
+Muting users will cause all posts by the muted user to be hidden from display. The server MAY still store the posts internally, so that un-muting the user will cause past entries to appear again.
+
+Any side effect at the server SHOULD NOT cause the muted user to know they have been muted. Muting users SHOULD NOT have any externally visible side effects.
+
+For example, in the context of the [[Salmention]] spec, the server should still behave as if the muted user was not muted.
+
+'''GET'''
+
+Retrieve the list of users that are muted in the given channel.
+
+Request
+
+<pre>
+GET /microsub?action=mute HTTP/1.1
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+Content-type: application/json
+
+{
+  "items": [
+    {
+      "type": "card",
+      "url": "http://annoying.example.com/",
+      "name": "Annoying Person",
+      "photo": "http://annoying.example.com/photo.jpg"
+    },
+    {
+      ...
+    }
+  ]
+}
+</pre>
+
+'''POST'''
+
+Mute a user in a channel, or with the uid <code>global</code> mutes the user across every channel.
+
+Request
+
+<pre>
+POST /microsub HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+action=mute&url=https://annoying.example.com/
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+</pre>
+
+=== Unmute ===
+
+'''POST'''
+
+To unmute a user, use <code>action=unmute</code> and provide the URL of the account to unmute. Unmuting an account that was previously not muted has no effect and should not be considered an error.
+
+=== Blocking ===
+
+<code>action=block</code>
+
+Blocking users will cause all previous posts by the blocked user to be hidden or deleted, and future posts by that user should not be stored. Additionally, the server SHOULD NOT produce any content or side effect that would notify the blocked user about a post. It is acceptable for the blocked user to know they have been blocked.
+
+For example, in the context of the Webmention spec, the server should not send webmentions even if the user mentions the blocked user in a post. In the context of the Salmention spec, the server should stop sending follow-up webmentions to the blocked user. 
+
+'''GET'''
+
+Retrieve the list of users that are blocked in the given channel.
+
+TODO: document the response format
+
+'''POST'''
+
+Block a user in a channel, or with the uid <code>global</code> blocks the user across every channel.
+
+=== Channels ===
+
+<code>action=channels</code>
+
+'''GET'''
+
+Retrieve the list of channels for the user.
+
+The response will contain a <code>channels</code> property with the list of channel uids and names. The <code>uid=default</code> and <code>uid=notifications</code> channels are not part of this response, so for users who have only the default channels, the response will be an empty array.
+
+<pre>GET /microsub?action=channels
+Authorization: Bearer xxxxxxxxx
+
+HTTP/1.1 200 Ok
+Content-type: application/json
+
+{
+  "channels": [
+    {
+      "uid": "31eccfe322d6c48c50dea2c84efc74ff",
+      "name": "IndieWeb"
+    },
+    {
+      "uid": "1870e67e924856dc7e4c37732b303b45",
+      "name": "W3C"
+    }
+  ]
+}</pre>
+
+'''POST'''
+
+To create a new channel, the client sends a POST request with the <code>channels</code> action and the name of the channel to create. The uid of the channel will be assigned by the server.
+
+Request
+
+<pre>
+POST /microsub HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+action=channels&name=Coworkers
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+Content-type: application/json
+
+{
+  "uid": "2c5e5d7c4d57da68cb03c972846e827845af974c9b",
+  "name": "Coworkers"
+}
+</pre>
+
+== Types of Feeds ==
+
+The specific types and formats of feeds that can be followed is out of scope of Microsub. Instead, it's up to the Microsub server to support whichever feed formats it wishes. Typically, Microsub servers will prefer a Microformats 2 feed such as an <code>h-feed</code> or list of <code>h-entry</code>s, and will then fall back to finding an Atom or RSS feed. Other types of feeds may be supported, but clients should not make any assumptions about which formats are supported, and should make use of the "preview" action so that users have an indication of whether a subscription will succeed.
+
+== Objects ==
+
+=== Posts ===
+
+Posts are the basic object used in the API. Posts can be short status updates, photos, videos, podcast episodes, checkins, and many other content types. Post objects returned in the "items" array MUST be valid [[jf2]] post objects.
+
+An example of a simple jf2 post is below.
+
+<pre>{
+    "type": "entry",
+    "published": "2017-04-28T11:58:35-07:00",
+    "url": "https://aaronparecki.com/2017/04/28/9/p3k-http",
+    "author": {
+        "type": "card",
+        "name": "Aaron Parecki",
+        "url": "https://aaronparecki.com/",
+        "photo": "https://aaronparecki.com/images/profile.jpg"
+    },
+    "category": [
+        "http",
+        "p3k",
+        "library",
+        "code",
+        "indieweb"
+    ],
+    "photo": [
+        "https://aaronparecki.com/2017/04/28/9/photo.png"
+    ],
+    "content": {
+        "text": "Finally packaged up my HTTP functions into a library! https://github.com/aaronpk/p3k-http Previously I had been copy+pasting these around to quite a few projects. Happy to have consolidated these finally!",
+        "html": "Finally packaged up my HTTP functions into a library! <a href=\"https://github.com/aaronpk/p3k-http\">https://github.com/aaronpk/p3k-http</a> Previously I had been copy+pasting these around to quite a few projects. Happy to have consolidated these finally!"
+    }
+}</pre>
+
+=== Channels ===
+
+
+=== Feeds ===
+
+
+== Paging ==
+Microsub uses a cursor-based pagination model, which provides the most flexibility to server implementations while still being easy to use by clients.
+
+For API requests that paginate their results (e.g. [[#Timeline]]), there is an additional object returned with the values needed to page through those results. 
+
+<pre>{
+  "items": [ ... ],
+  "paging": {
+    "before": "xxxxx",
+    "after": "xxxxx"
+  }
+}</pre>
+
+* If there are any items returned in the response, the server MUST return a "before" value that will retrieve items before all the returned items in the list. 
+* If there are no items returned in the response, the server MUST NOT return a "before" value.
+* If there are additional items available that were not returned in the response, the server MUST return an "after" value that will retrieve the next page of items.
+* If there are no more items available, the server MUST NOT return an "after" value.
+
+As far as the client is concerned, the "before" and "after" values are arbitrary strings. This allows the server to internally use whatever specific implementation is most appropriate for its backend technology. (Often this will be either a timestamp or a unique ID identifying the first and last items in the returned list.)
+
+To make a timeline request for the next page of results, the client adds the "after=xxxxx" parameter to the query string. This allows easy navigation through the whole list of items in the channel.
+
+While the user is reading the timeline, the client will likely also want to poll the timeline to see if new posts have been added since it was originally requested. Since not all Microsub servers will support streaming, the client needs an efficient way to poll for new items. The client adds "before=xxxxx" to the query string to request items that come before the first item returned in the previous request. This way the client can poll that until new items appear, and only the new items will be returned.
+
+=== Example Paging Workflow ===
+* The user loads the client and makes a request for the timeline for the default channel:
+** <code>/microsub?action=timeline</code>
+** The server replies with the newest 20 items, and includes <code>before=5a1713e55a171588</code> and <code>after=5a1713e55a17136c</code>
+* The user scrolls to the bottom and clicks "load more". The client makes a request for the next set of results:
+** <code>/microsub?action=timeline&after=5a1713e55a17136c</code>
+** The server replies with 3 more items, and does not include an "after" paging cursor in the response, indicating that there are no more items in the timeline.
+* Meanwhile, in the background, the client polls the timeline to find newer items by using the first "before" cursor that was returned in the initial request:
+** <code>/microsub?action=timeline&before=5a1713e55a171588</code>
+** The server replies with an empty <code>items</code> list and an empty <code>paging</code> object indicating there are no new items
+* After some interval, the client polls for new items again
+** <code>/microsub?action=timeline&before=5a1713e55a171588</code>
+** In the time between the two polls, there have been 25 new items added to the timeline, more than one page of results. The server replies with the newest 20 <code>items</code> list, and includes new before and after values, <code>before=5a1724ad5a171599</code> and <code>after=5a1722ea5a171280</code>
+* Since the client sees there is an "after" cursor, it immediately fetches the next page of results using the original "before" and the new "after" value:
+** <code>/microsub?action=timeline&before=5a1713e55a171588&after=5a1722ea5a171280</code>
+** The server replies with the remaining 5 items, and no new cursors since there is no more data missing.
+* The client then continues polling with the latest "before" cursor it received
+
+See the [https://github.com/aaronpk/Monocle/blob/41df4e44ffaa356df40df797f2cf53d65c0273a7/monocle/tests/Feature/PagingTest.php#L19 tests in Monocle] for an example of the API requests made.
+
+=== Limiting Results ===
+Microsub servers SHOULD set a default limit on the number of items returned in lists. A reasonable default limit is 20 items. Microsub servers SHOULD support an additional query parameter <code>limit</code> which clients can use to indicate the requested limit of number items returned. Microsub servers MAY set an upper or lower bound on the values they accept for the <code>limit</code>, and MAY return a different number of items in the list than the client requets, for any reason. Clients should not expect the number of results returned to exactly match the number of results requested.
+
+== Authentication and Authorization Details ==
+
+The client builds an [[IndieAuth]] authorization request URL at the [[authorization-endpoint|authorization endpoint]], and directs the user's browser there. In a native client, the client should use a system-native browser, rather than using a web view embedded in the application. See [https://tools.ietf.org/html/draft-ietf-oauth-native-apps OAuth 2.0 for Native Apps] for more details.
+
+Build a URL with the following query parameters:
+
+* <code>me={the user's profile URL}</code> - the URL that the user entered at which the Microsub endpoint was found
+* <code>response_type=code</code>
+* <code>client_id={the client's URL, e.g. its home page}</code>
+* <code>state={random state}</code> - the client should generate a unique state value, and verify that it matches when the user is redirected
+* <code>redirect_uri={the client's redirect URI}</code> - for native apps, this may include a custom URL scheme
+* <code>scope={requested scope}</code> - a space-separated list of scopes that the client is requesting
+
+==== Scopes ====
+
+Microsub defines the following scopes:
+
+* <code>read</code> - this is the minimum scope clients should request. this allows clients to have read access to channels.
+* <code>follow</code> - allows the client to manage the following list
+* <code>mute</code> - allows the client to mute and unmute users
+* <code>block</code> - allows the client to block and unblock users
+* <code>channels</code> - allows the client to create and edit channels
+
+Additionally, the client may request Micropub scopes, in order for the user to be able to reply or like posts from within the client.
+
+* <code>create</code>
+* <code>update</code>
+* <code>delete</code>
+
+The recommended set of scopes to request is <code>read follow mute block create</code>, which enables a rich set of interaction on the client, while also protecting the security of the user by default.
+
+The user will visit the authorization endpoint, and if they approve the request, their browser will be redirected back to the client's redirect URI with a <code>code</code> and <code>state</code> in the URL.
+
+<pre>
+HTTP/1.1 302 Found
+Location: https://client.example/redirect?code=xxxxxxxx
+                                         &state=1234567890
+</pre>
+
+The client verifies the state value matches the state it generated for the initial request, and can then exchange the authorization code for an access token.
+
+The client makes a POST request to the token endpoint initially discovered, with the following parameters:
+
+* <code>grant_type=authorization_code</code>
+* <code>code=xxxxxxxxx</code>
+* <code>redirect_uri={the client's redirect URI}</code>
+* <code>client_id={the client's URL}</code>
+
+The response will be a JSON object with the following keys:
+
+<pre>
+{
+  "access_token": "XXXXXXXXXXX",
+  "scope": "read follow mute block create",
+  "me": "https://aaronpk.example/"
+}
+</pre>
+
+The <code>me</code> value returned MAY be different from the original <code>me</code> value input, but MUST have a matching host name. This enables support for multi-user websites, and allows the user's server to normalize profile URLs, e.g. it will always return <code><nowiki>https://aaronpk.example/</nowiki></code> even if the user initially enters <code><nowiki>http://aaronpk.example</nowiki></code>.
+
+The scopes returned MAY be different from what the client requested, based on whether the user choose to deny certain scopes, or grant additional scopes during the authorization request.
+
+== Design Considerations ==
+
+=== Why a single endpoint instead of individual endpoints for each operation ===
+Many similar APIs such as the [[Twitter API]] or [[Wordpress API]] use unique URLs for each type of operation: following, muting, fetching posts, etc. Microsub instead takes an [[RPC]] style approach, where all requests are made against a single endpoint, with the operation is specified with a query or form parameter.
+
+This allows more flexibility in the design of the server, since the spec is not imposing a URL design on the server, each can choose a URL for the Microsub endpoint that makes sense for itself. 
+
+This also makes clients easier to write, since all requests are made against one base URL rather than needing to either keep track of a fixed URL pattern, or have a configurable URL pattern.
+
+== Feedback ==
+
+== Issues ==
+
+=== Give Microsub server access to private posts for its user? ===
+When a website adds [[private posts]] within feeds for auth’d visitors, it could be important for the Microsub server to be able to fetch these posts if the current user is included in the [[audience]].
+
+=== Image Resizing ===
+It may be too much of a burden to require that clients are responsible for image resizing themselves. There has been some discussion about this [https://chat.indieweb.org/dev/2017-11-22#t1511397808146000 in IRC] as well as [https://github.com/cleverdevil/together/issues/11 on GitHub].
+
+=== Indicating whether posts have already been responded to ===
+The Microsub client needs to know whether a post has already been liked/replied/bookmarked/etc by the user in order to display a the appropriate interface buttons. Similarly the client should allow the user to delete the "like" post if it's been posted already, so it will need to know the URL of the like.
+
+One way to accomplish this for external Microsub servers is the Microsub server can subscribe to your own site and index all the "like" posts it finds, and match those up. If your site is also your micropub and microsub server then all this is internal to the system and doesn't need to be specified.
+
+=== Tracking read state or position ===
+Some people would like to be able to track the read/unread state of individual items in a feed. Traditional feed readers typically work this way, although more modern interfaces like Slack keep only a single read pointer pointing to where in the stream was last read.
+
+* Slack: [https://api.slack.com/methods/channels.mark set the read cursor]
+* Feedly: [https://developer.feedly.com/v3/markers/ Markers API]
+
+=== Per Channel Filters ===
+It may be useful for users to have filters per channel. For example if a user only wants to see original content from people they are following eg. excluding likes, reposts, bookmarks etc.
+
+Tweet decks supports filters per "channel" to; show only tweets with a certain type of media, hide a keyword, only show a keyword and exclude retweets
+
+[[File:tweet-deck-channel-filters.png|250px]]

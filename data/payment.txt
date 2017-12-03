@@ -1,8 +1,11 @@
-http://indiewebcamp.com/payment
+https://indieweb.org/payment
 
 {{stub}}
 
 '''<dfn>payment</dfn>''' in the context of the indieweb refers to a feature on an indie web site that provides a way for the visitor to that website to pay (currency, gift card credit, etc.) the person represented by that indie web site.
+
+== Why ==
+So anyone who visits your website can easily pay you (for whatever) in the ways you prefer to be paid, similar to how communication links help people communicate with you in the ways you prefer[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience].
 
 == How ==
 There are several tutorials on how to create links / URLs for various payment services to put on your web site:
@@ -21,12 +24,15 @@ Currency:
 ** [[PayPal.Me]] - create a simple-looking paypal.me/yournamehere link to share for people to pay you from their PayPal accounts
 * [[Square Cash]]
 ** Requires linking your debit card to your account to receive or send money. Can optionally link a credit card to your account.
+** Doesn't work with UK postcode
 ** Fees:
 *** Personal account: none for debit card payments. 3% for credit card payments.
 *** Business account: 2.75% is automatically deducted from any payment accepted with Cash for Business.
 ** Creates a simple-looking cash.me/$username URL to share for people to pay you. An amount can be pre-selected by adding it to the URL, e.g. cash.me/$username/10.
 * [https://developer.venmo.com/docs/payment-links Venmo]
 ** Fees: free with linked bank account and some debit, 3% for credit
+* [https://monzo.me/ Monzo.me] UK only, requires a [https://monzo.com Monzo] card
+** Fees: ?
 
 Gift card(s):
 * [http://jonathanstark.com/card/#give-a-coffee Starbucks Gift Card]
@@ -35,20 +41,22 @@ Once you have a payment URL e.g. pay.example.com/username/usd/5, link to it with
 
 <code>&lt;a href="https://pay.example.com/username/usd/5" rel="payment">Donate $5 to me&lt;/a></code>
 
-== Why ==
-So anyone who visits your website can easily pay you (for whatever) in the ways you prefer to be paid, similar to how communication links help people communicate with you in the ways you prefer[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience].
-
 == IndieWeb Examples ==
 Specific rel=payment links:
-* {{aaronpk}} uses rel=payment to link to Venmo and Gittip on his home page.
+* {{aaronpk}} uses rel=payment to link to Venmo, Paypal, Square Cash and Gratipay on his home page.
 *  [[User:Kodfabrik.se|Pelle Wessman]] uses Jekyll [https://github.com/voxpelli/voxpelli.github.com/blob/29b056bf6114481cf3fe32acdeb55f5ad8d938cb/_layouts/default.html#L14 to add] Flattr rel=payment links to each blog post on [http://voxpelli.com/ voxpelli.com]
-* {{bret}} has links to a bitcoin addresses hosted on [http://coinbase.com coinbase] a a tip jar.  I had a dogecoin address that was hosted on dogevault but dogecoin shut down after getting hacked.
+* {{bret}} has links to a bitcoin addresses hosted on [http://coinbase.com coinbase] a tip jar.  I had a dogecoin address that was hosted on dogevault but dogecoin shut down after getting hacked.
+* {{petermolnar}} added rel=payment links to PayPal and Monzo, displayed as a button at the end of each entry hoping it will encourage tipping
 
-Overall /payment page:
-* ... none so far
+
+Overall <span id="Payment_page">/payment page</span>. Just like having a <kbd>/[[contact]]</kbd> page, your indieweb site should have a <kbd>/payment</kbd> page with icons linked to various ways to pay you.
+* {{aaronpk}} provides links to his preferred payment methods on a separate payment page as of 2016-11-28: 
+** https://aaronparecki.com/pay/
+* {{t}} provides a mobile-friendly payment page with preferred payment methods as of 2017-10-01 (built on [[2017/NYC|IndieWebCamp NYC 2017]] hack day!)
+** http://tantek.com/pay
 
 Overall /payment page with /payment/nn support for auto-filling $ amounts
-* ... none so far
+* {{aaronpk}}'s payment page will pre-fill the amount on the links to providers that support it when visiting a URL such as https://aaronparecki.com/pay/?5
 
 == Other independent examples ==
 === Podcast Examples ===
@@ -57,6 +65,11 @@ Quite a few podcasters include rel-payment metadata – mostly in their podcast 
 Notable examples:
 * The [http://5by5.tv/ 5by5] network uses it in their feeds
 * Big german podcaster [http://metaebene.me/ Tim Pritlove] uses it across all of his podcasts, both web pages and feeds
+
+=== Scott Hanselman ===
+Intro slide from [https://www.hanselman.com/ Scott Hanselman]'s talk at .NET Fringe 2017:
+
+[[File:2017-hanselman-dotnetfringe.png|600px]]
 
 == Implementations ==
 === Publishing Software ===
@@ -73,24 +86,50 @@ Notable examples:
 * [https://cash.me Square Cash] - allows you to collect payment, e.g. https://cash.me/$aaronpk. An amount can be pre-selected by adding it to the URL, e.g. https://cash.me/$aaronpk/10
 
 == Brainstorming ==
-=== Payment page ===
-Just like having a <kbd>/[[contact]]</kbd> page, your indieweb site should have a <kbd>/payment</kbd> page with icons linked to various ways to pay you.
-
-Interested:
-* {{t}} - one of my top [[Falcon#Payment_Links|Falcon Itches: Payment Links]]
-* ...
-
 === Payment page with amount ===
 Just like [[PayPal.me]] and [[Square Cash]] cash.me, your Payment page should allow a subdirectory component for a dollar amount, which it would then build into the specific payment method links:
 * <kbd>/payment/10</kbd> - to pay you $10
 Alternatively this might read better as just "pay" (also less typing), e.g.
 * <kbd>/pay/10</kbd>
+* ...
 
 Note: this could be handled fully serverside.
 
-Note 2: take a look at the [[PayPal.me]] and [[Square Cash]] cash.me UIs, which I *think* let you edit the amount and add a reason. Those may be good enhancements to consider for such pre-filled out payment subpage URLs. Then again if the payment service provides a final opportunity to edit amount/reason, then having that on your own site may see redundant.
+Interested:
+* {{t}} - one of my [[Falcon#Payment_Links|Falcon Itches: Payment Links]]
+* ...
 
+=== Payment page with reason ===
+It would also be nice to be able to share a URL with the reason for the payment as well, so when the user taps a payment button, the provider has the reason pre-filled in as well.
 
+Take a look at the [[PayPal.me]] and [[Square Cash]] cash.me UIs, which I *think* let you edit the amount and add a reason. Those may be good enhancements to consider for such pre-filled out payment subpage URLs. Then again if the payment service provides a final opportunity to edit amount/reason, then having that on your own site may see redundant.
+* <kbd>/pay/5/coffee</kbd>
+* <kbd>/pay/20/atm</kbd>
+* ...
+
+Note: this could be handled fully serverside.
+
+Interested:
+* {{t}} - one of my [[Falcon#Payment_Links|Falcon Itches: Payment Links]]
+* ...
+
+Perhaps a pay URL could also just have the reason, without an amount like:
+* <kbd>/pay/tip/</kbd>
+* <kbd>/pay/donate/</kbd>
+* ...
+
+{{aaronpk}} has two payment pages, one at <kbd>/pay/</kbd> the other at <kbd>/tip/</kbd>.
+
+=== Escrow ===
+There has been some discussion around using webmentions as a form of payment notification. {{mblaney}} has suggested syndicating these webmentions to a 3rdparty website as a form of Escrow. The interaction would work as follows:
+
+Alice creates a post on her site, representing a payment to Bob, and sends him a homepage webmention. The post includes a link to a 3rdparty site (let's call it Carol's site). Bob replies to Alice's post thanking her for the payment.
+
+Carol runs a site that tracks payments, so she looks for specific markup in the original post and subsequent reply. When Alice creates the post, the payment is currently pending. When Bob replies, the transaction is settled.
+
+If Carol's site was considered trustworthy by both parties, they could use a separate mechanism to transfer funds to her account. Carol could then clear the above transaction between Alice and Bob by paying Bob the outstanding amount.
+
+In general though, transactions only need to be settled to calculate the new balance for Alice and Bob, and the low cost of tracking payments via webmention means no transaction fees are required, except when real funds are withdrawn via Carol's site.
 
 == Articles ==
 Articles about various forms of payment from an independence perspective:
@@ -102,3 +141,4 @@ Articles about various forms of payment from an independence perspective:
 * http://relpayment.com/
 * [[homepage]]
 * [[icon]]
+* [[Apple Pay]]

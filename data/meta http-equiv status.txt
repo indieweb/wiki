@@ -1,0 +1,94 @@
+https://indieweb.org/meta_http-equiv_status
+
+{{stub}}
+
+'''<dfn>meta http-equiv status</dfn>''' is an HTML extension specification that adds the "Status" value to the existing meta element's http-equiv attribute as a method for representing the HTTP Status code to be returned by a web server serving that HTML document, and for consuming applications like webmention receivers to parse and interpret as such for use-cases such as representing a 410 Gone deleted resource on static hosting that often disallow setting HTTP headers directly.
+
+;Status
+:This is a '''Living Specification''' yet mature enough to encourage [[#IndieWeb_Examples|implementations]] and [[#Issues|feedback]].
+;Latest Published Version
+:https://indiewebcamp.com/meta_http-equiv_status
+;Participate
+:[[#Issues|feedback]]
+:[[IRC]]: [irc://irc.freenode.net/indiewebcamp #indiewebcamp on Freenode]
+;Editors
+:[http://tantek.com Tantek Çelik]
+;Authors
+:Other contributors: [https://indiewebcamp.com/wiki/index.php?title=meta_http-equiv_status&action=history revision history]
+;License
+:<small>Per [http://creativecommons.org/publicdomain/zero/1.0/ CC0], to the extent possible under law, the editor(s) and contributors have waived all copyright and related or neighboring rights to this work. In addition, as of {{CURRENTYEAR}}-{{CURRENTMONTH}}-{{CURRENTDAY2}}, the editor(s) and contributors (2015-04-07 onward) have made this specification available under the [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0].</small>
+
+__TOC__
+== http-equiv Status ==
+This specification extends the existing HTML <code>&lt;meta&gt;</code> tag's <code>[https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#attr-http-equiv http-equiv]</code> attribute with one additional value: 
+* '''<code>Status</code>''' - case insensitive, indicates an HTTP header response code directive, the response code itself is provided in the existing <code>content</code> attribute.
+
+== Content attribute ==
+While potentially allowing for any HTTP Status return code, this specification currently only defines the following additional value(s) for the "content" attribute, based on real world use-cases.
+=== 410 Gone ===
+If for some reason you are unable to configure your web server / content host to return a 410 response (e.g. [[GitHub#No_HTTP_Status_Code_Control|GitHub pages]]), a meta http-equiv provides the opportunity for a page to communication this information. 
+
+Since the HTTP status code is returned in code explicitly as a "Status:" header[http://tools.ietf.org/html/rfc3875#section-6.3.3], we can simply use meta http-equiv:
+* <code>&lt;meta http-equiv="Status" content="410 Gone"/></code>
+
+== Server Requirements ==
+* HTTP Servers should read the <code>&lt;head></code> of an HTML document before serving it, and use the first meta element with http-equiv attribute value of "Status" (case-insensitive) for the status code to return in the HTTP Response Header, if one hasn't been set by other means of configuration (e.g. in .htaccess).
+
+== Publisher Guidelines ==
+Publishers should put that meta tag in the HTML they return for [[deleted]] comments '''in addition to''' returning the HTTP response 410 status code.
+
+== Consuming Application Requirements ==
+A meta http-equiv status consuming application must implement the following:
+
+When a consuming application retrieves an HTTP resource which returns an HTTP Status 200 code, if the resource is an HTML document, the implementation MUST check for a meta element with http-equiv attribute of "Status" (case-insensitive), with a content attribute that starts with an HTTP Status code number and a space (e.g. "410 " or "410 Gone"). 
+
+If such an element is found inside the head element of the HTML document, the consuming application MUST treat that resource as if its HTTP return headers returned that Status code.
+ 
+=== Webmention Receiver Requirements ===
+A webmention receiver is a specific kind of consuming application, here is how the consuming application requirements apply in particular to webmention receivers:
+
+If your implementation is a [[Webmention]] receiver, in addition to Webmention receiver processing requirements, it must do the following:
+
+When retrieving a source document as part of checking the source document body for a link to target, a webmention receiver MUST first check for a meta element with http-equiv attribute of "Status" (case-insensitive), with a content attribute that starts with "410 ", e.g. "410 Gone". If such an element is found inside the source document head element, the webmention receiver MUST treat that source document as if its HTTP return headers returned an HTTP Status code of 410 Gone as defined in the Webmention specification.
+
+== IndieWeb Examples ==
+Personal sites publishing meta http-equiv status, e.g. for [[deleted]] posts:
+* ... {{bear}} ... need permalink(s)
+* ... {{t}} ... need permalink(s)
+* ... {{martymcguire}} added support on 2017-01-24. [https://martymcgui.re/2017/01/16/144516/ Example deleted post]
+* ...
+
+Personal sites consuming meta http-equiv status, e.g. for [[deleted]] responses:
+* ... {{kylewm}} ... need permalink(s) and implementations ([[Redwind]]?)
+* ... {{mblaney}} added support on 2016-06-14: https://gitlab.com/dobrado/dobrado/blob/master/install/Post.php#L1325
+* ...
+
+== Implementations ==
+Servers:
+* [https://github.com/tommorris/django-httpequiv-status django-httpequiv-status] is (alpha) Django Middleware that automatically implements the Server Requirements for any Django web application.
+
+Consuming Applications / Webmention Receivers:
+* [[Redwind]] is an indieweb [[CMS]] that implements the Consuming Application Requirements, specifically as a Webmention receiver.
+* [[dobrado]] implements the Consuming Application Requirements when receiving webmentions.
+
+== Brainstorming ==
+=== Possible addition to uf2 parsing ===
+Adding http-equiv parsing to uf2 parsing sounds like it might be a good strategy:
+
+From [[ irc http://indiewebcamp.com/irc/2014-04-09]]:
+<pre>10:56 <aaronpk> it would be great if the http-equiv was included in the result of microformats parsers, like how "rels" is
+...
+10:57 <aaronpk> example: https://gist.github.com/aaronpk/10297489</pre>
+
+Captured: 
+* http://microformats.org/wiki/microformats2-parsing-brainstorming#Add_meta_http-equiv_to_microformats2_parsing_model
+
+== Background ==
+* 2013-06-25 {{t}} [https://indiewebcamp.com/wiki/index.php?title=deleted&direction=next&oldid=3721#Brainstorming brainstormed using a meta element for returning HTTP Status on static hosting]
+* 2016-05-01 {{bear}} and {{kylewm}} live prototype publishing and consuming a meta http-equiv 410, with [[kaku]] and [[Redwind]] implementations respectively and thus proof of concept.
+* 2016-05-08 {{t}} second publishing implementation with ([[Falcon]]).
+* 2016-05-17 specification first drafted.
+
+== See Also ==
+* [[Webmention]]
+* [[deleted]]

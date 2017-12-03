@@ -1,0 +1,298 @@
+https://indieweb.org/p3k-v1
+
+{{stub}}
+
+[[File:p3k-logo.png|right]]
+
+= pзk =
+
+<span class="p-summary">'''<dfn>pзk</dfn>''' (pronounced "peek") is the name of the software that runs [http://aaronparecki.com aaronparecki.com] and [http://indiewebcat.com indiewebcat.com]. Below is the description of version 1 which was active until [https://aaronparecki.com/2016/01/30/13/ 2016-01-30]. See [[p3k]] for information on the current version.</span>
+
+<div style="clear:both;"></div>
+
+== Screenshots ==
+
+[[File:p3k-note-mini-ui.jpg|none|thumb|500px|Writing a note (mini UI)]]
+
+[[File:p3k-note-full-ui.jpg|none|thumb|500px|Writing a note (full UI)]]
+
+[[File:p3k-article-compose.jpg|none|thumb|500px|Writing an article]]
+
+[[File:p3k-v1-posting-ui.png|none|thumb|500px|Posting UI with syndication options]]
+
+==== p3k event ====
+
+[http://aaronparecki.com/replies/2014/09/27/1/event-interface https://aaronparecki.com/2014/09/26/6/photo.png]
+
+
+
+=== Other ===
+* [https://aaronparecki.com/2012/09/09/6/indieweb Posting UI]
+* [https://aaronparecki.com/2013/04/25/4/original-post-discovery Original Post Discovery]
+* [https://github.com/aaronpk/p3k/issues/1 Example post files]
+
+== Source Code ==
+While the core of p3k is not open source, many components are. Below is a list of the components used in p3k.
+
+* [[Quill]] - [[note]] [[posting interface]] (https://github.com/aaronpk/Quill)
+* [https://github.com/indieweb/php-mf2 php-mf2] - a PHP Microformats 2 parser
+* [https://github.com/indieweb/mention-client-php mention-client-php] - A PHP client to send [[webmentions]] and [[pingbacks]]
+* [https://github.com/aaronpk/Timezone-API Timezone-API] - An API to find the timezone at a latitude and longitude
+* [https://github.com/indieweb/php-comments php-comments] - Helper for parsing and presenting comments from external sites
+* [https://github.com/indieweb/link-rel-parser-php link-rel-parser-php] - Parse HTTP <code>Link</code> headers into a structured format
+* [https://github.com/indieweb/indieauth-client-php indieauth-client-php] - Sample implementation and helper methods for an IndieAuth client
+* [https://github.com/indieweb/date-formatter-php date-formatter-php] - Render dates and date ranges in a human-readable format, including proper microformats-2 markup
+* [https://github.com/aaronpk/php-mf2-twitter-shim php-mf2-twitter-shim] - Converts a single tweet to a microformats h-entry
+* [https://github.com/tantek/cassis tantek/cassis] - Used for truncating and ellipsizing post text
+
+== Features ==
+
+* [http://microformats.org/wiki/microformats-2 Microformats 2] markup - on notes, replies and articles
+* JSON representation of each post created by parsing the HTML Microformats
+** HTML: http://2015.aaronparecki.com/notes/2013/03/31/1/indieweb
+** JSON: http://2015.aaronparecki.com/notes/2013/03/31/1/indieweb.json
+* Git-backed data store, no content is stored in a database
+* Posts are written as markdown files
+* Native [[hashtag]] support (e.g. http://aaronparecki.com/tag/indieweb)
+* Can create [[events]] on my site with [[h-event]] markup and handles accepting incoming RSVPs
+* [[RSVP]] support (e.g. http://2015.aaronparecki.com/replies/2013/06/25/3/indiewebcamp)
+* Photo posts (e.g. http://2015.aaronparecki.com/notes/2014/03/16/1/pdx)
+* Footer auto-embedding of content linked in notes
+** Images - [http://2015.aaronparecki.com/notes/2012/12/16/2/iphone-emergency-alert-snowpocalypse example]
+** Video - [http://2015.aaronparecki.com/notes/2013/04/25/1/original-post-discovery example]
+** Youtube - [http://2015.aaronparecki.com/notes/2012/11/29/2/ example]
+** Vimeo - [http://2015.aaronparecki.com/replies/2012/10/29/1/ example]
+** Vine - [http://2015.aaronparecki.com/notes/2013/03/15/1/ example]
+** Gists - [http://2015.aaronparecki.com/notes/2013/05/08/1/karaoke example]
+** Soundcloud - [http://2015.aaronparecki.com/notes/2012/11/20/1/berlin-devsummit example]
+** Slideshare - [http://2015.aaronparecki.com/notes/2012/11/04/1/cyborgcamp example]
+** Spincam - [http://2015.aaronparecki.com/notes/2013/02/08/1/ example]
+** Google Maps - [http://2015.aaronparecki.com/replies/2012/08/14/3/ example]
+** Instagram - [http://2015.aaronparecki.com/notes/2012/10/11/3/ example]
+** XKCD - [http://2015.aaronparecki.com/notes/2013/05/21/1/xkcd example]
+** todo: Flickr - [http://2015.aaronparecki.com/replies/2012/05/25/1/ example]
+** todo: Inline previews of content recognized by the mf2 parser
+* Private sharing of draft posts when logged in via [[IndieAuth]]
+* Returns "410 Gone" for [[deleted]] posts
+
+=== IndieWeb Support ===
+* [[POSSE]] - Content originates on this site and is syndicated to Twitter
+* [[pingback]] and [[webmention]] - sent when posting new content
+* [[original-post-discovery|original post discovery]] - to properly link replies when given a syndicated URL
+* [[reply-context|reply context]] - displaying the post I'm replying to above my own reply posts
+* [[comment|Commenting]]
+** displays received comments and mentions below posts ([http://2015.aaronparecki.com/replies/2013/05/21/2/ example])
+** receiving comments and mentions via [[webmention]]
+* [[RSVP]] - can send RSVPs to events
+* [[event]] - can post events on my site
+
+=== Publishing Other Content ===
+
+Aside from [[notes]], [[articles]] and [[replies]], I also publish the types of content listed below.
+
+==== Sleep ====
+Example: http://2015.aaronparecki.com/metrics/2012/12/03/075900/
+
+I've had the [http://aaronparecki.com/articles/2012/10/28/1/low-friction-personal-data-collection best luck with the Jawbone UP] for tracking my sleep. I have logs now since November 2011 of how much I've slept every night.
+
+The Jawbone app has an interface for adding a note to a sleep record. Here is [http://www.flickr.com/photos/aaronpk/8837063058/in/photostream/ a screenshot] showing an example of adding a note to a sleep record.
+
+==== Weight ====
+Example: http://2015.aaronparecki.com/metrics/2013/09/15/081800/
+
+I use the Withings scale to track my weight. Through a series of convoluted steps, the data eventually ends up on p3k and is published here.
+
+Currently every time there is a new measurement it results in a post on my site. I may change this to post once a week showing a small graph instead.
+
+==== Pushups ====
+[[Pushups]] example: http://2015.aaronparecki.com/metrics/2013/11/28/143242/
+
+I wrote a simple [https://github.com/aaronpk/PushupCounter-iOS simple pushup-tracking app] which makes POST requests directly to my server, creating these posts.
+
+=== Backwards-Compatible Support ===
+
+* Facebook Open Graph tags (e.g. https://www.facebook.com/aaronpk/posts/10100897893521096)
+* [[Twitter Cards]] (e.g. https://twitter.com/aaronpk/status/336305584213225473)
+* [[Pingback]]s are forwarded as webmentions via [[webmention.io]]
+* A [[WebDAV]] API for uploading images from apps that support it
+
+=== Notes vs Articles ===
+* Note: a note is plaintext only, HTML markup is not allowed. There is some auto-linking code that adds links around @mentions, URLs and hashtags. Any recognized URLs like images and video are embedded below the post.
+* Article: an article is a long form entry that supports any HTML.
+* See also: [[Semantics Of Article-Note Distinction]]
+
+=== Storing External Content ===
+When displaying external content on my site for [[reply-context]] and [[comments]], p3k stores both the raw HTML and the parsed JSON for external pages on disk. Below is a screenshot showing how the folder structure maps to the URLs.
+
+[[File:p3k-external-files.png]]
+
+=== Local Nicknames ===
+When writing a note, I often want to address people by a nickname rather than by full name or full domain name. (I don't think "@aaronparecki.com" looks particularly good in a post.)
+
+I have a file called <code>users.txt</code> which contains a mapping of local nicknames to profile info including full name, website and avatar URL. I call this a "local" nickname because it may or may not be a nickname that the other person actually uses for themselves or exists on a silo. In practice, it mostly consists of Twitter usernames, however. 
+
+Sample data:
+
+<pre>
+@aaronpk      http://aaronparecki.com http://aaronparecki.com/images/aaronpk.png Aaron Parecki
+@caseorganic  http://caseorganic.com https://twimg0-a.akamaihd.net/profile_images/1788860814/kk-caseorganic_reasonably_small.jpg Amber Case
+@tantek       http://tantek.com http://tantek.com/photo.jpg Tantek Çelik 
+@t            http://tantek.com http://tantek.com/photo.jpg Tantek Çelik
+@snarfed	http://snarfed.org/	https://pbs.twimg.com/profile_images/2812992290/be21b6e4df4b499a98e87413b355c657_bigger.jpeg	Ryan Barrett
+</pre>
+
+Note that in the case of @snarfed, his twitter account is actually different.
+
+==== Issues ====
+* Fixed-column schemas are annoying to deal with and extend
+* Since some of these photo URLs are twitter URLs, they often change and many are already out of date
+
+==== See Also ====
+[[nicknames-cache]]
+
+== Database ==
+
+p3k uses a [[database-cache|database as a cache]] and to quickly query lists of posts by category, tag, date or by other meta data. No actual post content is stored in the database, the post content is read from disk when needed. The database can be regenerated from the raw files on disk with a script, so there is no worry if the database is suddenly deleted or corrupted.
+
+=== Schema ===
+
+==== posts ====
+The posts table holds the primary meta-data for all posts on the site. 
+
+*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+*   `category` varchar(255) DEFAULT NULL,
+*   `type` varchar(255) DEFAULT NULL,
+*   `permalink` varchar(255) DEFAULT NULL,
+*   `filename` varchar(255) DEFAULT NULL,
+*   `published` datetime DEFAULT NULL,
+*   `updated` datetime DEFAULT NULL,
+*   `tz_offset` int(11) DEFAULT NULL,
+*   `timezone` varchar(255) DEFAULT NULL,
+*   `latitude` double DEFAULT NULL,
+*   `longitude` double DEFAULT NULL,
+*   `client_id` varchar(255) DEFAULT NULL,
+*   `deleted` tinyint(4) NOT NULL DEFAULT '0',
+*   `draft` tinyint(4) NOT NULL DEFAULT '0',
+
+Indexes:
+*   KEY `published` (`published`),
+*   KEY `filename` (`filename`),
+*   KEY `post_type` (`type`),
+*   KEY `category` (`category`),
+*   KEY `category_published` (`category`,`published`),
+*   KEY `category_type` (`category`,`type`)
+
+==== tags ====
+Each tag has an ID and is stored in the tags table.
+
+*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+*   `tag` varchar(255) DEFAULT NULL,
+
+Indexes:
+*   KEY `tag` (`tag`)
+
+==== post_tags ====
+This table links posts to tags.
+
+*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+*   `post_id` bigint(20) DEFAULT NULL,
+*   `tag_id` bigint(20) DEFAULT NULL,
+
+Indexes:
+*   UNIQUE KEY `post_id_2` (`post_id`,`tag_id`),
+*   KEY `tag_id` (`tag_id`),
+*   KEY `post_id` (`post_id`)
+
+==== clients ====
+The clients table holds a list of all [[micropub]] clients that have created posts. 
+
+*   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+*   `client_id` varchar(255) DEFAULT NULL,
+
+Indexes:
+*   KEY `client_id` (`client_id`)
+
+==== syndications ====
+The syndications table contains syndication URLs for posts.
+
+*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+*   `post_id` bigint(20) DEFAULT NULL,
+*   `service` varchar(255) DEFAULT NULL,
+*   `syndicated_url` varchar(255) DEFAULT NULL,
+
+Indexes:
+*   KEY `url` (`syndicated_url`),
+*   KEY `post_id` (`post_id`)
+
+This can be used to find the canonical URL of a syndicated post given its URL on Twitter or Instagram.
+
+== Storage ==
+All content in p3k is stored as files on disk. 
+
+There is a top-level folder for each post type, articles, notes, replies, events, metrics, travel, presentations. (If I had to do this from scratch, I wouldn't have made this distinction at this level).
+
+Each folder contains subfolders for the year and month.
+
+For everything except metrics, the structure is:
+* <code>YYYY/mm/dd-n.md</code> where n is the nth post on that day.
+
+For metrics, the filenames are the full timestamp:
+* <code>YYYY/mm/dd/HHMMSS.md</code>
+
+{|
+| [[File:2014-05-25-aaronpk-articles-filesystem.png]]
+| [[File:2014-05-25-aaronpk-notes-filesystem.png]]
+| [[File:2014-05-25-aaronpk-metrics-filesystem.png]]
+|}
+
+If there are any associated photos or files for a post, they go into a subfolder with the same name as the base name of the file. In the "notes" example above, the photo attached to the "08-4.md" note lives in a folder named "08-4".
+
+=== Example Note ===
+
+Here is an example .md file for one of my notes.
+
+<pre>---
+date: "2013-12-03T23:21:49-08:00"
+place-name: Portland, OR, USA
+timezone: America/Los_Angeles
+latitude: 45.506659
+longitude: -122.654230
+slug: homebrew-website-club
+tags:
+- hwc
+- indieweb
+syndication:
+- https://twitter.com/aaronpk/408134030979108864
+...
+
+Next Homebrew Website Club mtg Wed 18:30 at @EsriPDX & @MozSF (with remote video) http://calagator.org/events/1250465273 Notes from last meeting: http://tantek.com/2013/332/b1/homebrew-website-club-newsletter All are welcome, whether or not you currently have your own website!</pre>
+
+=== Example Event ===
+
+<pre>---
+title: IndieWeb Dinner at 21st Amendment
+slug: indieweb-dinner-at-21st-amendment
+date: "2013-09-30T18:00:00-07:00"
+timezone: America/Los_Angeles
+type: event
+tags: indieweb
+event:
+  start: "2013-09-30T18:00:00-07:00"
+location:
+  org: 21st Amendment
+  street-address: 563 2nd St
+  locality: San Francisco
+  region: CA
+  country: US
+  country-abbr: US
+  postal-code: 94107
+  url: http://21st-amendment.com/
+...</pre>
+
+__TOC__
+
+== See Also ==
+* [[p3k]]
+* [[p3k naming convention]]
+
+[[Category:p3k]]

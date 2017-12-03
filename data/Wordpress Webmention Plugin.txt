@@ -1,0 +1,54 @@
+https://indieweb.org/Wordpress_Webmention_Plugin
+
+The '''<dfn>[https://github.com/pfefferle/wordpress-webmention Wordpress Webmention Plugin]</dfn>''' is a [[WordPress]] plugin that adds [[webmention]] support to WordPress.
+
+* Repository: https://github.com/pfefferle/wordpress-webmention
+* WordPress plugin directory: https://wordpress.org/plugins/webmention/
+
+Incoming webmentions are added as comments to the original post and webmentions are sent when a post is published/updated.
+
+== Installation ==
+
+The WordPress Webmentions plugin is available in the WordPress.org repository. The development version is available on Github.
+
+== Configuration == 
+
+While the plugin has no specific settings, for it to work, you must enable link notifications.
+
+* Go to the Settings => Discussion page in your WordPress admin, and check the "Allow link notifications from other blogs (pingbacks and trackbacks)" and "Allow people to post comments on new articles" checkboxes.
+
+=== Automatically approving ===
+
+Webmentions often get caught in moderation and/or flagged as spam by Akismet and other spam filter plugins. To prevent this, add this PHP snippet to your theme's <code>functions.php</code> file:
+
+<pre>
+function unspam_webmentions($approved, $commentdata) {
+  return $commentdata['comment_type'] == 'webmention' ? 1 : $approved;
+}
+
+add_filter('pre_comment_approved', 'unspam_webmentions', '99', 2);
+</pre>
+
+== Issues and Brainstorming ==
+
+* The Webmentions plugin does not currently support asynchronous webmention processing, deleting posts(mostly due to the fact that WordPress doesn't have a status for deleted, only trashed).
+
+* There have been issues with the fact that the enhanced presentation benefits traditionally associated with Webmentions are located in the [[Semantic Linkbacks]] plugin and not in the webmentions plugin. New users aren't aware of the need for both plugins. The reason for the separation is the need for brainstorming on a better implementation solution.
+
+* Custom comment types do not have the level of support in WordPress as custom post(content) types or custom taxonomies... See(https://core.trac.wordpress.org/ticket/35214 and related). So, using webmention as a comment type is supported, but not fully integrated. Right now, the plugin only has one comment type...webmention. The question is if it should use the field to reflect 'like', 'bookmark' etc. 
+
+* What properties should be extended off of the WordPress comment type to reflect a webmention need to be considered.
+
+== Related Plugins == 
+
+* [[Semantic Linkbacks]]
+* Webmentions for (Threaded) Comments - Adds support for threaded comments for webmentions
+* [[Post Kinds Plugin]]
+
+
+{{WordPress}}
+
+== See Also ==
+* ...
+
+[[Category:WordPress plugins]]

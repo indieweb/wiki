@@ -1,0 +1,55 @@
+https://indieweb.org/User%3AKylewm.com/Old_Itches
+
+Archived on 2016-03-14; these had gotten too out of control
+
+== Itches ==
+
+* Offline-first micropub app -- Upload photos, write notes, post checkins; save the content in localStorage, and publish it (manually? automatically?) when back online. Use AppCache or Service Workers to make the application shell available when offline.
+* Then offline-ify Woodwind where possible -- cache recent posts in localStorage update when online. Queue up replies/likes/reposts when offline.
+* Work on resiliency for webmention (the spec and my implementation). Specify status codes, etc. Monitor failures for sync and async mentions; retry n-times with exponential backoff.
+* Make silo.pub a great OAuth2 implementation. Eran Hammer says a naive OAuth 2 implementation is not very secure by default, and I'm not happy slapping an insecure OAuth 2 impl (silo.pub) on top of a more secure protocol (Twitter? FB?).  Look into expirations and refresh tokens.
+
+* Micropub conformance test suite.
+** Test server: Using an arbitrary client, sign into the test suite, it gives detailed feedback if any of your parameters are wrong or missing. Like indiewebify.me
+** Test client: can sign into an arbitrary server, same type of detailed feedback
+* Would be cool to write up a few chapters adding IndieWeb features to Miguel Grinberg's Flask Mega-Tutorial <code>microblog</code>
+* Thinking about friend graph stuff. How can you host your own reader subscriptions, how can you find friends of friends.
+** More specifically, how can I implement a "Follow" button in Woodwind like exists on retweets in Twitter. [[File:twitter-rt-follow-2015-05-21.png]]
+
+
+=== Red Wind ===
+* Self-host project descriptions, inspired by https://willnorris.com/go/imageproxy. Even if the code lives on github, the canonical project homepage can still be my site.
+* I'm itchy about mixing long-form articles with (in my case very ephemeral) notes. Red Wind UX is geared to quick notes atm. 
+** For articles I prefer the static site generator flow of writing in a text editor.
+* Collection posts for photo albums -- prompted by batch of vacation photos starting around https://kylewm.com/photo/2014/07/31/4
+** added album selector for POSSE to Facebook; album should exist on my site too! 
+* Consume/PESOS from last.fm API somehow. Low bandwidth option: grab and publish [http://www.last.fm/api/show/user.getWeeklyArtistChart top artists] and [http://www.last.fm/api/show/user.getWeeklyTrackChart top tracks] once a week  
+** OwnYourScrobbles type service?
+* "reposts" of longer-than-tweet-length content need more sophistication. e.g. [http://ryandc.tumblr.com/post/37252937055/adam-brault-i-quit-twitter-for-a-month-and-it a tumblr repost of an indieweb post]
+** auto-fill or fallback to the mf2util generated content, but let me override manually with a different title/summary.
+** do the same with bookmarks and likes?
+
+==== Completed ====
+* Hook up redwind and silo.pub so that rw delegates POSSE to sp. Still allow different per-silo configurations 
+* Improve post metadata styling. grey links at the bottom of each post are too cluttered and too click targets are too small.
+* Mixed-content warning for images reposted from http (e.g. twitter). Could mirror locally or serve over an https proxy.
+* Split out admin templates and "theme" templates, better support for customization across installs
+
+=== Woodwind ===
+
+* "Who to follow" suggestions -- friends of friends
+* Outsource the subscription list to your personal site (a la IndieReader), using a common mechanism so users can move between feed readers without losing their subscriptions
+
+==== Completed ====
+
+* Clean up micropub UI; fix the gigantic syndication buttons.
+
+=== other ideas ===
+
+* Browser plugin to display a status icon if the current site accepts webmentions and/or pingbacks. Clicking could bring up more detailed information: h-feed, microformats2, microformats1, etc. [https://kylewm.com/reply/2014/06/06/1] 
+* In the Bridgy mould, would it be useful to extract webmention sending as a separate service that could watch an h-feed and send mentions for links in new entries? PuSH consuming and monitoring for updates/deletes would be a little tricky.
+* This is fuzzier. It would be cool to have a proxy server that could generate h-entry's from "arbitrary" sources: e.g., silos that are already supported by a-u or oembed, plus tumblr, blogger, wordpress, NYT, Wapo, LATimes. Useful for fetching reply context, maybe other stuff.
+
+== Need Help With ==
+
+* Reply/Like/Repost buttons in Woodwind are totally hidden right now until you click on a post, which is confusing and awkward. I'd like to make them visible but not distracting. Ideally the syndication buttons would not advertise twitter/facebook/etc. under every post (I feel like they really break up the flow) [[File:woodwind-reply-area-2015-12-04.png]].

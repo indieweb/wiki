@@ -1,15 +1,20 @@
-http://indiewebcamp.com/repost
+https://indieweb.org/repost
 
-<span style="float:right;height:128px;font-size:128px">♺</span>
+[[Category:PostType]]
+{{emojicon|♺}}
 A '''<dfn>repost</dfn>''' on the indieweb is a [[post]] that is purely a 100% re-publication of another post. The act of <dfn>reposting</dfn> is an umbrella term that covers the general practice of republishing another post typically on the same service or [[silo]], but more and more across sites.
 
 Many silos including [[Tumblr]], [[Twitter]], [[Facebook]], [[SoundCloud]] and [[Google+]] implement reposting — see [[repost#Silo_Examples|Silo Examples]]
 
-Perhaps the oldest form of reposting is the act of "reblogging" someone else's blog post, which typically consists of copying an entire blog post [[article]] from one site to another, keeping it intact, and not adding anything except perhaps a "reblogged from ___" bit of text at the start and/or end linking to the original from which it was reblogged.
-
-(need screenshots of this in the wild, what a reblog looks like, what's the UX flow to reblog something)
+For how to display others reposts of your posts on your posts (e.g. like "5 ♺"), see:
+* [[reposts]]
 
 == Why ==
+Some reasons people repost content:
+* Show that you agree with something without wanting to re-state it yourself. Giving credit for stating something in a way you thought was stated better than you could yourself.
+* Share a post to your followers who may not be following the person you're reposting.
+* Help your followers discover new people who they may not yet be following.
+
 Why implement reposting:
 * '''Retweet from your own site.''' Incrementally supporting reposts, especially with [[POSSE]] to Twitter, enables you to "retweet" from your own site, rather than depending on Twitter to do so.
 ** This in turn ensures a copy of anything you retweet on your own site, in case the original is deleted/removed etc.
@@ -20,43 +25,33 @@ Use <code>class="u-repost-of"</code> to indicate that the URL being linked to is
 
 <pre><nowiki>
 <span class="h-entry"> ... 
- <a class="u-repost-of" href="http://someothersite.example.com/permalink47">...</a>
+ <a class="u-repost-of" 
+    href="http://anothersite.example.com/permalink47">...</a>
 </span>
 </nowiki></pre>
 
-demonstrates an h-entry for a "repost" of <nowiki>http://someothersite.example.com/permalink47</nowiki>. As with [[reply|replies]] and [[like|likes]], let the reposted URL know that you’ve linked to it by sending a [[webmention]].
+demonstrates an h-entry for a "repost" of <nowiki>http://someothersite.example.com/permalink47</nowiki>.
+
+It could also be a nested [[h-cite]], if the target is displayed similar to a [[reply-context#Markup|reply-context]]:
+<pre><nowiki>
+<div class="h-entry">
+  <div class="h-cite u-repost-of">
+    Repost of <a class="u-url" href="https://example.com/post">a post</a> by
+    <span class="p-author h-card">
+      <a class="u-url p-name" href="https://example.com">Author Name</a>
+    </span>:
+    <blockquote class="e-content">
+      <p>The post being reposted</p>
+    </blockquote>
+  </div>
+</div>
+</nowiki></pre>
+
+As with [[reply|replies]] and [[like|likes]], let the reposted URL know that you’ve linked to it by sending a [[webmention]].
 
 '''Why not u-repost?'''
 * The trailing preposition "of" helps communicate this in the same that we have <code>u-in-reply-to</code> instead of <code>u-reply</code>, and <code>u-like-of</code> instead of <code>u-like</code>.
 * This frees up "u-repost" (and "p-repost") to actually indicate that the URL being linked is a repost itself (e.g. similar to "p-comment").
-
-=== Brainstorming Markup ===
-
-Reposts carry a lot of data (all of the original post's traits + all the repost's traits). How can we mark them up so that all that data is captured? 
-
-Ideally we would provide reasonable fallbacks for consumers that don't know about reposts. This is made more problematic because [[readers]]' ideal fallback (full content of the original post) is different than [[webmention]] receivers' ideal fallback (something like "reposted this.").
-
-Here's a slightly simplified example from [https://kylewm.com/2015/10/repost-of-ben-werdmu-ller-ipfs-would-be-a-good-thing kylewm.com].
-
-<code><pre><nowiki>
-&lt;article class="h-entry">
-  &lt;div class="e-content p-name">
-    &lt;div class="u-repost-of h-cite">
-      &lt;a class="p-author h-card" href="http://werd.io/profile/benwerd">
-        Ben Werdmüller
-      &lt;/a>
-      &lt;div class="e-content p-name">            
-        &lt;p>IPFS would be a good thing for the Internet. Amber Case explains: &lt;a href="http://techcrunch.com/2015/10/04/why-the-internet-needs-ipfs-before-its-too-late/">http://techcrunch.com/2015/10/04/why-the-internet-needs-ipfs-before-its-too-late/&lt;/a>&lt;/p>
-      &lt;/div> &lt;!-- .e-content .p-name -->
-      &lt;a class="u-url" href="http://werd.io/2015/ipfs-would-be-a-good-thing-for-the-internet-amber">&lt;i class="fa fa-retweet">&lt;/i> Reposted from werd.io&lt;/a>
-    &lt;/div> &lt;!-- .u-repost-of .h-cite -->
-  &lt;/div> &lt;!-- .e-content .p-name -->
-  &lt;a class="u-url u-uid" href="https://kylewm.com/2015/10/repost-of-ben-werdmu-ller-ipfs-would-be-a-good-thing">
-    &lt;time class="dt-published" datetime="2015-10-06T16:58:29-07:00">
-      4:58pm PDT
-  &lt;/time>&lt;/a>
-&lt;/article>
-</nowiki></pre></code>
 
 == How to Display ==
 Best practices for how to display a repost are still being worked out.
@@ -74,11 +69,11 @@ See: [[2014/reposts#Repost_presentation|2014 Repost session: repost presentation
 [http://barryfrost.com/ Barry Frost] has been experimenting with using <code>u-repost</code> for reposts since at least ????-??-??, example?
 
 === Barnaby Walters ===
-[[User:waterpigs.co.uk|Barnaby Walters]] manually reposted [http://waterpigs.co.uk/articles/getting-started-with-microformats2/ Getting Started With microformats2] on microformats.org using [[WordPress]] and <code>u-repost-of</code> markup [http://microformats.org/2014/03/05/getting-started-with-microformats2 on 2014-03-05]. Example(s):
-* http://microformats.org/2014/03/05/getting-started-with-microformats2 
+[[User:waterpigs.co.uk|Barnaby Walters]] manually reposted his own [[article]] post [http://waterpigs.co.uk/articles/getting-started-with-microformats2/ Getting Started With microformats2] on microformats.org using [[WordPress]] and <code>u-repost-of</code> markup [http://microformats.org/2014/03/05/getting-started-with-microformats2 on 2014-03-05]. Example(s):
+* http://microformats.org/2014/03/05/getting-started-with-microformats2
 
 === Ryan Barrett ===
-[[User:snarfed.org|Ryan Barrett]] uses [[WordPress]] to and the IndieWeb [[Press This]] bookmarklet to repost tweets and POSSE retweets [https://snarfed.org/2014-04-21_twitter-t-going-to-homebrew-website-club since at least 2014-04-21]. Examples:
+[[User:snarfed.org|Ryan Barrett]] uses [[WordPress]] and the [[IndieWeb Press This]] bookmarklet to repost tweets and POSSE retweets [https://snarfed.org/2014-04-21_twitter-t-going-to-homebrew-website-club since at least 2014-04-21]. Examples:
 * https://snarfed.org/2014-04-21_twitter-t-going-to-homebrew-website-club
 ** retweet of: https://twitter.com/t/status/458308409558040577
 
@@ -103,9 +98,29 @@ See: [[2014/reposts#Repost_presentation|2014 Repost session: repost presentation
 {{rhiaro}} has been able to post reposts since 2015-04-07, listed at [http://rhiaro.co.uk/shares /shares] Eg:
 * [http://rhiaro.co.uk/2015/04/1430205825 repost of an indieweb post]
 
-== Proto-repost examples ==
+=== Marty McGuire ===
+{{martymcguire}} has been posting reposts since 2016-11-11. Example:
+* [https://martymcgui.re/2016/11/29/181404/ repost of an indieweb post]
+
+=== Sebastiaan Andeweg ===
+{{sebsel}} has reposts on his site since he imported his twitterfeed. 
+* On 2017-02-07, he reposted a whole article (first no-tweet), to host a copy of it in case the original would go down because of heavy traffic.
+* Since [https://seblog.nl/2017/02/16/2/day-32-new-repost-policy 2017-02-16] he changed the way his reposts look, displaying only the first 50 words of reposted articles. This way, most tweets stay intact, but articles get shortened, making it only quotes, thus keeping copyright impact low.
+* To further keep content on the original page, permalinks of reposts where redirected to the original. This would, however, make it impossible to webmention, so he removed the redirect on [https://seblog.nl/2017/03/03/4/day-40-reverting-repost-changes 2017-03-03], giving his reposts pages on his own site again.
+* After some deliberation, decided on 2017-03-03 to change the reposted article from 'repost-of' to 'bookmark-of', which solved the problem of having to quote / shorten it. So: now reposts have their own url on Seblog, show all the content of the original post.
+
+=== gRegor Morrill ===
+{{gRegor}} has posted reposts as of 2017-04-17:
+* Repost of Facebook post: https://gregorlove.com/2017/04/robert-reich-posted/
+* Repost of Facebook photo: https://gregorlove.com/2017/04/repost-me-and-superman/
+** Tried with text "Reposted [name]'s photo:"
+
+=== Add yourself! ===
+* ...
+
+=== Proto-repost examples ===
 The following IndieWeb examples resemble reposts in appearance but are actually other simpler kinds of posts.
-=== Tantek ===
+==== Tantek ====
 {{t}} has occasionally posted pseudo-retweets to tantek.com as [[notes]], e.g.:
 * 2011-06-29 http://tantek.com/2011/180/t2/ashton-kutcher-invite-vic-gundotra-hot-g <blockquote>RT @scobleizer: "Ashton Kutcher [@aplusk] asked me for an invite. Hey +Vic Gundotra you got a hot property!" G+: https://plus.google.com/111091089527727420853/posts/QXD5Rsm7bNn</blockquote>
 ** POSSEd as a tweet (not retweet) : https://twitter.com/t/status/86285590655549442
@@ -115,6 +130,21 @@ And a manual [[photo]] repost from Instagram, with additional prepended text.
 ** repost of: https://www.instagram.com/p/BARwMA5Onox/?taken-by=bladerunnerreality
 ** POSSE tweet: https://twitter.com/t/status/685519566106066944
 ** POSSE FB: https://www.facebook.com/photo.php?fbid=10102066852677463
+
+=== Other independent examples ===
+==== Syracuse iSchool ====
+Self-described as: <blockquote>Information Space is where the people of the Syracuse iSchool community share their stories, ideas and thoughts about the information field. Our bloggers are students, alumni, faculty and staff.</blockquote> this sounds like a reasonably independent community more than a silo.
+
+Examples:
+* 2016-08-24 <cite>[http://infospace.ischool.syr.edu/2016/08/24/decentralized-web-experts/ What Is the Decentralized Web? 24 Experts Break it Down]</cite> is a repost of an [[article]] that [http://infospace.ischool.syr.edu/2016/08/24/decentralized-web-experts/#dd_start explicitly notes]: <blockquote><em>This article is reposted from “<a href="https://ischoolonline.syr.edu/blog/what-is-the-decentralized-web/">What Is the Decentralized Web? 24 Experts Break it Down</a>”&nbsp;written by 2U intern and Syracuse University iSchool Senior Mackenzie Polzin.</em></blockquote> notably:
+** "repost" notice is the first thing after the article name/title
+** "em" tag/markup is used to emphasize the fact that it is a repost
+** The text "This article is reposted from" is very direct (and similar in structure to [[POSSE]] text like "Originally published at:")
+** hyperlink to original article being reposted, with linktext of original article name/title.
+** missing "," (comma) after that hyperlink makes the subsequent "written by" ambiguous/misleading
+** "written by" text should really be "reposted by"
+** followed by brief profile (role, association, name) of the reposter
+** by putting the repost notice first, it also shows up in "summary" views of the article as well, e.g. on the [http://infospace.ischool.syr.edu/author/mppolzin/ author's page].
 
 == Commons Examples ==
 === Quitter se ===
@@ -166,6 +196,12 @@ For me reposting is about saying this entire post is interesting (http://www.san
 A '''repost''' is different from '''[[like]]''' in that a like is about me liking something personally (subjective value) while a repost is about something I think will be valuable to people that follow/subscribe to my site (objective value). Liking is an emotional response (feeling). - [[User:Sandeep.io|Sandeep Shetty]]
 * +1 this is a good distinction. {{t}}
 
+=== Bookmark vs Repost ===
+Bookmark obviously does not contain the full content. Is there a difference in intent? Some users clearly share (and comment) on bookmarks with the intent of sharing the bookmarked post with others. Other bookmarks could be just private "I want to find this again" notes. thoughts? – {{sknebel}}
+* for me, I only repost things when they are something I would have written myself, but was either better written by someone else, or I wanted to credit them for it. I post far more bookmarks than reposts, and bookmarks are a way for me to find content again, since I tag all my bookmarks. - {{aaronpk}}
+* I think the purpose of a repost (other than promoting the content) would be to preserve the content on the web. A bookmark, whether it contains a comment or is published with the intent of sharing, is still a link to external content. – {{martijnvdven}}
+* I've recently begun using [[PressForward]], a WordPress plugin, that allows one to scrape an entire page via bookmarklet for reposting which I'm alternately using for [[bookmark]] or [[read]] posts. The nice part is that it provides the ability (though there's currently a bug in it, so I'll try to post an example shortly once it's been remedied) to set the original URL of the content as the canonical URL and when visiting the post directly at the URL for my site, it will redirect my repost to the original page URL (after a configurable number of seconds), thus giving my site a referral ping (especially from POSSE copies which typically have just a traditional bookmark headline or short quote/snippet), while still giving the original site the ultimate credit. My post then still stands as fully readable from my back end for my personal archival/consumption purposes (who can really trust something you bookmark to still exist when you want to come back to it??), especially with highlights and other potential marginalia, but can also still receive webmentions and conversation around my post of the original article. In archive page views on my site, I typically use a "read more" tag after a paragraph or less of the original as a teaser which then forces the reader to visit the page URL which, as mentioned, forwards to the original source, so it works as a more "traditional" bookmark for other people viewing my post. Ultimately I'm heavily blurring the line between some of the types for my personal consumption while still trying to present things traditionally to outside readers. As a result, I rarely use reposts, except for extremely short content like Twitter, or use it as described by {{aaronpk}} above. I've also begun pinging the [[Internet Archive]]/Wayback machine with all posts to save the content found for bookmarks/reposts/etc. as an additional back up. – {{chrisaldrich}}
+
 == Displaying reposts of ==
 {{main|reposts}}
 When a post receives a [[webmention]] from a repost, it can choose to display it similar to a favoriting/liking of that post, as well as optionally displaying a number of reposts, or icons of recent reposters.
@@ -204,13 +240,25 @@ Previously, retweets in streams of the retweeter looked like:
 [[File:2013-08-16-retweet.png]]
 
 ==== The Most Reposted Thing ====
+===== Most Retweeted =====
+Via https://www.washingtonpost.com/news/the-intersect/wp/2017/05/09/congrats-the-most-retweeted-tweet-ever-is-now-a-teens-plea-to-a-brand-for-free-nuggets/
+
+* https://twitter.com/carterjwm/status/849813577770778624
+Has over 3.6 million reposts as of 2017-11-29.
+
+
+Before 2017:
+
 On 2014-03-02, Ellen DeGeneres, with the help of Bradley Cooper, took a "selfie" with her mobile device and posted it on Twitter:
 
 https://twitter.com/TheEllenShow/status/440322224407314432 <blockquote>If only Bradley's arm was longer. Best photo ever. #oscars <br>https://pbs.twimg.com/media/BhxWutnCEAAtEQ6.jpg</blockquote>
 
-That tweet became the most measurably reposted thing (beat Barack Obama's [https://twitter.com/BarackObama/status/266031293945503744 most shared tweet] around the 2012 elections), with over 3.4 million reposts as of 2014-04-02 (one month). See additional references[https://movies.yahoo.com/blogs/movie-news/oscars-2014--ellen-s--selfie-wins-internet--breaks-twitter-034518537.html], including animated GIF of the taking of the selfie[https://movies.yahoo.com/blogs/movie-news/ellen-degeneres--record-breaking--selfie-inspires-hilarious-memes-including-grumpy-cat--of-course-045110776.html]
+That tweet became both the most measurably reposted thing (beat Barack Obama's [https://twitter.com/BarackObama/status/266031293945503744 most shared tweet] around the 2012 elections), with over 3.4 million reposts as of 2014-04-02 (one month), and the most [[response|responded]] to thing with over 6 million responses (reposts, likes, replies) as of 2017-08-16.
 
-https://s.yimg.com/os/publish-images/movies/2014-03-03/3166a050-a28b-11e3-a16f-a394e4559bf0_ellengroupselfie.gif
+See additional references[https://movies.yahoo.com/blogs/movie-news/oscars-2014--ellen-s--selfie-wins-internet--breaks-twitter-034518537.html], including animated GIF of the taking of the selfie[https://movies.yahoo.com/blogs/movie-news/ellen-degeneres--record-breaking--selfie-inspires-hilarious-memes-including-grumpy-cat--of-course-045110776.html] <!-- dead link: repair with archive org? https://s.yimg.com/os/publish-images/movies/2014-03-03/3166a050-a28b-11e3-a16f-a394e4559bf0_ellengroupselfie.gif -->
+
+See also:
+* [[like#The_Most_Liked_Thing|like: The Most Liked Thing]]
 
 === Tumblr ===
 [[Tumblr]] has a notion of "reblogging", which Tumblr users tend to take reblogging quite seriously — for example it is bad form to reblog a post as a new tumblr post even if you're linking back to the original [http://indiewebcamp.com/irc/2014-03-07/line/1394241260]
@@ -259,6 +307,50 @@ The [https://plus.google.com/u/0/+KevinMarks/posts/GYNUzmCntMZ shared post] is i
 === Repost.us ===
 [[repost.us]] was a verb silo, hosting buttons and a UI for reposting articles which provided an HTML+JS snippet to embed on your own site. [http://www.repost.us/article-preview/hash/f3854b40aaf0a7a4cc60a52ca243dd9e/ Example repost UI] (seen once the "repost" button is clicked). Site is offline as of [[site-deaths#2014|July 31, 2014]]
 
+
+== Cross-silo Examples ==
+Because many silos allow for automatic cross-posting to other silos, many of them also cross-post local reposts!
+
+=== Twitter to Facebook ===
+A retweet on Twitter, auto-cross-posted by Twitter to Facebook:
+
+[https://www.rmendes.net/2016/protip-dont-connect-your-twitter-account-to-facebook-or-your <img src="https://www.rmendes.net/file/8f932d90fa90a9ce58341f02bfccf7cf" alt="" style="max-width:100%"/>]
+
+
+This is particularly awkward when you compare what a Twitter to Facebook retweet cross-post looks like with a Twitter to Facebook tweet cross-post:
+
+[https://www.rmendes.net/2016/protip-dont-connect-your-twitter-account-to-facebook-or-your <img src="https://www.rmendes.net/file/09da7fa1daf3bb55d810fa5111d1a306" alt="" style="max-width:100%"/>]
+
+== Brainstorming ==
+=== Brainstorming Markup ===
+
+Reposts carry a lot of data (all of the original post's traits + all the repost's traits). How can we mark them up so that all that data is captured? 
+
+Ideally we would provide reasonable fallbacks for consumers that don't know about reposts. This is made more problematic because [[readers]]' ideal fallback (full content of the original post) is different than [[webmention]] receivers' ideal fallback (something like "reposted this.").
+
+Here's a slightly simplified example from [https://kylewm.com/2015/10/repost-of-ben-werdmu-ller-ipfs-would-be-a-good-thing kylewm.com].
+
+<code><pre><nowiki>
+&lt;article class="h-entry">
+  &lt;div class="e-content p-name">
+    &lt;div class="u-repost-of h-cite">
+      &lt;a class="p-author h-card" href="http://werd.io/profile/benwerd">
+        Ben Werdmüller
+      &lt;/a>
+      &lt;div class="e-content p-name">            
+        &lt;p>IPFS would be a good thing for the Internet. Amber Case explains: &lt;a href="http://techcrunch.com/2015/10/04/why-the-internet-needs-ipfs-before-its-too-late/">http://techcrunch.com/2015/10/04/why-the-internet-needs-ipfs-before-its-too-late/&lt;/a>&lt;/p>
+      &lt;/div> &lt;!-- .e-content .p-name -->
+      &lt;a class="u-url" href="http://werd.io/2015/ipfs-would-be-a-good-thing-for-the-internet-amber">&lt;i class="fa fa-retweet">&lt;/i> Reposted from werd.io&lt;/a>
+    &lt;/div> &lt;!-- .u-repost-of .h-cite -->
+  &lt;/div> &lt;!-- .e-content .p-name -->
+  &lt;a class="u-url u-uid" href="https://kylewm.com/2015/10/repost-of-ben-werdmu-ller-ipfs-would-be-a-good-thing">
+    &lt;time class="dt-published" datetime="2015-10-06T16:58:29-07:00">
+      4:58pm PDT
+  &lt;/time>&lt;/a>
+&lt;/article>
+</nowiki></pre></code>
+
+
 == Challenges ==
 The biggest challenge with repost is that currently it's something which is native to silo for silo posts, and nothing more. It's a challenge, because it's not clear how it makes sense in a cross-site manner. 
 
@@ -286,6 +378,26 @@ How should a repost of a repost be displayed?
 What about a repost of a repost of a repost?
 * Should a repost of ... a repost show all intermediate repost authors? A repost chain?
 
+=== Avoiding blogspamming ===
+This article:
+* https://danielmiessler.com/blog/digg-and-reddit-please-learn-the-difference-between-original-content-and-blogspam/
+defines "blogspamming" broadly enough to potentially apply to any repost of an [[article]] post.
+
+The challenge is, what is the best way to repost an article, without having it seem or in any way appear to be "blogspam" or "blogspamming"?
+
+Additional discussion at: https://chat.indieweb.org/2017-02-03#t1486168081905000
+
+=== Copyright issues ===
+At [[events/2017-02-14-homebrew-website-club|HWC 2017-02-14]] we questioned the ethics of reposting a complete content, especially that unless explicitly stated all material fall under copyright laws, and reposting should respect this. [http://microformats.org/wiki/rel-license rel-licence] could be added to indicate the openness of a certain post.
+
+Additional discussion at: https://chat.indieweb.org/2017-02-16#t1487241083379000
+
+== History ==
+=== reblogging ===
+Perhaps the oldest form of reposting is the act of "reblogging" someone else's blog post, which typically consists of copying an entire blog post [[article]] from one site to another, keeping it intact, and not adding anything except perhaps a "reblogged from ___" bit of text at the start and/or end linking to the original from which it was reblogged.
+
+(need screenshots of this in the wild, what a reblog looks like, what's the UX flow to reblog something)
+
 == See Also ==
 * This was discussed in IRC on [http://indiewebcamp.com/irc/2013-06-09 2013-06-09], [http://indiewebcamp.com/irc/2013-06-10#t1370885009 2013-06-10]
 * http://sandeep.shetty.in/2012/10/social-verbs.html (lots of resources in the references section)
@@ -295,3 +407,5 @@ What about a repost of a repost of a repost?
 * [[reposts]]
 * [[quotation]]
 * [[webactions]]
+* 2017-11-15 [https://medium.com/@mroth/why-the-emoji-recycling-symbol-is-taking-over-twitter-65ad4b18b04b Why the Emoji Recycling Symbol is Taking Over Twitter]
+* early example of ♺ use by Ev Williams https://twitter.com/ev/status/923901604

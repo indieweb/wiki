@@ -1,21 +1,22 @@
-http://indiewebcamp.com/private_posts
+https://indieweb.org/private_posts
 
 {{stub}}
 
-'''<dfn>private posts</dfn>''' refer to [[posts]] or portions of posts which are [[privacy|private]] to either the author or to a limited audience chosen by the author. Typical [[silos]] offer some form of private posts (or messaging, like email).This is a nascent area on the indieweb.
+'''<dfn>private posts</dfn>''' refer to [[posts]] or portions of posts which are [[privacy|private]] to either the author or to a limited audience chosen or previously approved by the author. Typical [[silos]] offer some form of private posts (or messaging, like email). This is a nascent area on the indieweb.
 
 == Use Cases ==
 There are numerous use case for private posts, however here we are capturing use-cases raised by active Indieweb community members that wish to [[selfdogfood]] such features on their own site.
 
 === Private messaging ===
-From Aaron Parecki (who has implemented this on his site)
-* [[indieweb-messaging]]
-
-There could be a possibility with [[pgp#Possible_Solution | pgp messaging]].
+==== Brainstorming ====
+* [[Private-Webmention]]
+* [[private-webmention-brainstorming]]
+* [[private-messaging-brainstorming]]
+* [[pgp#Possible_Solution | pgp messaging]]
 
 === Allow silo friends to see private posts ===
 From Tom Morris in IRC:
-<blockquote>Allowing your [[Facebook]] friends to see things where you assume they *don't* have their own domain", and thus you'd need to support some form of Facebook-authentication to verify their identities before showing them the private post(s) you'd like them to see. "Similarly [[Twitter]]" friends.</blockquote>
+<blockquote>Allowing your [[Facebook]] friends to see things where you assume they *don't* have their own domain, and thus you'd need to support some form of Facebook-authentication to verify their identities before showing them the private post(s) you'd like them to see. "Similarly [[Twitter]]" friends.</blockquote>
 
 Need to maintain an address book to coordinate identities across various silos, and allow users alternative authentication mechanisms (I'd be inclined to include email). Posts could be shared with individual address-book entries or predefined mailing-lists. Or dynamic lists like "Facebook friends", "Twitter friends" above, or as [[User:aaronparecki.com|Aaron]] [http://indiewebcamp.com/irc/2014-05-04/line/1399224045 suggested], all the h-cards linked to from a webpage like [[irc-people]]   --[[User:Kylewm.com|Kylewm.com]] 11:56, 8 May 2014 (PDT)
 
@@ -51,9 +52,37 @@ It was suggested to respond with a "WWW-Authenticate" header, like the one used 
 
 It was also discussed that the response could include a unique URL as a rel-self to enable realtime [[Pubsubhubbub]] updates on said content.
 
-This would enable [[block]] mechanisms based on eg. [http://microformats.org/wiki/block-list block lists] to advertise both some blocked items to public and additional ones privately to certain trusted users and to have changes propagate in realtime to all clients, such as [[WebMention]] endpoints, that might have use for such data to eg. block mentions from being shown.
+This would enable [[block]] mechanisms based on eg. [http://microformats.org/wiki/block-list block lists] to advertise both some blocked items to public and additional ones privately to certain trusted users and to have changes propagate in realtime to all clients, such as [[Webmention]] endpoints, that might have use for such data to eg. block mentions from being shown.
 
 It can also be used to upgrade a public [[h-feed]] with private posts when subscribing to it in a [[reader]].
+
+=== Sharing only with approved followers ===
+The ability to share posts only with approved followers (instead of publicly viewable) is a common [[silo]] feature, either as an aspect of a [[private account]], or sometimes as part of sharing to "friends only".
+
+Such posts are sometimes also called a "follower-only post" or a "follower-only message".
+
+=== Sharing With Fewer Friends ===
+There are many times when you may want to share something, like something vulnerable, with only a few friends, a small subset of your "friends" on any particular social media or other service.
+
+Thoughts from (unattributed) private (but not person-specific) messages of specific examples of such times, some ambiguities added:
+
+<blockquote>Where does one go / post when one feels lost or in need of connection or understanding?</blockquote>
+...
+<blockquote>Where do you post when your significant other breaks up with you and you're friends with them and their friends too on every social network?</blockquote>
+...
+<blockquote>Where do you go for support for a problem you're having with someone else in your friend group? Especially when we're so interlinked.</blockquote>
+...
+<blockquote>We're so interlinked superficially. Linked yet feeling disconnected.</blockquote>
+...
+<blockquote>In public or even friends only posts we are compelled to put on an air of invulnerability, of strength, of bouncing back from anything for fear that if we don't we won't seem attractive to others we may be dating or want to date. Or to get a job or funded or whatever we are seeking approval for.</blockquote>
+
+Should you even use the indieweb / web for this?
+
+How could private posts be better than a simple group txt message where you add the people you want to share, then share?
+
+Or are those the same thing with just different UIs?
+
+Would it be a goal of this use-case to replace group txt messages?
 
 == IndieWeb Examples ==
 
@@ -71,6 +100,17 @@ Example note from {{kylewm}}'s site:<br>[[File:kmahan-private-note-display.png|b
 === {{benthatmustbeme}} ===
 [[postly]] has support for private posts as of 2015-11-30, more data forthcoming.
 
+=== gRegor Morrill ===
+{{gRegor}} added basic support for making a page private as of 2016-09-27, as part of work on [[private webmention]]
+* https://gregorlove.com/2016/09/this-is-a-test-private/
+** Returns HTTP 401 Unauthorized
+** Returns WWW-Authenticate: Bearer header
+** Returns Link: header for token endpoint, for authentication
+** See [[private_webmention#gRegor_Morrill|my private webmention notes]] for more details
+
+TODO:
+* [[uid]] for slug so no private information is leaked through the slug
+
 == Silo Examples ==
 We can learn from the UI that [[silos]] use to present and edit the privacy of posts.
 
@@ -83,10 +123,40 @@ We can learn from the UI that [[silos]] use to present and edit the privacy of p
 * subset of friends (curated whitelist) of the author of the photo
 * only the author
 
+Facebook shows the name of the group a post was shared with. This screenshot was captured by someone other than the author of the post.
 [[File:fb-private-post-2015.png]]
+
+==== Limited Audience ====
+When a post is shared with a specific list of friends, a small gear icon appears beside the status. Hovering over it shows a list of names who the post is shared with:
+
+[[File:facebook-limited-audience-hover-2016-10-19.png]]
+
+Clicking the icon shows a popover with more information and links to the friends' profiles:
+
+[[File:facebook-limited-audience-click-2016-10-19.png]]
+
+=== Instagram ===
+[[Instagram]] supports private posts as a side effect of their [[private account]] support.
+
+The posts themselves do not have a "private" or not setting per se, but rather as a whole are the same as the privacy of the account. The time of post does not matter, e.g. posts that look private when an account is private are made public when an account is switched the public and vice versa.
+
+You must be logged into Instagram to view private posts (posts from private accounts where you've requested access and they've granted access).
+
+If you are not logged in, when you try to view a private post (e.g. by following a hyperlink to a private post permalink) you may see (as of 2017-01-22) a confusing message like:
+
+<blockquote style="text-align:center">'''Sorry, this page isn't available.''' <br/><br/>The link you followed may be broken, or the page may have been removed. Go back to Instagram.</blockquote>
+
+=== Swarm ===
+
+On [[Swarm]], people can checkin "off the grid", which shows the checkin only to the user themselves (with a lock-icon).
+
+[[File:2017-08-20-swarm-private-off-the-grid.png]]
 
 === Google Plus ===
 TODO: find a screenshot of Google+ posts shared publicly as well as with a circle.
+
+=== WordPress ===
+Wordpress enables password protected posts Here's [https://epeus.wordpress.com/2016/03/09/how-private-is-this/ an example] - note that it leaks the title and the URL. The password is 'indie'
 
 == Other Examples ==
 
@@ -101,7 +171,7 @@ TODO: find a screenshot of Google+ posts shared publicly as well as with a circl
 
 === Private feed for each authenticated ===
 
-Given that there is a private feed for each authenticated user on each website: 
+Given that there is a private [[feed]] for each authenticated user on each website: 
 
 * How does private feed discovery work for readers?
 ** A "Follow me" or "subscribe" button usually only transfers the current URL to the reader, delegating the feed discovery task (which is necessary, since the feed reader might support one feed format but not the other). The reader will not be authenticated (as it does not have the same cookies or IP as the user), so it will not see the private feed.
@@ -114,14 +184,22 @@ Given that there is a private feed for each authenticated user on each website:
 
 * the feed can be public without the posts in in being public. Potentially the posts can be linked from the feed, though that may leak timestamp metadata (and content in slugs if you're not careful) [[User:Kevinmarks.com|Kevinmarks.com]] 11:10, 24 February 2016 (PST)
 
+* https://chat.indieweb.org/2016-02-18#t1455816804068000
+
 === Other issues ===
 
 * When sending a private message, I don't want to write my contact's domain names but select the target contacts from a list. How can [[Micropub]] clients get a list of all contacts and contact groups?
 
 == See Also ==
+* [[private account]]
 * [[privacy]]
-* [[indieweb-messaging]]
+* [[private-webmention]]
 * [[messaging]]
 * [[posts]]
 * [[SharingWithCircles]]
 * [[sign-in-use-cases]]
+* [[iceberg post]]
+* https://www.w3.org/2005/Incubator/federatedsocialweb/wiki/SWAT1_use_cases#Private_content
+* https://github.com/tootsuite/mastodon/issues/712 - [[Mastodon]] issue regarding the challenge of a UI (and protocols!) for actually federating private posts (likely because no one has actually made it work, despite a few historical iterations of claims)
+* https://marrus-sh.github.io/mastodon-info/everything-you-need-to-know-about-privacy-v1.3-020170427.html
+* [[2014/SF/indiepriv]]

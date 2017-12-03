@@ -1,0 +1,154 @@
+https://indieweb.org/How_to_publish_and_consume_WebSub
+
+<div class="p-summary">This page is a description of a minimum viable subset of [[PubSubHubbub|PuSH 0.4]] that is sufficient for supporting the IndieWeb use cases of realtime publishing feeds of [[h-entry]] posts, and subscribing to & receiving notifications of updates from those feeds.</div>
+
+== Why ==
+The PuSH 0.4 spec talks only about the relationship between subscribers and publishers. 
+
+PuSH 0.4 does not specify:
+* how publishers should notify the hub of new content
+* what the hub should actually send to subscribers
+
+This guide assumes the use cases above to provide a more concrete description of how to use PuSH. It is meant to leave as little ambiguity as possible so that implementers have a direct path to using it.
+
+== Overview ==
+
+[[File:websub-sequence-diagram.png|400px]]
+
+== How to Publish ==
+=== Link to your PuSH Hub ===
+<div id="Discovery"></div>
+Consumers will need two pieces of information in order to subscribe to your content, the '''hub''' that you send pings to, and the '''topic''' which is just the URL that contains the feed, for example your home page.
+
+If you don't yet have a hub, you should first choose one to use. Currently the most stable hub that is compatible with 0.4 and HTML resources is [[Superfeedr]]. You can use the common Superfeedr hub without any registration by using <code><nowiki>http://pubsubhubbub.superfeedr.com</nowiki></code> as your hub URL. If you register your own hub at Superfeedr, you will also get access to information such as the subscribers to each of your topic URLs. For alternate hubs to use, see [[PuSH#Hubs]].
+
+Add the two URLs in an HTTP Link header, <code>rel=self</code> and <code>rel=hub</code>. If you can't add Link headers, then you can add HTML <code>&lt;link&gt;</code> tags instead.[https://pubsubhubbub.googlecode.com/svn/trunk/pubsubhubbub-core-0.4.html#discovery].
+
+For example, the HTTP Link headers should look like this:
+
+<pre>
+Link: <https://pubsubhubbub.superfeedr.com/>; rel="hub"
+Link: <https://kylewm.com/>; rel="self"
+</pre>
+Or as one Link: header:
+<pre>
+Link: <https://pubsubhubbub.superfeedr.com/>; rel="hub", <https://kylewm.com/>; rel="self"
+</pre>
+
+
+Or if you can't (or don't want to) publish Link headers, you can link to them in the HTML:
+
+<pre>
+<link rel="self" href="https://kylewm.com/">
+<link rel="hub" href="https://pubsubhubbub.superfeedr.com/">
+</pre>
+
+=== Notify the hub of new content ===
+
+When you update your feed, you need to notify your hub that there is new content. Send an HTTP [[form-encoded]] POST to your hub with two fields:
+
+* <code>hub.mode=publish</code>
+* <code>hub.url=YOUR_FEED_URL</code> (this should be the exact URL you advertise in the rel=self link)
+
+The hub will check your URL for new content, then notify all subscribers of the update.
+
+==== Multiple topic URLs ====
+When a new post is created, it appears on one's home page, archives page, and often on a tag page. For example, when posting this note (http://aaronparecki.com/notes/2015/03/17/5/monocle), the following URLs were updated:
+* http://aaronparecki.com/
+* http://aaronparecki.com/notes
+* http://aaronparecki.com/tag/monocle
+* http://aaronparecki.com/tag/indieweb
+* http://aaronparecki.com/tag/push
+
+Rather than sending 5 publish pings to the hub, it is better to send a single publish request. There are currently two different ways to indicate multiple topic URLs in a single request, using array notation and with wildcards.
+
+===== Array Notation =====
+
+For hubs that support array notation, make a request with all of the topic URLs that were updated:
+
+<pre><nowiki>hub.mode=publish
+&hub.url[]=http://aaronparecki.com/
+&hub.url[]=http://aaronparecki.com/notes
+&...etc</nowiki></pre>
+
+This is supported by the following hubs:
+* [[Superfeedr]]
+* [[Switchboard]]
+
+===== Wildcards =====
+For hubs that support the wildcard method, you can use a <code>*</code> at the end of a topic URL, and the hub will send notifications for any URL that matches:
+
+<pre><nowiki>hub.mode=publish
+&hub.url=http://cweiske.de/*</nowiki></pre>
+
+If the hub receives a wildcard url in the publish request, it checks which subscription URLs match the wildcard URL. Those URLs are then checked for changes.
+
+This is supported by the following hubs:
+* [[phubb]]
+
+This is nice for static blogs. After updating the blog content, you only have to tell the hub that <tt>http://blog.example.org/*</tt> changed, and the hub figures out the rest. No need to keep track of the changed URLs the hub has been notified of.
+
+== How to Subscribe ==
+
+=== Discover the "hub" and "self" URLs ===
+Given a URL of posts such as https://kylewm.com/, you first need to discover what hub it is using. 
+
+To find the hub, first look for an HTTP <code>Link</code> header with rel="hub" and use that hub if found. If no Link header is found, check the HTML for a <code>&lt;link&gt;</code> tag with rel="hub" and use that URL.
+
+To find the URL value, check for an HTTP <code>Link</code> header with rel="self" and use that URL if found. If no Link header is found, check the HTML for a <code>&lt;link&gt;</code> tag with rel="self" and use that URL instead.
+
+Now you have two URLs, the "hub" and "self" URL.
+
+=== Send the subscription request ===
+To subscribe, send a [[form-encoded]] POST request to the hub with the following parameters:
+* '''hub.mode''' - The string "subscribe" 
+* '''hub.topic''' - The URL with the content you are subscribing to, which was the value of the "self" link previously discovered
+* '''hub.callback''' - The URL that you want the hub to send notifications to, so it must be a publicly-accessible URL. It is a good idea to use a unique URL per subscription so that you know what feed is updated when you receive a notification.
+
+The hub will reply with either <code>202 Accepted</code> or <code>400 Bad Request</code>. If there were any problems with the request, such as the subscriber attempting to subscribe to a topic that does not exist, the hub will return <code>400 Bad Request</code> and a plain text description of the error. If the hub accepted the subscription request, it will return <code>202 Accepted</code> and will then attempt to verify the subscription request.
+
+=== The hub verifies the subscription request ===
+After you send the request, the hub will make a separate request back to your callback URL to verify the request, so that attackers can't create arbitrary subscriptions for you.
+
+The request will be GET request with the following query string parameters:
+* '''hub.mode''' - The string "subscribe" 
+* '''hub.topic''' - The topic URL from the subscription request
+* '''hub.challenge''' - A hub-generated random string that must be echoed by the subscriber to verify the subscription
+* '''hub.lease_seconds''' - The hub-determined number of seconds that the subscription will stay active. After which the subscriber will need to subscribe again. 
+
+To confirm the subscription, you will need to reply with <code>200 OK</code> and a request body of exactly the string provided in the "hub.challenge" parameter in the request. The response body should not contain anything else, and is not form-encoded, just the plain string.
+
+To reject the request, reply with <code>404 Not Found</code> and an empty body. Any response other than <code>200 OK</code> will indicate to the hub that the subscription is rejected and you will not receive notifications of new content.
+
+=== Receiving notifications of new content ===
+Now that the subscription is created, you will begin receiving notifications at the callback URL you specified. Notifications will always be POST requests but may or may not contain a post body. The notification will also contain two Link headers with the rel=self and rel=hub URLs from the subscription.
+
+==== Standard Notifications ====
+Standard notifications will not contain a POST body. As a subscriber, if you receive an empty notification, you are expected to treat this as a notification that the publisher has updated the URL, and go fetch the new content yourself. Since the page will likely be an [[h-feed]] of posts, or an [[h-entry]] with comments, there will almost certainly be content there you have already seen. You will need to properly process only the items you have not yet seen.
+
+==== Fat Pings ====
+"Fat ping" notifications will contain a POST body with either the full HTML of the page, or just the HTML of the new entries the publisher added since the last notification. This mechanism is likely to be used by websites with a large subscriber base, to avoid triggering thousands of subscribers making HTTP requests to the publisher's site when an update is made.
+
+The hub may parse the microformats from the publisher's website and re-create the HTML that is sent, so you should not assume the HTML is literally the same as it was from the publisher. The content will be the same of course, but it may have been reformatted if the hub parses the [[h-entry]] posts and re-generates new HTML entries from the data in the original.
+
+== How to Unsubscribe ==
+
+=== Send the unsubscribe request ===
+To subscribe, send a [[form-encoded]] POST request to the hub with the following parameters:
+* '''hub.mode''' - The string "unsubscribe" 
+* '''hub.topic''' - The URL with the content you had previously subscribed to
+* '''hub.callback''' - The URL that you were receiving notifications at
+
+The hub will reply with either <code>202 Accepted</code> or <code>400 Bad Request</code>.
+
+=== The hub verifies the unsubscribe request ===
+After you send the request, the hub will make a separate request back to your callback URL to verify the request, so that attackers can't remove subscriptions for you.
+
+The request will be GET request with the following query string parameters:
+* '''hub.mode''' - The string "unsubscribe" 
+* '''hub.topic''' - The topic URL from the subscription request
+* '''hub.challenge''' - A hub-generated random string that must be echoed by the subscriber to verify the request
+
+To confirm and unsubscribe, you will need to reply with <code>200 OK</code> and a request body of exactly the string provided in the "hub.challenge" parameter in the request. The response body should not contain anything else, and is not form-encoded, just the plain string.
+
+To reject the request, reply with <code>404 Not Found</code> and an empty body. Any response other than <code>200 OK</code> will indicate to the hub that the subscription is rejected and you will not receive notifications of new content.

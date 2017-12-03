@@ -1,0 +1,41 @@
+https://indieweb.org/2015/MIT/Notifications
+
+'''<dfn>Notifications clustering and presentation</dfn>''' was a session at [[2015/MIT|IndieWebCamp MIT 2015]].
+
+The etherpad was https://etherpad.indieweb.org/notifications.
+
+== Notes ==
+* {{rhiaro}} aaronpk: Lowest common denominator for notifications is text
+* {{rhiaro}} ... webmention.io clusters because of flooding
+* {{GWG}} aaronpk is discussion clustering
+* {{rhiaro}} ... in irc
+* {{rhiaro}} ... when a notification is received it starts a timer, notifications coming in are added to timer and timer is extended for x amount of time
+* <Kongaloosh> it's interesting, most people check their notifications within a few minutes of waking up
+* {{rhiaro}} ... if no new webmentions are recieved by the time the timer goes off, it's a cluster, text is created and whole cluster is sent
+* {{snarfed}} yeah this was subtle and nontrivial to design
+* {{rhiaro}} ... only similarly typed notifications are clustered
+* {{rhiaro}} ... that can be combined into a single sentance
+* <Kongaloosh> and the number of times people check their phones during the day is astronomically high
+* <neanias> Kongaloosh: one of the first things I do, to be honest
+* <Kongaloosh> partially by design
+* {{rhiaro}} ... you want to cluster when one post links to multiple things
+* {{GWG}} Notifications are by author or by type, but not both.
+* {{rhiaro}} ... eg. one post links to many wiki pages
+* {{tantek}} aaronpk: you do want to cluster by: source (permalink) of notification (e.g. one post links to many posts)
+* {{snarfed}} we iterated on this for a while. gory details in https://github.com/aaronpk/webmention.io/issues/39#issuecomment-123388057
+* {{rhiaro}} ... also multiple people respond to one post, like rsvps to an event
+* {{tantek}} aaronpk: or multiple sources link to one of your posts
+* <Kongaloosh> that's a good idea
+* {{rhiaro}} GWG: how to decide who list first?
+* {{rhiaro}} aaronpk: silos do it based on distance in social graph and amount of interactions. Obviously harder.
+* {{kevinmarks}} Or one person likes /retweet several of your posts?
+* {{aaronpk}} here's the thread where we were designing this https://github.com/aaronpk/webmention.io/issues/39
+* {{aaronpk}} here's a bunch of text design https://github.com/aaronpk/webmention.io/issues/39#issuecomment-127048277
+
+
+{{aaronpk}} uses a rolling timer
+* when a webmention comes in, it starts a 60 second timer.  after that any new notification that comes in before the timer is up increases the timer by another 60 seconds.
+* notification is sent after no webmentions for 60 seconds.
+* there is an upper limit of 5 minutes
+
+[[Category: 2015 sessions]]

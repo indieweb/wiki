@@ -1,0 +1,55 @@
+https://indieweb.org/content_addressing
+
+{{stub}}
+
+'''<dfn>content addressing</dfn>''' is a way of looking up pages or files by hashes of their contents rather than the URL of their origin server.
+
+== Use in existing web standards ==
+
+[https://www.w3.org/TR/CSP/#script-src-hash-usage CSP allows specification of hashes] eg 
+
+  Content-Security-Policy: default-src 'self';
+                         script-src 'self' https://example.com 'sha256-base64 encoded hash'
+
+[https://www.w3.org/TR/SRI/#cryptographic-hash-functions Sub-resource Integrity] does too
+  Conformant user agents must support the SHA-256, SHA-384 and SHA-512 
+  cryptographic hash functions for use as part of a request’s integrity 
+  metadata and may support additional hash functions.
+  User agents should refuse to support known-weak hashing functions
+  like MD5 or SHA-1 and should restrict supported hashing functions 
+  to those known to be collision-resistant.
+
+[https://developer.mozilla.org/en-US/docs/Web/API/Request service worker requests] have
+
+  Request.integrity Read only
+    Contains the subresource integrity value of the request 
+    (e.g., sha256- BpfBw7ivV8q2jLiT13fxDYAe2tJllusRSZ273h2nFSE=).
+
+== Proposed new standards ==
+
+Some discussion at IETF - see [https://www.ietf.org/proceedings/95/slides/slides-95-httpbis-1.pdf this presentation] and drafts:
+
+* https://tools.ietf.org/html/draft-thomson-http-scd
+* https://tools.ietf.org/html/draft-thomson-http-bc
+* https://tools.ietf.org/html/draft-reschke-http-oob-encoding
+* https://tools.ietf.org/html/draft-thomson-http-mice
+* https://tools.ietf.org/html/draft-ietf-httpbis-encryption-encoding
+
+Note the use of this header:
+   x-object-meta-sha1base36: 1d91dx0894wjewukeyxu56os5uhx4ph
+
+== Strange de facto standards ==
+[https://lists.w3.org/Archives/Public/www-talk/2001NovDec/0090.html HTTP Extensions for a Content-Addressable Web (2001)] no longer on the web except as a mailing list archive
+
+[https://en.wikipedia.org/wiki/Magnet_URI_scheme Magnet URIs] - wikipedia article is more current than the [http://magnet-uri.sourceforge.net/ site] or [http://magnet-uri.sourceforge.net/magnet-draft-overview.txt draft]
+
+== Possible integrations ==
+If servers use a prefixed hash in the above format as an ETag, that could enable incremental usage of content hashes.
+
+== See Also ==
+* [[ca3db]]
+* [https://hash-archive.org/ Hash Archive] collects hashes of documents in various formats
+* [[Camlistore]]
+* [[IPFS]]
+* [[etag]] - can be implemented as a hash
+* [https://youtu.be/oYBkb6vRK4s?t=1h2m38s talking about content hashing on TWiG]

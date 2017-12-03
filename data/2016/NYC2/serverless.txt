@@ -1,0 +1,54 @@
+https://indieweb.org/2016/NYC2/serverless
+
+'''<dfn>Serverless / AWS Lambda</dfn>''' was a session at [[2016/NYC2|IndieWebCamp NYC2 2016]].
+
+Notes archived from: https://etherpad.indieweb.org/serverless
+
+Video at: https://youtu.be/H0Hq2NDdhEM
+----
+When: 2016-08-27 13:30
+
+== Participants ==
+* Avi (session facilitator)
+* {{schmarty}}
+* Eric
+* {{GWG}}
+* ...
+
+== Notes ==
+We're going to be talking [[Chalice]] ( https://github.com/awslabs/chalice )
+
+Python microframework, similar to Flask ( http://flask.pocoo.org/ ) or Bottle ( http://bottlepy.org/docs/dev/index.html )
+
+Thin HTTP wrapper (GET, POST, paths)
+
+In this sessions, we'll be going through a quick hello world / install using their README
+
+# create a Python virtual environment
+# install dependencies
+# create a project
+# set up AWS credentials ~/.aws/config
+# ran into setup issues beyond the scope of a quick session
+
+Digging in to a working example.
+
+* output from Chalice is a lambda function that is uploaded to [[AWS Lambda]]. Looking at the resulting lambda in the console.
+* example app is triggered by an AWS cron that calls the lambda every 10 or 15 minutes
+* this particular app:
+** queries Twitter API for trending hashtags
+** grabs the volume of tweets
+** searches whois data for hashtag + ".com"
+** if domain is available, add the domain and tweet volume to a google spreadsheet
+
+For indieweb projects, Chalice makes it easy to use the AWS lambda http endpoints.
+
+* For example, could make a Chalice-based micropub endpoint that adds posts to a GitHub Pages site
+* AWS lambda also supports lots of other triggers, such as IoT buttons
+** e.g. send a micropub post to your site when you push a button
+
+AWS Lambda frees you from dealing with operating systems, hosting hardware, etc.
+
+== See Also ==
+* [[2016/NYC2/Schedule]]
+
+[[Category:2016 sessions]]

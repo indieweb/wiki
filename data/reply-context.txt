@@ -1,4 +1,4 @@
-http://indiewebcamp.com/reply-context
+https://indieweb.org/reply-context
 
 A '''<dfn>reply context</dfn>''' is the display of what a [[reply]] post is in reply to, including linking to that original post with [[in-reply-to]] markup, showing some amount of that original post like author name, icon, summary / ellipsed content, and datetime published.
 
@@ -33,7 +33,7 @@ For consistency with [[comment-presentation#How_to_markup|comment markup]], repl
 
 <pre><nowiki>
 <div class="h-entry">
- <div class="p-in-reply-to h-cite">
+ <div class="u-in-reply-to h-cite">
   <p class="p-author h-card">Emily Smith</p>
   <p class="p-content">Blah blah blah blah</p>
   <a class="u-url" href="permalink"><time class="dt-published">YYYY-MM-DD</time></a>
@@ -163,6 +163,9 @@ In order of deployment:
 * '''[[User:david.shanske.com|David Shanske]]''' displaying limited reply-contexts since 2014
 ** Example Pending
 
+* '''{{eddiehinkle.com}}''' has been displaying limited reply-contexts on [http://eddiehinkle.com eddiehinkle.com] since 2017-03-18
+** [http://eddiehinkle.com/social/2017/03/updating-indieauth/ example]
+
 == of silo posts ==
 Reply contexts where the original is on a silo may sometimes need or deserve special treatment.
 
@@ -178,7 +181,7 @@ You may find the following tools useful:
 === CRUD ===
 Though one advantage of storing and showing a reply-context is freezing the original context of what you're replying to, it may make sense to accept some updates.
 
-For this to work, an original post that accepts and displays [[comments]] should send webmentions to all the [[comments]] permalinks when the original post is updated or deleted.
+For this to work, an original post that accepts and displays [[comments]] should send webmentions to all the [[comments]] permalinks when the original post is [[updated]] or [[deleted]].
 
 ==== Update ====
 * If your reply post receives a webmention from the original post, re-read the reply-context from the original, and consider updating the reply-context on your reply accordingly. Possibilities to consider:
@@ -196,6 +199,25 @@ For this to work, an original post that accepts and displays [[comments]] should
 
 Examples:
 * http://aaronparecki.com/replies/2014/05/17/1/ - replied to a tweet which was deleted
+
+==== CRUD Issues ====
+===== Downstream vs Upstream =====
+* I think it's bad to send webmentions downstream and that it should be avoided. One should rather look into alternative mechanisms to ensure reply-contexts stay up to date and maybe look at how eg. silos like Facebook solves that. I see some reasons why it's bad to send webmentions downstream as suggested here: <span class="h-card" style="white-space:nowrap">{{sparkline|http://voxpelli.com/avatar.jpg}} [[User:Kodfabrik.se|Pelle Wessman]]</span> 05:21, 8 May 2016 (PDT)
+** It will make a webmention endpoint that doesn't expect such downstream mentions to show the upstream post as a comment due to the upstream post likely including a link to the downstream post from the original upstream mention.
+*** That's a bug in the endpoint. It has no choice but to handle this since a third party C can send a webmention for any post link in A that links to B, regardless of whether that link is in a reply-context, a like-of, or a comment. [[User:Tantek.com|Tantek]]
+** It adds lots of complexity for standalone webmention endpoints, like [[webmention.herokuapp.com]], which don't really have the data of an original post readily at hand and detecting downstream webmentions, unlike Salmentions which also adds a lots of complexity, will have side-effects if ignored.
+*** Complex or not an endpoint must handle any webmention for any link. It doesn't have a choice about this since anyone can send a web mention on behalf, and it is likely validation tools like webmention.rocks will start doing this automatically. [[User:Tantek.com|Tantek]] 05:46, 8 May 2016 (PDT)
+** I'm also missing documentation of existing practices of for keeping reply-contexts up to date – eg. both Facebook and Twitter shows a preview of mentioned URL:s – how do they keep them up to date? Can the same practices be applied here? Downstream webmentions is no small addition and looking into alternatives would therefore be a good thing so we don't add complexity where we don't need to.
+*** There is no additional complexity beyond the defensive handling. This just an optional enhancement. [[User:Tantek.com|Tantek]] 05:46, 8 May 2016 (PDT)
+
+===== Webmentions to responses inefficiency =====
+Even though possible, it may be inefficient to send individual webmentsions from an original post to all the responses of that post.
+
+With each nth response (reply, like, etc.), the source then has to send n-1 webmentions to all the previous responses.
+
+It results in a geometrically growing responsibility of sending webmentions.
+
+There may be other notification mechanisms that should be explored such as [[PuSH]], e.g. if a response wants updates on that post in particular, perhaps it could do PuSH discover on the post, and then explicitly subscribe to receive PuSH updates on that post. (suggestion from {{aaronpk}})
 
 ==== Events RSVPs Invitations ====
 This applies to [[event]] posts as well, and any [[responses]] to them, e.g. any changes to the event (name, , location, times, description etc.) should make the event send a webmention to any
@@ -217,7 +239,7 @@ We could write a single reusable JS library that fetches, renders, and injects r
 
 == Silo Examples ==
 {{main|reply-context-examples#Silo_Examples}}
-Some silos display reply-contexts, including [[App.net]] (who mark them up with h-cite) and [[Twitter]].
+Some silos display reply-contexts.
 
 == See Also ==
 * [[in-reply-to]]

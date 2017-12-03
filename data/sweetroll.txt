@@ -1,0 +1,35 @@
+https://indieweb.org/sweetroll
+
+[https://github.com/myfreeweb/sweetroll '''<dfn>sweetroll</dfn>'''] is {{myfreeweb}}'s engine that powers their website, [https://unrelenting.technology unrelenting.technology].
+
+* Supports [[tags]], full text [[search]], [[photo]]s, [[video]]s, [[audio]] files, [[review]]s, [[private posts]] (mostly just for [[draft]]s), content warnings, simple [[realtime]] notifications (only "this page has changed, refresh it").
+* Supports only [[micropub]] for posting, updating, deleting and undeleting, no custom endpoints.
+* Includes [https://github.com/myfreeweb/micro-panel micro-panel], a micropub-based admin panel.
+
+[[File:micro-panel-screenshot.png]]
+
+== Architecture ==
+
+Sweetroll consists of:
+* a "backend" service written in [[Haskell]] that's (roughly) responsible for getting data into the database: auth, [[micropub]], receiving [[webmention]]s;
+* a "frontend" service written in [[JavaScript]] ([[node.js]]) that's (roughly) responsible for getting data out of the database: rendering the website, sending [[webmention]]s, publishing [[WebSub]] notifications;
+* a [[PostgreSQL]] database ([https://github.com/myfreeweb/mf2sql mf2sql schema] created for Sweetroll) that's used for storage, full text search and change notifications (LISTEN/NOTIFY).
+* a web server that proxies requests to both services (configuration is provided for [[nginx]]).
+
+Pretty much everything in Sweetroll is represented as [[microformats]]2 [[JSON]] objects, including [[feed]] configurations and site settings. (Of course there's no common microformats for that, so it's custom, but stored in the same way.) Stored procedures are used to extract embedded entries (comments, in-reply-to contexts, etc.) into their own records when writing content and to embed them back when reading. And to build feeds.
+
+[[File:sweetroll_live.png|320px|thumb|right]]
+
+This data-driven feed construction allows the engine to know exactly which feeds would be affected by an entry creation/change. So when an entry is updated, the frontend app would determine that it affected e.g. the home feed, the articles feed and tag feeds for #sweetroll and #web. So the WebSub hub would receive a notification for all these feeds, and browsers currently open to these pages would receive a "reload this" box →
+
+== Libraries ==
+The following Haskell libraries were written for Sweetroll:
+* [https://github.com/myfreeweb/magicbane a small Dropwizard-like Haskell "framework" based on Servant]
+* [https://github.com/myfreeweb/http-link-header a parser for the HTTP Link header]
+* [https://github.com/myfreeweb/microformats2-parser a parser for Microformats 2]
+* [https://github.com/myfreeweb/indieweb-algorithms implementations of indieweb algorithms] like [[authorship]]
+* [https://github.com/myfreeweb/pcre-heavy a usable PCRE based regular expressions library]
+
+No longer used:
+* [https://github.com/myfreeweb/gitson gitson], a Git+JSON storage library
+* [https://github.com/myfreeweb/hs-duktape hs-duktape], bindings to [http://duktape.org duktape], a small JavaScript interpreter

@@ -1,7 +1,33 @@
-http://indiewebcamp.com/Skein
+https://indieweb.org/Skein
 
-Skein is an indieweb microblog developed by [[User:notenoughneon.com|Emma Kuo]] and running on [http://notenoughneon.com notenoughneon.com]. It is the successor to [[Neonblog]], is written in [[node]] and publishes content to [[Amazon S3]].
+'''<dfn>Skein</dfn>''' is a [[Node.js]] static site generator developed by {{emmak}} and running on http://notenoughneon.com since July 2015. It uses html+microformats as its native data store.
+
+== Features ==
+
+* Articles, notes, photos, replies, likes, reposts
+* Tags
+* Webmentions
+* Self hosted oauth and indieauth endpoint
+* [[Micropub]] endpoint
+* [[oEmbed]]s Youtube, Soundcloud, Twitter content
+* Publishes to [[Amazon S3]]
+
 
 == Code ==
 
-[https://github.com/notenoughneon/skein github.com/notenoughneon/skein]
+Skein is in development. Use at your own risk.
+
+https://github.com/notenoughneon/skein
+
+The microformats library used by Skein has been released as a separate module on NPM, and is more suitable for general use:
+
+https://github.com/notenoughneon/mf-obj
+
+
+== Architecture ==
+
+Skein uses [[PURR]] to use published HTML as its native data store. Earlier in development, sqlite was used as a cache, but it was abandoned due to issues getting out of sync with published content. See [[database-antipattern]]. The oauth endpoint issues stateless [[JWT]] tokens.
+
+The server process hosts micropub and webmention endpoints, and is designed to run an an EC2 instance. On receiving a webmention or new post, content is regenerated and published to S3.
+
+The publishing layer is modular, and S3 can be switched out for git or static file hosting backends. The static file backend is used to run an end-to-end test suite.

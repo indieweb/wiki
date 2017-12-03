@@ -1,4 +1,4 @@
-http://indiewebcamp.com/p3k
+https://indieweb.org/p3k
 
 {{stub}}
 
@@ -10,330 +10,193 @@ http://indiewebcamp.com/p3k
 
 <div style="clear:both;"></div>
 
-== Screenshots ==
-
-[[File:p3k-note-mini-ui.jpg|none|thumb|500px|Writing a note (mini UI)]]
-[[File:p3k-note-full-ui.jpg|none|thumb|500px|Writing a note (full UI)]]
-[[File:p3k-article-compose.jpg|none|thumb|500px|Writing an article]]
-
-
-=== Other ===
-* [http://aaronparecki.com/notes/2012/09/09/3/indieweb Posting UI]
-* [http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery Original Post Discovery]
-* [https://github.com/aaronpk/p3k/issues/1 Example post files]
 
 == Source Code ==
-While the core of p3k is not open source, many components are. Below is a list of the components used in p3k.
+While the entirety of p3k is not open source, I have open-sourced many of the components. I've chosen to provide components of my site rather than the whole thing because in reality nobody is going to want to use the exact same workflow I have built. Instead, components of my site can be re-used by others in their own way.
 
-* [[Quill]] - [[note]] [[posting interface]] (https://github.com/aaronpk/Quill)
+=== Apps ===
+* [[Quill]] [https://quill.p3k.io] - Posting interface for many kinds of posts
+* [[Teacup]] [https://teacup.p3k.io] - [[food]]-tracking client
+* [[Gramophone]] [https://gramophone.p3k.io] - a [[podcast]] posting client
+* [[Switchboard]] [https://switchboard.p3k.io] - a [[PuSH]] hub
+* [[Atlas]] [https://atlas.p3k.io] - APIs for looking up information about locations
+* [[Compass]] [https://compass.p3k.io] - a GPS tracking server
+* [[Telegraph]] [https://telegraph.p3k.io] - webmention sending API
+* [[webmention.io]] - webmention receiver
+* [[XRay]] [https://xray.p3k.io] - extract post and author data from a page
+* [[Monocle]] [https://monocle.p3k.io] - [[reader]] (not currently active)
+* [[Watchtower]] - a minimal API to watch web pages for changes, similar to [[Superfeedr]]
+* See also: [[p3k naming convention]]
+
+=== Libraries ===
+* [https://github.com/aaronpk/p3k-http p3k-http] - a small HTTP client
+* [https://github.com/aaronpk/p3k-utils p3k-utils] - several helper functions for dealing with dates, timezones, URLs, and more
+* [https://github.com/aaronpk/p3k-websub p3k-websub] - a library for subscribing to and publishing WebSub feeds
 * [https://github.com/indieweb/php-mf2 php-mf2] - a PHP Microformats 2 parser
 * [https://github.com/indieweb/mention-client-php mention-client-php] - A PHP client to send [[webmentions]] and [[pingbacks]]
-* [https://github.com/aaronpk/Timezone-API Timezone-API] - An API to find the timezone at a latitude and longitude
 * [https://github.com/indieweb/php-comments php-comments] - Helper for parsing and presenting comments from external sites
 * [https://github.com/indieweb/link-rel-parser-php link-rel-parser-php] - Parse HTTP <code>Link</code> headers into a structured format
 * [https://github.com/indieweb/indieauth-client-php indieauth-client-php] - Sample implementation and helper methods for an IndieAuth client
 * [https://github.com/indieweb/date-formatter-php date-formatter-php] - Render dates and date ranges in a human-readable format, including proper microformats-2 markup
-* [https://github.com/aaronpk/php-mf2-twitter-shim php-mf2-twitter-shim] - Converts a single tweet to a microformats h-entry
+* [https://github.com/aaronpk/emoji-detector-php emoji-detector-php] - Finds all emoji in an input string and return information about each emoji character
+* [https://github.com/aaronpk/p3k-timezone p3k-timezone] - Find the timezone for a given latitude and longitude
+* [https://github.com/aaronpk/clone-media-fragment clone-media-fragment] - enables YouTube-like time offset URLs for audio and video tags
 * [https://github.com/tantek/cassis tantek/cassis] - Used for truncating and ellipsizing post text
 
-I am working to pull out more parts of p3k into libraries and will keep this list up to date as I progress.
+== IndieAuth ==
+p3k has a built-in authorization endpoint, which supports customizing the scope granted, as well as restricting which "channels" apps can post to.
 
-== Features ==
-
-* [http://microformats.org/wiki/microformats-2 Microformats 2] markup - on notes, replies and articles
-* JSON representation of each post created by parsing the HTML Microformats
-** HTML: http://aaronparecki.com/notes/2013/03/31/1/indieweb
-** JSON: http://aaronparecki.com/notes/2013/03/31/1/indieweb.json
-* Git-backed data store, no content is stored in a database
-* Posts are written as markdown files
-* Native [[hashtag]] support (e.g. http://aaronparecki.com/tag/indieweb)
-* Can create [[events]] on my site with [[h-event]] markup and handles accepting incoming RSVPs
-* [[RSVP]] support (e.g. http://aaronparecki.com/replies/2013/06/25/3/indiewebcamp)
-* Photo posts (e.g. http://aaronparecki.com/notes/2014/03/16/1/pdx)
-* Footer auto-embedding of content linked in notes
-** Images - [http://aaronparecki.com/notes/2012/12/16/2/iphone-emergency-alert-snowpocalypse example]
-** Video - [http://aaronparecki.com/notes/2013/04/25/1/original-post-discovery example]
-** Youtube - [http://aaronparecki.com/notes/2012/11/29/2/ example]
-** Vimeo - [http://aaronparecki.com/replies/2012/10/29/1/ example]
-** Vine - [http://aaronparecki.com/notes/2013/03/15/1/ example]
-** Gists - [http://aaronparecki.com/notes/2013/05/08/1/karaoke example]
-** Soundcloud - [http://aaronparecki.com/notes/2012/11/20/1/berlin-devsummit example]
-** Slideshare - [http://aaronparecki.com/notes/2012/11/04/1/cyborgcamp example]
-** Spincam - [http://aaronparecki.com/notes/2013/02/08/1/ example]
-** Google Maps - [http://aaronparecki.com/replies/2012/08/14/3/ example]
-** Instagram - [http://aaronparecki.com/notes/2012/10/11/3/ example]
-** XKCD - [http://aaronparecki.com/notes/2013/05/21/1/xkcd example]
-** todo: Flickr - [http://aaronparecki.com/replies/2012/05/25/1/ example]
-** todo: Inline previews of content recognized by the mf2 parser
-* Private sharing of draft posts when logged in via [[IndieAuth]]
-* Returns "410 Gone" for [[deleted]] posts
-
-=== IndieWeb Support ===
-* [[POSSE]] - Content originates on this site and is syndicated to Twitter
-* [[pingback]] and [[webmention]] - sent when posting new content
-* [[original-post-discovery|original post discovery]] - to properly link replies when given a syndicated URL
-* [[reply-context|reply context]] - displaying the post I'm replying to above my own reply posts
-* [[comment|Commenting]]
-** displays received comments and mentions below posts ([http://aaronparecki.com/replies/2013/05/21/2/ example])
-** receiving comments and mentions via [[webmention]]
-* [[RSVP]] - can send RSVPs to events
-* [[event]] - can post events on my site
-
-=== Publishing Other Content ===
-
-Aside from [[notes]], [[articles]] and [[replies]], I also publish the types of content listed below.
-
-==== Sleep ====
-Example: http://aaronparecki.com/metrics/2012/12/03/075900/
-
-I've had the [http://aaronparecki.com/articles/2012/10/28/1/low-friction-personal-data-collection best luck with the Jawbone UP] for tracking my sleep. I have logs now since November 2011 of how much I've slept every night.
-
-The Jawbone app has an interface for adding a note to a sleep record. Here is [http://www.flickr.com/photos/aaronpk/8837063058/in/photostream/ a screenshot] showing an example of adding a note to a sleep record.
-
-==== Weight ====
-Example: http://aaronparecki.com/metrics/2013/09/15/081800/
-
-I use the Withings scale to track my weight. Through a series of convoluted steps, the data eventually ends up on p3k and is published here.
-
-Currently every time there is a new measurement it results in a post on my site. I may change this to post once a week showing a small graph instead.
-
-==== Pushups ====
-[[Pushups]] example: http://aaronparecki.com/metrics/2013/11/28/143242/
-
-I wrote a simple [https://github.com/aaronpk/PushupCounter-iOS simple pushup-tracking app] which makes POST requests directly to my server, creating these posts.
-
-=== Backwards-Compatible Support ===
-
-* Facebook Open Graph tags (e.g. https://www.facebook.com/aaronpk/posts/10100897893521096)
-* [[Twitter Cards]] (e.g. https://twitter.com/aaronpk/status/336305584213225473)
-* [[Pingback]]s are forwarded as webmentions via [[webmention.io]]
-* A [[WebDAV]] API for uploading images from apps that support it
-
-=== Notes vs Articles ===
-* Note: a note is plaintext only, HTML markup is not allowed. There is some auto-linking code that adds links around @mentions, URLs and hashtags. Any recognized URLs like images and video are embedded below the post.
-* Article: an article is a long form entry that supports any HTML.
-* See also: [[Semantics Of Article-Note Distinction]]
-
-=== Storing External Content ===
-When displaying external content on my site for [[reply-context]] and [[comments]], p3k stores both the raw HTML and the parsed JSON for external pages on disk. Below is a screenshot showing how the folder structure maps to the URLs.
-
-[[File:p3k-external-files.png]]
-
-=== Local Nicknames ===
-When writing a note, I often want to address people by a nickname rather than by full name or full domain name. (I don't think "@aaronparecki.com" looks particularly good in a post.)
-
-I have a file called <code>users.txt</code> which contains a mapping of local nicknames to profile info including full name, website and avatar URL. I call this a "local" nickname because it may or may not be a nickname that the other person actually uses for themselves or exists on a silo. In practice, it mostly consists of Twitter usernames, however. 
-
-Sample data:
-
-<pre>
-@aaronpk      http://aaronparecki.com http://aaronparecki.com/images/aaronpk.png Aaron Parecki
-@caseorganic  http://caseorganic.com https://twimg0-a.akamaihd.net/profile_images/1788860814/kk-caseorganic_reasonably_small.jpg Amber Case
-@tantek       http://tantek.com http://tantek.com/photo.jpg Tantek Çelik 
-@t            http://tantek.com http://tantek.com/photo.jpg Tantek Çelik
-@snarfed	http://snarfed.org/	https://pbs.twimg.com/profile_images/2812992290/be21b6e4df4b499a98e87413b355c657_bigger.jpeg	Ryan Barrett
-</pre>
-
-Note that in the case of @snarfed, his twitter account is actually different.
-
-==== Issues ====
-* Fixed-column schemas are annoying to deal with and extend
-* Since some of these photo URLs are twitter URLs, they often change and many are already out of date
-
-==== See Also ====
-[[nicknames-cache]]
-
-== Database ==
-
-p3k uses a [[database-cache|database as a cache]] and to quickly query lists of posts by category, tag, date or by other meta data. No actual post content is stored in the database, the post content is read from disk when needed. The database can be regenerated from the raw files on disk with a script, so there is no worry if the database is suddenly deleted or corrupted.
-
-=== Schema ===
-
-==== posts ====
-The posts table holds the primary meta-data for all posts on the site. 
-
-*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-*   `category` varchar(255) DEFAULT NULL,
-*   `type` varchar(255) DEFAULT NULL,
-*   `permalink` varchar(255) DEFAULT NULL,
-*   `filename` varchar(255) DEFAULT NULL,
-*   `published` datetime DEFAULT NULL,
-*   `updated` datetime DEFAULT NULL,
-*   `tz_offset` int(11) DEFAULT NULL,
-*   `timezone` varchar(255) DEFAULT NULL,
-*   `latitude` double DEFAULT NULL,
-*   `longitude` double DEFAULT NULL,
-*   `client_id` varchar(255) DEFAULT NULL,
-*   `deleted` tinyint(4) NOT NULL DEFAULT '0',
-*   `draft` tinyint(4) NOT NULL DEFAULT '0',
-
-Indexes:
-*   KEY `published` (`published`),
-*   KEY `filename` (`filename`),
-*   KEY `post_type` (`type`),
-*   KEY `category` (`category`),
-*   KEY `category_published` (`category`,`published`),
-*   KEY `category_type` (`category`,`type`)
-
-==== tags ====
-Each tag has an ID and is stored in the tags table.
-
-*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-*   `tag` varchar(255) DEFAULT NULL,
-
-Indexes:
-*   KEY `tag` (`tag`)
-
-==== post_tags ====
-This table links posts to tags.
-
-*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-*   `post_id` bigint(20) DEFAULT NULL,
-*   `tag_id` bigint(20) DEFAULT NULL,
-
-Indexes:
-*   UNIQUE KEY `post_id_2` (`post_id`,`tag_id`),
-*   KEY `tag_id` (`tag_id`),
-*   KEY `post_id` (`post_id`)
-
-==== clients ====
-The clients table holds a list of all [[micropub]] clients that have created posts. 
-
-*   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-*   `client_id` varchar(255) DEFAULT NULL,
-
-Indexes:
-*   KEY `client_id` (`client_id`)
-
-==== syndications ====
-The syndications table contains syndication URLs for posts.
-
-*   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-*   `post_id` bigint(20) DEFAULT NULL,
-*   `service` varchar(255) DEFAULT NULL,
-*   `syndicated_url` varchar(255) DEFAULT NULL,
-
-Indexes:
-*   KEY `url` (`syndicated_url`),
-*   KEY `post_id` (`post_id`)
-
-This can be used to find the canonical URL of a syndicated post given its URL on Twitter or Instagram.
+[[File:p3k-auth-prompt.png|500px]]
 
 == Storage ==
-All content in p3k is stored as files on disk. 
+=== Folder Structure ===
+All content in p3k is stored as files on disk.
 
-There is a top-level folder for each post type, articles, notes, replies, events, metrics, travel, presentations. (If I had to do this from scratch, I wouldn't have made this distinction at this level).
+There is a main folder "posts" which contains individual files for each post as well as any associated files. Posts are stored in a folder structure by year/month/day/index.
 
-Each folder contains subfolders for the year and month.
+<code>YYYY/MM/DD/N/post.txt</code>
 
-For everything except metrics, the structure is:
-* <code>YYYY/mm/dd-n.md</code> where n is the nth post on that day.
+The index increments with each new post created on that day. The index is not necessarily time-ordered, since quite often various import scripts create backdated posts after newer posts were already created.
 
-For metrics, the filenames are the full timestamp:
-* <code>YYYY/mm/dd/HHMMSS.md</code>
+[[File:p3k-storage-example.png]]
 
-{|
-| [[File:2014-05-25-aaronpk-articles-filesystem.png]]
-| [[File:2014-05-25-aaronpk-notes-filesystem.png]]
-| [[File:2014-05-25-aaronpk-metrics-filesystem.png]]
-|}
+Ultimately each post ends up with its own folder containing the primary post file <code>post.txt</code>, and optionally a <code>public</code> folder containing associated files. The web server serves files from this folder directly.
 
-If there are any associated photos or files for a post, they go into a subfolder with the same name as the base name of the file. In the "notes" example above, the photo attached to the "08-4.md" note lives in a folder named "08-4".
+A post with a URL of:
 
-=== Example Note ===
+<code><nowiki>https://aaronparecki.com/2017/04/21/19/</nowiki></code>
 
-Here is an example .md file for one of my notes.
+will correspond with a storage file:
 
-<pre>---
-date: "2013-12-03T23:21:49-08:00"
-place-name: Portland, OR, USA
-timezone: America/Los_Angeles
-latitude: 45.506659
-longitude: -122.654230
-slug: homebrew-website-club
-tags:
-- hwc
-- indieweb
-syndication:
-- https://twitter.com/aaronpk/408134030979108864
+<code>posts/2017/04/21/19/post.txt</code>
+
+The image at the URL:
+
+<code><nowiki>https://aaronparecki.com/2017/04/21/19/photo.jpg</nowiki></code>
+
+will be stored on disk as:
+
+<code>posts/2017/04/21/19/public/photo.jpg</code>
+
+=== File Format ===
+The contents of the <code>post.txt</code> file is described below.
+
+There is a YAML header block which contains some top-level properties that are core to p3k, such as published, type, content-type, and client-id. These are indexed in the database and control how the post is sorted and how it is rendered.
+
+There is another top-level property called <code>properties</code> which contains the Microformats2 vocabulary of all the post contents, with the exception of the <code>content</code> property.
+
+The header block is delimited by <code>---</code> <code>...</code>, and everything below the header is considered the <code>content</code> Microformats2 property. The <code>content-type</code> property notes the content type in order to indicate which renderer to use. (Either text, in which case a basic autolinker is used, Markdown which renders the Markdown as HTML, or HTML which outputs the contents directly without any processing.)
+
+<pre>
+---
+published: "2017-04-15T18:23:00-07:00"
+type: entry
+content-type: text/plain
+client_id: https://ownyourgram.com
+properties:
+  category: indieweb
+  location:
+    type:
+    - h-card
+    properties:
+      name: Migration Brewing Company
+      latitude: 45.526300
+      longitude: -122.636451
+      locality: Portland
+      region: Oregon
+      country-name: USA
+  syndication: https://www.instagram.com/p/BS7XoRCANxF/
+  photo: photo.jpg
+  p3k-channel:
+  - photos
+  - primary
 ...
 
-Next Homebrew Website Club mtg Wed 18:30 at @EsriPDX & @MozSF (with remote video) http://calagator.org/events/1250465273 Notes from last meeting: http://tantek.com/2013/332/b1/homebrew-website-club-newsletter All are welcome, whether or not you currently have your own website!</pre>
+Scheming. #indieweb
+</pre>
 
-=== Example Event ===
+All values can be either arrays or single values, and there is some code to abstract reading and writing the values regardless of whether they are strings or arrays.
 
-<pre>---
-title: IndieWeb Dinner at 21st Amendment
-slug: indieweb-dinner-at-21st-amendment
-date: "2013-09-30T18:00:00-07:00"
-timezone: America/Los_Angeles
-type: event
-tags: indieweb
-event:
-  start: "2013-09-30T18:00:00-07:00"
-location:
-  org: 21st Amendment
-  street-address: 563 2nd St
-  locality: San Francisco
-  region: CA
-  country: US
-  country-abbr: US
-  postal-code: 94107
-  url: http://21st-amendment.com/
-...</pre>
+All properties in <code>properties</code> can be read and written via [[Micropub]] requests.
+
+=== Indexing and Caching ===
+To render lists of posts, such as channels and tags, a database indexing strategy is used. Channels are top-level URLs such as [https://aaronparecki.com/notes /notes], [https://aaronparecki.com/photos /photos], [https://aaronparecki.com/checkins /checkins]. Tag pages live under the "tag" subdirectory, e.g. [https://aaronparecki.com/tag/indieweb /tag/indieweb]. The home page is actually just another channel named "primary".
+
+Certain properties of each post are cached in a MySQL database and used when querying channel and tag pages.
+
+* the published date, stored as UTC date with separate timezone offset
+* the <code>category</code> property (tags)
+* the <code>p3k-channel</code> property
+
+To generate a page such as the home page or a tag page, the database is queried and sorted by published date. The database returns the list of filenames, and then each post file is read from disk and rendered in a list.
 
 == Working On ==
 The things I am currently implementing in p3k:
 
-<githubissues src="https://github.com/aaronpk/p3k/issues?labels=priority%3Ain-progress"/>
+* https://github.com/aaronpk/p3k/issues?labels=priority%3Ain-progress
 
 == Itching ==
-These are a collection of annoyances that have respective features / improvements. As their annoyance level bubbles to the top, they're likely to become concrete "Working On" tasks.
+These are a collection of annoyances that have respective features / improvements. As their annoyance level bubbles to the top, they're likely to become concrete "Working On" tasks. 
 
-<githubissues src="https://github.com/aaronpk/p3k/issues?labels=priority%3Aitching"/>
+=== Blog posts in lists ===
+Currently, any time you are looking at a list of posts on my site (my home page, a tag page, a search, etc), the full contents of articles is shown. This makes it hard to quickly scroll through the posts in the list. I'm considering switching back to showing just the name, summary and featured image. (This means I'll need to do a better job of setting featured images for my blog posts, but that would also be a good solution for generating the twitter/facebook meta tags too).
+
+=== Archive Pages ===
+I'm not super happy with how to browse older content on my site. Mainly what's missing is a way to quickly browse past blog posts.
+
+What I do like:
+
+* Day permalinks: https://aaronparecki.com/2017/04/19/
+* Month permalinks: https://aaronparecki.com/2017/04
+* Year permalinks: https://aaronparecki.com/2017
+
+The month permalinks are cute, but they aren't super actionable since there is no indication of *what* to find behind each icon. It might be nice to have some sort of additional summary of the month below or above the calendar. Maybe including things like:
+
+* List of the name of each blog post that month
+* Most common tags used in posts
+* Summary of transport posts (number of miles biked, walked, number of flights, etc)
+* Showcase events from the month
+
+Here are some examples of blog post archive pages that I like. I might want to change my [https://aaronparecki.com/articles articles] list to something more like these rather than showing the full contents of each post.
+
+* https://snarfed.org/archive
+* http://v6.robweychert.com/blog/
+
+=== Venues / Checkins ===
+* ✅ Checkin posts, e.g. https://aaronparecki.com/2017/04/19/9/
+* Venue permalinks
+** Find a good URL structure (I think I'm happy with the current solution)
+** Need to store a mapping between Foursquare venues and my own permalinks, including handling what happens when Foursquare venues are merged/deleted
+** Need a good venue search, or just defer to Foursquare checkins for now
+* Replicate Foursquare lists on my site, along with a comment about why a venue is in that list
+* Show venues clustered on a map
+* Figure out what a venue permalink shows about the venue
+** Comments from me about the venue? (e.g. foursquare tips)
+** Collections the venue appears on
+** A list of all my checkins at the venue? Last couple checkins? Paged feed of checkins?
+* How to handle private venues? (Both from PESOSing foursquare checkins of private venues, and for checking in only on my site)
+* Having real venue support would also make it easier to create events at locations, rather than just named places with no location info
+
+=== Github Issues ===
+
+https://github.com/aaronpk/p3k/issues?labels=priority%3Aitching
 
 == Need Further Thought ==
 
-==== Checkins ====
-I have been using Foursquare consistently for a number of years now, and it is the authoritative source of every venue I've been. I know that if I have never checked in somewhere before on Foursquare, I actually have never been there before. 
-
-While my Foursquare feed is currently public, I'm reconsidering whether I want my "IndieSquare" feed to be completely public. I may end up being more selective about the checkins I make public instead, and keep my full checkin history private. 
-
-Examples of public checkins often include a short note from me along with the venue for things like checking in to a venue for a public event, or checking in somewhere to say I'm going to be hacking there for a while inviting people to join me. When I check in to lunch two blocks away from my office, it's not that I don't want anyone to know I'm there, it's just that probably nobody cares and there usually isn't anything actionable that would come from them knowing anyway. Usually I'm getting something to go and don't have time to stay and talk anyway.
-
-==== IndieSquare ====
-Foursquare provides:
-* a push API so I can pesos checkins to my site in real time
-* lots of my friends still use it
-* the app still provides fun tidbits when I check in, like "you've been here 5 weeks in a row", etc
-* searching for venues is difficult to implement from scratch, and I'm not entirely happy with the OSM data, so using foursquare venues continues to be highest quality
-
-Really getting annoyed that when Foursquare venues are renamed, merged or deleted, my own history is changed.
-
-* Figure out how to represent a "checkin" on my own site (see [http://aaronparecki.com/articles/2012/10/22/1/creating-content-on-the-indie-web Creating content on the Indie Web] for more thoughts)
-* Figure out how to store venues on my site (venue IDs, nice slugs, ???)
-* Build a basic interface for viewing "checkin" data
-* Syndicate out to Foursquare and possibly Facebook (although Facebook recently deprecated checkins in favor of attaching venues to notes)
-* Repurpose the [https://github.com/tijoinc/Checkie Checkie] app to search my site for venues and post checkins to my site first
-* Download all Foursquare history and create checkins on my site retroactively
-
 ==== Location ====
-Since I carry an active GPS tracker at all times, I collect a large amount of location data. It is not automatically organized into "trips" or anything, it's just a raw stream. I've been considering various ways of publishing this for some time.
-
-Currently I publish my current city as well as time zone of wherever I am on my home page. I do not yet have a feed available.
+Since I carry an active GPS tracker at all times, I collect a large amount of location data. It currently provides data to location-tag all my posts, and sets the timezone of the posts to my local timezone. I do not have a feed of the raw location data available.
 
 I'm considering publishing a new "location" post any time I change cities (or possibly also large neighborhood). Here is an example of publishing my city automatically to Facebook: http://www.flickr.com/photos/aaronpk/6962452588/
 
-There are other non-venue locations I may want to publish, such as when I get into a neighborhood I haven't been to in a while. Ideally my phone would detect automatically when I've entered a new area or an area I haven't been to in a while. Probably I would want it to prompt me before publishing anything publicly. I could receive a push notification saying something like "It looks like you're in NW Portland for the first time since August! Publish this?"
-
-== Open Source ==
-While the entire p3k stack is not open source, I have open-sourced many of the components. I've chosen to provide components of the stack rather than the whole thing because in reality nobody is going to want to use the exact same workflow I have built. Instead, components of my site can be re-used by others in their own way.
-
-See [[#Source Code]] above.
+There are other non-venue locations I may want to publish, such as when I get into a neighborhood I haven't been to in a while. Ideally my phone would detect automatically when I've entered a new area or an area I haven't been to in a while. Probably I would want it to prompt me before publishing anything publicly. I could receive a push notification saying something like "It looks like you're in NW Portland for the first time this year! Publish this?" These posts are usually only interested when there is some additional information that provides context, such as "for the first time this year"
 
 __TOC__
 
 == See Also ==
+* [[p3k-v1]] Version 1 of this software
 * [[p3k naming convention]]
 
 [[Category:p3k]]
+[[Category:CMS]]
+
+__NOTITLE__

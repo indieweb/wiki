@@ -1,0 +1,18 @@
+https://indieweb.org/User%3AWww.svenknebel.de/scratchspace
+
+# start with an h-entry
+# find local author information
+## if the <code>h-entry</code> has an <code>author</code> property, use that
+## otherwise if the h-entry has a parent <code>[[h-feed]]</code> with <code>author</code> property, use that
+# if an <code>author</code> property was found
+## if it has an [[h-card]], use it, exit.
+## otherwise if <code>author</code> property is an <code>http(s)</code> URL, let the <var>author-page</var> have that URL (continue at 5)
+## otherwise use the <code>author</code> property as the author name, exit
+#if there is no <var>author-page</var> yet, try to find one
+##if <code>h-entry</code>'s page is a permalink page and has a [[rel-author]] link, let the <var>author-page</var>'s URL be the href of the [[rel-author]] link
+# if there is an <var>author-page</var> URL
+## get the <var>author-page</var> from that URL and parse it for microformats2
+## if <var>author-page</var> has 1+ <code>[[h-card]]</code> with <code>url</code> == <code>uid</code> == <var>author-page</var>'s URL, then use first such <code>h-card</code>, exit.
+## else if <var>author-page</var> has 1+ <code>[[h-card]]</code> with <code>url</code> property which matches the <code>href</code> of  a [[rel-me]] link on the <var>author-page</var> (perhaps the same hyperlink element as the u-url, though not required to be), use first such <code>h-card</code>, exit.
+## if the <code>h-entry</code>'s page has 1+ <code>[[h-card]]</code> with <code>url</code> ==  <var>author-page</var> URL, use first such <code>h-card</code>, exit.
+# otherwise no deterministic author can be found. Implementations are encouraged to document additional heuristics below for consideration for incorporation in to the authorship algorithm.

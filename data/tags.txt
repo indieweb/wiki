@@ -1,6 +1,4 @@
-http://indiewebcamp.com/tags
-
-{{stub}}
+https://indieweb.org/tags
 
 '''<dfn>tags</dfn>''' or '''<dfn>tagging</dfn>''' refers to categorizing or labeling content, your own or others ([[tag-reply]]), with words, phrases, names, or other information, optionally linked to specific people, events, locations, such as the practice of tagging [[posts]] being about certain people ([[person-tag]]), like tagging people or other items where ([[area-tag]]) they're depicted in a [[photo]].
 
@@ -19,6 +17,15 @@ Person-tagging someone in a post is a social gesture saying publicly that the po
 Person-tagging a [[photo]] is a small (likely) positive social gesture that you saw them in a photo and thought of them.
 
 == How to ==
+=== How to markup ===
+To tag a post, add <code>class="p-category"</code> around the tag name.
+
+For example, a plain text tag:
+<pre><span class="p-category">indieweb</span></pre>
+
+Or a tag that links to a [[tag aggregation]] page:
+<pre><a href="/tag/indieweb" class="p-category">indieweb</a></pre>
+
 === mark up and post a tag reply ===
 To post a "tag reply", the reply post's [[h-entry]] MUST hyperlink to the permalink of the thing that is being tagged, with <code>class="u-tag-of"</code>. E.g.
 <pre><nowiki>
@@ -34,25 +41,50 @@ Adding in an h-card makes it a [[person-tag]]. See [[person-tag]] for more speci
 <pre><nowiki>
 <span class="h-entry"> ... 
  Alice tagged 
- <a href="http://bob.example.com/" class="p-category h-card">Bob Smith</a> 
+ <a href="http://bob.example.com/" class="u-category h-card">Bob Smith</a> 
  in <a class="u-tag-of u-in-reply-to" href="http://s.example.com/post47">Some article</a> 
 </span>
 </nowiki></pre>
 
 == IndieWeb Examples ==
+
+=== Shane Becker ===
+{{veganstraightedge}} supports tags on his site (as powered by [[Dark Matter]]).
+* Implemented tags (linked with <code>.p-category</code>) on [https://github.com/veganstraightedge/sbbme/commit/90a6d6eabeb3ff4d64177f163146f1e506dd0600#diff-7da6b096dbc71915e14cd3f6021c6b8d 2012-11-18] (private repo)
+* #[[hashtags]] in notes are autolinked to [[Twitter]]'s hashtag search pages using [https://github.com/twitter/twitter-text-rb Twitter Text Ruby] (since [https://github.com/veganstraightedge/sbbme/commit/1b58a195dbfe18fff61aa31f257c25cb2ba6e35f 2012-12-26])
+* Plaintext tags can be added to any posttype in a separate field (since [https://github.com/darkmatterapp/publisher-server-rails/commit/2cbf929b47099f1d67f309e43d34da870697e8e3#diff-ef0916f6b5e43464a33f1c9a21ed01af 2015-10-11])
+* Example of tagged post: http://veganstraightedge.com/articles/2016/04/08/toward-an-indiewebcamp-logo-redesign-iterations-in-the-key-of-c
+* Tags are listed in the footer of each post and linked to tag a aggregation page
+* Aggregation pages list all post's tagged with that tag: http://veganstraightedge.com/tags/indieweb (since [https://github.com/darkmatterapp/publisher-server-rails/commit/4e53e93de15e450e12abba5c75effc4af38fa130 2016-03-13])
+* All tags page: http://veganstraightedge.com/tags (since [https://github.com/darkmatterapp/publisher-server-rails/commit/5acc249b8afdcecc58bf950e76ae42cb19662ed4 2015-11-03])
+
 === Aaron Parecki ===
-Aaron Parecki links tags in his posts (specifically, [[hashtags]]) to tag aggregation pages, e.g.:
-* http://aaronparecki.com/tag/indieweb
+{{aaronpk}} implemented linked tags (on 2013-04-21).
+* linked tags in his posts (specifically, [[hashtags]]) to tag aggregation pages: http://aaronparecki.com/tag/indieweb
 His tag aggregation pages include a list of the following, all date-time ordered together:
 * all of his [[posts]] (of any kind) with that tag
 * any comments with that tag made [[in-reply-to]] his posts
 * any posts of others' with that tag that he replied to.
 
 === Kyle Mahan ===
-
-{{kylewm}} has an old-fashioned list of tags at the end of each post. [[hashtags]] that are added inline automatically populate the tag list (so that they will appear twice, once inline, once in the list).
-* Example tag aggregation page: https://kylewm.com/tags/indieweb
+{{kylewm}} has an old-fashioned list of tags at the end of each post. [[hashtags]] that are added inline automatically populate the tag list (so that they will appear twice, once inline, once in the list). (Originally implemented in [[Red Wind]] (on [https://github.com/kylewm/redwind/commit/e5f5b3248489c85742600df1ed37098ba6139f7b 2014-05-09]) (on development hiatus), now implemented by using [[Known]]).
+* Example tag aggregation page: https://kylewm.com/tag/indieweb
 * Example tagged post https://kylewm.com/2015/08/updated-woodwind-to-preselect-syndication-targets
+
+=== Tantek ===
+{{t}} added automatically marked up tag support to hashtags on his posts, implemented 2016-01-25, but first [https://indiewebcamp.com/wiki/index.php?title=Falcon&action=historysubmit&diff=25055&oldid=25026 deployed early 2016-01-26] e.g.:
+* https://www.flickr.com/photos/tantek/23995162453/ POSSE copy with all "tags" automatically posted by Bridgy Publish which detected them all from the hashtags auto-marked up with u-category on:
+** original: http://tantek.com/2016/002/t2/change-clothing-inspired-tomorrowland
+
+=== gRegor Morrill ===
+{{gRegor}} added plaintext tags on [[event]] posts on 2016-03-09
+* http://gregorlove.com/2016/01/pink-martini/
+Added on [[note]] posts on 2017-03-19
+* https://gregorlove.com/2017/03/ooh-unwed-sailor-is-playing/
+
+=== Marty McGuire ===
+{{martymcguire}} added linked tag support on 2017-02-20. Tags appear in the footer or header of posts, marked up with <code>.p-category</code> and linked to a [[tag aggregation]] page.
+* https://martymcgui.re/tag/indieweb/
 
 == Web Tagging Origins ==
 The mid-2000s Web 2.0 trend popularized free form tagging not part of any formal taxonomy (referred to as a <dfn>folksonomy</dfn>), as well as the practice of people tagging (each) others' content in a shared location (AKA <dfn>social tagging</dfn>) that could surface aggregate trends. This trend was started in 2004 by various sites (link-tagging silo [[Delicious]] (original site since defunct) & photo silo [[Flickr]]), blogging tools (e.g. [[WordPress]]), and blog search engines ([[Technorati]] (2005 tag search now defunct)).
@@ -73,9 +105,37 @@ Any kind of tag could also be made a private tag.
 * Private tags can be used to do [[POSSE]] stuff like what [https://www.facebook.com/selectivetwitter/info Selective Tweets] does with the #fb tag, but without having a visible public tag: like this IFTTT recipe that [https://ifttt.com/recipes/14872 crossposts Pinboard bookmarks to Twitter that have the .twitter private tag].
 * I have a #readlater tag that I would love to have private -[[User:Www.sandeep.io|Www.sandeep.io]] 16:37, 11 September 2013 (PDT)
 
-IndieWeb opinions:
-* [[User:Sandeep.io|Sandeep Shetty]] uses a #private tag (as a way to reduce an interface element that is required less often) to make posts only visible to him. 
-** You can combine Private tags and #private to make both tags and content visible only to the author.
+=== IndieWeb Examples ===
+==== Sandeep Shetty ====
+[[User:Sandeep.io|Sandeep Shetty]] uses a #private tag (as a way to reduce an interface element that is required less often) to make posts only visible to him. 
+* You can combine Private tags and #private to make both tags and content visible only to the author.
+
+==== Shane Becker ====
+{{veganstraightedge}} supports private tags on his site (as powered by [[Dark Matter]]).
+
+* Any tag that starts with a . is only visible to the author when they're signed in (since [https://github.com/darkmatterapp/publisher-server-rails/commit/5acc249b8afdcecc58bf950e76ae42cb19662ed4 2016-11-03])
+* Any private post is auto-tagged with with ".private" (since [https://github.com/darkmatterapp/publisher-server-rails/commit/5acc249b8afdcecc58bf950e76ae42cb19662ed4 2016-11-03])
+
+
+== Machine Tags ==
+[[Machine_tags|Machine tags]] are also sometimes called triples, a triple store, or triple tags. They come in the form of <code>namespace:predicate=value</code>. And they are typically not written by humans directly, hence the name "machine tags", as coined by 
+Aaron Straup Cope when Flickr implemeted them on [https://www.flickr.com/groups/api/discuss/72157594497877875/ 2007-01-24]. They are usually added to a post when the post is created/edited by another piece of software via an API. 
+
+* medium:paint=oil
+* geo:quartier="plateau mont royal"
+* upcoming:event=81334
+
+One way to think about them is that they are just like normal tags and treat it as just a string of characters. 
+You can also think of them as normal tags with a prefix: 
+* <code>value</code> is the tag
+* <code>namespace:predicate=</code> is the prefix
+
+=== IndieWeb Examples ===
+==== Shane Becker ====
+{{veganstraightedge}} implemeted machine tags on his site (as powered by [[Dark Matter]]) on [https://github.com/darkmatterapp/publisher-server-rails/commit/1679b0c962580f6685d52cb884e23c0004c90c90 2016-04-08].
+
+* Example post with a machine tag: http://veganstraightedge.com/videos/2013/05/31/backyard-squirrel-buddy
+* Tag page of posts with machine tag "imported:from=vine-co": http://veganstraightedge.com/tags/imported:from=vine-co
 
 == See Also ==
 * [[hashtags]]

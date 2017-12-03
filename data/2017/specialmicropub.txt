@@ -1,0 +1,94 @@
+https://indieweb.org/2017/specialmicropub
+
+'''<dfn>Specialized Micropub Clients</dfn>''' was a session at [[2017|IndieWeb Summit 2017]].
+
+Notes archived from: https://etherpad.indieweb.org/specialmicropub<br>
+Video at: https://www.youtube.com/watch?v=Ka45-m0rwvY
+----
+IndieWeb Summit 2017
+
+Session: Specialized Micropub Clients (#specialmicropub)
+
+When 2017-06-24 14:00
+
+== Participants ==
+* {{grantcodes}} session facilitator
+* {{schmarty}}
+* [https://www.jjuran.org/ Josh Juran]
+* [[User:Sebastian.kip.pe|Sebastian Kippe]]
+* {{gRegor}}
+* {{jimpick}}
+* [[User:Herestomwiththeweather.com|Tom Brown]]
+* [https://podviaznikov.com/ Anton Podviaznikov]
+
+Remote lurking:
+* {{sebsel}}
+
+== Notes ==
+There is a list of clients on the wiki at https://indieweb.org/Micropub/Clients
+
+Spoke about:
+* client for event-posting https://slater.schmarty.net
+* client for audio-posting https://screech.schmarty.net
+* photo callery posting http://photopostr.tpxl.io/
+* Quill
+* OwnYourSwarm
+* silo.pub
+* Micropub to github
+
+"Specialized" in this case means something like "for more than text posts". 
+Examples: Teacup, PushupCounter
+
+Screen for posting audio
+
+Slater for posting events
+* A big issue is locations. Slater has "punted" on this by accepting location as a free text field. Marty's micropub endpoint accepts geo: URLs, URLs to a page with a venue h-card, or text venue name.
+
+Ideas for mp clients that don't exist yet
+* Screenshots from live demos
+* Currently reading
+* Currently watching
+* Photo galleries
+* Address book add contacts
+* Check-ins without Swarm
+* Moving around large chunks of data (podcasts, video)
+* Reviews for books - https://quill.p3k.io/review
+
+martymcgui.re has an Automator script that can send arbitrary files to his micropub media endpoint. Used largely for screenshots.
+
+Micropub supports file uploads via multipart/form-encoded post. Media endpoint support allows sending *just* a file and returns a permalink URL.
+
+Want to read client. Send ISBN code, title, reading percentage etc. The website can then pull more data about the book. Should clients send all available data or minimum amount and rely on the end consumer to grab more data based on ISBN?
+
+Marty is showing his MP client Slater and Screech
+
+Grant showing his gallery posting MP client http://photopostr.tpxl.io
+
+Josh: in addition to checkins, would be valuable within a limited community posting "I have met Grant"
+
+gRegor: Use "summary" as a fallback. E.g. Teacup sends "eat-of" and "drink-of", and if your micropub server supports that, it can do whatever it wants. For servers without support for special properties, sending a summary allows it to show "I ate a taco."
+
+Grant: Is there a standard yet for marking posts as private? I know drafts exist
+
+Micropub helper libraries:
+* https://indieweb.org/micropub#Libraries
+** kylewm built a Flask library for micropub clients that handles IndieAuth authentication flow: https://github.com/kylewm/flask-micropub
+** Marty is developing one for python
+*** a Flask library for micropub endpoints (servers) that handles IndieAuth authentication flow: https://github.com/martymcguire/flask-indieauth
+
+Grant: CORS is always an issue with Node.js MP clients
+
+Voxpelli has a service: webpage-micropub-to-github for MP posting to a Jeckyl file, commit to github, push to your gh page (static sites)
+
+Check-ins without swarm
+* Difficult to get the location and venue data
+* OpenStreetMap has venue data
+* OwnYourSwarm offers a good template for what the micropub params should be.
+
+https://indieweb.org/commentpara.de - anonymous comments via indieauth (not micropub, afaik? Came up while discussing auth for MP. -- gRegor)
+
+grant walked through a Quill editor demo.
+* used the fancy HTML editor. got an error because added a too-large image
+* made a successful text post.
+
+[[Category: 2017 sessions]]

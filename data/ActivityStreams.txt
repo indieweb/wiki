@@ -1,9 +1,9 @@
-http://indiewebcamp.com/ActivityStreams
+https://indieweb.org/ActivityStreams
 
 <span style="float:right">http://snarfed.org/activitystreams_logo.png</span>
 {{stub}}
 
-[http://activitystrea.ms ActivityStreams] (AS) is a standardization effort to define common types of objects and actions (verbs) taken on various social media sites. Quick reference to AS types and verbs:
+'''<dfn>[http://activitystrea.ms ActivityStreams]</dfn>''' ('''AS''') is a standardization effort to define common types of objects and actions (verbs) taken on various social media sites. Quick reference to AS types and verbs:
 * [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md#object-types object types]
 * [https://github.com/activitystreams/activity-schema/blob/master/activity-schema.md#verbs verbs]
 
@@ -18,7 +18,7 @@ Atom + ActivityStreams namespaced markup:
 Additional indie web implementations:
 
 JSON ActivityStreams ([http://activitystrea.ms/specs/json/1.0/ latest spec])
-* [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] is a library and REST API that converts between [[Facebook]], [[Twitter]], [[Google+]], and [[Instagram]] and ActivityStreams (and also [[microformats2]] HTML, JSON, and Atom). It uses the [[silo]]s' APIs to fetch and also publish posts, comments, likes, retweets, etc. and supports Activity Streams ATOM as well as JSON format.
+* [https://github.com/snarfed/granary granary] is a library and REST API that converts between [[Facebook]], [[Twitter]], [[Google+]], and [[Instagram]] and ActivityStreams 1 (and also [[microformats2]] HTML, JSON, and Atom). It uses the [[silo]]s' APIs to fetch and also publish posts, comments, likes, retweets, etc. and supports Activity Streams ATOM as well as JSON format.
 
 * [[User:Sandeep.io|Sandeep Shetty]]: The [[RSSB]] stuff on [http://sandeep.io sandeep.io] is [http://indiewebcamp.com/irc/2013-06-11#t1370984352 lot like AS] and trivially [http://www.sandeep.io/50 maps to it] and was done as an exercise to understand AS:
 ** Post: http://www.sandeep.io/31.as
@@ -33,25 +33,18 @@ JSON ActivityStreams ([http://activitystrea.ms/specs/json/1.0/ latest spec])
 *** '''note''' - 't' for plain text note
 *** '''article''' - 'b' for blog post
 * [[User:benwerd.com]]: I'm using ActivityStreams as a handy abstraction layer, not because I think anyone's necessarily reading it. All new content posted in idno has an AS object type; plugins can then observe post events based on that object type, intercept the object, and (eg) syndicate it to third-party sites. That way the syndication plugins don't have to be dependent on any specific content plugins.
-* [[User:snarfed.org|Ryan]] is currently focusing on connecting the IndieWeb to existing silos, and he uses ActivityStreams via [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] as a common backplane for each new IndieWeb use case.
+* [[User:snarfed.org|Ryan]] is currently focusing on connecting the IndieWeb to existing silos, and he uses ActivityStreams via [https://github.com/snarfed/granary granary] as a common backplane for each new IndieWeb use case.
 * ...
 
 == Use with microformats2 ==
-* [https://github.com/snarfed/activitystreams-unofficial activitystreams-unofficial] converts from ActivityStreams to [[microformats2]] JSON and HTML. See [https://github.com/snarfed/activitystreams-unofficial/blob/master/microformats2.py microformats2.py].
-* [[User:Tantek.com]]: One thought is to use [[microformats2]] root class names for object types as we publish them. I've been using "as-note" and "as-article" on my "h-entry" elements for some time (note related 2011 post about "as-*" classnames[https://plus.google.com/+PelleWessman/posts/VSiMYVKgDan]), but as of 13:27, 12 October 2012 (PDT) was considering switching to using '''h-as-note''' and '''h-as-article''' instead (as they're really indicating "subtypes" of an h-entry), and as of [http://tantek.com/2012/302/t2/added-classes-fsws-activitystreams-microformats2 2012-10-26 have done so] per the [[FSWS2012]]  session on ActivityStreams and microformats2[https://www.w3.org/2005/Incubator/federatedsocialweb/wiki/Federated_Social_Web_Summit_2012/notes#as-mf2]. [[User:Tantek.com|Tantek]] 09:13, 30 October 2012 (PDT)
-** I'll likely add "h-as-reply" and "h-as-rsvp" as I add those post types. Currently they're just styling hooks, though one could conceivably use them as part of a h-entry -> ActivityStreams(Atom or JSON) converter. - [[User:Tantek.com|Tantek]] 11:31, 9 May 2013 (PDT)
-*** In practice I found no need for "h-as-reply". They're just notes that I can display specially as replies if they happen to have a [[rel-in-reply-to]] link. [[User:Tantek.com|Tantek]] 09:03, 25 June 2013 (PDT)
-*** I'm leaning towards removing all h-as-* class names as they don't seem to have helped with anything, and less is more. UIs are also moving away from explicit post typing. [[User:Tantek.com|Tantek]] 12:44, 15 March 2015 (PDT)
-* [[User:Waterpigs.co.uk]]: I am publishing my notes and articles with '''h-as-note''' and '''h-as-article''', as well as using u-as-downstream-duplicate for downstream duplicate URIs ([http://waterpigs.co.uk/notes/848/ example]) ----
-* [[User:benwerd.com]]: I'm using "h-as-note" and "h-as-article" in [http://idno.co idno], with more to follow. I'm particularly interested in h-as-event in combination with [[webmention]] attendance reports.
-* [[User:jeena.net]]: I'm using "h-as-photo" in addition to h-entry for my photo entries.
-* ...
+* [https://github.com/snarfed/granary granary] converts from ActivityStreams 1.x to [[microformats2]] JSON and HTML. See [https://github.com/snarfed/granary/blob/master/granary/microformats2.py microformats2.py].
 
-See also: http://microformats.org/wiki/activity-streams#activity_object_brainstorm
+Note: use of "h-as-*" (or "as-*") classes is now discouraged. For more see:
+* '''[[h-as]]'''
 
 == Commons Examples ==
 === Quitter se ===
-[http://quitter.se Quitter.se] is an install of [[GNU Social]]
+[http://quitter.se Quitter.se] is an install of [[GNU social]]
 * http://quitter.se/api/statuses/user_timeline/115649.atom
 ** Activity Streams 1.0 Atom / XML
 * http://quitter.se/api/statuses/user_timeline/115649.as
@@ -59,7 +52,7 @@ See also: http://microformats.org/wiki/activity-streams#activity_object_brainsto
 
 == FAQ ==
 === How do you add discoverability of an ActivityStream ===
-''Q: What would the best practice be to add discoverability of an [[ActivityStream]] to an indie web site?''
+''Q: What would the best practice be to add discoverability of an ActivityStream to an indie web site?''
 
 A: Check out the guide on [[How to set up your realtime feed]] for best practices and tips for publishing [[feeds]].
 
@@ -137,3 +130,4 @@ Various [[post]] types:
 * [[notes]]
 * [[photos]]
 * ...
+* [[ActivityPub]]

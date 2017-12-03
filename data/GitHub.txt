@@ -1,19 +1,102 @@
-http://indiewebcamp.com/GitHub
+https://indieweb.org/GitHub
 
+[[Category:silo]]
 {{pagelogo|https://pbs.twimg.com/profile_images/616309728688238592/pBeeJQDQ.png}}
 {{stub}}
 
 '''<dfn>[http://github.com GitHub]</dfn>''' is a specialized content hosting [[silo]] for code, issues, comments, and static content that has some aspects of a [[commons]], and through free domain mapping, a [[content hosting service]] as well.
 
-== Github ==
+* See [[github-pages]] for how to setup a static Github pages site!
+
+== Features ==
 __TOC__
+* [[star]] a repo: serves as a personal bookmark and ranking the popularity of the repo
+* [[watch]] a repo: receive notifications of updates to the repo
+* [[issue]] posts
+** [[reply]] to an issue
+** [[reacji]] to an issue
+* . . .
+
+== POSSE to GitHub ==
+For [[POSSE]]ing source [[code]] to github, see [[git]].
+
+While git is inherently distributed, all the extra functionality (issues, pull requests, etc.) that GitHub adds on top is not. GitHub [https://developer.github.com/v3/ has a nice API] for interacting with repositories, which makes it pretty easy to POSSE issues, comments on issues, stars, and maybe more.
+
+=== POSSE note to GitHub ===
+Plain text [[note]]s can be POSSEd to GitHub as a gist.
+
+No known examples of anyone doing this yet. 
+
+Be the first and add your permalinks here!
+
+=== POSSE an issue ===
+An [[issue]] post that is in reply to a particular GitHub repo can (and should) be POSSEd to GitHub as a new issue on that GitHub repo.
+
+See examples of POSSEing issues to GitHub:
+* [[issue#IndieWeb_Examples]]
+
+=== POSSE reply to repo ===
+A [[reply]] to a GitHub repo path, may make sense to be POSSEd as a comment on that path, e.g. if it is a gist. If the reply is an issue, see above [[#POSSE_an_issue|POSSE an issue]].
+
+=== POSSE reply to issue ===
+A [[reply]] to a specific GitHub issue can (and should) be POSSEd as a new comment on that issue.
+
+=== Backfeed from ===
+If you POSSE to GitHub in any of the above ways, you should [[backfeed]] any replies on your post's GitHub POSSE copy back to your own post so that you can:
+* keep a copy of people's comments on your post
+* view follow-ups to your post on your post, instead of having to visit GitHub's site
+* reply to follow-ups to your post, from your site, instead of using GitHub's UI
+
+=== IndieWeb Examples ===
+==== Aaron Parecki ====
+{{aaronpk}} is manually [[POSSE]]ing comments on GitHub issues from his own site to GitHub. E.g.:
+* http://aaronparecki.com/replies/2013/08/14/6/mailpile (original)
+** https://github.com/pagekite/Mailpile/issues/48#issuecomment-22682787 (POSSE copy on GitHub)
+==== Colin Tedford ====
+[[User:Colintedford.com|Colin Tedford]] manually POSSEs Github issues, and manually POSSEs and backfeeds comments on GitHub issues (it's just occasional bug reports, so not as onerous as it might be if he were a developer).
+* http://colintedford.com/2015/02/02.0338-easy-syntax-not-working/ (original, w/ comments)
+** https://github.com/glensc/dokuwiki-plugin-pageredirect/issues/18 (POSSE copy on Github)
+
+==== Chris Aldrich ====
+{{chrisaldrich}} is occasionally automatically POSSEing comments on GitHub issues from his Known site to GitHub. E.g.:
+* original: http://stream.boffosocko.com/2017/miklb-i-would-generally-agree-with-you-but-im-thinking 
+** POSSE: https://github.com/dshanske/indieweb-post-kinds/issues/84#issuecomment-292446828
+
+He does this with the [[Known]] plugin to POSSE to GitHub.
+
+=== Bridgy Publish ===
+There is no current support in Bridgy Publish to POSSE to Github. Feature request:
+* https://github.com/snarfed/bridgy/issues/333
+** for all variations of note->gist, reply -> repo | issue
+
+=== Bridgy Backfeed ===
+There is no current support in Bridgy to backfeed responses to your GitHub POSSE copies back to your original posts. Feature request:
+* https://github.com/snarfed/bridgy/issues/333 (part of, likely to be split into a separate issue).
+
+=== Known ===
+[[Known]] has a plugin for automatic POSSEing to GitHub:
+* https://github.com/mapkyca/KnownGithub
+
+=== Silopub ===
+* [[silo.pub]] supports creating issues, commenting on issues and pull requests, and starring repositories since [https://kylewm.com/2016/04/i-launched-github-support-on-silo-pub-this-morning 2016-04-22]
+
+== Porting to the IndieWeb ==
+Example github activity [[Atom]] [[feed]] whereby you can export or [[PESOS]] your activities from:
+* https://github.com/tantek.atom (for account name "tantek")
+
+If you want a feed of activity by others on your repositories, it looks like you can get it through your "Personal News Feed". "Your personal News Feed shows activity—other than your own!—on repositories you watch. [&hellip;] To subscribe to your personal News Feed in your favorite RSS reader, click Subscribe to News Feed under your list of repositories." https://help.github.com/articles/news-feed/
 
 == Self-hosted alternatives ==
 {{main|git#Software}}
-There are various self-hosted alternatives to github:
-* [[gitlab]]
-* [[gitosis]]
-* [[gitorious]]
+
+There are some self-hosted alternatives to GitHub. Gitlab and Gogs support issue tracking and project management as well.
+
+* [[GitLab]]: full-featured GitHub replacement
+* [[Gogs]]: full-featured GitHub replacement
+* [http://gitolite.com/ Gitolite]: web interface for managing repositories, with fine-grained access controls 
+* [https://git.wiki.kernel.org/index.php/Gitweb Gitweb]: simple web interface for browsing git repositories 
+* Formerly [[Gitorious]] (acquired by GitLab in March 2015)
+* Formerly Gitosis ([http://wiki.dreamhost.com/Gitosis#Note deprecated] long ago in favor of gitolite)
 
 == Criticism ==
 === DMCA harassment ===
@@ -21,14 +104,30 @@ You can lose your data due to unjustified DMCA takedowns:
 * [https://github.com/github/dmca/blob/master/2014-07-02-Qualcomm.md Takedown] and [http://ausdroid.net/2014/07/05/qualcomm-retracts-dmca-takedown-request-apologises-involved/ Apology]
 * Github has since improved this process by defining how they are handled better, specifically allowing for the owner to make needed corrections or to move hosts. https://github.com/blog/1908-a-better-dmca-process
 === DDoS collateral damage ===
-Github is sometimes the target of DDoS attacks, apparently targeted at specific projects. While GitHub seems to be handling the attacks in such a way as to keep access working, this is a vulnerability of any centralized service, that it attracts attacks unrelated to your use of it, that jeopardize your use of it (collateral damage).
+Github is sometimes the target of DDoS attacks, apparently targeted at specific projects. While GitHub seems to be handling the attacks in such a way as to keep access working, this is a vulnerability of any centralized service, that it attracts attacks unrelated to your use of it, that jeopardize your use of it (collateral damage). Most recent first
+
+* 2016-10-21 DDos attack on [[DYN]] affects [https://krebsonsecurity.com/2016/10/ddos-on-dyn-impacts-twitter-spotify-reddit/ Twitter, Spotify, Reddit, GitHub], effectively taking them all offline.
 
 * 2015-03-26 DDoS attack [https://github.com/blog/1981-large-scale-ddos-attack-on-github-com] via unsuspecting browsers executing scripts from ([[MitM]]) faked [[Baidu]] requests[http://insight-labs.org/?p=1682].
+
+=== March 2017 Terms of Service Update ===
+In March 2017, GitHub updated their terms of service. Several people are upset about the change, which may affect GPL and similarly licensed software.
+* http://joeyh.name/blog/entry/removing_everything_from_github/
+* https://www.mirbsd.org/permalinks/wlog-10_e20170301-tg.htm#e20170301-tg_wlog-10
+* Discussion thread: https://news.ycombinator.com/item?id=13766933
+
+== Downtime ==
+Occassionally GitHub fails to handle requests:
+
+[[File:2016-07-26-github-no-server-available.png]]
+
+<blockquote>No server is currently available to service your request.<br/><br/>Sorry about that. Please try refreshing and contact us if the problem persists.</blockquote>
 
 == See Also ==
 * [[github-pages]]
 * [[code]]
 * [[issue tracker]]
+* [[issue]]
 * [[commons]]
 * [[Getting Started]]
 * [[silo]]

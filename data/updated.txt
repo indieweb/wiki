@@ -1,0 +1,70 @@
+https://indieweb.org/updated
+
+<span style="float:right;height:128px;font-size:128px;margin-top:48px">🆙</span>
+
+{{stub}}
+
+An '''<dfn>updated</dfn>''' is a post that has been edited by the author. It should have <code>dt-updated</code> with the datetime of the update.
+
+== Why ==
+There are numerous reasons you may want to update a post, and indicate to others that you want any copies updated, hoping they will update any caches of it, from displays of your [[responses]] to [[reply-context]]s in reply to your original posts.
+
+== Use Case ==
+A user updates a post and wants any copies of that post (i.e. if it was a reply post) on other sites to also be updated.
+
+__TOC__
+== Handling ==
+How to handle updated posts, i.e. implementation details:
+
+* When a post is updated by the user, implementations should:
+** send a webmention to all URLs that were either in the previous version of the post or the new version
+** update any [[POSSE]] copies of that post. See [[POSSE#Update|POSSE Update]] for details.
+
+* When the permalink of a post that has been updated is requested, implementations should return:
+*# an HTML [[h-entry]] with a <code>dt-updated</code> with the date the post was updated.
+
+== IndieWeb Examples ==
+Not sure who explicitly supports proper "updated" posts with dt-updated and automatic sending of webmentions to all URLs whether in the previous or new version of a post.
+
+If you think you support updated posts properly, try http://webmention.rocks/ Update tests, if you pass them all, add yourself here with citations of your updated post(s).
+
+=== bear ===
+{{bear}} has implemented updated posts support on his site bear.im since 2016-04-15.
+
+Example URL of an updated post:
+* https://bear.im/bearlog/2016/106/testing-webmention-rocks-updates.html
+
+== Media Examples ==
+Major media sites update their articles from time to time, e.g.
+=== New York Times ===
+The [[New York Times]] updated 
+[https://www.nytimes.com/2017/03/24/us/politics/health-care-affordable-care-act.html this article published 2017-03-24] within minutes of publication, with a revised article name and content edits:
+
+[[File:2017-03-24-nyt-article-update.png]]
+
+== Silo Examples ==
+=== Facebook ===
+[[Facebook]] supports editing posts and shows that a post has been "edited". (See [[versioning#Facebook]] for details).
+
+=== Flickr ===
+[[Flickr]] supports replacing the photo of a photo post, without changing its permalink, comments etc.
+
+== Brainstorming ==
+=== Update POSSE copies ===
+When you update a post, you should update its POSSE copies too if you can.
+
+=== Notifying Responses ===
+* send a webmention to all [[responses]] to the post (so the responses can update their [[reply-context]], per [[reply-context#CRUD|reply-context CRUD]], possibly [[notify]] the responder so they can update or delete their response).
+** Note: this is subject to the [[reply-context#CRUD_Issues|issues documented re: reply-context CRUD]]
+
+== Issues ==
+=== Threaded Comments Problems ===
+Similar to [[deleted]] posts, but perhaps less disruptive, and updated post or comment may impact the relevance / meaning of subsequent replies.
+
+== See Also ==
+* [[deleted]]
+* [[posts]]
+* [[webactions]]
+* [[comment]]
+* [[versioning]]
+* [[edit]]

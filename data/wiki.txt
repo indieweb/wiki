@@ -1,11 +1,13 @@
-http://indiewebcamp.com/wiki
+https://indieweb.org/wiki
 
-{{stub}}
+__TOC__
 
 '''<dfn>wiki</dfn>''' may refer to:
 * '''[[#Suggestions|suggestions]]''' / discussion about the indiewebcamp wiki itself.
 * '''[[#Page_type|page type]]''': the [[wiki-page]] as type of page or content
 * '''[[#Projects|projects]]''': specific [[wiki-projects]] related to indieweb wiki hosting
+
+
 
 == Page type ==
 {{main|wiki-page}}
@@ -15,7 +17,8 @@ In addition to sequential / time-ordered [[posts]], many in the IndieWebCamp com
 Wiki pages are typically editable and versioned with visible / easily accessible version history & browsable versions. Wiki pages are often also multi-authored and have a multi-platform interface (like any web-based content hosting solution).
 
 * [[User:Tommorris.org|Tom Morris]] has his own wiki at http://wiki.tommorris.org/
-* [[User:caseorganic.com|Amber Case]] has her own wiki at http://caseorganic.com/wiki/
+* {{tantek}} has a wiki at http://tantek.pbworks.com
+* [[User:caseorganic.com|Amber Case]] had her own wiki at http://caseorganic.com/wiki/
 * ...
 
 There are also various wiki hosting sites / [[silos]].
@@ -32,10 +35,27 @@ IndieWebCamp [[projects]] related to wiki hosting/creation/editing:
 
 See also [[wiki-projects#Brainstorming|wiki projects brainstorming]].
 
-== Uploading by Email ==
-You can upload files to this wiki via email, which is often easier to do on a phone than sign in to the wiki and use the MediaWiki interface.
+== Wiki Features We Use ==
 
-Send a file attachment to <code>upload@indiewebcamp.com</code>. Any text in the body of your email will be added as the description of the photo. The subject line is ignored. You will get an email response after the wiki processes the photo, but you might need to check your spam folder for the reply.
+At some unlikely point in the far future, we may decide to migrate the wiki off of MediaWiki. If this ever happens, we'll need to be sure whatever replaces it has roughly the same functionality that we use in MediaWiki. Below is a list to collect descriptions of MediaWiki features that we use. Feel free to add to it.
+
+* Wiki-style editing - Click "edit" to view page source and "save" to save changes immediately. Conflicts are not merged automatically, and a message is shown if someone else has edited the page in the mean time.
+* Wiki-style links - MediaWiki provides a syntax for quickly linking between wiki pages, e.g. <nowiki>[[events]]</nowiki>. 
+* Nickname templates - We often use sparkline templates to display someone's photo and name in a line of text such as {{aaronpk}}. This is done by creating a template with the person's nickname and typing <nowiki>{{aaronpk}}</nowiki> in a line of text.
+* Signature on edits - Sometimes we add a signature to lines using <nowiki>~~~~</nowiki> which is replaced by the logged-in user's signature and a timestamp.
+* Content templates - Several pages (such as [[events]] and [[2016/Guest_List]]) use templates to avoid duplicating complicated wiki markup on the page. The templates themselves are wiki pages and are editing by the community.
+* IRC notifications - When wiki pages are edited, we get notifications in [[IRC]] describing the change.
+* The ability to embed HTML in the wiki markup – needed e.g. to add microformats to [[events]]
+* The ability to upload images, e.g. clicking "embed file" icon inserts wiki link with <nowiki>[[File:Example.jpg]]</nowiki>. Clicking that wiki link takes you to the form to upload the image.
+
+=== Wiki Features We Need ===
+
+Sometimes, MediaWiki does not have a good way to do what we want, so we have to hack around it.
+
+* Hotlinked images - We often want to hotlink images to avoid uploading them to the wiki (which is only possible if the image can be CC0 licensed), but we also want to proxy the img src on the resulting page so that the site can be served over https even if the image is http
+
+See also:
+* '''[[mediawiki-customization]]''' for all the things we've had to do to make MediaWiki work for us.
 
 == Suggestions ==
 See:
@@ -44,9 +64,37 @@ See:
 Suggestions and bug reports for improving the IndieWebCamp.com wiki. Please provide suggestions as github issues here:
 * https://github.com/indieweb/wiki/issues
 
-<githubissues src="https://github.com/indieweb/wiki/issues?state=open"/>
+https://github.com/indieweb/wiki/issues?state=open
 
-__TOC__
+== Brainstorming ==
+Ideas being iterated rather than a specific suggestion for improvement.
+
+=== Categorize Pages ===
+Problem statement: If we look at the [[this-week]] reports (e.g. [https://indieweb.org/this-week/2016-07-29.html 2016-07-29 this week]) and summaries of wiki pages that have been edited, it's a long list and doesn't provide a lot of information about why any particular page is important / compared to any other page, or any other way of chunking / understanding the long list.
+
+Thoughts: 
+* one possibility would be to present each page with an icon in front according to what "type" or "kind" of page it is.
+* another possibility is to use such types/kinds to cluster the list of changed pages by type/kind, thus avoiding a need to repeat icons over and over
+* either way we could also use the "page icon" or "emojicon" on each page in particular to provide an even more specific graphical hook/representation for easier/quicker understanding of what the pages were about
+
+Approaches:
+* Use MediaWiki "Category:" for coarse top level categorization.
+** What categories? 
+*** Develop adaptively as needed from looking at "this week" and seeing what patterns (sets of pages) emerge. E.g. from [https://indieweb.org/this-week/2016-07-29.html 2016-07-29 this week]:
+**** 📆 event pages for [[Events]] + subpages (HWC events), and IWC events /YYYY/city|country
+**** project pages for specific projects e.g. [[ikiwiki]], [[WordPress]](/*), [[p3k]], [[relmeauth.php]], [[WhisperFollow]], [[Monocle]] etc.
+**** "feature" building blocks (including types of content like [[album]], [[multi-photo]], [[travel]], and UI features like [[search]]), other things from [[IndieMark]]
+**** "technology/plumbing" building blocks (like [[Webmention]])
+**** people (User: pages)
+**** (anti-)patterns e.g. [[database-antipattern]], [[js;dr]]
+**** silos ([[GitHub]], [[Google Photos]], etc.)
+**** companies (e.g. [[Google]])
+**** services (e.g. [[SubToMe]], [[web hosting]], Bridgy, silo.pub)
+**** history (points of record, e.g. [[site-deaths]], history, timeline, [[posts about]], [[videos about]] etc.)
+**** technologies (in general, like [[Perl]], other languages, frameworks)
+*** (re-)use rough coarse categories from [http://tantek.com/2015/201/b1/indiewebcamp-2014-year-review IndieWebCamp 2014 Year in Review] separate lists of pages.
+** Assign a generic icon (or emoji) for each top level category
+* Use page-specific page icons or emojicons (both already use templates, so should be automatable) to to customize the icon shown for a page
 
 == Done ==
 Suggestions that have been implemented.

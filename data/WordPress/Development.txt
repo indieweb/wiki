@@ -1,29 +1,94 @@
-http://indiewebcamp.com/WordPress/Development
+https://indieweb.org/WordPress/Development
 
-Purpose of this page is to document discussions/brainstorming regarding Indieweb [[WordPress]] Themes and Plugins to operate together, despite the author and future development, as well as advice/suggested practices.
+Purpose of this page is to document discussions/brainstorming regarding Indieweb [[WordPress]] Themes and Plugins to operate together, initiatives to get Indieweb elements into Core and WordPress building blocks. Interoperability should exist regardless of the author and future development, as well as advice/suggested practices.
 
-=== Working On ===
+= Working On =
 There are several projects to improve both the level and ease of supporting [[IndieMark|IndieWeb formats & protocols]] in WordPress.
 
-Themes:
+== IndieWeb Plugin ==
+Brainstorming/discussion at https://github.com/indieweb/wordpress-indieweb/issues/47
+
+=== Plugins ===
+Ease of installation and management
+* [[Upon2020.com|Johannes Ernst]] [[2014/Demos|demonstrated]] at [[2014|Indie Web Camp 2014]] how to install Wordpress with several preactivated indie web plugins with a single command on [[IndieBox]]. Updates, backups, restores etc are also single commands on [[IndieBox]].
+
+== Themes ==
 * A barebones theme that has [[microformats2]] - point the designers/developers that want to build a theme to use that.
 ** gRegor is considering doing this with the HTML5blank.com theme.
 *** [https://github.com/pfefferle/SemPress SemPress]  supports a solid mf2 structure and is easily customizable/extendable --[[User:Notizblog.org|Matthias Pfefferle]]
 *** My understanding is that SemPress is a great out-of-the-box theme, but I also wanted a "blank" theme that indieweb designers could build from scratch on. — [[User:Gregorlove.com|gRegor]] ([[User talk:Gregorlove.com|talk]]) 08:51, 17 June 2014 (PDT)
 * Some common defaults that non-technical users could try out, like Twenty Fourteen with [[microformats2]] support added
-** GWG is working on a fork of _s(Underscores) for Indieweb, which is the stripped down starter theme on which the default Wordpress themes are based. It can be found at [https://github.com/dshanske/mf2_s mf2_s]
+** GWG worked on a fork of _s(Underscores) for Indieweb, which is the stripped down starter theme on which the default Wordpress themes are based. It can be found at [https://github.com/dshanske/mf2_s mf2_s]. Also working on trying to get MF2 changes into _s itself.
+*** Remove hentry from _s(WordPress Starter Theme) - https://github.com/Automattic/_s/pull/860
+*** Microformats 2 changes to _s - https://github.com/Automattic/_s/pull/972
 
-Plugins:
+=== Brainstorming ===
 
+'''Problem''': Right now there's too much context-setting pre-amble before there's anything like a "Hey, choose from one of these themes."
 
-Ease of installation and management
-* [[Upon2020.com|Johannes Ernst]] [[2014/Demos|demonstrated]] at [[2014|Indie Web Camp 2014]] how to install Wordpress with several preactivated indie web plugins with a single command on [[IndieBox]]. Updates, backups, restores etc are also single commands on [[IndieBox]].
+'''Goal''': Improve the variety and number of available WordPress themes that support IndieWeb out of the box. Many of the common IndieWeb functionalities have been implemented, but theme support is one of the last remaining major bottlenecks for helping the WordPress implementation of IndieWeb gain broader support from [[generations]] 2+. 
+
+'''General strategy''': Compile and simplify a list of popular candidate themes and expand support for those which seem most worthwhile to increase the list of options.
+
+Perhaps in small groups we could choose a new theme every three months or so to dogfood and iterate on?
+
+Separate themes out into "These work, go ahead and use them", and "We're testing these out", and "Here's some we could improve"
+
+It's been suggested that themes developed on Github are much easier to keep the updates coming and you can run a fork that is easy to update.
+
+* Common problems to watch out for:
+** Many plugins and themes put metadata in the_content plugin, which creates a problem, as most themes wrap the_content in e-content.
+
+* Suggestions of specific areas of themes to work on/draw from:
+** Modern themes that are responsive (https://premium.wpmudev.org/blog/free-responsive-wordpress-themes-reviewed/) (these are also most likely to have the longest supported lives)
+** Themes for personal sites/blogs as opposed to magazine, corporate/business, seasonal themes to stay true to [[principles]].
+** Template themes like _s which designers can easily fork and build upon
+*** Subsequent themes would them be far more likely to support IW use
+** Popular themes in broad/common use
+*** Might be worth looking at popular downloads on wp.org and look at forking them for IW.
+** Nudge some of the popular "premium" themes to better support IW and microformats: https://www.elegantthemes.com/blog/resources/most-popular-premium-wordpress-themes particularly since people are paying for them and resulting functionality
+*** There was a plugin for Genesis themes on github to add mf2. Picking that up might be better solution for premium theme adoption; see also https://github.com/willnorris/willnorris.com-wordpress/blob/master/public/content/mu-plugins/genesis-indieweb.php has some code from willnorris though
+
+* List of common/popular themes to test for general compatibility 
+** WordPress annual themes
+*** [https://wordpress.org/themes/twentyten/ Twenty Ten]
+*** [https://wordpress.org/themes/twentyeleven/ Twenty Eleven]
+*** [https://wordpress.org/themes/twentytwelve/ Twenty Twelve]
+*** [https://wordpress.org/themes/twentythirteen/ Twenty Thirteen]
+*** [https://wordpress.org/themes/twentyfourteen/ Twenty Fourteen]
+**** Magazine-y in feel, but {{chrisaldrich}} has run site(s) using it with relatively good IndieWeb results.
+**** Be aware that it themes on hentry which could potentially cause layout issues if used with plugins like UF2 (which isn't mission critical).
+*** [https://wordpress.org/themes/twentyfifteen/ Twenty Fifteen]
+*** [https://wordpress.org/themes/twentysixteen/ Twenty Sixteen]
+**** {{GWG}} has a [https://github.com/dshanske/twentysixteen-indieweb repo for developing] this
+**** This theme does very well out of the box, but when syndicating content it can include information from Syndication Links and JetPack modules because [https://github.com/WordPress/twentysixteen/issues/470 Class entry-content div overextends itself]
+**** It's also been reported that Syndication Links adds a u-photo tag on the avatar within the author box at the bottom of posts which can cause problems for those trying to use Bridgy Publish, though other means of syndication are available.
+*** [https://wordpress.org/themes/twentyseventeen/ Twenty Seventeen]
+**** This is more corporate/business-esque in feel, so possibly not a great candidate, but there is a [https://github.com/WordPress/twentyseventeen/issues/115 push to support microformats2 properly]
+** Other Themes
+*** [https://github.com/godaddy/wp-primer-theme GoDaddy Primer]
+**** Stacey De Polo of [[GoDaddy]] has proposed that they make their base theme IW compatible
+
+See also conversation from [https://indieweb.org/irc/2017-01-03#bottom 2017-01-03]
+
+* Examples of Indieweb friendly themes that users are building and/or [[self-dogfooding]] (Note: these are actively being developed, so one's mileage may vary, but they can serve as interesting examples)
+** [https://github.com/ngm/doublepress DoublePress] theme for doubleloop.net
+** [https://github.com/miklb/permission Permission] theme by {{miklb}}
+** [https://github.com/cdevroe/wp-cdevroe WP-cdevroe] by {{cdevroe}}
+
+== Core ==
+There are several efforts to add Indieweb Elements to WordPress Core and related projects.
+* Add Microformats2 Support https://core.trac.wordpress.org/ticket/30783 (CLOSED AS WONTFIX)
+* Improve Linkback Presentation https://core.trac.wordpress.org/ticket/32653
+* Comments should have real permalinks(necessary for better and effective mentioning) https://core.trac.wordpress.org/ticket/34106
+
+Also, the current WordPress theme, Twenty-Sixteen, has proper use of hfeed and removes the theme dependence on styling these elements. Similar efforts underway for minor changes to Twenty-Seventeen.
 
 === Brainstorming ===
 * Based on interpretation of the Wordpress Codex custom post types are intended for creating entirely new content types, not extending the existing post type.
 
-* [[User:acegiak.net|Ashton McAllan]] is currently using custom metadata on standard post types and working out how to display which posts in the theme based on whether or not the metadata is populated for a post, considering classifying posts with a custom taxonomy to make for easier handling in the wordpress administration.
-* GWG had recently decided the best move to get semantic markup was a custom taxonomy with terms like like/reply/repost that could be acted on. He had been working on this with a new custom post type, notes. Based on comments by [[User:acegiak.net|Ashton McAllan]], he switched to the simpler suggestion of adding the custom taxonomy to the default post type.
+* [[User:acegiak.net|Ashton McAllan]] was using custom metadata on standard post types and working out how to display which posts in the theme based on whether or not the metadata is populated for a post, considering classifying posts with a custom taxonomy to make for easier handling in the wordpress administration.
+* GWG decided the best move to get microformats markup was a custom taxonomy with terms like like/reply/repost that could be acted on. He had been working on this with a new custom post type, notes. Based on comments by [[User:acegiak.net|Ashton McAllan]], he switched to the simpler suggestion of adding the custom taxonomy to the default post type. The current implementation is based on the less popular Post Formats feature of WordPress.
 * [[User:snarfed.org|Ryan Barrett]] has a Press This-like plugin for inserting webmentions to a post from the bookmark bar: [https://snarfed.org/indieweb-press-this-bookmarklets-for-wordpress IndieWeb Press This bookmarklets for WordPress] (or use the [https://github.com/pfefferle/wordpress-indieweb-press-this WordPress plugin])
 
 == Filters ==
@@ -44,7 +109,6 @@ Suggestion for Common Filter Names/Placement (Work in Progress)
 * I would suggest to use underscores (instead of hyphens) in actions to use the same style as the [http://codex.wordpress.org/Plugin_API/Action_Reference WordPress "actions"] --[[User:Notizblog.org|Matthias Pfefferle]]
 * As of 2015-05-25, {{gwg}} is working on a 'better' idea of adding the 'entry-content e-content' div inside the content block using a filter attached to 'the_content'. This would require some minor theme changes, but would ensure the best compatibility for adding additional elements.
 
-
 The above would allow data to be added/removed by plugins in a designated place outside the content block, either inside a block designated for meta data in the header/footer or not.
 
 == Location == 
@@ -59,11 +123,12 @@ It consists of standard keys for geodata in the meta for posts, pages, users, co
 
 The advantage of using the standard meta keys is support by various plugins. 
 
-GWG is working on a plugin for Wordpress that uses these values, plus a fifth geo_venue, which would indicate the [[venue]]. The plugin, tentatively called [https://github.com/dshanske/simple-location Simple Location], is supposed to add this support to Wordpress. There are plugins that offer location support, but none that implement it in a way best compatible with the location aspect described in the wiki and many would be overbuilt for the purpose. It is nowhere near feature complete.
+GWG has released a plugin for Wordpress that uses these values. The plugin called [https://wordpress.org/plugins/simple-location Simple Location], is supposed to add this support to Wordpress. There are plugins that offer location support, but none that implement it in a way best compatible with the location aspect described in the wiki and many would be overbuilt for the purpose. It is in a state of major rewrite now to be more user friendly.
+
+
+{{WordPress}}
 
 == See Also ==
-* [[WordPress]]
-* [[WordPress/Data]]
 * [[projects]]
 * [[silos]]
-* [[blogs]]
+* [[WordPress]]
