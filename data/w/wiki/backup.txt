@@ -4,27 +4,30 @@ You can help IndieWebCamp by downloading and keeping a backup of this wiki!
 
 As of 2017-12-01 the wiki and images are about 500mb.
 
-NOTE: Make sure you download the files to a case-sensitive filesystem (OSX and Windows are not case sensitive by default).
+IMPORTANT: Make sure you download the files to a case-sensitive filesystem (OSX and Windows are not case sensitive by default).
 
-<!--
-* Download [http://www.bittorrent.com/sync Bittorrent Sync]
-* Create a folder on your computer or server to store the files
-* Add a folder to btsync using this read-only secret: <code>BB3SRZEPU6B4EUMMD5XDWZBY2RDZSN33Q</code>
-* '''''(Optional)''''' Set the "Restore modified files to original version" option to true in the sync options window to revert any accidental local changes to the wiki back to the correct version.
-* '''''(Optional)''''' Set the "Search DHT network" option to true to enable trackerless distributed hash table lookups of peers.
-
-After adding the folder, your btsync client will begin downloading all the files!
--->
-
-<!--
-[[User:Rascul.io|rascul]] has a mirror at [http://indiewiki.rascul.io http://indiewiki.rascul.io]. Easy to mirror it with wget or rsync:
-: <code>wget -rm <nowiki>http://indiewiki.rascul.io</nowiki></code>
-: <code>rsync -avz rsync://indiewiki.rascul.io:/indiewiki .</code>
-
-[[User:kbsriram.com|KB]] has placed a [https://github.com/kbsriram/indiewebcamp-wiki-archive baseline archive at github] as of May11, 2014 and will update it ad-hoc. Scripts/cronjobs (being tested on a laptop that perambulates between cafes) is at https://gist.github.com/kbsriram/0ae713dfa46f3676e2b5
--->
+You can also download an archive of the chat logs via https://github.com/indieweb/indieweb-chat-archive
 
 == Archive Methods ==
+
+=== git ===
+The wiki is synced to github.com every 5 minutes. The export generated for the rsync method is committed to git at regular intervals.
+
+<code>git clone https://github.com/indieweb/wiki.git</code>
+
+<table><tr><td width="50%">
+==== Pros ====
+* Supports incremental additions and deletions
+* Git repo stores full history of changed and deleted files
+* Will properly delete local files when the remote files are deleted
+* Does not require a password
+* Fast
+</td><td>
+==== Cons ====
+* Requires the server to take another step after exporting the wiki to text files, potentially more prone to errors
+</td></tr></table>
+
+----
 
 === rsync ===
 <code>rsync -avz --delete --stats rsync://indieweb@indieweb.org/indiewebcamp_wiki indiewebcamp</code>
@@ -37,25 +40,11 @@ After adding the folder, your btsync client will begin downloading all the files
 </td><td>
 
 ==== Cons ====
+* Requires a password
 * Requires running a separate publicly-accessible daemon on the server
 </td></tr></table>
 
-
-==== automating ====
 if you do this automatically, e.g. in a cron job, you'll want to use the <code>--password-file</code> option to rsync, which expects a file with just the password and chmod 600
-
-<!--
-----
-=== btsync ===
-<table><tr><td width="50%">
-==== Pros ====
-* Keeps archive copies in sync nearly instantly (updates every 5 minutes)
-</td><td>
-
-==== Cons ====
-* Proprietary sync protocol
-</td></tr></table>
--->
 
 ----
 
@@ -70,19 +59,5 @@ if you do this automatically, e.g. in a cron job, you'll want to use the <code>-
 * Local files won't be deleted when deleted on the server
 * slow: as of 2017-04-09 both new mirror and updating an existing one takes >2 hours (mostly due to the 1s delay between >6000 mostly tiny files, each of which has to be touched at each update). Not a big issue if run in cron, but annoying if done manually.
 </td></tr></table>
-
-<!--
-----
-=== git ===
-<table><tr><td width="50%">
-==== Pros ====
-* Works over HTTP
-* Supports incremental additions and deletions
-* Git repo stores full history
-</td><td>
-==== Cons ====
-* Requires the server to take another step after exporting the wiki to text files, potentially more prone to errors
-</td></tr></table>
--->
 
 __NOTOC__
