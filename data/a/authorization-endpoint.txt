@@ -88,7 +88,6 @@ HTTP/1.1 302 Found
 Location: https://webapp.example.org/auth/callback
     ?code=xxxxxxxx
     &state=1234567890
-    &me=https://aaronparecki.com/
 </pre>
 
 Parameters:
@@ -96,9 +95,6 @@ Parameters:
 : Authorization code
 ;<tt>state</tt>
 : State variable sent by the web application
-;<tt>me</tt>
-: Full URI of the user's homepage
-: This may be different from the <tt>me</tt> parameter that the user originally entered, but MUST be on the same domain.
 
 === Auth code verification ===
 For the sign-in flow, the web application will query the authorization endpoint to verify the auth code it received. The client makes a POST request to the authorization server with the following values:
@@ -134,7 +130,6 @@ Parameters:
 ;<tt>me</tt>
 : Full URI of the user's homepage
 : This may be different from the <tt>me</tt> parameter that the user originally entered, but MUST be on the same domain.
-: This MUST be the same as the <tt>me</tt> parameter that "redirect to web application" returned.
 
 ==== Use by Token Endpoints ====
 When used in the flow for [[obtaining an access token]] that can create posts using [[Micropub]], the token endpoint will be making the request to verify the authorization code, rather than the client. In this case, the client will make the request described above to the token endpoint instead. If the token endpoint and authorization endpoint are part of the same software, then of course the token endpoint can verify the authorization code using a proprietary method, such as looking up the code from the same database that the authorization endpoint stored it in.
