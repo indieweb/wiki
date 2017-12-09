@@ -1,0 +1,172 @@
+https://indieweb.org/2017/Austin/building-blocks
+
+{{stub}}
+
+'''<dfn>IndieWeb Building Blocks</dfn>''' was a session at [[2017/Austin|IndieWebCamp Austin 2017]] on 2017-12-09.
+
+* Watch: {{videoduration|link=https://youtu.be/sB4zHGpvyig?t=1h4m13s|duration=1:01:20}}
+* [https://chat.indieweb.org/2017-12-09#t1512837132044000 Chat logs], 10:32 CST
+
+== Notes ==
+* {{aaronpk}} returns to the podium for a Building Blocks session
+* Session grid will be created
+* Topics to be discussed.
+* Remember, you do not need to know anything to lead a session
+* Barcamp style
+* Two or three sessions in parallel
+* Tomorrow...capture all of that energy and release it into our sites
+* Feel free to interrupt anytime
+* The Basics
+* 1. You need a website/domain name
+* Starting with a domain name is the key
+* Then you have a place to put stuff
+* If you look at a cross section of people's website, they usually have the person's name, sometimes photo, often About/Bio, and then as we get into more social...a list of posts. It could be blog posts, or it could be things like microblog posts, photos, and other crazy stuff and experimental posts.
+* aaronpk posts everything
+* Bike rides, plane trips, exercise, food, drink...
+* (Your /homepage is a building block )
+* Another common element are links to where you can find him or anyone in other places
+* 2. How can you do this yourself? The most important thing is to Just Do It. Make it useful to yourself, and then make it useful to interact with others
+* (your [[elsewhere]] links are a building block, useful for logging in to the wiki etc. with [[IndieAuth]])
+* 3. The next step is you can use your website to log into things, like our community wiki. If you try, it will ask you for your domain name, and it will give you ways to authenticate through other services. It did this because on his page, there is a little markup(rel=me) that allows a website to interpret what other profiles/services can be used to sign you in.
+* That is just turning your website into a machine readable source for certain pieces of data
+* 4. The next popular thing is microblog posts/notes. We are seeing this because Twitter introduced the idea of posting short things without a title.
+* Here are some examples... aaronparecki.com/notes
+* It has no title, a date, etc
+* The 'fun' part of this is that you can interact with them because of the way it is marked up
+* People have 'liked' and 'replied' to his posts using Indieweb standards
+* In this example, he wrote a reply on a micro.blog site, and aaronpk wanted to write back to him, so he used his website, but marked it up so that the other site knew that is was a reply and presented it as a comment
+* This uses two protocols, [[webmentions]] and [[microformats]]
+* Webmentions allowed his site to notify the other site that there was a mention of it. Microformats allows the other site to interpret the comment.
+* That's how we are able to make sites with totally different codebases work together
+* The way to turn it on.
+* On [[WordPress]], there are plugins
+* If you are writing your own site, you can add a few things to your HTML. Webmentions are just simple POST Requests
+* {{gwg}} adds [[webmention.io]] as a hosted webmention servicve
+* The [[Known]] has them built into the core of the CMS.
+* Webmention.io is a service where you copy two lines into your site header that handles webmentions and has an API to pull them out.
+* There is another one called [[webmention.herokuapp.com]] with the same idea
+* This one provides not only an API, but adds an HTML embed to render the comments
+* Shows martymcgui.re's Indieweb podcast as another example
+* And how all mentions are propogated
+* Offers an intro to Microformats next
+* [[h-card]] is a microformat that describes a person, place, or business
+* notes the flashing blue indicating aaronpk is still at the point of last checkin
+* Shows source showing an h-card
+* His photo is marked up as u-photo to indicate it is a photo for consuming parsers
+* u-url for URLs
+* dt-bday for Birthdays
+* Shows off minimal hcard by adding h-card to a link.
+* Expands h-card to include photo
+* There's an h-card generator at http://microformats.org/code/hcard/creator
+* Next is [[h-entry]], a post...
+* h-entry is the full post, but has minimal required properties...so inside the content is e-content for the text of the post. dt-published for the time of publish...
+* So, if you look at the parsed version of the page, he uses a location properties, published property, content, etc
+* You can see, with a couple of classes, you can add structure to the page
+* He also added markup for his comments
+* Demoing a minimal h-entry
+* Hello, World
+* You can start simple, and add complexity
+* Checkin property for checkins, photo property for photos, etc
+* You can start simple, and add complexity
+* Moves on to posting interfaces
+* aaronpk has no posting interface for his site.
+* His admin is small.
+* He uses [[Micropub]] based services instead
+* For example, [[Quill]], a micropub client
+* tantek: (thought I saw a "reply" link on his post but that was on the micro.blog copy of the post)
+* Quill tries to know how to sign you in, how to get credentials, and where to send posts.
+* Shows the Quill note interface
+* Creates a post. Shows Syndication targets, location, etc. https://aaronparecki.com/2017/12/09/10/
+* A few people mentioned [[OwnYourGram]]/Swarm. They are also Micropub apps.
+* Instead of posting notes, they post checkins/photos posted to those services back to your site.
+* So, this is [[PESOS]], Post Elsewhere, Syndicate Own Site
+* [[OwnYourGram]] has a page showing people using it
+* aaronpk demoes OYG to Micro.blog and Known.
+* aaronpk is demoing OYS now
+* Shows preview in OwnYourSwarm
+* Another example is the micro.blog iOS app.
+* So, even though it was designed for micro.blog,, it uses Micropub, so aaronpk can use it
+* There is also a browser extension
+* There is a question of whether assets are local or remote
+* That is up to the server, not the client app
+* However, Micropub supports uploading a photo as part of the specification
+* aaronpk demonstrates reply to a tweet, but from his own website
+* to do that he posts a copy on Twitter
+* and links to it using a Twitter icon on the post itself
+* this is the [[posts-elsewhere]] building block
+* One of the reasons that linking to Twitter is useful is that we want to show his reply on Twitter as a comment on our site.
+* his posts have a series of small icons next to the datetime published that link to copies of his posts in other places
+* His reply only exists on Twitter. aaronpk doesn't want to do the Twitter API
+* Someone has solved this: [[Bridgy]]
+* when people reply to aaronpk's post copies on Twitter, he wants those to show up on the original post on aaronpk's site
+* It takes Twitter/Facebook/etc responses and turns them into webmentions
+* So, aaronpk doesn't have to do anything
+* This is for replies, favorites, retweets
+* On WordPress, there are plugins for this
+* aaronpk moves into how to follow people, an underdeveloped part of the ecosystem
+* Covers PubSubHubBub aka [[WebSub]]
+* This is How to Make Feeds Real Time
+* When you post something, anyone who subscribes gets notified
+* What they do is outside of the spec
+* We are trying to prove the concept of [[following]] people
+* There is a pretty good start to an Indieweb reader...brainstormed and prototyped this summer: [[Together]] Together.tpxl.io
+* It's kind of neat to follow people from their own websites
+* There is no 3rd party service
+* There are lots of different views by type
+* Mostly Manton on Podcasts
+* It's a start
+* Moves to [[Monocle]].... monocle.p3k.io, the new service that does the following of feeds. It doesn't do a user interface
+* But, because Monocle is a service, any app can work with it
+* Since it is linked to his site, he can interact with posts by clicking 'like' buttons etc
+* Why Cell Phone Battery?
+* aaronpk shows some of his extra features. his website always knows his location.
+* use-case for sharing phone battery level: if you send aaronpk a message and he doesn't respond, if you can see his battery level is 0 then that might be why
+* also cell phone battery level and charging status, weather and time for current location
+
+* new mini session:
+* Community Resources
+* the community has a website: indieweb.org
+* that is where everything starts
+* it links to everything else
+* the website is a wiki
+* available for anybody to edit
+* if you try to login, it will ask you to login with your website
+* if you don't have that, it has instructions to doing that (including [[Getting Started]] )
+* website has [[events]]
+* including this one
+* when is IWC Austin?
+* Loqi: IndieWebCamp Austin 2017 was on 2017-12-09 at Capital Factory https://indieweb.org/IWC_Austin
+* we also have a chat: [[discuss]]
+* Chat exists on IRC in freenode
+* you can also join it from Slack
+* or the web! https://chat.indieweb.org/
+* shows chat.indieweb.org on the projector
+* wiki, chat, etherpad
+* we are big on documentation
+* {{chrisaldrich}} is logged in on chat.indieweb.org, just as an example
+* for this event we like to take notes on all the sessions
+* the way we do that is on a collaborative note-taking tool called [[Etherpad]]
+* we create one for each session in the schedule
+* and link to it from the schedule
+* tantek e.g. etherpad.indieweb.org/2017-austin
+* If notes already exist in the etherpad for previous sessions, enter a few line breaks at the top and enter the newer notes at the top.
+* at least someone in each session should take notes in the etherpad for the session
+* https://indieweb.org/Etherpad#How_to_take_notes_during_IndieWebCamp
+* great to have documentation for the sessions so we can learn and make progress as a community instead of just having the discussions be ephemeral
+* we will try to live stream at least this room
+* and maybe the second room too.
+* the other thing the chat can do is talk to the wiki
+* if you seem people talking about something you don't understand
+* you can ask "what is..."
+* aaronpk_ asks in chat "what is Blue Star?"
+** Loqi: It looks like we don't have a page for "Blue Star" yet. Would you like to create it? https://indieweb.org/s/10yz (Or just say "Blue Star is ____", a sentence describing the term)
+* aaronpk_ answers in chat: Blue Star is a donut shop in Portland Oregon
+** Loqi creates the page
+* #indieweb is for user level discussions, #indieweb-dev is for protocol and development stuff, #indieweb-wordpress is for WordPress specific questions
+* #indieweb-meta is for talking about events and the community, organizing, etc
+* #microformats, #bridgy, #known have channels for those topics
+* #indieweb-chat is the offtopic unlogged discussion
+* aaronpk covers the [[code of conduct]]
+
+== See Also ==
+* [[2017/Austin]]
