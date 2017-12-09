@@ -1,0 +1,113 @@
+https://indieweb.org/2017/Austin/pay
+
+{{stub}}
+
+'''<dfn>Payments, Pledges, Donations</dfn>''' was a session at [[2017/Austin|IndieWebCamp Austin 2017]].
+
+* Notes archived from: https://etherpad.indieweb.org/pay
+* Video: https://www.youtube.com/watch?v=-aMhXReda8k
+----
+IndieWebCamp Austin 2017
+
+Session: Payments, Pledges, and Donations
+
+When: 2017-12-09 14:45 CST
+
+== Participants ==
+* {{tantek}} (session facilitator)
+* {{martymcguire}}
+* {{gwg}}
+* {{aaronpk}}
+* [http://weblogsky.com/ Jon Lebkowsky]
+* {{chrisaldrich}} (remote)
+* {{gRegor}} (remote)
+* {{addyourself}}
+
+== Notes ==
+Lots of websites have tip jars, donate links. We should encourage this and help IndieWeb creators get paid by their fans.
+
+[[payment]] documents ways to create payment links for Paypal, Square.
+
+* {{t}} shows his /contact page, simple buttons http://tantek.com/contact
+* Similar UI idea with http://tantek.com/pay
+
+* {{t}} shows https://aaronparecki.com/pay/
+** Square Cash, Venmo, Paypal, Bitcoin. Also has an amount form to directly pay with credit card (using [[Stripe]])
+*** Stripe charges fees, so he passes those on to the payer.
+** Also supports an amount in the URL, so he can give out links to pay specific amounts. E.g. https://aaronparecki.com/pay/?10
+*** Not every service supports pre-filled amounts. Only Square Cash and Paypal.me.
+**** {{t}}: why not show the icons? they can enter in the amount. {{aaronpk}}: i'll think about it
+
+Recurring [[pledge]]s are something we don't have an IndieWeb answer for. But we could!
+
+[[Patreon]] changed their fee structure 2 days ago and made many people upset. The changes most strongly affect
+fans who donated small amounts to many creators.
+article: https://theoutline.com/post/2571/no-one-makes-a-living-on-patreon
+
+{{t}}: this session is for brainstorming about these things. one-time payments, recurring donations, etc. maybe {{gwg}} can
+make a WordPress plugin.
+
+{{gwg}}: use case? {{t}}: people can tip you for your IndieWeb WordPress Plugin work and fund your IndieWeb trips. {{gwg}}: that works.
+
+... some time spent solving WiFi issues ...
+
+We use opencollective.com/indieweb to take one-time and recurring donations for expenses like servers, domain names, event costs, etc.
+* accepts payments
+* lets organizers submit receipts. sends notifications to managers.
+* lets manager approve reimbursements and sends them out.
+* transactions are all visible! accountability!
+
+Recurring payments:
+* amount per time period (e.g. months)
+* or events/deliverables (every time Aaron posts about OAuth)
+
+Need a UI to cancel recurring payments.
+* Paypal has a centralized list of recurring payment agreements
+* Stripe has no such UI! It would need to be built.
+
+* {{aaronpk}}: what features do we need to add to make it more IndieWeb friendly?
+** special content available only to patrons
+** ...
+** what else?
+
+
+One of the issues on [[Patreon]] was having custom content for patrons via email/feed (and making that easy); as an example one audio creator provided different levels of audio quality for different levels of patronage. (Cross reference [[private_posts]] and [[audience]].)
+
+https://memberful.com/ is a service that can manage memberships and let supporters access exclusive content.
+* if they supported subdomain mapping, that would be very IndieWeb. would make it easier to switch platforms, at least.
+** patreon creators are struggling with this right now.
+** {{aaronpk}}: this is the classic indieweb problem. i should be able to swap out backends and keep all my followers.
+*** {{t}}: if members have to log in to a service provider, they're locked into that relationship
+* they have a wordpress plugin that maps memberful member accounts to wordpress users
+** {{aaronpk}}: do those wordpress users have email addresses? if so, you still have access to your members even if memberful goes away
+* memberful actually creates customers in your Stripe account, so you can still charge them without memberful.
+
+As a comparison, when moving from WordPress.com to a self-hosted WordPress.org site, one needs to make a special request through JetPack to transfer subscribers from the first system to the second. Otherwise one is stuck pushing them to re-subscribe. There's no easy way to do this manually without the help of the third party.
+
+psychologically, switching will still have a cost. if a member has to take positive steps to restore a subscription, some will drop out.
+
+One benefit of recurring payments for many businesses is that they can usually re-up the credit card payments to continue subscriptions without tacit action by the end user.
+
+{{t}}: W3C has a [https://www.w3.org/TR/payment-request/ Payment Request API] in Candidate Recommendation status as of 2017-09-21.
+* Browser holds payment info and acts as user agent.
+* Supports extras like shipping options and cost.
+* Browser support: Edge, Chrome, Firefox (behind a flag), Android Chrome. Safari "real soon now".
+** Chrome offers a polyfill that can fall back to Apply Pay JS.
+* Stripe also supports Payment Request API.
+* {{aaronpk}}: this sounds like Apple Pay for the browser. iOS lets apps (and websites via proprietary "Apple Pay JS" API) request payment without asking you to enter credit card information.
+* we can make this spec better, or at least find out whether it works. should be possible for a hack day project.
+
+A key issue to remember is who "owns" the customer? Amazon takes payments on behalf of sellers, but never forwards along the customer information (name, address, phone, email, etc.) so the seller/site has a means of continuing the contact after the interaction. Keeping the credit card information (and thus potentially keeping it safe) is worthwhile however.
+
+== See Also ==
+* [[payment]]
+* [[pledge]]
+* [[donate]]
+* [[Patreon]]
+* [[Drip]]
+* [[Stripe]]
+* [[Apple Pay]]
+
+
+[[Category: 2017]]
+[[Category: 2017 sessions]]
