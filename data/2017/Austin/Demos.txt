@@ -2,10 +2,141 @@ https://indieweb.org/2017/Austin/Demos
 
 {{stub}}
 
-'''<dfn>Demos</dfn>''' for [[2017/Austin|IndieWebCamp Austin 2017]] will take place December 10, 2017.
+'''<dfn>Demos</dfn>''' for [[2017/Austin|IndieWebCamp Austin 2017]] took place December 10, 2017.
 
-== participant name ==
-* ...
+* Notes archived from: https://etherpad.indieweb.org/austin-demos
+* Video: https://www.youtube.com/watch?v=9rJZMtwVQ0s
+----
+IndieWebCamp Austin 2017
+
+Session: Sunday Demos
+
+When: 2017-12-10 16:00
+
+== Participants ==
+* {{t}}
+* {{aaronpk}}
+* {{manton}}
+* {{tbbrown}}
+* {{gwg}}
+* {{martymcguire}}
+* {{gRegor}} (remote)
+* {{sknebel}} (remote)
+* {{addyourself}}
+
+== Notes ==
+
+=== Tantek Çelik ===
+{{t}} set out to work on his things backwards. Started trying to figure out person [[tag-reply#person_tag_reply]]. Did a lot of digging and thinking and discovered lots of details to be answered before implementing.
+
+Added himself to the page there to note his intent.
+Wants to include multiple urls in the h-cards for the people he is tagging, something not many folks support.
+
+Has determined that this is a type of [[edit]] response. Figured out an implementation plan but ended up with < 2 hours to go.
+
+Switched to improving his payment page.
+
+Started this weekend with simple http://tantek.com/pay page that he made at [[2017/NYC]] hack day. Added the ability to pay a specific amount in the URL. E.g. http://tantek.com/pay/10
+
+* redirects values like "1.999" to "2", but plain decimals (2.50) work.
+* has a cap of $14000 (tax-free gift limit in the US)
+* Wants to add W3C Request Payment API.
+
+=== Aaron Parecki ===
+{{aaronpk}} set out to also work on his [[payment]] page. Started with a page that had an input box to enter a value, and allowed amounts to be specified with a query string URL.
+
+Now uses full slashes for pay URL. e.g. https://aaronparecki.com/pay/10
+
+Started digging into W3C Payment Request API. The spec is written for browser implementors, not web devs. Google has good docs. Stripe has some code that does it all for you.
+
+For some reason (browser support worries?) if there isn't a credit card saved in the browser, it doesn't show the buttons at all. His fallback is to use the older standard Stripe widget.
+
+In Chrome you can add a credit card at chrome://settings/autofill
+
+Once a saved card is there, https://aaronparecki.com/pay/10 shows a different button which initiates the browser's built-in payment request handling UI. Includes fields for billing info.
+
+Showed a fake card failing to process on his live site. Tried to show a fake card working on his test site and was tripped up because the SSL cert was invalid. After trusting the SSL cert and reloading, he showed a payment go through in test mode!
+
+Another cool thing the Stripe API does is support Apple Pay.
+
+Showed video demo of the process on his phone, where the browser pay button is replaced with an Apple Pay button. Clicking it shows the Apple Pay prompt, and it follows their UI flow. "It just goes. It's kind of amazing."
+
+In Safari, if you're signed in with your Apple ID, you see Apple Pay on Desktop Safari and it confirms with the UI on your phone.
+
+There are a lot of edge cases to deal with and it's quite a bit of work. Overall it wasn't too bad and is a step in the right direction.
+
+Also implemented sanity checks for fractions of cents, a million dollars, etc.
+
+Had a stretch goal for micropub vocabularies but didn't get to it.
+
+=== Manton Reece ===
+
+{{manton}} wanted to work on something related to replies and bookmarks as they relate to micro.blog. Wanted to support bookmarks and likes from Indigenous app on iOS.
+
+Mapped bookmarks to favorites on micro.blog.
+
+Showed example on desktop app for micro.blog.
+
+Showed iOS simulator running Indigenous. Used the iOS share functionality to share a link from Safari. Liked a post by {{aaronpk}}.
+
+The implementation shows images if they are found, and will attribute the post to the micro.blog user account for the post author, if they are found.
+
+Q: what if not found?
+A: shows example with sharing indiewebcat.com post. it uses a "fake user" approach, showing the domain name. Takes advantage of author h-card name and photo if present. Historically micro.blog assumes that posts and users have been in its system, but being able to bookmark and favorite anything on the web means most posts and authors won't already be in the system.
+
+This is the path forward for micro.blog. Wants to expand this to work for webmention support. Expects some issues to work around, but thinks it should work with some testing.
+
+Q: does it send webmentions when you bookmark into micro.blog?
+A: favorites on micro.blog are private right now and don't have public permalinks.
+
+Excited about where this led!
+
+=== Tom Brown === 
+
+{{tbbrown}} went through the process of making a simple IndieAuth app. Followed instructions on IndieAuth for Developers page and created a Heroku site for an existing Rails project.
+
+Showed entering his web address into a sign-in form, starting the IndieAuth login process.
+
+GitHub repo is on his site. http://herestomwiththeweather.com/2017/12/10/simple-indieauth-project-for-indiewebcamp-austin/
+
+=== David Shanske ===
+
+{{gwg}} did some work using his (public) testing site. Goal was to be able to send things to his site automatically via various means.
+
+Exercising the code that he uses in WordPress to fetch details about a URL to try and expand it enhance posts submitted by Micropub.
+
+Also wanted to post from his phone. Took some effort, but has something. Doesn't use a traditional bookmarklet system and has to authenticate every time. The app is [https://play.google.com/store/apps/details?id=ch.rmy.android.http_shortcuts "HTTP Request Shortcuts" by waboodoo] and allows making custom URLs, form fields, and more.
+
+Can share a link from his browser. Can choose bookmark/like. Clicked like, refreshed his site, and it appears! With reply context!
+
+//TODO: reference on https://indieweb.org/Posting_from_mobile_devices
+
+The example post: https://tiny.n9n.us/2017/12/10/virtual-homebrew-website-club-meetup-on-december-13-2017/
+
+Needs more work before he would publish it for others to use. Has 5 more kinds to cover.
+
+=== Marty McGuire ===
+{{martymcguire}} did a few things today:
+* Shortcut for Alfred, quick launch for indieweb wiki pages. Saves a few keystrokes when looking at the wiki a lot. [https://martymcgui.re/2017/12/10/111432/ Posted about it on his site] including download. Would like to have it autocomplete
+* Wanted his site to support [[websub]] correctly
+** Wanted to send out websub for tag pages
+** Not easy to demo, very backend-heavy
+** [some technical explanation I missed]
+
+Did some other cleanups to site
+* photo posts / checkins. Can accept multiple photos, but in terms of display they were large on the page.
+** in the last half our, played around with flexbox and CSS grid
+** Images now show up in a CSS grid above the map
+
+=== gRegor Morrill ===
+* {{gRegor}} (remote)
+* Working on [[read]] posts and [[micropub]] support, ended up adding mf2 properties <code>p-read-of</code> and <code>p-read-status</code> to current [[read]] posts.
+* https://gregorlove.com/2017/12/my-project-for-todays-indiewebcamp/
+
+=== Sven Knebel ===
+* {{sknebel}} (remote)
+* https://indieweb.org/live now updates with embedded youtube when a stream is live, otherwise links to archived videos on YouTube
+* https://indieweb.org/User:Kaja.sknebel.net/upcoming-hwcs embedded on homepage, currently on a cron job
 
 == See Also ==
 * [[2017/Austin]]
