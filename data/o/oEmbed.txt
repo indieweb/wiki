@@ -2,11 +2,22 @@ https://indieweb.org/oEmbed
 
 {{stub}}
 
-'''<dfn>[http://oembed.com/ oEmbed]</dfn>''' is a 2009-era [[JSON]]-based format for providing information to construct a [[link-preview]] of a page.
+'''<dfn>[http://oembed.com/ oEmbed]</dfn>''' is a [[JSON]]/[[XML]]-based format for providing information to construct a [[link-preview]] of a page.
 
 == Criticism ==
 === Requires Extra Endpoint ===
 oEmbed requires that any site support it support another URL (the oEmbed endpoint) to provide information that is otherwise available in the page itself.
+
+This appears to be a design decision to reduce the parsing effort for the including sites, some implementations do not parse the embedded page at all and rely on a centralized [https://oembed.com/providers.json list of endpoints].
+
+=== embedded site provides markup ===
+The site being embedded provides the markup to construct the preview. While this gives the site being embedded a lot of control over the display, this might clash with the wishes of the embedding site, accidentially conflict with existing CSS and pose security issues. This in turn makes whitelisting of sites attractive, which means non-major sites are less likely to be included.
+
+=== direct embeds are a privacy/tracking issue ===
+Since content often is included directly from the source site, this leaks information about your visitors to this site and can be a problem for your privacy/[[Do Not Track]] policy.
+
+== Support == 
+As of late 2017, oEmbed is supported by many major silos (see [https://oembed.com/#section7 central list of supporting sites]). Wordpress provides an oEmbed endpoint by default as well, many other CMSes at least can act as consumers and embed content from oEmbed-enabled sites.
 
 == Discussion ==
 Some discussion of oEmbed vs. a simpler [[link-preview]] approach has occurred in IRC:
