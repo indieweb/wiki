@@ -5,16 +5,19 @@ https://indieweb.org/payment
 '''<dfn>payment</dfn>''' in the context of the indieweb refers to a feature on an indie web site that provides a way for the visitor to that website to pay (currency, gift card credit, etc.) the person represented by that indie web site.
 
 == Why ==
-So anyone who visits your website can easily pay you (for whatever) in the ways you prefer to be paid, similar to how communication links help people communicate with you in the ways you prefer[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience].
+You should have a payment page (e.g. at you.example.com/pay) so:
+* anyone who visits your website can easily pay you (for whatever) in the ways you prefer to be paid, similar to how communication links help people communicate with you in the ways you prefer[http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience].
+* you can share a simple you.example.com/pay link to get paid
 
-== How ==
+=== Why with amount ===
+In addition, your payment page should support a specific amount from the URL so you can:
+* message a friend a payment link like yoursite/pay/16/ for a specific amount, to split dinner, pay for something they got for you like donuts etc.
+* provide a donation link like yoursite/pay/10 (e.g. for a donation optional yoga class)
+
+== How to ==
 There are several tutorials on how to create links / URLs for various payment services to put on your web site:
 
 Currency:
-* [http://developers.flattr.net/feed/ Flattr] for one-time or recurring (monthly) micro-donations
-** Gifts can be anonymous
-** Fees: 10% on all the money you receive
-** Encourages both [http://developers.flattr.net/button/ buttons] and [http://developers.flattr.net/feed/ rel-payment]
 * [[PayPal]]
 ** [https://www.paypal.com/cgi-bin/webscr?cmd=_donate-intro-outside  PayPal donate link] - 
 *** Fees: free with linked bank account, $0.30 + 2.9% for credit/debit.
@@ -28,6 +31,10 @@ Currency:
 ** Creates a simple-looking cash.me/$username URL to share for people to pay you. An amount can be pre-selected by adding it to the URL, e.g. cash.me/$username/10.
 * [https://developer.venmo.com/docs/payment-links Venmo]
 ** Fees: free with linked bank account and some debit, 3% for credit
+* [http://developers.flattr.net/feed/ Flattr] for one-time or recurring (monthly) micro-donations
+** Gifts can be anonymous
+** Fees: 10% on all the money you receive
+** Encourages both [http://developers.flattr.net/button/ buttons] and [http://developers.flattr.net/feed/ rel-payment]
 * [https://monzo.me/ Monzo.me] UK only, requires a [https://monzo.com Monzo] card
 ** Fees: ?
 
@@ -37,6 +44,26 @@ Gift card(s):
 Once you have a payment URL e.g. pay.example.com/username/usd/5, link to it with [http://microformats.org/wiki/rel-payment rel=payment], e.g.
 
 <code>&lt;a href="https://pay.example.com/username/usd/5" rel="payment">Donate $5 to me&lt;/a></code>
+
+=== Payment page with amount ===
+Just like [[PayPal.me]] and [[Square Cash]] cash.me, your Payment page can allow a subdirectory component for a dollar amount, which it would then build into the specific payment method links:
+* <kbd>/payment/10</kbd> - to pay you $10
+Alternatively this might read better as just "pay" (also less typing), e.g.
+* <kbd>/pay/10</kbd>
+* ...
+
+Provider link patterns (only these so far)
+* cash.me/$username/amount
+* paypal.me/username/amount
+
+For other providers, keep their icon / link - better to keep the option than make it curiously disappear.
+
+Note: this can be handled fully serverside.
+
+(add how to normalize URL numerical dollar values to something sensible)
+
+(provide open source for sanitizing numerical values)
+
 
 == IndieWeb Examples ==
 === rel-payment examples ===
@@ -115,19 +142,6 @@ Some common affiliate programs that [[creator|creators]] frequently use include:
 * [https://cash.me Square Cash] - allows you to collect payment, e.g. https://cash.me/$aaronpk. An amount can be pre-selected by adding it to the URL, e.g. https://cash.me/$aaronpk/10
 
 == Brainstorming ==
-=== Payment page with amount ===
-Just like [[PayPal.me]] and [[Square Cash]] cash.me, your Payment page should allow a subdirectory component for a dollar amount, which it would then build into the specific payment method links:
-* <kbd>/payment/10</kbd> - to pay you $10
-Alternatively this might read better as just "pay" (also less typing), e.g.
-* <kbd>/pay/10</kbd>
-* ...
-
-Note: this could be handled fully serverside.
-
-Interested:
-* {{t}} - one of my [[Falcon#Payment_Links|Falcon Itches: Payment Links]]
-* ...
-
 === Payment page with reason ===
 It would also be nice to be able to share a URL with the reason for the payment as well, so when the user taps a payment button, the provider has the reason pre-filled in as well.
 
