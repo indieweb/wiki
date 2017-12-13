@@ -28,7 +28,7 @@ Here are the steps:
 | 3.
 | Don't be surprised by the title of the Amazon web page: "Step 2: Choose an Instance Type". You got to skip Step 1 because the UBOS / AWS logo you clicked on automatically filled in the first step for you.
 
-Now select how powerful/expensive or not-so-powerful/cheap you would like your cloud server to be. The selected default -- General-purpose, "t2.micro" -- is typically perfectly fine for personal websites. It is "Free tier eligible", which means you might not even have to pay for it for a full year. (Go to [https://aws.amazon.com/ec2/pricing/ Amazon EC2 price list].) So once you made your choice, click on "Next: configure instance details".
+Now select how powerful/expensive or not-so-powerful/cheap you would like your cloud server to be. The selected default -- General Purpose, "t2.micro" -- is typically perfectly fine for personal websites. It is "Free tier eligible", which means you might not even have to pay for it for a full year. (Go to the [https://aws.amazon.com/ec2/pricing/ Amazon EC2 price list].) So make your choice, and then click on "Next: configure instance details".
 | [[File:aws-ubos-select-instance-type.png|thumb]]
 |-
 | 4.
@@ -44,7 +44,7 @@ Now select how powerful/expensive or not-so-powerful/cheap you would like your c
 | [[File:aws-ubos-add-tags.png|thumb]]
 |-
 | 7.
-| But now you need to pay attention. In "Step 6: Configure Security Group", you need to tell Amazon that you want them to let visitors browse your site with http or https. You also want to log into your server with ssh.
+| But now you need to pay attention. In "Step 6: Configure Security Group", you need to tell Amazon that you want them to let visitors browse your site with <code>http</code> or <code>https</code>. You also need to be able to log into your server with <code>ssh</code>.
 
 Check "Create a new security group", give it a name (like "UBOS website"), change the description if you like (like "Let visitors browse my site") and then have three rules in the section below by clicking "Add Rule" and filling out the form:
 
@@ -103,20 +103,20 @@ Your screen should look like the screen shot to the right. Then you can close yo
 |
 |-
 | 11.
-| Now you can finally click "Launch Instance" and Amaszon will create and turn on your new virtual server. The screen says "The following instance launches have been initiated:", followed by a code number. Click on that code number.
+| Now you can finally click "Launch Instance" and Amazon will create and turn on your new virtual server. The screen says "The following instance launches have been initiated:", followed by a code number. Click on that code number.
 |
 |-
 | 12.
 | Now you are at the main Amazon Web Services server management screen. It currently shows one server (an "instance") and its instance state. Just like your PC might be off, or booting, or ready to do some work for you, your virtual server can be running or not.
 
-Wait until the "Instance State" is "Running", the select the row with your running instance. Note the "IPv4 Public IP Address" address in the bottom-right: it looks like number-dot-number-dot-number-dot-number. In the screenshot to the right it is <code>54.209.39.87</code>, but yours will be different.
+Wait until the "Instance State" is "Running". Then, select the row with your running instance. Note the "IPv4 Public IP Address" address in the bottom-right: it looks like number-dot-number-dot-number-dot-number. In the screenshot to the right it is <code>54.209.39.87</code>, but yours will be different.
 
 | [[File:aws-ubos-instance-running.png|thumb]]
 |-
 | 13.
 | Finally, you can log in! To do that, run your favorite command-line terminal, like Terminal.app on the Mac, konsole on Linux, or an SSL terminal program on Windows.
 
-For example, on the Mac or in Linux, you would type:
+For example, on the Mac or in Linux, you would type (all on one line):
 
 <code>ssh -i ~/ssh/amazon-ec2.pem -l shepherd 54.209.39.87</code>
 
