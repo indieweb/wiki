@@ -378,8 +378,15 @@ Content-type: application/json
 
 '''POST'''
 
-To create a new channel, the client sends a POST request with the <code>channels</code> action and the name of the channel to create. The uid of the channel will be assigned by the server.
+To create or update channels, the client sends a POST request with the <code>channels</code> action.
 
+To create a channel, the client includes the name of the channel to create. The uid of the channel will be assigned by the server.
+
+To update a channel, the client includes the <code>uid</code> of the channel to update, and includes the new name of the channel. Changing the name of the channel MAY change the <code>uid</code> of the channel, and if it does, the server MUST return the new <code>uid</code> in the response.
+
+Both creating and updating a channel MUST return the <code>uid</code> and <code>name</code> properties for the channel.
+
+==== Create a Channel ====
 Request
 
 <pre>
@@ -398,6 +405,29 @@ Content-type: application/json
 {
   "uid": "2c5e5d7c4d57da68cb03c972846e827845af974c9b",
   "name": "Coworkers"
+}
+</pre>
+
+==== Update a Channel ====
+
+Request
+
+<pre>
+POST /microsub HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+action=channels&uid=2c5e5d7c4d57da68cb03c972846e827845af974c9b&name=Friends
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+Content-type: application/json
+
+{
+  "uid": "2c5e5d7c4d57da68cb03c972846e827845af974c9b",
+  "name": "Friends"
 }
 </pre>
 
