@@ -33,9 +33,23 @@ Started using OwnYourSwarm on 2017-03-30 on his Known site (while still also usi
 * https://known.aegibson.me/2017/checked-into-ac-transit-route-99-southbound-bus-stop-2 via OwnYourCheckin
 
 
-== Person Tags ==
+== Features ==
+=== Person Tags ===
 OwnYourSwarm detects when a checkin has [[person-tag|person tags]], and then passes those along in the Micropub request. The person-tags are sent as JSON h-cards, including the Swarm user's first name as reported by the service, along with the profile photo of the user. If the tagged user also uses OwnYourSwarm, then their own website URL is used in addition to their Swarm profile URL.
 
+=== Checked in by ===
+Swarm provides a feature which allows your friends to check you in if you've allowed it. When a friend checks in and tags you in the checkin, a checkin is also created on your account. OwnYourSwarm will push this checkin to your site just like if you had created the checkin yourself. 
+
+OwnYourSwarm includes an additional property in the Micropub JSON request that includes the h-card of the person who checked you in. The property is called <code>checked-in-by</code>, and includes the h-card of the person who checked you in in the same format as used by person tags.
+
+[https://ownyourswarm.p3k.io/docs#checked-in-by docs]
+
+=== Micropub Options ===
+OwnYourSwarm provides two options for making Micropub requests to your site. It can send checkins as simple text (or text and photo) posts using the simple form-encoded Micropub style, or can send a JSON post that contains a much richer checkin object including full h-card person tags, full venue information, and HTML content.
+
+[[File:ownyourswarm-micropub-options.jpg]]
+
+See the [https://ownyourswarm.p3k.io/docs OwnYourSwarm docs] for more details.
 
 == See Also ==
 * [[OwnYourGram]]
@@ -45,4 +59,3 @@ OwnYourSwarm detects when a checkin has [[person-tag|person tags]], and then pas
 * [https://aaronparecki.com/2017/03/23/12/day-93-ownyourswarm-photos Polling for Photos]
 * [https://aaronparecki.com/2017/03/24/9/day-94-ownyourswarm-coins Webmentions for Coins]
 * [https://aaronparecki.com/2017/03/25/5/day-95-swarm-backfeed Backfeedling Likes and Comments]
-* https://media.aaronpk.com/Screen-Shot-2017-09-22-10-47-56-hCS1v3TE0i.jpg
