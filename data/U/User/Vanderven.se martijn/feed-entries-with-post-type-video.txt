@@ -1,0 +1,102 @@
+https://indieweb.org/User%3AVanderven.se_martijn/feed-entries-with-post-type-video
+
+I follow a lot of streamers on [[Twitch]]. My voice can be heard in multiple [[Mixer]] streams. I like many channels on [[YouTube]]. To [https://petermolnar.net/personal-website-as-archiving-vault/#the-place-of-social-networks-on-the-web support those artists] I [[follow]] (“subscribe”, etc.) their channels within those [[silos]]. But I consume the actual content by subscribing to their [[Atom]] feeds ([[YouTube#Atom_feeds|YouTube has some weird mapping for this]]) in my [[reader]].
+
+In swoops Telia and [https://wiki.zegnat.net/connection takes away my internet]. Now I move a lot of video content aside in my reader. They sit there, waiting for me to leech off of someone else’s internet to be watched or [https://rg3.github.io/youtube-dl/ downloaded].
+
+But why can’t I have my reader sort out all [[video]] posts by itself? That would save me time. And maybe I can then also create something that automatically downloads things. So how do I know which [[posts]] are ''video posts''? A beautiful use-case for {{tantek}}’s [[post type discovery]]!
+
+<blockquote>If the post has a "video" property with a valid URL,<br>
+Then it is a video post.
+</blockquote>
+
+But how do I detect a <code>video</code> property? I first thought I should create a converter from YouTube (their Atom, API, oEmbed, Schema.org, …) to [[h-feed]]. But as far as I could find a <code>video</code> property is always a URL to a video file in [[microformats]]. Outsourcing video hosting to specialised silos (almost) always means there is no video file to link to.
+
+<raw><aside style="font-size:smaller"><p></raw>(<span style="font-variant:small-caps;">Aside:</span> this can have loads of reasons. Sometimes because of rights management ([https://en.wikipedia.org/wiki/Encrypted_Media_Extensions EME]?). YouTube has separate audio and video streams for in-browser muxing (hello DASH!). Twitch offers what is basically a playlist of small video files instead of one giant file for their long live streams for faster seeking and loading. Etc.)<raw></p></aside></raw>
+
+The next feed format I looked at (also on the list from post type discovery) is [[jf2]]. This offers an interesting example, where the <code>video</code> property can be more descriptive than just the URL:
+
+<raw><blockquote><pre><code class="language-json" style="border:none;padding:0;">{
+  "type": "entry",
+  "video": [
+    {
+      "content-type": "video/mp4",
+      "url": "sample_h264.mov"
+    }
+  ]
+}</code></pre></blockquote></raw>
+
+By a happy accident [[Microsub]], “a standardized way for clients to consume and interact with feeds”, also builds on jf2! So not only have I found a feed format that (in its current draft iteration) supports video posts, but it can also be served by the server over an interoperable format to readers implementing the draft [[Microsub-spec|Microsub specification]].
+
+I am now planning to link the video through its embeddable URL, as almost every video silo has one of those. I will then set the <code>content-type</code> to <code>text/html</code>. A reader can use this to know that it should load the video in an <code>iframe</code> instead of <code>video</code> element. Much like how it might learn in the future that certain types cannot be rendered by a browser at all and might skip them completely instead of forcing it into a <code>video</code> element.
+
+<raw><aside style="font-size:smaller"><p></raw>(<span style="font-variant:small-caps;">Aside:</span> another example of a video file that will not work in browser <code>video</code> elements is [https://en.wikipedia.org/wiki/Flash_Video FLV]. The web (and [[Newgrounds]] especially) is full of this video format.)<raw></p></aside></raw>
+
+Looking closely at what data can be scraped from [[permalink|a YouTube video post permalink]], I discovered the people at Google had exactly the same idea! They leverage [[The-Open-Graph-protocol|the Open Graph protocol]]’s [http://ogp.me/#structured structured properties] by setting the following <code>meta</code> elements:
+
+<raw><pre><code class="language-html" style="border:none;padding:0;">&lt;meta property=&quot;og:type&quot; content=&quot;video&quot;&gt;
+&lt;meta property=&quot;og:video:url&quot; content=&quot;https://www.youtube.com/embed/ZTIwTVPo-sU&quot;&gt;
+&lt;meta property=&quot;og:video:secure_url&quot; content=&quot;https://www.youtube.com/embed/ZTIwTVPo-sU&quot;&gt;
+&lt;meta property=&quot;og:video:type&quot; content=&quot;text/html&quot;&gt;</code></pre></raw>
+
+So now I am teaching [[XRay]] to extract jf2 compatible entries from YouTube URLs. I am hoping for an output akin to the following:
+
+<raw><pre><code class="language-json" style="border:none;padding:0;">{
+  "type": "entry",
+  "name": "What is the IndieWeb - Keynote - IndieWeb Summit 2017",
+  "url": "https://www.youtube.com/watch?v=UAfjDXc1U0w",
+  "author": {
+    "type": "card",
+    "name": "IndieWebCamp",
+    "photo": "https://yt3.ggpht.com/-V4bGNJhcSlc/AAAAAAAAAAI/AAAAAAAAAAA/ObnfgHTttqI/s288-c-k-no-mo-rj-c0xffffff/photo.jpg",
+    "url": "https://www.youtube.com/channel/UCco4TTt7ikz9xnB35HrD5gQ"
+  },
+  "video": [
+    {
+      "content-type": "text/html",
+      "url": "https://www.youtube.com/embed/UAfjDXc1U0w"
+    }
+  ],
+  "photo": [
+    "https://i.ytimg.com/vi/UAfjDXc1U0w/maxresdefault.jpg"
+  ],
+}</code></pre></raw>
+
+Wish me luck~
+
+== External links ==
+
+# {{citation
+| title = Bookmarks, favs, likes - backfilling years of gaps
+| url = https://petermolnar.net/personal-website-as-archiving-vault/
+| author = {{petermolnar}}
+| published = 2017-07-08
+| archiveurl = https://web.archive.org/web/20171226212816/https://petermolnar.net/personal-website-as-archiving-vault/
+}}
+# {{citation
+| title = What is with my internet connection?
+| url = https://wiki.zegnat.net/connection
+| author = {{martijnvdven}}
+| archiveurl = https://web.archive.org/web/20171226213552/https://wiki.zegnat.net/connection
+}}
+# {{citation
+| title = Post Type Discovery
+| url = https://www.w3.org/TR/post-type-discovery/
+| author = {{tantek}}
+| published = 2017-08-01
+| archiveurl = https://web.archive.org/web/20171226212557/https://www.w3.org/TR/post-type-discovery/
+}}
+# {{citation
+| title = JF2 Post Serialization Format
+| url = https://www.w3.org/TR/jf2/
+| author = {{ben_thatmustbeme}}, {{kevinmarks}}
+| published = 2017-10-26
+| archiveurl = https://web.archive.org/web/20171226222810/https://www.w3.org/TR/jf2/
+}}
+# {{citation
+| title = The Open Graph protocol
+| url = http://ogp.me/
+| author = Facebook and [https://github.com/facebook/open-graph-protocol/graphs/contributors contributors]
+| published = 2017-07-27
+| archiveurl = https://web.archive.org/web/20171226230321/http://ogp.me/
+}}
