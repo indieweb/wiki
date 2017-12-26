@@ -378,11 +378,13 @@ Content-type: application/json
 
 '''POST'''
 
-To create or update channels, the client sends a POST request with the <code>channels</code> action.
+To create, update, or delete channels, the client sends a POST request with the <code>channels</code> action.
 
 To create a channel, the client includes the name of the channel to create. The uid of the channel will be assigned by the server.
 
-To update a channel, the client includes the <code>uid</code> of the channel to update, and includes the new name of the channel. Changing the name of the channel MAY change the <code>uid</code> of the channel, and if it does, the server MUST return the new <code>uid</code> in the response.
+To update a channel, the client includes the uid of the channel to update in the <code>channel</code> parameter, and includes the new name of the channel. Changing the name of the channel MAY change the <code>uid</code> of the channel, and if it does, the server MUST return the new <code>uid</code> in the response.
+
+To delete a channel, the client includes an additional parameter <code>method=delete</code>. Note that the <code>default</code> and <code>notifications</code> channels can not be deleted. 
 
 Both creating and updating a channel MUST return the <code>uid</code> and <code>name</code> properties for the channel.
 
@@ -416,7 +418,9 @@ Request
 POST /microsub HTTP/1.1
 Content-type: application/x-www-form-urlencoded
 
-action=channels&uid=2c5e5d7c4d57da68cb03c972846e827845af974c9b&name=Friends
+action=channels
+&channel=2c5e5d7c4d57da68cb03c972846e827845af974c9b
+&name=Friends
 </pre>
 
 Response
@@ -429,6 +433,27 @@ Content-type: application/json
   "uid": "2c5e5d7c4d57da68cb03c972846e827845af974c9b",
   "name": "Friends"
 }
+</pre>
+
+==== Delete a Channel ====
+
+Request
+
+<pre>
+POST /microsub HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+action=channels
+&method=delete
+&channel=2c5e5d7c4d57da68cb03c972846e827845af974c9b
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+Content-type: application/json
+
 </pre>
 
 == Types of Feeds ==
