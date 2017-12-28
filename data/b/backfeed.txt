@@ -136,7 +136,12 @@ Also, many silos support private and semi-private posts: [[Twitter]] protected a
 These (semi-)private replies could be backfed to a [[private_posts|private post]] that's only visible to the same audience. Private posts aren't very widespread yet, though, especially not POSSEd to the same private audience, so we haven't really seen that in practice yet.
 
 === Spam ===
-If the syndicated copy of POSSE'd content receives spam interactions (e.g. Twitter likes from fake bot accounts), this spam is carried over to the original page. Being undesirable, this might require manual action by the site owner, as backfeed implementations commonly don't have spam detection built in.
+If the syndicated copy of POSSE'd content receives spam interactions (e.g. Twitter likes from fake bot accounts), this spam is carried over to the original page. Being undesirable, this might require manual action by the site owner, as backfeed implementations commonly don't have spam detection built in (e.g. incoming Bridgy backfeed replies cannot be processed by common content-based spam filters as the spam is the reply itself, not its content).
+
+Possible approaches to dealing with this issue are:
+* not displaying backfeed from spam-prone sources at all
+* verifying incoming replies by computing whether the Twitter user is e.g. max. 1-2 degrees away on the social graph
+* queueing incoming backfeed replies in an approval queue
 
 == Background ==
 * 2010-02-03 backfeed first described online as a concept in <cite>[http://tantek.com/2010/034/t2/diso-2-personal-domains-shortener-hatom-push-relmeauth conceptualizing #DiSo 2.0]</cite> but called "reverse syndication": <blockquote>#8 reverse syndication of comments+tags+notes from said specific sites. </blockquote>
