@@ -41,6 +41,25 @@ Please report any feed issues to https://github.com/bcomnes/iwc-log-feed/issues
 We have the most awesome IRC logs on the web. That doesn't mean they can't be even more awesome. Got an idea, suggestion, or issue to report about the logs? Create or comment on a GitHub issue:
 * https://github.com/indieweb/chat.indieweb.org/issues
 
+=== Spam ===
+Occasionally, Freenode gets hit with a wave of IRC spam. Typically the pattern is an account joins many channels across Freenode and sends repeated similar messages to as many channels as it can, often mentioning other peoples' nicknames in order to get their attention. 
+
+Hopefully other Freenode admins catch the bot and block it from the server. Any channel op can also <code>/kick spammer</code> to remove them from the specific channel immediately, which is a good short-term solution to prevent more spam, but not a permanent solution.
+
+The IndieWeb chat logs are all stored as files in a GitHub repo, which is where the web interface pulls from. Individual lines in the file can be marked as deleted to avoid them being shown in the web interface. This should only be used to block actual spam, not remove legitimate text from users, even if it is something you don't agree with.
+
+To help remove spam from the logs, you can send a pull request to the [https://github.com/indieweb/indieweb-chat-archive chat archive] repo to mark specific lines as deleted. Find the specific file containing the messages, and then find the specific chat line to mark as deleted. Each line in the file corresponds to a single IRC message, and begins with a timestamp, followed by a JSON string with the log info. To mark as deleted, add <code>"deleted":true</code> as the first property in the JSON text. 
+
+For example, change:
+
+<pre>2018-01-01 01:05:10.931300 {"type":"message", ... </pre>
+
+to:
+
+<pre>2018-01-01 01:05:10.931300 {"deleted":true,"type":"message", ... </pre>
+
+Send a pull request containing all your edits together, like [https://github.com/indieweb/indieweb-chat-archive/pull/2 this one]. Anyone with write access to the repo can merge the change, and {{aaronpk}} will then deploy it to the server. This will prevent the spam from being shown in the web logs.
+
 == Install an IRC app ==
 You can use an IRC application for more convenience. See the section [[#Clients|Clients]] for clients commonly used in the community which you can download and install.
 
@@ -211,8 +230,7 @@ Scenarios - the above error has been encountered when:
 * Using a Virgin Mobile MiFi to access the internet. (2011-193 [[User:Tantek|Tantek]])
 * Using a tethered T-Mobile Internet connection ([[User:Npdoty.name|Npdoty.name]] 15:47, 14 March 2013 (PDT))
 
-== Brainstorming ==
-=== Voice ===
+== Voice ==
 
 Anyone who has added themselves to the [[IRC-people]] list will be automatically given "voice" (+v) in the IndieWeb channels by [[Loqi]] as a way to indicate that you have access and are listed in the wiki.  This "user mode" is often represented by a + in front of the persons name in many IRC clients.  
 
@@ -247,6 +265,8 @@ Additional info
  /msg chanserv help
  /msg chanserv help flags
  /msg chanserv help set mlock
+
+== Brainstorming ==
 
 == See Also ==
 * [[Contribute]]
