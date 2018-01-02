@@ -60,6 +60,23 @@ to:
 
 Send a pull request containing all your edits together, like [https://github.com/indieweb/indieweb-chat-archive/pull/2 this one]. Anyone with write access to the repo can merge the change, and {{aaronpk}} will then deploy it to the server. This will prevent the spam from being shown in the web logs.
 
+==== How-to remove spam ====
+
+This is how {{martijnvdven}} has been removing spam from the logs:
+
+# Find the log file with spam in it on GitHub.
+# Use GitHub’s editor by clicking the pencil icon.
+# Copy the entire file to a plain text editor with [[regular expression]] find and replace support. (E.g. [[BBEdit]].)<br>[[File:fork-and-edit.png]]
+# Run a find and replace that marks all lines from a specified user as <code>deleted</code>.<br>[[File:bbedit-find-and-replace-spam.png|500px]]
+#* Match the pattern: <code>(^[0-9:. -]+ {)(.+?,"author":{"uid":"spammername")</code>. Replace <code>spammername</code> with the actual name of the spammer.
+#* Replace it with: <code>\1"deleted":true,\2</code>.
+# Copy it all back into GitHub’s editor, making sure it ends with exactly 1 empty line.
+# Give it a clear title in the “Propose file change” section identifying what spam you have removed.
+# Press the (green) “Propose file change” button.
+# Check the diff to double check you haven’t made any destructive changes.
+# Press the (green) “Create pull request” button.
+# The [[pull request]] should be auto-filled with the title from step 6. If the title was clear enough you do not need to write anything more, otherwise comment on why/what you changed in the logs.
+
 == Install an IRC app ==
 You can use an IRC application for more convenience. See the section [[#Clients|Clients]] for clients commonly used in the community which you can download and install.
 
