@@ -12,23 +12,45 @@ __TOC__
 Use [[microformats]] to markup the <em>visible</em> information on the page instead, which can be used for a [[link preview]] - the whole purpose of OGP.
 
 == How To ==
-To add Open Graph tags to a page, you need to add at least the four required properties below.
+To add Open Graph tags to a page, add only the tags you need, because Facebook will use other existing page markup and information in the absence of og: tags.
 
-<pre><meta property="og:url" content="http://example.com/post" />
-<meta property="og:title" content="Hello World" />
-<meta property="og:description" content="This is a summary of the post and should be limited to one or two sentences. It may be truncated when displayed." />
-<meta property="og:image" content="http://example.com/photo.jpg" /></pre>
+=== How to set title ===
+If the title of your page is more than just the name of the page (i.e. includes the site name), then use og:title to provide only the page name:
+
+<pre>
+<meta property="og:title" content="Really Cool Blog Post" />
+</pre>
+
+=== How to set URL ===
+You do not need <code>og:url</code>. Instead, use the existing rel=canonical (which Facebook's own documentation states they support) standard to link to your canonical page URL:
+
+<pre><link rel="canonical" href="http://example.com/post-permalink" /></pre>
+
+=== How to set description ===
+If the first part of the text content of your page is a good description and summary, then you can omit <code>og:description</code>. But if you want specific control over the link preview text content summary, you can use the much older, more widely supported meta description that Facebook also supports (we know from experience, see examples below):
+
+<pre><meta name="description" value="This is a summary of the post and should be limited to one or two sentences. It may be truncated when displayed." /></pre>
+Instead of:
+<pre><meta property="og:description" content="This is a summary of the post and should be limited to one or two sentences. It may be truncated when displayed." /></pre>
+
+=== How to set image ===
+Lastly, Facebook will automatically show the first image that is at least 600px wide on your page, so if that works, no need to use <code>og:image</code>. Otherwise if you want a specific preview image, you can do so:
+<pre><meta property="og:image" content="http://example.com/preview-image.jpg" /></pre>
 
 The image should be at least 1200 x 630, a minimum of 600 x 315, and up to 8mb in size. [https://developers.facebook.com/docs/sharing/best-practices#images]
 
 More info: https://developers.facebook.com/docs/sharing/webmasters/#markup
 
 === Required Properties ===
-The four required properties for every page are:
+The four required properties for every page according to the documentation are:
 * og:title - The title of your object as it should appear within the graph, e.g., "The Rock".
 * og:type - The type of your object, e.g., "video.movie". Depending on the type you specify, other properties may also be required.
 * og:image - An image URL which should represent your object within the graph.
 * og:url - The canonical URL of your object that will be used as its permanent ID in the graph, e.g., "http://www.imdb.com/title/tt0117500/".
+
+In practice they are all optional, Facebook will show a link preview without any of these properties, but in certain cases using them may provide more control (see above "How to" section).
+
+See also the [[Twitter Cards]] documentation which notes that Twitter re-uses (falls back to) various <code>og:</code> meta properties which you can then use instead of Twitter’s own proprietary meta card properties.
 
 == Criticism ==
 === Pseudo-RDFa ===
