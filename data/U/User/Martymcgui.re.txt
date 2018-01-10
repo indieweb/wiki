@@ -81,7 +81,6 @@ While I try to treat [[silos]] as purely places where I publish syndication, the
 ** Audio content such as podcasts are posted using [[Screech]]
 * Content is served as a [[static-site]] compiled using [[Jekyll]]
 ** [[permalinks]] are <code>/YYYY/mm/dd/HHMMSS/</code> (Eastern Time)
-** Custom plugin extracts the <code>data:</code> URLs that the Quill Editor uses to encode images.
 * [[short-domains|short domain]] mmg.re
 ** [[permashortlinks]] using [[newbase60]] to convert permalink paths into 6 characters (3 for days-since-epoch, 3 for seconds-since midnight)
 ** Custom Jekyll plugin makes these available to posts when rendering
@@ -113,67 +112,56 @@ While I try to treat [[silos]] as purely places where I publish syndication, the
 ** [[bookmark|Bookmarks]] ([https://martymcgui.re/2017/04/25/105934/ example])
 ** [[checkin|Checkins]] ([https://martymcgui.re/2017/06/23/171326/ example])
 *** PESOS from [[OwnYourSwarm]]
-*** with photo
+*** with photo and multiphoto ([https://martymcgui.re/2017/12/08/144536/ example])
 * POSSE via manual [[bridgy]] publish
 ** to [[Twitter]]
 ** to [[Facebook]]
 ** display links to syndicated posts (added [https://martymcgui.re/2017/02/27/163638/ 2017-02-27])
-* accepting [[webmentions]] via [[webmention.io]]
+* accepting [[webmentions]] via [[webmention.io]], which sends via webhook to a local [https://github.com/martymcguire/morris morris] service which stores them in static-site-compatible JSON format.
 ** each post page has a simple form for sending a webmention to the page by entering the source URL.
 ** backfeed from Twitter and Facebook via bridgy
 ** Displaying
-*** downloading and caching during Jekyll compile (inspired by [https://github.com/aarongustafson/jekyll-webmention_io aarongustafson/jekyll-webmention_io]) (added [https://martymcgui.re/2017/03/22/003710/ 2017-03-22])
-*** "Yes", "Going", and "Maybe" RSVPs from webmention.io
-**** [https://martymcgui.re/2017/03/21/211412/ example]
-*** Likes and Reposts
-**** [https://martymcgui.re/2017/03/21/211412/ example]
-*** Reply and Mention
-**** [https://martymcgui.re/2017/03/17/133511/ example]
+*** "Yes", "Going", and "Maybe" RSVPs from webmention.io ([https://martymcgui.re/2017/03/21/211412/ example])
+*** Likes and Reposts ([https://martymcgui.re/2017/03/21/211412/ example])
+*** Reply and Mention ([https://martymcgui.re/2017/03/17/133511/ example])
+*** [[Reacji]] ([https://martymcgui.re/2017/04/05/162509/ example])
 
 == Itches ==
 
-=== Automating POSSE w/ bridgy publish and/or silo.pub ===
-** ✅ <s>micropub syndication query for Quill's syndicate-to feature</s>
-** ✅ <s>embed syndication links for POSSE via webmention</s>
-** send webmentions and save response to post's syndication section
-*** currently this is through Telegraph and is as many or more steps as manual POSSE and using micropublish.net to add the syndication links back
-*** want to automate this at some point
-**** a micropub client that supports the SE in POSSE with my workflow?
-***** queries for mp-syndicate-to URLs for a given post
-***** some support publishing via webmention and the wm request returns a reply w/ a permalink that could be sent back w/ a micropub update
-****** news.indieweb.org/en
-****** brid.gy also works for this
-***** harder: recognize other kinds of posts and do them.
-****** e.g. silo.pub requires micropubs, probably parsed from the h-entry on the post.
+=== Automating POSSE ===
 
-=== Improved Handling of Webmentions ===
+w/ bridgy publish and/or silo.pub?
 
-Incoming
-* tool to slurp webmention.io data into static files suitable as Jekyll or Hugo data files
-* web hook to accept notifications from wmio and, add the new mention to the data store, and rebuild the site
+* ✅ <s>micropub syndication query for Quill's syndicate-to feature</s>
+* ✅ <s>embed syndication links for POSSE via webmention</s>
+* send webmentions and save response to post's syndication section
+** currently this is through Telegraph and is as many or more steps as manual POSSE and using micropublish.net to add the syndication links back
+** want to automate this at some point
+*** a micropub client that supports the SE in POSSE with my workflow?
+**** queries for mp-syndicate-to URLs for a given post
+**** some support publishing via webmention and the wm request returns a reply w/ a permalink that could be sent back w/ a micropub update
+***** news.indieweb.org/en
+***** brid.gy also works for this
+**** harder: recognize other kinds of posts and do them.
+***** e.g. silo.pub requires micropubs, probably parsed from the h-entry on the post.
 
-Outgoing - a service that...
+=== Webmention sending ===
+
+Currently I use the [[Telegraph]] service, manually. I want a service that:
 
 * subscribes to my site updates via websub
-** detects new posts
-*** finds "relevant" links to send notifications about
-**** a list of links to look for such as like-of, in-reply-to is obvious but not enough for just plain url mentions
-**** a list of links to ignore such as links in h-entry properties like author, syndication - maybe?
-**** probably a combo.
-*** sends webmentions and saves the results
-**** if given a status URL, save that too and check later. either on a job queue or manual, probably.
-** detects updated posts
-*** finds any new "relevant" links
-**** include any replies to the post
-*** re-sends webmentions, saving results again
-**** since wms can be sent multiple times, save a log incl response for each attempt.
-** UI to review webmentions
+* does all the things that [https://github.com/strugee/lazymention lazymention does]
+* maybe limit to "relevant" links to send notifications about
+** like-of, in-reply-to is obvious. plain url mentions only in e-content?
+** ignore links in h-entry properties like author, syndication - maybe?
+* if given a status URL, save that too and check later. either on a job queue or manual, probably.
+* UI to review webmentions
 
-=== Micropub client for posting 360 panoramas ===
-** poster image
-** some metadata that indicates it's a pano
+=== Pano micropub client ===
+* photo
+* some metadata that indicates it's a pano
 
-=== archives by month/year and other discoverability ===
+=== archives by month/year ===
 
 got a version of this for months, now. [https://martymcgui.re/2017/09/ example 2017-09].
 
@@ -187,18 +175,14 @@ got a version of this for months, now. [https://martymcgui.re/2017/09/ example 2
 
 ALSO: better next/prev navigation include keyboard nav for left/right.
 
-=== more coherent design including typography ===
+=== more coherent design ===
 
-* move /posts to front page
+* typography! colors! process-driven thought into what goes on what pages!
+* move /posts to front page? maybe latest 30, link back to monthly archive?
 * more compact display of my own likes, reposts
 ** support [[reacji]]! (e.g. "Marty reacted 👻 to AUTHOR'S POST")
 
-=== WebSub ===
-
-* does my websub... pub? what even subs web?
-* websub notifications for tag pages (already work for my /posts/ page)
-
-==== speed everything up ====
+=== speed everything up ===
 
 Port to [[Hugo]] 😩. Big task.
 
@@ -225,24 +209,35 @@ Port to [[Hugo]] 😩. Big task.
 
 === track listens? ===
 
-* "[[listen]]-of" => 🎧, "Listened to this"
+"[[listen]]-of" => 🎧, "Listened to this"
 
-* i use AntennaPod for listening to podcasts.
-** it seems to [https://github.com/AntennaPod/AntennaPod/issues/542 integrate with gpodder]. Possibly only syncing subscription list (OPML?) But possibly also supporting [https://gpoddernet.readthedocs.io/en/latest/api/reference/events.html per-episode events].
-** can self-host the [https://github.com/gpodder/mygpo gpodder server]
-** those events could become listen posts on my site
+Currently use Overcast on my iPhone to listen to podcasts. Could create listen-of posts from Overcast URLs. Having an audio element to play feels critical. I'd probably want to point at the original published URL, if I can find it.
 
-=== better reply contexts ===
+=== post my own videos ===
 
-* currently using [https://github.com/indieweb/microformats2-ruby/ the ruby microformats2 gem] to get mf2 data, XRay for twitter.com posts.
-* <s>would like to support posts with microdata markup [https://martymcgui.re/2016/11/17/161819/ example])</s>
-** that microdata was embedded in a JSONP-like call, yuck. instead, made a custom parser for Soundcloud that extracts the "sound ID" and creates an embed. not great but provides a reasonable reading experience at the moment.
-* would like to support posts with mf1 markup [https://martymcgui.re/2016/11/21/104043/ example])
-* would like to support posts with json-ld markup [https://martymcgui.re/2016/11/11/141225/ example])
-* probably going to use [[XRay]]?
+This is an itch that has returned! Most notably, I post short [[audiogram]]s containing audio from my IWC interviews for [[TWITIWAE]] along with subtitles. [[Screech]] can already post these files successfully, but needs to be able to switch from sending a "photo" prop to sending "video".
 
 == No Longer Itches ==
 
+* <s>better reply contexts</s>
+** 2017-12 I switched to using XRay when I rewrite my hook-publish handler in PHP.
+** previously used [https://github.com/indieweb/microformats2-ruby/ the ruby microformats2 gem] to get mf2 data, XRay for twitter.com posts.
+** <s>would like to support posts with microdata markup [https://martymcgui.re/2016/11/17/161819/ example])</s>
+*** that microdata was embedded in a JSONP-like call, yuck. instead, made a custom parser for Soundcloud that extracts the "sound ID" and creates an embed. not great but provides a reasonable reading experience at the moment.
+** <s>would like to support posts with mf1 markup [https://martymcgui.re/2016/11/21/104043/ example]) (XRay does it well)</s>
+** <s>would like to support posts with json-ld markup [https://martymcgui.re/2016/11/11/141225/ example]) (the referred post 410s now)</s>
+* <s>use AntennaPod history for creating listen posts</s>
+** i no longer use an android device, so no antennapod.
+** it seems to [https://github.com/AntennaPod/AntennaPod/issues/542 integrate with gpodder]. Possibly only syncing subscription list (OPML?) But possibly also supporting [https://gpoddernet.readthedocs.io/en/latest/api/reference/events.html per-episode events].
+** can self-host the [https://github.com/gpodder/mygpo gpodder server]
+** those events could become listen posts on my site
+* <s>websub notifications for tag pages (already work for my /posts/ page)</s>
+** cleaned up my websub handling when i rewrite my hook-publish compile handler in PHP.
+** uses rsync results to see what files actually changed. filters out pagination but includes tag pages and individual pages.
+* <s>Better handling of incoming webmentions</s>
+** tool to slurp webmention.io data into static files suitable as Jekyll or Hugo data files
+** web hook to accept notifications from wmio and, add the new mention to the data store, and rebuild the site
+** this is now handled by [https://github.com/martymcguire/morris morris]
 * <s>an [https://unhosted.org/ unhosted] evernote knockoff using [https://remotestorage.io/ remotestorage.io] as my backend</s>
 ** I'm happy enough with [https://laverna.cc laverna] at the moment, though I haven't yet migrated any old notes in and support for files/images is limited/broken.
 * <s>an internet archive style backup that snarfs pages that i want to bookmark into my notes</s>
