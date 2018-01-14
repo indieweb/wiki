@@ -108,6 +108,30 @@ We use the default Vector skin for the wiki, with some minor customization to ad
 
 In <code>skins/Vector/VectorTemplate.php</code>, make the changes described on https://aaronparecki.com/2018/01/14/3/
 
+== front page ==
+MediaWiki refuses to serve the front page from <code>/</code> and insists on redirecting it to <code>/Main_Page</code> instead. It's possible to rename that page to something like <code>/Home</code>, but even that isn't great. We want the front page to be served at just <code>https://indieweb.org/</code>. To do that, there is a separate <code>index.php</code> file at the root of the server, which essentially proxies the MediaWiki page.
+
+<pre><?php
+$opts = array('title' => 'Main_Page');
+if(array_key_exists('useskin',$_GET))
+  $opts['useskin'] = $_GET['useskin'];
+$ch = curl_init('https://indieweb.org/wiki/index.php?'.http_build_query($opts));
+// Pass the HTTP_COOKIE header through for auth
+if(array_key_exists('HTTP_COOKIE', $_SERVER)) {
+	curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		'Cookie: ' . $_SERVER['HTTP_COOKIE']
+	));
+}
+
+header('Link: <https://webmention.io/indiewebcamp/webmention>; rel="webmention"');
+
+// No-cache if the user is logged in
+if(isset($_SERVER['REMOTE_USER'])) {
+  header('Cache-Control: no-cache');
+}
+
+curl_exec($ch);</pre>
+
 
 == See Also ==
 * [[wiki/]]
