@@ -3,19 +3,50 @@ https://indieweb.org/mediawiki-customization
 This page documents the customizations we've made to MediaWiki for our community.
 
 == extensions ==
-=== download and install ===
-* '''[https://github.com/BenWard/mediawiki-semantic-html SemanticHTML]'''
-* notitle
-* [https://github.com/aaronpk/IndieAuth-MediaWiki IndieAuth for MediaWiki]
+=== IndieWeb extensions ===
+https://github.com/indieweb/mediawiki-extensions
+
+* AllowAnchorTags - allows inserting <code><a></code> anchor tags into wikitext
+* notitle - adds <code><nowiki>__NOTITLE__</nowiki></code> tag to stop MediaWiki from adding its own page title
+* raw - lets you embed raw HTML into wiki pages using <nowiki>raw</nowiki>
 * RelWebmention - add webmention endpoint to wiki pages
-* ...
+* LassoAuth - enables [[web sign-in]] via the [[Lasso]] auth proxy
+* Calendar - adds <nowiki><calendar></nowiki> tag for creation of a single month calendar
 
-=== enable ===
-<pre>wfLoadExtension("Cite");
-wfLoadExtension("ParserFunctions");</pre>
+=== dfn ===
+https://github.com/aaronpk/mediawiki-mf2-dfn
 
-== hacks ==
-* Add <code>'data', 'time', 'mark', 'a'</code> to the list of allowed HTML tags in <code>includes/Sanitizer.php</code> (search for htmlpairsStatic)
+Adds a <code>p-summary</code> tag around the first sentence of a page that contains a <code><nowiki><dfn></nowiki></code> tag
+
+=== CategoryTree ===
+* https://www.mediawiki.org/wiki/Extension:CategoryTree
+
+=== mf2 parser ===
+The wiki requires a Microformats parser to be able to do a few things. Copy the [https://github.com/indieweb/php-mf2 php-mf2] repository to the extensions folder.
+
+=== enable extensions ===
+<pre>wfLoadExtension('Cite');
+wfLoadExtension('ParserFunctions');
+wfLoadExtension('Auth_remoteuser');
+wfLoadExtension('CategoryTree');
+
+require_once('extensions/php-mf2/Mf2/Parser.php');
+require_once('extensions/dfn/dfn.php');
+
+require_once('extensions/IndieWeb/raw.php');
+require_once('extensions/IndieWeb/notitle.php');
+require_once('extensions/IndieWeb/AllowAnchorTags.php');
+require_once('extensions/IndieWeb/RelWebmention.php');
+require_once('extensions/IndieWeb/Calendar.php');
+require_once('extensions/IndieWeb/LassoAuth.php');
+</pre>
+
+=== extension config ===
+<pre>LassoAuth::$auth = 'https://sso.indieweb.org/';
+LassoAuth::$wiki = 'https://indieweb.org/';
+
+$wgPingbackEndpoint = 'https://webmention.io/indiewebcamp/xmlrpc';
+$wgWebmentionEndpoint = 'https://webmention.io/indiewebcamp/webmention';</pre>
 
 == editable customizations ==
 
@@ -24,17 +55,20 @@ See [[MediaWiki:Common.css]] for custom CSS used on this wiki.
 == configuration ==
 Add these to <code>LocalSettings.php</code>
 
-==== enable nice urls ====
-<pre>$wgScriptPath       = "";
+=== enable nice urls ===
+The wiki is installed in the <code>wiki</code> folder on the server, but we want the URLs to be <code>indieweb.org/example</code>.
+
+<pre>$wgScriptPath = '/wiki';
 $wgScriptExtension  = ".php";
 $wgArticlePath = '/$1';
 $wgUsePathInfo = true;
 $wgCapitalLinks = false;</pre>
 
-==== user permissions ====
+=== user permissions ===
 <pre>$wgGroupPermissions['*']['read'] = true;
 $wgGroupPermissions['*']['edit'] = false;
 $wgGroupPermissions['*']['createaccount'] = false;
+$wgGroupPermissions['*']['autocreateaccount'] = true;
 $wgGroupPermissions['user']['move'] = true;
 $wgGroupPermissions['user']['movefile'] = true;
 $wgGroupPermissions['user']['delete'] = true;
@@ -43,9 +77,10 @@ $wgGroupPermissions['user']['browsearchive'] = true;
 $wgGroupPermissions['user']['rollback'] = true;
 $wgDefaultUserOptions ['editsection'] = true;
 $wgAllowUserSkin = true;
-$wgAllowUserCss = true;</pre>
+$wgAllowUserCss = true;
+$wgAllowUserJs = true;</pre>
 
-==== copyright ====
+=== copyright ===
 <pre>$wgEnableCreativeCommonsRdf = true;
 $wgRightsPage = "IndieWebCamp:Copyrights"; # Set to the title of a wiki page that describes your license/copyright
 $wgRightsUrl = "http://creativecommons.org/publicdomain/zero/1.0/";
@@ -53,26 +88,28 @@ $wgRightsText = "a CC0 public domain dedication";
 $wgRightsIcon = "https://i.creativecommons.org/p/zero/1.0/88x31.png";
 $wgEnableCreativeCommonsRdf = true;</pre>
 
-==== allow more file uploads ====
-<pre>$wgFileExtensions[] = 'txt';
+=== allow more file uploads ===
+<pre>$wgFileExtensions[] = 'pdf';
+$wgFileExtensions[] = 'txt';
 $wgFileExtensions[] = 'svg';
 $wgFileExtensions[] = 'ai';</pre>
 
-==== others ====
-<pre>$wgNoFollowLinks = false;
-$wgAllowExternalImages = true;
+=== others ===
+<pre>$wgEnableUploads = true;
 $wgAllowImageTag = true;
+$wgNoFollowLinks = false;
+$wgAllowExternalImages = true;
 $wgCookieExpiration = 180 * 86400;
 $wgSecureLogin = true;
-$wgCookieSecure = true;
-$wgPingbackEndpoint = 'https://webmention.io/indiewebcamp/xmlrpc';
-$wgWebmentionEndpoint = 'https://webmention.io/indiewebcamp/webmention';</pre>
+$wgCookieSecure = true;</pre>
 
-== See Slso ==
-See also [http://microformats.org/wiki microformats wiki]:
-* [http://microformats.org/wiki/mediawiki-customization microformats wiki mediawiki customization] - you might find some useful customizations here too.
+== skin ==
+We use the default Vector skin for the wiki, with some minor customization to add Microformats markup to pages.
+
+In <code>skins/Vector/VectorTemplate.php</code>, make the changes described on https://aaronparecki.com/2018/01/14/3/
 
 
-----
-
-Return to [[Getting Started]].
+== See Also ==
+* [[wiki/]]
+* [http://microformats.org/wiki microformats wiki]:
+** [http://microformats.org/wiki/mediawiki-customization microformats wiki mediawiki customization] - you might find some useful customizations here too.
