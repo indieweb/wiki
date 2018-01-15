@@ -4,6 +4,45 @@ https://indieweb.org/Wordpress_IndieAuth_Plugin
 
 The '''<dfn>[https://github.com/indieweb/wordpress-indieauth/ WordPress IndieAuth Plugin]</dfn>''' is a [[WordPress]] plugin that adds [[indieauth]] login support to WordPress.
 
+
+== Use Cases ==
+The below is brainstorming the use cases that this plugin solves or will solve in the future.
+
+=== Logging in to a single-user Wordpress via RelMeAuth ===
+✔️ Currently implemented
+
+Assumptions:
+* The Wordpress site has only one user account
+* The home page lists one or more rel=me profiles to Twitter, GitHub, etc.
+* The user wants to use RelMeAuth to log in to Wordpress instead of typing a password
+
+How it works:
+* When installing the plugin, the admin configures an authentication service to use (e.g. indielogin.com)
+* When viewing the Wordpress login screen, there is an additional [[web sign-in]] prompt under the username/password
+* The user enters the URL of their Wordpress site, and the plugin redirects to the authentication service
+* The plugin verifies the auth code with the service and logs the user in
+ 
+=== Logging in to a multi-user Wordpress site via IndieAuth ===
+❌ Not yet implemented
+
+Assumptions:
+* The Wordpress site has multiple user accounts (example.com/alice, example.com/bethany)
+* Each user has their own separate website that supports [[IndieAuth]] or [[RelMeAuth]]
+** example.com/alice -> alice.example.com (which has its own built-in IndieAuth server)
+** example.com/bethany -> bethany.example.org (which links to twitter.com/bethanyexample)
+* The users want to use their own website identity to log in to the group Wordpress instead of typing a password
+
+How it works:
+* When installing the plugin, the admin configures an authentication service to use for RelMeAuth fallback (e.g. indielogin.com)
+* When viewing the Wordpress login screen, there is an additional [[web sign-in]] prompt under the username/password
+* The user enters their personal URL (not the same domain as the wordpress site)
+* The plugin checks if their personal URL advertises an [[authorization endpoint]], and redirects there if so, and redirects to indielogin.com if not
+* Upon being redirected back to complete the flow, the plugin verifies the code with the appropriate endpoint (will need to store the endpoint in session data)
+
+=== Posting to Wordpress from Micropub clients ===
+❌ Not yet implemented
+
+
 == See also ==
 * [[indieauth]]
 
