@@ -618,6 +618,59 @@ This allows more flexibility in the design of the server, since the spec is not 
 
 This also makes clients easier to write, since all requests are made against one base URL rather than needing to either keep track of a fixed URL pattern, or have a configurable URL pattern.
 
+== Brainstorming ==
+
+=== Per-Item Data ===
+
+It's clear that there is a need for the reader and server to store additional per-item data that is not part of the post itself. Things like:
+
+* read/unread status
+* whether the user has already taken certain actions on the item (already favorited or reposted it)
+* whether there are any comments in the thread, how many there are, whether the user has commented
+* starred/unstarred status ([https://github.com/feedbin/feedbin-api/blob/master/content/starred-entries.md Feedbin])
+
+There are a few ways we could store the additional per-item data.
+
+* Add new properties to the item object
+** may conflict with future Microformats vocabularies
+* Create a single new property (e.g. "microsub") that contains all the additional data
+** avoids possible vocab conflicts except for the name of the one property
+* Wrap the item in a new object which can contain these additional properties
+** makes accessing the post data an extra level deep, possibly awkward
+** won't conflict with Microformats vocabularies
+
+=== Channel Statuses ===
+Typically an interface will want to indicate whether particular channels have any new items since the user's last visit. We could add some additional data in the response of listing channels that can be used to provide either unread counts or just a boolean unread status (like Slack).
+
+The response to retrieve the list of channels could look like:
+
+<pre>
+{
+  "channels": [
+    {
+      "uid": "31eccfe322d6c48c50dea2c84efc74ff",
+      "name": "IndieWeb",
+      "unread": 30,
+      "updated": "2018-01-16T10:19:00-0800"
+    },
+    {
+      "uid": "1870e67e924856dc7e4c37732b303b45",
+      "name": "W3C",
+      "unread": 0,
+      "updated": "2018-01-16T02:21:00-0800"
+    }
+  ]
+}</pre>
+
+The <code>unread</code> property indicates the number of items in the channel that have not yet been marked as read. An interface can display either the count or just a boolean indication of whether the value is greater than 0.
+
+* [https://developer.feedly.com/v3/markers/#get-the-list-of-unread-counts Feedly Markers]
+
+=== Bulk Operations / Syncing ===
+With the addition of storing per-item state, readers will likely want a way to mark large numbers of items as read in a single request. Both for offline reading, as well as just for efficiency's sake while online. 
+
+[https://developer.feedly.com/v3/markers/#mark-one-or-multiple-articles-as-read Feedly's Markers API] allows operations to be made on one or more items at a time. We can likely do something similar, possibly by just including multiple <code>url[]</code> parameters in the request.
+
 == Feedback ==
 
 == Issues ==
