@@ -2,69 +2,41 @@ https://indieweb.org/Wordpress_IndieAuth_Plugin
 
 {{stub}}
 
-The '''<dfn>[https://github.com/indieweb/wordpress-indieauth/ WordPress IndieAuth Plugin]</dfn>''' is a [[WordPress]] plugin that adds [[indieauth]] login support to WordPress.
+The '''<dfn>[https://github.com/indieweb/wordpress-indieauth/ WordPress IndieAuth Plugin]</dfn>''' is a [[WordPress]] plugin that adds [[indieauth]] support to WordPress.
 
+The original release, written in 2013 by [[pfefferle]], added support for logging into a WordPress site using Indieauth.com. The intention from the beginning was to eventually make WordPress an Indieauth server as well.
+
+In 2017, after stagnation, the plugin was transferred to the Indieweb repository. [[gwg]] committed to rewriting the existing functionality as it used unsupported/undocumented features of Indieauth.com and to try to make the plugin usable with any Indieauth server, not just Indieauth.com.
+
+This second release is still in process before being released.
+
+There is a third release hoped for that would add the server functionality directly to the plugin.
 
 == Use Cases ==
 The below is brainstorming the use cases that this plugin solves or will solve in the future.
 
-=== Logging in to a single-user Wordpress via RelMeAuth ===
-✔️ Currently implemented
+=== Logging in to a multi-user Wordpress via IndieAuth ===
+✔️ Implemented in the original release
 
 Assumptions:
-* The Wordpress site has only one user account
-* The home page lists one or more rel=me profiles to Twitter, GitHub, etc.
-* The user wants to use RelMeAuth to log in to Wordpress instead of typing a password
+* The Website field in the User's profile lists a URL that has one or more rel=me profiles to Twitter, GitHub, etc.
+* The user wants to use another service to log in to Wordpress instead of typing a password. This is usually Rel-Me-Auth.
 
 How it works:
-* When installing the plugin, the admin configures an authentication service to use (e.g. indielogin.com)
+* When installing the plugin, the admin configures an authentication service to use (defaults to indieauth.com). In the original release, it only supported indieauth.com
 * When viewing the Wordpress login screen, there is an additional [[web sign-in]] prompt under the username/password
-* The user enters the URL of their Wordpress site, and the plugin allyredirects to the authentication service
+* The user enters the URL that is in their profile, and the plugin redirects to the authentication service
 * The plugin verifies the auth code with the service and logs the user in 
 
-Brainstorming:
-* While WordPress sites with only one user aren't uncommon, it isn't a guarantee we should assume.
-* The Indieweb plugin has a property that allows a user to declare a site is a single or multi-author site, which accounts for the possibility of an admin and a regular user account for the same person.
-* WordPress itself has a is_multi_author function to test for multiple published authors.
-
-=== Authenticating to a multi-user Wordpress site via IndieAuth ===
-✔️ Partially implemented
-
-Assumptions:
-* The Wordpress site has multiple user accounts
-* (example.com/author/alice, example.com/author/bethany)
-* Users may not have their own websites that support [[IndieAuth]] or [[RelMeAuth]], but the WordPress site is supports individual author archives where user specific info can be displayed, such as rel-me or h-card data.
-** example.com/author/alice -> alice.example.com (which has its own built-in IndieAuth server)
-** example.com/author/bethany -> which links to twitter.com/bethanyexample
-* The users want to use their own website identity to access permitted services on the multi-user WordPress site..such as posting via Micropub or accessing the WordPress REST API, which can enable access to a variety of services.
-
-Brainstorming:
-* While we'd like everyone to have a website of their own, we know some people don't. We need to accommodate these later-generation community members by supporting this on a multi-user site, which will hopefully encourage them to adopt their own individual sites, which would be supported.
-* So, the mapping of URLs to WordPress users is limited to WordPress author archive pages, (usually /author/username ) or to the URL they themselves identified as their website...which could be on another site). For login, discovery is done whichever one it is to find the right server.
+Note: The does not currently do discovery on the provided URL to find the authorization_endpoint, but there is a PR pending for this. The trust relationship here is that the user has to add the website to their user account for it to allow login.
 
 
-== Logging into a multi-user WordPress site via Indieauth where users have their own separate websites ==
-❌ Not yet implemented
-
-Assumptions:
-* The Wordpress site has multiple user accounts (example.com/alice, example.com/bethany)
-* Each user has their own separate website that supports [[IndieAuth]] or [[RelMeAuth]]
-** example.com/alice -> alice.example.com (which has its own built-in IndieAuth server)
-** example.com/bethany -> bethany.example.org (which links to twitter.com/bethanyexample)
-* The users want to use their own website identity to log in to the group Wordpress instead of typing a password
-
-How it works:
-* When installing the plugin, the admin configures an authentication service to use for RelMeAuth fallback (e.g. indielogin.com)
-* When viewing the Wordpress login screen, there is an additional [[web sign-in]] prompt under the username/password
-* The user enters their personal URL (not the same domain as the wordpress site)
-* The plugin checks if their personal URL advertises an [[authorization endpoint]], and redirects there if so, and redirects to indielogin.com if not
-* Upon being redirected back to complete the flow, the plugin verifies the code with the appropriate endpoint (will need to store the endpoint in session data)
-
-=== Posting to Wordpress from Micropub clients ===
+=== Using IndieAuth Authorization ===
 ❌ Not yet implemented
 
 * For now, the Micropub plugin handles this. 
-* The Indieauth plugin does support verifying tokens from token endpoints, and could take this function over in future as the code functionality is there, but hooks in at a deeper level.
+* Recent commits have added support verifying tokens from token endpoints, and could take this function over in future as the code functionality is there, but hooks in at a deeper level.
+* Goal of this was to allow access to the WordPress REST API, which is customizable(It is used for the Webmention plugin, for example) using an Indieauth Token.
 
 == See also ==
 * [[indieauth]]
