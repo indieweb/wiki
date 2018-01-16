@@ -19,7 +19,7 @@ Assumptions:
 How it works:
 * When installing the plugin, the admin configures an authentication service to use (e.g. indielogin.com)
 * When viewing the Wordpress login screen, there is an additional [[web sign-in]] prompt under the username/password
-* The user enters the URL of their Wordpress site, and the plugin redirects to the authentication service
+* The user enters the URL of their Wordpress site, and the plugin allyredirects to the authentication service
 * The plugin verifies the auth code with the service and logs the user in 
 
 Brainstorming:
@@ -27,7 +27,23 @@ Brainstorming:
 * The Indieweb plugin has a property that allows a user to declare a site is a single or multi-author site, which accounts for the possibility of an admin and a regular user account for the same person.
 * WordPress itself has a is_multi_author function to test for multiple published authors.
 
-=== Logging in to a multi-user Wordpress site via IndieAuth ===
+=== Authenticating to a multi-user Wordpress site via IndieAuth ===
+✔️ Partially implemented
+
+Assumptions:
+* The Wordpress site has multiple user accounts
+* (example.com/author/alice, example.com/author/bethany)
+* Users may not have their own websites that support [[IndieAuth]] or [[RelMeAuth]], but the WordPress site is supports individual author archives where user specific info can be displayed, such as rel-me or h-card data.
+** example.com/author/alice -> alice.example.com (which has its own built-in IndieAuth server)
+** example.com/author/bethany -> which links to twitter.com/bethanyexample
+* The users want to use their own website identity to access permitted services on the multi-user WordPress site..such as posting via Micropub or accessing the WordPress REST API, which can enable access to a variety of services.
+
+Brainstorming:
+* While we'd like everyone to have a website of their own, we know some people don't. We need to accommodate these later-generation community members by supporting this on a multi-user site, which will hopefully encourage them to adopt their own individual sites, which would be supported.
+* So, the mapping of URLs to WordPress users is limited to WordPress author archive pages, (usually /author/username ) or to the URL they themselves identified as their website...which could be on another site). For login, discovery is done whichever one it is to find the right server.
+
+
+== Logging into a multi-user WordPress site via Indieauth where users have their own separate websites ==
 ❌ Not yet implemented
 
 Assumptions:
@@ -47,6 +63,8 @@ How it works:
 === Posting to Wordpress from Micropub clients ===
 ❌ Not yet implemented
 
+* For now, the Micropub plugin handles this. 
+* The Indieauth plugin does support verifying tokens from token endpoints, and could take this function over in future as the code functionality is there, but hooks in at a deeper level.
 
 == See also ==
 * [[indieauth]]
