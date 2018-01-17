@@ -208,6 +208,41 @@ Webmention senders may wish to keep track of the status of webmentions they send
 ** the request failed due to a server error (returned 5xx)
 * webmention displayed - the target URL sent a webmention back to you after displaying your comment
 
+
+=== receiving webmentions for POSSE copies ===
+What do people think about receiving a webmention for a [[POSSE]] copy?
+
+E.g. You post to your site, you posse to twitter, someone @-replies on twitter, and then they put that reply permalink into the "send a webmention" form on your original post permalink?
+
+Kind of a semi manual backfeed without [[Bridgy]] that is.
+
+Motivation: webmention to tweet posse copy was motivated by manual backfeed to add a reply to a posse tweet that Bridgy apparently missed (probably due to Twitter's flaky search API, which Bridgy has to use since they have NO REPLIES API)
+
+See replies to the POSSE tweet copy of:
+* https://aaronparecki.com/2013/07/05/2/
+which do not appear as replies on the original post
+
+
+'''Webmention extension'''
+
+We could extend the webmention spec like this:
+* when verifying the 'target' parameter, also check to see if it matches any of your POSSE copy permalinks, if so, treat it as a [[backfeed]] webmention to the original post of that POSSE copy
+
+As this doesn't affect existing compliant implementations, it should be backward compatible.
+
+It should also be an extension that sites can implement immediately and try experimenting with.
+
+
+'''How to implement'''
+
+One way to implement it would be something like:
+* if target otherwise failed verification (per normal webmention processing), then
+** if target is a permalink to a post on a silo that my site POSSEs to, then
+*** do [[original post discovery]] on target
+*** recheck to see if that is one of my posts (same as normal target verification)
+*** if so, use that as the verified target, like you would for redirect processing of a target URL
+
+
 == Alternatives ==
 Alternatives to webmention.
 === LINK verb ===
@@ -314,16 +349,3 @@ Synchronous webmention receivers should return the following status codes:
 Asynchronously:
 
 Similarly, in an asynchronous interaction, the callback webhook should include a "status" URL query parameter with the status codes noted above.
-
-=== receiving webmentions for POSSE copies ===
-What do people think about receiving a webmention for a [[POSSE]] copy?
-
-E.g. You post to your site, you posse to twitter, someone @-replies on twitter, and then they put that reply permalink into the "send a webmention" form on your original post permalink?
-
-Kind of a semi manual backfeed without [[Bridgy]] that is.
-
-Motivation: webmention to tweet posse copy was motivated by manual backfeed to add a reply to a posse tweet that Bridgy apparently missed (probably due to Twitter's flaky search API, which Bridgy has to use since they have NO REPLIES API)
-
-See replies to the POSSE tweet copy of:
-* https://aaronparecki.com/2013/07/05/2/
-which do not appear as replies on the original post
