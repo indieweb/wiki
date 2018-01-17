@@ -2,31 +2,27 @@ https://indieweb.org/https_admin_tax
 
 {{stub}}
 
-'''<dfn>https admin tax</dfn>''' is the additional amount of regular administrative work you or your web host must do to keep your [[https]] site running and available.
+'''<dfn>https admin tax</dfn>''' is the additional amount of regular administrative work you or your web host must do to keep your [[https]] site running and available even if you make no other changes to your site and want to just leave it alone.
 
-Note that this page is not saying https is something to avoid, just that you should be aware of the additional work required to configure and maintain the https certificate. 
-
-Chrome [https://security.googleblog.com/2016/09/moving-towards-more-secure-web.html plans to label all HTTP pages as non-secure] in an upcoming release, making the eventual move to https-only all but a requirement. For now, as of 2018-01, http websites are still visible and accessible in all browsers.
-
-<img src="https://3.bp.blogspot.com/-DG70U0Y-y9w/V9Cwuym53AI/AAAAAAAAAW0/6zO81T_hqWMjdAF_YYK7dfXV-26DL7OYACLcB/s1600/blog%2Bimage%2B2.png" width="300">
-
-current display of http websites in Chrome:
-
-[[File:2018-01-chrome-http-warning.png]]
+If you run a website, you should still strongly consider adding [[https]] support for all the reasons in [[https#Why]]. This page is here to raise awareness of the additional work required to configure and maintain the https certificate, and real additional site outage risks, as documented by real world examples of failures.
 
 == Fragility ==
-Due to this admin tax, making your website https-only makes it more fragile, as shown by numerous indieweb examples where people have forgotten or neglected to do the administrative work update their certificates, thus breaking their websites and making them inaccessible.
+Due to this admin tax, making your website https-only in particular makes it more fragile, as shown by numerous indieweb examples where people have forgotten or neglected to do the administrative work update their certificates, thus breaking their websites and making them inaccessible even over plain http since they hardcoded their websites to always redirect to the https-only version of pages. [[HSTS]] can add additional fragility here due to the time it makes you wait to make changes to the http(s) setup of your site including redirects.
 
 Search IndieWeb [[discuss|chat]] for "certificate expired" or "cert expired" for examples of failure to pay this admin tax. 
 
-Examples:
+https-only site-outage examples:
 * 2018-01-17 benwerd.com per https://chat.indieweb.org/dev/2018-01-17/1516209430591900
 * 2018-01-12 glennjones.net per https://chat.indieweb.org/dev/2018-01-12/1515783317246500
 * 2017-07-20 openidconnect.net per https://chat.indieweb.org/dev/2017-07-30/1501441404233000
-* 2017-05-25 tantek.com per https://chat.indieweb.org/dev/2017-05-25/1495744011090000
 * 2017-04-23 silo.pub per https://chat.indieweb.org/2017-04-23/1492954446036000
 * 2016-09-08 aaronparecki.com per https://chat.indieweb.org/dev/2016-09-08/1473340694939000
 * 2016-07-19 woodwind.xyz per https://chat.indieweb.org/2016-07-19/1468949368459000
+* ...
+
+https outage examples where the site was still available using plain http:
+* 2017-05-25 tantek.com per https://chat.indieweb.org/dev/2017-05-25/1495744011090000
+** self-signed cert used only for site admin auth / posting UI.
 * ...
 
 "But [[letsencrypt]] forces you to automate certificate renewal so there's no problem then!"
