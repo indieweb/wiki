@@ -75,6 +75,61 @@ The '''<dfn>Building Blocks</dfn>''' session is the second session of [[2018/Bal
 
 <div class="slide">
 == Microformats ==
+* Microformats give other computers a way to know which parts of the page are your post, or profile info, etc
+* Microformats classes make a web page machine-readable without having to create a second copy of the data in some other format
+
+Given a simple blog post like the below, you can add a few classes to make the page machine-readable.
+
+<pre><article>
+  <h2>Blog Post Name</h2>
+  by <a href="/">Some Person</a>
+  <img src="/images/featured.jpg">
+  <div>Here is the blog post content</div>
+</article></pre>
+
+<div class="slide-footer">{{slideshow/next|Micropub}} building block [[Microformats]]</div>
+</div>
+
+<div class="slide">
+== Microformats ==
+* Microformats give other computers a way to know which parts of the page are your post, or profile info, etc
+* Microformats classes make a web page machine-readable without having to create a second copy of the data in some other format
+
+Given a simple blog post like the below, you can add a few classes to make the page machine-readable.
+
+<pre><article class="h-entry">
+  <h2 class="p-name">Blog Post Name</h2>
+  by <a href="/" class="u-author h-card">Some Person</a>
+  <img src="/images/featured.jpg" class="u-featured">
+  <div class="e-content">Here is the blog post content</div>
+</article></pre>
+
+<div class="slide-footer">{{slideshow/next|Micropub}} building block [[Microformats]]</div>
+</div>
+
+<div class="slide">
+== Microformats ==
+That enables other computers to see the page as a nice clean data structure.
+
+<pre>{
+    "type": ["h-entry"],
+    "properties": {
+        "author": [{
+            "type": ["h-card"],
+            "properties": {
+                "name": ["Some Person"],
+                "url": ["https://example.com/"]
+            },
+            "value": "https://example.com/"
+        }],
+        "name": ["Blog Post Name"],
+        "featured": ["https://example.com/images/featured.jpg"],
+        "content": [{
+            "html": "Here is the blog post content",
+            "value": "Here is the blog post content"
+        }]
+    }
+}</pre>
 
 <div class="slide-footer">{{slideshow/next|Micropub}} building block [[Microformats]]</div>
 </div>
