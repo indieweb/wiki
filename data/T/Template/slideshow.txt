@@ -1,0 +1,35 @@
+https://indieweb.org/Template%3Aslideshow
+
+<noinclude>{{slideshow/doc}}</noinclude>
+<includeonly>
+<raw>
+<style>
+a.start.external, a.start.external:visited { background: none; padding: 10px; background: #0DBD40; border-radius: 6px; color: white; }
+.slideshow #bodyContent { max-width: none; }
+.slideshow .slide { height: 100vh; position: relative; }
+.slideshow #mw-panel .portal { display: none; }
+.slideshow #p-logo { position: fixed; top: 0; }
+.slideshow .slide .mw-editsection { display: none; }
+.slideshow .slide .mw-headline { display: block; padding-top: 2em; }
+.slideshow .slide h2 { background: #FF5C00; color: white; font-weight: bold; padding: 10px; border: 0; font-family: sans-serif; font-size: 1.3em; border-radius: 0 0 8px 8px; }
+.slideshow .slide-footer { display: block; position: absolute; bottom: -10px; left: 0; right: 0; padding: 20px; border-radius: 8px 8px 0 0; background: #FFB100; color: white; font-weight: bold; font-size: 0.9em; }
+.slideshow .slide-footer a { color: white; text-decoration: underline; font-size: 1.2em; }
+.slide-footer a.next.external, .slide-footer a.next.external:visited { display: none; }
+.slideshow .slide-footer a.next.external, .slideshow .slide-footer a.next.external:visited { display: block; float: right; color: white; text-decoration: none; background: none; }
+</style>
+<script>
+document.onkeydown = function(e){
+var nav = document.querySelectorAll("#toc li a");
+e = e || window.event;
+switch(e.which || e.keyCode) {
+case 39:
+var nextLink = false; nav.forEach(function(el, i){ if(!nextLink){ if(el.getAttribute("href") == window.location.hash) { nextLink = nav[i+1]; if(nextLink) { nextLink.click() } else { document.querySelector(".slide .done").click(); } }} });
+break;
+case 37:
+var prevLink = false; nav.forEach(function(el, i){ if(!prevLink){ if(el.getAttribute("href") == window.location.hash) { prevLink = nav[i-1]; if(prevLink) { prevLink.click(); } else { document.querySelector(".slide .done").click(); } }} });
+break;
+}
+}
+</script>
+</raw>
+</includeonly>
