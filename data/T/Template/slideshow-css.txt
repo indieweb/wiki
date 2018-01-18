@@ -17,5 +17,16 @@ a.start.external, a.start.external:visited { background: none; padding: 10px; ba
 .slide-footer a.next.external, .slide-footer a.next.external:visited { display: none; }
 .slideshow .slide-footer a.next.external, .slideshow .slide-footer a.next.external:visited { display: block; float: right; color: white; text-decoration: none; background: none; }
 </style>
+<script>
+var nav = document.querySelectorAll(".slide .next");
+document.onkeydown = function(e){
+e = e || window.event;
+switch(e.which || e.keyCode) {
+case 39:
+var nextLink = false; nav.forEach(function(el, i){ if(!nextLink && el.classList.contains("active")) { nextLink = nav[i+1]; el.classList.remove("active"); } if(nextLink){ nextLink.classList.add("active"); window.location.hash = nextLink.getAttribute("href"); } });
+break;
+}
+}
+</script>
 </raw>
 </includeonly>
