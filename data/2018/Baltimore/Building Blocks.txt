@@ -204,13 +204,49 @@ More complicated h-cards:
 
 <div class="slide">
 == Micropub ==
+* {{aaronpk}} has no posting interface in his website
+* Instead, only uses external apps to make posts
+** [[Quill]] - web app
+*** notes, photos, blog posts, events, favorites, bookmarks
+*** https://quill.p3k.io
+*** [https://indieweb.org/images/1/14/quill-auth-progress.png logging in] - Quill asks your site how to log you in, where to send posts
+*** live demo!
+** [[micro.blog]] iOS app
+*** [https://itunes.apple.com/us/app/micro-blog/id1253201335?ls=1&mt=8 app store link]
+*** even though it was designed for Micro.blog, it uses Micropub so I can post to my website from the app directly
+** [[Omnibear]] - browser extension
+** [[Indigenous]] - iOS app
+** [[Together]] and [[Woodwind]] - [[reader]]s
+*** with Micropub support, so you can reply to things inline
+** [[OwnYourGram]] - posts your Instagram photos to your website via Micropub
+*** https://ownyourgram.com
+** [[OwnYourSwarm]] - posts your Swarm checkins to your website
+*** https://aaronparecki.com/checkins
+*** It also includes [[backfeed]] from Swarm, including Swarm coins, and likes/comments from your friends
 
-<div class="slide-footer">{{slideshow/next|Following}} building block [[Micropub]]</div>
+<div class="slide-footer">{{slideshow/next|Micropub_Spec}} building block [[Micropub]]</div>
 </div>
 
-
 <div class="slide">
-== Micropub ==
+== Micropub Spec ==
+Micropub is simple enough that writing clients and servers isn't too difficult.
+
+<pre>
+POST /micropub HTTP/1.1
+Host: example.com
+Content-type: application/x-www-form-urlencoded
+Authorization: Bearer XXXXXXX
+
+h=entry
+&content=Hello+World
+</pre>
+
+<pre>
+curl https://example.com/micropub -d h=entry -d "content=Hello World" -H "Authorization: Bearer XXXXXXX"
+</pre>
+
+* https://www.w3.org/TR/micropub/
+* https://indieauth.spec.indieweb.org/
 
 <div class="slide-footer">{{slideshow/next|Following}} building block [[Micropub]]</div>
 </div>
