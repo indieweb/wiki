@@ -671,6 +671,10 @@ The <code>unread</code> property indicates the number of items in the channel th
 
 This may also apply when listing the subscriptions in a channel, (currently the "GET follow" request).
 
+Most existing feed readers also show the list of feeds added to a channel. While this makes sense for certain applications, it could be overwhelming if you are following dozens of individual people's accounts in a channel. How do existing readers handle the case when there are lots of subscriptions in a channel/folder?
+
+Microsub may need a new endpoint that can return the list of channels as well as feeds within the channel including the unread/updated state for each, since this may be too big of a response to use in the "GET channels" response.
+
 === Bulk Operations / Syncing ===
 With the addition of storing per-item state, readers will likely want a way to mark large numbers of items as read in a single request. Both for offline reading, as well as just for efficiency's sake while online. 
 
@@ -686,6 +690,9 @@ See some examples below:
 [[File:reeder-v1.png]]
 
 [[File:reeder-v2.png]]
+
+A similar but slightly different version of this is when following content from forums, where you want to know which forum thread a post is from.
+* {{aaronpk}} currently uses a forum API to subscribe to a few specific threads, which is sent to IRC. Replicating this in a reader interface would need some way to include which thread an item is part of so that it can be read in context.
 
 == Feedback ==
 
