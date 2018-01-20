@@ -1,0 +1,109 @@
+https://indieweb.org/2018/Baltimore/micropub
+
+'''<dfn>Building a Micropub Server</dfn>''' was a session at [[2018/Baltimore|IndieWebCamp Baltimore 2018]].
+
+Notes archived from: https://etherpad.indieweb.org/micropub
+----
+IndieWebCamp Baltimore 2018
+
+Session: Building a Micropub Server
+
+When: 2018-01-20 13:23
+
+== Participants ==
+* {{aaronpk}} (facilitator)
+* {{martymcguire}}
+* Lydia
+* Matt
+* {{eddiehinkle.com}}
+* adambachman.org
+* {{gwg}}
+* arturpaikin.com
+* russellheimlich.com
+
+== Notes ==
+{{aaronpk}} has declared he will build a Micropub server from scratch in 45 minutes. 
+
+(Might be helpful if aaronpk could be doing a screen capture as he does this demo... 
+* he is capturing the screen to post later. his streaming rig is recording but uploading is broken
+hooray!!! 
+** (The livestream isn't showing the screen well at all))
+** our livestream setup is separate from the final recording :|
+** sorry remote people :'(
+
+Starts with a simple "empty" website at https://pin13.net/indiewebcamp/. Front page with a hello world and no other HTML tags.
+
+"let's make this a blog that we can post to with micropub"
+
+Starts with [[Quill]], trying to sign in. It gives error messages:
+* You need an authorization endpoint,
+* a token endpoint,
+* and a micropub endpoint
+
+Since we want to focus on micropub endpoint, we will use external services to do the services we don't want to write ourselves (yet).
+* indieauth.com/auth for the authorization endpoint.
+* tokens.indieauth.com/token for the token endpoint.
+
+Try again with Quill: "you have no rel=me links!" Adds a rel=me link from his new page to his Twitter.
+
+Try again: "this twitter link doesn't link back". He changes his Twitter profile's "website" entry to point back to the website.
+
+Try again: he authorizies with Twitter, and Quill gets back a token from the token service. This will authorize Quill to post to our micropub endpoint.
+
+He makes a test post and... it fails! Error 404 file not found. Because we have no micropub endpoint there for Quill to answer.
+
+We make a new php file at that location, with code that does nothing. Quill still gives an error because it didn't expect "200 Success".
+
+Let's look at what Quill sends! We make our endpoint code:
+
+<code><?php
+echo json_encode($_SERVER, JSON_PRETTY_PRINT);</code>
+
+This makes our server spit out the request info it received as an HTTP success. Since Quill still doesn't like the 200, it helpfully outputs all of that information for debugging, so we can see what is happening.
+
+Next step, update our endpoint to look for an HTTP_AUTHORIZATION header, in order to verify that it should bother handling this request.
+
+Since we are using tokens.indieauth.org to handle our tokens, we construct a CURL request to ask whether this token is valid. If we send it our token, we see details about the token. If we send it junk, it fails.
+
+Now we see see details about the token, include the "me" value that identifies the site that this token was issued for.
+
+We update our endpoint to check that the "me" value is what we expect - the URL we want to log in as (https://pin13.net/indiewebcamp/)
+
+Now we can verify that this post is authorized. Let's store the content and make a blog!
+
+We're going to make a folder full of JSON files and have our index.php file load them for display.
+
+Now let's dump the data we got to a file. First we unset the access token from $_POST so it doesn't get saved. Then we JSON encode the whole $_POST and store it in posts/YYYYMMDD-HHMMSS.json.
+
+Sending from Quill again, we can refresh the index.php and see the post content. But Quill is still unhappy because our endpoint didn't tell it that the post succeeded.
+
+We make our endpoint return HTTP 201 Created, and add a Location: header to the permalink of the new post.
+
+But, oops, we don't have permalinks on our site, yet. Quick and dirty hack: let our index.php support an ?id=... query. We'll just make the id the filename, so it's of the form id=YYYYMMDD-HHMMSS
+
+Question about URL design.
+A: it's up to you to manage your URLs, which is always true on the web. if you want to change your URL structures, you should make sure that your old URLs redirect.
+
+Now that we send Quill what it wants, we can post again and it redirects us to the permalink of the new post.
+
+(now we update index.php to pull out just the file for that id and display it. super safe code, we used a regex match to ensure only numeric and hyphen chars in the id)
+
+We have a little blog now! we can make a new post and see what new properties we get. for example, if we add a tag, we see a new <code>"category": ["indiewebcamp"]</code> property.
+
+A tour of the micropub spec for the list of properties.
+
+Q: file uploads?
+
+Two was of handling file uploads in micropub.
+# send the binary data in the post request (simplest. most frameworks handle this.)
+# nicer way, especially for mobile: do the upload before the main post. this requires micropub media endpoint.
+
+Media endpoint is another server. It's only job is to accept files and return a URL for where that file can be retrieved.
+The client will send the file asynchronously to the media endpoint, and will send the main micropub server the URL.
+
+Q: what about file types?
+A. media endpoint doesn't care.
+Q: does the client know?
+A: client already knows what the file should be because the UI specifies something like "add a photo".
+
+[[Category:2018-sessions]]
