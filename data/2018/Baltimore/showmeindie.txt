@@ -1,0 +1,103 @@
+https://indieweb.org/2018/Baltimore/showmeindie
+
+'''<dfn>Building Blocks (draw it/diagram it)</dfn>''' was a session at [[2018/Baltimore|IndieWebCamp Baltimore 2018]].
+
+Video: https://www.youtube.com/watch?v=h5_lRiQZZsY
+
+Notes archived from: https://etherpad.indieweb.org/showmeindie
+----
+IndieWebCamp Baltimore 2018
+
+Session: Building Blocks, Visually, Diagrammy (#showmeindie)
+
+When: 2018-01-20 14:10
+
+== Participants ==
+* adambachman.org (facilitator)
+* {{aaronpk}}
+* Matt
+* Lydia
+* arturpaikin.com
+* {{martymcguire}}
+* ... add names
+
+== Notes ==
+We'd like to visualize what servers/services play a part in the IndieWeb, what data they hold, what protocols they use to move which data around.
+
+My Accounts
+* Twitter
+* Instagram
+* Facebook
+
+My Site
+* on a server
+* has a URL
+* some static content (e.g. /static)
+* some dynamic content (e.g. /blog, maybe in a database)
+* an example post /microblog
+** stored in my server
+** how does it get to Twitter? Or others? Many possibilities.
+
+Do we want to always POSSE everywhere? Sometimes now.
+
+Example case: "I post a cat picture for all three silos".
+
+Starting with: "i posted a picture post to my site, pointing to an image called picture.jpg"
+
+* there's a wrench in the system already, because Instagram has no API to post images *to* Instagram.
+** but it *can* go the other way:
+*** a "thing" (Instawatcher™) watches your instagram feed
+**** we think of it as a black box because there are many ways to scrape your instagram and it really doesn't matter how you get the new post data as long as you get it.
+*** it knows how to add posts to your website. there are many ways to do that, but micropub is the most common among indieweb folks.
+*** this is PESOS - publish elsewhere, syndicate to your own site
+
+Twitter and Facebook both have posting APIs. Once that new photo post arrives at your website, they can be copied to those silos.
+* this is the POSSE model - publish on your own site, syndicate elsewhere
+* there are several ways this could happen.
+** your site could use Twitter and FB APIs directly
+** an external service can watch your site grab the new content, and make platform-native API calls to syndicate that post. (e.g. IFTTT, bridgy publish)
+**# "hey bridgy, i posted this URL"
+**# bridgy fetches that URL and parses content using microformats
+**# bridgy has oauth tokens for your Twitter, Facebook account because you did the login dance there, so it uses platform-native API calls to post that content on your behalf.
+** silo.pub is an API service that takes micropub requests and makes platform-native API calls
+*** you oauth it so it has a token for your Twitter, FB, whatever.
+*** you oauth your site's server so it has tokens to silo.pub
+**** each of your accounts is a different silo.pub identity
+*** your server sends a micropub request for each silo where you want the post to appear
+
+A new building block came up: "posts elsewhere", aka the syndication links. These are the links to the post on each silo that corresponds to the "original" on your website.
+
+* the instagram poster is going to give your site that URL directly because that's where the post came from originally
+* bridgy publish will make the silo post and then give you back the URL of the new post on Twitter or FB
+* silo.pub returns the URL to the syndicated post as part of the micropub
+
+photo of the whiteboard: {{photosrcalt|https://media.martymcgui.re/64/d6/86/4a/798a8af229cabbcec37d7805203d1c4ca1ed84867c27e887aac07209.jpg|screenshot}}
+
+^^^ That's publishing. Let's talk responses, now.
+
+I have my site on a server, with a cat photo post, which has a URL like /cat-photo
+
+# Marty sees this post and wants to reply with 😻. He makes a "reply" post on his own site /marty-likes-cat-photo with "😻" content, and a link to /cat-photo
+# Marty sends a webmention.
+#* First, he needs to know WHERE to send the webmention. He fetches /cat-photo and looks for a <link rel="webmention" href="/some-url-where-you-want-webmentions" />
+#* Once he knows that, he POSTs to /some-url-where-you-want-webmentions with:
+#** target=/cat-photo
+#** source=/marty-likes-cat-photo
+
+My site will verify that webmention, but after that, it can do whatever it wants with that webmention!
+* send me a notification to my phone
+* display it on /cat-photo
+* store it somewhere
+* do nothing!
+
+This now expands out to silos with a service like brid.gy
+* brid.gy watches Twitter and Facebook and looks for posts that mention your post
+* it creates a little proxy page about that post
+** contains the actual details like "this post came from this URL and it's a like of your post"
+* it sends you a webmention with that proxy page as a source
+** your webmention handler should look in the microformats and find the canonical URL to make sure you're not linking back to bridgy's proxy.
+** proxies like this could be used for spam, so source vs canonical URL should be flagged
+
+photo of the whiteboard: {{photosrcalt|https://media.martymcgui.re/69/63/00/be/9a7c641bca100307a0efe14db89e2dffc36c016646827b5f3c6d5e00.jpg|screenshot}}
+
+[[Category: 2018-sessions]]
