@@ -7,7 +7,8 @@ The Microsub server is responsible for managing the accounts you follow, retriev
 ;Status
 :This is an early '''Editor's Draft''', and feedback is encouraged.
 ;Participate
-:Wiki ([[#Feedback|Feedback]], [[#Issues|Open issues]])
+:Wiki ([[#Feedback|Feedback]])
+:GitHub: [https://github.com/indieweb/microsub/issues issues and brainstorming]
 :[[IRC]]: [irc://irc.freenode.net/indieweb #indieweb on Freenode]
 ;Editor
 :{{aaronpk}}
@@ -618,158 +619,10 @@ This allows more flexibility in the design of the server, since the spec is not 
 
 This also makes clients easier to write, since all requests are made against one base URL rather than needing to either keep track of a fixed URL pattern, or have a configurable URL pattern.
 
-== Brainstorming ==
-
-=== Per-Item Data ===
-
-It's clear that there is a need for the reader and server to store additional per-item data that is not part of the post itself. Things like:
-
-* read/unread status
-* whether the user has already taken certain actions on the item (already favorited or reposted it)
-* whether there are any comments in the thread, how many there are, whether the user has commented
-* starred/unstarred status
-** This is something many feed [[readers]] have copied from the old [[Google Reader]]. (Did it originate with Google Reader?) Starring items is a lot like [[bookmarking]] within the reader and often instructs the back-end not to remove a [[post]] from storage.
-** A star was used here in much the same way as [[browsers]] use it in their UI to denote bookmarks. The design influenced the name.
-** Readers known to implement starring in their API include [https://github.com/feedbin/feedbin-api/blob/master/content/starred-entries.md Feedbin], [https://www.newsblur.com/api#/reader/starred_stories NewsBlur] and [https://feedwrangler.net/developers/feed_items Feed Wrangler]. Feedly uses a special [https://developer.feedly.com/cloud/#global-resource-ids global “saved” ID] as an “[e]quivalent of starring articles”.
-
-There are a few ways we could store the additional per-item data.
-
-* Add new properties to the item object
-** may conflict with future Microformats vocabularies
-* Create a single new property (e.g. "microsub") that contains all the additional data
-** avoids possible vocab conflicts except for the name of the one property
-* Wrap the item in a new object which can contain these additional properties
-** makes accessing the post data an extra level deep, possibly awkward
-** won't conflict with Microformats vocabularies
-* Prefix all new properties with "_"
-** avoids vocab conflicts since underscores are never used in vocab terms
-** is an indication that this property is not part of the post data
-
-=== Channel Statuses ===
-Typically an interface will want to indicate whether particular channels have any new items since the user's last visit. We could add some additional data in the response of listing channels that can be used to provide either unread counts or just a boolean unread status (like Slack).
-
-The response to retrieve the list of channels could look like:
-
-<pre>
-{
-  "channels": [
-    {
-      "uid": "31eccfe322d6c48c50dea2c84efc74ff",
-      "name": "IndieWeb",
-      "unread": 30,
-      "updated": "2018-01-16T10:19:00-0800"
-    },
-    {
-      "uid": "1870e67e924856dc7e4c37732b303b45",
-      "name": "W3C",
-      "unread": 0,
-      "updated": "2018-01-16T02:21:00-0800"
-    }
-  ]
-}</pre>
-
-The <code>unread</code> property indicates the number of items in the channel that have not yet been marked as read. An interface can display either the count or just a boolean indication of whether the value is greater than 0.
-
-* [https://developer.feedly.com/v3/markers/#get-the-list-of-unread-counts Feedly Markers]
-
-This may also apply when listing the subscriptions in a channel, (currently the "GET follow" request).
-
-Most existing feed readers also show the list of feeds added to a channel. While this makes sense for certain applications, it could be overwhelming if you are following dozens of individual people's accounts in a channel. How do existing readers handle the case when there are lots of subscriptions in a channel/folder?
-
-Microsub may need a new endpoint that can return the list of channels as well as feeds within the channel including the unread/updated state for each, since this may be too big of a response to use in the "GET channels" response.
-
-=== Channel Order ===
-Having used [[Indigenous]] and [[Together]] for a little while, it's quickly become apparent that I want to be able to set an explicit order to the channels. 
-
-The Flickr API has a nice mechanism for ordering, which involves very little effort on the part of the client:
-
-"Ordered, comma-delimited list of photo ids. Photos that are not in the list will keep their original order" https://www.flickr.com/services/api/flickr.photosets.reorderPhotos.html
-
-In Microsub, this could be done in a similar way with a "channel" action:
-
-<pre>
-POST /microsub
-
-action=channels
-&method=order
-&channels[]=2c5e5d7c4d57d
-&channels[]=c972846e8278
-</pre>
-
-This would set the order of the two channels given. All other channels would remain in the same order. This enables a simple drag and drop interface or a "move up/move down" button in clients, while also providing the ability for more complex interfaces that want to set the order of all channels in one command.
-
-=== Bulk Operations / Syncing ===
-With the addition of storing per-item state, readers will likely want a way to mark large numbers of items as read in a single request. Both for offline reading, as well as just for efficiency's sake while online. 
-
-[https://developer.feedly.com/v3/markers/#mark-one-or-multiple-articles-as-read Feedly's Markers API] allows operations to be made on one or more items at a time. We can likely do something similar, possibly by just including multiple <code>url[]</code> parameters in the request.
-
-=== Indicating Item Source ===
-Because many traditional readers choose to show both the "Source" of an item in a feed when viewing it, in addition to the "Author" of the item, it may make sense to include some details about the Source in each Item in that source when retrieving a timeline.
-
-See some examples below:
-
-[[File:feedbin-screenshot.png]]
-
-[[File:reeder-v1.png]]
-
-[[File:reeder-v2.png]]
-
-[[File:inoreader_channel_author_feed_example.png]]
-
-This will also be useful when someone reposts content, so you want the item to show the original author, but you also want to show who reposted it. Twitter does this by adding a line above the tweet.
-
-[[File:twitter-repost-indicator.png]]
-
-A similar but slightly different version of this is when following content from forums, where you want to know which forum thread a post is from.
-* {{aaronpk}} currently uses a forum API to subscribe to a few specific threads, which is sent to IRC. Replicating this in a reader interface would need some way to include which thread an item is part of so that it can be read in context.
-
 == Feedback ==
+Feel free to leave notes here or open an [https://github.com/indieweb/microsub/issues issue on GitHub].
 
-== Issues ==
+== Brainstorming ==
+<span id="Issues"></span>
 
-=== Give Microsub server access to private posts for its user? ===
-When a website adds [[private posts]] within feeds for auth’d visitors, it could be important for the Microsub server to be able to fetch these posts if the current user is included in the [[audience]].
-
-=== Image Resizing ===
-It may be too much of a burden to require that clients are responsible for image resizing themselves. There has been some discussion about this [https://chat.indieweb.org/dev/2017-11-22#t1511397808146000 in IRC] as well as [https://github.com/cleverdevil/together/issues/11 on GitHub].
-
-* Would a Microsub server download and store the images from post in its feeds? If yes, there needs to be logic to give the new URLs to the client somehow, and potentially the need for authentication for them. <span class="h-card" style="white-space:nowrap">[[User:Www.svenknebel.de|sknebel]]</span> 06:42, 4 December 2017 (PST)
-
-=== Indicating whether posts have already been responded to ===
-The Microsub client needs to know whether a post has already been liked/replied/bookmarked/etc by the user in order to display a the appropriate interface buttons. Similarly the client should allow the user to delete the "like" post if it's been posted already, so it will need to know the URL of the like.
-
-One way to accomplish this for external Microsub servers is the Microsub server can subscribe to your own site and index all the "like" posts it finds, and match those up. If your site is also your micropub and microsub server then all this is internal to the system and doesn't need to be specified.
-
-=== Tracking read state or position ===
-Some people would like to be able to track the read/unread state of individual items in a feed. Traditional feed readers typically work this way, although more modern interfaces like Slack keep only a single read pointer pointing to where in the stream was last read.
-
-* Slack: [https://api.slack.com/methods/channels.mark set the read cursor]
-* Feedly: [https://developer.feedly.com/v3/markers/ Markers API]
-* Inoreader: [https://www.inoreader.com/developers/edit-tag system-internal tag/category]
-
-==== Feedback ====
-In case you want opinions, individual state is crucial in a reader for me: for feeds with long-form content I often read individual items, not in order. The API could provide bulk methods for mark-as-read to support clients using the different style (maybe based on the timeline/paging mechanism?) <span class="h-card" style="white-space:nowrap">[[User:Www.svenknebel.de|sknebel]]</span> 04:13, 4 December 2017 (PST)
-
-I too rely heavily on per-item read state. I think this comes down to a per-feed preference. This is because, the way I see it, there are 2 types of feeds I can subscribe to:
-
-# A [[stream]] I am interested in. Like a person’s [[Twitter]] (or other micro-blogging) timeline. I am not particularly interested in every separate [[note]] on this feed, it is the feed (or rather the person!) I am interested in. If I am away from my [[reader]] for a weekend, I am not likely to go back and read what I missed. I just want to see their thoughts when they share them. A single “read pointer” is enough for these.
-# A collections of long-form [[posts]], most likely [[articles]], that I am interested in. Here my interest goes out to the separate posts. The feed in its entirety is of no real concern, that’s just a ways for a publisher to communicate their collection to me. Because I see each post as a singular entity, that is how I would expect their read state to work. Marking everything as read prior to a single point makes little sense, especially when the only commonality between the posts is that they happened to come from the same publisher.
-
-In the [[discuss|chat]] it was raised that this is “treating it like email” [https://chat.indieweb.org/dev/2018-01-10/1515616306358800]. I would say instead that I treat it like a magazine subscription. I do not always want to read from cover to cover. But just because I happened to read the one in the back first, doesn’t mean I skipped everything before it because I didn’t want to read it. I merely skimmed the titles and will then read ''in order of relevance'', where relevance is subjective. This might mean marking some things as read right after skimming the title (irrelevant) and keeping other things as unread ever after the next batch of posts (magazine issue) has already come and gone.
-
-Some people have used things like “[[star|starring]]” in feed readers to get around this problem. But I think that is a bad usage of the feature. Read state should be used to remind me that I haven’t read a thing yet, not bookmarking.
-
-— {{martijnvdven}}
-
-=== Per Channel Filters ===
-It may be useful for users to have filters per channel. For example if a user only wants to see original content from people they are following eg. excluding likes, reposts, bookmarks etc.
-
-Tweet decks supports filters per "channel" to; show only tweets with a certain type of media, hide a keyword, only show a keyword and exclude retweets
-
-[[File:tweet-deck-channel-filters.png|250px]]
-
-=== Find posts about post ===
-It could be useful if the server could provide information about other posts in the users collection that link to a specific one, e.g. to easily compile information like "5 people you follow liked this". This could be related to [[#Indicating_whether_posts_have_already_been_responded_to]] or part of [[#Searching_for_Content]]
-
-=== CORS ===
-[[CORS]] headers would make it possible to build clients that do not need any server-side code of their own. Authentication would be an issue in this case, so maybe suggesting a way to implement this would be helpful.
+See [https://github.com/indieweb/microsub/issues?q=is%3Aissue+is%3Aopen+label%3Abrainstorming brainstorming issues on GitHub].
