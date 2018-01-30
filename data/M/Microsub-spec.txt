@@ -678,6 +678,26 @@ Most existing feed readers also show the list of feeds added to a channel. While
 
 Microsub may need a new endpoint that can return the list of channels as well as feeds within the channel including the unread/updated state for each, since this may be too big of a response to use in the "GET channels" response.
 
+=== Channel Order ===
+Having used [[Indigenous]] and [[Together]] for a little while, it's quickly become apparent that I want to be able to set an explicit order to the channels. 
+
+The Flickr API has a nice mechanism for ordering, which involves very little effort on the part of the client:
+
+"Ordered, comma-delimited list of photo ids. Photos that are not in the list will keep their original order" https://www.flickr.com/services/api/flickr.photosets.reorderPhotos.html
+
+In Microsub, this could be done in a similar way with a "channel" action:
+
+<pre>
+POST /microsub
+
+action=channels
+&method=order
+&channels[]=2c5e5d7c4d57d
+&channels[]=c972846e8278
+</pre>
+
+This would set the order of the two channels given. All other channels would remain in the same order. This enables a simple drag and drop interface or a "move up/move down" button in clients, while also providing the ability for more complex interfaces that want to set the order of all channels in one command.
+
 === Bulk Operations / Syncing ===
 With the addition of storing per-item state, readers will likely want a way to mark large numbers of items as read in a single request. Both for offline reading, as well as just for efficiency's sake while online. 
 
