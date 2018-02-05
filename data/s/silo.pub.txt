@@ -5,6 +5,84 @@ https://indieweb.org/silo.pub
 == History ==
 silo.pub was temporary named "Feverdream" while it was being developed. And hosted at https://feverdream.herokuapp.com during that period.
 
+== Installation ==
+Some notes on how to install silo.pub on an Ubuntu 16.04 server running nginx.
+
+This guide was helpful: https://chriswarrick.com/blog/2016/02/10/deploying-python-web-apps-with-nginx-and-uwsgi-emperor/
+
+* Create a new venv in a folder like <code>/web/sites/silopub</code>
+<pre>cd /web/sites/
+virtualenv -p /usr/bin/python3 silopub</pre>
+
+* Clone the git repo to <code>/web/sites/silopub/silo.pub</code>, e.g.:
+<pre>cd /web/sites/silopub
+git clone https://github.com/kylewm/silo.pub.git</pre>
+
+* Install the project dependencies
+<pre>./bin/pip install -r silo.pub/requirements.txt</pre>
+
+* Change ownership of the folder to the web server user
+<pre>chown -R www-data: silo.pub</pre>
+
+* Create a folder for the socket and logs
+<pre>mkdir srv
+chown www-data: srv</pre>
+
+* Create the uwsgi config file at <code>/web/sites/silopub/silopub.ini</code>
+<pre>[uwsgi]
+socket = /web/sites/silopub/srv/uwsgi.sock
+chmod-socket = 775
+chdir = /web/sites/silopub/silo.pub
+master = true
+binary-path = /web/sites/silopub/bin/uwsgi
+virtualenv = /web/sites/silopub
+module = silopub.wsgi:application
+uid = www-data
+gid = www-data
+process = 1
+threads = 2
+logger = file:/web/sites/silopub/srv/uwsgi.log
+die-on-term = true</pre>
+
+* Configure nginx to point to the socket
+<pre>
+server {
+  listen 443 ssl;
+
+  # ... your normal nginx ssl/log stuff here
+
+  location / {
+    uwsgi_pass      unix:///web/sites/silopub/srv/uwsgi.sock;
+    include         uwsgi_params;
+    uwsgi_param     UWSGI_SCHEME $scheme;
+    uwsgi_param     SERVER_SOFTWARE    nginx/$nginx_version;
+  }
+
+  location /static {
+    root /web/sites/silopub/silo.pub/silopub/;
+    index index.html;
+  }
+}
+</pre>
+
+* Configure the startup script at <code>/etc/systemd/silopub.service</code>
+<pre>[Unit]
+Description=SiloPub
+
+[Service]
+WorkingDirectory=/web/sites/silopub/
+ExecStart=/web/sites/silopub/bin/uwsgi --ini silopub.ini
+Restart=always
+User=www-data
+
+[Install]
+WantedBy=multi-user.target</pre>
+
+* Enable the systemd service
+** <code>sudo systemctl enable /etc/systemd/silopub.service</code>
+* Start the service
+** <code>sudo service silopub start</code>
+
 == See Also ==
 
 * "Installed my own copy of https://silo.pub ... A screencast of how I configure my syndication endpoints..." https://aaronparecki.com/2016/11/29/7/syndication
