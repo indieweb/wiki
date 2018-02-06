@@ -2,7 +2,7 @@ https://indieweb.org/Twitter
 
 [[Category:silo]]
 {{pagelogo|https://pbs.twimg.com/profile_images/530553072594874368/7f9QErOD_200x200.png}}
-'''<dfn>Twitter</dfn>''' (also known as <dfn>Twitter.com</dfn>) is a popular content hosting [[silo]] most well known for 140 character text [[notes]].
+'''<dfn>Twitter</dfn>''' (also known as <dfn>Twitter.com</dfn>) is a popular content hosting [[silo]] most well known for originally limited to 140 characters text [[notes]]. Over 11 years later, the [http://www.independent.co.uk/life-style/gadgets-and-tech/news/twitter-280-characters-tweets-start-when-get-latest-a8042716.html limitation was raised to 280].
 
 == Why ==
 Why use Twitter? Besides all the usual [[social media]] [[silo]] reasons like "everyone is on there", see what people come up with when they ask why am I using Twitter:
@@ -101,8 +101,8 @@ It's rough and unpolished. [[User:Snarfed.org|Ryan]] eventually plans to polish 
 ** "twitter's editor is hard to beat though, like auto-expanding twitter handles and telling you how many characters you have left (with accounting for URL-shortening)"
 *** Re: "how many characters you have left (with accounting for URL-shortening)" - there's [[CASSIS]] functions for that:
 **** <code>[https://github.com/tantek/cassis/blob/master/cassis.js#L1186 tw_text_proxy($t)]</code> - given plain text for a note, it returns a string with character count that Twitter would give it, e.g. after t.co-wrapping URLs. Useful for length estimations, and doing truncation/ellipsing computations.
-***** e.g. <code>140-strlen(tw_text_proxy($t))</code> gives you # of characters left
-**** <code>[https://github.com/tantek/cassis/blob/master/cassis.js#L1255 note_length_check($note, $maxlen, $username)]</code> - given a string $note (e.g. the output from tw_text_proxy() above), a $maxlen (e.g. 140), and a $username (e.g. "@indiewebcamp"), it returns result codes (roughly based on / reusing from HTTP)
+***** e.g. <code>280-strlen(tw_text_proxy($t))</code> gives you # of characters left
+**** <code>[https://github.com/tantek/cassis/blob/master/cassis.js#L1255 note_length_check($note, $maxlen, $username)]</code> - given a string $note (e.g. the output from tw_text_proxy() above), a $maxlen (e.g. 280), and a $username (e.g. "@indiewebcamp"), it returns result codes (roughly based on / reusing from HTTP)
 ***** 200 - $note exactly fits $maxlen characters when retweeted (if $username was provided)
 ***** 206 - $note fits $maxlen and has room to spare even when retweeted (if $username provided)
 ***** 207 - $note fits $maxlen with room to spare, but a retweet would get truncated (if $username provided)
@@ -141,7 +141,7 @@ Once POSSE is successful:
 The sections below contain details on how to do some of this for [[notes]] and [[articles]] in particular.
 
 === POSSE Notes to Twitter ===
-For notes, you can POSSE out up to 140* characters of your note to Twitter.
+For notes, you can POSSE out up to 280* characters of your note to Twitter.
 
 ==== POSSE entire note to twitter ====
 For notes that fit entirely within a tweet (*including [[permashortcitation]]), you ''should'' include a post [[permashortcitation]] at the end of your tweet. Examples:
@@ -169,9 +169,9 @@ The whole point of POSSE is that you still care about your friends on Twitter (o
 Only provide permashortlinks as part of your POSSE tweets when they link to an the original post <em>with more content</em> than in the POSSE tweet copy. Otherwise use permashortcitations so that your original posts are still automatically discoverable using the [[original-post-discovery]] algorithm.
 
 ==== POSSE abbr note to twitter ====
-If your note (with permashortid) exceeds 140 characters, you should abbreviate your note to 117 (116) characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 117 (116) characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into 23 characters. 
+If your note (with permashortid) exceeds 280 characters, you should abbreviate your note to 117 (116) characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 117 (116) characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into 23 characters. 
 
-When shortening to 116 (140-23-1) characters, you must count <em>other</em> http (https) URLs within that as 23 characters (excepting schemeless pathless ccTLDs). You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace http (https) URLs in a string with 23 character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
+When shortening to 256 (280-23-1) characters, you must count <em>other</em> http (https) URLs within that as 23 characters (excepting schemeless pathless ccTLDs). You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace http (https) URLs in a string with 23 character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
 
 You may want to put an ellipsis character at the end of your POSSEd note to Twitter before your perma(short)link. Be sure to leave room for the ellipsis too: instead of just 1 character for a space before your permashortlink, save 4 characters for "... ", or 2 characters for "… " (ellipsis entity character). Note Twitter now counts characters in a sensible fashion, they count codepoints in Unicode NFC: https://dev.twitter.com/docs/counting-characters. Ideally elide at a punctuation boundary (like sentence terminator or a comma - the above-mentioned CASSIS function does this too).
 Examples (which link to original posts after eliding with "... ")
@@ -227,7 +227,7 @@ IndieWebCamp community members who are doing this:
 ** https://twitter.com/aaronpk/status/463747044260065280
 
 === POSSE Articles to Twitter ===
-Similar to POSSEing a note, you can POSSE an article to Twitter, but instead of the first 140 characters of the post, you should POSSE the first 140 characters of the entry name (title) of the article, followed by optionally a ":" character (unless the entry title already ends with punctuation), then a space " ", then the perma(short)link to your original post. Examples: 
+Similar to POSSEing a note, you can POSSE an article to Twitter, but instead of the first 280 characters of the post, you should POSSE the first 280 characters of the entry name (title) of the article, followed by optionally a ":" character (unless the entry title already ends with punctuation), then a space " ", then the perma(short)link to your original post. Examples: 
 * https://twitter.com/t/status/21599383183 (no colon between tweeted title and blog post permalink)
 * https://twitter.com/t/status/24915461441 (entry title ends with punctuation, no ":" needed)
 * https://twitter.com/t/status/10572648543162368 (colon between tweeted title and blog post permalink)
@@ -372,7 +372,7 @@ Twitter provides the following features currently:
 ** [[trends]]
 * [[post]] a [[note]] or [[reply]] (optionally attaching 1-4 [[photos]] (max 5MB), 1 video or 1 animated GIF [https://dev.twitter.com/rest/media/uploading-media#keepinmind]) optionally [[people-tagged]]) at a [[permalink]] with:
 ** [[create]] tweet UI with
-*** [[character count]] display, live while entering text - actually characters <em>remaining</em> since Twitter has a 140 character per tweet limitation
+*** [[character count]] display, live while entering text - actually characters <em>remaining</em> since Twitter has a 280 character per tweet limitation
 *** [[deduplication]] by disallowing exact same tweet text to be posted on same day.
 ** [[autolink]]ing of URLs, @-names, #-[[hashtags]] in note/reply
 ** [[link-preview]] of (only one, the last, in contrast to [https://dev.twitter.com/cards/getting-started#multiple what Twitter docs claim]) URLs in note/reply, including [[autoembed]]ding of [[YouTube]] and other whitelisted media hosting sites. See [[Twitter Cards]] for details.
