@@ -59,7 +59,7 @@ Authorization is handled the same way as [[Micropub]], using [[IndieAuth]] to [[
 
 Channels are described by the following properties:
 
-* <code>uid</code> - a string representation of a user-specific unique ID for the channel. This uid will be unique for each user, but may be duplicated across different users. Some implementations will use constant strings such as "example", while others may use database IDs such as "15029932", or a URL such as "<nowiki>http://user.example.com/channel/foo</nowiki>". The valid characters for a uid are any URL-safe character. 
+* <code>uid</code> - a string representation of a user-specific unique ID for the channel. This uid will be unique for each user, but may be duplicated across different users. Some implementations will use constant strings such as "example", while others may use numeric database IDs such as "15029932", a random string like "1NYnmUVYR5qBVXYBzt", or a URL such as "<nowiki>http://user.example.com/channel/foo</nowiki>". The valid characters for a uid are any URL-safe character. 
 * <code>name</code> - the display name for the channel. This may include any valid UTF-8 sequence. The client should use this name when displaying the name of the channel in the interface.
 
 <pre>
@@ -69,9 +69,9 @@ Channels are described by the following properties:
 }
 </pre>
 
-In addition to any channels listed by the server, all Microsub servers have two channels with the uid <code>default</code> and <code>notifications</code>. Clients should display these with the localized names "Home" and "Notifications". Some users may not have any additional channels.
+Servers must always have a channel with the uid <code>notifications</code>, and must always have at least one other channel for a user.
 
-Some actions may want to apply to every channel, so the uid of <code>global</code> is reserved for this purpose. Actions such as <code>mute</code> that want to mute a user across every channel should use the channel uid of <code>global</code>.
+Some actions may want to apply to every channel, so the uid of <code>global</code> is reserved for this purpose. Actions such as <code>mute</code> that want to mute a user across every channel use the channel uid of <code>global</code>.
 
 == Users ==
 
@@ -89,7 +89,7 @@ All operations in Microsub are considered "actions", and are specified with a qu
 * mute / unmute
 * block / unblock
 
-Actions that operate within the context of a channel can accept a query string or form body parameter of <code>channel</code> specifying the <code>uid</code> of the channel to use. If no channel is specified, then the <code>default</code> channel is assumed.
+Actions that operate within the context of a channel can accept a query string or form body parameter of <code>channel</code> specifying the <code>uid</code> of the channel to use.
 
 === Timelines ===
 
@@ -101,7 +101,7 @@ Retrieve the entries in a given channel.
 
 Parameters:
 * action=timeline
-* channel (optional)
+* channel={uid}
 * after={cursor}
 * before={cursor}
 
@@ -190,10 +190,10 @@ TBD: It might be nice to show an approximate frequency of posts, e.g. [[:File:fe
 TBD: implementing a search API for searching past posts that the Microsub server has indexed.
 
 * action=search
-* channel=
-* query=
+* channel={uid}
+* query={term}
 
-The presence of the "channel" parameter indicates to the server that the client wants to search for posts rather than search for feeds. The channel parameter can be set to an individual channel such as "default" or a channel ID, or "global" to search across all channels.
+The presence of the "channel" parameter indicates to the server that the client wants to search for posts rather than search for feeds. The channel parameter can be set to an individual channel uid, or "global" to search across all channels.
 
 === Preview ===
 
@@ -208,6 +208,9 @@ The response includes the list of items in the feed if available, in the same fo
 <code>action=follow</code>
 
 '''GET'''
+
+* action=follow
+* channel={uid}
 
 Retrieve the list of feeds being followed in the given channel.
 
@@ -228,6 +231,10 @@ The feed items may contain additional properties that describe the feed, see htt
 '''POST'''
 
 Follow a new URL in a channel. 
+
+* action=follow
+* channel={uid}
+* url={url}
 
 <pre>POST /microsub
 Content-type: application/x-www-form-urlencoded
@@ -252,6 +259,10 @@ The response is a JSON representation of the channel, the same as is returned wh
 
 '''POST'''
 
+* action=unfollow
+* channel={uid}
+* url={url}
+
 Unfollow a feed from a channel.
 
 <pre>POST /microsub
@@ -261,6 +272,8 @@ action=unfollow&channel=indieweb&url=http://tantek.com/
 </pre>
 
 The Microsub server may remove all of this feed's items from the channel, or may leave them in place, at its discretion. If you are used to treating these channels as an IRC or Slack timeline, it would be more appropriate to leave the old items in the channel, just stop delivering new ones. However if you are more used to treating these channels as a Twitter or Facebook feed, then you may want the server to remove them from the channel.
+
+TODO: Should there be another parameter for the client to specify whether to remove previous entries or leave them? 
 
 === Muting ===
 
@@ -276,12 +289,15 @@ For example, in the context of the [[Salmention]] spec, the server should still 
 
 '''GET'''
 
+* action=mute
+* channel={uid}
+
 Retrieve the list of users that are muted in the given channel.
 
 Request
 
 <pre>
-GET /microsub?action=mute HTTP/1.1
+GET /microsub?action=mute&channel=indieweb HTTP/1.1
 </pre>
 
 Response
@@ -307,6 +323,10 @@ Content-type: application/json
 
 '''POST'''
 
+* action=mute
+* channel={uid}
+* url={url}
+
 Mute a user in a channel, or with the uid <code>global</code> mutes the user across every channel.
 
 Request
@@ -315,7 +335,7 @@ Request
 POST /microsub HTTP/1.1
 Content-type: application/x-www-form-urlencoded
 
-action=mute&url=https://annoying.example.com/
+action=mute&channel=indieweb&url=https://annoying.example.com/
 </pre>
 
 Response
@@ -340,11 +360,18 @@ For example, in the context of the Webmention spec, the server should not send w
 
 '''GET'''
 
+* action=block
+* channel={uid}
+
 Retrieve the list of users that are blocked in the given channel.
 
 TODO: document the response format
 
 '''POST'''
+
+* action=block
+* channel={uid}
+* url={url}
 
 Block a user in a channel, or with the uid <code>global</code> blocks the user across every channel.
 
@@ -354,9 +381,11 @@ Block a user in a channel, or with the uid <code>global</code> blocks the user a
 
 '''GET'''
 
+* action=channels
+
 Retrieve the list of channels for the user.
 
-The response will contain a <code>channels</code> property with the list of channel uids and names. The <code>uid=default</code> and <code>uid=notifications</code> channels are not part of this response, so for users who have only the default channels, the response will be an empty array.
+The response will contain a <code>channels</code> property with the list of channel uids and names. The <code>uid=notifications</code> channel must always be the first in the list, as clients are expected to treat it separately and not show it in the channel list.
 
 <pre>GET /microsub?action=channels
 Authorization: Bearer xxxxxxxxx
@@ -366,6 +395,10 @@ Content-type: application/json
 
 {
   "channels": [
+    {
+      "uid": "notifications",
+      "name": "Notifications"
+    },
     {
       "uid": "31eccfe322d6c48c50dea2c84efc74ff",
       "name": "IndieWeb"
@@ -383,14 +416,28 @@ To create, update, or delete channels, the client sends a POST request with the 
 
 To create a channel, the client includes the name of the channel to create. The uid of the channel will be assigned by the server.
 
+* action=channels
+* name={channel name}
+
 To update a channel, the client includes the uid of the channel to update in the <code>channel</code> parameter, and includes the new name of the channel. Changing the name of the channel MAY change the <code>uid</code> of the channel, and if it does, the server MUST return the new <code>uid</code> in the response.
 
+* action=channels
+* channel={uid}
+* name={channel name}
+
 To delete a channel, the client includes an additional parameter <code>method=delete</code>. Note that the <code>default</code> and <code>notifications</code> channels can not be deleted. 
+
+* action=channels
+* method=delete
+* channel={uid}
 
 Both creating and updating a channel MUST return the <code>uid</code> and <code>name</code> properties for the channel.
 
 ==== Create a Channel ====
 Request
+
+* action=channels
+* name={channel name}
 
 <pre>
 POST /microsub HTTP/1.1
@@ -414,6 +461,10 @@ Content-type: application/json
 ==== Update a Channel ====
 
 Request
+
+* action=channels
+* channel={uid}
+* name={channel name}
 
 <pre>
 POST /microsub HTTP/1.1
@@ -439,6 +490,10 @@ Content-type: application/json
 ==== Delete a Channel ====
 
 Request
+
+* action=channels
+* method=delete
+* channel={uid}
 
 <pre>
 POST /microsub HTTP/1.1
