@@ -517,6 +517,40 @@ Content-type: application/json
 
 </pre>
 
+==== Set Channel Order ====
+
+Channels are ordered according to the user's preference. When returning the list of channels, the <code>notifications</code> channel must always be the first in the list, as clients are expected to treat it separately such as showing it as a separate icon, not in the main channel list.
+
+To modify the order of channels, the client sends a POST request with the list of channel IDs in the new ordering.
+
+Only the order of the channel IDs specified will be changed. This provides two primary methods for adjusting channel orders. To move a channel up or down, the client can include the two IDs of the channels in question in the new order. Alternately the client can provide the full list of channel IDs in the new ordering.
+
+Request
+
+* action=channels
+* method=delete
+* channel[]={uid}
+* channel[]={uid}
+* ...
+
+<pre>
+POST /microsub HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+action=channels
+&method=order
+&channel[]=2c5e5d7c4d57da68cb03
+&channel[]=c972846e827845af974c
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+Content-type: application/json
+
+</pre>
+
 == Types of Feeds ==
 
 The specific types and formats of feeds that can be followed is out of scope of Microsub. Instead, it's up to the Microsub server to support whichever feed formats it wishes. Typically, Microsub servers will prefer a Microformats 2 feed such as an <code>h-feed</code> or list of <code>h-entry</code>s, and will then fall back to finding an Atom or RSS feed. Other types of feeds may be supported, but clients should not make any assumptions about which formats are supported, and should make use of the "preview" action so that users have an indication of whether a subscription will succeed.
