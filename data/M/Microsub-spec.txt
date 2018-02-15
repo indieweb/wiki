@@ -554,6 +554,44 @@ Content-type: application/json
 
 </pre>
 
+===== Order Algorithm =====
+
+From the server's perspective, the below is a description of how to process the order command.
+
+Given a list of channels with IDs:
+
+<pre>[a b c d e f g h]</pre>
+
+and a command to set the order of the following in the list: <code>[d a c g]</code>
+ 
+Assign the items in the initial list a numeric index:
+ 
+<pre>[a b c d e f g h]
+[1 2 3 4 5 6 7 8]</pre>
+ 
+Build a new map with the input items and their existing numeric order:
+
+<pre>[
+  1 => a
+  3 => c
+  4 => d
+  7 => g
+]</pre>
+
+For each item in the input list in the given order, set the value in the map:
+
+<pre>[
+  1 => d
+  3 => a
+  4 => c
+  7 => g
+]</pre>
+
+For each item in the new map, change the value at the corresponding numeric index of the list:
+ 
+<pre>[d b a c e f g h]
+[1 2 3 4 5 6 7 8]</pre>
+
 == Types of Feeds ==
 
 The specific types and formats of feeds that can be followed is out of scope of Microsub. Instead, it's up to the Microsub server to support whichever feed formats it wishes. Typically, Microsub servers will prefer a Microformats 2 feed such as an <code>h-feed</code> or list of <code>h-entry</code>s, and will then fall back to finding an Atom or RSS feed. Other types of feeds may be supported, but clients should not make any assumptions about which formats are supported, and should make use of the "preview" action so that users have an indication of whether a subscription will succeed.
