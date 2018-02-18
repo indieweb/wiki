@@ -38,7 +38,29 @@ Especially for the above two cases, if you're posting photos which are not yours
 Otherwise if you just use <code>u-photo</code> directly yourself to embed someone else's photos or artwork, since you're the author of your post you're implying they're <em>your</em> photos, that you photographed them or drew them which is kind of like plagiarism.
 
 == How ==
+=== How to publish ===
 Like a photo post, but with multiple "u-photo" images.
+
+(needs a minimal h-entry multiple u-photo markup example!)
+
+=== How to POSSE ===
+* [[Twitter]]
+** Supports up to 4 photos on their multi-photo posts, and you can use [[Bridgy]] Publish or [[silo.pub]] to POSSE to Twitter (numerous IndieWeb folks do)
+** If you have more than 4 photos in your multi-photo post, you can try POSSEing them to Twitter four at a time in a [[tweetstorm]], e.g.
+*** {{kartikprabhu}} original 6 photo multi-photo: https://kartikprabhu.com/notes/ithaca-winter
+*** Tweetstorm with all 6 across two tweets: https://twitter.com/kartik_prabhu/status/965020396927029248
+* [[Facebook]]
+** no known examples of POSSEing a multi-photo to a Facebook multi-photo post, though it should be theoretically possible.
+* [[Flickr]]
+** no known examples of POSSEing a multi-photo to Flickr, though it should be theoretically possible by POSSEing a multi-photo to a Flickr Album, which is similar to a [[collection]]
+* [[Instagram]]
+** only manual POSSEing to Instagram is possible, yet a few folks do regularly manually POSSE multi-photo posts to Instagram. See '''[[Instagram#POSSE]]''' for details. Examples:
+** {{t}} [http://tantek.com/2017/090/t3/pretty-tiles-sky-sunrise since 2017-03-31] (2 photos)
+*** manual POSSE to Instagram: https://www.instagram.com/p/BST1yEHlJ1J/
+*** see also 2017-03-28 manual POSSE of photos from four original posts (3 photo posts, 1 multi-photo) to one Instagram post, yet omitting one of the photos from the IG multi-photo
+**** original posts: http://tantek.com/t4nZ1 http://tantek.com/t4nZ2 http://tantek.com/t4nZ3 http://tantek.com/t4nZ4
+**** Instagram POSSE: https://www.instagram.com/p/BSJ9wPjAHTF/
+**** before that, {{t}} was manually PESOSing multi-photos from Instagram
 
 == IndieWeb Examples ==
 Sorted by earliest multi-photo posts first.
@@ -76,10 +98,17 @@ Examples:
 
 === Tantek ===
 {{t}} uses [[Falcon]] to publish multi-photo posts [http://tantek.com/2015/352/t1/building-lights-clouds-heels-cab since 2015-352] which are [[note]] posts with embedded images at the start. He does the following:
-# Uses [[Instagram]] iOS client to post a multi-photo there
-# Writes & posts a [[note]] on his own site that starts with a direct .jpg URL of the photo image, then a space/linebreak, then permalink of the Instagram post (auto-generated using the Instagram Bookmarklet), then at least one more .jpg URL + permalink, then caption.
+# Uses [[Swarm]] iOS client to post photos at their locations (checkin [[venue]]s) soon after he takes them ([http://tantek.com/2017/089/t1/swarmapp-mobile-photo-posting since 2017-03-30], instead of Instagram 2015-352…2017-085). 
+# Writes & posts a [[note]] on his own site that starts with a direct width960 .jpg URL of the photo image, then a space/linebreak, then direct original resolution of the .jpg URL, then at least one more .jpg width960 URL + .jpg original resolution URL, then caption.
 # That "note" is auto-upgraded by [[CASSIS]]'s <code>auto_link</code> function into a multi-photo post by putting the <code>u-photo</code> class name on the [[auto-embed]] <code>&lt;img&gt;</code> of the JPG, since it's the first URL in the "note", and auto-linking it with the subsequent URL, then including any immediately subsequent JPG+URL pairs into additional <code>u-photo</code> embeds.
-# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the multi-photo as a photo post to both [[Twitter]] (first 4 photos per their limit) and [[Facebook]] (only the first photo per limit), saving the resulting syndication URLs in storage.
+# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the multi-photo as a photo post to both [[Twitter]] (first 4 photos per their limit), [[Facebook]] (only the first photo per limit), and [[Flickr]] (same one photo limitation), saving the resulting syndication URLs in storage.
+# Uses [[Instagram]] iOS client to copy caption from original post, and manually choose and post same photos in the same order as in original post.
+# Manually copy new [[Instagram]] multi-photo post permalink into original post as a syndication link.
+* Previously 2015-352…2017-085:
+*# Uses [[Instagram]] iOS client to post a (multi-)photo there.
+*# Writes & posts a [[note]] on his own site that starts with a direct .jpg URL of the photo image, then a space/linebreak, then permalink of the Instagram post (auto-generated using the Instagram Bookmarklet), then at least one more .jpg URL + permalink, then caption.
+*# That "note" is auto-upgraded by [[CASSIS]]'s <code>auto_link</code> function into a multi-photo post by putting the <code>u-photo</code> class name on the [[auto-embed]] <code>&lt;img&gt;</code> of the JPG, since it's the first URL in the "note", and auto-linking it with the subsequent URL, then including any immediately subsequent JPG+URL pairs into additional <code>u-photo</code> embeds.
+*# Falcon automatically uses [[Bridgy]] Publish to [[POSSE]] the multi-photo as a photo post to both [[Twitter]] (first 4 photos per their limit) and [[Facebook]] (only the first photo per limit), saving the resulting syndication URLs in storage.
 
 Examples:
 * http://tantek.com/2015/352/t1/building-lights-clouds-heels-cab
