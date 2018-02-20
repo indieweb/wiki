@@ -1,11 +1,14 @@
 https://indieweb.org/Micropub-extensions
 
-This page is for brainstorming, discussion, and other questions and explorations about extensions to [[Micropub]].
+This page is for documenting extensions to [[Micropub]]. Discussion for these should take place on [https://github.com/indieweb/micropub-extensions/projects GitHub].
 
 == Server Commands ==
 The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
 
 === Slug ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/1
+
 Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
 
 [[File:wordpress-customize-slug.png]]
@@ -13,8 +16,6 @@ Many posting UIs provide an option for the user to choose a slug for the post th
 This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
  
 * <code>mp-slug=</code>
-
-Issues and discussion: https://github.com/indieweb/micropub-extensions/projects/1
 
 The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
 
@@ -26,9 +27,21 @@ The server may or may not decide to respect the requested slug, based on whether
 ** [[p3k]]
 ** [[Transformative]]
 
+=== Destination ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/4
+
+* <code>mp-destination=https://mysite.example.com/</code>
+
+Specify a destination to create a new post on a web site other than the default. The value of <code>mp-destination</code> should be a uid from the array of destinations returned from q=config. See [https://gist.github.com/manton/52e0015f87fcf50c687a0c64e392fc37 an example query response here].
+
+
 == New Properties ==
 
 === Post Status ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/2
+
 * <code>post-status=published</code> (or no post-status set) - The post is published, or when the published date is in the future, the post is scheduled.
 * <code>post-status=draft</code> - The post is a draft, and should not be shown in lists. (Of course it's up to the implementation whether it wants to use a capability URL for draft posts or actually restrict it to logged-in users.)
 
@@ -39,15 +52,13 @@ The server may or may not decide to respect the requested slug, based on whether
 ** [[p3k]]
 
 === Visibility ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/3
+
 * <code>visibility=public</code> (or no visibility set)
 * <code>visibility=private</code>
 
 In addition to public/private visibility, [[Wordpress]] also supports password-protected posts. However, passwords are inherently insecure and also not very user friendly, and there are likely better solutions to the problem. Essentially the goal of password-protected posts on Wordpress is to provide "guest access" to posts, where the viewer does not need an account at the site. Flickr accomplishes this with something they call "guest passes".
-
-=== Destination ===
-* <code>mp-destination=https://mysite.example.com/</code>
-
-Specify a destination to create a new post on a web site other than the default. The value of mp-destination should be a uid from the array of destinations returned from q=config. See [https://gist.github.com/manton/52e0015f87fcf50c687a0c64e392fc37 an example query response here].
 
 == Query ==
 Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
