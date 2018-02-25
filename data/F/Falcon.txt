@@ -14,13 +14,13 @@ Open source portions:
 * ...
 
 == Disclaimer ==
-Note: this documentation is purely for informational purposes. 
+Note: documentation purely for informational purposes. 
 
-There are many aspects of this design that are not optimal and that I'm working on improving.  However I figured it was still worth documenting it to capture it.
+Though many aspects of this design are suboptimal, perhaps some of it may help with designing your own indieweb implementation. 
 
-If some of this helps you with designing your own indieweb implementation, great. If something doesn't make sense, ask, e.g. in [[IRC]], as there's a good chance it's something that I should fix in the design. 
+If something doesn't make sense, ask, e.g. in [[IRC]], as there's a good chance it's something that I should fix in the design. 
 
-Thanks, - [[User:Tantek.com|Tantek]] 19:37, 23 March 2013 (PDT)
+Thanks!
 
 == Features ==
 Falcon supports:
@@ -55,14 +55,17 @@ Falcon supports the following specific kinds of [[posts]].
 * with minimal [[reply-context]] support (linked URL of original being replied to)
 * with [[multi-reply]] reply-context presentation support too.
 * automatic sending of webmentions (or pingbacks if no webmention endpoint) to original post ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
+* reply to tweet permalink posts a POSSE @-reply threaded to the tweet permalink
+* reply to GitHub issue posts a POSSE reply on that GitHub issue ([http://tantek.com/2018/050/t1/authorize-bridgy-prompt since 2018-050])
 * current reply limitations: 
-** replies directly to tweets (Tweet permalink URLs) are well supported. I've wanted to POSSE my @-replies to Twitter and have them thread properly on Twitter for a while, so even just implementing this helps me interact with friends who use Twitter instead of their own site (most people).
-** replies to indieweb URLs are supported for posting / storing / presenting, but won't thread to their POSSE copies.
-** multi-reply support provides a manual work-around for replying to an indieweb URL and also replying to the POSSE copy of that indieweb URL (and thus threading with it on Twitter).
-*** This gives me the ability to (but a bit inconveniently) post a reply to an indieweb post, and also post a POSSE'd @-reply that threads properly to the POSSE'd copy of the original indieweb post I'm replying to. There's two itches below for supporting replies either to POSSE tweets or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
+** replies directly to tweets (Tweet permalink URLs) are well supported. This enables POSSEing @-replies to Twitter and have them thread properly on Twitter, which helps interact with friends who use Twitter instead of their own site (most people).
+** replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies.
+** multi-reply support provides a manual work-around for replying to an indieweb URL and also replying to the POSSE copy of that indieweb URL (and thus threading with it on Twitter). This provides the ability to post a reply to an indieweb post that is also a reply to its POSSE tweet, and thus POSSE @-reply to thread properly to the original POSSE tweet. 
+** replies to GitHub issues are deliberately not POSSEd to Twitter
+** Pending: There's two itches below for supporting replies either to POSSE tweets or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
 
 === Like ===
-'''[[like]]''' are supported, and sequential likes are collapsed for presentational purposes on the main home stream.
+'''[[like]]s''' are supported, and sequential likes are collapsed for presentational purposes on the main home stream.
 * automatic [[POSSE]] to [[Twitter]] of likes of tweets, using [[Bridgy]] Publish
 
 === RSVP ===
@@ -100,6 +103,14 @@ Falcon supports the following specific kinds of [[posts]].
 ** with automatic mapping of known venue URLs to their equivalent Twitter @-name
 * Optional manual POSSE to a Facebook event
 * Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06], including [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.dev/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])
+
+=== Issue ===
+'''[[issue]]''' posts are also similar to article posts, but with explicit reply to the source code repo or its issues page, e.g. on GitHub. Supported [http://tantek.com/2018/052/b1/bridgy-github-support-images-hyperlinks since 2018-052] with POSSE to GitHub.
+
+Rather than posting directly to [[GitHub]], it is better to post any new [[issue]]s (or comments on issues) on my site first, and then automatically have those issues and comments be syndicated to the right repo or thread accordingly. (per http://tantek.com/2018/015/t1/made-destination-figured-out-newwwyear)
+
+Use-cases:
+* github.com: plenty of groups/repos for standards (microformats, W3C, WHATWG), open source projects (various Mozilla projects, indieweb, microformats repos) use GitHub, thus this feature enables owning your issues for those and any other public GitHub repos/projects.
 
 
 __TOC__
@@ -201,27 +212,6 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
-
-=== Own my issues and issue replies ===
-Rather than posting directly to [[GitHub]], I want to post any new [[issue]]s (or comments on issues) on my site first, and then (ideally automatically) have those issues and comments be syndicated to the right repo or thread accordingly. (per http://tantek.com/2018/015/t1/made-destination-figured-out-newwwyear)
-
-Goal: manually if I have to starting 2018-032 (Feb 1).
-
-Use-cases:
-* github.com/ plenty of groups/repos for standards (microformats, W3C, WHATWG), open source projects (various Mozilla projects, indieweb, microformats repos).
-
-==== POSSE replies to GitHub ====
-* figure out how replies to GitHub issues should be POSSEd to Twitter (if it makes sense to do so at all)
-** if not, figure out how to post replies WITHOUT POSSEing to Twitter
-* create [[reply]] posts in-reply-to GitHub on my site
-* POSSE those reply posts to GitHub when the in-reply-to URL is on github.com and ends with .../issues/n
-* Automatically POSSE those replies to GitHub
-
-==== POSSE issues to GitHub ====
-* figure out how [[issue]] posts would make sense 
-* create [[issue]] posts on my site
-* POSSE [[issue]] posts to GitHub when the in-reply-to URL is on github.com
-* Automatically POSSE those issues to GitHub
 
 === Own my public list emails and replies ===
 Goal: by end of 2018, start posting emails and replies to public lists on my own site first, and POSSEing them to their public email list destination(s).
