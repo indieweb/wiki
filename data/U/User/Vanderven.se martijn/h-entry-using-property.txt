@@ -6,7 +6,7 @@ The word “using” is often seen in the surrounding text, and upgrading it fro
 
 {{alert|The name <code>using</code> is currently just a placeholder name based on some collected prior art. It may not be descriptive enough to stand on its own inside a parsed microformat.}}
 
-== Brainstorming ==
+== Functionality ==
 
 I would imagine the property to take several different values:
 
@@ -41,6 +41,14 @@ Which would translate to a parsed [[microformats]] property:
   }
 ]</pre>
 
+== Property Name ==
+
+* <code>using</code> seems like a good name based on the text-first designs we have seen. But when taken as a singular word on a parsed microformat it may lose a lot of meaning given by context. Is the [[h-entry]] using something?
+* <code>via</code>, as seen in [[#Sebastiaan_Andeweg|the text-first design]] by {{sebsel}}, is another one that does clearly illustrate the current h-entry was obtained through some path, but may be a hat-tip to a person rather than the technical path.
+* <code>authored-using</code> or <code>authored-with</code> would clearly identify the relation between the contents of the property and the h-entry. But could one say that the h-entry was “authored” by the [[author]] if it originated from a tool like [[OwnYourGram]]? Currently Micropub tools like that are often displayed on websites the same way as a more traditional [[editor]] like Quill.
+* <code>generator</code> is another option, taken from the often seen <code><meta name="generator"></code> element. Like the way that element expresses what tool was used to author the entire web page, a property sharing that name would express it for the h-entry. (Many pages [https://www.w3.org/html/wg/wiki/ChangeProposal/meta_name%3Dgenerator_does_not_make_missing_alt_conforming#current_usage_of_meta_name.3Dgenerator_.28New.29 on generator usages] are deceptively old. Deceptively because even modern CMS like [[Hugo]] [https://github.com/gohugoio/hugo/issues/2850 will add the element].)
+* <code>formatter</code>, this is apparently [https://www.metatags.org/meta_name_generator_or_name_formatter an alternative to <code>generator</code>].
+
 == Prior Art ==
 
 Currently several IndieWeb sites are showing what tool was used to create a post, but non of them are currently giving this any parsable markup.
@@ -64,6 +72,25 @@ On {{eddiehinkle.com}}’s posts’ permalink pages the header is expanded (comp
 <blockquote>[https://eddiehinkle.com/2018/02/24/4/note/ Feb 24, 2018 8:45 AM] 47.03℉ 🌫 [https://eddiehinkle.com/tag/homestead homestead] posted using [https://indigenous.abode.pub/ indigenous.abode.pub]</blockquote>
 
 [https://eddiehinkle.com/2018/02/24/4/note/ Source]
+
+=== Sebastiaan Andeweg ===
+
+{{sebsel}} includes where a post originated from but only in the HTML, it is currently hidden through CSS. Unlike other examples his text design uses the word “via” rather than “using”:
+
+<pre><footer class="post-meta cf">
+  <a href="https://seblog.nl/2018/02/14/3/ik-dacht-dat-ik-na-de" class="u-url">
+    <time datetime="2018-02-14T21:10:02+0000" class="dt-published">wo 14 februari 2018 om 22:10 CET</time>
+  </a>
+  <time datetime="2018-02-14T21:10:02+0000" class="dt-updated"></time>
+  <a href="https://twitter.com/Sebsel/status/963883093915504640" rel="syndication" class="syndication u-syndication"><img src="https://seblog.nl/assets/images/twitter.com.svg" alt="twitter.com" class="icon"></a>
+  <a href="https://5eb.nl/4sw3" rel="shortlink" style="color:transparent" title="2018/045/3">&bull;</a>
+  <a href="https://seblog.nl/2018/045/3" rel="canonical" class="u-uid"></a>
+  <div style="float:right">
+    <span class="hidden">via workflow.is</span>
+  </div>
+</footer></pre>
+
+[https://seblog.nl/2018/02/14/3/ik-dacht-dat-ik-na-de Source]
 
 === Tantek Çelik ===
 
