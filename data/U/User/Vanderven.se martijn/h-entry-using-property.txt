@@ -1,0 +1,70 @@
+https://indieweb.org/User%3AVanderven.se_martijn/h-entry-using-property
+
+<span class="p-summary">'''<dfn>[[h-entry]] <code>using</code> property</dfn>''' is a way to show what software was used to [[create]] a [[post]].</span> This could be anything from the name of your [[CMS]], to a [[Micropub]] [[Micropub/Clients|client]] or word processor.
+
+The word “using” is often seen in the surrounding text, and upgrading it from just text to a property would be a great example of [[text-first design]].
+
+{{alert|The name <code>using</code> is currently just a placeholder name based on some collected prior art. It may not be descriptive enough to stand on its own inside a parsed microformat.}}
+
+== Brainstorming ==
+
+I would imagine the property to take several different values:
+
+# The name of the software used, e.g. BBEdit.
+# The URL of the software used, e.g. <nowiki>https://quill.p3k.io/</nowiki>.
+# The [[h-app]] object giving information about the software used, e.g. both its name and URL.
+
+As all microformat properties take a list of values, it is also possible to show multiple pieces of a publishing flow. Maybe you used [https://ia.net/writer/ iA Writer] to draft it and then [[Quill]] to submit it to your website. This could be added to a post’s HTML as:
+
+<pre>Posted using
+<a class="u-using h-app" href="https://ia.net/writer/">iA Writer</a> and
+<a class="u-using h-app" href="https://quill.p3k.io/">Quill</a></pre>
+
+Which would translate to a parsed [[microformats]] property:
+
+<pre>"using": [
+  {
+    "value": "https://ia.net/writer/",
+    "type": [ "h-app" ],
+    "properties": {
+      "name": [ "iA Writer" ],
+      "url": [ "https://ia.net/writer/" ]
+    }
+  },
+  {
+    "value": "https://quill.p3k.io/",
+    "type": [ "h-app" ],
+    "properties": {
+      "name": [ "Quill" ],
+      "url": [ "https://quill.p3k.io/" ]
+    }
+  }
+]</pre>
+
+== Prior Art ==
+
+Currently several IndieWeb sites are showing what tool was used to create a post, but non of them are currently giving this any parsable markup.
+
+=== Aaron Parecki ===
+
+On {{aaronpk}}’s posts’ [[permalink]] pages there is an additional info box that shows to what internal [[feed]] it was published and by what tool. The tool here is a link:
+
+<blockquote>Posted in [https://aaronparecki.com/notes /notes] using [https://quill.p3k.io/ quill.p3k.io]</blockquote>
+
+=== Eddie Hinkle ===
+
+On {{eddiehinkle.com}}’s posts’ permalink pages the header is expanded (compared to the hme feed) with extra information such as [[weather]], [[u-syndication|syndication]], and what tool was used to post:
+
+<blockquote>[https://eddiehinkle.com/2018/02/24/4/note/ Feb 24, 2018 8:45 AM] 47.03℉ 🌫 [https://eddiehinkle.com/tag/homestead homestead] posted using [https://indigenous.abode.pub/ indigenous.abode.pub]</blockquote>
+
+=== Tantek Çelik ===
+
+On {{tantek}}’s posts’ permalink pages the footer is expanded (compared to the home feed) from just the publishing date to also include the [[permashortlink]] and the software used to write the post:
+
+<blockquote>09:45 on 2018-02-21 (ttk.me t4t32) using BBEdit</blockquote>
+
+=== Sink ===
+
+On {{martijnvdven}}’s [[Sink]] the posts’ permalink pages display the [[IndieAuth]] Profile URL and the Micropub client associated with the post through its [[access token]]:
+
+<blockquote><nowiki>By https://vanderven.se/martijn/, using https://omnibear.com</nowiki></blockquote>
