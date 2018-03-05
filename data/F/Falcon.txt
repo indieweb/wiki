@@ -4,7 +4,7 @@ https://indieweb.org/Falcon
 
 <span class="p-summary">'''<dfn>[http://tantek.com/w/Falcon Falcon]</dfn>''' is a personal publishing (tweeting, blogging, realtime syndicating) web application. There is an instance of Falcon running at [http://tantek.com/ tantek.com] and serving/syndicating [[notes]], [[articles]], and occasionally other types of [[posts]].</span>
 
-Attendees that are using it on their own site:
+Users:
 * [[User:Tantek|Tantek Çelik]] ([http://tantek.com tantek.com], author (Falcon), actively developing and sharing portions as open source.
 
 Open source portions:
@@ -16,7 +16,9 @@ Open source portions:
 == Disclaimer ==
 Note: documentation purely for informational purposes. 
 
-Though many aspects of this design are suboptimal, perhaps some of it may help with designing your own indieweb implementation. 
+Though many aspects of this design are suboptimal, Falcon has been running continuously since 2010-01-01 (on tantek.com), in nearly daily use for publishing, iterated live, and thus perhaps some of it may help with designing or improving your own practical indieweb implementation.
+
+In addition, feel free to use and improve on the brainstorming of items I am [[#Working_On]] or [[#Itches]] to scratch.
 
 If something doesn't make sense, ask, e.g. in [[IRC]], as there's a good chance it's something that I should fix in the design. 
 
@@ -213,14 +215,127 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
-=== Fix Recent Articles Box ===
-When I started posting [[issue]]s on my own site and POSSEing to GitHub, something about that seemingly broke my Recent Articles Box on my home page (but ironically didn't break my articles-only Atom feed).
-* Fix recent articles to use common code with articles-only Atom feed
-And while in there, consider:
-* [[#mobile_recent_articles_box]]
-* "More articles..." link that goes to a separate only page of the most recent (perhaps 10?) articles
-** at what URL?
-** link rel alternate link that to articles-only Atom feed
+
+=== improve replies details ===
+* consider using [[XRay]] (X-Ray) at post publish time (falconpost UI) to 
+** synchronously get reply-context information statically 
+** display richer reply-context in falconpost UI
+** save that reply-context info inside post storage alongside links to POSSE copies (Twitter, etc.)
+* re-evaluate below in the context of what XRay is able to 
+
+==== show icon reply-context in-stream ====
+Prefix reply posts in a stream ([[homepage]] and [[archive]] lists) with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
+
+Why:
+* So [[reader]]s that consume only the [[h-feed]] of my homepage will be able to detect and optionally retrieve/show/disclose [[reply-context]]s for my [[reply]] posts.
+* Also a small visual cue to more clearly indicate replies (independent of starting with @-name), in a [[composite stream]], as distinct from [[note]]s and other types of [[posts]]
+** Current distinction is a bit subtle - and requires that I start replies with "@-name" references which is suboptimal - too Twitter-centric a design.
+
+Why not more reply-context?
+*Bigger / more extensive reply-contexts inline in a stream (especially composite stream) would add too much clutter/noise vs. value.
+
+Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
+* http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
+
+==== improve reply-context support ====
+(Reprioritize improve replies details section at this point)
+
+Improve reply-context support in reply posts (some of this is easier than the other improve replies features below)
+* ''Why?'' Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
+** Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
+* Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup). Necessary improvements:
+** Show @-username in reply contexts for replies to Tweets
+** Custom microcopy for GitHub repos/issues/comments per [[reply-context#Minimal_text_reply_contexts|Brainstorming: minimal text reply contexts]]
+** Show [[reply-context#icon|icon in reply contexts]] for replies to tweets and indieweb posts
+*** Show icons for replies to indieweb posts using a [[nicknames-cache]] and their Twitter icon
+**** distinguish presentation of a [[multi-reply]] to the same post+POSSE copy, vs multi-reply to different people/posts.
+** vvv Rest of this his harder than other improve replies features, and doing reposts, so reprioritize the remaining "improve replies details" task when I get to this point. vvv
+** Store and show [[reply-context#published|dt-published]] of original post
+** Store and show [[reply-context#author_name|full name of author]] of original post
+*** Start with a [[nicknames-cache]] implementation
+*** Improve with implementing [[authorship]] algorithm
+** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
+
+==== post reply to any URL and auto POSSE ====
+Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to support [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to Twitter]]
+* Per:
+** [[u-syndication#POSSE_threading|use-case description]]
+** [[u-syndication#Discovery|discovery algorithm]]
+* Using:
+** [[php-mf2]] statically with
+*** <code>[https://github.com/indieweb/php-mf2#parsing-rel-and-relalternate-values ->parseRelsAndAlternates()]</code>
+* So I can:
+** enter just the URL of an original indieweb post I'm replying to into my posting storage (or UI),
+** have Falcon's posting UI automatically discover the link to the tweet copy of the post 
+** add an in-reply-to link from my post to the tweet I'm replying to
+** have my reply POSSE copy thread with the POSSE tweet of the original.
+* ''Why?''
+** automatically thread the POSSE copy of my reply with the POSSE copy of the original indieweb post that I was replying to.
+** remove step of me having to look for the "also on twitter" link on an indieweb post and explicitly copy/paste it into my storage/UI.
+** Provide better user experience for those reading my posts on Twitter by providing them the threaded context right there in their reading experience.
+
+==== post reply to any tweet and auto indie-post reply ====
+Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http://waterpigs.co.uk/services/original-post original post endpoint] from server)
+* So I can:
+** enter just the URL of a tweet I'm replying to into my posting storage (or UI),
+** have Falcon's posting UI automatically discover the link to the original post (that the tweet is a copy of)
+** add an in-reply-to link from my post to the original post I'm replying to, before the in-reply-to of the tweet
+** while still having my reply POSSE copy thread with the POSSE tweet of the original.
+* ''Why?'' 
+** automatically link from my posts to more indieweb posts instead of their Tweet POSSE copies - prefer linking to indieweb original content and URLs
+** remove stress of having to check a tweet manually to see if it has an indieweb original version - less thinking about having to find an original permalink myself manually.
+
+==== show webmention results ====
+* <span id="show-webmentions">'''show webmention results'''</span> - Perhaps show a list of outbound links with send result for each (no webmention/pingback endpoint found, or green checkmark webmention/pingback sent, or red webmention/pingback rejected, distinguish webmention/pingback for each)
+** ''Why?''
+*** UIs that provide feedback on actions instill more confidence that the actions took place (similar to providing the tweet permalink of a successful POSSE to Twitter).
+*** Debug/diagnose possible problems with other indieweb sites (may expand later into part of the whitelist, webmention+howyouknowme protocol/UI)
+*** Convenient UI to specifically check (click-on) links with successful webmentions to see if they parsed my reply into their comments section correctly or did something else with it.
+*** Might help discover sites with newly added webmention/pingback receiving support.
+*** Could help demonstrate/explain how webmentions work
+
+=== RSVP reply-context ===
+Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
+
+==== MV in-stream RSVP reply-context ====
+Figure out a minimum viable RSVP reply-context to display on RSVPs in-stream.
+* analyze below display options for RSVP permalinks
+* choose minimum (check/research existing in-stream RSVP reply-contexts)
+* design and implement incrementally
+** e.g. minimum, "↪ 📅 (event URL)"
+** pick next most important piece of information to display and implement it. repeat.
+
+==== improve rsvp reply notes ====
+Improve [[rsvp]] reply notes:
+* use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
+
+Goals (in order of design need / ease of implementation)
+# display a nice mini-event reply-context (needs design)
+# use whatever information can be inferred from the prose of the RSVP post
+# parse event permalink for event information as [[h-event]] etc.
+
+Goals, show one or more of these, 
+* '''name''' of the event (perhaps inferred from (smart)quoted or titlecapped text following RSVP recognition prose (e.g. "going to ...")
+* '''date(s)''' of the event
+** default single day (not multiple)
+** default same day as RSVP post
+*** exception: "went to" assume day before RSVP post
+*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVPs)
+* '''start time''' and '''end time'''
+** default no specific time(s)
+** first n:nn or nn:nn text indicates start time
+** second n:nn or nn:nn text indicates start end time 
+* '''location'''
+** default no specific location
+** first @-reference possibly? indicates Twitter account of venue
+*** look it up in [[nicknames-cache]]?
+*** or just hardcode an array of common @-venues for now
+** if " at " in text, then use subsequent titlecapped text as location string
+** '''city'''
+*** imply from @-venue
+*** if titlecapped text, split on commas, work backwards from end
+**** note&drop country if any, note&drop state name/abbr if any, next chunk is city name
+**** use abbr title="city, state, country (if any)" and city
 
 === Own my public list emails and replies ===
 Goal: by end of 2018, start posting emails and replies to public lists on my own site first, and POSSEing them to their public email list destination(s).
@@ -249,6 +364,8 @@ Implement basic [[on this day]] functionality:
 * also include posts *about* a day, e.g. with #2018_048 style hashtags
 
 === Display RSVPs summary ===
+(need to re-evaluate this as compared to whether I'll keep using FB for POSSE events or find another silo or aggregator to POSSE events to)
+
 Display summary of number of people going and interested like:
 * "3 Going · 3 Interested"
 just above the facepile of RSVPs
@@ -342,6 +459,15 @@ Showing [[homepage]] mentions is an entirely different scale of design problem:
   }
 }
 </pre>
+
+=== Recent Articles improvements ===
+The Recent Articles box on my home page can be improved a number of ways.
+* Re-use common code between Recent Articles box and articles-only Atom feed
+And while in there, consider:
+* [[#mobile_recent_articles_box]]
+* "More articles..." link that goes to a separate articles-only page of the most recent (perhaps 10?) articles
+** at what URL?
+** link rel alternate link from that articles-only page to articles-only Atom feed
 
 === Display Received Webmentions ===
 Process my queue of [[webmentions]] at webmention.io and implement some sort of [[comments-presentation]] to show them on my posts.
@@ -490,119 +616,6 @@ Specific use-cases:
 ** POSSE to [[Lanyrd]] (if event doesn't already have a page)
 ** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
 
-=== improve rsvp reply notes ===
-Improve [[rsvp]] reply notes:
-* implement p-rsvp options of "no", "maybe", and "tracking" (or "interested")
-* use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
-
-=== improve replies details ===
-* consider using [[XRay]] (X-Ray) at post publish time (falconpost UI) to 
-** synchronously get reply-context information statically 
-** display richer reply-context in falconpost UI
-** save that reply-context info inside post storage alongside links to POSSE copies (Twitter, etc.)
-* re-evaluate below in the context of what XRay is able to 
-
-==== show icon reply-context in-stream ====
-Prefix reply posts in a stream ([[homepage]] and [[archive]] lists) with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
-
-Why:
-* So [[reader]]s that consume only the [[h-feed]] of my homepage will be able to detect and optionally retrieve/show/disclose [[reply-context]]s for my [[reply]] posts.
-* Also a small visual cue to more clearly indicate replies (independent of starting with @-name), in a [[composite stream]], as distinct from [[note]]s and other types of [[posts]]
-** Current distinction is a bit subtle - and requires that I start replies with "@-name" references which is suboptimal - too Twitter-centric a design.
-
-Why not more reply-context?
-*Bigger / more extensive reply-contexts inline in a stream (especially composite stream) would add too much clutter/noise vs. value.
-
-Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
-* http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
-
-==== improve reply-context support ====
-(Reprioritize improve replies details section at this point)
-
-Improve reply-context support in reply posts (some of this is easier than the other improve replies features below)
-* ''Why?'' Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
-** Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
-* Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup). Necessary improvements:
-** Show @-username in reply contexts for replies to Tweets
-** Show [[reply-context#icon|icon in reply contexts]] for replies to tweets and indieweb posts
-*** Show icons for replies to indieweb posts using a [[nicknames-cache]] and their Twitter icon
-**** distinguish presentation of a [[multi-reply]] to the same post+POSSE copy, vs multi-reply to different people/posts.
-** vvv Rest of this his harder than other improve replies features, and doing reposts, so reprioritize the remaining "improve replies details" task when I get to this point. vvv
-** Store and show [[reply-context#published|dt-published]] of original post
-** Store and show [[reply-context#author_name|full name of author]] of original post
-*** Start with a [[nicknames-cache]] implementation
-*** Improve with implementing [[authorship]] algorithm
-** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
-
-==== post reply to any URL and auto POSSE ====
-Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to support [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to Twitter]]
-* Per:
-** [[u-syndication#POSSE_threading|use-case description]]
-** [[u-syndication#Discovery|discovery algorithm]]
-* Using:
-** [[php-mf2]] statically with
-*** <code>[https://github.com/indieweb/php-mf2#parsing-rel-and-relalternate-values ->parseRelsAndAlternates()]</code>
-* So I can:
-** enter just the URL of an original indieweb post I'm replying to into my posting storage (or UI),
-** have Falcon's posting UI automatically discover the link to the tweet copy of the post 
-** add an in-reply-to link from my post to the tweet I'm replying to
-** have my reply POSSE copy thread with the POSSE tweet of the original.
-* ''Why?''
-** automatically thread the POSSE copy of my reply with the POSSE copy of the original indieweb post that I was replying to.
-** remove step of me having to look for the "also on twitter" link on an indieweb post and explicitly copy/paste it into my storage/UI.
-** Provide better user experience for those reading my posts on Twitter by providing them the threaded context right there in their reading experience.
-
-==== post reply to any tweet and auto indie-post reply ====
-Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http://waterpigs.co.uk/services/original-post original post endpoint] from server)
-* So I can:
-** enter just the URL of a tweet I'm replying to into my posting storage (or UI),
-** have Falcon's posting UI automatically discover the link to the original post (that the tweet is a copy of)
-** add an in-reply-to link from my post to the original post I'm replying to, before the in-reply-to of the tweet
-** while still having my reply POSSE copy thread with the POSSE tweet of the original.
-* ''Why?'' 
-** automatically link from my posts to more indieweb posts instead of their Tweet POSSE copies - prefer linking to indieweb original content and URLs
-** remove stress of having to check a tweet manually to see if it has an indieweb original version - less thinking about having to find an original permalink myself manually.
-
-==== show webmention results ====
-* <span id="show-webmentions">'''show webmention results'''</span> - Perhaps show a list of outbound links with send result for each (no webmention/pingback endpoint found, or green checkmark webmention/pingback sent, or red webmention/pingback rejected, distinguish webmention/pingback for each)
-** ''Why?''
-*** UIs that provide feedback on actions instill more confidence that the actions took place (similar to providing the tweet permalink of a successful POSSE to Twitter).
-*** Debug/diagnose possible problems with other indieweb sites (may expand later into part of the whitelist, webmention+howyouknowme protocol/UI)
-*** Convenient UI to specifically check (click-on) links with successful webmentions to see if they parsed my reply into their comments section correctly or did something else with it.
-*** Might help discover sites with newly added webmention/pingback receiving support.
-*** Could help demonstrate/explain how webmentions work
-
-=== RSVP reply-context ===
-Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
-
-Goals (in order of design need / ease of implementation)
-# display a nice mini-event reply-context (needs design)
-# use whatever information can be inferred from the prose of the RSVP post
-# parse event permalink for event information as [[h-event]] etc.
-
-Goals, show one or more of these, 
-* '''name''' of the event (perhaps inferred from (smart)quoted or titlecapped text following RSVP recognition prose (e.g. "going to ...")
-* '''date(s)''' of the event
-** default single day (not multiple)
-** default same day as RSVP post
-*** exception: "went to" assume day before RSVP post
-*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVPs)
-* '''start time''' and '''end time'''
-** default no specific time(s)
-** first n:nn or nn:nn text indicates start time
-** second n:nn or nn:nn text indicates start end time 
-* '''location'''
-** default no specific location
-** first @-reference possibly? indicates Twitter account of venue
-*** look it up in [[nicknames-cache]]?
-*** or just hardcode an array of common @-venues for now
-** if " at " in text, then use subsequent titlecapped text as location string
-** '''city'''
-*** imply from @-venue
-*** if titlecapped text, split on commas, work backwards from end
-**** note&drop country if any, note&drop state name/abbr if any, next chunk is city name
-**** use abbr title="city, state, country (if any)" and city
-
 === Upcoming Events Based on RSVPs ===
 Find next three current/upcoming events by looking backwards through storage for RSVPs (max 3 bims? no RSVPs more than 6 months in advance AFAIK).
 * like most recent three articles box, except need to check RSVP for end-date if there is one, or if not then start-date, is today or later
@@ -743,7 +756,7 @@ Implement [[summary#More_text_UI]] to:
 Thoughts:
 * support "More..." text in its own paragraph in the content as the "UI" to designate a summary boundary
 * add a new [[CASSIS]] function or option to existing auto_link function to auto_summary based on that "UI"
-* update calls to auto_link in Falcon to use that new function/option to provide p-summary markup in permailnks (e.g. so Bridgy Publish can see them), and maybe on home page so [[reader]]s can see them.
+* update calls to auto_link in Falcon to use that new function/option to provide p-summary markup in permalinks (e.g. so Bridgy Publish can see them), and maybe on home page so [[reader]]s can see them.
 
 === repost support ===
 ==== reposts of Instagram posts ====
@@ -865,17 +878,17 @@ I believe I can do this by following the how to as documented in:
 
 And then should be able to test it with {{aaronpk}} or {{kylewm}}'s implementation of web+action: URL handling, or rather, have them test it by going to one of my posts and clicking "Reply" which should activate their own Reply UI.
 
-=== webaction buttons in streams ===
+=== webaction buttons in-stream ===
 In short two things:
 # update look of [[web action]] buttons to be more [[Instagram]]-like
-# web action buttons on notes/articles in stream (home page) / collection (day and new month archives)
+# web action buttons on notes/articles in-stream (home page) / collection (day and new month archives)
 ## screenshot existing stream presentation (desktop, mobile) and post as example on [[composite_stream#IndieWeb_Examples]]
-## implement web action buttons on notes/articles in stream
+## implement web action buttons on notes/articles in-stream
 ## screenshot new stream presentation (desktop, mobile) and post as example on [[composite_stream#IndieWeb_Examples]]
 
 Update look:
 
-I want to add web action buttons like [[Instagram]] has - I really like their grey boxy buttons with both icon and text, so something similar, e.g. in stream text mockup:
+I want to add web action buttons like [[Instagram]] has - I really like their grey boxy buttons with both icon and text, so something similar, e.g. in-stream text mockup:
 
 <code style="display:block;white-space:pre-wrap;font-size:1.5em;line-height:1em; padding:1em"><nowiki>...
 11:40 on 2014-06-29 (ttk.me t4Wq1) using BBEdit 
