@@ -1,0 +1,35 @@
+https://indieweb.org/User%3AMylesb.ca/Amalfi
+
+'''Amalfi''' is an IndieWeb application built using [[Python]] and [[Flask]] that is currently in development by {{Myles}}.
+
+People using it on their own site:
+
+* {{Myles}} | https://mylesbraithwaite.com/ | https://braithwaite.io/
+* ...
+
+== Features ==
+
+== Implementation Design ==
+
+=== Storage Format ===
+
+I took a lot of inspiration from {{aaronpk}}'s [[p3k#Storage|p3k]] folder and file structure.
+
+All the content for the website is stored in a Git repository and mirrored to an [[Amazon_S3|S3]] bucket.
+
+There is a main folder ''posts'' which contain the individual post files. Post are stored in a structure of <code>posts/%Y/%m/%j/index</code> (example the third post on 13 March 2018 would be <code>posts/2018/03/072/03</code>).
+
+In a individual post directory there is always a <code>_meta.toml</code> for storing information about the post, all h-entry variables are supported. In the directory there is also h-entry variables as text files (ex summary.txt, content.md, etc).
+
+A posts folder structure looks like:
+
+ .
+ └── posts
+     └── 2018
+         └── 072
+             └── 01
+                 ├── _meta.toml
+                 ├── summary.txt
+                 ├── content.md
+                 └── media
+                     └── photo.jpg
