@@ -670,6 +670,45 @@ An example of a simple jf2 post is below.
     }
 }</pre>
 
+Neither the Microsub spec nor jf2 defines the vocabularies used in posts. The vocabularies are defined by [[Microformats]], and represented as [[jf2]] posts. Clients may also find the [https://www.w3.org/TR/post-type-discovery/ Post Type Discovery] spec useful when consuming posts. A non-comprehensive list of properties and their expected values is below, based on the most common kinds of posts encountered.
+
+==== entry ====
+Entries are the base post type for most kinds of posts including [[articles]], [[notes]], [[photos]], [[checkins]], and more.
+
+Properties:
+* <code>type=entry</code>
+* <code>published</code> (string) - ISO8601 timestamp
+* <code>url</code> (string) - the permalink of the post
+* <code>uid</code> (string) - a unique ID for the post, often the same as the url
+* <code>name</code> (string) - the name of the post, such as if the post is an [[article]]
+* <code>content</code> (object)
+** <code>text</code> (string) - a plaintext representation of the post content. If a client displays this text in a browser, it is expected to escape any HTML entities itself.
+** <code>html</code> (string) - an HTML representation of the post content. The Microsub server should do its own HTML sanitization, but clients may also wish to sanitize the HTML themselves according to their own security requirements before displaying the HTML.
+* <code>author</code> (card object) - a card representing the author of the post
+* <code>category</code> (array of strings) - a list of categories (tags) of the post
+* <code>photo</code> (array of strings) - one or more URLs to images associated with the post
+* <code>video</code> (array of strings) - one or more URLs to video files associated with the post
+* <code>audio</code> (array of strings) - one or more URLs to audio files associated with the post, e.g. podcasts
+* <code>like-of</code>, <code>repost-of</code>, <code>bookmark-of</code>, <code>in-reply-to</code> (array of strings) - each of these properties indicates a separate post that this post is in response to. See [[like]], [[repost]], [[bookmark]], and [[reply]] for more information.
+* <code>syndication</code> (array of strings) - one or more URLs where this post has been syndicated to
+* <code>checkin</code> (card object) - indicates this post is a checkin, and the value is a card representing the location of the checkin
+
+==== card ====
+Cards represent people or places and are used as the values of certain properties of entries.
+
+People:
+* <code>type=card</code>
+* <code>name</code> (string) - the full name of this person
+* <code>url</code> (string) - the profile URL of this person, used as the identifier for this profile
+* <code>photo</code> (string) - the profile photo of this person
+
+Places:
+* <code>type=card</code>
+* <code>name</code> (string) - the full name of the place
+* <code>url</code> (string) - the URL of the place, used as the identifier for this profile
+* <code>latitude</code> and <code>longitude</code> (string) - the GPS coordinates of this location
+* <code>street-address</code>, <code>locality</code>, <code>region</code>, <code>country</code> (string) - the location of this place
+
 === Channels ===
 
 
