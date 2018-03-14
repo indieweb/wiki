@@ -448,12 +448,14 @@ Content-type: application/json
     {
       "uid": "1870e67e924856dc7e4c37732b303b45",
       "name": "W3C",
-      "unread": 1
+      "unread": true
     }
   ]
 }</pre>
 
-Servers ''should'' support tracking the read state of items in channels, and return the number of unread items when the channel list is queried. If the server does not support read state tracking, then the server ''must not'' return the <code>unread</code> property in the response.
+Servers ''should'' support tracking the read state of items in channels, and return the number of unread items, or a boolean, when the channel list is queried. If the server does not support read state tracking, then the server ''must not'' return the <code>unread</code> property in the response.
+
+For channels that support full unread count tracking, the value of the <code>unread</code> property will be an integer. For channels that support only boolean unread tracking (whether there are new entries or not), the value will be <code>true</code> or <code>false</code>.
 
 '''POST'''
 
