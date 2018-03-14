@@ -642,7 +642,7 @@ The specific types and formats of feeds that can be followed is out of scope of 
 
 Posts are the basic object used in the API. Posts can be short status updates, photos, videos, podcast episodes, checkins, and many other content types. Post objects returned in the "items" array MUST be valid [[jf2]] post objects.
 
-An example of a simple jf2 post is below.
+An example of a simple jf2 post in the context of a channel timeline is below.
 
 <pre>{
     "type": "entry",
@@ -667,8 +667,15 @@ An example of a simple jf2 post is below.
     "content": {
         "text": "Finally packaged up my HTTP functions into a library! https://github.com/aaronpk/p3k-http Previously I had been copy+pasting these around to quite a few projects. Happy to have consolidated these finally!",
         "html": "Finally packaged up my HTTP functions into a library! <a href=\"https://github.com/aaronpk/p3k-http\">https://github.com/aaronpk/p3k-http</a> Previously I had been copy+pasting these around to quite a few projects. Happy to have consolidated these finally!"
-    }
+    },
+    "_id": "abc987",
+    "_is_read": true
 }</pre>
+
+All properties beginning with an underscore <code>_</code> are set by the Microsub server and are not part of the post's contents. 
+
+* <code>_id</code> (string) - a unique internal ID for this entry in the given channel, used to mark an entry as read or remove it from a channel
+* <code>_is_read</code> (boolean) - indicates whether this entry is read or unread so that clients can visually indicate the state to the user
 
 Neither the Microsub spec nor jf2 defines the vocabularies used in posts. The vocabularies are defined by [[Microformats]], and represented as [[jf2]] posts. Clients may also find the [https://www.w3.org/TR/post-type-discovery/ Post Type Discovery] spec useful when consuming posts. A non-comprehensive list of properties and their expected values is below, based on the most common kinds of posts encountered.
 
