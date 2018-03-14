@@ -95,6 +95,7 @@ Actions that operate within the context of a channel can accept a query string o
 
 <code>action=timeline</code>
 
+==== Retrieve Entries in a Channel ====
 '''GET'''
 
 Retrieve the entries in a given channel.
@@ -105,7 +106,7 @@ Parameters:
 * after={cursor}
 * before={cursor}
 
-The response will include a property <code>items</code> with an array of post objects. See below for documentation on the format of items.
+The response will include a property <code>items</code> with an array of post objects. See [[#Posts]] for documentation on the format of items.
 
 <pre>
 {
@@ -121,6 +122,40 @@ The response will include a property <code>items</code> with an array of post ob
 </pre>
 
 See [[#Paging]] for more details on the paging mechanism.
+
+==== Mark Entries Read ====
+'''POST'''
+
+To mark one or more individual entries as read: 
+
+Parameters:
+* action=timeline
+* method=mark_read
+* channel={uid}
+* entry={entry-id} or entry[]={entry-id}
+
+To mark an entry read as well as everything before it in the timeline:
+
+* action=timeline
+* method=mark_read
+* channel={uid}
+* last_read_entry={entry-id}
+
+These commands only affect the entry within the context of the given channel's timeline, and do not affect other timelines.
+
+
+==== Remove Entry from a Channel ====
+'''POST'''
+
+Parameters:
+* action=timeline
+* method=remove
+* channel={uid}
+* entry={entry-id} or entry[]={entry-id}
+
+The client can pass one or more entry IDs (found via the <code>_id</code> property on an entry) to remove it from the channel. The server may decide whether to actually delete the entry or just hide it from view. The entry will no longer show up in the given channel's timeline, and this command will not affect the given entry in other channels.
+
+Servers will likely use their own generated IDs for the entry ID, so clients must not make assumptions about the uniqueness of these values.
 
 === Search ===
 
