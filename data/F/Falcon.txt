@@ -5,7 +5,7 @@ https://indieweb.org/Falcon
 <span class="p-summary">'''<dfn>[http://tantek.com/w/Falcon Falcon]</dfn>''' is a personal publishing (tweeting, blogging, realtime syndicating) web application. There is an instance of Falcon running at [http://tantek.com/ tantek.com] and serving/syndicating [[notes]], [[articles]], and occasionally other types of [[posts]].</span>
 
 Users:
-* [[User:Tantek|Tantek Çelik]] ([http://tantek.com tantek.com], author (Falcon), actively developing and sharing portions as open source.
+* [[User:Tantek|Tantek Çelik]] at [http://tantek.com tantek.com], author (Falcon), actively developing and sharing portions as open source.
 
 Open source portions:
 * http://cassisproject.com/ - general string and datetime processing
@@ -71,16 +71,16 @@ Falcon supports the following specific kinds of [[posts]].
 * automatic [[POSSE]] to [[Twitter]] of likes of tweets, using [[Bridgy]] Publish
 
 === RSVP ===
-'''[[rsvp]]''' notes are supported. RSVPs are similar to reply notes, but for RSVPing to indieweb [[event]] posts. (since 2013-264, full RSVP values support since 2017-016!)
+'''[[rsvp]]''' notes are supported. RSVP posts are similar to reply notes, but for RSVPing to indieweb [[event]] posts. (since 2013-264, full RSVP values support since 2017-016!)
 * <code>p-rsvp</code> marked up with a <code>&lt;data&gt;</code> element in its [[reply-context]] where it says e.g. "RSVP something to", where something is yes, no, maybe, or interested. E.g. [http://tantek.com/2013/264/t1/indiewebcamp-breakfast-rsvp 2013-264 RSVP].
-* only works for indieweb [[event]] posts. no explicit POSSE reply threading support, though [[multireply]] RSVPs are supported for combined RSVPs to an indie event and silo POSSE copy.
+* only works for indieweb [[event]] posts. no explicit POSSE reply threading support, though [[multireply]] RSVP posts are supported for combined RSVPing to an indie event and silo POSSE copy.
 * Supports all RSVP values! yes, maybe, no, interested
 ** "yes" via text starting with: "going to " (since first implementation) or "[[went]] to " ([http://tantek.com/2016/336/t3/went-trails-motion-film-festival since 2016-336])
 ** "maybe" via text starting with: "might go to " (since 2017-016) or "might remotely attend " ([http://tantek.com/2015/042/t1/homebrew-website-club since 2015-042])
 ** "no" via text starting with: "not going to " ([http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people since 2015-043]) or "missing "
 ** "interested" via text starting with: "considering today", "considering tonight", "considering going to "
 * [[webmention]](s) sent automatically (or pingbacks if no webmention endpoint) to the indie events being responded to (multi-rsvp supported). ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
-* automatic [[POSSE]] to [[Facebook]] of RSVPs to FB events, using [[Bridgy]] Publish
+* automatic [[POSSE]] to [[Facebook]] to RSVP to FB events, using [[Bridgy]] Publish
 
 === Comics ===
 '''[[comics]]''' - similar to articles, except the post name is incorporated into the image and not displayed separately. The image is served wider than images in articles, and is marked up with: <blockquote><nowiki><div class="comic"><object type="image/jpeg" ...> fallback markup </object></div></nowiki></blockquote> In addition to the image, there's a further visible description, hyperlinked, semi-structured.
@@ -104,7 +104,7 @@ Falcon supports the following specific kinds of [[posts]].
 * Automatic POSSE to [[Twitter]] (from there indirectly to [[Facebook]])
 ** with automatic mapping of known venue URLs to their equivalent Twitter @-name
 * Optional manual POSSE to a Facebook event
-* Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06], including [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.dev/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])
+* Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06], including [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.com/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])
 
 === Issue ===
 '''[[issue]]''' posts are also similar to article posts, but with explicit reply to the source code repo or its issues page, e.g. on GitHub. Supported [http://tantek.com/2018/052/b1/bridgy-github-support-images-hyperlinks since 2018-052] with POSSE to GitHub.
@@ -136,13 +136,13 @@ Falcon automatically pings the [[Internet Archive]] to save a copy of any links 
 
 === POSSE ===
 Falcon currently supports automatically [[POSSE]]ing to:
-* '''[[Twitter]]: [[notes]], [[replies]], [[RSVPs]], [[like]]s*, [[photo]]s''' - first 112-120 characters (if applicable, depending on content), white-space preserved. *likes of tweets and posts with POSSE tweet copies are POSSEd as Twitter favorites.
+* '''[[Twitter]]: [[note]], [[reply]], [[RSVP]], [[like]], [[photo]] posts''' - first 256 characters (if applicable, depending on content), white-space preserved. *likes of tweets and posts with POSSE tweet copies are POSSEd as Twitter favorites.
 ** '''[[Twitter#POSSE_Notes_to_Twitter|POSSE Notes to Twitter]]''' - complete direct implementation ([https://twitter.com/t/status/8228455558 since 2010-026]) except "note with photos".
 ** '''[[Twitter#original_has_POSSE_tweet|reply threading on Twitter]]''' - reply notes are [[Twitter#POSSE_Replies_to_Tweets|POSSE'd as @-replies]] with proper threading (currently requires user input of original tweet permalink URL that is being replied to) - complete direct implementation.
 ** '''[[Twitter#POSSE_Favorites_of_Tweets|POSSE Favorites of Tweets]]''' via [[Bridgy]] Publish (since 2015-092)
 ** '''[[Twitter#POSSE_Favorites_to_Twitter|POSSE Favorites of indie posts]]''' by favoriting their POSSE tweet copies (if any), again via [[Bridgy]] Publish (since 2015-092)
 * '''[[Facebook]]: [[RSVP]] to [[Facebook]] events, photos, and notes*'''
-** [[RSVP]]s are automatically POSSEd to the FB event using [[Bridgy]] Publish (since 2015-145)
+** [[RSVP]] posts are automatically POSSEd to the FB event using [[Bridgy]] Publish (since 2015-145)
 ** [[photo]]s are automatically POSSEd to Facebook using [[Bridgy]] Publish (since 2015-312)
 ** *[[notes]] are POSSEd to [[Facebook]] indirectly via Twitter to Facebook bridge, per same limitations as POSSEing notes to Twitter.
 ** Occasionally longer notes are manually POSSEd directly in their entirety from tantek.com to Facebook using Bridgy Publish, and then the Falcon original is manually edited to link to the Facebook POSSE copy. Falcon then automatically displays the syndication link to the Facebook POSSE copy on the Falcon post permalink.
@@ -298,7 +298,7 @@ Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http:/
 Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
 
 ==== MV in-stream RSVP reply-context ====
-Figure out a minimum viable RSVP reply-context to display on RSVPs in-stream.
+Figure out a minimum viable RSVP reply-context to display on RSVP posts in-stream.
 * analyze below display options for RSVP permalinks
 * choose minimum (check/research existing in-stream RSVP reply-contexts)
 * design and implement incrementally
@@ -320,7 +320,7 @@ Goals, show one or more of these,
 ** default single day (not multiple)
 ** default same day as RSVP post
 *** exception: "went to" assume day before RSVP post
-*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVPs)
+*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVP posts)
 * '''start time''' and '''end time'''
 ** default no specific time(s)
 ** first n:nn or nn:nn text indicates start time
@@ -388,6 +388,7 @@ JSON API example:
   }
 }
 </pre>
+(summary totals from e.g. https://webmention.io/api/mentions.jf2?perPage=1000&target=http://tantek.com/2017/183/e1/sunday-yoga-presidio which shows all responses)
 
 * Need PHP/CASSIS to parse out the rsvp-maybe and rsvp-yes fields from that JSON into $rsvp_yes and $rsvp_maybe.
 * CASSIS to generate summary something like
@@ -585,6 +586,8 @@ Remaining:
 
 ==== process and show webmentions ====
 As part of implementing "event activity (event creation, comments, RSVPs)", Falcon will have to process all webmentions received, parse/store them (with appropriate caching), and make them available for posts to display (as [[likes]], [[reposts]], [[comments]], and [[RSVPs]]).
+
+E.g. https://webmention.io/api/links.jf2?perPage=1000&target=http://tantek.com/2017/183/e1/sunday-yoga-presidio (apparently same as mentions.jf2)
 
 Consider also:
 * '''[https://gist.github.com/otherjoel/9301d985622f0d3d1a09 webmention to email]'''[ (both as notification system, though XMPP would be preferred, and as a backup for webmentions - could format the emails similar to how [[Facebook]] formats its notification emails)
