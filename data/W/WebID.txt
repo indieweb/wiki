@@ -7,6 +7,42 @@ https://indieweb.org/WebID
 == IndieWeb Examples ==
 * none currently
 
+== WebID/Indieauth integration possibility? ==
+
+'''{{danq}}''': Aren't WebID cards attempting to achieve a similar thing as "profile" URLs containing rel="me" links - that is, provide a trusted, controlled representation of a person at a URL and, through that, indicate secondary profile links for them (that could be trusted-parties for authentication).
+
+Could/should IndieAuth be expanded to support WebID URLs as inputs? This could instantly expand its usage potential and applicability and mean that authors using only one of the two standards could use IndieAuth with no further work on their part. Because IndieAuth is based on domain names rather than URLs, it'd presumably only be valid where a WebID was based at (or redirected-to from) the root of a domain, but doubtless ''some'' are (or would).
+
+Example workflow:
+
+# Tim wants to log in and provides his personal URL, https://www.w3.org/People/Berners-Lee/ (note that for IndieAuth compatibility, he'd need a domain name of his own as described above)
+# The parser reads the page as usual; it doesn't find any usable rel="me" links but it does find the link to his WebID, identified by the #i suffix to the URL: <code><a title="Data about me" href="card#i"></code>
+# It requests his WebID via https://www.w3.org/People/Berners-Lee/card#i (with Accepts: text/turtle) and gets the document found at https://www.w3.org/People/Berners-Lee/card.ttl
+# This contains a <code>card:i</code> block whose <code>:account</code> section includes, among other things, <code>http://twitter.com/timberners_lee</code>, a valid IndieAuth authentication provider, which can be used to verify his identity in the usual way
+
+
+{{t}}: What additional use-cases are enabled? (None AFAIK) Sure it seems possible, but lots of different [[plumbing]] approaches are possible (see the history of [[OpenID]] for example). Possible is insufficient as all code has a cost of implementation and worse, maintenance (something that [[OpenID]] itself had problems with, client libraries etc.), and particularly in this case, security concerns. Just look at the additional technologies that the example workflow would require, while providing no additional user functionality:
+# WebID discovery "#i"
+# conneg support to retrieve text/turtle hosted [[sidefile]], a known anti-pattern
+# parsing text/turtle
+# turtle auth provider discovery
+Each of those requires (possibly new) code, testing, maintenance, from the consuming code side, and from the publisher side, it requires
+# publishing a hyperlink to a separate "Data about me" from your home page
+# maintaining a separate "Data about me" HTML page
+# maintaining a [[sidefile]] version of that page in another format
+# maintaining additional properties in that sidefile ":account" to link to a OAuth authentication provider profile
+# a link back from that OAuth authentication provider profile to your home page
+That's a lot of steps/files/data for the publisher, each of which adds confusion and fragility to the setup, which we know even from OpenID requiring *two* publisher links from their home page, is enough to cause non-trivial breakage.
+
+Whereas IndieAuth at a minimum requires one step for the publisher
+# add rel=me to an existing hyperlink to an OAuth authentication provider profile
+Most folks with their own website have already done the other half:
+# a link back from that OAuth authentication provider profile to their website
+
+That simplification (to one step in common cases, two if you are setting up from scratch) makes IndieAuth much easier to setup and maintain (more robust) than OpenID (requires two links instead of one for delegation), and certainly much easier that the WebID proposal above.
+
+It appears that worse than just not providing any additional use-cases, WebID as you proposed it would add unnecessary complexity and fragility to IndieAuth, and for that reason I would highly recommend against it, both for publishers, and identity consumers.
+
 == See Also ==
 * [[IndieAuth]]
 * [[OpenID]]
