@@ -295,6 +295,74 @@ Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http:/
 *** Might help discover sites with newly added webmention/pingback receiving support.
 *** Could help demonstrate/explain how webmentions work
 
+=== event posts ===
+Improve support for publishing [[event]] posts (with presentation goal similar to [[event#Before_2014-02-07]]), essentially:
+* quick fixes
+** minimal calendar like design bits to better visually communicate "eventness"
+** (and move appropriate items below into sections above into post types supported)
+* p-name over a u-featured photo as background image if any
+* features on permalink pages for events:
+** "Got an indie RSVP? Enter the URL here: ______" form that submits to [[wmio]]
+*** check [[event#IndieWeb_Examples]] for other indie event permalinks RSVP submission UI
+** static map of location, e.g. 640x160: https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15
+*** add h-card fields to venue cache per [https://chat.indieweb.org/dev/2018-03-30#t1522430840334400 2018-03-30 dev chat]
+**** street-address, locality, region, country-name, postal-code
+*** enhance h-card of venue with address
+*** perhaps insert static img using JS on page from the <code>p-location</code> [[h-geo]] or [[h-card]]/[[h-adr]] of the event. To avoid having search spiders crawl the map embeds etc. Better for them to just directly use any geo-related microformats in the event.
+*** perhaps change color according to "how soon til event" color clues (e.g. [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-green-cutout&basemap=gray&width=640&height=160&zoom=15 green] before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-yellow-cutout&basemap=gray&width=640&height=160&zoom=15 yellow] day of, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15 orange] hours before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-red-cutout&basemap=gray&width=640&height=160&zoom=15 red] during, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-blue-cutout&basemap=gray&width=640&height=160&zoom=15 blue] when it's over). See [https://github.com/esripdx/Static-Maps-API-PHP Static-Maps-API-PHP documentation] for other options. 
+** possibly linked to equivalent Google map (to get directions)
+*** decided not to use [http://nominatim.openstreetmap.org/search?street=2+harrison+st&city=san+francisco&state=ca Nominatim equivalent], though that's another alternative
+
+Need to:
+* re-prioritize remaining what is not yet done
+
+Remaining:
+** p-organizer - show first one
+*** optional: display more than one
+** event description
+** who is going/maybe/invited (h-cards)
+** event activity and responses (event creation, comments, likes) 
+*** receive webmentions for this (will likely keep using webmention.io to queue them up)
+*** manual acceptance / copy-pasting of RSVPs onto the event
+*** (semi-)automatic acceptance of RSVPs
+* home page: have them automatically appear as part of my stream/home page at the event start time 
+* upcoming box: have the next 3 upcoming [[event]]+[[RSVP]](yes|maybe) posts automatically appear on the "next 3 events" box on my home page
+
+==== process and show webmentions ====
+As part of implementing "event activity (event creation, comments, RSVPs)", Falcon will have to process all webmentions received, parse/store them (with appropriate caching), and make them available for posts to display (as [[likes]], [[reposts]], [[comments]], and [[RSVPs]]).
+
+E.g. https://webmention.io/api/links.jf2?perPage=1000&target=http://tantek.com/2017/183/e1/sunday-yoga-presidio (apparently same as mentions.jf2)
+
+Consider also:
+* '''[https://gist.github.com/otherjoel/9301d985622f0d3d1a09 webmention to email]'''[ (both as notification system, though XMPP would be preferred, and as a backup for webmentions - could format the emails similar to how [[Facebook]] formats its notification emails)
+
+==== POSSE events ====
+Events are a key post type to POSSE, to both reach friends not yet on the indieweb, and save myself time with copying event information to other locations. Four specific (semi-disjoint) use-cases:
+
+Always POSSE semi-public events to:
+* [[Twitter]] (event microsyntax shorthand) - serves as replacement for RSVP and its POSSE to Twitter
+Specific use-cases:
+* personal / social events (public gatherings, races)
+** POSSE to [[Facebook]] (if they don't already have a page)
+* community events (IndieWebCamp, Homebrew Website Club)
+** POSSE to IndieWeb Wiki [[Events]] page
+** POSSE to [[Facebook]]
+** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
+** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
+** POSSE IndieWebCamps in particular to [[Lanyrd]]
+* work standards meetings (W3C f2f meetings)
+** POSSE to [https://www.w3.org/wiki/ W3C Wiki] - custom per WG (if event doesn't already have a page)
+** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
+** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
+** POSSE W3C TPACs in particular to [[Lanyrd]]
+** POSSE W3C Social Web WG meetings to IndieWeb Wiki [[Events]] page
+* work talks at conferences
+** POSSE to [[Facebook]] (especially if they don't have their own)
+** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
+** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
+** POSSE to [[Lanyrd]] (if event doesn't already have a page)
+** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
+
 === RSVP reply-context ===
 Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
 
@@ -554,74 +622,6 @@ Storage:
 POSSEing pins:
 * Ideally when you pin a post on your homepage, your server software should automatically pin any POSSE copies of that post on their respective silos, e.g. FB or Twitter
 * Similarly with unpinning
-
-=== event posts ===
-Improve support for publishing [[event]] posts (with presentation goal similar to [[event#Before_2014-02-07]]), essentially:
-* quick fixes
-** minimal calendar like design bits to better visually communicate "eventness"
-** (and move appropriate items below into sections above into post types supported)
-* p-name over a u-featured photo as background image if any
-* features on permalink pages for events:
-** "Got an indie RSVP? Enter the URL here: ______" form that submits to [[wmio]]
-*** check [[event#IndieWeb_Examples]] for other indie event permalinks RSVP submission UI
-** static map of location, e.g. 640x160: https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15
-*** add h-card fields to venue cache per [https://chat.indieweb.org/dev/2018-03-30#t1522430840334400 2018-03-30 dev chat]
-**** street-address, locality, region, country-name, postal-code
-*** enhance h-card of venue with address
-*** perhaps insert static img using JS on page from the <code>p-location</code> [[h-geo]] or [[h-card]]/[[h-adr]] of the event. To avoid having search spiders crawl the map embeds etc. Better for them to just directly use any geo-related microformats in the event.
-*** perhaps change color according to "how soon til event" color clues (e.g. [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-green-cutout&basemap=gray&width=640&height=160&zoom=15 green] before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-yellow-cutout&basemap=gray&width=640&height=160&zoom=15 yellow] day of, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-orange-cutout&basemap=gray&width=640&height=160&zoom=15 orange] hours before, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-red-cutout&basemap=gray&width=640&height=160&zoom=15 red] during, [https://static-maps.pdx.esri.com/img.php?marker=location:2+Harrison+st,+San+Francisco,+CA;icon:small-blue-cutout&basemap=gray&width=640&height=160&zoom=15 blue] when it's over). See [https://github.com/esripdx/Static-Maps-API-PHP Static-Maps-API-PHP documentation] for other options. 
-** possibly linked to equivalent Google map (to get directions)
-*** decided not to use [http://nominatim.openstreetmap.org/search?street=2+harrison+st&city=san+francisco&state=ca Nominatim equivalent], though that's another alternative
-
-Need to:
-* re-prioritize remaining what is not yet done
-
-Remaining:
-** p-organizer - show first one
-*** optional: display more than one
-** event description
-** who is going/maybe/invited (h-cards)
-** event activity and responses (event creation, comments, likes) 
-*** receive webmentions for this (will likely keep using webmention.io to queue them up)
-*** manual acceptance / copy-pasting of RSVPs onto the event
-*** (semi-)automatic acceptance of RSVPs
-* home page: have them automatically appear as part of my stream/home page at the event start time 
-* upcoming box: have the next 3 upcoming [[event]]+[[RSVP]](yes|maybe) posts automatically appear on the "next 3 events" box on my home page
-
-==== process and show webmentions ====
-As part of implementing "event activity (event creation, comments, RSVPs)", Falcon will have to process all webmentions received, parse/store them (with appropriate caching), and make them available for posts to display (as [[likes]], [[reposts]], [[comments]], and [[RSVPs]]).
-
-E.g. https://webmention.io/api/links.jf2?perPage=1000&target=http://tantek.com/2017/183/e1/sunday-yoga-presidio (apparently same as mentions.jf2)
-
-Consider also:
-* '''[https://gist.github.com/otherjoel/9301d985622f0d3d1a09 webmention to email]'''[ (both as notification system, though XMPP would be preferred, and as a backup for webmentions - could format the emails similar to how [[Facebook]] formats its notification emails)
-
-==== POSSE events ====
-Events are a key post type to POSSE, to both reach friends not yet on the indieweb, and save myself time with copying event information to other locations. Four specific (semi-disjoint) use-cases:
-
-Always POSSE semi-public events to:
-* [[Twitter]] (event microsyntax shorthand) - serves as replacement for RSVP and its POSSE to Twitter
-Specific use-cases:
-* personal / social events (public gatherings, races)
-** POSSE to [[Facebook]] (if they don't already have a page)
-* community events (IndieWebCamp, Homebrew Website Club)
-** POSSE to IndieWeb Wiki [[Events]] page
-** POSSE to [[Facebook]]
-** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
-** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
-** POSSE IndieWebCamps in particular to [[Lanyrd]]
-* work standards meetings (W3C f2f meetings)
-** POSSE to [https://www.w3.org/wiki/ W3C Wiki] - custom per WG (if event doesn't already have a page)
-** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
-** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
-** POSSE W3C TPACs in particular to [[Lanyrd]]
-** POSSE W3C Social Web WG meetings to IndieWeb Wiki [[Events]] page
-* work talks at conferences
-** POSSE to [[Facebook]] (especially if they don't have their own)
-** POSSE to [https://wiki.mozilla.org/Events Mozilla Events Page]
-** POSSE to [https://wiki.mozilla.org/WeeklyUpdates/ Mozilla Weekly Updates event sections]
-** POSSE to [[Lanyrd]] (if event doesn't already have a page)
-** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
 
 === Upcoming Events Based on RSVPs ===
 Find next three current/upcoming events by looking backwards through storage for RSVPs (max 3 bims? no RSVPs more than 6 months in advance AFAIK).
