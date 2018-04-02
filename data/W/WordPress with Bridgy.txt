@@ -75,7 +75,7 @@ The simplest method for including u-syndication links is by using the aforementi
 One could also manually include the microformats and URLs in raw HTML on their pages, but this can be time consuming. Details for doing this can be found at https://brid.gy/about#link
 
 ==== Spam ====
-Webmentions on WordPress can often be caught in one's spam folder. Presently there haven't been any reported instances of webmention spam. For those who would prefer to automatically mark all incoming webmentions explicity as not spam, you can add the following code snippet to your functions.php file in your theme (or preferably [[WordPress/Themes#Child_Themes|child theme]]).  
+Webmentions on WordPress can often be caught in either moderation or, if Akismet is enabled, in one's spam folder. Presently there haven't been any reported instances of webmention spam. For those who would prefer to automatically mark all incoming webmentions explicity as not spam, you can add the following code snippet to your functions.php file in your theme (or preferably [[WordPress/Themes#Child_Themes|child theme]]).  
 
 <pre>
 /* functions.php code to accept all webmentions as not spam
@@ -88,6 +88,9 @@ function unspam_webmentions($approved, $commentdata) {
 }
 add_filter('pre_comment_approved', 'unspam_webmentions', '99', 2);
 </pre>
+
+As an additional/alternate measure, {{gregorlove}} has created a [https://gist.github.com/gRegorLove/8215cb9c9584b364aaf4ef2999416f56 WordPress filter to approve webmentions from previously-approved domains]. Its code can be placed in one's functions.php file in their WordPress Theme to get it to work properly.
+
 
 ==== Brainstorming ====
 Additional pieces this page could expand upon:
