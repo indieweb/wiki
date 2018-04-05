@@ -9,11 +9,13 @@ The '''<dfn>[http://archive.org Internet Archive]</dfn>''' is a non-profit organ
 === Trigger an Archive ===
 You can tell archive.org to crawl and archive a specific URL immediately.
 
-<code style="display:block;padding:1em"><nowiki>$ curl [[curl -I|-I]] [[curl -H|-H]] "Accept: application/json" https://web.archive.org/save/{url to archive} | grep Content-Location</nowiki></code>
+<code style="display:block;padding:1em"><nowiki>$ curl -I -H "Accept: application/json" https://web.archive.org/save/{url to archive} | grep Content-Location</nowiki></code>
 
 and you'll get a response like:
 
 <samp><nowiki>Content-Location: /web/20160715203015/http://indieweb.org</nowiki></samp>
+
+(We have wiki entries for [[curl -I|the <code>-I</code> option]] and [[curl -H|the <code>-H</code> option]] to <code>curl</code>.)
 
 The response includes the path to the archived page on web.archive.org. Append this path to <kbd><nowiki>https://web.archive.org</nowiki></kbd> to build the final URL for the archived page.
 
@@ -96,6 +98,8 @@ There is a useful little plugin [https://wordpress.org/plugins/post-archival/ Po
 {{kevinmarks}} implemented pinging the archive with URLs of the SVG display posts, and thus indirectly the SVGs themselves
 === [[mention-tech]] ===
 {{kevinmarks}} implemented [http://known.kevinmarks.com/2017/day-2-saving-webmentioned-urls-to-archiveorg-100daysofindieweb (2017-01-24)] pinging the archive with both the source and target URLs of the webmention so that they get preserved too.
+=== Jonathan LaCour ===
+{{cleverdevil}} implemented on 4/04 (HAH!) in 2018 using the Known plugin.
 
 == Requests ==
 * [[Telegraph]] support - https://github.com/aaronpk/Telegraph/issues/14 - should support auto-archiving for any sent Webmention
