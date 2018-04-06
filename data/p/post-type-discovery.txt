@@ -228,6 +228,45 @@ Implementations, in progress, partial, or complete, of Post Type Discovery.
 * [[article]]
 * [[note]]
 
+== History ==
+
+The following was originally part of [[posts]], and moved here.
+
+Alternative perspective: instead of explicit post kinds, infer the post kind (and thus presentation/UI) by what aspects/properties a post has. E.g.:
+* a post with just plain text content -> [[note]]
+* with an explicit post name (title) -> [[article]]
+* with an embedded image (<code>u-photo</code> of the <code>h-entry</code>) -> [[photo]]
+* with one or more [[in-reply-to]] links -> [[reply]]
+* with a p-location [[venue]] -> [[checkin]]
+* an h-event [[event]] -> [[event]]
+* with a p-rsvp -> [[RSVP]]
+* with a u-like-of -> [[like]]
+* with a u-repost-of -> [[repost]]
+* with a p-invitee -> [[invitation]]
+* with a u-tag-of -> [[tag-of]] response
+
+The above list is very roughly ordered and likely requires implementation experience (of multiple post types/kinds) to better understand which properties should more primarily determine a post type than others.
+
+Combinations of the above will also have to be explored to see if they make sense, and given multiple possible inferred post kinds, which should "win" in terms of driving the presentation/UI. E.g.
+* with an embedded image and with a p-location [[venue]] -> [[checkin]] with photo. E.g. [http://aaronparecki.com/notes/2014/05/06/3/iiw-indieweb this post by aaronpk] should be considered a check-in. Reasoning:
+** the p-location applies to the whole h-entry, not the specific u-photo, thus making the h-entry primarily a checkin, and secondarily, happening to have a photo
+** the alternative, a photo post tagged with a venue location, should be expressed by having the p-location be a property of an object nested on the u-photo, e.g. a "u-photo h-item" or "u-photo h-photo" which then has a "p-location h-card" inside it. The actual nested root class (h-item or h-photo, these are (mostly) just brainstorms) matters less than there happening to be such a nested root class.
+
+=== Articles about implied post types ===
+* {{citation
+| title = The tyranny of content types #indiewebcamp
+| url = https://werd.io/entry/51c72566bed7dee673ee2052/the-tyranny-of-content-types-indiewebcamp
+| author = {{benwerd}}
+| published = 2013-06-23
+| archiveurl = https://web.archive.org/web/20180406174530/https://werd.io/entry/51c72566bed7dee673ee2052/the-tyranny-of-content-types-indiewebcamp
+}}
+* {{citation
+| title = Creating Content on the Indie Web
+| url = https://aaronparecki.com/2012/10/22/1/creating-content-on-the-indie-web
+| author = {{aaronpk}}
+| published = 2012-10-22
+| archiveurl = https://web.archive.org/web/20180406174711/https://aaronparecki.com/2012/10/22/1/creating-content-on-the-indie-web
+}}
+
 == See Also ==
-* [[posts]] - specifically [[posts#Inferring_post_kinds_from_properties]] for prior work on implied post types.
 * [http://rhiaro.co.uk/2015/09/post-type Post type discovery] (my implementation pre-this-page) [[User:Rhiaro.co.uk|Rhiaro.co.uk]] 10:05, 30 September 2015 (PDT)
