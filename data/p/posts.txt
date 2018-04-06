@@ -20,10 +20,10 @@ How to publish a post.
 * posted at a [[permalink]]
 * on your [[personal domain]]
 
-== Kinds of Posts ==
-This section is about post kinds (kinds of posts) in general, for the [[Wordpress]] plugin, see:
-* [[Post Kinds Plugin]]
-Experience has shown that there are different kinds of posts on indieweb sites, and publishing and display interfaces for them vary by type. Here are a few kinds of posts that indieweb community members are currently publishing:
+== Types of Posts ==
+Experience has shown that there are different types of posts on IndieWeb sites. Publishing and display interfaces for these different types vary. Below are a few types of posts that IndieWeb community members are currently publishing.
+
+Sometimes these types are referred to as ''post kinds'' instead. [[WordPress]] is an example of an [[CMS]] with a difference between types and kinds, where post kinds match with the IndieWeb post types. See the [[Post Kinds Plugin]] for more information.
 
 Roughly ordered by apparent/anecdotal indieweb posting frequency across different sites / implementations (Most of these are also cross-linked from [[:Category:PostType]]):
 * [[📔]] [[note]] <!-- huge number -->
@@ -85,39 +85,17 @@ Indieweb community members are working on publishing these real soon now, or the
 Merely gleams in various eyes:
 * ...
 
-=== Inferring post kinds from properties ===
-Alternative perspective: instead of explicit post kinds, infer the post kind (and thus presentation/UI) by what aspects/properties a post has. E.g.:
-* a post with just plain text content -> [[note]]
-* with an explicit post name (title) -> [[article]]
-* with an embedded image (<code>u-photo</code> of the <code>h-entry</code>) -> [[photo]]
-* with one or more [[in-reply-to]] links -> [[reply]]
-* with a p-location [[venue]] -> [[checkin]]
-* an h-event [[event]] -> [[event]]
-* with a p-rsvp -> [[RSVP]]
-* with a u-like-of -> [[like]]
-* with a u-repost-of -> [[repost]]
-* with a p-invitee -> [[invitation]]
-* with a u-tag-of -> [[tag-of]] response
-
-The above list is very roughly ordered and likely requires implementation experience (of multiple post types/kinds) to better understand which properties should more primarily determine a post type than others.
-
-Combinations of the above will also have to be explored to see if they make sense, and given multiple possible inferred post kinds, which should "win" in terms of driving the presentation/UI. E.g.
-* with an embedded image and with a p-location [[venue]] -> [[checkin]] with photo. E.g. [http://aaronparecki.com/notes/2014/05/06/3/iiw-indieweb this post by aaronpk] should be considered a check-in. Reasoning:
-** the p-location applies to the whole h-entry, not the specific u-photo, thus making the h-entry primarily a checkin, and secondarily, happening to have a photo
-** the alternative, a photo post tagged with a venue location, should be expressed by having the p-location be a property of an object nested on the u-photo, e.g. a "u-photo h-item" or "u-photo h-photo" which then has a "p-location h-card" inside it. The actual nested root class (h-item or h-photo, these are (mostly) just brainstorms) matters less than there happening to be such a nested root class.
-
-==== Articles about implied post types ====
-* 2013-06-23 {{benwerd}}: <cite>[http://werd.io/entry/51c72566bed7dee673ee2052/the-tyranny-of-content-types-indiewebcamp The tyranny of content types #indiewebcamp]</cite>
-* 2012-10-22 {{aaronpk}}: <cite>[http://aaronparecki.com/articles/2012/10/22/1/creating-content-on-the-indie-web#indieweb-posts Creating Content on the Indie Web: IndieWeb Posts]</cite>
+=== Inferring Post Type ===
+It is sometimes necessary to detect what type of post a piece of content belongs to. Out of this need [[Post Type Discovery]] has been created. It outlines an algorithm where a type can be assigned to a post based on what sort of parsed properties it contains.
 
 === New Post Types ===
-In general, we should avoid creating new post types/kinds.
+In general, we should avoid creating new post types.
 
 Both individually and as a community. [[Simpler]] is better and all that.
 
 The key is whenever you <em>think</em> you have something new to post, try posting it as your simplest existing post type, which are likely just [[notes]], maybe with tags, e.g. what [[User:Waterpigs.co.uk]] does with steps, and [[User:Sandeep.io]] does with tags as well. Then document here on the wiki why/how that doesn't work if you run into problems.
 
-One reason why re-using an existing post type might "not work" is that you really want to present it differently, provide a specific UX for a particular kind of posts differently from any existing post type. This is the *primary* reason that should drive any desire to create new post types. 
+One reason why re-using an existing post type might "not work" is that you really want to present it differently, provide a specific UX for a particular type of posts differently from any existing post type. This is the *primary* reason that should drive any desire to create new post types. 
 
 If there's no reason to present a different UX, then you likely shouldn't be thinking about a new post type.
 
