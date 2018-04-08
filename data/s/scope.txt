@@ -6,15 +6,31 @@ In [[OAuth]] terminology, '''<dfn>scope</dfn>''' is a way to limit what parts of
 
 For example, you can choose to allow one application to read your basic profile info, while another application may be authorized to post on your behalf. 
 
-== Scopes used by IndieWeb apps ==
+== Micropub Scopes ==
+
+[[Micropub]] clients use scopes to indicate what permissions they are requesting from Micropub servers, which will result in the user seeing the listed scopes in the authorization prompt. Clients and servers must agree on the names and expected behavior of a list of scopes in order to provide a consistent user experience among apps.
+
+Listed below are the currently supported Micropub scopes across most clients and servers.
+
+* '''<code>create</code>''' - allows the client to create posts on behalf of the user
+* '''<code>update</code>''' - allows the client to edit existing posts
+* '''<code>delete</code>''' - allows the client to delete posts
+
+These are distinct permissions, so e.g. granting a client only "create" scope means it will not be able to update or delete existing posts.
+
+Use the sections below to document additional experimental scopes that software has implemented, and once there are two or more clients and servers that support the additional scopes, they can be added to the registry above.
+
+=== Scopes supported by IndieWeb clients ===
 [[File:quill scope selection.png|thumb|right]]
 * [[Quill]] requests the "create" and/or "update" scope when authorizing it to create posts on your domain.
 * [[OwnYourGram]] requests the "create" scope when authorizing it to create photo posts on your domain.
 * [[Micropublish.net]] requests the scopes "post" or "create update delete undelete", for the user to choose
 * [[Indigenous]] requests the "create", "update" and "delete" scopes when logging in to the app.
 
-== Scopes accepted by IndieWeb sites ==
+=== Scopes supported by IndieWeb servers ===
 [[File:aaronpk auth form.png|thumb|right]]
+* Known supports _____
+* The Wordpress Micropub plugin supports _____
 * {{aaronpk}} requires the "create" scope in order for a client to create new posts, "update" for updates, and "delete" for deletes. "media" for file uploads.
 * {{voxpelli}}, using his [https://github.com/voxpelli/webpage-micropub-to-github micropub-to-github] endpoint, requires the "create" or "post" scope for a client to give access, treating "create" as the preferred one
 * {{sebsel}} uses scopes "create", "update", "delete", "media" (for photo upload) and "media-plus" (for uploads without limitations on file extension)
@@ -31,7 +47,7 @@ See the [https://developer.github.com/v3/oauth/#scopes full list of Github OAuth
 Scopes that conform to the OpenID Connect standard have full names that are short: profile, email and openid—they are not in the form of a URI. On the other hand, Google-specific scopes are in the form of a URI, such as https://www.googleapis.com/auth/plus.login
 </blockquote>
 
-seeAlso: [https://developers.google.com/+/web/api/rest/oauth#authorization-scopes Authorization scopes]
+See also: [https://developers.google.com/+/web/api/rest/oauth#authorization-scopes Authorization scopes]
 
 == See Also ==
 * [[micropub]]
