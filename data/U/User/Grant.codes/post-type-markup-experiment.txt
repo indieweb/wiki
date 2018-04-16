@@ -26,15 +26,35 @@ There are different approaches to posting photos. E.g.
 
 === How to markup ===
 
-{{codetabs}}
-
-Be sure to markup your actual photo image (or hyperlink to higher quality image) with:
-<pre><code>class="u-photo"</code></pre>
-in order for it to be recognize as a photo post.
-
-(needs complete simple h-entry example also)
-
-(could be rephrased better) This also means, don't go marking up every random image in every random post with "u-photo", unless you really want every random post being mistaken for a photo post.
+{{codetabs
+|tab-1-title=MF2 HTML Markup
+|tab-1-content=<pre><nowiki>
+<div class="h-entry">
+  <p class="p-summary"> Liked: <a class="u-like-of" href="http://othersite.example.com/permalink47">http://othersite.example.com/permalink47</a> </p>
+</div>
+</nowiki></pre>
+|tab-2-title=Rendered HTML
+|tab-2-content=<raw><div class="h-entry">
+  <p class="p-summary"> Liked: <a class="u-like-of" href="http://othersite.example.com/permalink47">http://othersite.example.com/permalink47</a> </p>
+</div>
+</raw>
+|tab-3-title=MF2 JSON
+|tab-3-content=<raw>
+  {
+    "type": ["h-entry"],
+    "properties": {
+      "like-of": ["http://othersite.example.com/permalink47"]
+    }
+  }
+</raw>
+|tab-4-title=JF2 JSON
+|tab-4-content=<raw>
+  {
+    "type": "entry",
+    "like-of": "http://othersite.example.com/permalink47"
+  }
+</raw>
+}}
 
 === Tagging ===
 Tagging (AKA annotating) photos, initially popularized by [[Flickr]], has become a key motivation for publishing photos. Here are a number of ways you can tag photo posts, both directly in a post, and as a response to a photo post!
