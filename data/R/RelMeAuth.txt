@@ -40,11 +40,9 @@ There are also usability, error detection, and recovery reasons for keeping such
 == Issues ==
 
 === Selectively Displaying rel-me Info ===
-Selectively Displaying rel-me Info (e.g. hiding your phone number).
+Selectively Displaying rel-me Info (e.g. hiding a one-off email address).
 
-Tantek points out that he would like to be able to use SMS auth on IndieAuth.com, but doesn't want his cell phone number public on his site. [https://indieweb.org/irc/2013-08-31/line/1377987957]
-
-Ideally your site would know that the request was coming from an (your?) IndieAuth server, and only render your phone number if so.
+Ideally your site would know that the request was coming from an (your?) IndieAuth server, and only render your one-off email address if so.
 
 This would require either
 
@@ -56,7 +54,7 @@ Here is a potential example flow.
 
 * Sign in once to your IndieAuth server
 * Click a "generate shared secret" button, which is some 128-bit string that the IndieAuth server stores internally on your user record.
-* You take the string and add some code like this to your home page:<br /><code>if header['IndieAuth-Secret'] == shared_secret<br />&nbsp;&nbsp;&nbsp;&nbsp;echo '<link rel="me" href="tel:+15035551212">'<br />end</code> which checks to see if the secret is passed in an HTTP header called "IndieAuth-Secret".
+* You take the string and add some code like this to your home page:<br /><code>if header['IndieAuth-Secret'] == shared_secret<br />&nbsp;&nbsp;&nbsp;&nbsp;echo '<link rel="me" href="mailto:oneoffemail@example.com">'<br />end</code> which checks to see if the secret is passed in an HTTP header called "IndieAuth-Secret".
 
 ==== 2 public key ====
 
@@ -72,7 +70,7 @@ Please document here if there is some other existing mechanism that can solve th
 
 ==== potential workaround ====
 
-A potential workaround is putting your phone number in a <code><link></code> tag in your HTML head so that it isn't visible to viewers of your web page. (Currently [https://aaronparecki.com aaronparecki.com] does this.) While this doesn't actually prevent a person from seeing your phone number, it is at least an unlikely place for them to look.
+A potential workaround is putting your one-off email in a <code><link></code> tag in your HTML head so that it isn't visible to viewers of your web page. While this doesn't actually prevent a person from seeing your one-off email, it is at least an unlikely place for them to look. Though robots would likely still index it, so this is not a sufficient workaround.
 
 === RDFa Parsing Problems ===
 
