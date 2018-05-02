@@ -181,17 +181,23 @@ You may find the following tools useful:
 
 == Brainstorming ==
 === Minimal text reply contexts ===
-Some ideas as improvements to just: "in reply to: (URL)".
+{{t}}: Some ideas for improvements over: "in reply to: (URL)".
 (some from [[Falcon#improve_reply-context_support]])
-* if URL is a tweet permalink of user aaronpk, <blockquote style="color:gray">Replying to @aaronpk</blockquote> and hyperlink it to the in-reply-to URL
-* else if URL is a Github issue comment permalink (github.com/owner/project/issues/n#issuecomment-m), <blockquote style="color:gray">Replying to a comment on owner/project issue #n</blockquote>
-* else if URL is a Github issue (github.com/owner/project/issues/n), <blockquote style="color:gray">Replying to owner/project issue #n</blockquote>
-* else if URL is a Github repo or issues list (github.com/owner/project or github.com/owner/project/issues optional trailing /), <blockquote style="color:gray">New issue on owner/project</blockquote>
-* else if URL has some other silo domain (facebook.com instagram.com others?), <blockquote style="color:gray">Replying to silo-domain/path-segment</blockquote> (where path-segment is the username)
-* else <blockquote style="color:gray">Replying to URL</blockquote>
+* if URL is a tweet permalink of user aaronpk, <blockquote style="color:gray">In reply to @aaronpk’s tweet</blockquote> and hyperlink it to the in-reply-to URL
+* else if URL is a Github issue comment permalink (github.com/owner/xyz/issues/n#issuecomment-m), <blockquote style="color:gray">In reply to a comment on issue #n of GitHub project xyz</blockquote>
+* else if URL is a Github issue (github.com/owner/xyz/issues/n), <blockquote style="color:gray">In reply to issue n of GitHub project xyz</blockquote>
+* else if URL is a Github repo or issues list (github.com/owner/xyz or github.com/owner/xyz/issues optional trailing /), <blockquote style="color:gray">New issue on GitHub project xyz</blockquote>
+* else if URL has some other silo domain (facebook.com instagram.com others?), <blockquote style="color:gray">In reply to silo-domain/path-segment</blockquote> (where path-segment is the username)
+* else <blockquote style="color:gray">In reply to URL</blockquote>
 For [[multi-reply]] context, space separate the generated @/domain/URL and link 2nd and later to respective in-reply-to URLs.
 
 Possibly worth a small CASSIS function, takes in-reply-to array, returns display HTML.
+
+Note that the above brainstormed reply contexts are actually two separate things - the "Replying to a" pre-text which is specific to a reply-context (e.g. RSVPs would be different), and the synthesized summary of the url e.g. "issue n of Github project xyz".
+
+The latter can be used in a number of different contexts for providing a more human text-friendly synthetic summary of a URL if you have no other information (i.e. a URL-only [[h-cite]], and no retrieval of the URL itself for [[link-preview]] properties).
+
+Thus it’s probably better to make two CASSIS functions, one for the reply_to_text and one for an auto_url_summary.
 
 === CRUD ===
 Though one advantage of storing and showing a reply-context is freezing the original context of what you're replying to, it may make sense to accept some updates.
