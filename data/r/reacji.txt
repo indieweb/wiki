@@ -14,11 +14,23 @@ The row(s) of buttons with icons at the bottom indicate the reacji that the post
 __TOC__
 
 == Why ==
+Why should you support posting reacji?
+
+One great reason is to own your reactions(👍👎😆🎉😕❤️) to GitHub issues and comments by posting them on your own site and POSSEing (e.g. using [[Bridgy]]).
+ 
 Why should you support receiving reacji and displaying them? 
 
 So people can send you reacji and have it show up? E.g. a 🎂 for your birthday, or different kinds of reactions instead of just a "[[like]]".
 
 == How to ==
+=== How to display ===
+Display a reacji post itself with [[reply-context]]. Because a reacji is so minimal, it may appear meaningless or misleading without additional context. But because reacji are small, a normal [[reply context]] would be presentationally overwhelming and look awkward.
+
+The reply context for a reacji should be similar to the reply context for a [[like]], which tends to re-order the reply-context as the object of the like, rather than a header above it. At a minimum show the in-reply-to URL linked to itself, then additional information as it is available (e.g. name or summary of post), all of which can be wrapped in a <code>u-in-reply-to h-cite</code> hyperlink. Some sample hypertext designs:
+* 👍 to http://tantek.com/2018/102/t9/css-2-2
+* 👍 to [http://tantek.com/2018/102/t9/css-2-2 tantek.com’s post]
+* 👍 to [http://tantek.com/2018/102/t9/css-2-2 CSS 2.2]
+
 === How to markup ===
 Markup a reacji response post as follows:
 
@@ -26,13 +38,27 @@ Post a [[reply#Post_a_reply|reply (How to markup)]] where the content is a singl
 
 Note: if there is HTML in the content property, it may mess with [[emoji]] detection, so you should use <code>p-content</code>, rather than <code>e-content</code> for reacji reply posts.
 
-(complete h-entry reacji code example would be nice here, perhaps with the 🎂 as noted above)
+<pre>
+<p class="h-entry">
+ <span class="p-name p-content">👍</span>
+ to 
+ <a class="u-in-reply-to h-cite" 
+    href="http://tantek.com/2018/102/t9/css-2-2">CSS 2.2</a>
+ ...
+ <a class="u-url"
+    href="...permalink of post...">
+  <time class="dt-published">2018-05-01 11:00-0700</time>
+ </a>
+</p>
+</pre>
+
+Can use div or li or even span instead of (or around) the p element depending on what works for your site and context, e.g. on a permalink or in-stream. Note the reply-context comes after the content which is atypical for reply-context hypertext design/markup in general.
 
 In addition, if your reacji is at least a somewhat positive approval, you may want to add a <code>u-like-of</code> class (in addition to <code>u-in-reply-to</code>) to your link to the original post, so that even if the receiver only supports likes, they can count your response as a like, until they add support for receiving reacji.
 
 (complete h-entry reacji as a positive response code example would be nice here, perhaps with a thumbs-up or heart or smileyface emoji)
 
-=== How to receive and display ===
+=== How to receive and display reacjis ===
 You can detect a reacji reply post by inspecting any incoming reply to see if it is a single emoji character.  
 This is harder than it seems as there are many possible emoji sets and some emoji can consist of multiple characters combined.  Just looking for the single character emoji will cover most emoji however. 
 
@@ -82,6 +108,11 @@ If you also receive and display reacjis from others on your posts in some specia
 {{t}} has been posting reacji [http://tantek.com/2015/350/f1 since 2015-12-16].
 * http://tantek.com/2015/350/f1
 ** is also a [[like]] post (hence the /f in the URL) for fallback purposes, so that targets that understand likes but not reacji at least get the positive sense of the reacji being communicated. This method only makes sense for like-like reacji, but that's an acceptable limitation.
+More recently ([http://tantek.com/2018/103/t1/ since 2018-04-13]), reacji being posted as [[reply]] posts with a single emoji, e.g.:
+* http://tantek.com/2018/103/t1/
+
+[http://tantek.com/2018/122/t2/ Since 2018-05-02], showing in-stream mini-reply-contexts of the form:
+<blockquote>👍 to issue 2588 of GitHub project “csswg-drafts”</blockquote>
 
 ==== Peter Molnar ====
 {{petermolnar}} used to display reacji with Wordpress, then had them removed; now they are back again, but since it's a static site, they are display with significant delays - 2017-06-01
@@ -166,37 +197,9 @@ More:
 === Services ===
 * [[Bridgy]] [[backfeed]]s [[Facebook]] reactions as of 2016-04-28. [https://github.com/snarfed/bridgy/issues/626 Details.]
 
-
 == Brainstoming ==
 === Reply Context ===
-{{t}} thoughts on reacji reply context design.
-
-Reacji are so small and short that typical [[reply context]] would be presentationally overwhelming and look awkward.
-
-The reply context for a reacji should likely be similar to the reply context for a [[like]], which tends to re-order the reply-context as the object of the like, rather than block header above it.
-
-Perhaps at a minimum just the URL linked to itself, then additional information as it is available (e.g. name or summary of post), all of which can be wrapped in an <code>u-in-reply-to h-cite</code>. Some sample hypertext designs:
-* 👍 to http://tantek.com/2018/102/t9/css-2-2
-* 👍 to [http://tantek.com/2018/102/t9/css-2-2 CSS 2.2]
-* ...
-
-How to markup the samples above. Since the examples include the full content of the h-entry (the reacji itself), we should work out the entire h-entry markup for reacji with minimal reply-context. Off the top of my head:
-
-<pre>
-<p class="h-entry">
- <span class="p-name e-content">👍</span>
- to 
- <a class="u-in-reply-to h-cite" 
-    href="http://tantek.com/2018/102/t9/css-2-2">CSS 2.2</a>
- ...
- <a class="u-url"
-    href="...permalink of post...">
-  <time class="dt-published">2018-05-01 11:00-0700</time>
- </a>
-</p>
-</pre>
-
-Can use div or li or even span instead of (or around) the p element depending on what works for your site and context, e.g. on a permalink or in-stream. Note the reply-context comes after the content which is atypical for reply-context hypertext design/markup in general.
+{{t}} thoughts on reacji reply context design, deployed since brainstorming, have been incorporated into "[[#How_to_display|How to display]]" above.
 
 == Criticism ==
 * We should call this [[reactions]] instead of reacji. The rest of the industry already does - [[Slack]], [[Facebook]], [[GitHub]], etc. Common terminology is more valuable than minor semantic differences. (Lots more discussion [http://indiewebcamp.com/irc/2016-04-29#t1461959269173 in IRC].) - {{snarfed}}
