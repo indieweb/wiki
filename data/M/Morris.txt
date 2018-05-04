@@ -2,4 +2,29 @@ https://indieweb.org/Morris
 
 {{stub}}
 
-'''<dfn>[https://github.com/martymcguire/morris Morris]</dfn>''' is a service for storing [[Webmentions]] from [[Webmention.io]] in a way that [[static site]]s can easily render them.
+'''<dfn>[https://github.com/martymcguire/morris Morris]</dfn>''' is a self-hosted PHP service for storing [[Webmentions]] from [[webmention.io]] in a JSON format that [[static site]]s can use to render them without querying webmention.io on each build.
+
+Sites currently using Morris to store webmentions:
+
+* {{martymcguire}} on his site at [https://martymcgui.re/ martymcgui.re] and podcast at [https://wehavetoask.com/ wehavetoask.com]
+* ...
+
+== Features ==
+
+* Receive webmentions from webmention.io via [[webmention.io#Sends_Notification_of_Valid_Webmentions_via_Web_Hook|webhook notification]].
+* Stores mention data, along with a lookup index, in a configurable data folder.
+** Saves the [[jf2]] data for each mention from webmention.io in its own file. The filename serves as an ID for looking up the mention data, and is derived from the hash of the webmention's source and target URLs.
+** An index file maps a path like <code>/2018/05/04/a-great-post/</code> to a list of mention IDs for that path.
+* Uses webmention.io's "callback secret" to ensure that data comes from webmention.io.
+* Passthrough functionality allows mentions to be passed along to other webhooks for features like notifications.
+* Publish functionality allows Morris to republish your site as mentions come in. This feature requires writing code to trigger your site's build process.
+
+== How to Use ==
+
+Once your site is [[webmention.io#How_to_Use|set up to receive webmentions at webmention.io]], you can install Morris on your own server, configure it to store mention data in a folder where your static site generator will make them available for your templates to render them.
+
+See the [https://github.com/martymcguire/morris#readme README] for installation and configuration instructions as well as some example templates.
+
+== Source Code ==
+
+* https://github.com/martymcguire/morris
