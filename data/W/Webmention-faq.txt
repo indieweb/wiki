@@ -8,6 +8,35 @@ Short answer: No, Webmentions are not like Pingbacks. Webmentions are like [[com
 
 Longer: No, Webmentions power existing user-centric features like comments, likes, notifications etc. across websites, while Pingback (perhaps unintentionally) created a new (and ugly) user-feature "Pingback" which was more confusing than helpful. Under the covers, Webmention is a much simpler, cleaner, and more secure protocol than Pingback despite having some structural similarities.
 
+=== Do webmentions work only when both sites use webmentions? ===
+For webmentions to work, both sites don't have to support both sending '''and''' receiving webmentions. Although, it works best when they do. 
+
+Here are the minimum requirements for a webmention to work:
+# The sending website should include a link to the receiving website.
+# The receiving website should have a webmention endpoint (this endpoint can either be part of the website or a hosted service like [[webmention.io]]). 
+
+Through the use of [http://microformats.org/wiki/microformats2 microformats2], a sending website can help the receiving site to better present the webmention.
+
+=== How do you know if a website uses webmentions? ===
+You can't know if a website sends webmentions, but you can know if a website receives webmentions. This is known by looking for rel="webmention" being attached to either an HTTP Link Header, an HTML link in the document head or on a hyperlink on the page. If any of those three items are found with a rel="webmention" attribute then the site has declared that it has an endpoint for receiving webmentions.
+
+As a quick practical check, in most browsers one can right click and choose <code>view source</code> for the particular web page and then search for "webmention" to find something along the lines of <nowiki><link rel="webmention" href="https://example.com/webmention" /></nowiki>. Some websites may also explicitly indicate they have webmention support with a [[buttons#Buttons|badge or button]], though actually searching for the endpoint as described above is certainly more definitive.
+
+=== If I write an article that links to another article and both websites support webmentions, does it notify the other website automatically? ===
+It depends on the webmention support in the sending website. Some sending websites have automatic webmention sending and others use services like [[Telegraph]] to manually send webmentions.
+
+If your site supports automatic webmention sending, then there is nothing else you need to do. Unless someone is using their own custom code, sites using [[micro.blog]] and [[WordPress]] sites using the [[Wordpress Webmention Plugin]] will automatically send webmentions.
+
+It's become somewhat common for sites that accept incoming webmentions to have a URL box in their comments section to allow users' whose sites may not support sending webmentions to manually input their URLs. The receiving site then checks the input to ensure that the page was indeed mentioned before accepting it.
+
+Keep in mind that many sites that do accept mentions do not necessarily display them while others may moderate their comments/webmentions prior to displaying them.
+
+=== I am not a programmer, so if I want to set up webmention on a website is something like webmention.io the best way to set it up? ===
+''Needs to be answered''
+
+=== How do webmentions work with social media sites like Twitter? ===
+Most popular social media sites, like Twitter, don't support webmentions. To deal with the lack of webmention support, we use the [[backfeed]] approach. Using services like [[bridgy]] we watch social media posts using their proprietary APIs and send webmentions from intermediary posts that represent the canonical social media posts.
+
 == Developer Questions ==
 === What is the canonical URL for the Webmention spec ===
 Webmention is a W3C spec and lives at https://www.w3.org/TR/webmention/
@@ -120,29 +149,6 @@ Because it is peer-to-peer, Webmention scales naturally with the web, in contras
 Senders are expected to only send the webmention to the first endpoint they discover. This is to avoid a situation where a web page can advertise a large number of endpoints and require the sender make an unreasonable number of requests to deliver the webmentions.
 
 If a receiver wants to use multiple webmention endpoints (for example, if one endpoint exists to send notifications, and another exists to archive the source documents, and another exists to collect a backup copy of comments), it should set up a single endpoint and forward a copy of incoming mentions to the other endpoints. In the real world, the only way a receiver can guarantee its multiple endpoints will receive mentions is if it sends them itself, since even if the spec says senders should send to all advertised endpoints, there is no way to guarantee the sender will actually do so.
-
-=== Do webmentions work only when both sites use webmentions? ===
-For webmentions to work, both sites don't have to support both sending '''and''' receiving webmentions. Although, it works best when they do. 
-
-Here are the minimum requirements for a webmention to work:
-# The sending website should include a link to the receiving website.
-# The receiving website should have a webmention endpoint (this endpoint can either be part of the website or a hosted service like [[webmention.io]]). 
-
-Through the use of [http://microformats.org/wiki/microformats2 microformats2], a sending website can help the receiving site to better present the webmention.
-
-=== How do you know if a website uses webmentions? ===
-You can't know if a website sends webmentions, but you can know if a website receives webmentions. This is known by looking for rel="webmention" being attached to either an HTTP Link Header, an HTML link in the document head or on a hyperlink on the page. If any of those three items are found with a rel="webmention" attribute then the site has declared that it has an endpoint for receiving webmentions.
-
-=== If I write an article that links to another article and both websites support webmentions, does it notify the other website automatically? ===
-It depends on the webmention support in the sending website. Some sending websites have automatic webmention sending and others use services like [[Telegraph]] to manually send webmentions.
-
-If your site supports automatic webmention sending, then there is nothing else you need to do.
-
-=== I am not a programmer, so if I want to set up webmention on a website is something like webmention.io the best way to set it up? ===
-''Needs to be answered''
-
-=== How do webmentions work with social media sites like Twitter? ===
-Most popular social media sites, like Twitter, don't support webmentions. To deal with the lack of webmention support, we use the [[backfeed]] approach. Using services like [[bridgy]] we watch social media posts using their proprietary APIs and send webmentions from intermediary posts that represent the canonical social media posts.
 
 == See Also ==
 * [[Webmention]]
