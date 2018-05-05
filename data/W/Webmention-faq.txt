@@ -12,17 +12,17 @@ Short answer: No, Webmentions are not like Pingbacks. Webmentions are like [[com
 Longer: No, Webmentions power existing user-centric features like comments, likes, notifications etc. across websites, while Pingback (perhaps unintentionally) created a new (and ugly) user-feature "Pingback" which was more confusing than helpful. Under the covers, Webmention is a much simpler, cleaner, and more secure protocol than Pingback despite having some structural similarities.
 
 === Do webmentions work only when both sites use webmentions? ===
-Webmentions start working as soon as a site supports receiving webmentions & displaying them, and someone (anyone) sends them a webmention of another site linking to them.
+Webmentions start working as soon as a site supports receiving webmentions (and, optionally, displaying them), and someone (anyone) sends them a webmention from another site that links to the receiving site.
 
-Webmentions work better when the linking site supports both [[microformats2]] and automatically sending webmentions. That is when site A publishes a post that links to site B which supports receiving webmentions, site A should automatically send a webmention to site B so that site B is immediately notified, can parse site A’s post for key information from its microformats (like comment content, author name & icon) and display a comment (or other [[response]]) accordingly on site B.
+Webmentions work better when the sending site both supports [[microformats2]] and automatically sends webmentions. That is, when site A (the sender) publishes a post that links to site B (the receiver) which can receive webmentions, site A should automatically send a webmention to site B. This immediately notifies site B, which can then parse site A’s post for key information from its microformats (such as comment content, author name and icon. The receiver (site B) can then decide whether to display a comment (or other [[response]])  and how to present it.
 
-Webmentions work best when both sites support [[microformats2]] and both sending & receiving webmentions, which enables both sites to comment back and forth in real time, similar to social networks like Twitter.
+Webmentions work best when both sites support [[microformats2]] and also sending and receiving webmentions. With this in place, both sites can comment back and forth in real time, similar to social networks like Twitter.
 
 Here are the minimum requirements for a webmention to work well:
-# The sending website should markup its [[response]] posts with [[microformats2]]
+# The sending website should mark up its [[response]] posts with [[microformats2]]
 # The sending website should include a link to the receiving website.
 # The receiving website should have a webmention endpoint (either its own endpoint or delegated to a hosted webmention receiving service like [[webmention.io]]).
-# The sending website should automatically detect that endpoint and send a webmention
+# The sending website should automatically detect that endpoint and send the webmention.
 
 === How do you know if a website uses webmentions? ===
 You can't know if a website sends webmentions, but you can know if a website receives webmentions. This is known by looking for rel="webmention" being attached to either an HTTP Link Header, an HTML link in the document head or on a hyperlink on the page. If any of those three items are found with a rel="webmention" attribute then the site has declared that it has an endpoint for receiving webmentions.
