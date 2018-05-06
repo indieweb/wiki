@@ -127,6 +127,7 @@ Standard publishing formats:
 ** [[h-entry]] - on all post permalinks, and [[homepage]] posts, including respective post type specific properties:
 *** [[u-in-reply-to]], [[p-rsvp]], [[u-like-of]], [[u-photo]], [[u-video]]
 ** [[h-feed]] - homepage [[composite stream]], and Recent Articles box
+*** homepage stream includes minimal in-stream [[reply-context]]s with explicit [[in-reply-to]] on [[h-entry]] replies & RSVPs, with compact inline reply-contexts on [[reacji]] posts
 
 Standard protocol support:
 * [[Webmention]] — Falcon automatically sends Webmentions for all links in notes & responses.
@@ -223,27 +224,6 @@ The next things I'm working on designing and implementing in Falcon. These are a
 ** save that reply-context info inside post storage alongside links to POSSE copies (Twitter, etc.)
 * re-evaluate below in the context of what XRay is able to 
 
-==== reacji in-stream reply-context ====
-Problem: [[reacji]] look silly on their on on a home page stream.
-
-Solution: provide a minimal [[reacji#Brainstorming|reacji reply context in-stream]].
-
-Depends on simple reacji detection function (preferably CASSIS).
-
-==== show icon reply-context in-stream ====
-Prefix reply posts in a stream ([[homepage]] and [[archive]] lists) with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
-
-Why:
-* So [[reader]]s that consume only the [[h-feed]] of my homepage will be able to detect and optionally retrieve/show/disclose [[reply-context]]s for my [[reply]] posts.
-* Also a small visual cue to more clearly indicate replies (independent of starting with @-name), in a [[composite stream]], as distinct from [[note]]s and other types of [[posts]]
-** Current distinction is a bit subtle - and requires that I start replies with "@-name" references which is suboptimal - too Twitter-centric a design.
-
-Why not more reply-context?
-* Bigger / more extensive reply-contexts inline in a stream (especially composite stream) would add too much clutter/noise vs. value.
-
-Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
-* http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
-
 ==== improve reply-context support ====
 (Reprioritize improve replies details section at this point)
 
@@ -262,6 +242,12 @@ Improve reply-context support in reply posts (some of this is easier than the ot
 *** Start with a [[nicknames-cache]] implementation
 *** Improve with implementing [[authorship]] algorithm
 ** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
+
+==== reply-contexts in archives ====
+Prefix reply posts in a [[archive]] lists with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
+
+Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
+* http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
 
 ==== post reply to any URL and auto POSSE ====
 Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to support [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to Twitter]]
