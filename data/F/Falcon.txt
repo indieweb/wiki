@@ -217,6 +217,16 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== For IWS 2018 ===
+Features to implement for IWS [[2018]], with particular reasons why:
+* [[#improve_replies_details|improve replies details]]
+** show higher-fidelity [[reply]] permalinks, similar or better than Twitter
+** similar improvement to compact in-stream [[reply-context]]s
+* [[#one-off_tag-of_post|one-off tag-of post]]
+** to give {{snarfed}} a good reason to implement Bridgy Publish support to POSSE tag-of posts to at least [[GitHub]]
+* [[#On_This_Day|On This Day]]
+** I expect both emotional value and challenges - a good combination to inspire in-person discussion
+
 === improve replies details ===
 * consider using [[XRay]] (X-Ray) at post publish time (falconpost UI) to 
 ** synchronously get reply-context information statically 
@@ -255,17 +265,20 @@ Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to sup
 ** [[u-syndication#POSSE_threading|use-case description]]
 ** [[u-syndication#Discovery|discovery algorithm]]
 * Using:
-** [[php-mf2]] statically with
+** [[XRay]] - should be able to find the u-syndication links!
+** backup plan: [[php-mf2]] statically with
 *** <code>[https://github.com/indieweb/php-mf2#parsing-rel-and-relalternate-values ->parseRelsAndAlternates()]</code>
-* So I can:
+
+Use-case(s):
+* Automatic POSSE threading - automatically thread the POSSE copy of my reply with the POSSE copy of the original indieweb post that I was replying to.
 ** enter just the URL of an original indieweb post I'm replying to into my posting storage (or UI),
 ** have Falcon's posting UI automatically discover the link to the tweet copy of the post 
 ** add an in-reply-to link from my post to the tweet I'm replying to
 ** have my reply POSSE copy thread with the POSSE tweet of the original.
-* ''Why?''
-** automatically thread the POSSE copy of my reply with the POSSE copy of the original indieweb post that I was replying to.
-** remove step of me having to look for the "also on twitter" link on an indieweb post and explicitly copy/paste it into my storage/UI.
-** Provide better user experience for those reading my posts on Twitter by providing them the threaded context right there in their reading experience.
+
+Why?
+* Save time and steps! Remove step(s) of me having to look for the "also on twitter" link on an indieweb post and explicitly copy/paste it into my storage/UI.
+* Preserve POSSE threading use-cases like: Provide better user experience for those reading my posts on Twitter by providing them the threaded context right there in their reading experience.
 
 ==== post reply to any tweet and auto indie-post reply ====
 Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http://waterpigs.co.uk/services/original-post original post endpoint] from server)
@@ -364,14 +377,6 @@ Specific use-cases:
 === RSVP reply-context ===
 Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
 
-==== MV in-stream RSVP reply-context ====
-Figure out a minimum viable RSVP reply-context to display on RSVP posts in-stream.
-* analyze below display options for RSVP permalinks
-* choose minimum (check/research existing in-stream RSVP reply-contexts)
-* design and implement incrementally
-** e.g. minimum, "↪ 📅 (event URL)"
-** pick next most important piece of information to display and implement it. repeat.
-
 ==== improve rsvp reply notes ====
 Improve [[rsvp]] reply notes:
 * use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
@@ -379,9 +384,11 @@ Improve [[rsvp]] reply notes:
 Goals (in order of design need / ease of implementation)
 # display a nice mini-event reply-context (needs design)
 # use whatever information can be inferred from the prose of the RSVP post
-# parse event permalink for event information as [[h-event]] etc.
+# parse with [[XRay]] event permalink for event information as [[h-event]]
+# pick next most important piece of information to display and implement it. repeat.
 
 Goals, show one or more of these, 
+* improve reply-context presentation, e.g. consider "↪ 📅 (event URL)"
 * '''name''' of the event (perhaps inferred from (smart)quoted or titlecapped text following RSVP recognition prose (e.g. "going to ...")
 * '''date(s)''' of the event
 ** default single day (not multiple)
