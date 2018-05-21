@@ -148,18 +148,6 @@ w/ bridgy publish and/or silo.pub?
 **** harder: recognize other kinds of posts and do them.
 ***** e.g. silo.pub requires micropubs, probably parsed from the h-entry on the post.
 
-=== Webmention sending ===
-
-Currently I use the [[Telegraph]] service, manually. I want a service that:
-
-* subscribes to my site updates via websub
-* does all the things that [https://github.com/strugee/lazymention lazymention does]
-* maybe limit to "relevant" links to send notifications about
-** like-of, in-reply-to is obvious. plain url mentions only in e-content?
-** ignore links in h-entry properties like author, syndication - maybe?
-* if given a status URL, save that too and check later. either on a job queue or manual, probably.
-* UI to review webmentions
-
 === Pano micropub client ===
 * photo
 * some metadata that indicates it's a pano
@@ -222,8 +210,20 @@ This is an itch that has returned! Most notably, I post short [[audiogram]]s con
 
 == No Longer Itches ==
 
+* <s>Webmention sending</s>
+** 2018-04 [https://martymcgui.re/2018/04/14/194434/ I implemented automatic WM sending in my hook-publish handler]
+*** It uses rsync output to determine what permalink pages are new or updated, parses them for the main h-entry and pulls out "appropriate" links for which to send webmentions.
+** Previously I used the [[Telegraph]] service, manually. I wanted a service that:
+*** subscribes to my site updates via websub
+*** does all the things that [https://github.com/strugee/lazymention lazymention does]
+*** maybe limit to "relevant" links to send notifications about
+**** like-of, in-reply-to is obvious. plain url mentions only in e-content?
+**** ignore links in h-entry properties like author, syndication - maybe?
+*** if given a status URL, save that too and check later. either on a job queue or manual, probably.
+*** UI to review webmentions
+
 * <s>better reply contexts</s>
-** 2017-12 I switched to using XRay when I rewrite my hook-publish handler in PHP.
+** 2017-12 I switched to using XRay when I rewrote my hook-publish handler in PHP.
 ** previously used [https://github.com/indieweb/microformats2-ruby/ the ruby microformats2 gem] to get mf2 data, XRay for twitter.com posts.
 ** <s>would like to support posts with microdata markup [https://martymcgui.re/2016/11/17/161819/ example])</s>
 *** that microdata was embedded in a JSONP-like call, yuck. instead, made a custom parser for Soundcloud that extracts the "sound ID" and creates an embed. not great but provides a reasonable reading experience at the moment.
