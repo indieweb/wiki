@@ -11,18 +11,16 @@ After spending months on arguing with myself, I finally decided to write my stat
 
 ; [[POSSE]]
 : My photos are POSSEd to [[Flickr]] via [[bridgy]], but I barely cross-post anything else these days.
-; [[PESOS]]
-: I recently started to embrace in-silo interactions, because I can pull all of them with a simple cron job to my site before I run the build process. Most of these require [[OAuth]] 1 or 2, therefore there is a tiny service running which handles callbacks and stores tokens.
+; [[PASTA]]
+: After speding a lot of time thinking throught [https://petermolnar.net/making-things-private/ what should be on my website] I decided to archive silo interactions, favorites, bookmarks, etc. only in private archives. Most of these require [[OAuth]] 1 or 2, therefore there is a tiny service running which handles callbacks and stores tokens.
 ; [[Webmention]]s
-: I'm using an ancient Python library, [https://github.com/petermolnar/webmention-tools webmention-tools], which I altered a little to my needs; this is what's finding the webmention endpoints and sending the mentions on build. All the previously done mentions are stored in a JSON file.
+: Using {{aaronpk}}'s [http://github.com/aaronpk/xray X-Ray] to detect the webmention endpoints (yes, from Python, via a system call) to send webmentions to. The webmentions themselves (from,to,timestamp) are in an SQLite database to skip the ones already done.
 ; [[Micropub]]
-: There is another microservice running, which shares only a minimal amount of code with the generation process; essentially it just receives incoming requests and writes them into YAML+Markdown.
+It's not yet done in the 2.x version of my static generator.
 ; [[search]]
-: The site builds a [https://whoosh.readthedocs.io/en/latest/ whoosh] index on generation by either updating or adding the documents' text. This is served by yet another small service.
+: The site populates an SQLite database using the FTS5 engine for full text search. It comes with a set of weird issues ( no - allowed for example, because it interprets it as a column name), but it works reasonably well and it's extremely simple.
 ; image and image metadata handling
 : It all relies on [[exiftool]] for getting metadata from images, but all my tries for storing all the image related meta (including text and tags) failed due to the lack of a software capable of handling IPTC and XMP with reasonable UI, so I ended up using the same, post-like YAML+Markdown format, with the same name as the photos, therefore they are linked.
-; taxonomies: category and tag only
-: Category is the name of the folder the post is physically located in; the tags are hand applied. They all have archives per item and an index per taxonomy. 
 
 
 == Previously ==
