@@ -28,38 +28,8 @@ Specific "how to backfeed" documentation per silo API:
 * Otherwise, there's the unreliable, undocumented, unofficial 'related_results' endpoint.
 
 ==== Facebook ====
-===== [https://developers.facebook.com/docs/graph-api Graph API] =====
-The Graph API is the official way of communicating with Facebook.
-
-To get comments for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/comments]:
-
-  https://graph.facebook.com/v2.2/POSTID/comments?limit=LIMIT&access_token=ACCESS_TOKEN
-
-POSTID is the id of a post; no need for any user id, just the regular, post id
-LIMIT how many comments should be shown in one request
-ACCESS_TOKEN is the Oauth2 access token to the service
-
-Similarly, to get likes for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/likes]:
-
-  https://graph.facebook.com/v2.2/POSTID/likes?limit=LIMIT&access_token=ACCESS_TOKEN
-
-===== FQL =====
-* before Graph API 2.2, there was FQL that could be used as:
-* [https://developers.facebook.com/docs/reference/fql/ FQL] makes this surprisingly easy. For example, here's a query to get all comments on the posts from a given user with links in them:
-  SELECT post_fbid, time, fromid, username, object_id, text FROM comment
-    WHERE object_id IN (SELECT link_id FROM link WHERE owner = USER_ID)
-    ORDER BY time DESC
-* And here's the follow-up query to get the URLs of those links (where <tt>LINK_IDS</tt> is a comma-separated list of the <tt>object_id</tt>s from the above query):
-  SELECT link_id, url FROM link WHERE link_id IN (LINK_IDS)
-* See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/facebook.py#L167 example code here]. There's also [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/facebook.py#L185 this example code] that fetches and processes comments from the posts found by those queries.
-* API is sometimes slow. Most backfeed solutions will/should poll in offline processes though, so they won't usually block end user requests.
-* Returns extremely unclear failed results for API calls to posts by under-18s
-** This is bloody annoying for us minors. It's more "bothersome" than "protecting" -- [[User:Waterpigs.co.uk|barnabywalters]]
-
-* How best to represent external users?
-** Facebook URI (not preferable)
-** Can we grab their personal URI from their profile?
-** Detect comments from originating user?
+See:
+* [[Facebook#How_to_backfeed_from]]
 
 ==== Flickr ====
 Flickr has direct APIs for this:
