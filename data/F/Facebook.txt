@@ -31,41 +31,6 @@ Previously, [[Freedom.io]] could be used to copy Facebook posts. It is no longer
 
 __TOC__
 
-=== How to POSSE to ===
-{{main|POSSE to Facebook}}
-
-There are <span id="POSSE_out_to">multiple ways to [[POSSE]]</span> out ''some'' things from your indieweb site to your Facebook profile. Specifically, you can POSSE posts and event RSVPs, but [https://github.com/snarfed/bridgy/issues/350 as of the 2.x Facebook API, ''not'' comments or likes.] Comments and likes [https://github.com/snarfed/ownyourresponses#facebook can't be PESOSed either.]
-
-Existing techniques:
-
-==== from Twitter ====
-* [[User:Tantek.com|Tantek]] POSSEs [[notes]], [[articles]] by name + permalink, [[replies]] (including [[RSVP]]s) out from tantek.com to Twitter, and then uses the Twitter/FB integration functionality to cascade (except for plain replies) that POSSEing from Twitter to Facebook. Reasons:
-** insufficient marginal utility in writing a custom POSSE syndicator to FB.
-** FB just gets abbreviated summaries (thus placing more value on tantek.com original posts).
-** Exception: In 2014 Tantek started occasionally manually using [[Bridgy]] Publish to POSSE a few longer and more significant posts (notes and articles) directly from tantek.com to Facebook. 
-*** Working on adding to Falcon: [[Falcon#auto_Bridgy_POSSE_to_FB|Automatic Bridgy POSSE to FB]]
-* [[User:Tommorris.org|tommorris]] does likewise, because he's lazy.
-
-==== IFTTT ====
-* [[User:Adactio.com|Adactio]] POSSEs [[notes]], [[photos]], [[articles]] out from adactio.com to Facebook using If This Then That (IFTTT).
-
-==== Bridgy ====
-You can use [[Bridgy]] to POSSE Facebook posts and event RSVPs. [https://www.brid.gy/about#publish Details here.]
-
-Bridgy ''used to'' support POSSEing comments and likes, [https://github.com/snarfed/bridgy/issues/350 but Facebook's 2.x API disabled that.]
-
-* [[User:Snarfed.org]]: [https://snarfed.org/responses#replies comments], [https://snarfed.org/responses#likes likes], [https://snarfed.org/responses#rsvps RSVPs]
-
-==== Facebook API ====
-{{main|POSSE to Facebook}}
-Posting to one's wall is supported with the Facebook 'Graph API'. See [[POSSE to Facebook]] for details and examples.
-
-For broader overview of the Facebook API, see the Social Web WG analysis:
-* https://www.w3.org/wiki/Socialwg/Social_API/Facebook_API
-
-=== How to PESOS from ===
-You can use the Facebook API to <span id="PESOS_from">PESOS your posts</span>, but as of the 2.x API, [https://github.com/snarfed/ownyourresponses#facebook not your comments or likes.]
-
 === How to <span id="Weaning">wean</span> yourself from ===
 If you’re looking to reduce your usage of Facebook, you may find that incrementally doing so (as opposed to doing a cold-turkey [[silo-quit]]) may be easier.
 
@@ -101,13 +66,85 @@ Here are some steps to take.
 #* Goal: stop checking Facebook notifications (toolbar globe icon)
 #** IndieWeb folks who have done this: {{t}} (2016-08-07 for ~1 week, 2017-08-01 for ~1.5 weeks, 2018-01-14 for ~10 weeks by being off Facebook the website completely, still using FB Messenger app for comms, and then procrastinating checking notifications since); {{petermolnar}} when in he visited China (no Facebook there)
 
-
 ==== Weaning Brainstorming ====
 More thoughts on how one could reduce one's Facebook usage
 
 * document all your Facebook use-cases as itches to implement on your own site
 * pick the easiest use-case to implement yourself, build it, and try stopping using Facebook for that
 * ...
+
+=== How to POSSE to ===
+{{main|POSSE to Facebook}}
+
+There are <span id="POSSE_out_to">multiple ways to [[POSSE]]</span> out ''some'' things from your indieweb site to your Facebook profile. Specifically, you can POSSE posts and event RSVPs, but [https://github.com/snarfed/bridgy/issues/350 as of the 2.x Facebook API, ''not'' comments or likes.] Comments and likes [https://github.com/snarfed/ownyourresponses#facebook can't be PESOSed either.]
+
+Existing techniques:
+
+==== from Twitter ====
+* [[User:Tantek.com|Tantek]] POSSEs [[notes]], [[articles]] by name + permalink, [[replies]] (including [[RSVP]]s) out from tantek.com to Twitter, and then uses the Twitter/FB integration functionality to cascade (except for plain replies) that POSSEing from Twitter to Facebook. Reasons:
+** insufficient marginal utility in writing a custom POSSE syndicator to FB.
+** FB just gets abbreviated summaries (thus placing more value on tantek.com original posts).
+** Exception: In 2014 Tantek started occasionally manually using [[Bridgy]] Publish to POSSE a few longer and more significant posts (notes and articles) directly from tantek.com to Facebook. 
+*** Working on adding to Falcon: [[Falcon#auto_Bridgy_POSSE_to_FB|Automatic Bridgy POSSE to FB]]
+* [[User:Tommorris.org|tommorris]] does likewise, because he's lazy.
+
+==== IFTTT ====
+* [[User:Adactio.com|Adactio]] POSSEs [[notes]], [[photos]], [[articles]] out from adactio.com to Facebook using If This Then That (IFTTT).
+
+==== Bridgy ====
+You can use [[Bridgy]] to POSSE Facebook posts and event RSVPs. [https://www.brid.gy/about#publish Details here.]
+
+Bridgy ''used to'' support POSSEing comments and likes, [https://github.com/snarfed/bridgy/issues/350 but Facebook's 2.x API disabled that.]
+
+* [[User:Snarfed.org]]: [https://snarfed.org/responses#replies comments], [https://snarfed.org/responses#likes likes], [https://snarfed.org/responses#rsvps RSVPs]
+
+==== Facebook API ====
+{{main|POSSE to Facebook}}
+Posting to one's wall is supported with the Facebook 'Graph API'. See [[POSSE to Facebook]] for details and examples.
+
+For broader overview of the Facebook API, see the Social Web WG analysis:
+* https://www.w3.org/wiki/Socialwg/Social_API/Facebook_API
+
+=== How to PESOS from ===
+You can use the Facebook API to <span id="PESOS_from">PESOS your posts</span>, but as of the 2.x API, [https://github.com/snarfed/ownyourresponses#facebook not your comments or likes.]
+
+=== How to backfeed from ===
+There are a few ways to [[backfeed]] from Facebook post copies to your original posts:
+====  Graph API ====
+The [https://developers.facebook.com/docs/graph-api Graph API] is the official way of communicating with Facebook.
+
+To get comments for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/comments]:
+
+  https://graph.facebook.com/v2.2/POSTID/comments?limit=LIMIT&access_token=ACCESS_TOKEN
+
+POSTID is the id of a post; no need for any user id, just the regular, post id
+LIMIT how many comments should be shown in one request
+ACCESS_TOKEN is the Oauth2 access token to the service
+
+Similarly, to get likes for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/likes]:
+
+  https://graph.facebook.com/v2.2/POSTID/likes?limit=LIMIT&access_token=ACCESS_TOKEN
+
+==== FQL ====
+* before Graph API 2.2, there was FQL that could be used as:
+* [https://developers.facebook.com/docs/reference/fql/ FQL] makes this surprisingly easy. For example, here's a query to get all comments on the posts from a given user with links in them:
+  SELECT post_fbid, time, fromid, username, object_id, text FROM comment
+    WHERE object_id IN (SELECT link_id FROM link WHERE owner = USER_ID)
+    ORDER BY time DESC
+* And here's the follow-up query to get the URLs of those links (where <tt>LINK_IDS</tt> is a comma-separated list of the <tt>object_id</tt>s from the above query):
+  SELECT link_id, url FROM link WHERE link_id IN (LINK_IDS)
+* See [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/facebook.py#L167 example code here]. There's also [https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/facebook.py#L185 this example code] that fetches and processes comments from the posts found by those queries.
+* API is sometimes slow. Most backfeed solutions will/should poll in offline processes though, so they won't usually block end user requests.
+* Returns extremely unclear failed results for API calls to posts by under-18s
+** This is bloody annoying for us minors. It's more "bothersome" than "protecting" -- [[User:Waterpigs.co.uk|barnabywalters]]
+
+* How best to represent external users?
+** Facebook URI (not preferable)
+** Can we grab their personal URI from their profile?
+** Detect comments from originating user?
+
+==== Bridgy backfeed ====
+Sign-up with [[Bridgy]] and authorize Bridgy to view your Facebook account and send you [[webmention]]s when people respond to your Facebook post copies.
 
 === How to delete your account ===
 Deletion of an account is made deliberately awkward and uncomfortable by Facebook. Note that there are two separate types of account deletion, viz. Deactivation and Deletion.
