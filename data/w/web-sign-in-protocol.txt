@@ -2,15 +2,20 @@ https://indieweb.org/web-sign-in-protocol
 
 {{stub}}
 
-This page describes using IndieAuth for authentication rather than [[obtaining-an-access-token|authorization]]. In this case, no token endpoint or Micropub endpoint are needed, and '''the user did not delegate authorization to a specific endpoint''' so the client searches for known authentication providers.
+This page describes signing in to websites using your personal web address. In the example, sites that have not delegated authorization to a specific endpoint fall back to using [[relmeauth]] for authentication rather than [[obtaining-an-access-token|authorization]]. 
 
-== Examples ==
+If the user did not delegate authorization to a specific endpoint, such as an [[IndieAuth] endpoint, then no token endpoint is needed and the client searches for known authentication providers by other means. 
 
-In these examples, the following URLs will be used.
+[[IndieAuth]] is a popular option for authorization, while [[relmeauth]] is a popular option to fall back on. However, web sign-in does not dictate any particular service.
 
-The site the user is signing in to is the IndieWebCamp wiki:
-* client_id = https://indiewebcamp.com
-* redirect_uri = https://indiewebcamp.com/auth/callback
+== Example of Web Sign-In ==
+
+
+In these examples, [[relmeauth]] will be used as the example of a fallback method and the following URLs will be used.
+
+The site the user is signing in to is the IndieWeb wiki:
+* client_id = https://indieweb.org
+* redirect_uri = https://indieweb.org/auth/callback
 
 The user signing in is [[User:Aaronparecki.com|Aaron Parecki]]:
 * me = https://aaronparecki.com/
@@ -35,7 +40,8 @@ aaronparecki.com points to multiple silo authorization services by specifying re
 <pre>&lt;link rel="pgpkey" href="/files/key.asc"&gt;</pre>
 
 === Authorization ===
-The wiki should present an interface describing the request being made. It must indicate:
+
+If not using a site's delegated auth endpoint, the [[relmeauth]] service or other service should present an interface describing the request being made. It must indicate:
 * The name of the site making the request
 * Give the user choices of using any supported auth providers they have listed on their home page
 
