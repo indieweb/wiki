@@ -1,0 +1,58 @@
+https://indieweb.org/recommendation_request
+
+A '''<dfn>recommendation request</dfn>''' is a type of post that requests recommendations from people who see your post.
+
+A recommendation could have reduced scope to only allow specific friends to provide recommendations or you can tag friends to specifically flag their attention to request their recommendations specifically.
+
+==Facebook Example==
+
+Facebook has a UI for requesting recommendations from friends within a certain geographical area.
+
+=== Create Request ===
+The user requesting recommendations first specifies what sort of recommendations they want and where they should be geographically.
+
+[[File:Facebook-iOS-Recommendation-Request-1.png|200px]]
+[[File:Facebook-iOS-Recommendation-Request-2.png|200px]]
+[[File:facebook-recommendations-request-post-ui.png|400px]]
+
+=== Add to Timeline ===
+The user can then add the recommendations request to their timeline.
+
+[[File:Facebook-iOS-Recommendation-Request-3.png|200px]]
+[[File:facebook-recommendations-request-post-ui-2.png|400px]]
+
+=== Timeline Post ===
+An example of a recommendations request in the timeline.
+
+[[File:Facebook-iOS-Recommendation-Request-4.png|200px]]
+[[File:facebook-recommendations-timeline-post.png|400px]]
+
+
+==Brainstorming==
+
+There are UX concerns and data concerns.
+
+=== UX ===
+Either a CMS or a Micropub app could build in support for creating a recommendation request. From a user's perspective this could involve allowing a person to enter the city or locale that they are going to visit, or even just clicking a place on a map and selecting the size of the area they are looking at.
+
+
+=== Data ===
+In order to allow a reader to parse a recommendation request there is some minimum geographic information the reader would need in order to operate. Because the only site that really allows these types of requests currently is Facebook, we are unable to process their data model. However, in place of that, I have researched how the different Places or Points of Interest APIs allow you to search for locations.
+
+It seems the most common use case is overwhelmingly using a latitude, longitude and a radius measured in meters, as you can read in the sections below.
+
+This data would need to be made available to a parser and thus a reader through microformats.
+
+The argument has also been made that latitude, longitude and radius don't accurately reflect the needed information for someone to give a recommendation. {{kevinmarks}} has pointed out that it [https://chat.indieweb.org/dev/2018-06-01#t1527847015081800 could really be a question of time, distance and busyness] or even [https://chat.indieweb.org/dev/2018-06-01#t1527867376324200 what metro line you are staying on, what are your modes of transportation?]
+
+Whether lat/lng/radius or some other form of geographic communication, there needs to be some data available through an h-card or h-geo that communicates the geographic boundaries so that a [[reader]] or [[Micropub]] app can provide a list of places/venues for a person to easily post a [[recommendation]] post.
+
+==== Latitude, Longitude and Radius ====
+Facebook's Places API, Google Maps' Places API and Foursquare's Venue Search API all take a latitude, longitude and a radius (measured in meters) to define an area of search. Google Maps places a maximum allowed radius of 50,000 meters.
+
+==== Bounding Box ====
+Mapbox's Points of Interest (POI) API takes a latitude and longitude, as well as an optional bounding box (the minimum and maximum of both the latitude and longitude) to restrict how far away a POI can be returned from the original latitude and longitude.
+
+== See Also ==
+
+* [[recommendation]]
