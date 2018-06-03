@@ -129,13 +129,16 @@ And despite using a silo, there is little downside because the use is ephemeral 
 One potentially non-trivial downside (depends on the user) of using a silo account for authorization is that the silo account may be tracking your use of IndieAuth.com, and who knows what they will do with that data. The silo accounts do not see what services (like this wiki) that you sign-into however with IndieAuth.
 
 == Issues ==
-This section is about issues with IndieAuth-the-[[building block]], not [[indieauth.com|IndieAuth'''.com'''-the-service]]. Please open specific bugs and action items for the latter on the [https://github.com/aaronpk/IndieAuth.com/issues?state=open IndieAuth.com Github project]. Issues below should be specifically about IndieAuth as a protocol.
+This section is for issues with the IndieAuth protocol that are not specific to either [[authorization-endpoint]] or [[token-endpoint]]. Issues with how the protocol is presented, as well as security considerations can go here.
 
-=== Security ===
-* The token can be sent to IndieAuth without TLS (or the docs make it appear so); such a request should be refused (*not* redirected) to prevent DNS poisoning, MITM, and race-condition attacks.
+This section is not for issues with [[indieauth.com|IndieAuth'''.com'''-the-service]]. Please open specific bugs and action items for the latter on the [https://github.com/aaronpk/IndieAuth.com/issues?state=open IndieAuth.com Github project].
+
+<span id="Security"></span>
+=== Should the specification make recommendations on HTTPS? ===
+A token can be sent to an IndieAuth endpoint without [[HTTPS]] (the docs do not forbid this), such a request should be refused. In the case of an HTTPS redirect being in place for the domain the request should not be redirected to prevent DNS poisoning, MITM, and race-condition attacks.
 
 === Need Simple Copy Paste How To ===
-The explanation in http://waterpigs.co.uk/articles/indiewebcamp-signin-ux/ provides a list of three lengthy descriptions of what you need to setup IndieAuth, which was then subsequently criticized as "this is not a straightforward process" in the post: http://aralbalkan.com/notes/on-evolving-indieauth/
+The explanation in http://waterpigs.co.uk/articles/indiewebcamp-signin-ux/ provides a list of three lengthy descriptions of what you need to set up IndieAuth, which was then subsequently criticized as "this is not a straightforward process" in the post: http://aralbalkan.com/notes/on-evolving-indieauth/
 
 Thus we need a a simple copy paste how to that is not three lengthy descriptions.
 
@@ -148,6 +151,11 @@ Compare with:
 Explanations for IndieAuth need to be <em>at least as simple to understand</em> as those for Twitter Sign-in and Facebook Connect.
 
 === IndieAuth using form-encoded responses instead of JSON ===
+IndieAuth originally used standard form-encoding for requests and responses, since it has been a standard encoding format since the beginning of the web.
+
+Over time, implementations added support for sending JSON responses as well as form-encoded. When IndieAuth was written up as a [https://www.w3.org/TR/indieauth/ formal OAuth 2.0 extension], it documented only the JSON responses in order to be compatible with OAuth 2.0. At that point, most implementations already supported JSON responses, or did content negotiation to support both formats.
+
+<raw><details><summary>Historical Discussion</summary></raw>
 IndieAuth uses standard form-encoding for requests and response because it has been a standard encoding format since the beginning of the web. If it were a JSON response, then 7 years down the road you'd be asking "why is the response in JSON instead of ____" where ____ is the next trendy thing that replaces JSON. (Remember when XML was the new hotness?)
 
 Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_changes_to_indieauth_protocol.html#content_negotiation &mdash; [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 02:26, 5 March 2015 (PST)
@@ -161,10 +169,11 @@ Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_ch
 * Just to be anti-inventing-new-formats (too many of them around and demanding attention), I'd go for form-encoded -- {{kartik}} 00:21 2015-03-06
 
 * I just never saw HTTP POST form encoded _responses_ anywhere, only POST url encoded form requests... Any link to other (REST) services that use this? e.g. XMLHttpRequest does not support form encoded responses at all... [[User:tuxed.net|fkooman]]
+<raw></details></raw>
 
 === Requesting additional user details ===
 
-The auth consumers may want to receive additional information about a user, and not just their homepage URL. Andy Baio raised some points in regard to this in a backer-only Kickstarter post, [https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812 Opening the Source and The Great Auth Debate], 2015-03-16, when deciding what authenticator to use for [[Upcoming.org]].
+The auth consumers may want to receive additional information about a user, and not just their homepage URL. Andy Baio raised some points in regard to this in a backer-only Kickstarter post, [https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812 Opening the Source and The Great Auth Debate], 2015-03-16, when deciding what authentication mechanism to use for [[Upcoming.org]].
 
 * Silos may give the application access to the user’s social graph: who their friends are, who they are following.
 ** This would require some IndieWeb format for [[following]].
@@ -172,7 +181,7 @@ The auth consumers may want to receive additional information about a user, and 
 
 * Silos may give the application location information about the user.
 ** This is great for applications like Upcoming.org that want to show relevant events.
-** May be possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
+** This is possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
 
 === naming confusion ===
 
