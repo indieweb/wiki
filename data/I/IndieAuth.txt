@@ -112,11 +112,12 @@ The [https://github.com/aaronpk/IndieAuth.com IndieAuth.com source code] is avai
 (This section is a stub and needs expansion!)
 
 There are a growing number of web sites that you can log into using IndieAuth and gain additional functionality:
-* https://indieweb.org/
-** This site! Signing-in with IndieAuth enables you to edit the site!
-** Most (all?) [[Micropub]] apps use IndieAuth to sign in.
+* [[Main Page|IndieWeb.org]]
+** This site! Signing-in with IndieAuth enables you to edit the wiki!
+* [https://telegraph.p3k.io/ Telegraph]
+** [[Telegraph]] allows people to send [[Webmentions]] after logging in.
+* Most (all?) [[Micropub]] apps use IndieAuth to sign in.
 * ...
-
 
 == Use with Micropub ==
 <span id="Micropub"></span>
@@ -124,6 +125,62 @@ There are a growing number of web sites that you can log into using IndieAuth an
 Most (all?) [[Micropub]] implementations use IndieAuth to obtain the user's authorization (and an access token), including:
 
 * [https://wordpress.org/plugins/micropub/ wordpress-micropub]
+
+== IndieAuth Protocol ==
+
+TODO: consider moving this to its own page, maybe on [[:Category:IndieAuth]].
+
+A user should only have to communicate their own homepage URL to the website they are trying to log in to. This is the core idea of [[Web sign-in]]. This means a developer should in their turn be able to find everything they need on that one user supplied URL.
+
+=== Discovery from the User's Homepage ===
+
+IndieAuth defines two new [[rel-values|<code>rel</code> values]] for this. A user can simply link to the endpoints they want to use from their homepage, add the correct <code>rel</code> value and be done.
+
+An example would be to link to them in the <code><head></code> section of their HTML, like so:
+
+    <link rel="authorization_endpoint" href="https://example.com/auth">
+    <link rel="token_endpoint" href="https://example.com/token">
+
+Developers can use any way they want of finding these.
+
+=== The Authorization Endpoint ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[authorization-endpoint]]''' for implementation details.</p>
+
+The authorization endpoint is a page where applications can send users to and asking them to identify themselves. Because the user defines their own endpoint on their homepage, this can be part of their own website or a completely separate service. This is how the user provides proof they really operate the homepage URL they provided.
+
+An application can also ask the user to grant it certain rights by requesting them through the authorization endpoint. A [[Micropub]] client might ask to be allowed <code>create</code> rights. The user can then either accept these or not when they have been redirected to their endpoint.
+
+For developers the authorization endpoint also functions as a verification service. If they get a code from a user they can check its validity with the endpoint to make sure it was truly issued by the user.
+
+==== Third Party Services ====
+
+* [[IndieAuth.com]] has an authorization endpoint that wraps [[RelMeAuth]] and will let you use [[silo]] accounts like [[Twitter]] or simple alternatives like [[email]] as authentication options. Use the URL <code>https://indieauth.com/auth</code> as your value for <code>authorization_endpoint</code>.
+* [[commentpara.de]] allows anyone to (anonymously or pseudonymously) log in to websites supporting IndieAuth by using <code>https://commentpara.de/</code> as their homepage.
+
+==== Self-Hostable Implementations ====
+
+* [[selfauth]] is an authorization endpoint in [[PHP]] made to be easy to deploy.
+* [https://github.com/barryf/acquiescence Acquiescence] is an authorization endpoint in [[Ruby]] developed and used by {{barryf}}.
+* [[Known]] enables an authorization endpoint when the [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub IndiePub plugin] is turned on.
+
+=== The Token Endpoint ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[token-endpoint]]''' for implementation details.</p>
+
+The token endpoint is a service that creates access tokens for applications to store. This way a user can authorize a [[Micropub]] client to make posts without having to go through the authorization process every time.
+
+==== Third Party Services ====
+
+* [[IndieAuth.com]] has a token endpoint. Use the URL <code>https://tokens.indieauth.com/token</code> as your value for <code>token_endpoint</code>.
+
+==== Self-Hostable Implementations ====
+
+* [https://github.com/barryf/acquiescence Acquiescence] is a token endpoint in [[Ruby]] developed and used by {{barryf}}.
+* [[Known]] enables a token endpoint when the [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub IndiePub plugin] is turned on.
+
+
+
 
 == Table of Contents ==
 <div style="width:100%;float:left">
