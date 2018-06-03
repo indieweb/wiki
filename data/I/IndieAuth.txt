@@ -26,17 +26,31 @@ Basic flow with a User signing in to a (web)App
 # '''The App checks the code with the auth endpoint''', and if the code is valid and if the User’s identifier matches the identifier the auth endpoint gives, the login is completed, and the User can enter and use the app.
 
 == How to ==
+If all you're trying to do is log in to the wiki, then you may not need to set up IndieAuth at all! Instead, you can just link to your existing Twitter or GitHub accounts and the wiki will use those to authenticate you! See [https://indielogin.com/setup] for more details.
+
 === Set up using IndieAuth.com ===
-* Add a link on your home page to your various social profiles with the attribute <code>rel="me"</code>
-* Ensure your profiles link back to your home page
-* Enter your domain in a "Web Sign-In" box to begin using your own domain as your online identity!
+[[indieauth.com|IndieAuth.com]] is a service that allows you to sign in as your site by using your social media profiles. Your homepage and social media profiles need to link to each other for verification. Instead of registering for an account at indieauth.com, it uses your existing social media accounts to verify you own the URL you're signing in as.
+
+# Add [[rel-me]] links to your homepage for various ways to reach you,<br>e.g. <code><nowiki><a href="https://twitter.com/indiewebcamp" rel="me">Twitter</a></nowiki></code>.
+# Make sure any social media profiles you linked to have a link back to your homepage.
+# Finally, include <code><link rel="authorization_endpoint" href="https://indieauth.com/auth"></code> on your homepage.
+
+You are done! Try to log in to a site that supports IndieAuth, such as:
+* [https://indieweb.org/Special:UserLogin this wiki]
+* [https://telegraph.p3k.io/login Telegraph]
+* [https://pin13.net/login/ this demo page on pin13.net]
+
+These services should redirect you to your chosen IndieAuth endpoint to sign in, which in this case is indieauth.com.
 
 See: [https://indieauth.com/setup full setup instructions]
 
-=== Use IndieAuth.com for your OpenID ===
+==== Use IndieAuth.com for your OpenID ====
 See [[indieauth.com#OpenID]]
 
-=== Setup your own IndieAuth provider ===
+=== Set up in WordPress ===
+If you use WordPress, you can install the [[Wordpress IndieAuth Plugin]] which provides a built-in IndieAuth server.
+
+=== Set up your own IndieAuth provider ===
 {{main|authorization-endpoint}}
 
 == Users ==
