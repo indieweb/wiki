@@ -22,6 +22,7 @@ __TOC__
 
 == Implementations ==
 Open source implementations 
+* [[IndieLogin.com]] - service and open source
 * [[IndieAuth.com]] - service and open source
 * Node.js:
 ** https://npmjs.org/package/relmeauth
@@ -42,12 +43,14 @@ There are also usability, error detection, and recovery reasons for keeping such
 === Selectively Displaying rel-me Info ===
 Selectively Displaying rel-me Info (e.g. hiding a one-off email address).
 
-Ideally your site would know that the request was coming from an (your?) IndieAuth server, and only render your one-off email address if so.
+Ideally your site would know that the request was coming from a RelMeAuth server, and only render your one-off email address if so.
 
 This would require either
 
 # some sort of pre-registration with the indieauth server so your site could verify a shared secret
 # crypto signing with public keys so that pre-registration is not required
+
+It is not possible to provide information to an arbitrary site without it also being available to attackers. A better solution to this problem is to implement [[IndieAuth]] so that you can have a trusted relationship with your IndieAuth server and authenticate with it however you want. That gives you a trusted channel to enter your email address, set up a multifactor auth option, etc.
 
 ==== 1 pre-registration ====
 Here is a potential example flow.
@@ -98,6 +101,7 @@ Possible solutions have been mentioned through an extra link relation:
 ## I can understand the desires to 1. provide a non-authorative broader identity consolidation (which you would do with rel=me as documented), 2. keep the simple rel=me way to do both consolidation and authn, 3. and a way to limit which of those you wanted used for authentication. In which case, I'd suggest "authn" as the new rel value to use. And then there are a number of possibilities for how it should work. I like the "upgrade a rel=me" semantic that {{aaronpk}} suggests. Though the effect is more of a slight downgrade of all the *other* rel=me links on the page. - {{t}}
 ## I don’t think it is either “upgrade” or “downgrade” at all. More of a branch off. For people with long lists of identities (I am approaching 30) trust may become an issue and thus branching authentication away from consolidation makes sense. Curious though: why the extra ''n'' in <code>authn</code> for the link relation? —&nbsp;{{martijnvdven}}
 ## That seems more-elegant than my suggestion; presumably we'd want ''both'' attributes (i.e. <code>rel="me auth"</code>) in cases where the resulting link both represented me ''and'' could be used to authenticate me? So the process for an authenticator would be: (a) check for "auth", failing that (b) check for "me", and the process for a different service simply spidering for where I am found on the web found be: (a) just check for "me". {{danq}}
+## This has been implemented in indielogin.com. See [https://indielogin.com/setup#choosing-auth-providers https://indielogin.com/setup#choosing-auth-providers] for details.
 
 == Articles ==
 * {{citation
@@ -121,6 +125,13 @@ Possible solutions have been mentioned through an extra link relation:
 | author = {{barnabywalters}}
 | published = 2013-12-08
 | archiveurl = https://web.archive.org/web/20180227093118/https://waterpigs.co.uk/articles/squarespace-web-sign-in/
+}}
+* {{citation
+| title = Dropping Twitter Support on IndieAuth.com
+| url = https://aaronparecki.com/2018/05/27/10/indieauth-twitter
+| author = {{aaronpk}}
+| published = 2018-05-27
+| archiveurl = https://web.archive.org/web/20180603223725/https://aaronparecki.com/2018/05/27/10/indieauth-twitter
 }}
 
 == Brainstorming ==
