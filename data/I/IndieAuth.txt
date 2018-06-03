@@ -9,6 +9,8 @@ IndieAuth was build on ideas and technology from existing proven technologies li
 
 == Why ==
 
+By choosing your IndieAuth provider, you can tell applications where to send you to sign in. This gives you more control over the privacy and security of your logins.
+
 IndieAuth is part of taking back control of your online identity. Instead of logging in to websites as “you on Twitter” or “you on Facebook”, you should be able to log in as just “you”. We should not be relying on [[silos]] to provide our authenticated identities, we should be able to use our own [[personal domain|personal domains]] to log in to sites everywhere.
 
 You can use it right now to log in to this wiki and contribute to the [[community]], including doing common things like:
@@ -18,12 +20,12 @@ You can use it right now to log in to this wiki and contribute to the [[communit
 IndieAuth is also used by many [[Micropub]] clients, so you can use your own website to log in to the tools you use to post content.
 
 == How it works ==
-Basic flow with a User signing in to a (web)App
-# '''The User fills in his/her personal URL''' This is called [[Web sign-in]].
-# '''The App fetches the URL, looking for an Authorization Endpoint.''' For this, the user can use IndieAuth.com, but it can also be at their own domain. The App redirects the User to their AuthEndpoint.
-# '''The User authenticates at their own Authorization Endpoint.''' IndieAuth.com uses [[RelMeAuth]] to authenticate users, but if a user uses an Authorization Endpoint on his/her own site, it can be a password, e-mail link, or any other authentication the auth endpoint provides. They prove their identity to their auth endpoint, the App waits.
-# '''The authorization endpoint issues a temporary authorization code''', and sends it to the app by redirecting the user's browser.
-# '''The App checks the code with the auth endpoint''', and if the code is valid and if the User’s identifier matches the identifier the auth endpoint gives, the login is completed, and the User can enter and use the app.
+Basic flow with a user signing in to a (web) app
+# '''The user fills in his/her personal URL''' This is called [[Web sign-in]].
+# '''The app fetches the URL, looking for an authorization endpoint.''' For this, the user can use IndieAuth.com, but it can also be at their own domain. The app redirects the User to their authorization endpoint.
+# '''The user authenticates at their own authorization endpoint.''' IndieAuth.com uses [[RelMeAuth]] to authenticate users, but if a user uses an authorization endpoint on his/her own site, it can be a password, e-mail link, or any other authentication mechanism the authorization endpoint provides. They prove their identity to their authorization endpoint while the app waits for them to complete.
+# '''The authorization endpoint issues a temporary authorization code''', and sends it to the app by redirecting the user's browser back to the app.
+# '''The app checks the code with the authorization endpoint''', and if the code is valid and if the user’s identifier matches the identifier the authorization endpoint gives, the login is completed, and the user can enter and use the app.
 
 == How to ==
 If all you're trying to do is log in to the wiki, then you may not need to set up IndieAuth at all! Instead, you can just link to your existing Twitter or GitHub accounts and the wiki will use those to authenticate you! See [https://indielogin.com/setup indielogin.com/setup] for more details.
@@ -51,7 +53,7 @@ See [[indieauth.com#OpenID]]
 If you use WordPress, you can install the [[Wordpress IndieAuth Plugin]] which provides a built-in IndieAuth server.
 
 === Set up your own IndieAuth provider ===
-{{main|authorization-endpoint}}
+Use an existing [[#Implementations|implementation]] or [[authorization-endpoint|build your own!]]
 
 == Users ==
 === IndieWeb Examples ===
