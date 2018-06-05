@@ -1,0 +1,27 @@
+https://indieweb.org/How_is_IndieAuth_different_from_OpenID_Connect
+
+{{stub}}
+
+{{main|IndieAuth}}
+
+This page documents the similarities and differences between [[IndieAuth]] and [[OpenID Connect]].
+
+== Similar Goals ==
+=== Adding identity to OAuth 2.0 ===
+OAuth 2.0 by itself is missing some critical pieces that make it usable as an ''authentication'' protocol. (See [https://oauth.net/articles/authentication/ OAuth is not an authentication protocol] on oauth.net). In particular, OAuth by itself does not return any information about the user, even a unique user ID. 
+
+In order for IndieAuth to be useful as an authentication protocol (in addition to authorization), IndieAuth adds the concept of a unique user identifier: a profile URL. Because these URLs rely on the public web and DNS, they are guaranteed to be globally unique.
+
+OpenID Connect also adds an identity layer on top of OAuth 2.0. Users are identified by a property, "sub" (short for subject), which can be a string of any format returned by the authorization server. There is no requirement that these user identifiers are globally unique, they are only guaranteed to be unique within the particular OpenID Connect system being used.
+
+== Different Goals ==
+=== Decentralized identity ===
+The original goals of OpenID 1 included the ability for users to be their own identity providers, and developers to be able to consume any identities, without any prior relationships. Additionally, users could bring their own identity with them when they moved to a different OpenID provider. From the original OpenID spec:
+
+<blockquote>OpenID is completely decentralized meaning that anyone can choose to be a Consumer or Identity Provider without having to register or be approved by any central authority. End User's can pick which Identity Provider they wish to use and preserve their Identity as they move between Providers. [http://openid.net/specs/openid-authentication-1_1.html openid.net]</blockquote>
+
+OpenID Connect has moved away from these goals, instead treating each OpenID Connect system as its own silo. For example, Google is an OpenID Connect provider, so every Google account is an OpenID Connect identity. However, that identity is tied to Google, and there is no way to move it to a new provider to reuse it later.
+
+IndieAuth is a decentralized identity protocol, leveraging the public web and DNS. Users' identities can be [https://indieauth.spec.indieweb.org/#user-profile-url any valid URL], which is not tied to any particular service. The profile URL delegates to an IndieAuth server so that the user's website doesn't have to also handle authenticating the user itself. This is very similar to the original OpenID 1 mechanism.
+
+Because of this difference, IndieAuth identities are portable, not tied to a service, and rely on the existing DNS to act as a global user database.
