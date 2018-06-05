@@ -109,11 +109,12 @@ For broader overview of the Facebook API, see the Social Web WG analysis:
 You can use the Facebook API to <span id="PESOS_from">PESOS your posts</span>, but as of the 2.x API, [https://github.com/snarfed/ownyourresponses#facebook not your comments or likes.]
 
 === How to backfeed from ===
-There are a few ways to [[backfeed]] from Facebook post copies to your original posts:
+There used to be a few programmatic ways to [[backfeed]] from Facebook post copies to your original posts, but [https://developers.facebook.com/blog/post/2018/05/01/facebook-login-updates-further-protect-privacy/ Facebook pretty much shut them all down in May 2018].
+
 ====  Graph API ====
 The [https://developers.facebook.com/docs/graph-api Graph API] is the official way of communicating with Facebook.
 
-To get comments for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/comments]:
+To get comments for a post, ''only from users who have logged into your Facebook app and granted its permissions'', use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/comments]:
 
   https://graph.facebook.com/v2.2/POSTID/comments?limit=LIMIT&access_token=ACCESS_TOKEN
 
@@ -121,7 +122,7 @@ POSTID is the id of a post; no need for any user id, just the regular, post id
 LIMIT how many comments should be shown in one request
 ACCESS_TOKEN is the Oauth2 access token to the service
 
-Similarly, to get likes for a post, use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/likes]:
+Similarly, to get likes for a post, ''only from users who have logged into your Facebook app and granted its permissions'', , use [https://developers.facebook.com/docs/graph-api/reference/v2.2/object/comments /object/likes]:
 
   https://graph.facebook.com/v2.2/POSTID/likes?limit=LIMIT&access_token=ACCESS_TOKEN
 
@@ -147,7 +148,7 @@ Note recent limitations / challenges:
 ** Detect comments from originating user?
 
 ==== Bridgy backfeed ====
-Sign-up with [[Bridgy]] and authorize Bridgy to view your Facebook account and send you [[webmention]]s when people respond to your Facebook post copies.
+[[Bridgy]] used to backfeed Facebook comments, likes, reactions, and RSVPs, [https://brid.gy/about#rip-facebook but stopped in May 2018 due to Facebook's restrictions.]
 
 === How to delete your account ===
 Deletion of an account is made deliberately awkward and uncomfortable by Facebook. Note that there are two separate types of account deletion, viz. Deactivation and Deletion.
