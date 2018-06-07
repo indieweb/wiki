@@ -3,18 +3,22 @@ https://indieweb.org/User%3ACjwillcock.ca/starting-with-wordpress
 Doing some initial testing: [https://wp-dev.cjwillcock.ca/ wp-dev.cjwillcock.ca] (begin 2018-06-07)
 
 = Itches =
-T.B.D.
+* fix the http/https protocol confusion in relmeauth
 
 = Observations =
 
-== A Run Through IndieWebify.Me using vanilla WP and twentyseventeen theme ==
+== Power User / Developer: Run Through IndieWebify.Me using fresh WP install ==
 WP Version: 4.9.6
 
+You guys are in for a treat. I'm documenting my first time seeing any of this IndieWeb WP Ecosystem.
+
+I only know of micro_etc_ stuffs and etc. etc. Been here a week or so. Let's see how it goes.
+
 === Set up Web Sign In ===
-No changes, and I test ... "Something Went Wrong, no rel=me links could be found"
+No changes from vanilla WP install, and I test ... "Something Went Wrong, no rel=me links could be found"
 * Can indiewebify.me detect WP as the source and offer specific guidance here, smart onboarding for the win
 
-So I start with the primary plugin, Indieweb plugin
+So I start with the primary plugin, Indieweb plugin. How did I know to do this? Found it in the WordPress block far away at the bottom of the Getting Start page.
 
 Search via WP Dash -> Plugins -> Add new -> "IndieWeb" -- huzzah, I recognize the logo, success, installed and activated
 * No new custom post types, hmmm. Not what I was expecting, maybe that comes in other plugins (note: very beginner at all things IndieWebCamp)
@@ -24,7 +28,20 @@ Search via WP Dash -> Plugins -> Add new -> "IndieWeb" -- huzzah, I recognize th
 Checking out this new plugin -- wow, a page full of info for me under Getting Started. Alright IWC, alright.
 * I guess you want me to fill in my user profile. Look at all those new fields. okay. done.
 * Side option multi/single author ---- it's already set to single, all good then I suppose
-* rel-me links on my site huh? Confirmed. Cool. I think I can sign in now? Oh yea. Works now.
+* rel-me links on my site huh? Confirmed. Cool. I think I can sign in now? Oh yea. Works now. Or does it?
+
+"We found the following rel=me URLs on your site" -> but they don't link back.
+* Where is my email based rel=me?
+* What the?! Now it recognizes I am from WP. Because of the plugin I just installed? Hmm.
+
+Alright, let's see, I added twitter and github information. I'll temporarily change those backlinks to my wp-dev.cjwillcock.ca address and try it again.
+* Still no joy? Sigh ... oh yea this. When I enter my domain without protocol information at indiewebify.me, it defaults to HTTP. However, the HTTP address auto-redirects to HTTPS on my site, AND I'm using HSTS. Fine fine. I'm in the habit of entering the domain-with-protocol as https but lately (indieweb influence) I am thinking of cjwillcock.ca as my identity token. However, when I enter domain-without-protocol (wp-dev.cjwillcock.ca) on Github or on my WP dashboard it defaults to http, while the same domain-without-protocol entered on Twitter correctly determines the https!
+
+Recap: set my url as wp-dev.cjwillcock.ca on Github, WordPress, Twitter and IndieWebify.me, result of web-sign in test is github works perfectly, while Twitter doesn't link back.
+
+I don't like it. HSTS style, I'm going to set them all to https. And, now it's all green, github & twitter working perfectly. 
+
+Next!
 
 == This Wiki ==
 Haven't looked at the [[Getting Started on WordPress]] page until now. Whoa. That's a lot of stuff &hellip;
