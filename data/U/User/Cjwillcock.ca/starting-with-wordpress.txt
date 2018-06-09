@@ -222,6 +222,35 @@ Time to rewind and repack that beastie now. Why am I digging into all that again
 
 That's done, my version of wordpress-uf2 plugin now includes the gravatr next to the author name, and I have success with indiewebify.me.
 
+<pre>        /**
+         * Adds microformats v2 support to the author.
+         *  with ugly hack by cjwillcock
+         */
+        public static function the_author( $author ) {
+                if ( ! is_admin() ) {
+                        $avatar = '';
+                        $args = array(
+                          'search' => $author,
+                          'search_fields' => array('display_name')
+                        );
+                        $user = new WP_User_Query($args);
+                        if(null !== $user){
+                                $avatar = get_avatar(
+                                        $user->get_results()[0]->user_email,
+                                        15,
+                                        'default',
+                                        '',
+                                        array(
+                                                'class' => array(),
+                                        )
+                                ) . ' ';
+                        }
+                        return "$avatar<span class='p-author h-card'>$author</span>";
+                }
+
+                return $author;
+        }</pre>
+
 What's the next missing thing? URL for my h-entry. I'll need to include the permalink, even when I'm on the single-post template (by default the permalink typically is on the title when looking at a list of posts, and absent when looking at a single post).
 
 Urk. This is likely where some other third party plugin, for customizing my post-footer will be a good fit. Where currently I only have tags and categories there, I may be able to put something else. Various other themes will all do this their own way. I'll see what may work for me.
