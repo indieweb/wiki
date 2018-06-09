@@ -199,6 +199,25 @@ Take that twentyseventeen. Let's see how we fair with the test. Well, it's diffe
 
 Test again at indiewebify.me -- yea, that did it alright. I have my u-photo from my representative h-card in the sidebar now showing up as the h-card for my h-entry, and giving me a green light.
 
+==== Generalizing this technique to a plugin that will work for all themes? ====
+'''Sadly, no can do'''
+Output buffering like this is generally something to avoid, but in some cases it could be alright. For example, transitioning from a non-microformats2 theme as a temporary situation, deferring a robust solution (use a different theme with native microformats2 support) to later. However, manipulating the output of WP in the general case of '''any''' theme being used, we can only safely '''add''' to the theme, not take away from it. Why? Because the nature of the data which is described by the microformats2 vocabulary tokens applied to HTML elements, is being dual-purposed to describe presentation of that data via CSS. If I remove an 'author vcard', and CSS rules targeting .author.vcard will no longer apply.
+
+'''Bottom line''': human intervention is required to apply this technique to a theme.
+
+===== But you don't need to remove microformats(1) tokens, to add microformats2 tokens =====
+'''Exactly right, that is what the microformats2 wordpress plugin does now''' in a safe, actions-&-filters-only approach.
+* If the indiewebify.me tests had a strict mode, which ignored microformats(1) tokens, I (and others) could explore this.
+* Alternatively, there may be other self-tests that can be utilized for this development, instead of indiewebify.me.
+* Alternatively, someone could roll a new self-test that ignored microformats(1) and only showed the microformats2 relevant things.
+
+'''Unresolved, pre-requisite question''': In general, are consumers of microformats2 also sensitive to microformats(1) tokens? If so, any improvements in microformats2 coverage will fail to convey the intended meaning, because the consumers of microformats are satisfied with the presence of microformats(1) tokens and stop looking for microformats2 details.
+
+    '''Aside''' ''This brings up a fundamental gotcha of [[selfdogfood]] with WordPress'' (or any other CMS/app thinger) other than those entirely self-authored (disclaimer: which I have seen to-date). Namely, the tool is communicating on your behalf and with your authority, some things which you have not knowingly intended to include in your own works. Rather than the challenge of implementing what you want, you are stuck into a daunting requirement to dig as-deep-as-necessary into a foreign work, to mute what you don't want to be included. We trade control for speed. Furthermore, the third party may, at any time, include new things (following an update) where the onus is on the site-owner to review and respond should further muting of unwanted inclusions be necessary. Removal of desired inclusions by decision of the third-party is another edge on their too.
+
+Time to rewind and repack that beastie now. Why am I digging into all that again? Oh yes, because the test at indiewebify.me did not see my u-photo in the h-card it selected for the h-entry. Can I maybe just add the u-photo to the plugin where it is already putting the 'p-author' and 'h-card' tokens? Yes I can. Done.
+* I will not do a PR right away with this, because there should be an option about including the photo there, defaulting to 'no'.
+
 == WordPress / Indie Ecosystem ==
 
 
