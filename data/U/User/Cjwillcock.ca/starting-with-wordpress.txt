@@ -142,7 +142,62 @@ Well, let's sort this out. Step 1, disable microformats2 plugin to clean up the 
 * Now that I'm a little more familiar with microformats2, I think what I'm seeing here is that WP vanilla theme is using microformats(1). While indiewebify.me testing gave me a 'social pass' with the success on the h-entry test (allowing hentry). The difficulty is that I need microformats2 support and a healthy failure notice on the test with some relevant advice is preferable to me.
 ** The easy 'install a plugin' option is not there however. we've tried installing microformats2 plugin and the test still didn't pass. If we can resolve this for end-users of WP, only then would it be generally good to throw a fail for missing microformats2 (speculation).
 
-Alright, I need microformats2 support. Reactivated plugin and diving into the markup again.
+Alright, I need microformats2 support. Reactivated plugin and diving into the markup again. View source and search for any 'h-*'.
+* There's my 'h-entry' on the <body>
+* Look at that, now there is an 'h-card' with 'p-author' property inside my post-header. Interesting ... so is indiewebify.me finding '''that''' h-card and not looking for another one? Survey says, NOPE. I disabled the output of the h-card token by editing the source of the microformats2 plugin. Even without this h-card, indiewebify.me is still not picking up the representative h-card with u-photo from the sidebar.
+* I'm still seeing those microformats(1) tokens on things, and I have already seen the indiewebify.me test allowing a v1 stuff to pass v2 tests. I wonder if the test is picking up the 'author' and 'vcard' tokens from microformats(1)? Time to bring out the big guns.
+
+I could either work in the theme now or work in a for-plugin-purpose style. I'm going to try the plugin route -much more difficult- because any solution I come to that is theme-agnostic will be more useful. The background on this microformats2 plugin is that it does the best it can, given the limited number of WP actions and filters that are available to manipulate outputs. I have a very nice hammer and I'm rather well-accustomed to WP internals, so I'm going to see what else may be done.
+* I install and activate the Query Monitor plugin by John Blackbourn & contributors
+* Reload the public post, hover over the query monitor info that has been added to the WP admin bar at the top of my screen, and select the Hooks and Actions item.
+
+Whoa. The microformats(2) description is very accurate about the current situation:
+<blockquote>
+&hellip; not every element is accessible through actions or filters. It is better to use a theme that supports Microformats 2 fully.
+<cite>[https://github.com/indieweb/wordpress-uf2 wordpress-uf2 plugin authors]</cite></blockquote>
+
+'''Hypothesis'''': It may be ''better to use a different theme'' but it's not ''impossible to manipulate this one''. 
+
+There is the WP action 'get_template_part_template-parts/post/content' which is dynamically created at runtime for the arguments supplied to get_template_part(). This is fragile as old get out (no guarantees it will work with any other theme) but I can work with this. Or can I? The action fires before the template part is included, but there is no corresponding action for after the template part is included. Back to the drawing board (and further up the action hook stack trace).
+
+There is the WP action 'the_post' which is triggered after the database query completes and the post is setup. That's not what I'm after, it only happens in the beginning. Further up again then.
+
+There is the 'loop_start' action hook and corresponding 'loop_end' action hook. That's what I'm after. I'm going to start an output buffer on 'loop start' and do some string replacements on the buffer before outputting it on 'loop end'.
+
+It looks like this:
+<pre>add_action('loop_start', function(){
+    ob_start();
+});
+
+add_action('loop_end', function(){
+    $result = ob_get_clean();
+
+    $replace_all_of = array();
+    $with_nothing = '';
+
+    $result = str_replace($replace_all_of, $with_nothing, $result);
+
+    echo $result;
+});</pre>
+'''Note''': I'm putting this code at the bottom of my theme's functions.php file for R&D purposes
+
+So far, this accomplishes nothing. But it does me an opportunity to rewrite the contents of the post, before it is sent to the wire. I want to take out the 'author' and 'vcard' tokens from the post-header, and see if indiewebify.me then finds my representative h-card in the sidebar. This is not portable or safe or anything like that, it's a hammer! So I add 'author vcard' to my $replace_all_of array:
+
+<pre>
+...
+    $replace_all_of = array('author vcard');
+...
+</pre>
+
+Take that twentyseventeen. Let's see how we fair with the test. Well, it's different &hellip; but it's still not passing. The mircoformats(2) plugin has added an 'h-card' token in the same area. I can disable the plugin, but I'd rather use my little code to remove the specific token I don't want there:
+
+<pre>
+...
+    $replace_all_of = array('author vcard', 'p-author h-card');
+...
+</pre>
+
+Test again at indiewebify.me -- yea, that did it alright. I have a my u-photo from my representative h-card in the sidebar now showing up and giving me a green light.
 
 == WordPress / Indie Ecosystem ==
 
