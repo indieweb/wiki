@@ -201,7 +201,7 @@ Test again at indiewebify.me -- yea, that did it alright. I have my u-photo from
 
 ==== Generalizing this technique to a plugin that will work for all themes? ====
 '''Sadly, no can do'''
-Output buffering like this is generally something to avoid, but in some cases it could be alright. For example, transitioning from a non-microformats2 theme as a temporary situation, deferring a robust solution (use a different theme with native microformats2 support) to later. However, manipulating the output of WP in the general case of '''any''' theme being used, we can only safely '''add''' to the theme, not take away from it. Why? Because the nature of the data which is described by the microformats2 vocabulary tokens applied to HTML elements, is being dual-purposed to describe presentation of that data via CSS. If I remove an 'author vcard', and CSS rules targeting .author.vcard will no longer apply.
+Output buffering like this is generally something to avoid, but in some cases it could be alright. For example, transitioning from a non-microformats2 theme as a temporary situation, deferring a robust solution (use a different theme with native microformats2 support) to later. However, manipulating the output of WP in the general case of '''any''' theme being used, we can only safely '''add''' to the theme, not take away from it. Why? Because the nature of the data which is described by the microformats2 vocabulary tokens applied to HTML elements, is being dual-purposed to describe presentation of that data via CSS. If I remove an 'author vcard', any CSS rules targeting .author.vcard will no longer apply.
 
 '''Bottom line''': human intervention is required to apply this technique to a theme.
 
@@ -218,7 +218,14 @@ Output buffering like this is generally something to avoid, but in some cases it
 Furthermore, the third party may, at any time, include new things (following an update) where the onus is on the site-owner to review and respond should further muting of unwanted inclusions be necessary. Removal of desired inclusions by decision of the third-party is another edge on their too. Still, for ease-of-use, and, you know, people must start somewhere, it's a fair trade.</blockquote>
 
 Time to rewind and repack that beastie now. Why am I digging into all that again? Oh yes, because the test at indiewebify.me did not see my u-photo in the h-card it selected for the h-entry. Can I maybe just add the u-photo to the plugin where it is already putting the 'p-author' and 'h-card' tokens? Yes I can. Done.
-* I will not do a PR right away with this, because there should be an option about including the photo there, defaulting to 'no'.
+* I will not do a PR right away with this, because there should be an option about including the photo there, defaulting to 'no'. Also, I'm starting to suspect that these plugin methods are used for many purposes and by, for example, adding an email address or photo, what works in one place will compromise or straight-up break other use cases.
+
+That's done, my version of wordpress-uf2 plugin now includes the gravatr next to the author name, and I have success with indiewebify.me.
+
+What's the next missing thing? URL for my h-entry. I'll need to include the permalink, even when I'm on the single-post template (by default the permalink typically is on the title when looking at a list of posts, and absent when looking at a single post).
+
+Urk. This is likely where some other third party plugin, for customizing my post-footer will be a good fit. Where currently I only have tags and categories there, I may be able to put something else. Various other themes will all do this their own way. I'll see what may work for me.
+* I prefer to code something than install third-party by default.
 
 == WordPress / Indie Ecosystem ==
 
