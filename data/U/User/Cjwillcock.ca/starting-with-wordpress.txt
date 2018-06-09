@@ -181,7 +181,7 @@ add_action('loop_end', function(){
 });</pre>
 '''Note''': I'm putting this code at the bottom of my theme's functions.php file for R&D purposes
 
-So far, this accomplishes nothing. But it does me an opportunity to rewrite the contents of the post, before it is sent to the wire. I want to take out the 'author' and 'vcard' tokens from the post-header, and see if indiewebify.me then finds my representative h-card in the sidebar. This is not portable or safe or anything like that, it's a hammer! So I add 'author vcard' to my $replace_all_of array:
+So far, this accomplishes nothing. But it does give me an opportunity to rewrite the contents of the post, before it is sent to the wire. I want to take out the 'author' and 'vcard' tokens from the post-header, and see if indiewebify.me then finds my representative h-card in the sidebar. This is not portable or safe or anything like that, it's a hammer! So I add 'author vcard' to my $replace_all_of array:
 
 <pre>
 ...
@@ -189,7 +189,7 @@ So far, this accomplishes nothing. But it does me an opportunity to rewrite the 
 ...
 </pre>
 
-Take that twentyseventeen. Let's see how we fair with the test. Well, it's different &hellip; but it's still not passing. The mircoformats(2) plugin has added an 'h-card' token in the same area. I can disable the plugin, but I'd rather use my little code to remove the specific token I don't want there:
+Take that twentyseventeen. Let's see how we fair with the test. Well, it's different &hellip; but it's still not passing. The microformats2 plugin has added an 'h-card' token in the same area. I can disable the plugin, but I'd rather use my little code to remove the specific token I don't want there:
 
 <pre>
 ...
@@ -197,7 +197,7 @@ Take that twentyseventeen. Let's see how we fair with the test. Well, it's diffe
 ...
 </pre>
 
-Test again at indiewebify.me -- yea, that did it alright. I have a my u-photo from my representative h-card in the sidebar now showing up and giving me a green light.
+Test again at indiewebify.me -- yea, that did it alright. I have my u-photo from my representative h-card in the sidebar now showing up as the h-card for my h-entry, and giving me a green light.
 
 == WordPress / Indie Ecosystem ==
 
