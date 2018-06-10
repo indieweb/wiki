@@ -45,6 +45,7 @@ How it Works:
 * The group blog verifies the authorization code with the user's WordPress site, and then starts a session for the user
 
 ==== Logging in to a multi-user WordPress site via RelMeAuth ====
+🚫 This is not currently supported
 
 Assumptions:
 * A group WordPress blog with this plugin, e.g. https://notiz.blog/
@@ -54,10 +55,22 @@ Assumptions:
 * There is a user record in notiz.blog with the user's profile URL of https://pfefferle.org/
 
 Plugin Configuration:
-* ...
+* notiz.blog
+** The IndieWeb plugin is set to a multi-author site
+** The IndieAuth plugin has the "Use IndieAuth login" setting checked
+** The IndieAuth plugin is set to use the built-in IndieAuth endpoint
+* pfefferle.org
+** No IndieAuth plugin is installed
+** A GitHub and Twitter username are entered in the user's profile
+** The IndieWeb Plugin is installed, which adds rel=me links to the user's GitHub and Twitter profile
 
 How it Works:
-* ...
+* When the user views the Wordpress login screen of the group blog, there is an additional [[web sign-in]] prompt under the username/password
+* The user enters the URL that is in their profile (their personal site)
+* The group blog does not find an IndieAuth server at that URL, but notices the rel=me links
+* The group blog sends the user to indielogin.com to complete the [[RelMeAuth]] authentication
+* Upon a successful authentication (via Twitter or GitHub, etc) at indielogin.com, the user is redirected back to the group blog with an authorization code from indielogin.com
+* The group blog verifies the authorization code with indielogin.com and starts a session for the user
 
 === IndieAuth ===
 
