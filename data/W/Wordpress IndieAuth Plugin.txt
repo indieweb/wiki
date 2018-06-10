@@ -17,26 +17,58 @@ In 2017, after stagnation, the plugin was transferred to the Indieweb repository
 * '''IndieAuth''' - using wordpress to log in to other places such as Micropub apps
 
 == Use Cases ==
-The below is brainstorming the use cases that this plugin solves or will solve in the future.
+The below is brainstorming the use cases that this plugin solves or will solve in the future. These should include enough information and steps to be able to test the plugin when making changes.
 
-=== Logging in to a multi-user Wordpress via IndieAuth ===
-✔️ Implemented in the original release
+=== Web Sign-In ===
+==== Logging in to a multi-user WordPress site via IndieAuth ====
+<span id="Logging_in_to_a_multi-user_Wordpress_via_IndieAuth"></span>
 
 Assumptions:
-* The Website field in the User's profile lists a URL that has one or more [[rel-me|rel="me"]] profiles to Twitter, GitHub, etc.
-* The user wants to use another service to log in to Wordpress instead of typing a password. This is usually Rel-Me-Auth.
+* A group WordPress blog with this plugin, e.g. https://notiz.blog/
+* An individual with a personal WordPress blog with this plugin, e.g. https://pfefferle.org/
+* There is a user record in notiz.blog with the user's profile URL of https://pfefferle.org/
 
-How it works:
-* When installing the plugin, the admin configures an authentication service to use (defaults to indieauth.com). In the original release, it only supported indieauth.com
-* When viewing the Wordpress login screen, there is an additional [[web sign-in]] prompt under the username/password
-* The user enters the URL that is in their profile, and the plugin redirects to the authentication service
-* The plugin verifies the auth code with the service and logs the user in 
+Plugin Configuration:
+* notiz.blog
+** The IndieWeb plugin is set to a multi-author site
+** The IndieAuth plugin has the "Use IndieAuth login" setting checked
+** The IndieAuth plugin is set to use the built-in IndieAuth endpoint
+** ...?
+* pfefferle.org
+** The IndieWeb plugin is set to a single-author site
+** ...?
 
-Note: The does not currently do discovery on the provided URL to find the authorization_endpoint, but there is a PR pending for this. The trust relationship here is that the user has to add the website to their user account for it to allow login.
+How it Works:
+* When the user views the Wordpress login screen of the group blog, there is an additional [[web sign-in]] prompt under the username/password
+* The user enters the URL that is in their profile (their personal site), and the plugin redirects to their personal wordpress site
+* The user sees the login request prompt and clicks "Approve"
+* The user is redirected back to the group blog with an authorization code in the query string
+* The group blog verifies the authorization code with the user's WordPress site, and then starts a session for the user
+
+==== Logging in to a multi-user WordPress site via RelMeAuth ====
+
+Assumptions:
+* A group WordPress blog with this plugin, e.g. https://notiz.blog/
+* An individual with a personal WordPress blog, e.g. https://pfefferle.org/
+** The personal blog does not have the IndieAuth plugin installed
+** The personal blog has a rel=me link to Twitter and GitHub on the home page
+* There is a user record in notiz.blog with the user's profile URL of https://pfefferle.org/
+
+Plugin Configuration:
+* ...
+
+How it Works:
+* ...
+
+=== IndieAuth ===
+
+==== Logging in to the IndieWeb Wiki using your WordPress Site via IndieAuth ====
+('''Authentication''')
 
 
-=== Using IndieAuth Authorization ===
 
+==== Authorizing a Micropub app to Post to your WordPress ====
+('''Authorization''')
 
 == See also ==
 * [[IndieAuth]]
