@@ -1,37 +1,198 @@
 https://indieweb.org/Canopy
 
-Big-C Canopy is a decentralized social web and small-c canopy is a python package that implements IndieWeb technologies to this end. The network is being bootstrapped from [https://boot.cnpy.live boot.cnpy.live]. '''This software should be considered alpha.'''
+{{stub}}
 
-== Live Examples ==
+The Canopy is a decentralized social space underpinned by the '''<dfn>[https://github.com/angelogladding/canopy canopy]</dfn>''' platform written in [[Python]] by {{angelo}} that helps you create and fully manage a personal identity site with extensive support for IndieWeb features and API interoperability.
 
-* {{angelo}} at [https://lahacker.net lahacker.net] ([[selfdogfooding]])
-* ...add yourself!
+See also: [[projects#Canopy]]
 
 == Features ==
 
-=== IndieWeb ===
+* Representative h-card that incorporates components as you install and use plugins:
+** bio (with <code>about</code>)
+** location (with <code>locations</code>)
+** twitter/email/phone (with <code>contact</code>)
+* Access control separation of users and owner. Resources can be public or private.
+* Simple automated background task queue for updating:
+** email inbox
+** contacts' info
+** weather
+* API credential management. Plugins define required APIs and <code>/admin</code> store credentials and manages overlapping requirements gracefully.
+* Usable without javascript or css. Manually tested in <code>w3m</code>.
+* In-code documentation resurfaces in <code>/help</code> pages.
 
-* representative h-card and h-feed on homepage
-* posts + permalinks
-** associations (one-way "friending"; contact storage; trust labeling)<br><small>e.g. [https://lahacker.net/people/lahacker.net /people/lahacker.net]</small>
-** notes (simple plaintext)<br><small>e.g. [https://lahacker.net/notes/2018/04/02/68_K/hello_world /notes/2018/04/02/68_K/hello_world]</small>
-* IndieAuth at /sign-in
-* WebSub at /subscriptions
-* Webmention at /mentions
-* reader at /reader
-* editor at /editor
-* [https://indieweb.org/Canopy#Search search] e.g. [https://lahacker.net/search /search]
-* web actions at /actions
+== Working on ==
 
-=== Generic ===
+* Core features: generic post stream, search & tagging mechanics.
+* Built-in user login a la IndieAuth.
+* Minimally fleshing out and polishing initial plugins.
+* Documentation and tests. Continuous integration via automated real world deployment and engagement with fictional identities (at different hosts and with different simulated use cases).
 
-* simple install &mdash; one command deploys a site (Digital Ocean supported but not required)
-* automated TLS &mdash; not only is your website protected the canopy will only interface with other secured sites
+== Goals ==
 
-=== Descriptions ===
+* A complete web-based personal operating system. AGPL'd and redistributes its own code. Fork your own complete system from an existing system.
+* Secure. Fully defended against the OWASP standard. Peer-reviewed. Automatic TLS via LetsEncrypt, HSTS and HPKP (with self-signed cert fallback). Use of SSH and PGP keys where relevant.
+* Safe. Zero-loss data layer even in unreliable shared host environment. Fully automated backups of database and assets to [https://rsync.net rsync.net]. Tor + VPN on capable hosts.
+* Host-agnostic. Tested on at least three low-tier and three high-tier providers. Tested on vanilla Debian stable.
+* Alpha launch for demo by IndieWebCamp LA (Nov 4)
 
-==== Search ====
+=== Succinctness ===
 
-The most recent versions of all resources + metadata are stored in a SQLite database as JSON under Full Text Search (FTS) mode. Local results are shown to all searchers. DuckDuckGo results are paired on the page when logged in as owner.
+I believe that every line of code matters and that source code should read like a book. Python lends itself well to readability and I strive to use Pythonic idioms whenever and wherever possible to further my pursuit. I also believe that large projects become unwieldy as features are added and edge cases are handled without refactoring. Thusly pre-alpha and alpha stages of this project will be frequently refactored outside of source control until a balance of stability and succinctness has been met.
 
-OpenSearch is supported. Using it you can register your site's search endpoint in your browser so that searches through your address bar are routed through your website.
+==== Lines of Code ====
+
+* Sep 10, 2016: 15k (12 core + 5 plugin packages; still limited functionality, almost no tests)
+
+'''DISCLAIMER''' simplistic line counting through <code>pss -f | xargs wc -l</code> includes shipped vendor code without consideration. PHP projects often ship all requirements whereas Python/Ruby projects often leverage a package distribution system. The following line counts are rough.
+
+'''Sep 10, 2016'''
+
+* bridgy: 22k
+* django: 480k
+* DarkMatter: 19k
+* Dobrado: 160k
+* flask: 27k
+* Known: 102k
+* Mailpile: 90k
+* redwind: 13k
+* woodwind: 3k
+* Wordpress: 505k
+* wordpress-indieweb: 5k
+
+== Model ==
+
+Currently bootstrapped. A fully functional and feature frozen beta will provide for an optional recurring Bitcoin-based microdonation on the order of $1/mo.
+
+== Live Examples ==
+
+IndieWeb community members using <code>canopy</code> as their primary site:
+
+* {{angelo}} at [https://angelo.lahacker.net/ angelo.lahacker.net] ([[selfdogfooding]])
+* ...add yourself!
+
+== Pros ==
+
+* one-click install
+** builds and installs important libraries to support the inclusion of reliable and up-to-date requirements
+** installs, configures, runs and manages database and web servers
+** configures an isolated virtual Python environment and populates with editable source code distributions for seamless development
+* full-featured
+** dynamically rendered
+** built-in background task queue
+** API management built into core
+* adheres to minimalist philosophies
+** DRY; less is more
+** progressive enhancement
+** js;dr
+
+== Cons ==
+
+* complex [http://stackoverflow.com/questions/4568704/what-does-complex-is-better-than-complicated-mean but not complicated!]
+* pre-alpha (constant breaking changes)
+
+== Dependencies ==
+
+<code>canopy</code> depends on the following free and open source software packages.
+
+=== External ===
+
+The build script will fetch and install the following C-based packages and Python-based wrappers:
+
+Redis,
+Nginx,
+VirtualEnv, pip,
+PyCrypto,
+uwsgi,
+libxml, libxslt, lxml,
+libicu, pyicu
+
+=== Internal ===
+
+[https://github.com/angelogladding/pkg pkg],
+[https://github.com/angelogladding/src src],
+[https://github.com/angelogladding/term term],
+[https://github.com/angelogladding/kv kv],
+[https://github.com/angelogladding/uri uri],
+[https://github.com/angelogladding/mkup mkup],
+[https://github.com/angelogladding/mf mf],
+[https://github.com/angelogladding/mkdn mkdn],
+[https://github.com/angelogladding/mm mm],
+[https://github.com/angelogladding/web web],
+[https://github.com/angelogladding/solarized solarized]
+
+== Install ==
+
+'''''INSTALLATION IS IN A FRAGILE STATE.''''' Advanced users only should attempt at this point but don't hesitate to contact me with any questions.
+
+=== Core ===
+
+'''''BEWARE''''' this project is currently in pre-alpha. The following script will change often and could damage existing data in and around the directory in which it is run. That said, it should fully confine itself to a directory named <code>tree</code> in the current working directory and safeguard against overwriting an existing <code>tree</code> directory. Currently '''tested and functional on a [https://www.webfaction.com WebFaction] VPS'''.
+
+==== Non-Developer ====
+
+===== WebFaction =====
+
+''TODO'' WebFaction custom install script to perform install directly from Control Panel.
+
+===== Other Host =====
+
+''TODO'' <code>ssh USER@HOST "wget https://lahacker.net/plant_sapling.sh -qO- | sh DOMAIN_NAME LISTEN_PORT 'FULL NAME' 'PASSPHRASE'"</code>
+
+==== Developer ====
+
+# Fork the <code>canopy</code> project, its 11 [https://indieweb.org/Canopy#Internal internal dependencies] and the [https://gist.githubusercontent.com/angelogladding/c01eb1a1707804864a6235117e3e886f install script] on Github.
+# Ensure your host machine's SSH public key is added to your Github account.
+
+Clone the install script locally and you can then execute the script interactively or by passing command line arguments. For a complete description of options run <code>sh c01eb1a1707804864a6235117e3e886f/plant_sapling.sh -h</code>.
+
+=== Plugins ===
+
+A core install makes few assumptions about your intended use and thusly comes with an empty trunk. It is expected that you install branches to add functionality. The trunk and its branches comprise the understory which ultimately supports the resources, foliage and flowers, found in the canopy.
+
+* [https://github.com/angelogladding/understory-about about]
+* [https://github.com/angelogladding/understory-articles articles]
+* [https://github.com/angelogladding/understory-contact contact]
+* [https://github.com/angelogladding/understory-events events]
+* [https://github.com/angelogladding/understory-locations locations]
+* [https://github.com/angelogladding/understory-money money]
+* [https://github.com/angelogladding/understory-notes notes]
+* [https://github.com/angelogladding/understory-people people]
+* [https://github.com/angelogladding/understory-photos photos]
+* [https://github.com/angelogladding/understory-security security]
+* [https://github.com/angelogladding/understory-software software]
+* [https://github.com/angelogladding/understory-weather weather]
+
+APIs: IMAP/SMTP, Twilio, Twitter, Github, Google Maps, Yelp, Coinbase, WeatherUnderground, [Credit Union]
+
+==== Future ====
+
+* audio
+* pages
+* sites
+* video
+
+APIs: Uber, Zoneedit, Facebook, Keybase, Flickr, Lanyrd, Youtube, Last.fm, ..
+
+==== Non-Developer ====
+
+Navigate to /admin/applications and provide a URL in the following format:
+
+ https://github.com/angelogladding/understory-PLUGIN.git
+
+where <code>PLUGIN</code> is the desired plugin name.
+
+==== Developer Install ====
+
+# Fork the desired plugin on Github.
+# Ensure your host machine's SSH public key is added to your Github account.
+
+Then follow the ''Non-Developer Install'' instructions above instead providing a URL in the following format:
+
+ ssh://git@github.com/USERNAME/understory-PLUGIN.git
+
+where <code>USERNAME</code> is your Github username.
+
+== See Also ==
+
+* [[projects]]
