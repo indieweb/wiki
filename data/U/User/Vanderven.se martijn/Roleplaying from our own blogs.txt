@@ -1,0 +1,54 @@
+https://indieweb.org/User%3AVanderven.se_martijn/Roleplaying_from_our_own_blogs
+
+This is an idea that latched itself into my mind and I can’t let go. Most online role playing games (and I mean the [https://rpg.stackexchange.com/a/92449 theatre of the mind] kind, not the video game kind) take place within [[silos]]. When a [[BBS|forum]] is lost to time, so are your stories. When your [[Slack]] reaches the end of its free log retention, gone is the session history.
+
+But if all my moves are [[POSSE|published on my own website first]], I will have a permanent record as long as I want it. And it I keep [[reply context|reply contexts]] for all my moves, I will have an even better picture of the adventure.
+
+This requires a game that allows for [https://en.wikipedia.org/wiki/Play-by-post_role-playing_game play-by-post].
+
+There are lots of games that function perfectly well for this. Especially games that work by having people, in order, make a move that is completely self contained. The move could be [https://chat.indieweb.org/2018-06-18/1529360479528600 written at the end of a list of moves] and that will be all. Chess comes to mind (why not play [https://twitter.com/alapapa/status/312053522755641344 graphically on Twitter]?), so does Battleships (maybe on the [https://blog.benjojo.co.uk/post/bgp-battleships backbone of the internet]?).
+
+I think those games work because it is limited to 2 players who have an easy time keeping track of who’s turn it is. I would like my role playing game to be able to handle more than 2 players though.
+
+I don’t want to become a game designer. I want to play a game. But I haven’t found a game system yet that supports what I would expect of a game that is being federated over several blogs.
+
+My biggest issue: '''player order'''. There are 2 “easy” solutions that come to mind:
+
+# Create an arbitrary player order. Alice is not allowed to write a reply until Bob his written theirs. This has the tendency to really slowdown a game. What if Alice has time on their hands right now, but Bob will not be online until the weekend? Now Alice has to wait, and possibly doesn’t have time for another few days after Bob has written in.
+# Have no player order at all. Alice can write in whenever they have time, so can Bob. What if Alice and Bob both go to their blogs directly after reading about a scene? They might submit their moves at the same time, or the moves might conflict with each other forcing one or both of them to rewrite it.
+
+Most of the table top RPGs I have looked at for inspiration solve this easily by having social cues. These work extremely well around a table, and sometimes in chats, but not so much when everyone is writing on their own blog.
+
+Else they fall back to [http://tvtropes.org/pmwiki/pmwiki.php/Main/RuleZero Rule Zero] and have the game master decide who gets to speak. (Or act the next scene, when it comes to narrative games.) In our blogging session there is no guarantee the game master is available, and micromanaging through lots of [[notes|short posts]] seems undesirable.
+
+What is needed here is a game system where players can make their move in any order, at any time, separate from each other.
+
+Not all systems need this. Notably, silos can more easily offer a way to show people when others are making their move (are writing). On forums I have seen people <i>reserve</i> their spot by creating a reply that says something like “currently writing”, and then editing that reply. This way other people will not go out of order.
+
+When you open your own editor – say, [[Quill]] – you are no longer within that one specific thread. Reserving your spot in a federated set up is hard.
+
+<raw><aside style="background-color:#f8f8f8;color:#383838;border:3px dashed #b8b8b8;padding:0 1em;margin:1em"><p><strong style="color:#ab4642">Physical analogy:</strong> the game master puts the parameters for the game on a notice board, behind glass. The bottom of the letter has a mailing address to post moves to.</p><p>Whenever the game master receives a letter, they will put it next to the original notice. Letters can come in any order due to delivery handling. Some letters might be written when only the original game notice was set up, others might have been written after other replies had also gone up.</p></aside></raw>
+
+On recommendation from [https://jgregorymcverry.com/ Greg]; I had a look at [[Storium]], an online collaborative story telling game (narrative role playing). It seems to have solved the player-order thing in their system. The game flow goes something like this:
+
+# Narrator sets the scene and supplies it with obstacles that need to be passed. An obstacle will take <raw><var style="color:#7cafc2;font-family:monospace,monospace;font-style:normal">x</var></raw> amount of actions to be resolved.
+# Players have character traits they can play as actions, they define these and write about what happens when the traits come into play.
+# When the players have submitted enough actions to resolve the obstacle, the scene is closed by the narrator and a new scene is started.
+
+Storium still depends on player order for one part of their system: a player gets to “win” the scene by being the one to play the <raw><var style="color:#7cafc2;font-family:monospace,monospace;font-style:normal">x</var></raw>th action. The winning player knows they are the one resolving the obstacle and tune their story to match.
+
+I don’t know how a <i>tie</i> is handled: when multiple people think they are closing the scene submit their actions simultaneously. Maybe the silo somehow blocks this from happening? More research needed.
+
+A system like that could map wonderfully to the IndieWeb. In the following example, the blogs use [[Webmentions]] and [[Salmentions]] to communicate:
+
+# The game master (GM) creates a [[post]] introducing the game and asking for players. This may include rules and defines how people should create their characters.
+# Players create their characters as posts on their own sites, as a [[reply]] to the original post by the GM.
+# When the GM is happy with the (amount of) players, they create a post introducing the characters to their first scene. This post is send as a reply to each player’s character post. This way, informing the players that they have been accepted and can start playing.
+# In any order, whenever they can, the players make their move as a reply to the scene.
+# For each reply received, the GM sends a ping to all players, in case they want to check what moves others have been making.
+# When the GM has received a move from all players, they write a closure for the previous scene and introduce a new one.
+# … go to 4 🔁
+
+Every time we speak of a reply, a Webmention should be sent and the page should contain proper microformats to be identified as a reply.
+
+The “ping” in step 5 is actually a Salmention. The scene post receives a Webmention for each player move and sends Webmentions to all the posts it originally replied to. For the first scene, those posts are the character introductions. For all following scenes, those posts are the previous character moves.
