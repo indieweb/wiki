@@ -1,0 +1,48 @@
+https://indieweb.org/auto-url-summary
+
+{{stub}}
+An '''<dfn>auto-url-summary</dfn>''' is brief human readable text generated automatically from the parts of a URL, often using special knowledge about the URL structures at particular domains, as a way to provide a summary of what the URL is about, instead of (or before) accessing the URL itself and reading the [[microformats]] there for more information.
+
+== Why ==
+In general auto-url-summary is useful when for some reason it is not possible (or not desirable) to retrieve the URL and parse it for microformats to generate an actual summary.  Some reasons:
+* simpler to code
+* [[offline]] support
+* user preference to minimize indirect loading, e.g. [[performance]] considerations for a low bandwidth connection, or perhaps [[privacy]]
+* text placeholder while lazy loading the URL
+* no easily discernible information at the URL itself, e.g. it returns apparent gibberish, a binary format, random JSON/XML/etc.
+
+Specific use-cases where this is useful:
+
+=== Minimal reply context ===
+An auto-url-summary can be used to generate a [[reply-context#Minimal_text_reply_contexts|minimal text reply context]].
+
+=== Link preview ===
+Similarly, an auto-url-summary may be used to provide a text-only link preview.
+
+== IndieWeb Examples ==
+=== Tantek ===
+{{t}} has been generating and displaying auto-url-summaries in in-stream [[reply-context#Minimal_text_reply_contexts|minimal text reply contexts]] since [http://tantek.com/2018/050/t1/authorize-bridgy-prompt 2018-02-19] using an experimental [[CASSIS]] function: [https://github.com/tantek/cassis/blob/master/cassis-lab.php#L52 auto_url_summary] (selfdogfooding on his own site)
+
+=== ... more ... ===
+Feel free to add your site if you also use auto-url-summary anywhere in your personal site / posting UI, and note since when.
+
+== Open Source ==
+See the [[CASSIS]] experimental <code>[https://github.com/tantek/cassis/blob/master/cassis-lab.php#L52 auto_url_summary]</code> function for a start at a decent (and [[selfdogfood]]ed) open source auto_url_summary implementation for [[PHP]]&amp;[[JS]].
+
+== Brainstorming ==
+=== English design ===
+Copied from [[reply-context#Minimal_text_reply_contexts|minimal text reply contexts]]:
+
+* if URL is a tweet permalink of user aaronpk, <blockquote style="color:gray">@aaronpk’s tweet</blockquote>
+* else if URL is a Github issue comment permalink (github.com/owner/xyz/issues/n#issuecomment-m), <blockquote style="color:gray">a comment on issue #n of GitHub project xyz</blockquote>
+* else if URL is a Github issue (github.com/owner/xyz/issues/n), <blockquote style="color:gray">issue n of GitHub project xyz</blockquote>
+* else if URL is a Github repo or issues list (github.com/owner/xyz or github.com/owner/xyz/issues optional trailing /), <blockquote style="color:gray">GitHub project xyz</blockquote>
+* else <blockquote style="color:gray">URL</blockquote>
+
+Feel free to expand with suggestions for other domains / URL patterns.
+
+== See Also ==
+* [[auto-link]]
+* [[auto-embed]]
+* [[auto-space]]
+* [[link-preview]]
