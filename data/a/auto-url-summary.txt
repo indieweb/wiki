@@ -41,6 +41,33 @@ Copied from [[reply-context#Minimal_text_reply_contexts|minimal text reply conte
 
 Feel free to expand with suggestions for other domains / URL patterns.
 
+=== CASSIS auto_url_summary improvements ===
+Some ideas I had for improving the CASSIS auto_url_summary function. - {{t}}
+
+* Bool param: solo recognized only, default false
+
+* recognize [[nicknames-cache]] primary domain, get text name (rather than account path / alias), and use that for <blockquote style="color:gray">name’s post</blockquote> (or tweet for @-names etc.)
+
+These brainstorms may be more relevant on [[reply-context]], but keeping here for now in context of other auto-url-summary related improvements.
+* use as a fallback for [[h-cite]] parsing (especially of an [[in-reply-to]] h-cite on a post), if the h-cite lacks an explicit <code>p-summary</code> and <code>p-name</code>. E.g.
+** Parse & load in-reply-to h-cite
+** explicit summary if any
+** explicit name if any
+** If neither then imply name
+** Display:
+*** name -> "post"
+*** else summary -> "note"
+
+Next:
+* Display: first check if h-cite has in-reply-to -> "reply"
+
+Next:
+* Attempt loading of in-reply-to URL
+** Retrieve reply-context h-cite at publish preview time
+** Cache reply-context h-cite at post time
+** Load additional h-cite fields
+*** Author: name, photo, url
+
 == See Also ==
 * [[auto-link]]
 * [[auto-embed]]
