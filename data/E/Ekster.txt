@@ -7,3 +7,20 @@ It was created by [[User:Peterstuifzand.nl|Peter Stuifzand]] on 2018-02-16 and r
 == Running Ekster ==
 
 See the README.md on Github.
+
+
+
+== Example with `ek` ==
+
+From: https://publog.stuifzandapp.com/posts/701
+
+Follow urls from an OPML file, by combining xmlstarlet and ek.
+
+    # Connect to your homepage by following steps (open url and allow auth)
+    ek connect https://example.com/
+    
+    # Create a channel for the feeds, this will show the ID.
+    ek channels "Imported feeds"
+    
+    # Gather the feeds from the file and pipe these to "ek follow ID"
+    xmlstarlet sel -t -v "//outline/@xmlUrl" hotlist.opml  | xargs -n 1 ek follow mtjTXQELiT60Wtm5ArVcLo5G
