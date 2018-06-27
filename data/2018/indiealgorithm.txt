@@ -2,7 +2,35 @@ https://indieweb.org/2018/indiealgorithm
 
 '''<dfn>Indie algorithm/indiefilter</dfn>''' was a session at [[2018|IndieWeb Summit 2018]].
 
-<!-- Notes archived from: https://etherpad.indieweb.org/indiealgorithm -->
+Attendees (from very vague memory): {{chrisaldrich}}, {{cleverdevil}}, {{schmarty}}, {{snarfed}}, [[User:Jackjamieson.net]], {{mblaney}}, {{manton}}, [https://edrex.pdxhub.org/ Eric Drechsel], [https://jamey.thesharps.us/ Jamey Sharp], [https://invisible.college/@toomim Michael Toomim]
+
+Three main parts to an algorithm:
+* Discovery (adding)
+* Filtering (removing)
+* Reordering (ranking)
+
+Three different categories of input data:
+* Global (everyone)
+* Friends/followings
+* Just yourself
+
+Privacy is important, especially when you use global and friends/followings' data. Many of the signals are sensitive and private, both explicit (likes, reposts, etc) and implicit (opened link, read time, etc). Can consider differential privacy techniques, but those take significant investment.
+
+Filtering is similar to reordering with a cutoff threshold, but not the same. Example: if you're all caught up, and one new item arrives, it would always be above a cutoff threshold, but if your rules filter out, it should still be hidden.
+
+Prior art:
+* Liked/reposted by your friends/followings, http://nuzzel.com/, http://belong.io/
+* NewsBlur training: https://newsblur.com/faq#intelligence_scroll
+* Shared blocklists: https://blocktogether.org/
+* Community up/down voting: Reddit, Hacker News
+
+Implementation thoughts:
+* Hard to do reordering and discovery in a microsub client or other frontend because you generally need full access to all feeds/items at once.
+* Filtering is more doable purely in client.
+
+Project ideas:
+* Reimplement Nuzzel over pure indieweb (microformats) data in a microsub backend. Count all indie likes/reposts seen for each item, then for each user, count how many are from their followings, then reorder feed items by those counts. Could also surface items liked by your followings in feeds you don't subscribe to in a new "discover" channel.
+* Implement filtering purely client side, based on NewsBlur. Allow blacklisting by author, tag, post type, containing photo/video/audio, or arbitrary substring match in name or content.
 
 <!-- Video at: https://www.youtube.com/watch?v=mvWpm1JlNj4 -->
 
