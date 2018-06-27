@@ -1,0 +1,87 @@
+https://indieweb.org/2018/microsub
+
+'''<dfn>Microsub: how to build servers and clients</dfn>''' was a session at [[2018|IndieWeb Summit 2018]].
+
+Notes archived from: https://etherpad.indieweb.org/microsub
+
+<!-- Video at: https://www.youtube.com/watch?v=mvWpm1JlNj4 -->
+
+------------
+IndieWeb Summit 2018<br>
+Session: Microsub<br>
+When: 2018-06-26 16:45
+
+== Participants ==
+* .{{gwg}} 
+* {{aaronpk}}
+* {{grantcodes}}
+* {{martijnvdven}} (remote – hi!)
+* {{jackjamieson}}
+* {{snarfed}}
+* {{tantek}}
+* {{cleverdevil}}
+* {{chrisaldrich}}
+* {{manton}}
+* {{t}}
+
+== Notes ==
+* https://indieweb.org/Microsub
+* https://indieweb.org/Microsub-spec
+
+
+* {{jackjamieson}} wrote a feed reader and wants to put this in ine with the Micropub spec. Goal is to learn.
+* Several people wanted to install an existing client, but not building one
+* {{grantcodes}} built together
+* {{cleverdevil}} is Interested in adjacent services that might
+* {{t}} wants to know how easy it is, and to create a one-click follow button for Microsub
+* {{chrisaldrich}} is here because whatever is built, he'll dogfood the heck out of it and evangelize it to others
+* {{mblaney}} is interested because he implements feed readers, specifically channels
+* {{manton}} has been following Microsub and thinks micro.blog should support it someday, if it is a good fit.
+
+Aaron wants feedback on the spec. 
+
+The main idea is an api doc, that you look at if you are building a reader. Servers read the api to learn what to return. {{mblanet}} suggests "microchannels" as a name.
+
+Servers could proxy or cache images. It is not required. Server defines its own polling schedule, should accept websub for realtime updates
+
+
+The API describes methods for actions that clients are likely going to need for interacting with feeds: adding them to the server (subscribing/following), getting the items inside of them, etc. 
+
+A server’s job is to read feeds and normalise them. So they can answer over the Microsub specified methods with a normalised data structure that the reader is expecting.
+
+Question from {{GWG}}: how do we share extra properties? My server does not know what a reader will expect. My website might offer a property, but a server may filter it out. Etc.
+Response: clients fall back to summary if there are no other fields they can understand, servers should always return summary
+
+It is a JSON based API.
+
+To get access to the server from the client, you send along an Access Token (OAuth). These can be generated through the IndieAuth flow. At the end of the flow the client has a token to send along.
+
+Note there there isn’t actually a requirement (in spec) for IndieAuth. What is required is the access token for authentication. How you source it, and how you validate it, does not matter.
+
+There is a special reserved channel (“notifications”) that is meant to be kept separate by the client. Items coming in to this channel could be handled differently by a client, e.g. showing a bell icon or some other way. (Think the notifications UI on Twitter and Facebook.)button 
+
+Universal follow button is needed for the web. But, in the client, there should be follow buttons in the app for reposted content.
+How does rel-subscribe fit in? 
+
+* '''Spec feedback:'''
+** Currently the spec requires a notifications channel from all servers. A server should be able to chose not to send them.
+** There is consensus amongst reader implementers (aaronpk, grantcodes, eddie) that this should and can be completely optional.
+** The spec currently doesn't say anything about locking channels down. Some servers may want to not let users add channels, fixed list of channels, but this may cause issues in readers that support creating channels & feeds
+** Scope for adding/removing channels?
+*** Allowing channels to be marked as not deletable by the server expressly
+*** Should be specced scopes so clients can check them and change the UI accordingly.  This is in the spec, server can choose which scopes to return
+
+== Getting Started ==
+
+* Step one: sign up for a Microsub service. Good news, there's only one for now - https://aperture.p3k.io
+** This requires a website that supports IndieAuth. If your website doesn't support IndieAuth yet, you can add it using instructions here - https://aperture.p3k.io/docs - which will use IndieAuth.com and "RelMe" auth.
+*** issue filed requesting RelMeAuth fallback: https://github.com/aaronpk/Aperture/issues/44
+** {{dgold}}’s guide to installing Aperture on your own server: https://ascraeus.org/websub-part-ii-aperture/ (defacto guide)
+* Step two: sign into a reader.
+** Option one: https://alltogethernow.io
+** Option two: http://monocle.p3k.io
+
+== See Also ==
+* [[2018/Schedule]]
+
+[[Category: 2018 sessions]]
