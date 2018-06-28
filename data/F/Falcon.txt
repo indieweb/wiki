@@ -219,13 +219,6 @@ The next things I'm working on designing and implementing in Falcon. These are a
 
 === For IWS 2018 ===
 Features to implement for IWS [[2018]], with particular reasons why:
-# [[#improve_replies_details|improve replies details]]
-#* show higher-fidelity [[reply]] permalinks, similar or better than Twitter
-#* similar improvement to compact in-stream [[reply-context]]s
-#* consider showing blockquotes in reply-contexts in reply to [[fragmention]] URLs.
-# [[#one-off_tag-of_post|one-off tag-of post]]
-#* to give {{snarfed}} a good reason to implement Bridgy Publish support to POSSE tag-of posts to at least [[GitHub]]
-#* step towards [[#one-off_person-tag_response_to_photo|one-off person-tag response to photo]]
 # [[#On_This_Day|On This Day]]
 #* I expect both emotional value and challenges - a good combination to inspire in-person discussion
 #* show value of indieweb posting all your things as compared to any one silo
@@ -235,14 +228,24 @@ Features to implement for IWS [[2018]], with particular reasons why:
 ** synchronously get reply-context information statically 
 ** display richer reply-context in falconpost UI
 ** save that reply-context info inside post storage alongside links to POSSE copies (Twitter, etc.)
-* re-evaluate below in the context of what XRay is able to 
+** display higher fidelity [[reply-context]]s
+** similar improvement to compact in-stream [[reply-context]]s
+
+Why:
+* Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
+* show higher-fidelity [[reply]] permalinks, similar or better than Twitter @-replies
+* Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
+
+==== show fragmention blockquote ====
+* consider showing blockquotes in reply-contexts in reply to [[fragmention]] URLs.
 
 ==== improve reply-context support ====
+Re-evaluate below in the context of what XRay is able to do:
+
 (Reprioritize improve replies details section at this point)
 
-Improve reply-context support in reply posts (some of this is easier than the other improve replies features below)
-* ''Why?'' Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
-** Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
+(some of this is easier than the other improve replies features below)
+
 * Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup). Necessary improvements:
 ** Show @-username in reply contexts for replies to Tweets
 ** Custom microcopy for GitHub repos/issues/comments per [[reply-context#Minimal_text_reply_contexts|Brainstorming: minimal text reply contexts]]
@@ -304,10 +307,14 @@ Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http:/
 *** Could help demonstrate/explain how webmentions work
 
 === one-off tag-of post ===
-Post a one-off [[tag-of]] post to provide a real world example to help encourage [[tag-reply#GitHub_POSSE|tag-reply GitHub POSSE]] support by Bridgy Publish.
+Post a one-off [[tag-of]] post to provide a real world example to help illustrate how to implement [[tag-reply#GitHub_POSSE|tag-reply GitHub POSSE]] support by Bridgy Publish.
 
 E.g. post tag-of responses to add labels to mf2 parsing issues:
 * https://github.com/microformats/microformats2-parsing/issues
+
+Why:
+* give {{snarfed}} a good reason to implement Bridgy Publish support to POSSE tag-of posts to at least [[GitHub]]
+* step towards [[#one-off_person-tag_response_to_photo|one-off person-tag response to photo]]
 
 === event posts ===
 Improve support for publishing [[event]] posts (with presentation goal similar to [[event#Before_2014-02-07]]), essentially:
