@@ -12,5 +12,24 @@ Its predecessor is [[OStatus]].
 
 {{main|bridge#ActivityPub}}
 
+=== ActivityPub Notifications to Webmention ===
+
+Since Mastodon and other ActivityPub implementations often include Microformats on their permalinks, a shortcut for receiving comments from ActivityPub servers is to treat them as webmentions instead of doing the full Inbox processing normally required by ActivityPub.
+
+When your ActivityPub inbox receives a notification:
+
+* If <code>type</code> is <code>Create</code>
+** and if <code>object.InReplyTo</code> is present and is a URL on your domain
+*** then save <code>object.id</code> as "source"
+*** save <code>object.InReplyTo</code> as "target"
+*** send a webmention to your webmention endpoint with the source and target
+
+Then your site's existing webmention handling will fetch and verify the ActivityPub source URL, and if there are Microformats on the page, will even look like a reply.
+
+Example:
+* Post permalink: https://aaronparecki.com/2018/07/01/9/
+* Mastodon reply URL: https://mastodon.social/@aaronpk/100302258872089825
+
+
 == See Also ==
 * [https://blog.joinmastodon.org/2018/06/how-to-implement-a-basic-activitypub-server/ How to Implement a Basic ActivityPub Server]
