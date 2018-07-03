@@ -6,6 +6,30 @@ https://indieweb.org/read
 
 To '''<dfn>read</dfn>''' or <dfn>reading</dfn> is the act of viewing and interpreting [[posts]] or other documents; on the IndieWeb, a '''read post''' expresses that something has been read, like a book or section thereof. This could serve as a way to share books etc. with followers, or to notify the author of a document that you have read it (if the document can receive webmentions).
 {{clear}}
+== How ==
+=== mark up and post a ''read'' ===
+To post a read, the post's [[h-entry]] should have properties:
+* <code>p-read-status</code>: indicates the status of the read post
+** current values being used: <code>to-read</code>, <code>reading</code>, and <code>finished</code>
+* <code>p-read-of</code>: indicates what is being read
+** it's recommended to use an [[h-cite]] for this so you can include author and [[uid]] information ([[ISBN]] or [[DOI]]), but you can use just the title as a minimum viable read post.
+
+A minimal post indicating you want to read ''[[Kill Process]]'' would be:
+
+<pre><nowiki>
+<div class="h-entry">
+	<span class="p-summary"><data class="p-read-status" value="to-read">Want to read</data>: <cite class="p-read-of h-cite">Kill Process</cite></span>
+</div>
+</nowiki></pre>
+
+A more complete post would use an h-cite as the <code>p-read-of</code>, with the author and uid:
+
+<pre><nowiki>
+<div class="h-entry">
+	<span class="p-summary"><data class="p-read-status" value="to-read">Want to read</data>: <span class="p-read-of h-cite"><cite class="p-name">Kill Process</cite> by <span class="p-author">William Hertling</span>, ISBN: <span class="p-uid">9781942097037</span></span>
+</div>
+</nowiki></pre>
+
 == IndieWeb Examples ==
 __TOC__
 === gRegor Morrill ===
@@ -88,6 +112,9 @@ Example: [https://www.jeremycherfas.net/reviews/cuisine-and-empire-cooking-in-wo
 2018-05-29: While [https://coloradoboulevard.net/ ColoradoBoulevard.net] can easily support posting reads, as a local newspaper for the Pasadena, CA and surrounding areas, it focuses more on displaying webmentions for [https://boffosocko.com/2018/05/29/indieweb-ifying-coloradoboulevard-net/ incoming read posts]
 * Example of [[facepile|facepiling]] received webmentions including [[like|likes]] and [[read|reads]]
 {{photosrcalt|src=https://indieweb.org/images/d/d9/facepiles_for_reads.PNG|alt=UI example from ColoradoBoulevard.net of facepiled Reads}}
+
+== Tools ==
+[[indiebookclub]] is a [[Micropub]] client for posting read posts to your site.
 
 == Other Examples ==
 Other interesting or notable examples of people posting about reading on the web, perhaps lists of books they have read, perhaps on another site but not on a "read" post silo.
