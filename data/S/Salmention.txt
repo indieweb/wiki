@@ -1,3 +1,102 @@
 https://indieweb.org/Salmention
 
-#redirect:[[Salmentions]]
+<!-- 
+
+By editing and/or contributing to this specification, you agree to make your contributions available under the http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0. 
+
+-->
+<span style="float:right;height:128px;font-size:128px;margin-top:48px">🐟</span>
+{{stub}}
+
+<span class="p-summary">'''<dfn>Salmention</dfn>''' is a protocol extension to [[Webmention]] to [[comment-propagation|propagate comments]] and other interactions upstream by sending a webmention from a response to the original post when the response itself receives a response (comment, like, etc.). </span> The original post then checks the response to the original, parses the response to the response (e.g. comment on a comment) and then displays it as an additional response on the original post.
+
+<dfn>Webmention with Salmention</dfn> depends on understanding [[Webmention]]. Please read that first.
+
+The name is a portmanteau of [[#Salmon]] and [[mention]].
+
+;Status
+:This is a '''Living Specification''' yet mature enough to encourage [[#IndieWeb_Examples|implementations]] and [[#Issues|feedback]].
+;Latest Published Version
+:https://indieweb.org/Salmention
+;Participate
+:[https://github.com/indieweb/salmention/issues issues]
+:[https://chat.indieweb.org/dev discussion on #indieweb-dev] ([irc://irc.freenode.net/indieweb-dev on Freenode IRC])
+;Editors
+:[https://ben.thatmustbe.me Ben Roberts]
+:[http://tantek.com Tantek Çelik]
+;Authors
+:Other contributors: [https://indiewebcamp.com/wiki/index.php?title=Salmentions&action=history revision history]
+;License
+:<small>Per [http://creativecommons.org/publicdomain/zero/1.0/ CC0], to the extent possible under law, the editor(s) and contributors have waived all copyright and related or neighboring rights to this work. In addition, as of {{CURRENTYEAR}}-{{CURRENTMONTH}}-{{CURRENTDAY2}}, the editor(s) and contributors (2015-04-07 onward) have made this specification available under the [http://www.openwebfoundation.org/legal/the-owf-1-0-agreements/owfa-1-0 Open Web Foundation Agreement Version 1.0].</small>
+
+== Protocol ==
+=== Sending Salmentions ===
+An implementation that sends and receives [[Webmention|Webmentions]] can send Salmentions by doing the following:
+
+When it receives and accepts a Webmention from a response to an original post:
+* Incorporate (or update) the response into the original post’s permalink by nesting the response inside the original, keeping track of whether any changes actually occurred.
+** E.g. incorporate a [[reply]] as a nested comment [[h-entry]] inside the original’s [[h-entry]]
+* If there were any changes (a new or updated response), then resend Webmentions to everything the original post sent webmentions to.
+
+That act of resending those Webmentions when an original post is updated in response to responses is called “sending Salmentions”.
+
+=== Receiving Salmentions ===
+An implementation that receives [[Webmention|Webmentions]] can receive Salmentions by doing the following:
+
+When it receives a Webmention, in addition to normal Webmention processing:
+* Store the contents of the source of the Webmention in such a way that it can be rechecked in the future for any changes.
+
+When it receives a previously received Webmention:
+* Check the source of the Webmention for any changes since the previous Webmention (using aforementioned stored contents), in particular any new responses to the source
+** E.g. check for new nested comment [[h-entry]](s) inside the source’s [[h-entry]]
+* Incorporate any new response(s) to the source both into those stored contents, and display as inline responses to the target itself.
+** E.g. displaying a reply to a reply, as an additional comment on the original post.
+** If the previous Webmention generated a [[notification]], then the new response(s) should as well.
+
+The act of noticing a re-receiving of a Webmention and doing something when there are changes in the source, specifically nested responses, is called “receiving Salmentions”.
+
+== IndieWeb Examples ==
+In order of implementation
+=== Kyle Mahan ===
+{{kylewm}} supports sending and receiving Salmentions on his site since 2015-06-09.
+* First mention sent: https://kylewm.com/2015/06/i-have-to-go-to-bed-now-if-this-works-or-not-so-i
+* and received: https://kylewm.com/2015/06/yeah-comment-threads-are-sort-of-a-todo-for-the-indieweb#kyle_mahan-4565
+
+=== Ashton Macallan ===
+{{acegiak}} supports sending and receiving Salmentions on her site since 2015-06-13.
+* Recieving: https://acegiak.net/2015/06/09/not-necessarily-threaded-comments-like-reddit-but-i-think-theres-broad-consensus-that-if-you-reply-to-a-reply-it-would-be/
+* Sending: https://acegiak.net/2015/06/13/i-have-to-go-to-bed-now-if-this-works-or-not-so-i-hope-it-works/
+
+=== Known ===
+{{benwerd}} sneakily added suport for sending Salmentions on 2015-07-11[https://github.com/idno/Known/commit/005542d1617686fca7196dcf071ca82c503382d9].
+* Here's an example of a salmentioned comment received from a Known site: https://kylewm.com/2016/05/nice-you-were-a-good-test-case-for-woodwind-there
+
+=== Ben Roberts ===
+{{benthatmustbeme}} supports sending Salmentions on his site since at least 2015-07-12 and built his support to help pass [[SWAT0]] as Player A.[https://aaronparecki.com/notes/2015/07/14/1/swat0]   Support for receiving was added since then (date unsure) [https://ben.thatmustbe.me/note/2016/5/16/2/]
+
+=== Aaron Parecki ===
+{{aaronpk}} supports sending Salmentions since 2016-03-23, and receiving Salmentions on his site since 2015-07-12 and built this support to help pass [[SWAT0]] as Player B.[https://aaronparecki.com/notes/2015/07/14/1/swat0]
+
+== Issues ==
+This section is closed. Please add to https://github.com/indieweb/salmention/issues instead.
+
+Awaiting original authors to move this issue to https://github.com/indieweb/salmention/issues:
+
+=== Comment thread on separate page from post ===
+
+This protocol requires that all replies be displayed on the same page as the post itself. I prefer to have the "conversation" on a second page, linked to from the post.
+
+Idea: forward the webmention upstream instead of repeating the webmention from yourself. Then, upstream can parse the reply-to-reply, see that it is in reply to a comment in a conversation it manages, and add to the thread accordingly. No display of the replies on the intermediate site is required at all for this flow.
+
+== Related ==
+=== ActivityPub ===
+{{main|ActivityPub}}
+[[ActivityPub]] describes a similar process to Salmention for propagating updates between systems. If one of your posts receives a mention (eg. as the target of a like, repost or inReplyTo, etc), your server should send the ''new post'' (the one that mentions you) to ''all recipients'' of your original post. (In ActivityPub, your server pushes your posts out to your followers, and retains a list of everyone posts are sent to, but this basically translates to sending a webmention to the original post).
+
+=== Salmon ===
+{{main|Salmon}}
+The [[Salmon]] protocol is a predecessor to [[#ActivityPub]] that broke useful conceptual ground but never gained widespread adoption. It's part of the [[OStatus]] protocol suite.
+
+== See Also ==
+* [[comment-propagation]]
+* [[reply-chain]]
