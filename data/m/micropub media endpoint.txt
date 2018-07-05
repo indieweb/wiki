@@ -15,6 +15,14 @@ A Micropub client should be able to query the Media Endpoint to find the last ph
 
 This also gets closer in line with the way the Wordpress uploader works, where images are stored in a media gallery and can be added to posts later. Might need to explore that API to see how they handle querying the list of media.
 
+This is currently produced by:
+
+* {{aaronpk}} on his media endpoint media.aaronpk.com
+
+And consumed by:
+
+* [[Quill]] - queries the media endpoint to find the last uploaded image and pre-populates the photo in the note interface
+
 === Response Body ===
 
 The Micropub spec doesn't define a particular response body when uploading to the media endpoint. It only defines that the response include the created URL in the Location header. However, some tools are easier to work with if they can use the response body instead of having to parse the HTTP headers.
@@ -39,7 +47,6 @@ This response currently produced by:
 
 And consumed by:
 
-* [[Quill]] - (JSON only) will populate the note interface with the last image uploaded by querying the media endpoint
 * {{aaronpk}} - a iOS Workflow that I created to upload to my media endpoint requests a text/plain response and uses the body as the URL, copying it to the clipboard. that was easier than adding a JSON parser to the Workflow.
 
 == See Also ==
