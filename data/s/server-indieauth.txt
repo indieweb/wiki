@@ -25,10 +25,12 @@ Flow:
 * Check how this fits in with existing auth/token endpoint implementations to make sure this doesn't conflict
 * Is there a need for Bob's server to distinguish requests made from Alice's server without Alice present vs when Alice is making a request from a client where Alice is present at the computer?
 * Is there a need for distinguishing different servers / Apps used by Alice? For instance: Alice's reader does the auth, gets a token, Alice's private webmention does the auth, gets a new token. Bob wants to invalidate the old token, but then Alice's reader does not have access anymore, and re-authenticating Alice's reader would drop her webmention token.
+** client id?
 * If this is used for more then just reading posts (for instance a bot editing this wiki), scoped tokens might be a thing. Do we need those?
 * how to do resource-scoping ("this system can only read this subset of all the posts that are private and readable by me, the user", e.g. for multiple private webmention endpoints)
-
+** also how to know the limits of an existing token? does my reader need a per-feed token, or one for the entire site? can it tell, or does it have to always assume it needs to fetch a token, can it always assume a token will be widely scoped - the latter is likely problematic for shared domains, where does a site start and end, or people using multiple apps.
 * alice.server should get a <code>code</code> from alice.auth before step 1. Do we need to make that explicit or is it out of scope for this spec?
+** should be specced as soon as we are thinking about alice.server being a third-party service - can my reader request a scope that gives it the right to read private feeds on others sites as me?
 
 === Design Considerations ===
 * No part of this spec should require that either party makes a request that requires another HTTP request inside of it. Everything should be able to happen asynchronously, either with job queues or cron jobs.
