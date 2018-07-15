@@ -100,8 +100,6 @@ For the purposes of an "issue", what is perhaps special is the added expectation
 === Close and re-open issues when commenting ===
 [[GitHub]] allows commenters (with authorization) to close / re-open an issue at the same time as submitting a comment.
 
-This is a UI shortcut that creates two separate user-visible events ("posts") on the issue timeline, not a single combined event. [https://github.com/snarfed/bridgy/issues/827#issuecomment-392522810 Example.] The API also distinguishes [https://developer.github.com/v3/issues/events/#events-1 events] and [https://developer.github.com/v3/issues/comments/ comments], with no object for a combined-comment and-close/reopen.
-
 How should we model this?
 
 Do we need an additional property for a [[reply]] to indicate that it closes/re-opens the thing it is a reply to?
@@ -111,6 +109,11 @@ Alternatively, we could model closing/re-opening as a separate [[response]] (wit
 Should we consider other systems like [[Bugzilla]] or other traditional bug-tracking solutions?
 
 Like "Resolve" an issue with a specific state? Or should that be a separate response since it is something you do separately from commenting.
+
+Some discussion:
+* This is a UI shortcut that creates two separate user-visible events ("posts") on the issue timeline, not a single combined event. [https://github.com/snarfed/bridgy/issues/827#issuecomment-392522810 Example.] The API also distinguishes [https://developer.github.com/v3/issues/events/#events-1 events] and [https://developer.github.com/v3/issues/comments/ comments], with no object for a combined-comment and-close/reopen. - {{snarfed}}
+** Arguing from the perspective of API sounds like a plumbing-centric approach. I’d say the opposite is true - the UI "shortcut" is representative of the user intent, which is the "actual" aspect of reality we want to model, not whatever happens to be exposed in storage or API. - {{t}}
+* Similar example: [[Gmail]] Send + Archive. Except in that case Gmail's UI clearly treats it as an atomic transaction set of actions since if you "Undo" it undoes send+archive.
 
 ==== Plain text close re-open ====
 Perhaps for now we can come up with plain text to communicate the intent of "closing" an issue or "re-opening it".
