@@ -4,6 +4,43 @@ https://indieweb.org/Webmention-brainstorming
 
 == Brainstorming ==
 
+=== status page ===
+
+The Webmention spec includes the possibility of [https://www.w3.org/TR/webmention/#receiving-webmentions creating a status page] if processing a webmention asynchronously. This enables a sender to have a way to check on the status of whether their webmention is verified.
+
+If a receiver returns a status page, the spec says to respond with HTTP 201 and a Location header, e.g.
+
+<pre>HTTP/1.1 201 Created
+Location: http://aaronpk.example/webmention/DEhB9Jme</pre>
+
+The contents and format of this status page are not specified, as there were no consuming cases implemented at the time of standardization. The goal of the status page is to give senders a way to know whether their webmention sending was successful or why it failed. People have implemented a variety of different ways this information is returned at the status URL.
+
+==== Implementations ====
+
+IndieWeb community members who have implemented either serving status pages or consuming them:
+
+* [[webmention.io]] returns status pages that return either JSON or HTML depending on the Accept header.
+** The HTML status page contains a header section with "Status: Success" or "Status: (error code)" depending on whether verifying the webmention was successful. Possible errors include: target_not_found, invalid_target, no_link_found
+** If the Accept header includes application/json, then the JSON in the HTML page's "Debug info" is returned instead.
+** This includes a property "status" set to "success" when successful, or one of the error codes above, as well as the source and target URLs, and the XRay-parsed result of the source URL to aid in debugging.
+
+[[File:webmention-io-status-page-html.png|link=https://webmention.io/indiewebcamp/webmention/Ti6bfuEvKFf8SSyAZyI2|600px]]
+
+[[File:webmention-io-status-page-json.png|600px]]
+
+* [[Telegraph]] checks for a status URL when sending a webmention and makes that URL available in the interface when you check your history of sent webmentions
+
+[[File:telegraph-webmention-sending-status.png|600px]]
+
+* {{aaronpk}} in p3k version 1 (example URL: https://aaronparecki.com/webmention/rf2_14yA)
+
+[[File:aaronparecki-webmention-status-example.png|link=https://aaronparecki.com/webmention/rf2_14yA|600px]]
+
+* Johnny Oskarsson (example URL: https://joskar.se/webmention/rgjnJ8)
+
+* {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} (example URL: https://ben.thatmustbe.me/queue/123)
+
+
 === using x-forwarded-for to mitigate DDoS abuse ===
 
 When verifying a webmention by checking the source site, include an X-Forwarded-For HTTP header in your request, with the value set to the IP address of the client that notified your server of the alleged webmention.
@@ -37,18 +74,6 @@ Webmention-Status: 202
 </pre>
 This would say that the webmention is still in the state of "accepted" but has not processed yet.
 This also leaves the page body open to any formatting for the user's view.
-
-==== Implementations ====
-
-IndieWeb community members who have implemented this
-
-* Aaron Parecki (example URL: https://aaronparecki.com/webmention/rf2_14yA)
-
-[[File:aaronparecki-webmention-status-example.png|link=https://aaronparecki.com/webmention/rf2_14yA]]
-
-* Johnny Oskarsson (example URL: https://joskar.se/webmention/rgjnJ8)
-
-* {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} (example URL: https://ben.thatmustbe.me/queue/123)
 
 === Asynchronous status notification ===
 Asynchronous status notification could be achieved by using a [[webhook]] in the initial webmention request.
@@ -351,3 +376,5 @@ Synchronous webmention receivers should return the following status codes:
 Asynchronously:
 
 Similarly, in an asynchronous interaction, the callback webhook should include a "status" URL query parameter with the status codes noted above.
+
+__TOC__
