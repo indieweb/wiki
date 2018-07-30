@@ -15,14 +15,17 @@ Use [[microformats]] to markup the <em>visible</em> information on the page inst
 To add Open Graph tags to a page, add only the tags you need, because Facebook will use other existing page markup and information in the absence of og: tags.
 
 === How to set title ===
-If the <code><title></code> tag of your page is more than just the name of the page (i.e. includes the site name), then use <code>og:title</code> to provide only the page name:
+You do not need <code>og:title</code> if the <code><title></code> tag of your page is just the name of your page.
 
+If your <code><title></code> is more than that (e.g. includes site name, author, etc.), then you may use <code>og:title</code> to provide only the page name:
 <pre>
 <meta property="og:title" content="Really Cool Blog Post" />
 </pre>
 
 === How to set URL ===
-You do not need <code>og:url</code>. Instead, use the existing [[rel=canonical]] standard to link to your canonical page URL. Facebook's own documentation states they support this [https://developers.facebook.com/docs/sharing/webmasters/crawler#canonical].
+You do not ever need <code>og:url</code>. 
+
+Instead, use the existing [[rel=canonical]] standard to link to your canonical page URL. Facebook's own documentation states they support this [https://developers.facebook.com/docs/sharing/webmasters/crawler#canonical].
 
 <pre><link rel="canonical" href="http://example.com/post-permalink" /></pre>
 
@@ -32,17 +35,22 @@ Screenshot from Open Graph Object Debugger:
 [[File:facebook-open-graph-object-debugger-2018-01-05.PNG]]
 
 === How to set description ===
-If the first part of the text content of your page is a good description and summary, then you can omit <code>og:description</code>. But if you want specific control over the link preview text content summary, you can use the much older, more widely supported meta description that Facebook also supports (we know from experience, see examples below):
+You do not need <code>og:description</code> if the first part of the text content of your page is a good description and summary.
+
+If you want specific control over the link preview text content summary, you can use the much older, more widely supported meta description that Facebook also supports (we know from experience, see examples below):
 
 <pre><meta name="description" value="This is a summary of the post and should be limited to one or two sentences. It may be truncated when displayed." /></pre>
-Instead of:
+
+If for some reason you need to provide a custom summary just for [[Facebook]] in particular (e.g. to encourage folks to leave Facebook), you may use <code>og:description</code> like this:
 <pre><meta property="og:description" content="This is a summary of the post and should be limited to one or two sentences. It may be truncated when displayed." /></pre>
 
 === How to set image ===
-Lastly, Facebook will automatically show the first image that is at least 600px wide on your page, so if that works, no need to use <code>og:image</code>. Otherwise if you want a specific preview image, you can do so:
+You do not need <code>og:image</code> if your page already has an image that is at least 600px wide.
+
+Facebook will automatically show the first image that is at least 600px wide on your page, so if that works, no need to use <code>og:image</code>. Otherwise if you want a specific preview image, you can do so:
 <pre><meta property="og:image" content="http://example.com/preview-image.jpg" /></pre>
 
-The image should be at least 1200 x 630, a minimum of 600 x 315, and up to 8mb in size. [https://developers.facebook.com/docs/sharing/best-practices#images]
+The image should be at least 1200 x 630, a minimum of 600 x 315, and up to 8mb in size. ([https://developers.facebook.com/docs/sharing/best-practices#images Dev.FB best practices on images]
 
 More info: https://developers.facebook.com/docs/sharing/webmasters/#markup
 
