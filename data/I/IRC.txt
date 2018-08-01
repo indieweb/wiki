@@ -43,7 +43,22 @@ We have the most awesome IRC logs on the web. That doesn't mean they can't be ev
 === Spam ===
 Occasionally, Freenode gets hit with a wave of IRC spam. Typically the pattern is an account joins many channels across Freenode and sends repeated similar messages to as many channels as it can, often mentioning other peoples' nicknames in order to get their attention. 
 
-Hopefully other Freenode admins catch the bot and block it from the server. Any channel op can also <code>/kick spammer</code> to remove them from the specific channel immediately, which is a good short-term solution to prevent more spam, but not a permanent solution.
+* Anyone registered on [[chat-names]] can kick users by telling Loqi to kick them using <code>!kick spammer</code>
+* Any channel op in our channels can also <code>/kick spammer</code> to remove them from the specific channel immediately
+* Other Freenode admins often catch the bots and block them from the server
+
+In very large spam waves, such as the one starting on 2018-07-31, we can employ additional tricks to prevent the spam from hitting the channels at all.
+
+* Set everyone currently in the channel to +v (<code>/voice nickname</code>)
+* Set the channel modes to +zm (<code>/mode #indieweb-dev +zm</code>)
+** +m means only people with +v mode can speak in the channel
+** +z allows channel ops to still see the messages from unvoiced users, so Loqi can still see messages from new people and spammers
+* When someone joins a channel, Loqi sets a timer for 30 seconds. If they are still in the channel after 30 seconds, they are automatically given +v
+* When an unvoiced user says something, if it matches a spam keyword phrase, they are immediately kicked.
+** If it does not match a spam phrase, then Loqi says "Welcome, {nickname}. Since you weren't yet recognized as a real person, your message wasn't sent to the channel. I'm repeating it below for you.", repeats their message to the channel, and sets +v
+** If the spam does not consistently match a pattern, this last rule can be dropped
+
+==== Spam in Chat Logs ====
 
 The IndieWeb chat logs are all stored as files in a GitHub repo, which is where the web interface pulls from. Individual lines in the file can be marked as deleted to avoid them being shown in the web interface. This should only be used to block actual spam, not remove legitimate text from users, even if it is something you don't agree with.
 
