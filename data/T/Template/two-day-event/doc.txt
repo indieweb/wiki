@@ -1,0 +1,79 @@
+https://indieweb.org/Template%3Atwo-day-event/doc
+
+This template is used to generate a two-day event with the appropriate <code>h-event</code> [[microformats]].
+
+== Blank Template ==
+Copy, paste, and fill in the information:
+
+<pre style="line-height: 1.4em; padding: 1em; border: 1px solid #ddd; color: black; background-color: #f9f9f9;">{{two-day-event
+| event_name = 
+| event_wiki_page =
+| event_external_url =
+| event_date = 
+| event_start_time = 
+| event_end_time = 
+| event_utc_offset =
+| event_location1 = 
+| event_description = 
+}}</pre>
+
+== Parameters ==
+; event_name : The name of the event.
+; event_wiki_page : The event's wiki page. Must '''not''' include the wiki bracket syntax.
+; event_external_url : The event's external URL. Typically used for events that don't have a wiki page.
+; event_date : The event's start date in <code>YYYY-MM-DD</code> format.
+; event_start_time : The event's start time in <code>HH:MM</code> format.
+; event_end_time : The event's day 2 end time in <code>HH:MM</code> format.
+; event_utc_offset : The timezone offset from <abbr>UTC</abbr> in <code>+/-HH:MM</code> format. If not supplied, the event's times will indicate "local time." ''(optional)''
+; event_location1 : The event's location. This value will be wrapped in the <code>p-location</code> microformat.
+: additional event locations can be added using parameters '''event_location2''' through '''event_location10'''
+; event_description : The event's short description.
+
+== Examples ==
+=== An event with no UTC offset ===
+<pre style="line-height: 1.4em; padding: 1em; border: 1px solid #ddd; color: black; background-color: #f9f9f9; white-space: pre-wrap;">{{one-day-event
+| event_name = IndieWeb Summit 2018
+| event_wiki_page = 2018
+| event_date = 2018-06-26
+| event_start_time = 09:00
+| event_end_time = 18:00
+| event_utc_offset =
+| event_location1 = Portland
+| event_description = The Eighth Annual Summit for all things IndieWeb!
+}}</pre>
+
+Will generate:
+{{two-day-event
+| event_name = IndieWeb Summit 2018
+| event_wiki_page = 2018
+| event_date = 2018-06-26
+| event_start_time = 09:00
+| event_end_time = 18:00
+| event_utc_offset =
+| event_location1 = Portland
+| event_description = The Eighth Annual Summit for all things IndieWeb!
+}}
+
+=== An event with UTC offset ===
+<pre style="line-height: 1.4em; padding: 1em; border: 1px solid #ddd; color: black; background-color: #f9f9f9; white-space: pre-wrap;">{{two-day-event
+| event_name = IndieWeb Summit 2018
+| event_wiki_page = 2018
+| event_date = 2018-06-26
+| event_start_time = 09:00
+| event_end_time = 18:00
+| event_utc_offset = -08:00
+| event_location1 = Portland
+| event_description = The Eighth Annual Summit for all things IndieWeb!
+}}</pre>
+
+Will generate:
+{{two-day-event
+| event_name = IndieWeb Summit 2018
+| event_wiki_page = 2018
+| event_date = 2018-06-26
+| event_start_time = 09:00
+| event_end_time = 18:00
+| event_utc_offset = -08:00
+| event_location1 = Portland
+| event_description = The Eighth Annual Summit for all things IndieWeb!
+}}
