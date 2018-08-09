@@ -1,8 +1,5 @@
 https://indieweb.org/User%3AStevestreza.com
 
-My name is Steve Streza. I love learning and making things, whether it’s software, hardware, computers, wood projects, electronics, or whatever else I get my hands on.
-
-My website is built on [[gatsby]] and is a work in progress.
 
 {{Infobox person
 |name = Steve Streza
@@ -11,3 +8,43 @@ My website is built on [[gatsby]] and is a work in progress.
 |summary = Software developer, comic book writer, video creator, hobbyist located in Seattle, WA.
 |elsewhere = [https://twitter.com/stevestreza Twitter] [https://github.com/SteveStreza GitHub] [https://www.youtube.com/channel/UCgvP1uuOjs2ZkCNIPjK1kAg YouTube]
 }}
+
+My name is Steve Streza. I love learning and making things, whether it’s software, hardware, computers, wood projects, electronics, or whatever else I get my hands on.
+
+My website is built on [[gatsby]] and is a work in progress.
+
+Go [https://www.soundersfc.com/ Sounders]!
+
+= Itches =
+
+* ✅ Setup [[microformats]] across my site that are automatically generated
+* Setup [[POSSE]] through a variety of platforms. Don't expect readers to come to me, go to the services they already use.
+** Telegram
+** Twitter
+** Apple News
+** Medium
+** LinkedIn
+** SMS
+** Email
+* Configure website to use a push-driven [[CDN]] (probably [https://www.keycdn.com/ KeyCDN])
+* Setup [[WebSub]] for important resources
+** Later setup [[WebSub]] for ''literally every page''
+* Setup a web-based editor to create posts (e.g. [[Netlify CMS]])
+* Support [[Micropub]] for publishing posts
+** Later setup [[Micropub]] for full spec coverage
+
+= How It's Made =
+
+== Static Site Generation ==
+
+My website is built with [[gatsby]] and has the full website, all the post content, and all [[microservice|microservices]] in a single [[git]] repository. When a change is made to any of those pieces, the change is committed and pushed to my personal [[GitLab]] instance, where a CI job builds the entire site, including a JSON file that has the entire contents of every page and post on the site. Assuming this is successful, the website is deployed to the server, and a [[webhook]] is sent to a [[microservice]] running on [[Lambda|AWS Lambda]] to kickoff [[syndication]].
+
+== Syndication ==
+
+The [[syndication]] [[webhook]] is stored on [[Lambda|AWS Lambda]], and is connected to [[DynamoDB|AWS DynamoDB]]. A full copy of all the website data is stored in a database. When the [[syndication]] [[webhook]] is triggered, a [[Node.js]] function is called that downloads the JSON site data file and compares it to [[DynamoDB]] to see if the post was created, updated, deleted, or stayed the same, and then updates the database as appropriate by creating, updating, and deleting records.
+
+[[DynamoDB]] supports streaming changes as an event log, and other [[Lambda]] functions can trigger when create/update/delete events are added to the stream. This means support for [[POSSE]] syndication can be added just by hooking into the stream, filtering to the types of events that are needed, and then calling the appropriate APIs to do the syndication. For example, a [[Telegram]] syndication would filter for create events of posts, transform those posts into API calls, and then perform those API calls, but it wouldn't bother with updating or deleting posts. But a [[Medium]] syndication should update and delete posts if I change them in the source location, so that syndicator would listen to all of the events separately and perform the changes as needed. This should scale to as many different services as I want to syndicate to, now or in the future, and crucially takes the burden of ops out of my hands.
+
+= Events =
+
+* [[events/2018-08-08-homebrew-website-club|2018-08-08 Homebrew Website Club]] in the Seattle Area, attended IRL
