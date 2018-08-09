@@ -3,31 +3,20 @@ https://indieweb.org/User%3APetermolnar.net
 <span style="float:right;margin-left:1em"><img src="https://petermolnar.net/favicon.png" /></span>
 <span class="h-card">[https://petermolnar.net/ Peter Molnar]</span>
 
-== Current: static generator ==
+== The Present ==
 
-After spending months on arguing with myself, I finally decided to write my static generator and walk away from WordPress. It took me a long while, but I'm more or less ready. Summary and reasoning: [https://petermolnar.net/going-static Going Static]
+Before the dawn of time - or a proper domain - went through a cycle of Microsoft FrontPage, a self-composed, PHP CMS, WordPress, and now I'm back on static(ish) site generation since 2016:
 
-=== What, why, how ===
+* https://github.com/petermolnar/nasg/
 
-; [[POSSE]]
-: My photos are POSSEd to [[Flickr]] via [[bridgy]], but I barely cross-post anything else these days.
-; [[PASTA]]
-: After speding a lot of time thinking throught [https://petermolnar.net/making-things-private/ what should be on my website] I decided to archive silo interactions, favorites, bookmarks, etc. only in private archives. Most of these require [[OAuth]] 1 or 2, therefore there is a tiny service running which handles callbacks and stores tokens.
-; [[Webmention]]s
-: Using {{aaronpk}}'s [http://github.com/aaronpk/xray X-Ray] to detect the webmention endpoints (yes, from Python, via a system call) to send webmentions to. The webmentions themselves (from,to,timestamp) are in an SQLite database to skip the ones already done.
-; [[Micropub]]
-It's not yet done in the 2.x version of my static generator.
-; [[search]]
-: The site populates an SQLite database using the FTS5 engine for full text search. It comes with a set of weird issues ( no - allowed for example, because it interprets it as a column name), but it works reasonably well and it's extremely simple.
-; image and image metadata handling
-: It all relies on [[exiftool]] for getting metadata from images, but all my tries for storing all the image related meta (including text and tags) failed due to the lack of a software capable of handling IPTC and XMP with reasonable UI, so I ended up using the same, post-like YAML+Markdown format, with the same name as the photos, therefore they are linked.
+Reasoning, lessons, conclusions:
+
+* https://petermolnar.net/running-a-static-indieweb-site/ [2018-08-07]
+* https://petermolnar.net/making-things-private/ [2017-10-28]
+* https://petermolnar.net/going-static/ [2016-12-31]
 
 
-== Previously ==
-
-I used WordPress between 2007 and 2016, but in the end I was running a version where I had to apply patches to the core - I tried submitting them but most of them got neglected.
-
-Consider these as abandoned or on hold projects.
+== Abandoned projects ==
 
 * [https://github.com/petermolnar/wp-webmention-again wp-webmention-again] - an alternative webmentions plugin for WordPress. It's most probably broken by now.
 * [https://github.com/petermolnar/blogroll2email Blogroll2email]- turns the Blogroll part of WordPress to feed (atom, rss, mf2) parser to send entries as mail; supports [[granary]] json-mf2 format
