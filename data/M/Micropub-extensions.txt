@@ -106,6 +106,62 @@ Micropub supports making a GET request to a Micropub endpoint with a <code>q=</c
 * extended markup formats – right now it is relatively dependent on the server implementation how text content is treated (1:1, basic processing like linking URLs, Markdown, ...). A query could expose information about this (and maybe even be part of a way to choose for the user)
 * media endpoint history – query recent uploads to the media endpoint, e.g. the last X photos uploaded from a phone
 
+=== Query for Supported Vocabulary ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/1
+
+This is an extension for returning what properties a Micropub server supports, so that a client like [[Quill]] or [[Indigenous]] could know to hide or rename the common choices in the UI. This is essentially using reverse [Post Type Discovery]
+
+<pre>
+{
+  "post-types": [
+    {
+      "type": "note",
+      "name": "Note"
+    },
+    {
+      "type": "article",
+      "name": "Blog Post"
+    },
+    {
+      "type": "photo",
+      "name": "Photo"
+    },
+    {
+      "type": "video",
+      "name": "Video"
+    },
+    {
+      "type": "reply",
+      "name": "Reply"
+    },
+    {
+      "type": "like",
+      "name": "Like"
+    },
+    {
+      "type": "repost",
+      "name": "Repost"
+    },
+    {
+      "type": "rsvp",
+      "name": "RSVP"
+    },
+    {
+      "type": "bookmark",
+      "name": "Bookmark"
+    }
+  ]
+}
+</pre>
+
+==== Implementations ====
+* Clients
+** [[Quill]]
+* Servers
+** [[micro.blog]]
+** [[abode]]
+
 === Query for Post List ===
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/4
