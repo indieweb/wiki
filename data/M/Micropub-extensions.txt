@@ -106,6 +106,66 @@ Micropub supports making a GET request to a Micropub endpoint with a <code>q=</c
 * extended markup formats – right now it is relatively dependent on the server implementation how text content is treated (1:1, basic processing like linking URLs, Markdown, ...). A query could expose information about this (and maybe even be part of a way to choose for the user)
 * media endpoint history – query recent uploads to the media endpoint, e.g. the last X photos uploaded from a phone
 
+=== Query for Post List ===
+; '''Issues and discussion:''' 
+: 
+
+This is a possible extension to the q=source query on my micropub endpoint, if no url is provided it returns a list of posts. This makes the url part of the query really into more of a filter. This would be super handy for clients wanting to present a list of posts to edit/delete/undelete.
+
+Another advantage of this extension is that your micropub server is just responsible for storing and listing posts as microformats, rendering posts can be another bit of software's responsibility 
+
+<pre>
+{
+ "items": [
+  {
+    "type": [
+      "h-entry"
+    ],
+    "properties": {
+      "like-of": [
+        "https:\/\/en.m.wikipedia.org\/wiki\/Poka-yoke"
+      ],
+      "uid": [
+        "20170820131258_59998adae54d0"
+      ],
+      "published": [
+        "2017-08-20T13:12:58+00:00"
+      ]
+    }
+  },
+  {
+    "type": [
+      "h-entry"
+    ],
+    "properties": {
+      "photo": [
+        "https:\/\/media.j4y.co\/2017\/cfd007ec-c819-47da-99a2-daec2e91a41e.jpg"
+      ],
+      "published": [
+        "2017-08-19T18:30:40+00:00"
+      ],
+      "content": [
+        ""
+      ],
+      "category": [
+        ""
+      ],
+      "uid": [
+        "20170819175715_59987bfb72c4f"
+      ]
+    }
+  }
+}
+</pre>
+
+==== Implementations ====
+* Clients
+** [[Quill]]
+* Servers
+** [[p3k]]
+** [[Micropub for WordPress]]
+
+
 === Questions ===
 
 * According to the current spec (2017-01), a <code>GET ?q=config</code> should also include the <code>syndicate-to</code> property. If the collection of supported properties grows, is this still a thing to hold on to? Venues and tags can make the response potentially large. {{Sebsel}}
