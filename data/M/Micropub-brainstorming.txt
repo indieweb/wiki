@@ -150,6 +150,8 @@ I think the above paragraph was from me. Got this working pretty well now. Also 
 While setting up a new micropub client I noticed [[Micropub/Servers#Implementation_status]]  This would be really helpful if I could fetch a version string of some sort from the endpoint and attempt to autoconfigure for that user's server software.  Not as ideal as discovering all supported fields, but would be a very simple addition that servers could easily return.
 
 ==== Query for post list ====
+This is a possible extension to the q=source query on my micropub endpoint, if no url is provided it returns a list of posts. This makes the url part of the query really into more of a filter.
+
 This would be super handy for clients wanting to present a list of posts to edit/delete/undelete.
 
 Another advantage of this extension is that your micropub server is just responsible for storing and listing posts as microformats, rendering posts can be another bit of software's responsibility 
@@ -219,6 +221,8 @@ Another advantage of this extension is that your micropub server is just respons
 
 In order to achieve the above use cases there would need to be a robust query system in place. It would need to be able to query for:
 
+* url (this filters and returns the single post with that url. This is how q=source currently functions)
+* posts based on post type (similar to https://github.com/indieweb/micropub-extensions/issues/1)
 * pages of posts with defined limits
 * posts with specific properties
 * posts with combinations of properties
