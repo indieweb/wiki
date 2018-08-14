@@ -28,6 +28,25 @@ Example:
 * Post permalink: https://aaronparecki.com/2018/07/01/9/
 * Mastodon reply URL: https://mastodon.social/@aaronpk/100302258872089825
 
+=== Sending an ActivityPub notification from an IndieWeb website ===
+
+As more people and services in the IndieWeb build in support for ActivityPub, it's important to remember that competing communication options could happen. Here is a general top-level breakdown of sending an ActivityPub notification for a [[reply]] or [[like]].
+
+The u-in-reply-to or u-like-of url will be referred to as the "targetUrl" below, and your post is referred to as the sourceUrl.
+
+* Fetch the targetUrl via text/html, check for a [[webmention]] endpoint.
+* If webmention endpoint exists, abort ActivityPub and send a webmention for sourceUrl to targetUrl
+* If webmention endpoint does not exist, attempt to fetch the targetUrl as <code>application/activity+json</code>
+** If targetUrl doesn't return JSON, targetUrl doesn't accept ActivityPub, abort.
+** If targetUrl returns JSON, check for a top-level <code>@context</code> attribute. This can be an array or a string, check if it contains "<code>https://www.w3.org/ns/activitystreams</code>".
+*** If targetUrl's JSON response does not return the right details, abort.
+*** If targetUrl's JSON response returns the correct info, check the <code>attributedTo</code> attribute for the author's ActivityPub profile.
+**** Fetch the author's ActivityPub profile url as <code>application/activity+json</code> and check top-level <code>inbox</code> attribute for the author's ActivityPub inbox endpoint.
+**** Send an ActivityPub notification to the author's ActivityPub inbox endpoint.
+
+==== Tips & Tricks for Sending ActivityPub notifications ====
+* Mastodon requires that you include a "Mention" in the tags array, but you also need to include the person's <code>preferredUsername</code> in the post text to show it as a notification.
+* Technically <code>attributedTo</code> can be an object, but this hasn't been seen in the wild yet.
 
 == See Also ==
 * [https://blog.joinmastodon.org/2018/06/how-to-implement-a-basic-activitypub-server/ How to Implement a Basic ActivityPub Server]
