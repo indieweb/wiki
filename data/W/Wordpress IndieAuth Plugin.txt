@@ -98,6 +98,27 @@ Due to the variety of ways and environments in which WordPress can be installed,
 ** Single-user installation (user URL is the blog root)
 ** Multi-user installation (user URLs include a path)
 * ... TODO
+== Troubleshooting ==
+
+=== ModSecurity Firewall blocking requests ===
+
+On servers using the [https://modsecurity.org/ ModSecurity Web Application Firewall], with [https://wiki.atomicorp.com/wiki/index.php/Atomic_ModSecurity_Rules Atomicorp.com WAF Rules] requests may be blocked because of [https://wiki.atomicorp.com/wiki/index.php/WAF_340162 WAF 340162]. This rule blocks requests that use external URLs in the URL, to protect against Remote File Injection.
+
+''' Temporary solutions: '''
+
+* ask the hosting in charge of the firewall to disable this rule,
+* or disable it yourself if you have access to server configuration files (this may also work in [[.htaccess]] files) [https://support.plesk.com/hc/en-us/articles/115002531753-How-to-disable-a-single-ModSecurity-rule-for-a-website-]:
+<pre><IfModule mod_security2.c>
+SecRuleRemoveById 340162
+</IfModule></pre>
+
+''' Real solution: '''
+
+From the WAF Rule description:
+
+<blockquote>It is not recommended that you disable this rule if you have a false positive. If you believe this is a false positive, please report this to our security team to determine if this is a legitimate case, or if its clever attack on your system. Instructions to report false positives are detailed on the [https://wiki.atomicorp.com/wiki/index.php/Reporting_False_Positives Reporting False Positives] wiki page. If it is a false positive, we will fix the issue in the rules and get a release out to you promptly.</blockquote>
+
+This may only be available to Atomicorp customers?
 
 == See also ==
 * [[IndieAuth]]
