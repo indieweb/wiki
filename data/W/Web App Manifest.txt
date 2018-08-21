@@ -4,6 +4,22 @@ https://indieweb.org/Web_App_Manifest
 
 '''<dfn>[https://w3c.github.io/manifest/ Web App Manifest]</dfn>''' is a W3C living document that defines a JSON [[sidefile]] for web applications to publish information such as their name, icon, description.
 
+== How to use for IndieAuth ==
+It has been [https://github.com/indieweb/indieauth/issues/23 proposed that WAM could be used for Client Information Discovery] in IndieAuth. There are some simple steps to be able to do this.
+
+* When checking for a <code>rel=redirectUrl</code>, check for <code>rel=manifest</code> (More information on [https://www.w3.org/TR/appmanifest/#obtaining obtaining a WAM url can be found here]).
+** If <code>rel=manifest</code> is not found, fallback to mf2 parsing or other fallback
+** If <code>rel=manifest</code> is found, create the manifestUrl by grabbing the <code>href</code> attribute from the element. If there is no http prefix, add the client_id to the beginning of the <code>href</code> string.
+*** Make a GET request to the manifest url and parse the response as JSON.
+**** the <code>name</code> attribute becomes the app name
+**** one of the items in the <code>icons</code> array can become the app logo. Note, there can be different icons of different sizes. You'll want to grab the appropriate one based on its size.
+***** The icons array contain objects that are src (the image url), sizes (a string about the size of the image at that url) and type (mime type).
+
+== IndieWeb Usage ==
+
+=== Eddie Hinkle ===
+{{eddiehinkle.com}} added WAM parsing support into [[abode]]'s Authorization endpoint [https://chat.indieweb.org/dev/2018-08-21#t1534866140311500 on Aug 21, 2018].
+
 == See Also ==
 
 * [https://github.com/indieweb/indieauth/issues/23 #23 Client Information Discovery without relying on microformats parsers.]
