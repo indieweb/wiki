@@ -3,18 +3,17 @@ https://indieweb.org/in-reply-to
 {{stub}}
 
 
-'''<dfn>in-reply-to</dfn>''' is a [[microformat]] for use where a [[post]] is a [[reply]] to another post. The reply post should hyperlink to the other post with [[u-in-reply-to]]. Often linked inside the [[reply-context]] of a reply post. 
+'''<dfn>in-reply-to</dfn>''' is the [[h-entry]] property to use in a [[post]] that is a [[reply]] to another post. The reply post must hyperlink to the original post with <code>class="u-in-reply-to"</code>.
 
-<code>in-reply-to</code> supersedes the legacy [[rel-in-reply-to]]. For more information, see [[rel-values]].
+The <code>in-reply-to</code> property supersedes [[rel-in-reply-to]]. For more information, see [[rel-values]].
 
 Additionally:
-* The [[microformats2]] class name <code>u-in-reply-to</code> should also be placed on such hyperlinks from reply posts to the posts that they're a reply to.
-* The microformats2 <code>u-in-reply-to h-cite</code> classnames can also be used to embed a [[reply-context]] with more detail than just a URL
+* The in-reply-to link is typically inside the [[reply-context]] of a reply post
+* The microformats2 <code>u-in-reply-to h-cite</code> class names can also be used to embed a [[reply-context]] with more details beyond the URL
 
 == How to consume in-reply-to ==
 Summary: collect an ordered list of unique in-reply-to URLs by checking and adding from:
 # the first h-entry for "in-reply-to" URLs (including embedded)
-# the rel collection for "in-reply-to" URLs
 
 === algorithm ===
 Given a URL of a post, to determine the URL(s) it’s in-reply-to:
@@ -25,7 +24,6 @@ Given a URL of a post, to determine the URL(s) it’s in-reply-to:
 *** If the item is a string, append it to <var>in-reply-to-urls</var> if not already there
 *** If the item is an embedded microformat, check if it has a ''url'' property. If it does, append the first url property value to <var>in-reply-to-urls</var> if not already there
 *** Otherwise ignore the item
-** If the post's rel collection has an "in-reply-to" entry, append each URL value in that entry to <var>in-reply-to-urls</var> if not already there
 * <var>in-reply-to-urls</var> is now a list of all the URLs the parsed URL is in-reply-to
 
 You may use a different algorithm if it produces exactly the same results. E.g. you could skip checking "if not already there" conditions, and instead at the end perform a step of "* Remove duplicate values from <var>in-reply-to-urls</var>" - as long as you removed latter duplicates, and kept first occurrences in the list.
@@ -40,16 +38,9 @@ __TOC__
 === Must an in-reply-to link be inside an h-entry ===
 ''Q: Does an in-reply-to link have to be inside an h-entry?''
 
-A: '''No.''' An in-reply-to link can be anywhere on the page using rel-in-reply-to, which then makes that page represent a reply to the destination of that link. The first h-entry, if any, then represents specifically the reply content and author, which may or may not actually contain the in-reply-to link. 
+A: '''Yes.''' An in-reply-to link must be inside the h-entry with class name of <code>u-in-reply-to</code> so that it can be recognized as a URL property of the h-entry.
 
-=== Why would an in-reply-to be outside an h-entry ===
-''Q: Why would a page have a rel-in-reply-to outside an h-entry?''
-
-A: A simple rel=in-reply-to hyperlink is '''easier for publishers''' to publish simple permalink reply pages and thus we want to allow that. They may later add h-entry markup for the contents of their comment and authorship, which may not actually contain the link at all. 
-
-In the broader blogosphere, comments on posts rarely actually include the URL of the post they're commenting on, thus you can't depend on the in-reply-to being inside the h-entry (or certainly not inside the content) of such a reply post.
-
-== Research ==
+== Past Research ==
 See:
 * http://microformats.org/wiki/rel-in-reply-to
 For the research and development of the <code>u-in-reply-to</code> property and <code>rel=in-reply-to</code>.
