@@ -126,15 +126,15 @@ See [[#Paging]] for more details on the paging mechanism.
 ==== Mark Entries Read ====
 '''POST'''
 
-To mark one or more individual entries as read: 
+To mark one or more individual entries as read or unread: 
 
 Parameters:
 * action=timeline
-* method=mark_read
+* method=mark_read (or mark_unread)
 * channel={uid}
 * entry={entry-id} or entry[]={entry-id}
 
-To mark an entry read as well as everything before it in the timeline:
+To mark an entry read as well as everything before it in the timeline: (does not apply to mark_unread)
 
 * action=timeline
 * method=mark_read
@@ -142,7 +142,6 @@ To mark an entry read as well as everything before it in the timeline:
 * last_read_entry={entry-id}
 
 These commands only affect the entry within the context of the given channel's timeline, and do not affect other timelines.
-
 
 ==== Remove Entry from a Channel ====
 '''POST'''
@@ -574,8 +573,8 @@ Request
 
 * action=channels
 * method=order
-* channel[]={uid}
-* channel[]={uid}
+* channels[]={uid}
+* channels[]={uid}
 * ...
 
 <pre>
@@ -584,8 +583,8 @@ Content-type: application/x-www-form-urlencoded
 
 action=channels
 &method=order
-&channel[]=2c5e5d7c4d57da68cb03
-&channel[]=c972846e827845af974c
+&channels[]=2c5e5d7c4d57da68cb03
+&channels[]=c972846e827845af974c
 </pre>
 
 Response
