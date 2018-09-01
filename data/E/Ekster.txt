@@ -10,7 +10,10 @@ See the README.md on Github.
 
 == Example with `ek` ==
 
-From: https://publog.stuifzandapp.com/posts/701
+
+=== Follow all urls from an OPML file ===
+
+From: https://p83.nl/posts/701
 
 Follow urls from an OPML file, by combining xmlstarlet and ek.
 
@@ -22,6 +25,12 @@ Follow urls from an OPML file, by combining xmlstarlet and ek.
     
     # Gather the feeds from the file and pipe these to "ek follow ID"
     xmlstarlet sel -t -v "//outline/@xmlUrl" hotlist.opml  | xargs -n 1 ek follow mtjTXQELiT60Wtm5ArVcLo5G
+
+=== Retrieve all feeds ===
+
+If you need to get your subscriptions directly from Aperture (or Ekster) you need "ek" (the microsub command line client) and run the following one liner: 
+
+    ek channels | awk '{print $1}' | xargs -n 1 ek follow
 
 == See Also ==
 * [[Microsub]]
