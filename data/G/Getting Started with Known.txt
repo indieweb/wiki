@@ -1,63 +1,64 @@
 https://indieweb.org/Getting_Started_with_Known
 
-'''<dfn>Getting Started with Known</dfn>''' describes who could use [[Known]] for their web presence, and how to get started with it.
+'''<dfn>Getting Started with Known</dfn>''' offers a guide to setting up [[Known]] on your web server.
 
-== Everyone ==
+Known is the simplest implementation of an IndieWeb-compatible website to date.
 
-Do you want to have a presence on different social media networks but still allow yourself to be on the open web ?
+[https://withknown.com Known] is a software package that adheres to IndieWeb principles and offers a usable IndieWeb site out of the box. It can be configured for a single user or to serve a community.
 
-Do you want to gain time by updating your presence on the web from your own site and send copies to social media without even thinking about it?
+It can publish Posts, Status updates (notes), Check-ins, Photos, Bookmarks, Events and RSVPs. Known can also host podcasts and video.
 
-Do you want to be able to push content in different networks and still aggregate back to your own website the reactions, comments,likes etc.?
+At one time, Known offered a paid-for hosted option for individuals. This is no longer available, and so you will need your own domain and somewhere to host the site.
 
-Do you want to be able to import your old [[WordPress]] website back to Known without loosing your old articles?
+There is a [https://withknown.com/guides/beginner/ comprehensive beginner's guide to Known], although parts of it may now be out of date.
 
-== Journalists ==
+[https://www.marcus-povey.co.uk/known/ Marcus Povey], a core contributer to Known, maintains up-to-date code and instructions.
 
-Why would journalists adopt #indieweb ? 
+== Hosting ==
 
-Do you have an old website that you abandoned since Facebook or Twitter? 
+Known offers guides to installing on [https://withknown.com/guides/arvixe/ Arvixe] and [https://withknown.com/guides/reclaim/ Reclaim]. People have successfully and easily installed Known on other hosts, such as DreamHost.
 
-Do you want to own your presence on the web and be easy  to find, easy to search on the public web but still be able to push content to different social media profiles easily ? 
+=== Requirements ===
 
-If you reply Yes to any of these questions, Known is for you. (simplest implementation of #indieweb to date)
+Known ''requires'' the following server components:
+* PHP 7.0 or above.
+* MySQL 5+, MongoDB, Postgres or SQLite3. (Known recommends MySQL.)
+* A Web Server that supports URL rewriting (Apache + mod_rewrite recommended).
+* If you are using Apache, you also need to make sure support for .htaccess is enabled (using the AllowOverride All directive).
 
-If the person in question already have a WordPress, I usually propose to brief them on how to get started with IndieWeb and WordPress. 
+[http://docs.withknown.com/en/latest/install/requirements/ System requirements for Known.]
 
-Another key argument is : time
+== Plugins ==
 
-A lot of the journalism today takes places on Twitter, but many of them don't have a Twitter account, arguing: 
-<blockquote>"I already have a Facebook profile/page"</blockquote> followed by:
-<blockquote>"I have no time to update both Twitter and Facebook.</blockquote>
-This is where I come and say: What if you could update both networks at once? 
+Much of Known's IndieWeb functionality is delivered through [http://docs.withknown.com/en/latest/plugins/community/ plugins]. Several of these support syndication to other platforms and to silos. Known also offers MicroPub to receive input from [[Micropub/Clients | suitable clients]].
 
-This is one of the best argument to get people interested on the idea. 
+Installing plugins requires access to your site's hosting in order to copy the plugin folder to the IdnoPlugins folder of your site. Once there, navigate to Site configuration > Plugins to enable a new plugin. Settings for each plugin are available from the menu at the top of the Site configuration page.
 
-Some of them will say:
-<blockquote>Well I can pay a service like Buffer or Zapier to automate my content on these platforms without having to learn something new.</blockquote>
-My reply:
-<blockquote>Indeed, you can pay to read your content on one app, pay another service to push this content on social media for you and than pay another service to gather stats about it but in the end of the day, you're creating value that you are literally giving for free to corporate mining platforms that will get a return on your data much more interesting than what You as a person is actually getting.
-</blockquote>
+For example, if you wish to syndicate posts to Twitter, enable the Twitter plugin and then follow the instructions on the Twitter configuration page. This will create a button underneath the Post creation screen that allows you to decide whether to syndicate that post to Twitter.
 
-This is when you start talking about the importance of owning your data, owning your domain, making your presence online is about autonomy, not dependence on a third party service that will die sooner or later because the web will change again and again. It's not easy to make the case for the importance of having a "home" on the wide web that is yours, that will always be your spot where you are in control. 
+== RSS and other feeds ==
 
-But once you start talking about how Facebook/Twitter is closed, how all the value created is closed on these private gardens, once they realize that they can't be found on the wide web, no matter the quality of the value they create, they start to understand that owning your data is also about existing on the wide web with autonomy and that this presence on the web is important for their work, their private life, and everything they do.
+Known has extensive support for [https://withknown.com/guides/beginner/feeds-rss/ feeds, in several formats; RSS, JSON and KML]. 
 
-It's about understand and going with the flow that journalism itself is changing and that no matter where you work, you can create value on your spot on the web and this will have a positive impact on everything that comes next. 
+Feeds are a good way of enabling people and other sites to read your site. Known makes it very easy to provide specific feeds for different kinds of content.
 
-== Projects/Community Managers ==
+* Status updates - <nowiki>https://example.withknown.com/content/statusupdates/?_t=rss</nowiki>
+* Posts - <nowiki>https://example.withknown.com/content/posts/?_t=rss</nowiki>
+* Photos - <nowiki>https://example.withknown.com/content/photos/?_t=rss</nowiki>
+* Check-ins - <nowiki>https://example.withknown.com/content/check-ins/?_t=rss</nowiki>
+* Bookmarks - <nowiki>https://example.withknown.com/content/bookmarkedpages/?_t=rss</nowiki>
+* Audio - <nowiki>https://example.withknown.com/content/streamingmedia/?_t=rss</nowiki>
 
-The first argument here is Time.
+You can also concatenate different kinds of content into a single post. This is a good way of sending only some kinds of post to a site such as [https://micro.blog Micro Blog]. For example, <nowiki>https://example.withknown.com/content/statusupdates/posts/bookmarkedpages?_t=rss</nowiki> sends only Posts, Status update (notes) and Bookmarks.
 
-CM/PM have lots of things to do, they have all these projects that take all their time and then they still have to remember to amplify this particular event or project or idea or article from that other community, or other business and they are always running after time. 
+== Examples ==
 
-My answer was: what if you could have your own spot on the web, allowing you to push your content to different Facebook pages, twitter accounts, all depending on the project you're working on?
+Several people are (or were) using Known as either their main site or as a secondary site. Many are listed [[Known#IndieWeb Examples | on the main Known page]] and may be willing to offer assistance.
 
-What if you could pilot your information sharing and project amplification on social media without leaving your own spot on the web? 
+== Getting help ==
 
-And this is the main argument to make them switch their workflow to one on the open web while still maintaining a perfectly good presence on the corporate web. 
-
-== Activists ==
-Probably a mix of the ideas above plus the addition of thinking security and the need to apply different solutions to different problems activists are having while using only corporate silo's to get their word out.
- 
-For this type of people it's already logical to adopt solutions to own your data, solutions to offer a secure access to their own website and the need to have a constant and independent presence on the web while retaining the capacity to push content where people today are: silo networks.
+* [https://indieweb.org/irc/today Join the #indieweb chat]
+* [https://chat.indieweb.org/known/ Known channel]
+* [https://groups.google.com/forum/#!forum/known-dev Known Developers Google Group]
+* [http://docs.withknown.com/en/latest/ Official Documentation]
+* [https://github.com/idno Github]
