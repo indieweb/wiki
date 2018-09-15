@@ -279,6 +279,29 @@ If the user provides another site to post to then the client [http://indiewebcam
 
 This flow is already possible with today's specification if clients were to implement this extended discovery practice.
 
+=== Alternative text for photos in form-encoded ===
+
+{{manton}} had concerns about switching from a form-encoded to a JSON post body but wanted the possibility to supply <code>alt</code> text for photos. [https://chat.indieweb.org/dev/2018-09-14#t1536954457041900 Start of chat discussion.]
+
+A new <code>mp-*</code> property could be used to associate some text with a photo. (Note: all non-<code>mp-*</code> properties must map to [[mf2]] object properties.)
+
+'''Proposal:''' include a <code>mp-photo-alt</code> for each included <code>photo</code> property. The alt value may be empty, but there must be an equal amount of alt properties as photo properties so they can be matched up. [https://chat.indieweb.org/dev/2018-09-14/1536955386290300] [https://chat.indieweb.org/dev/2018-09-14/1536955837075300]
+
+'''Examples:''' (white space used for clarity, not valid form-encoded)
+
+Single photo with alt text:
+<pre> h=entry
+&photo=https://indieweb.org/images/a/aa/2014-05-21-hwc-sf1.jpg
+&mp-photo-alt=Photo taken at Homebrew Website Club 2014-05-21</pre>
+
+Multiple photos, some with alt text:
+<pre> h=entry
+&photo[]=https://indieweb.org/images/a/a8/2018-pdx-hwc.jpg
+&photo[]=https://indieweb.org/images/3/36/2018-250-xoxo-indieweb-4.jpg
+&photo[]=https://indieweb.org/images/7/76/2018-250-xoxo-indieweb-8.jpg
+&mp-photo-alt[]=Photo of pre-XOXO Homebrew Website Club
+&mp-photo-alt[]=Photo of IndieWeb/Mastodon XOXO meet-up
+&mp-photo-alt[]=</pre>
 
 == Collections ==
 
