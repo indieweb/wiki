@@ -51,6 +51,20 @@ One should only add rel-"me" to pages that is seen as representing the same user
 ** '''[https://github.com/Zegnat/verify-me-locally verify-me-locally]''' by {{martijnvdven}} is a fork that does not rely on an external tool for the verification, handling everything in the browser itself.
 * '''[https://github.com/vilhalmer/rel-me-verifier rel=me verifier]''' by [https://vil.lv/ Bill Doyle] is a [[userscript]] inspired by the verify-me extension.
 
+== Silo Details ==
+=== Twitter ===
+[[Twitter]] includes a <code>rel="me"</code> URL on profile pages, but the URL is hidden behind their [[t.co]] redirection service. Example as per 2018-09-19:
+<pre><a class="u-textUserColor" target="_blank" rel="me nofollow noopener" href="https://t.co/UT1OXws8A5" title="https://vanderven.se/martijn/">vanderven.se/martijn/</a></pre>
+There are a few ways to solve checking whether Twitter has a backlink:
+
+# follow the [[RelMeAuth]] [http://microformats.org/wiki/relmeauth-algorithms algorithm] that specifies to follow one redirect; or
+# resolve all <code>rel-me</code> URLs in their entirety; or
+# use Twitter specific parsing and extract the full URL from the <code>title</code> attribute.
+
+Note that for 1 & 2 there might be issues with requesting the [[t.co]] URL. For certain user agents it will not result in an HTTP redirect, but will instead just offer [https://developer.mozilla.org/en-US/docs/Web/HTTP/Redirections#HTML_redirections an HTML redirection page].
+
+Some implementations are specifically setting dummy user agents to get around this problem: e.g. [https://github.com/Zegnat/verify-me-locally/commit/51d45f601d6058126cf949439b5feb5f7696c1e5 this commit on verify-me-locally].
+
 == Connecting the dots between rel=me and relmeauth ==
 
 This is my current interpretation - so people can correct and critique
