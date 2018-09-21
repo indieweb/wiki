@@ -46,7 +46,7 @@ One should only add rel-"me" to pages that is seen as representing the same user
 * '''Ruby''' [https://github.com/aaronpk/IndieAuth/blob/master/lib/relparser.rb relparser.rb] (part of IndieAuth) contains functions for doing the same sort of stuff
 * '''Python''' [https://github.com/bear/ronkyuu/blob/master/ronkyuu/relme.py relme.py] (part of Ronkyuu) contains functions to discover rel=me URLs on a site, generate normative URLs for both profile and resource URLs and to confirm that a resource URL is authoritative for a given profile URL.
 
-=== In Browsers ===
+== Browser Support ==
 * '''[https://github.com/indieweb/verify-me verify-me]''' by {{kevinmarks}} is a browser extension that checks all <code>rel="me"</code> links for being reciprocal, doing distributed verification.
 ** '''[https://github.com/Zegnat/verify-me-locally verify-me-locally]''' by {{martijnvdven}} is a fork that does not rely on an external tool for the verification, handling everything in the browser itself.
 * '''[https://github.com/vilhalmer/rel-me-verifier rel=me verifier]''' by [https://vil.lv/ Bill Doyle] is a [[userscript]] inspired by the verify-me extension.
@@ -66,6 +66,11 @@ To add rel=me links to Mastodon:
 # Go back to your Mastodon profile
 # Add a link to your website in the metadata section
 # To add a link to GitHub just add a link to your Mastodon account on your GitHub profile by editing the url in the settings.
+
+=== PixelFed ===
+[[PixelFed]] supports <code>rel="me"</code> URL on profile pages since 2018 September.
+* https://mastodon.social/@dansup/100726520814958974
+** "Mastodon implementing rel=me? <br>Wicked! Support landed in pixelfed just last week. #indieweb https://pixelfed.social/dansup" [https://mastodon.social/@dansup @dansup] September 14, 2018
 
 == Service Support ==
 === micro.blog ===
@@ -91,9 +96,10 @@ Note that for 1 & 2 there might be issues with requesting the [[t.co]] URL. For 
 
 Some implementations are specifically setting dummy user agents to get around this problem: e.g. [https://github.com/Zegnat/verify-me-locally/commit/51d45f601d6058126cf949439b5feb5f7696c1e5 this commit on verify-me-locally].
 
-== Connecting the dots between rel=me and relmeauth ==
+== rel=me and relmeauth ==
+(to be reviewed)
 
-This is my current interpretation - so people can correct and critique
+This is my (who?) current interpretation - so people can correct and critique
 it rather than assert any truthiness to this.
 
 rel=me is intended to mean that the destination represents "the same
@@ -126,7 +132,7 @@ these rel=me links on them.
     myfamily.example.com [rel=me] -&gt; {plus.google.com/+tommy}
     plus.google.com/+tommy [rel=me] -&gt; {myfamily.example.com/tommy}
 
-=== Context 1: Consolidating Identities ===
+=== Consolidating Identities use case ===
 
 Given a page, find me all the pages who are "the same person as" the
 current page.
@@ -147,7 +153,9 @@ And If we started from myfamily.example.com, we'd get back just
     {myfamily.example.com}
 
 
-=== Context 2: relmeauth based login ===
+=== Web sign-in ===
+{{main|Web sign-in}}
+[[Web sign-in]] is relmeauth based login.
 
 Given an page, find me all the pages "who can control" the current
 page. The "current page" is used as the username, and one of the
@@ -215,7 +223,5 @@ property="name">email (smtp)</span></a>
 * [https://pleroma.site/objects/ff1e65ad-a467-4179-8a0e-26e1b43e2688 thread on using rel=me for decentralized identity verification]
 * https://mastodon.social/@Gargron/100726489667811566
 ** "Okay I didn't mention what the "special attribute" was because I didn't want to alienate the non-dev audience, but I'm getting a lot of suggestions for complicated things, so yeah, I meant microformats rel="me", it's the simplest thing, why would you even bother with TXT records or public keys" [https://mastodon.social/@Gargron @Gargron] September 14, 2018
-* https://mastodon.social/@dansup/100726520814958974
-** "Mastodon implementing rel=me? <br>Wicked! Support landed in pixelfed just last week. #indieweb https://pixelfed.social/dansup" [https://mastodon.social/@dansup @dansup] September 14, 2018
 * https://mastodon.social/@Gargron/100726508288588883
 ** "@JonathanGerlach DNS doesn't work as well because not everyone knows how to edit DNS records. It's easy to put a rel="me" link in your tumblr bio, or drop in on your sharing hosting site, but it might not even be possible for you to edit your DNS records." [https://mastodon.social/@Gargron @Gargron] September 14, 2018
