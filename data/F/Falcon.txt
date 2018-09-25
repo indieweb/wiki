@@ -217,42 +217,117 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== Display Likes Reposts ===
+Implement a minimal display of [[likes]] &amp; [[reposts]] on posts.
+
+Perhaps:
+* just lists of @-names & domains
+* maybe [[facepile]]s linked to URLs with names as alt text
+* maybe counts of both and a list?
+** Is it good or distracting / emphasizing the wrong thing to show counts (like every [[silo]] does)?
+
+* Perhaps query webmention.io for likes and reposts separately, then pipe through stream.thatmustbe.us, and display as inline list of author names linked to their URLs
+* Perhaps process queue of [[webmentions]] at webmention.io
+
+==== Display likes facepile on events ====
+As a small incremental step, display just a likes facepile, just on event posts.
+
+This will be a good way to experiment with presentational issues without impacting all posts.
+
+Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
+
+==== Display reposts facepile on events ====
+Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
+
+This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
+
+==== Display likes reposts all posts ====
+These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
+* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
+* Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]
+
+This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
+* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
+
+Scaling display: How to handle a facepile with 100s of items?
+
+E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
+* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
+** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
+** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
+<pre>
+{
+  "count": 312,
+  "type": {
+    "like": 110,
+    "mention": 33,
+    "post": 2,
+    "reply": 36,
+    "repost": 128
+  }
+}
+</pre>
+
+Real world example:
+* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
+
+----
+'''Homepage mentions'''
+
+Showing [[homepage]] mentions is an entirely different scale of design problem:
+* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
+<pre>
+{
+  "count": 101737,
+  "type": {
+    "like": 30,
+    "mention": 99995,
+    "post": 5,
+    "reply": 1660,
+    "repost": 4
+  }
+}
+</pre>
+
 === improve replies details ===
+==== improve reply-context support ====
+Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup), with a bit of smarts to show type of response (in reply, RSVP etc.).
+
+Necessary improvements:
+
 * consider using [[XRay]] (X-Ray) at post publish time (falconpost UI) to 
-** synchronously get reply-context information statically 
+** synchronously get reply-context information statically
+** fall back to get author info (icons, etc.) from a [[nicknames-cache]]
 ** display richer reply-context in falconpost UI
+*** everything from XRay
+*** get u-syndication for Twitter if any from XRay and auto-fill tweet reply-to field!
+**** Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to support [[Twitter#POSSE_Replies_to_Twitter|POSSE Replies to Twitter]]
+*** auto-truncate post contents? or allow editing?
+*** allow editing of other fields? e.g. Twitter visible names often odd or indicate status (like @ XOXO)
 ** save that reply-context info inside post storage alongside links to POSSE copies (Twitter, etc.)
 ** display higher fidelity [[reply-context]]s
-** similar improvement to compact in-stream [[reply-context]]s
+*** Show [[reply-context#icon|icon in reply contexts]]
+**** does it help to limit to replies to tweets and indieweb posts?
+** Store and show [[reply-context#published|dt-published]] of original post
+** Store and show [[reply-context#author_name|full name of author]] of original post
+** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
+*** distinguish presentation of a [[multi-reply]] to the same post+POSSE copy, vs multi-reply to different people/posts.
+** similar improvements to compact in-stream [[reply-context]]s
+* Start a [[nicknames-cache]] implementation
+** Improve with implementing [[authorship]] algorithm
 
 Why:
 * Provide readers better [[reply-context]] of the URL (or URLs - see [[multiple-reply]]) I'm replying to. Better user experience through increased comprehension from the provided context.
 * show higher-fidelity [[reply]] permalinks, similar or better than Twitter @-replies
 * Building blocks for comments: all of this code serves as building blocks for [[comments-presentation]].
 
+Some of this is harder than other improve replies features, and doing reposts, so reprioritize as necessary with remaining "improve replies details" tasks
+
 ==== show fragmention blockquote ====
 * consider showing blockquotes in reply-contexts in reply to [[fragmention]] URLs.
 
-==== improve reply-context support ====
-Re-evaluate below in the context of what XRay is able to do:
-
-(Reprioritize improve replies details section at this point)
-
-(some of this is easier than the other improve replies features below)
-
-* Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup). Necessary improvements:
-** Show [[reply-context#icon|icon in reply contexts]] for replies to tweets and indieweb posts
-*** Show icons for replies to indieweb posts using a [[nicknames-cache]] and their Twitter icon
-**** distinguish presentation of a [[multi-reply]] to the same post+POSSE copy, vs multi-reply to different people/posts.
-** vvv Rest of this his harder than other improve replies features, and doing reposts, so reprioritize the remaining "improve replies details" task when I get to this point. vvv
-** Store and show [[reply-context#published|dt-published]] of original post
-** Store and show [[reply-context#author_name|full name of author]] of original post
-*** Start with a [[nicknames-cache]] implementation
-*** Improve with implementing [[authorship]] algorithm
-** Store and show [[reply-context#original_content|tweet text / p-summary]] of original post
-
 ==== reply-contexts in archives ====
-Prefix reply posts in a [[archive]] lists with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>.
+Prefix reply posts in [[archive]] lists with ↪ inline linked to the [[in-reply-to]] URL with <code>u-in-reply-to</code>, similar to existing in-stream reply-contexts on home page!
 
 Example of expected usability / presentation benefits (and arrow icon shape confirmation/re-use from an earlier design)
 * http://microformats.org/wiki/microformats2-parsing-issues#implied_properties_on_backcompat_parsing_unlikely_to_be_intended
@@ -263,7 +338,6 @@ Do '''[[u-syndication]] discovery of POSSE tweets''' in posting form / UI to sup
 ** [[u-syndication#POSSE_threading|use-case description]]
 ** [[u-syndication#Discovery|discovery algorithm]]
 * Using:
-** [[XRay]] - should be able to find the u-syndication links!
 ** backup plan: [[php-mf2]] statically with
 *** <code>[https://github.com/indieweb/php-mf2#parsing-rel-and-relalternate-values ->parseRelsAndAlternates()]</code>
 
@@ -297,6 +371,44 @@ Do '''[[original-post-discovery]]''' in posting form / UI (approach: use [http:/
 *** Convenient UI to specifically check (click-on) links with successful webmentions to see if they parsed my reply into their comments section correctly or did something else with it.
 *** Might help discover sites with newly added webmention/pingback receiving support.
 *** Could help demonstrate/explain how webmentions work
+** Perhaps use summary and details elements to hide by default. Presumably when everything is usually "working"
+
+=== RSVP reply-context ===
+Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and summary/summaries derived from inspecting the URL(s) of the event(s) being replied to.
+
+==== improve rsvp reply notes ====
+Improve [[rsvp]] reply notes:
+* use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
+
+Goals (in order of design need / ease of implementation)
+# display a nice mini-event reply-context (needs design)
+# use whatever information can be inferred from the prose of the RSVP post
+# parse with [[XRay]] event permalink for event information as [[h-event]]
+# pick next most important piece of information to display and implement it. repeat.
+
+Goals, show one or more of these, 
+* improve reply-context presentation, e.g. consider "↪ 📅 (event URL)"
+* '''name''' of the event (perhaps inferred from (smart)quoted or titlecapped text following RSVP recognition prose (e.g. "going to ...")
+* '''date(s)''' of the event
+** default single day (not multiple)
+** default same day as RSVP post
+*** exception: "went to" assume day before RSVP post
+*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVP posts)
+* '''start time''' and '''end time'''
+** default no specific time(s)
+** first n:nn or nn:nn text indicates start time
+** second n:nn or nn:nn text indicates start end time 
+* '''location'''
+** default no specific location
+** first @-reference possibly? indicates Twitter account of venue
+*** look it up in [[nicknames-cache]]?
+*** or just hardcode an array of common @-venues for now
+** if " at " in text, then use subsequent titlecapped text as location string
+** '''city'''
+*** imply from @-venue
+*** if titlecapped text, split on commas, work backwards from end
+**** note&drop country if any, note&drop state name/abbr if any, next chunk is city name
+**** use abbr title="city, state, country (if any)" and city
 
 === one-off tag-of post ===
 Post a one-off [[tag-of]] post to provide a real world example to help illustrate how to implement [[tag-reply#GitHub_POSSE|tag-reply GitHub POSSE]] support by Bridgy Publish.
@@ -376,43 +488,6 @@ Specific use-cases:
 ** POSSE to [[Lanyrd]] (if event doesn't already have a page)
 ** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
 
-=== RSVP reply-context ===
-Currently [[rsvp#Tantek|my RSVP posts]] have a [[reply-context]] of [[RSVP]] yes/no/maybe/interested and the URL(s) of the event(s) being replied to.
-
-==== improve rsvp reply notes ====
-Improve [[rsvp]] reply notes:
-* use presence of p-rsvp to display an RSVP differently than a simple reply - more calendarish.
-
-Goals (in order of design need / ease of implementation)
-# display a nice mini-event reply-context (needs design)
-# use whatever information can be inferred from the prose of the RSVP post
-# parse with [[XRay]] event permalink for event information as [[h-event]]
-# pick next most important piece of information to display and implement it. repeat.
-
-Goals, show one or more of these, 
-* improve reply-context presentation, e.g. consider "↪ 📅 (event URL)"
-* '''name''' of the event (perhaps inferred from (smart)quoted or titlecapped text following RSVP recognition prose (e.g. "going to ...")
-* '''date(s)''' of the event
-** default single day (not multiple)
-** default same day as RSVP post
-*** exception: "went to" assume day before RSVP post
-*** recognize today, tonight, yesterday (other textual date shorthands? analyze existing RSVP posts)
-* '''start time''' and '''end time'''
-** default no specific time(s)
-** first n:nn or nn:nn text indicates start time
-** second n:nn or nn:nn text indicates start end time 
-* '''location'''
-** default no specific location
-** first @-reference possibly? indicates Twitter account of venue
-*** look it up in [[nicknames-cache]]?
-*** or just hardcode an array of common @-venues for now
-** if " at " in text, then use subsequent titlecapped text as location string
-** '''city'''
-*** imply from @-venue
-*** if titlecapped text, split on commas, work backwards from end
-**** note&drop country if any, note&drop state name/abbr if any, next chunk is city name
-**** use abbr title="city, state, country (if any)" and city
-
 === Own my public list emails and replies ===
 Goal: by end of 2018, start posting emails and replies to public lists on my own site first, and POSSEing them to their public email list destination(s).
 
@@ -444,8 +519,6 @@ Why:
 * show value of indieweb posting all your things as compared to any one silo
 
 === Display RSVPs summary ===
-(need to re-evaluate this as compared to whether I'll keep using FB for POSSE events or find another silo or aggregator to POSSE events to)
-
 Display summary of number of people going and interested like:
 * "3 Going · 3 Interested"
 just above the facepile of RSVPs
@@ -476,69 +549,6 @@ JSON API example:
 $rsvp_summary = strcat($rsvp_yes>0 ? strcat($rsvp_yes, ' Going') : '', 
         $rsvp_yes>0 && $rsvp_maybe>0 ? ' · ' : '',
         $rsvp_maybe>0 ? strcat($rsvp_maybe, ' Interested') : '');
-</pre>
-
-=== Display Likes Reposts Facepiles ===
-Process my queue of [[webmentions]] at webmention.io and implement some sort of [[likes]] &amp; [[reposts]] presentation like [[facepile]]s to show them on my posts.
-
-==== Display likes facepile on events ====
-As a small incremental step, display just a likes facepile, just on event posts.
-
-This will be a good way to experiment with presentational issues without impacting all posts.
-
-Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
-
-==== Display reposts facepile on events ====
-Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
-
-This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
-
-==== Display likes reposts all posts ====
-These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
-* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
-* Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]
-
-This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
-* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
-
-Scaling display: How to handle a facepile with 100s of items?
-
-E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
-* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
-** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
-** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
-<pre>
-{
-  "count": 312,
-  "type": {
-    "like": 110,
-    "mention": 33,
-    "post": 2,
-    "reply": 36,
-    "repost": 128
-  }
-}
-</pre>
-
-Real world example:
-* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
-
-----
-'''Homepage mentions'''
-
-Showing [[homepage]] mentions is an entirely different scale of design problem:
-* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
-<pre>
-{
-  "count": 101737,
-  "type": {
-    "like": 30,
-    "mention": 99995,
-    "post": 5,
-    "reply": 1660,
-    "repost": 4
-  }
-}
 </pre>
 
 === Recent Articles improvements ===
