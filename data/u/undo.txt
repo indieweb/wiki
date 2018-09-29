@@ -25,6 +25,10 @@ After you send / file etc. an email, Gmail shows an "Undo" link/button/notificat
 
 Gmail implements undo send by introducing a delay (that same confirable 30s) before actually sending the email to the destination server.
 
+== Protocol Examples ==
+=== Micropub ===
+[[Micropub]] has an "undelete" verb, so clients that support it can attempt to undelete a post that was (recently?) deleted.
+
 == Sessions ==
 * [[2018/NYC/undo]]
 
@@ -47,6 +51,20 @@ Thus if you publish a feed file with a new post, perhaps as soon as you update i
 
 Work-around:
 * Only publish items which are 30 minutes or more older in your feed files (RSS/Atom). This way any edits / or undo publishing that you do within 30 minutes of publishing a post will not be seen by [[feed readers]], and thus give you plenty of time to "Undo" such actions without any side-effects in feed readers.
+
+=== UX flow ===
+(stub)
+
+A good place to start with implementing a UX flow from post to undo to delete with explicit states, UI mockups and the transitions (both explicit by user, and implicit by passage of time).
+
+=== Micropub Undo ===
+It may be worth exploring if it is possible to extend Micropub to support full undo on existing verbs. E.g.
+
+* Undo post
+* Undo update
+* ...
+
+This would require explicit support on clients and servers, as well as some way for a client to detect if the server supported these undo extensions.
 
 == See Also ==
 * [[edit]]
