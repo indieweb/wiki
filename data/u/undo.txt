@@ -19,11 +19,11 @@ Examples (of side-effects that cannot be undone)
 
 == Service Examples ==
 === Gmail ===
-[[Gmail]] has an option to turn on "Undo", which is most often useful for "Undo Send".
+[[Gmail]] has an option to turn on "Undo", which enables the very useful "Undo Send" action.
 
-After you send / file etc. an email, Gmail shows an "Undo" link/button/notification (depends on UI version you're using / app / platform), which disappears for some time later (typically 30s, configurable)
+After you send / file / move / label etc. an email, Gmail shows an "Undo" link/button/notification (depends on UI version you're using / app / platform), which disappears for some time later (typically 30s, configurable).
 
-Gmail implements undo send by introducing a delay (that same confirable 30s) before actually sending the email to the destination server.
+Gmail implements undo send by introducing a delay (that same configurable 30s) before actually sending the email to the destination server.
 
 == Protocol Examples ==
 === Micropub ===
@@ -56,6 +56,19 @@ Work-around:
 (stub)
 
 A good place to start with implementing a UX flow from post to undo to delete with explicit states, UI mockups and the transitions (both explicit by user, and implicit by passage of time).
+
+Timeline of actions
+* Post
+** Undo post (within 30s)
+** Can't undo post (after 30s), perhaps offer option to Delete
+
+* Delete
+** Undo delete
+** Recover
+
+* Edit
+** Undo update
+** ...
 
 === Micropub Undo ===
 It may be worth exploring if it is possible to extend Micropub to support full undo on existing verbs. E.g.
