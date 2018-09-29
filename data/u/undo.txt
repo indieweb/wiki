@@ -29,6 +29,16 @@ Gmail implements undo send by introducing a delay (that same confirable 30s) bef
 * [[2018/NYC/undo]]
 
 == Brainstorming ==
+=== posting UI ===
+In an [[create|indieweb posting]] UI, you can implement undo using the same technique as Gmail, e.g. a 30s delay, before executing any non-undoable actions (e.g. POSSE, etc.)
+
+This requires rethinking the indieweb posting UI to consider when/where to put an "Undo" link/button, and having it disappear when the delay time has passed.
+
+=== side-effects to delay ===
+Side-effects from publishing that you need to delay in order to actually implement Undo:
+* sending [[Webmentions]] (you don't control what the receiver will do with the Webmention both immediately, and upon any follow-up updates or delete Webmentions)
+* [[POSSE]] to [[Twitter]]
+* POSSE to [[GitHub]] - when you create a GitHub issue, or comment on one, it may be configured to automatically send an email, and that cannot be undone
 
 === Feed readers ===
 If you publish a [[feed file]], at any time (likely within minutes if not seconds), it may be retrieved by a [[feed reader]], which, commonly will cache that version, and may not actually update it.
