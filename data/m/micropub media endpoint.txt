@@ -11,6 +11,33 @@ https://indieweb.org/micropub_media_endpoint
 
 == Brainstorming ==
 
+=== Discovery via link rel ===
+As Micropub Media Endpoints are often implemented as separate services from a site's "main" Micropub endpoint, it may be useful to allow Micropub clients to discover the media endpoint without needing to query the "main" endpoint at all.
+
+Discovery of a Micropub Media Endpoint could be accomplished like [https://www.w3.org/TR/micropub/#endpoint-discovery Micropub endpoint discovery], with HTTP Link headers:
+
+<pre>Link <https://aaronpk.example/micropub/media>; rel="micropub_media"
+</pre>
+
+Or via HTML Link tag:
+
+<pre><link rel="micropub_media" href="https://aaronpk.example/micropub/media">
+</pre>
+
+==== Why ====
+
+'''Add Media support to a site whose Micropub server is missing it''' – With the [https://www.w3.org/TR/micropub/#discovery current Media Endpoint discovery] algorithm, a micropub client must ask the server whether a media endpoint is available. [[Micropub/Servers]], especially those that create posts for static sites like [[Jekyll]], don't offer media endpoint support. If a user sets up a separate micropub media endpoint, they must configure their "main" micropub server to make it available to clients - a change that could require them to edit the code of the micropub server.
+
+'''Standalone Media Endpoint''' – [[Indigenous for Android]] supports uploading files to a media endpoint and copying the URL to the clipboard for use in any context. Separating media endpoint discovery from "main" micropub server discovery would allow micropub clients to manage media without also managing posts on the site.
+
+This is currently implemented by:
+
+* {{martymcguire}} on his site.
+
+And consumed by:
+
+* {{addyourself}}
+
 === Query the last thing uploaded ===
 A Micropub client should be able to query the Media Endpoint to find the last photo uploaded. This would allow a post interface to appear with the photo pre-populated. This mechanism ends up treating the Media Endpoint as a kind of account-level clipboard, so you could upload a photo from one device then finish the post on another device.
 
