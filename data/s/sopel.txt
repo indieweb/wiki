@@ -4,6 +4,44 @@ https://indieweb.org/sopel
 
 '''<dfn>sopel</dfn>''' is a Python based IRC bot.
 
+== IRC Bridge Example ==
+
+The following setup will allow you to engage the #indieweb-dev chat from your own site by both backfeeding others' messages and POSSEing your own messages. See [[chat#Brainstorming]] for prior efforts at microformat patterns.
+
+ $ [[pip]] install sopel
+ $ sopel
+ ...follow wizard to initialize, accept defaults...
+
+<code>YourIRCName</code> should match your entry on [[chat-names]]. <code>YourSiteName</code> can be any valid nick -- it isn't used. Overwrite <code>~/.sopel/default.cfg</code> with the following.
+
+ <nowiki>[core]
+nick = YourIRCName
+host = irc.freenode.net
+use_ssl = true
+port = 6697
+owner = YourSiteName
+channels = #indieweb-dev</nowiki>
+
+You implement <code>backfeed()</code> and <code>posse_queue</code>. Install the following at <code>~/.sopel/modules/indiechatbackfeed.py</code>.
+
+ <nowiki>from sopel.module import rule, interval
+
+@rule(".*")
+def message_received(bot, trigger):
+    entry = {"author": str(trigger.nick),
+             "published": trigger.time,
+             "content": str(trigger)}
+    backfeed(entry)
+
+@interval(.1)
+def posse(bot):
+    message = posse_queue.pop()
+    if message:
+        bot.msg("#indieweb-dev", message)</nowiki>
+
+ <nowiki>$ sopel</nowiki>
+
 == See Also ==
 
+* [[chat]]
 * https://sopel.chat
