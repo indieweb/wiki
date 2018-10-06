@@ -1,7 +1,7 @@
 https://indieweb.org/User%3ALahacker.net/common.js
 
 /*
-Solarized Color Themes
+SOLARIZED COLOR THEMES
 ======================
 
 - toggle between default black on white and solarized
@@ -34,28 +34,32 @@ function lighten() {
     document.querySelector("#solarized").innerHTML = light + common;
     btn.innerHTML = "Dark"; }
 
-document.querySelector("body").innerHTML = document.querySelector("body").innerHTML + controls;
-var btn = document.querySelector("#solarized_theme");
-document.querySelector("#toggle_solarized").onclick = function() {
-    if (this.checked) {
+function solarize() {
+    // document.querySelector("body").innerHTML = document.querySelector("body").innerHTML + controls;
+    var btn = document.querySelector("#solarized_theme");
+    document.querySelector("#toggle_solarized").onclick = function() {
+        if (this.checked) {
+            if (btn.innerHTML == "Dark")
+                lighten();
+            else
+                darken();
+            btn.style["display"] = "inline";
+        } else {
+            document.querySelector("#solarized").innerHTML = "";
+            btn.style["display"] = "none";
+        }
+    };
+    btn.onclick = function() {
         if (btn.innerHTML == "Dark")
-            lighten();
-        else
             darken();
-        btn.style["display"] = "inline";
-    } else {
-        document.querySelector("#solarized").innerHTML = "";
-        btn.style["display"] = "none";
-    }
-};
-btn.onclick = function() {
-    if (btn.innerHTML == "Dark")
-        darken();
-    else
-        lighten();
-};
-lighten(document.querySelector("#solarized_theme"));
+        else
+            lighten();
+    };
+}
+
+// solarize();
+// lighten(document.querySelector("#solarized_theme"));
 
 /*
-END SOLARIZED COLOR THEME
+END SOLARIZED COLOR THEMES
 */
