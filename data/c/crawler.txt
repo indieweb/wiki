@@ -2,17 +2,39 @@ https://indieweb.org/crawler
 
 {{stub}}
 
-a '''<dfn>crawler</dfn>''' is a program that systematically browses the web.
+a '''<dfn>crawler</dfn>''' is a program that systematically browses the web
 
 == Use Cases ==
 
-=== Identity consolidation ===
+=== [[webmention]] ===
 
-A crawler can be used to dereference one's identity graph by following all rel=me links.
+When receiving a webmention the simplest case is grabbing the mentioning resource. There are additional resources one may want to fetch and cache for a more robust experience:
 
-==== 2018 Summer Crawl ====
+* other people introduced into the discussion through this source
 
-{{angelo}} wrote a basic crawler to crawl the indieweb starting with known hcards previously found in the indiemap crawl.
+=== [[nicknames-cache]] ===
+
+When fetching and caching a contact the simplest case is grabbing their homepage. There are additional resources one may want to fetch and cache for a more robust experience:
+
+* photo
+* PGP key
+* u-url, rel=me
+** identity consolidation
+** auto-contextualize nickname upon syndication
+* rel=feed
+** recommended subscriptions
+* rel=next, rel=prev
+** backfilling a subscription
+
+Combinations are possible. A recommendation to subscribe to a feed on a distant but related profile. Photos from related profiles to contextualize the appropriate photo for the mention.
+
+==== Identity Consolidation ====
+
+A crawler can be used to fetch one's identity graph by following all rel=me links.
+
+===== 2018 Summer Crawl =====
+
+{{angelo}} wrote a basic crawler to crawl the indieweb starting with known h-cards previously found in the indiemap crawl.
 Individual identities were consolidated, rel=me's were followed and [[PageRank]] was used to approximate the "primary" profile.
 
 {|
@@ -44,10 +66,22 @@ Individual identities were consolidated, rel=me's were followed and [[PageRank]]
 |[[File:singpolyma.net_summer2018_rel-me_graph.png|200px]]
 |}
 
-==== See Also ====
+===== See Also =====
 
 * https://indieweb.org/rel-me#Consolidating_Identities_use_case
 
+=== [[hashtag-cache]] ===
+
+When stumbling upon a tag, whether it's an actual [[hashtag]] in a note or a u-category associated with an h-card, fetching and caching the resource referenced by the tag can provide a contextual cue as to its meaning.
+
+==== Idea/Concept Consolidation ====
+
+A crawler can be used to fetch a tag's meaning by following all rel=alternate links.
+
+You can then use this list to assign some or all of them as your own rel=alternate's.
+
+The resulting concept graph could serve as the basis for a [[decentralized-chat]].
+
 == User Agent ==
 
-Crawlers in active use in 2018 accompany their requests with a descriptive User-Agent header. This value can then be used in a [[robots_txt]] file to suggest access control.
+Crawlers usually accompany their requests with a descriptive User-Agent header. This value can then be used in a [[robots_txt]] file to suggest access control. A crawler can always reuse a typical browser User-Agent to simulate a normal user instead. Thus User-Agent should not be relied upon for accuracy.
