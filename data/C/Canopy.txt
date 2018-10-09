@@ -1,34 +1,81 @@
 https://indieweb.org/Canopy
 
-Big-C '''<dfn>Canopy</dfn>''' is a decentralized social web and small-c canopy is a python package that implements IndieWeb technologies to this end. The network is being bootstrapped from [https://boot.cnpy.live boot.cnpy.live]. '''This software should be considered alpha.'''
+Big-C '''<dfn>Canopy</dfn>''' is a decentralized social web platform and small-c [https://dev.lahacker.net/code/canopy canopy] is a Python package that implements IndieWeb technologies to this end.
 
 == Live Examples ==
 
-* {{angelo}} at [https://lahacker.net lahacker.net] ([[selfdogfooding]])
-* ...add yourself!
+* {{angelo}} [https://dev.lahacker.net dev.lahacker.net]
+* ''Alice'' [https://alice.example.cnpy.gdn alice.example.cnpy.gdn]
+* ''Bob'' [https://bob.example.cnpy.gdn bob.example.cnpy.gdn]
+* ''Carol'' [https://carol.example.cnpy.gdn carol.example.cnpy.gdn]
 
 == Features ==
 
 === IndieWeb ===
 
-* representative h-card and h-feed on homepage
-* posts + permalinks
-** associations (one-way "friending"; contact storage; trust labeling)<br><small>e.g. [https://lahacker.net/people/lahacker.net /people/lahacker.net]</small>
-** notes (simple plaintext)<br><small>e.g. [https://lahacker.net/notes/2018/04/02/68_K/hello_world /notes/2018/04/02/68_K/hello_world]</small>
-* IndieAuth at /sign-in
-* WebSub at /subscriptions
-* Webmention at /mentions
-* reader at /reader
-* editor at /editor
-* [https://indieweb.org/Canopy#Search search] e.g. [https://lahacker.net/search /search]
-* web actions at /actions
+* [https://alice.example.cnpy.gdn /] &mdash; [[homepage]]
+** primary h-card
+*** photo, name, short note, [[Canopy#short-hashes short-hashes]] (w/ QR code representation)
+** primary feed
+*** some [[contact]] changes
+*** non-[[chat]] [[notes]]
+*** [[articles]]
+*** non-minor [[wiki]] page edits
+*** [[image]] creations
+*** [[audio]] creations
+*** [[video]] creations
+*** [[code]] version bumps
+*** [[issues]]
+*** [[likes]]
+*** [[bookmarks]]
+*** [[follows]]
+
+* [https://alice.example.cnpy.gdn/about /about] &mdash; [[about]]
+
+* post types
+** [https://alice.example.cnpy.gdn/contacts /contacts]
+*** add a contact by re-posting their homepage
+** [https://alice.example.cnpy.gdn/notes /notes]
+*** standalone messages
+*** context-based messages (chat)
+
+* [https://alice.example.cnpy.gdn/sign-in /sign-in] &mdash; [[IndieAuth]] endpoint
+* [https://alice.example.cnpy.gdn/subscriptions /subscriptions] &mdash; [[WebSub]] endpoint
+* [https://alice.example.cnpy.gdn/mentions /mentions] &mdash; [[Webmention]] endpoint
+* [https://alice.example.cnpy.gdn/reader /reader] &mdash; [[reader]]
+* [https://alice.example.cnpy.gdn/editor /editor] &mdash; [[editor]] for all supported post types
+* [https://alice.example.cnpy.gdn/search /search] &mdash; [[Canopy#search search]]
+* [https://alice.example.cnpy.gdn/actions /actions] &mdash; [[webactions]]
+
+* [https://alice.example.cnpy.gdn/system /system] &mdash; site settings
 
 === Generic ===
 
 * simple install &mdash; one command deploys a site (Digital Ocean supported but not required)
-* automated TLS &mdash; not only is your website protected the canopy will only interface with other secured sites
+* automated Tor &mdash; a hidden service is always spawned, even for standard domain-based installs
+* automated TLS &mdash; certificates are signed by Let's Encrypt automatically, provided that a domain name is pointed properly and firewall open
+
+Communication between IndieWeb users is first attempted over Tor where available, then over HTTPS, then over standard HTTP.
 
 === Descriptions ===
+
+==== Short Hashes ====
+
+{{angelo}} believes that a 16-digit vanity-prefixed Tor <code>.onion</code> backed by a 16-digit PGP long-hash is sufficient to guarantee uniqueness for the foreseeable future.
+
+The result is two-thirds less digits to read/verify (56 + 40 = 96 - (16 + 16) = 64 digits eliminated).
+
+===== PGP =====
+
+A key fingerprint is 40-digits long. 8-digit short hashes were used for a long time but have been deprecated as insecure in favor of 16-digit long hashes.
+
+See [https://security.stackexchange.com/questions/84280/short-openpgp-key-ids-are-insecure-how-to-configure-gnupg-to-use-long-key-ids-i#84281 StackExchange: Short OpenPGP key IDs are insecure, how to configure GnuPG to use long key IDs instead?]
+
+===== Tor <code>.onion</code> Addresses =====
+
+{{angelo}} assumes in 2018 that [[Tor#Mining]] for a 16-digit prefix is infeasible. Mining for 7 is simple enough (around a day or two). Thus a 16-digit short hash would be 7 digits of chosen vanity followed by 9 random alphanumerics.
+
+It should be possible for a determined user to spend a week or month mining with orders of magnitude more computer power. This could easily allow for 9 digits of vanity requiring only 7 digits of random.
 
 ==== Search ====
 
