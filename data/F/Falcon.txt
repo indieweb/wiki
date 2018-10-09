@@ -870,28 +870,6 @@ In short this means implementing:
 ** some sort of retweet icon to indicate that it was retweeted by me 
 ** time when retweeted (perhaps near retweet icon and an icon of myself)
 
-=== POSSE responses to Tumblr posts ===
-I've setup http://tantek-com.tumblr.com/ purely as a [[POSSE]] bridge for propagating my [[like]], [[repost]] (TBI), and [[reply]] posts to Tumblr posts, directly [[Tumblr#POSSE_to_Tumblr|into Tumblr]] so that the [[comments]] section on the Tumblr post says stuff like:
-* tantek.com likes this
-* tantek.com reblogged this from someoneTumblrUsername
-
-Ideally I'd like to automatically do so, e.g. [https://github.com/snarfed/bridgy/issues/272 via Bridgy Publish] (open github issue).
-
-Similar work: [[silo.pub]]
-* Might be able to re-use some of the open source: https://github.com/kylewm/feverdream to automatically post responses to Tumblr posts to Tumblr.
-** As of 2015-07-30: "can't actually publish native likes/reposts/etc. through silo.pub right now... even if you u-like-of a tumblr post, it still publishes a note with mf2 markup in it"[http://indiewebcamp.com/irc/2015-07-30/line/1438304553193]
-
-But until I get one of those approaches working automatically, I'll have to manually POSSE my responses to Tumblr posts into Tumblr.
-
-=== meme posts ===
-Publish a sample [[meme]] post similar to my [[comics]] post support, with:
-* summary: text of the meme object (exact text that is overlaid on top of the meme image)
-* content: consider techniques for providing description of image and text as alternative to image inside the meme object
-* no post name/title (thus more like a special type of [[note]])
-* how to [[POSSE]] a meme post to Twitter
-** text and upload image
-* document "Why" and "How to markup" in [[meme]] accordingly
-
 === quote posts ===
 I've been wanting to post [[quote]]s with minor secondary commentary / summary, and thus have been brainstorming a bit about how to do so.
 * based on a [[note]]
@@ -913,30 +891,14 @@ I've been wanting to post [[quote]]s with minor secondary commentary / summary, 
 * automatically '''blockquote''' text surrounded by “ ” smart double quotes (keep the quotes)
 * '''POSSE partial quotations of tweets''' as an @-reply to the original tweet
 
-=== auto Bridgy POSSE to FB ===
-Rather than manually using the publish form at https://www.brid.gy/facebook/214611#publishes,
-
-For all:
-* articles
-* notes
-* interactions with (replies to, likes of) FB posts (started with [http://tantek.com/2015/002/f 2015-002])
-** issue: [https://github.com/snarfed/bridgy/issues/331 Bridgy Publish sometimes returns 404 instead of POSSEing a like]
-** issue: [https://github.com/snarfed/bridgy/issues/334 Bridgy Publish does not yet return FB like permalink]
-that I post on my own site, <br/>
-when clicking the "Publish" or "Tweet it" button (which should be renamed, "PuSH and POSSE it" maybe?) :
-# if there is no u-syndication link to FB on the post, display a <pre><a href="http://brid.gy/publish/facebook"></a></pre> link instead (so Bridgy sees that)
-# send a webmention to Bridgy publish like: <blockquote><nowiki>curl https://www.brid.gy/publish/webmention -i -d  "source=http://tantek.com/2014/210/t1/trackattack-warmup-laps-first-time-did-all&target=brid.gy/publish/facebook"</nowiki></blockquote> (need <code>https</code> and <code>www</code> to avoid redirect, which won't <code>POST</code>)
-# parse the results of the curl, e.g. something like <blockquote style="white-space:pre;font-family:monospace">{<br>  "url": "<nowiki>http://facebook.com/456_789</nowiki>",<br>  "type": "post",<br>  "id": "456_789"<br>}</blockquote>
-# save the [URL] in a u-syndication hyperlink in storage on the post with the link text "Facebook post [id]", *after* the Twitter syndication link
-
-Then anytime I "PuSH and POSSE" an article, note, or a reply/like of a FB post, a copy should automatically show up in my FB timeline.
-
-Once confirmed that this works:
-# go to Twitter preferences for @t
-# turn off cross-posting to FB
-# edit the [[Falcon#POSSE_Details]] description above to note POSSEing to FB via Bridgy (instead of via Twitter)
-# edit the [[POSSE]] IndieWeb Examples to note POSSEing to FB via Bridgy (instead of via Twitter)
-# edit [[Facebook#POSSE_out_to]] to move tantek.com from "from Twitter " to "Bridgy" subsection
+=== meme posts ===
+Publish a sample [[meme]] post similar to my [[comics]] post support, with:
+* summary: text of the meme object (exact text that is overlaid on top of the meme image)
+* content: consider techniques for providing description of image and text as alternative to image inside the meme object
+* no post name/title (thus more like a special type of [[note]])
+* how to [[POSSE]] a meme post to Twitter
+** text and upload image
+* document "Why" and "How to markup" in [[meme]] accordingly
 
 === indie-config loading ===
 I'd like to add indie-config loading support to my existing [[webactions]] so that any registered web+action: URL handler is automatically activated, e.g. for:
@@ -1208,6 +1170,28 @@ Future alternative: (make this into a separate lower priority itch / working-on)
 
 I could also try adding native Flickr POSSE support to Falcon using {{adactio}}'s code:
 * https://gist.github.com/adactio/a9c7e419b2913f318bd1
+
+
+=== HTTPS support ===
+Need to figure out the best way to add [[HTTPS]] support.
+* Likely using [[Lets Encrypt]]
+** not sure how to do it with my web host
+*** file another ticket requesting they add it to the admin UI?
+*** consider moving to a different webhost?
+*** consider adding a CDN with HTTPS in front of my webhost?
+
+=== POSSE responses to Tumblr posts ===
+I've setup http://tantek-com.tumblr.com/ purely as a [[POSSE]] bridge for propagating my [[like]], [[repost]] (TBI), and [[reply]] posts to Tumblr posts, directly [[Tumblr#POSSE_to_Tumblr|into Tumblr]] so that the [[comments]] section on the Tumblr post says stuff like:
+* tantek.com likes this
+* tantek.com reblogged this from someoneTumblrUsername
+
+Ideally I'd like to automatically do so, e.g. [https://github.com/snarfed/bridgy/issues/272 via Bridgy Publish] (open github issue).
+
+Similar work: [[silo.pub]]
+* Might be able to re-use some of the open source: https://github.com/kylewm/feverdream to automatically post responses to Tumblr posts to Tumblr.
+** As of 2015-07-30: "can't actually publish native likes/reposts/etc. through silo.pub right now... even if you u-like-of a tumblr post, it still publishes a note with mf2 markup in it"[http://indiewebcamp.com/irc/2015-07-30/line/1438304553193]
+
+But until I get one of those approaches working automatically, I'll have to manually POSSE my responses to Tumblr posts into Tumblr.
 
 
 === more ===
@@ -1561,6 +1545,35 @@ RewriteRule ^updates\.atom falcon.php
 </pre>
 
 == Canceled Features ==
+=== auto Bridgy POSSE to FB ===
+'''2010-08-01 Bridgy shutdown POSSE to FB due to FB posting API shutdown.'''
+
+'''Re-evaluate if/when FB re-enables posting via an API (maybe [[Data Transfer Project]] import?), and if Bridgy is amenable to adding support for the (new) API.'''
+
+Rather than manually using the publish form at https://www.brid.gy/facebook/214611#publishes,
+
+For all:
+* articles
+* notes
+* interactions with (replies to, likes of) FB posts (started with [http://tantek.com/2015/002/f 2015-002])
+** issue: [https://github.com/snarfed/bridgy/issues/331 Bridgy Publish sometimes returns 404 instead of POSSEing a like]
+** issue: [https://github.com/snarfed/bridgy/issues/334 Bridgy Publish does not yet return FB like permalink]
+that I post on my own site, <br/>
+when clicking the "Publish" or "Tweet it" button (which should be renamed, "PuSH and POSSE it" maybe?) :
+# if there is no u-syndication link to FB on the post, display a <pre><a href="http://brid.gy/publish/facebook"></a></pre> link instead (so Bridgy sees that)
+# send a webmention to Bridgy publish like: <blockquote><nowiki>curl https://www.brid.gy/publish/webmention -i -d  "source=http://tantek.com/2014/210/t1/trackattack-warmup-laps-first-time-did-all&target=brid.gy/publish/facebook"</nowiki></blockquote> (need <code>https</code> and <code>www</code> to avoid redirect, which won't <code>POST</code>)
+# parse the results of the curl, e.g. something like <blockquote style="white-space:pre;font-family:monospace">{<br>  "url": "<nowiki>http://facebook.com/456_789</nowiki>",<br>  "type": "post",<br>  "id": "456_789"<br>}</blockquote>
+# save the [URL] in a u-syndication hyperlink in storage on the post with the link text "Facebook post [id]", *after* the Twitter syndication link
+
+Then anytime I "PuSH and POSSE" an article, note, or a reply/like of a FB post, a copy should automatically show up in my FB timeline.
+
+Once confirmed that this works:
+# go to Twitter preferences for @t
+# turn off cross-posting to FB
+# edit the [[Falcon#POSSE_Details]] description above to note POSSEing to FB via Bridgy (instead of via Twitter)
+# edit the [[POSSE]] IndieWeb Examples to note POSSEing to FB via Bridgy (instead of via Twitter)
+# edit [[Facebook#POSSE_out_to]] to move tantek.com from "from Twitter " to "Bridgy" subsection
+
 === indie comms Hello button ===
 Figure out and setup support for [https://wiki.mozilla.org/Loop Mozilla Hello] WebRTC client in my indie [[comms]] solution on /contact
 * to be able to "call" me [https://wiki.mozilla.org/Loop/Try_Loop#Clients on my FirefoxOS device]
