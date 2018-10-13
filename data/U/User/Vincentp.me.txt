@@ -28,8 +28,23 @@ For the short term Mastrl Cntrl pings Webmention.io once a day to check for new 
 '''Sending Webmentions''' 
 A webhook triggers Mastr Cntrl to check a custom JSON feed for outstanding webmentions to send (generated at build by Jekyll). Mastr Cntrl parses each of these and sends them, then clears the file to prevent the site constantly rebuilding. It also updates the "last published value" to the current date/time.
 
-''' Backfeed'''
+'''Backfeed'''
 [https://brid.gy Brid.gy] hits an endpoint on Mastr Cntrl which formats the content and pushes in to the Github API, triggering a rebuild.
+
+'''Syndication'''
+Currently content is syndicated using a Zapier zap from a webhook when the site is built. This will be replaced at some point by Mastr Cntrl.
 
 '''PESOS''' 
 Content from other sites such as ownyourgram, ownyourswarm and Quill is supported. Content hits an endpoint on Mastr Cntrl where content is formatted in to a markdown file and pushed in to the Github API.
+
+== Working On ==
+
+* Receiving Webmentions (couple of bugs left before deploying).
+* Media endpoint.
+* Syndication endpoint. An endpoint exists, listing syndication targets but does nothing so far.
+* Rollup Bookmarks in to a feed or weekly newsletter.
+* Accept Last.FM content and format in a nice way.
+* Syndicate to other sites without minor Zapier dependancy.
+* Port Mastr Cntrl to Lamda functions. In theory this is possible and would reduce the amount of hosting involved.
+* Implement content sharding to reduce exponentional build problems associated with static site generation
+* Cache files that haven't changed to reduce build times.
