@@ -1,0 +1,35 @@
+https://indieweb.org/User%3AVincentp.me
+
+{{Infobox person
+|name = Vincent Pickering
+|url = https://vincentp.me
+|photo_url = https://vincentp.me/images/profile/vincentp.jpg
+|summary = Service Designer & UI/UX Consultant
+|elsewhere = [https://twitter.com/vincentlistens Twitter]
+}}
+
+
+== Introduction ==
+
+Hello.I'm Vincent Pickering a Service Designer & UI/UX Consultant, based in the U.K
+I've been working in the industry for nearly 20 years building websites at scale.
+I love pulling apart complex things and working out new ways to view or combine them.
+
+== My site ==
+
+My site is a static site built on [https://jekyllrb.com Jekyll]. The code is hosted on [https://github.com/vipickering/vincentp Github] and deployed to [https://www.netlify.com Netlify]. IndieWeb content such as Webmentions are managed via a custom Node.JS server called [https://github.com/vipickering/mastr-cntrl Mastr Cntrl] which is hosted on [https://heroku.com Heroku]. In the future I may port this to Lamda functions and remove the dependancy on Heroku.
+
+'''Content'''
+The basic model to update content is to push in to the Github API. This triggers Netlify to build and deploy the site. At that point a variety of things can happen.
+
+'''Receiving Webmentions''' 
+For the short term Mastrl Cntrl pings Webmention.io once a day to check for new webmentions. If it finds any it imports them in to the Github API, triggering a rebuild of the site.
+
+'''Sending Webmentions''' 
+A webhook triggers Mastr Cntrl to check a custom JSON feed for outstanding webmentions to send (generated at build by Jekyll). Mastr Cntrl parses each of these and sends them, then clears the file to prevent the site constantly rebuilding. It also updates the "last published value" to the current date/time.
+
+''' Backfeed'''
+[https://brid.gy Brid.gy] hits an endpoint on Mastr Cntrl which formats the content and pushes in to the Github API, triggering a rebuild.
+
+'''PESOS''' 
+Content from other sites such as ownyourgram, ownyourswarm and Quill is supported. Content hits an endpoint on Mastr Cntrl where content is formatted in to a markdown file and pushed in to the Github API.
