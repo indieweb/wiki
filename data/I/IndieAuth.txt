@@ -227,9 +227,14 @@ For issues about the IndieAuth spec, please see the [https://github.com/indieweb
 
 For issues with the IndieAuth.com service, please see the [https://github.com/aaronpk/IndieAuth.com/issues IndieAuth.com Github project].
 
+<span id="naming_confusion"></span>
+
+Older discussions and brainstorming has been moved to [[IndieAuth-brainstorming]].
+
 We are currently working on moving the remaining sections below to either the IndieAuth GitHub project or the FAQ section above. Please open new issues on the respective GitHub projects above.
 
 <span id="Security"></span>
+
 === Should the specification make recommendations on HTTPS? ===
 The IndieAuth specification is an extension of OAuth 2.0, and [https://tools.ietf.org/html/rfc6749#section-10.5 OAuth 2.0 recommends using https URLs] for everything. IndieAuth doesn't provide any new reason to require or not require https so delegates this recommendation to OAuth 2.0.
 
@@ -278,32 +283,6 @@ The auth consumers may want to receive additional information about a user, and 
 * Silos may give the application location information about the user.
 ** This is great for applications like Upcoming.org that want to show relevant events.
 ** This is possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
-
-=== naming confusion ===
-
-There has been ongoing confusion between IndieAuth(-the-protocol), IndieAuth.com and RelMeAuth.
-
-Most people use IndieAuth by using IndieAuth.com as their authorization_endpoint, which then does RelMeAuth to authenticate them, which has people conflate IndieAuth with rel=me-links.
-
-Some might also just have rel=me links set up and only log in to sites which use IndieAuth.com (or other services that support RelMeAuth directly) to handle login for them, which means they are using RelMeAuth, but '''not''' IndieAuth(-the-protocol), while thinking they are using IndieAuth.
-
-* One problem with the indieauth.com site being called just "indieauth.com" is that people then think that IndieAuth is somehow centralized around this service. 
-** {{aaronpk}} plans to rename the two services that IndieAuth.com provides (an authorization_endpoint for people who want their site to support the IndieAuth protocol, and handling signing in users for sites like this wiki) to different names to lessen this confusion
-** See https://github.com/aaronpk/IndieAuth.com/issues/138 for name finding, and https://github.com/aaronpk/IndieAuth.com/milestone/1 and https://github.com/aaronpk/IndieAuth.com/milestone/2 for goals for the two separate services
-** <p>This seems to be '''resolved'''. '''[https://chat.indieweb.org/meta/2017-07-19/1500481059573000 IndieAuth.com will become IndieLogin.com.]'''</p><p>The scope for IndieLogin.com is defined as “a service that developers use to log users in to a website. you create a web sign-in form that asks for their domain, and it directs people to indielogin.com to authenticate. users can authenticate by linking to Twitter/GitHub/email address/PGP key, and then they are asked to authenticate at one of those when signing in.” [https://chat.indieweb.org/meta/2017-07-19/1500481422110000] Making a clear distinction between IndieAuth and any external login services.</p>
-* In in-person conversations about IndieAuth/RelMeAuth/OAuth with people, I've found that most people think of RelMeAuth when they are talking about IndieAuth. {{aaronpk}}
-** Another possibility is to rename the IndieAuth protocol (which is an extension of OAuth 2.0) to make it clear that the OAuth 2.0 extension has nothing to do with RelMeAuth
-*** {{martijnvdven}}: I think renaming the protocol is your call, {{aaronpk}} as the author of said protocol, but I feel it would be unnecessary. Especially if [[indieauth.com]] is getting renamed. This feels like an education issue, possibly a documentation issue (which we are already solving with wiki-gardening!). We don’t go and rename [[microformats]] because people have been writing blog posts where they used the word “microformats” and then described some other system like Microdata. Instead we educate on what the name microformats is.
-**** {{sknebel}}: +1, I think that'd lead to even more confusion
-** {{martijnvdven}}: Note that '''no implementers have made the mistake'''. [https://github.com/barryf/acquiescence Acquiescence], [[commentpara.de]], [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub Known], [[selfauth]] all talk about IndieAuth as the protocol.
-*** {{aaronpk}}: This is a great point, and convinces me the name of the spec is fine.
-** <p>{{martijnvdven}}: And '''no consumers advertise it wrong''' as far as I can find. Are there any implementations that use only [[indieauth.com]] and claim to be IndieAuth? That means not using something like [https://github.com/indieweb/indieauth-client-php indieauth/client] and using the service as a fallback, but really using only the service?</p><p>This wiki is an example of that, but also does not claim to use IndieAuth in any way! It describes its login as [[web sign-in]] and not IndieAuth. It mentions IndieAuth as ''an alternative'' for people who do not want to use their social media accounts, that’s a very correct description:</p><p>[[File:indieweblogin.png]]</p>
-*** {{sknebel}} Indeed, web-sign in seems like a fitting term here (given that the definitions talk about the general concept of using your homepage URL to sign in, and reference both RelMeAuth and IndieAuth as implementations)
-** {{sknebel}} I've been explaining IndieAuth at HWC Berlin to people from "has written an endpoint following [[authorization-endpoint]]" over "has logged into the wiki" to "IndieAuth, never heard of it". One of the first category wasn't quite clear on the status of non-Indieauth.com implementations of sites to log-in to (since they'd only used it with sites using Indieauth.com, primarily the wiki), second wasn't necessarily aware of a difference between service and protocol. Explaining the difference (and how RelMeAuth fits in) wasn't an issue, but had to be explicitly mentioned. I believe a different name for IndieAuth.com would go a long way there.
-* The wiki pages for IndieAuth don't always make this distinction clear, work has begun during IndieWebWeek (2017-05) to improve this
-** Work continued 2017-07-19 by moving FAQ and Issue items from this page to the pages they were about: [[RelMeAuth]] or [[indieauth.com]].
-** New copy for this wiki page was written in a separate sandbox page where the focus was on explaining IndieAuth and its 3 parts. See [[User:Vanderven.se martijn/IndieAuth]].
-*** {{sknebel}} +1, to me this is just clarifying and extending existing documentation (e.g. the different endpoints, that currently only have their separate pages, and clearly separating .com from the protocol)
 
 === how to should include endpoint definition ===
 
