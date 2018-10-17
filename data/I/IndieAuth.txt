@@ -262,27 +262,6 @@ Compare with:
 
 Explanations for IndieAuth need to be <em>at least as simple to understand</em> as those for Twitter Sign-in and Facebook Connect.
 
-=== IndieAuth using form-encoded responses instead of JSON ===
-IndieAuth originally used standard form-encoding for requests and responses, since it has been a standard encoding format since the beginning of the web.
-
-Over time, implementations added support for sending JSON responses as well as form-encoded. When IndieAuth was written up as a [https://www.w3.org/TR/indieauth/ formal OAuth 2.0 extension], it documented only the JSON responses in order to be compatible with OAuth 2.0. At that point, most implementations already supported JSON responses, or did content negotiation to support both formats.
-
-<raw><details><summary>Historical Discussion</summary></raw>
-IndieAuth uses standard form-encoding for requests and response because it has been a standard encoding format since the beginning of the web. If it were a JSON response, then 7 years down the road you'd be asking "why is the response in JSON instead of ____" where ____ is the next trendy thing that replaces JSON. (Remember when XML was the new hotness?)
-
-Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_changes_to_indieauth_protocol.html#content_negotiation &mdash; [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 02:26, 5 March 2015 (PST)
-
-* To me this would violate [[Postel's law]], requiring every implementation to publish many different formats. I don't care which format IndieAuth produces, but I do think we should settle on ''one'' canonical format. [[User:Kylewm.com|Kylewm.com]] 10:03, 5 March 2015 (PST)
-
-* Agreed that there should be only one format. The only valid argument for JSON is that the OAuth 2.0 spec defines the response as JSON. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:06, 5 March 2015 (PST)
-
-* OK I withdraw my objection to content negotiation. Agree it is a relatively small burden on a relatively small number of providers; it's worth supporting multiple formats for convenience to the large number of consumers [[User:Kylewm.com|Kylewm.com]] 12:06, 5 March 2015 (PST)
-
-* Just to be anti-inventing-new-formats (too many of them around and demanding attention), I'd go for form-encoded -- {{kartik}} 00:21 2015-03-06
-
-* I just never saw HTTP POST form encoded _responses_ anywhere, only POST url encoded form requests... Any link to other (REST) services that use this? e.g. XMLHttpRequest does not support form encoded responses at all... [[User:tuxed.net|fkooman]]
-<raw></details></raw>
-
 === Requesting additional user details ===
 
 The auth consumers may want to receive additional information about a user, and not just their homepage URL. Andy Baio raised some points in regard to this in a backer-only Kickstarter post, [https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812 Opening the Source and The Great Auth Debate], 2015-03-16, when deciding what authentication mechanism to use for [[Upcoming.org]].
