@@ -235,6 +235,7 @@ For issues about the IndieAuth spec, please see the [https://github.com/indieweb
 For issues with the IndieAuth.com service, please see the [https://github.com/aaronpk/IndieAuth.com/issues IndieAuth.com Github project].
 
 <span id="naming_confusion"></span>
+<span id="how_to_should_include_endpoint_definition"></span>
 
 Older discussions and brainstorming has been moved to [[IndieAuth-brainstorming]].
 
@@ -285,24 +286,6 @@ The auth consumers may want to receive additional information about a user, and 
 * Silos may give the application location information about the user.
 ** This is great for applications like Upcoming.org that want to show relevant events.
 ** This is possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
-
-=== how to should include endpoint definition ===
-
-This would make sure first time users do not have to try and figure this out themselves. Example:
-
-<raw><figure>
-<blockquote cite="https://ascraeus.org/embracing-the-indieweb/">Getting myself validated through IndieAuth was already taken care of by the <code>rel="me"</code> links, but some services needed me to declare IndieAuth as my <code>authorization endpoint</code>; <i>[…]</i></blockquote>
-<footer>— <cite class="title"><a href="https://ascraeus.org/embracing-the-indieweb/">Embracing the IndieWeb</a></cite> by <cite class="author"><a href="https://ascraeus.org/">Daniel Goldsmith</a></cite></footer>
-</figure></raw>
-
-Here “IndieAuth” refers to [[indieauth.com]]-the-service. The discussion above is about clearing up the name issue, this is only about including the endpoint declaration in HTML. Daniel ran into services that offered him to login with IndieAuth and required him to declare the authorization endpoint, completely according to how IndieAuth works. (As documented above, most implementers stick to the spec when they talk about IndieAuth.) This is currently completely left out of the how-to and new users are left to figure it out for themselves.
-
-The wiki leaves users hanging who try to login using IndieAuth outside of the wiki. This how-to issue is documented here specifically because {{t}} wondered [https://chat.indieweb.org/meta/2017-07-18#t1500393757490000 why an extra step was needed].
-
-* I say this is a mistake in the How-to that needs to be addressed. —{{martijnvdven}}
-* agreed, instructions about IndieAuth should explicitly include the endpoint —<span class="h-card" style="white-space:nowrap">[[User:Www.svenknebel.de|sknebel]]</span>
-* -1 disagreed. Don't make more work for the >99% to satisfy the &lt;1% who want to install their own IndieAuth providers. IndieAuth authentication services should handle rel=me without needing an explicitly specified endpoint. - {{t}}
-** Again this just points to the confusion around the responsibility of who is trusting who. If you are just trying to sign in to the wiki with your domain, you do not need to ever worry about or see the term "IndieAuth". The wiki is doing "web sign-in" via RelMeAuth, IndieAuth, email or PGP authentication by letting the indielogin.com service handle the implementation details. If someone actually wants to implement IndieAuth, it's because they want to specifically tell applications where to send them to sign in, in which case they do that by specifying an authorization_endpoint on their home page. {{aaronpk}}
 
 == To do ==
 * create an Architecture Diagram for IndieAuth per [http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/ Mozilla Security Blog: Speeding Up Security Reviews]
