@@ -68,7 +68,7 @@ A: To log in with indieauth as a domain served over [[HTTPS]], you have to type 
 * If you get an error about an insecure redirect, check to see whether your silo link is going to https://yoursite which is in turn redirecting to http://yoursite.  (Dreamwidth is an example of a site that does this.)  If so, change the link to go directly to http://yoursite
 
 === How do I use a specific other site for my IndieAuth ===
-See [[distributed-indieauth]].
+See [[IndieAuth]].
 
 === Is it good to delegate auth to 3rd parties ===
 ''Is it good to delegate authentication to third parties like Facebook or Twitter for IndieAuth?''[https://chat.indieweb.org/2013-10-30#t1383149585000000]
@@ -99,6 +99,22 @@ See: [[Why web sign-in]].
 ''Why not add [[WebFinger]] support to IndieAuth?''
 
 <blockquote>"The problem is it's too easy to not own your email address (@gmail.com, etc) so it's not really an "indie" identifier. The point of IndieAuth is to encourage people to own their online identity."[https://aaronparecki.com/2013/07/01/7/indieauth][https://twitter.com/aaronpk/status/351893272089735168]</blockquote>
+
+=== Do I need a silo account ===
+Q: Do I need an account on some third party silo to use it? 
+
+Short answer: no. You can use [[PGP]] or a self-hosted [[IndieAuth]] service.
+
+Longer answer: you do not need a silo account to use IndieAuth, e.g. you may set it up with [[PGP]] or a self-hosted [[IndieAuth]] service.  
+
+However, the vast majority of people already have silo accounts, and most people who have their own websites already have visible hyperlinks to their silo profiles, thus the easiest way to get most people setup with IndieAuth is using [[RelMeAuth]] by adding rel=me to their silo hyperlinks, and configuring their silo profiles to link back to their personal website.
+
+And despite using a silo, there is little downside because the use is ephemeral (the site using IndieAuth has no idea which silo used to verify your personal site identity), and there are a number of advantages for most folks:
+* '''[[UX]] familiarity.''' Most users are already familiar with the authentication flow of signing into a site or app with [[Twitter]] or [[GitHub]] (or even [[Facebook]] has a similar flow.
+* '''[[security]]'''. Silos have a much larger security staff (and with likely more expertise) than you do, and thus have likely secured their sign-in and authentication/authorization code and user flows much more than solution you would maintain yourself.
+* '''[[two-factor authentication]]''' (TFA) Most silo accounts can be secured with TFA which adds an additional degree of security, whereas the DIY IndieAuth solutions do not have such a capability, nor does anyone know of anyone who has implemented TFA on their personal site.
+
+One potentially non-trivial downside (depends on the user) of using a silo account for authorization is that the silo account may be tracking your use of IndieAuth.com, and who knows what they will do with that data. The silo accounts do not see what services (like this wiki) that you sign-into however with IndieAuth.
 
 == Issues ==
 See Also: https://github.com/aaronpk/IndieAuth.com/issues
