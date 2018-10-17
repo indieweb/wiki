@@ -237,6 +237,12 @@ IndieAuth originally used standard form-encoding for requests and responses, sin
 
 Over time, implementations added support for sending JSON responses as well as form-encoded. When IndieAuth was written up as a [https://www.w3.org/TR/indieauth/ formal OAuth 2.0 extension], it documented only the JSON responses in order to be compatible with OAuth 2.0. At that point, most implementations already supported JSON responses, or did content negotiation to support both formats.
 
+=== How can an application get additional information about the user ===
+
+<span id="Requesting_additional_user_details"></span>
+
+The IndieAuth specification offers the user’s profile page where further public information about the user can be found, e.g. by parsing an [[h-card]]. There is currently no common way of retrieving private information.
+
 == Issues ==
 For issues about the IndieAuth spec, please see the [https://github.com/indieweb/indieauth/issues IndieAuth GitHub project].
 
@@ -261,18 +267,6 @@ Compare with:
 * How Facebook Connect works: http://blog.facebook.com/blog.php?post=41735647130
 
 Explanations for IndieAuth need to be <em>at least as simple to understand</em> as those for Twitter Sign-in and Facebook Connect.
-
-=== Requesting additional user details ===
-
-The auth consumers may want to receive additional information about a user, and not just their homepage URL. Andy Baio raised some points in regard to this in a backer-only Kickstarter post, [https://www.kickstarter.com/projects/waxpancake/the-return-of-upcomingorg/posts/1167812 Opening the Source and The Great Auth Debate], 2015-03-16, when deciding what authentication mechanism to use for [[Upcoming.org]].
-
-* Silos may give the application access to the user’s social graph: who their friends are, who they are following.
-** This would require some IndieWeb format for [[following]].
-** This is great for applications like [[readers]] to start a user off.
-
-* Silos may give the application location information about the user.
-** This is great for applications like Upcoming.org that want to show relevant events.
-** This is possible by parsing the homepage URL of the user for [[h-card]] or recent [[checkins]].
 
 == To do ==
 * create an Architecture Diagram for IndieAuth per [http://blog.mozilla.org/security/2012/05/08/speeding-up-security-reviews/ Mozilla Security Blog: Speeding Up Security Reviews]
