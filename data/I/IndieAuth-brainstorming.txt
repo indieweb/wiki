@@ -53,3 +53,19 @@ The wiki leaves users hanging who try to login using IndieAuth outside of the wi
 * agreed, instructions about IndieAuth should explicitly include the endpoint —<span class="h-card" style="white-space:nowrap">[[User:Www.svenknebel.de|sknebel]]</span>
 * -1 disagreed. Don't make more work for the >99% to satisfy the &lt;1% who want to install their own IndieAuth providers. IndieAuth authentication services should handle rel=me without needing an explicitly specified endpoint. - {{t}}
 ** Again this just points to the confusion around the responsibility of who is trusting who. If you are just trying to sign in to the wiki with your domain, you do not need to ever worry about or see the term "IndieAuth". The wiki is doing "web sign-in" via RelMeAuth, IndieAuth, email or PGP authentication by letting the indielogin.com service handle the implementation details. If someone actually wants to implement IndieAuth, it's because they want to specifically tell applications where to send them to sign in, in which case they do that by specifying an authorization_endpoint on their home page. {{aaronpk}}
+
+=== IndieAuth using form-encoded responses instead of JSON ===
+
+IndieAuth uses standard form-encoding for requests and response because it has been a standard encoding format since the beginning of the web. If it were a JSON response, then 7 years down the road you'd be asking "why is the response in JSON instead of ____" where ____ is the next trendy thing that replaces JSON. (Remember when XML was the new hotness?)
+
+Proposal for content negotiation: https://www.tuxed.net/fkooman/blog/proposed_changes_to_indieauth_protocol.html#content_negotiation &mdash; [[User:Wwelves.org perpetual-tripper|Wwelves.org perpetual-tripper]] 02:26, 5 March 2015 (PST)
+
+* To me this would violate [[Postel's law]], requiring every implementation to publish many different formats. I don't care which format IndieAuth produces, but I do think we should settle on ''one'' canonical format. [[User:Kylewm.com|Kylewm.com]] 10:03, 5 March 2015 (PST)
+
+* Agreed that there should be only one format. The only valid argument for JSON is that the OAuth 2.0 spec defines the response as JSON. <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 10:06, 5 March 2015 (PST)
+
+* OK I withdraw my objection to content negotiation. Agree it is a relatively small burden on a relatively small number of providers; it's worth supporting multiple formats for convenience to the large number of consumers [[User:Kylewm.com|Kylewm.com]] 12:06, 5 March 2015 (PST)
+
+* Just to be anti-inventing-new-formats (too many of them around and demanding attention), I'd go for form-encoded -- {{kartik}} 00:21 2015-03-06
+
+* I just never saw HTTP POST form encoded _responses_ anywhere, only POST url encoded form requests... Any link to other (REST) services that use this? e.g. XMLHttpRequest does not support form encoded responses at all... [[User:tuxed.net|fkooman]]
