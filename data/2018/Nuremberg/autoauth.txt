@@ -1,0 +1,74 @@
+https://indieweb.org/2018/Nuremberg/autoauth
+
+= Automated IndieAuth =
+
+== Participants ==
+* Aaron Parecki (aaronpk.com)
+* Jan Sauer (jansauer.de)
+* Sven Knebel (svenknebel.de)
+* Sebastiaan Andeweg (seblog.nl)
+* Rosemary Orchard (rosemaryorchard.com)
+* Martijn van der Ven (vanderven.se/martijn/)
+* Sebastian (maker.sfeld.eu)
+* Sebastian Lasse (sl007)
+
+== Notes ==
+* IndieAuth works with a user, but is limited to that.
+* We're looking for a way a server can handle as an agent for the user while they are not involved. (e.g. Bob's Indiereader can fetch Alice's private feed, with some posts Bob has permission for)
+* sl007: ActivityPub already has some sort of a thing in place
+** Aaronpk: it's a solution to a different problem
+* ActivityPub used HTTP-signatures, we can use that
+** Aaronpk: is not a fan, wants to rely on HTTPS for the security, so people don't have to write their own crypto
+
+* Feed readers can handle requests for multiple users.
+** That feed reader is not part of the user's website. It handles in name of the user.
+
+* 1) we need a flow between the reader and the user. The user has to give permission (a read-managing scope) to the reader (preferrably once)
+* 2) the feed-publisher wants to create tokens for the feed-fetching part, so it only has to verify access tokens it issued itself.
+* 3) we want the user to be able to revoke the token given to the reader. After the revoke, the tokens issued by the feed publisher should be invalid
+
+=== Some flow ===
+* Alice has a reader in which she can read Bob's private feed.
+* Alice's reader gets a token from Alice's reader, to get tokens on behalf of Alice.
+* To request Bob's private feed, Alice's reader asks Alice's auth enpoint to get a token for Bob's feed.
+* Alice's auth endpoint issues a code, sends it to Bob's token endpoint.
+* Bob's token endpoint 
+
+
+# Device uses its access token to tell sven's authorization endpoint to go get a token for aaronpk.com
+## request includes: aaronpk.com client_id
+## response: URL and a code
+# Device polls the URL with the code to wait until the flow is done
+# sven's authorization endpoint tells aaronpk's token endpoint that the device is requesting a token for sven (includes: me, own client_id, client_id of device [audience?], randomly choosen auth code, callback url)
+# aaronpk token endpoint verifies auth code with auth endpoint discovered from me-url. if successful, calls callback to authorization endpoint confirming this
+# device poll succeeds, gets token
+# auth endpoint can revoke token, since it has a copy of it and knows where it is from
+
+question: is it always polling, or callback an option?
+
+
+1. User logs into reader app. Grants scope "request_token:read" (which gives the right to request tokens that contain a read scope)
+
+2. Request from reader to auth endpoint:
+* response_type=external_token - Indicates to the authorization server that this is a request to create a token from some third party
+* me - The profile URL for the user the app is  making the request at
+* client_id - The client URL
+* target_url - url to discover endpoints from (or directly the apps token endpoint?)
+* response_url - The URL for a callback. (Optional for polling purposes.) (keep calling it redirect_url?)
+* state - A parameter set by the client which will be included when the callback is made. If polling, used as the polling key( or not required and secret in url?)
+* scope - (optional) A space-separated list of scopes the client is requesting, e.g. "create". If the client omits this value, the authorization server MUST use a default value. (default: grant all in token?)
+* Has to include "Authorization: Bearer TOKEN"
+
+3. Authorization Endpoint creates an Authorization Code
+
+4. Authorization Endpoint posts a Token request to token endpoint from target_url
+* grant_type=authorization_code //TODO: change, what's a good name?
+* code - The authorization code received from the authorization endpoint in the redirect
+* client_id - The client's URL (the client here is the auth endpoint sending the request)
+* client_client_id (stupid name) - the application for which the token is intended
+* redirect_uri - The client's redirect URL, which MUST match the initial authorization request.
+* me - The user's in which name the token is requested profile URL
+
+
+
+__NOTITLE__
