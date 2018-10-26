@@ -4,12 +4,67 @@ https://indieweb.org/2018-10-24-iiw-indieauth
 
 '''<dfn>Making OAuth Work on the Open Web</dfn>''' was a session about IndieAuth at the [[events/2018-10-23-iiw|2018-10-24 IIW 27]] conference 
 
-== Notes ==
-
-
 == Slides ==
 * https://speakerdeck.com/aaronpk/making-oauth-work-on-the-open-web (web viewer)
 * https://slides.aaronparecki.com/2018/making-oauth-work-on-the-open-web.pdf (16mb PDF)
+
+== Photos ==
+
+[[File:2018-10-24-iiw-indieauth.jpg|800px]]
+
+== Notes ==
+
+Notes by {{tbbrown}}
+
+session is related to article:
+
+https://aaronparecki.com/2018/07/07/7/oauth-for-the-open-web
+
+Discussion:
+
+OAuth for the open web does not require client preregistration nor locked down user accounts.  Instead, there is IdP discovery and bring your own identity.
+
+OpenID Connect does not solve these original problems of OpenID
+
+There can be any number of authz servers so it is impractial for devs to do client registration for all.  For instance, Mastodon adoption has this problem because devs can't easily register on every instance.
+
+UserIDs need to have a shared global namespace.
+
+There is no overlap between Google and Microsoft user namespace, for instance.
+
+Limit the problem space:
+
+Client ids and user ids are full urls (provides path for discovery)
+
+OpenID usability problem was with the way the url was presented to user, not the url itself.
+
+The browser now autofills url and an email address can resolve to a url.  Start with something that can turn into a url.
+
+IndieAuth is just an extension to OAuth 2
+
+Focus on the client:
+
+client_id in the redirection url is the url of the appropriate
+
+App info is published at the url that is the client_id.  It seems choosing one of these three possibilities would be ideal:
+
+* 1. parse HTML for microformats (downside is that server needs a microformats parser)
+* 2. manifest.json
+* 3. .well-known
+
+(an example client is https://quill.p3k.io/)
+
+Let's consider beyond the Indieweb and include the open web which does not seem to include enterprise.
+
+Justin R. references Kitties are Fluffy!
+
+Book ref: Why We Fail https://rosenfeldmedia.com/books/why-we-fail/
+
+a traditional IdP often doesn't want to allow arbitrary clients that haven't registered first
+
+SPs often want more than a subject
+
+https://indieweb.org/authorization-endpoint
 
 == See Also ==
 * [[2014-05-06-iiw-indieauth|2014 IndieAuth Session]]
