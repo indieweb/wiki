@@ -1,0 +1,20 @@
+https://indieweb.org/AutoAuth
+
+<dfn>'''AutoAuth'''</dfn> is the working title of an extension to IndieAuth that allows clients to authorize to other servers in the name of their user, without the user being present to confirm each individual authorization flow. 
+
+It was first drafted in a [[2018/Nuremberg/autoauth|session at IWC Nürnberg]]. {{Zegnat}} and {{sknebel}} demoed first basic implementations at IWC Berlin 2018.
+
+== Goals ==
+Allow an application to access protected resources on a server it hasn't connected to before, without the user being present to confirm the usual, interactive, IndieAuth flow. The user and his authorization endpoint should still be in control of when this happens.
+
+== use cases ==
+* readers accessing private posts and feeds
+* verifying private webmentions
+
+== flow ==
+currently best docs at https://indieweb.org/2018/Nuremberg/autoauth#Notes_from_Dinner
+
+== open questions ==
+* {{sknebel}}: does the token endpoint get passed through the client_id triggering the original request?
+* {{sknebel}}: what do we call this thing? AutoAuth was a quickly choosen session name. Previous attempts used the names [[server-indieauth]] and [[non-interactive IndieAuth]].
+* {{sknebel}}: what does the polling exactly look like? The Internet has various opinions on what's good return codes for expressing "please wait further", just returning 200 and {"status": "pending"} or similar might be simpler. anyway, needs specification. (Webmention status URLs, which are similar, have no specification either, but are less critical to be machine-consumable)
