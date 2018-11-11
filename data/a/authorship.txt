@@ -208,6 +208,29 @@ Only if the rel-author page lacks an h-card do we then fallback to looking for a
 * See: https://chat.indieweb.org/dev/2018-11-07#t1541618658454100
 * XRay issues: https://github.com/aaronpk/XRay/issues/79
 
+{{gRegor}}: Here's my attempt at a feed authorship algorithm. Step 2 is based on [https://github.com/aaronpk/XRay/commit/8043ba575f203d7fdea249877c83c52d3d86b47c#diff-cd791fa54f76e837af01ffee8ff5efc6 this update to XRay].
+
+Parse the page for microformats2 and start with no author.
+
+#if an h-feed microformat is found, then
+## if the h-feed has an author property, use that
+## if an author property was found
+### if it has an h-card, use it, exit
+### otherwise if the author property is an http(s) URL, let the <var>author-page</var> have that URL
+### otherwise use the author property as the author name, exit
+## if there is no <var>author-page</var>, then
+### if the page has a rel-author link, let the <var>author-page</var> have that URL
+## if there is an <var>author-page</var> URL
+### get the <var>author-page</var> from that URL and parse it for microformats2
+### if <var>author-page</var> has 1+ h-card with url == uid == <var>author-page</var>'s URL, then use first such h-card, exit.
+### else if <var>author-page</var> has 1+ h-card with url property which matches the href of a rel-me link on the <var>author-page</var> (perhaps the same hyperlink element as the u-url, though not required to be), use first such h-card, exit.
+### if the h-feed's page has 1+ h-card with url == <var>author-page</var> URL, use first such h-card, exit.
+## otherwise no deterministic author can be found
+# Otherwise if the page has a list of 2+ h-*, then
+## if the items array has 1+ h-card, use first such h-card, exit
+## otherwise no deterministic author can be found
+----
+
 == Silo Implementations ==
 === none currently ===
 
