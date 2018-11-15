@@ -26,10 +26,7 @@ The basic model to update content is to push in to the Github API. This triggers
 Webmention.io posts to Mastr Cntrl. Webmentions are formatted and posted in to a JSON file via the Github API. This triggers a rebuild on Netlify and displays the webmentions.
 
 '''Sending Webmentions''' 
-TODO
-
-'''Backfeed'''
-[https://brid.gy Brid.gy] hits my webmention endpoint on Mastr Cntrl which then follows my format above for Webmentions.
+On publish I create a temporary queue of source/target pairs to send. Publishing fires a webhook which makes Mastr-Cntrl get the feed and loop through sending each Webmention.
 
 '''Syndication'''
 Currently content is syndicated using a Zapier zap from a webhook when the site is built. This will be replaced at some point by Mastr Cntrl.
@@ -39,6 +36,8 @@ Content from other sites such as ownyourgram, ownyourswarm and Notes (from anywh
 
 == Working On ==
 
+* Syndicating content from the website. Front matter tag would do this.
+* Displaying all other types of Webmentions on a page
 * Media endpoint.
 * Syndication endpoint. An endpoint exists, listing syndication targets but does nothing so far.
 * Rollup Bookmarks in to a feed or weekly newsletter.
