@@ -222,7 +222,34 @@ Another advantage of this extension is that your micropub server is just respons
 ** [[IndieWeb for Drupal]]
 
 === Query for Category/Tag List ===
-By sending q=category to the Micropub Endpoint, a JSON array of categories are returned.
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/5
+
+This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This also incorporates the possibility of being able to search for categories that would match an auto-complete.
+
+The following example would be returned as part of the <code>?q=category</code> query.
+<pre>
+{
+  "categories": [
+    "tag1",
+    "tag2",
+    "tag3",
+    "tag4",
+    "tag5",
+  ]
+}
+</pre>
+
+The follow example would be returned as part of the <code>?q=category&search=indie</code> query.
+<pre>
+{
+  "categories": [
+    "indieweb",
+    "indieweb-goals",
+    "indienews"
+  ]
+}
+</pre>
 
 ==== Implementations ====
 * Clients
@@ -230,6 +257,7 @@ By sending q=category to the Micropub Endpoint, a JSON array of categories are r
 * Servers
 ** [[Micropub for WordPress]]
 ** [[IndieWeb for Drupal]]
+** [[abode]] ({{eddiehinkle.com}})
 
 ==== Brainstorming ====
 [[category]] - [https://chat.indieweb.org/2017-01-18#t1484741717234000 suggestion] to get all existing tags/categories in the client. Expectation is client would cache and do autocomplete
