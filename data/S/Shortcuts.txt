@@ -10,53 +10,9 @@ https://indieweb.org/Shortcuts
 
 His shortcut is as follows. Note that most of the bulletpoints, once set, run automatically. You need to [[obtaining-an-access-token|obtain an Access Token]] to your Micropub Endpoint, or steal one from a Micropub client you already use.
 
-In the native Photos app, choose a picture to post, then open the share menu and run the following Shortcut:
+A desciption of the flow can be found at [[Shortcuts/Instagram POSSE]]
 
-A Shortcut called 'Foto op Seblog' which accepts images:
-* Set variable {photo} (I will use this bracket notation for vars here)
-* Ask for input: caption?
-* Copy to clipboard (so you can add it to Instagram later)
-* Set variable {caption}
-* URL (point this one to your Micropub endpoint)
-* Get contents of URL > advanced
-** Method: POST
-** Headers: Authorization: bearer [token] (put your token here)
-** Request body: (Form)
-*** h: entry (just that text)
-*** photo: {photo} (this one as 'file', select the variable)
-*** content: {content} (select the variable)
-* Get URLs from Input - this is a tricky one. I let my Micropub endpoint return a body with '<code><nowiki><a href="new-post-url">Success</a></nowiki></code>' in order for this to work
-* Open URLs (now you're redirected to Safari, opening your new post manually go back to the Photos app now, then Shortcut starts again)
-* Choose from menu: 'Also post on Instagram?' > Yes > Cancel
-** on yes:
-*** Get variable {photo}
-*** Post on Instagram (I have caption set to var Content, but that doesn't seem to work always)
-
-Then, on Instagram, just click through the menu's. When asked for the caption, if it's not there, you can just paste from your clipboard, the caption should be there.
-
-After posting copy the URL of the Instagram-post to your clipboard.
-
-Go back to Safari, where your new post is still lurking, open Share menu and choose the following shortcut 'Save syndication', which takes URLs and Safari web pages:
-
-* Get URLs from Input
-* Set variable {entryurl}
-* Ask for input: What is the Instagram url? > default answer {clipboard} > input type URL (you can leave this step out and just grab the clipboard, but I like checking)
-* Set variable {insta}
-* URL (set this to be your Micropub endpoint)
-* Get contents of URL > Advanced
-** Method: POST
-** Headers: Authorization: bearer [token] (put your token here)
-** Request body: (JSON!)
-*** action: update
-*** url: {entryurl}
-*** (as dictionary) add:
-**** (as array) syndication:
-***** {insta}
-* Get var {entryurl}
-* Open URLs
-And there you have it!
-
-== IndieAuth flow ==
+== IndieAuth ==
 
 {{sebsel}} made a Shortcut that does the IndieAuth dance for you, in order to pick up a token. It can be embedded into Micropub workflows, as it returns the token.
 
