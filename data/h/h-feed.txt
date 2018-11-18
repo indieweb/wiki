@@ -107,6 +107,11 @@ The possibility of separate partial vs full feeds provides more design freedom f
 from: http://indiewebcamp.com/irc/2014-03-27/line/1395970560
 
 === canonical feed autodiscovery ===
+The assumption of a "canonical" feed may be the wrong framing.
+
+Better to consider sites that share multiple feeds of information on their home page, and may have a "primary" feed among them. See "feed autodiscovery" for more.
+
+=== feed autodiscovery ===
 ==== prior work ====
 Feed readers discover the links to legacy RSS/Atom feed files automatically from HTML pages by parsing for links with <code>rel="alternate"</code> and  <code>type="application/rss+xml"</code> or <code>type="application/atom+xml"</code> respectively. 
 
@@ -129,6 +134,22 @@ More on:
 
 ==== url uid ====
 Alternatively, if an h-feed has a u-url u-uid property that is not the URL of the current page itself, then that u-url u-uid URL can be treated as the canonical full feed.
+
+==== Zegnat proposal 2018 ====
+{{Zegnat}} proposed an algorithm for this here:
+* https://chat.indieweb.org/dev/2018-11-16#t1542370898681400
+
+To-do: extract algorithm and put here inline
+
+==== Tantek example ====
+On my tantek.com homepage, I have three h-feed elements
+* unnamed
+* Recent Articles
+* Speaking & Events
+
+I realized that this pattern makes sense from the perspective that the main/primary feed doesn't need a separate name, or a superfluous explicit name like "Main", thus an h-feed consumer could:
+* treat the first unnamed h-feed as the primary h-feed of the page, and 
+* lacking one, perhaps just treat the first h-feed as the primary h-feed.
 
 == Articles ==
 * [http://blog.superfeedr.com/indieweb-microformats-fragments-subscriptions/ "IndieWeb: fragment subscriptions to microformats"] on Superfeedr.
