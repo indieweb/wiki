@@ -1,0 +1,64 @@
+https://indieweb.org/2018/Berlin/offline
+
+{{stub}}
+
+Archived from https://etherpad.indieweb.org/offline
+
+------------
+IndieWebCamp Berlin 2018
+
+Session: Making your website work offline
+
+== Participants ==
+* {{adactio}} (adactio.com)
+* {{aaronpk}} (aaronpk.com)
+* Tiara Miller (tiaramiller.com)
+* Sebastiaan Andeweg (seblog.nl)
+* Marty McGuire (martymcgui.re)
+* Ana Rodrique (ohhelloana.blog)
+* {{t}} (tantek.com)
+* Mike (madebymike.com.au)
+
+== Notes ==
+* UX
+* Service Workers
+** have website on server, a browser comes and make request for url
+**server sends back url and other stuff 
+* send back file, css, JS (different then regular JS)
+* installed into browser, like a cookie, but executable
+* once installed on visitors device, itll check with the service worker first before retriving updated file and go through cache
+* fetch all of these images and put to the cache
+* the way you set this up, is different per website, different per use-case of the website. (is it more like a book, which never changes, or does it work like a news-site, which tries to get the newest always, unless you're offline)
+* look in cache and if its in cache serve that, or find newer version and update chache
+* balancing two things:
+** freshness and performance
+* Fresh -1: a strategy where you will always serve the cache, and also always get a new one for the next page-load. 
+* no internet will try to retrieve from network and will fail and get it from the cache, with bad internet it will keep trying to access the network
+* It's async, so you can do both the cache ánd the cache-refresh, at the same time
+* You can serve a quick page saying you're working, then send a message from the service worker to show the new page.
+** problems: what if the cache is different, but only a bit, and you want to update, but the user has scrolled already... diffing in the browser.
+* For Jeremy's book site, it was Fresh -1 at first, for typo's, but later switched to offline-first, a permanent archive.
+* For personal sites: blog-posts don't change that often, so serve it offline-first.
+** But, webmentions do change, so grab them via an embed / javascript.
+* caching and pre-caching
+* with caching: users only will cache posts they have already read.
+** you can also use a button, so the user can put blogposts in the cache, to read later if they are offline.
+* the offline-page as the new 404-page: branding opportunity to put fun things in
+* another category: posting apps that work offline and post your posts when you are online again (see Aaron's offline Teacup)
+* using the Push-api: not display a notification, but go to the network and fill the cache with new posts
+* you have to be a good citizen with this: you will have to clean your cache.
+* it has better longevity than the browser-cache, it's around localStorage.
+
+
+More use cases:
+* books
+* blogs (reading or writing?)
+* news
+* games
+
+IndieWeb focused use-cases
+* nice (offline friendly) reading experience for readers of your blog
+* writing / authoring experience for you for your blog
+* reading experience using your reader (Microsub client)
+
+----
