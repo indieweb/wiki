@@ -2,4 +2,25 @@ https://indieweb.org/Konami_Code
 
 {{stub}}
 
-'''<dfn>Konami Code</dfn>''' is a cheat code originating from 80s Konami video games, these days used as reference, or as an actual, functioning Easter egg on websites.
+'''<dfn>Konami Code</dfn>''' is a cheat code originating from 80s Konami video games, these days used as reference, or as an actual, functioning Easter egg on websites: up, up, down, down, left, right, left, right, b, a
+
+== adding Konami Code to your website ==
+
+This is vanilla JS, no framework is needed.
+
+<pre>function kcl(cb) {
+  var input = '';
+  var key = '38384040373937396665';
+  document.addEventListener('keydown', function (e) {
+    input += ("" + e.keyCode);
+    if (input === key) {
+      return cb();
+    }
+    if (!key.indexOf(input)) return;
+    input = ("" + e.keyCode);
+  });
+}
+
+kcl(function () {
+    // do something here
+})</pre>
