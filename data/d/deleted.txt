@@ -17,11 +17,11 @@ How to <span id="Handling">handle</span> deleted posts, i.e. implementation deta
 
 === How to publish ===
 When a post is deleted by the user, implementations should:
-* send a webmention to all URLs that were in the post
+* send a [[webmention]] to all URLs that were in the post
 * delete any [[POSSE]] copies of that post (perhaps with a delay, or "Confirm Delete" user prompt, or both).  See [[POSSE#Delete|POSSE Delete]] for details.
 
 When a user (re)loads a permalink of a deleted post:
-* When the permalink of a post that has been deleted is requested, implementations should return:
+* When the [[permalink]] of a post that has been deleted is requested, implementations should return:
 *# HTTP 410 Gone
 *# an HTML [[h-entry]] with prose noting the post has been deleted, and at least a link to the home page, or recent posts. You may want to consider returning a link to "nearby" (by date, topic) posts, if you're comfortable disclosing that kind of contextual information about the post that was deleted. This helps users because often posts that are deleted are subsequently "replaced" by new posts. It would be nice if those new related posts were discoverable from the deleted permalink. You could also include the date the post was deleted, marked up with <code>dt-deleted</code>. See [[#Tombstoning|Tombstoning brainstorm]] for more details.
 
