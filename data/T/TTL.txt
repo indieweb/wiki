@@ -6,3 +6,11 @@ https://indieweb.org/TTL
 
 == DNS Examples ==
 * Google's public DNS at 8.8.8.8/8.8.4.4 respects TTL settings as low as 0, effectively supporting a setting for 'do-not-cache'.
+* OpenDNS's public DNS at 208.67.222.222/208.67.222.220 has a minimum TTL setting of about 10 seconds.
+
+== Observing the Effect of DNS TTL ==
+On a terminal with the '''dig''' and '''watch''' programs, run a per-second lookup of the domain under test:
+
+ <kbd>watch -n 1 "dig +short test1.indieweb.org @208.67.222.222"<kbd>
+
+As you then update DNS IP settings, the results displayed should change to the new IP setting within the seconds specified in the TTL.
