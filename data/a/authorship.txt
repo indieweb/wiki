@@ -92,13 +92,6 @@ is similarly spoofed.
 
 http://checkmention.appspot.com allows you to test receiving a spoofed webmention from Jonathan Ive.
 
-=== Does not implement standards ===
-The algorithm described above does only rely on new markup, but does not consider the page's head meta and link tags with <tt>rel="author"</tt>. They have been used since HTML 3.02 and are still defined in HTML5:
-* http://www.w3.org/TR/REC-html32#meta
-** meta tags long abandoned in practice (with few exceptions, not author). Lacking any real world indieweb examples that depend/need this, makes no sense to burden consuming code with unreliable legacy hidden metadata. Better to encourage the less-bad rel=author link to a page with visible author information marked up with h-card. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 12:56, 26 July 2017 (PDT)
-* http://www.w3.org/TR/html5/links.html#linkTypes
-** rel=author was already in algorithm at step 6.1 when issue noted. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 12:56, 26 July 2017 (PDT)
-
 === multiple authors ===
 A lot of steps could be expanded (have discovery steps check for a list of authors, do "enrichment" steps for each of them individually) for dealing with multiple authors. Do we have examples of posts published with multiple authors?
 
@@ -126,6 +119,24 @@ A common practice, especially in WordPress themes(see example https://ma.tt/), i
 === WordPress sites offer h-cards with links to an author archive marked up as an h-card ===
 
 These author archives have no h-card of their own, and have the same h-entrys with author property h-cards linking back to the author archive.
+
+== Resolved Issues ==
+As [[#Issues|issues]] as resolved, they'll be moved here. Next step is to rewrite their resolutions as [[#FAQ|FAQs]] below.
+
+=== Consider head meta link tags ===
+The algorithm described above does only rely on new markup, but does not consider the page's head meta and link tags with <tt>rel="author"</tt>. They have been used since HTML 3.02 and are still defined in HTML5:
+* http://www.w3.org/TR/REC-html32#meta
+** '''RESOLVED WON'T FIX'''. meta tags have long been abandoned in practice (with few exceptions, not author). Lacking any real world indieweb examples that depend/need this, makes no sense to burden consuming code with unreliable legacy hidden metadata. Better to encourage the less-bad rel=author link to a page with visible author information marked up with h-card. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 12:56, 26 July 2017 (PDT)
+* http://www.w3.org/TR/html5/links.html#linkTypes
+** '''RESOLVED WORKS ALREADY'''. rel=author was already in algorithm at step 6.1 when issue noted. - <span class="h-card" style="white-space:nowrap">{{sparkline|https://twitter.com/t/profile_image}} [[User:Tantek.com|Tantek Çelik]]</span> 12:56, 26 July 2017 (PDT)
+
+Previously: this issue was originally named <i><span id="Does_not_implement_standards">Does not implement standards</span></i>. This is an example of a bad name for an issue because it is (1) Negative framing - it complains about what something is not rather than requesting something positive, (2) As a general statement, it is false, as of course the authorship algorithm is based on standards. Left here as an example, please avoid such negative framing overgeneral statements that are provably false, and instead, name your issue as something you want (use-case) but which does not appear to be handled, e.g. in this case, it was renamed to the actual request which was to "Consider head meta link tags".
+
+== FAQ ==
+=== What about meta author ===
+Q: Can the algorithm consider the meta author tag as described in http://www.w3.org/TR/REC-html32#meta ?
+
+A: No. Avoid [[meta]] tags. Old style meta tags (including "author") have largely been abandoned due to data rot and spam, two common results of invisible metadata.
 
 == Use Cases ==
 === Name avatar display in comments ===
