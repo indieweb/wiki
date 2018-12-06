@@ -117,11 +117,22 @@ Theoretical issues are grouped here for capturing purposes. If you find a real w
 ** Looking through the current document for <code>h-card</code>s in other places can help out when the document’s mark-up does not allow the <code>h-card</code> to be nested directly under the <code>h-entry</code>, [https://chat.indieweb.org/microformats/2017-11-20/1511137462728000 because of layout/DOM limitations]. See [https://chat.indieweb.org/microformats/2017-11-21#t1511277129777000 a discussion] on the <code>#microformats</code> [[discuss|IRC channel]]. (This time brought on by [[User:Keithjgrant.com|Keith J. Grant]].)
 *** Keith also wishes “there was a way to say the mf of element X is associated with the h-* defined by element Y.” [https://chat.indieweb.org/microformats/2017-11-21/1511278502855000] This is basically what is being done by having the <code>u-author</code> property map to any <code>h-card</code> on the page with a matching <code>u-url</code>. In the mapping use-case it makes sense to do so before retrieving external resources.
 
+=== Minimal H-Card Does Not Include Photo Property ===
+
+A common practice, especially in WordPress themes(see example https://ma.tt/), is to have an h-card with name and url only, but not a photo on individual h-entrys inside a feed. The expectation of a minimal h-card would suggest you follow the URL inside the h-card to find the photo, assuming your goal is to offer a visual representation of the individual.
+
+=== WordPress sites offer h-cards with links to an author archive marked up as an h-card ===
+
+These author archives have no h-card of their own, and have the same h-entrys with author property h-cards linking back to the author archive.
+
 == Use Cases ==
 === Name avatar display in comments ===
 In [[comments-presentation]], it describes how a site that accepts indieweb [[reply]] posts via webmention can retrieve those replies and display them as full-fledged comments on a post, including name and icon/avatar of commenter.
 
 [[h-card]] is the most common way that name, URL, photo information is published about a person on the web. Thus parsing for an author's [[h-card]] to retrieve their name and avatar makes the most sense.
+
+==== Minimal h-cards ====
+Maybe handle u-uid on h-cards for fallback for representative h-card? My site showed no avatars in comments with a minimal h-card like this: <code>&lt;a class="u-author h-card" href="https://fireburn.ru"&gt;Vika&lt;/a&gt;</code> until I removed h-card class from the markup. -- [[User:Fireburn.ru|Fireburn.ru]] ([[User talk:Fireburn.ru|talk]]) 16:56, 5 December 2018 (PST)
 
 === Name avatar display in a reader ===
 In a [[reader]] (feature of an IndieWeb site), it's nice to show the name and icon/avatar of the person whose posts you're reading from their indieweb home page h-feed.
