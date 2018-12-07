@@ -99,6 +99,22 @@ http://checkmention.appspot.com allows you to test receiving a spoofed webmentio
 A lot of steps could be expanded (have discovery steps check for a list of authors, do "enrichment" steps for each of them individually) for dealing with multiple authors. Do we have examples of posts published with multiple authors?
 * {{sknebel}}: all the steps that turn URLs into h-cards could be run for multiple author-pages. The main question IMHO would be if authors can be discovered from multiple places, or if they have to be in the same place? The first would mean early steps could not exit the algorithm, but would have to check further places for additional authors, so my first instinct would be to not allow this. (Theoretical pattern where this could come up: main author on h-feed level, with a "in collaboration with $Second_Author" on an individual post)
 
+== Theoretical Issues ==
+Issues are moved here when they have no real world examples, or all examples given don't actually illustrate the problem case. Please find real world examples for them.
+
+=== h-card without photo ===
+Warning: theoretical, needs actual real world examples.
+* https://ma.tt/ has no photo on permalinks or homepage - thus not helpful
+
+Issue:
+
+A common practice, especially in WordPress themes(see example https://ma.tt/), is to have an h-card with name and url only, but not a photo on individual h-entrys inside a feed. The IndieWeb plugin for Wordpress allows to have the URL point to the homepage, but can not modify the theme to not add a mini hCard. The expectation of a minimal h-card would suggest you follow the URL inside the h-card to find the photo, assuming your goal is to offer a visual representation of the individual.
+
+* {{sknebel}}: there's also the pattern of having a larger h-card in the sidebar (in WP through the h-card widget). For both, a possible change to the algorithm could take u-uid (or a single u-url) from the mini-card and use it as the author-page in the later stages of the algorithm. For the steps where an additional page is fetched, it'd be interesting how often this actually helps vs how often it doesn't produce a result. This could also benefit from integration into the consuming use case: check if there's actually properties not yet known before going further to find them.
+
+=== WordPress author archives ===
+These author archives have no h-card of their own, and have the same h-entrys with author property h-cards linking back to the author archive.
+
 === Other theoretical ===
 Theoretical issues are grouped here for capturing purposes. If you find a real world example of one of these, feel free to promote it to an actual issue with its own === subhead.
 
@@ -113,16 +129,6 @@ Theoretical issues are grouped here for capturing purposes. If you find a real w
 ** Applying the algo to <code>h-entry</code> objects for [[comments]] could potentially make for a bigger chance that a minimal person card has been used previously in source order. E.g. someone commenting on a post they were person tagged in.
 ** Looking through the current document for <code>h-card</code>s in other places can help out when the document’s mark-up does not allow the <code>h-card</code> to be nested directly under the <code>h-entry</code>, [https://chat.indieweb.org/microformats/2017-11-20/1511137462728000 because of layout/DOM limitations]. See [https://chat.indieweb.org/microformats/2017-11-21#t1511277129777000 a discussion] on the <code>#microformats</code> [[discuss|IRC channel]]. (This time brought on by [[User:Keithjgrant.com|Keith J. Grant]].)
 *** Keith also wishes “there was a way to say the mf of element X is associated with the h-* defined by element Y.” [https://chat.indieweb.org/microformats/2017-11-21/1511278502855000] This is basically what is being done by having the <code>u-author</code> property map to any <code>h-card</code> on the page with a matching <code>u-url</code>. In the mapping use-case it makes sense to do so before retrieving external resources.
-
-=== Minimal H-Card Does Not Include Photo Property ===
-
-A common practice, especially in WordPress themes(see example https://ma.tt/), is to have an h-card with name and url only, but not a photo on individual h-entrys inside a feed. The IndieWeb plugin for Wordpress allows to have the URL point to the homepage, but can not modify the theme to not add a mini hCard. The expectation of a minimal h-card would suggest you follow the URL inside the h-card to find the photo, assuming your goal is to offer a visual representation of the individual.
-
-* {{sknebel}}: there's also the pattern of having a larger h-card in the sidebar (in WP through the h-card widget). For both, a possible change to the algorithm could take u-uid (or a single u-url) from the mini-card and use it as the author-page in the later stages of the algorithm. For the steps where an additional page is fetched, it'd be interesting how often this actually helps vs how often it doesn't produce a result. This could also benefit from integration into the consuming use case: check if there's actually properties not yet known before going further to find them.
-
-=== WordPress sites offer h-cards with links to an author archive marked up as an h-card ===
-
-These author archives have no h-card of their own, and have the same h-entrys with author property h-cards linking back to the author archive.
 
 == Resolved Issues ==
 As [[#Issues|issues]] as resolved, they'll be moved here. Next step is to rewrite their resolutions as [[#FAQ|FAQs]] below.
