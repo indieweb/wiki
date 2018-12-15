@@ -288,6 +288,14 @@ If you wanted to have a user type in an email address to start out with, you wou
 
 We don't see a lot of that being done right now in the things that are running today.
 
+=== If you have no pre-existing registration, how are you identifying yourself? ===
+
+Clients are all identified by a URL. In the OAuth 2.0 world, the primary thing that client registration gives you is: it ensures that system exchanging the code is actually the same system the code was issued to.
+
+When all clients are public clients, like JavaScript apps and mobile apps, you don't get a secret when you register, so you have to register a callback URL. The  URL basically acts as authentication already in the existing OAuth 2.0 world and OpenID Connect, what we've done with IndieAuth is said that client IDs don't need to be pre-registered because the only thing it gives you is a way to put that information about the app there.
+
+So instead of pre-registration, registration is DNS. An application will be running at example.com, that's already an identifier that's unique in the system, that is used as the identifier, and if we need to find out information about the app we can go and look it up at that URL.
+
 == Issues ==
 For issues about the IndieAuth spec, please see the [https://github.com/indieweb/indieauth/issues IndieAuth GitHub project].
 
