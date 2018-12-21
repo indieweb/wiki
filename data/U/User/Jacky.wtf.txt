@@ -34,3 +34,20 @@ This is a place for me to drop some itches, ideas and thoughts around IndieWeb b
 * Event management site dedicated for IndieWeb members
 * IndieWeb compatible (or -first!) app store
 * Native libraries to interact with IndieWeb sites
+
+=== Syndicator Detection ===
+I'd want to have a way to detect and authenticate with a site that provides [[h-x-app]] information to expose what kind of syndication targets it can provide. The MF2 could look something like:
+
+<pre>
+<section class="h-x-app h-syndicator">
+  <h3 class="p-name"><a href="https://app.com" class="u-uid u-url">App</a></h3>
+  <p class="e-content">This service can retrieve syndication requests to the following sources:</p>
+  <ul>
+    <li><a href="#" class="u-target p-name">Twitter</a></li>
+    <li><a href="#" class="u-target p-name">GitHub</a></li>
+    <li><a href="#" class="u-target p-name">Mastodon</a></li>
+  </ul>
+</section>
+</pre>
+
+The above would expose to a site in question that the app can syndicate to a particular set of destinations. One could then use these values (<code>u-target</code>) in their syndication endpoint. Ideally, the app would know which user it's coming from based on the host name provided or via a [[webmention]] to determine the user in question.
