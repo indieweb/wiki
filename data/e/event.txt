@@ -448,16 +448,37 @@ Possible tangents:
 * Use the event use case to help explore and possibly drive the possibility of other single <code><nowiki><div class="h-*">…</div></nowiki></code> handling inside feed file items as a common extension point to feed files without having to update separate feed file formats/syntaxes themselves, thus supporting a growing and extensible set of indieweb [[posts]] types (especially [[responses]]) across all of them
 * ...
 
+=== Cancelled ===
+Sometimes you have to cancel an event, and indicate the event as cancelled on its permalink.
+
+Gathering examples towards establishing best practices
+
+IndieWeb examples:
+* {{aaronpk}} 2017: https://aaronparecki.com/2017/12/06/1/hwcpdx
+* {{t}} 2018: http://tantek.com/2018/360/e1/homebrew-website-club-sf
+
+Facebook example:
+* 2017-12-06 HWC PDX: https://www.facebook.com/events/352784491841109/
+
+Some design aspects:
+* "⚠️ This event was canceled" header before rest of event (t, fb)
+* strike-through on the time and place
+* permalink still works
+* does not return 410 (cancelled != deleted)
+
+iCalendar's VEVENT a "STATUS" property that has a "CANCELLED" value:
+* https://tools.ietf.org/html/rfc5545#section-3.8.1.11
+
+Previously: What about when an event is cancelled? Options:
+* Implement event cancellation as a [[delete]] and return 410, based on real world existing silo example:
+** [[Facebook]] notifies you when an event you've indicated interest in has been cancelled, but then clicking that notification doesn't go anywhere - the event permalink itself just 404s.
+** As of 2017 cancelled events are not deleted on FB. 
+
 === Response context CRUD ===
 Similar to the general [[reply-context#CRUD|reply context: CRUD]] protocol, when an event changes (name, location, times, description, etc.) you should send webmentions to all the responses to the event that you've accepted, e.g. to all:
 * [[RSVP]]s in response to your event
 * [[invitation]]s to your event
 * and all other generic responses like comments, likes, reposts
-
-What about when an event is cancelled? Options:
-* Implement event cancellation as a [[delete]] and return 410, based on real world existing silo example:
-** [[Facebook]] notifies you when an event you've indicated interest in has been cancelled, but then clicking that notification doesn't go anywhere - the event permalink itself just 404s.
-* ... other options?
 
 === Calendar Reminders ===
 Some event hosting silos, such as [[Eventbrite]] offer "Add to Calendar" functionality which allow users to add event reminders to the calendar system of their choice. Some example export options include [[ICS]] for standalone calendar software such as Apple Calendar or Microsoft Outlook and links that pre-populate the event creation form for web-based calendars such as [[Google Calendar]].
