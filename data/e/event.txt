@@ -472,7 +472,21 @@ iCalendar's VEVENT a "STATUS" property that has a "CANCELLED" value:
 Previously: What about when an event is cancelled? Options:
 * Implement event cancellation as a [[delete]] and return 410, based on real world existing silo example:
 ** [[Facebook]] notifies you when an event you've indicated interest in has been cancelled, but then clicking that notification doesn't go anywhere - the event permalink itself just 404s.
-** As of 2017 cancelled events are not deleted on FB. 
+** As of 2017 cancelled events are not deleted on FB.
+
+=== Status ===
+Events can have the notion of a "status", to indicate whether it is '''[[#Cancelled|cancelled]]''', or some other state.
+
+Silo examples:
+* [[Facebook]] events can be cancelled then have a "cancelled" status.
+* [[Google Calendar]] events have a status that can be "Confirmed", "Tentative", "Cancelled". https://developers.google.com/calendar/v3/reference/events/update(per [https://chat.indieweb.org/dev/2018-12-27/1545869134116200 2018-12-27 dev chat])
+
+IndieWeb examples:
+* See '''[[#Cancelled|cancelled]]''' examples
+* No other (non-normal, non-cancelled events known)
+
+iCalendar's VEVENT a "STATUS" property that has similar values to Google Calendar (which likely got them from iCalendar)
+* https://tools.ietf.org/html/rfc5545#section-3.8.1.11
 
 === Response context CRUD ===
 Similar to the general [[reply-context#CRUD|reply context: CRUD]] protocol, when an event changes (name, location, times, description, etc.) you should send webmentions to all the responses to the event that you've accepted, e.g. to all:
