@@ -25,6 +25,65 @@ Many silo-based [[feed readers]] support OPML import/export as well as OPML subs
 * [http://opml-gen.ovh/ OPML Generator] input a list of RSS feeds and generate an OPML file
 * [https://codebeautify.org/opmlviewer OPML viewer]
 
+== XSL (making an OPML file look like HTML) ==
+
+[https://en.wikipedia.org/wiki/XSL XSL] is an XML extension that allows on the fly transformation of an XML document. It can be used to present an XML file - on this case, an OPML file - it a human readable, HTML-looking format.
+
+Example:
+<pre>
+<?xml version="1.0" encoding="ISO-8859-1"?>
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+        <xsl:template match="/opml">
+            <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+                <head>
+                    <title><xsl:value-of select="head/title"/></title>
+                    <style type="text/css">
+                    </style>
+                </head>
+                <body>
+                    <h1><xsl:value-of select="head/title"/></h1>
+                    <p><time><xsl:value-of select="head/dateCreated"/></time></p>
+                    <xsl:apply-templates select="body/outline"/>
+                </body>
+            </html>
+        </xsl:template>
+        <xsl:template match="outline" xmlns="http://www.w3.org/1999/xhtml">
+            <xsl:choose>
+                <xsl:when test="@type">
+                    <xsl:choose>
+                        <xsl:when test="@xmlUrl">
+                            <li>
+                                <a href="{@htmlUrl}"><xsl:value-of select="@text"/></a>
+                            </li>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <li>
+                                <a href="{@url}"><xsl:value-of select="@text"/></a>
+                            </li>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:when>
+                <xsl:otherwise>
+                    <details open="open">
+                        <summary>
+                            <xsl:value-of select="@text"/>
+                        </summary>
+                        <ul>
+                            <xsl:apply-templates select="outline"/>
+                        </ul>
+                    </details>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:template>
+    </xsl:stylesheet>
+</pre>
+
+It needs to be inserted in the OPML as:
+
+    <?xml-stylesheet type="text/xsl" href="https://petermolnar.net/following.xsl"?>
+
+following the `<?xml` definition, and can be styles with ordinary CSS within the `<style></style>` block.
+
 == Brainstorming ==
 In the context of IndieWeb, the idea of OPML could be interesting as a representation of whom you [[follow]]. Since it is supported by a variety of sources, It could be a good candidate to solve the "how do you discover people" question.
 
