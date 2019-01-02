@@ -217,6 +217,29 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== tags with spaces ===
+Background: how to create space separated labels via _ in hashtags per [https://chat.indieweb.org/dev/2018-11-16#t1542392876812700 2018-11-16 #dev chat discussion]
+
+Use-case: 
+* setting or adding labels to issues (typically on GitHub) that are already using labels with spaces in them. 
+** Enable automatic Bridgy Publish [[POSSE]] a hashtag to [[GitHub]] as a Label (which may have spaces), both on new issues, and tag-of replies.
+** Example existing labels with spaces: (examples needed from CSSWG, SocialWG repos/issues)
+
+Designs:
+* Mediawiki-ish style: [[hashtag]] underscores (_) converted to spaces for their equivalent "category", with exceptions:
+** NNNN_NNN, NNNN_NN_NN = dates, convert those to "-" (perhaps convert any *N_N* to *N-N*)
+** X__Y treat as literal "_" and convert to X_Y
+* OR Backcompat: [[hashtag]] double underscore (__) convert to space for their equivalent "category". Notes:
+** "__" rare (not used?) in hashtags today (certainly not in any more my posts)
+** maintains any/all existing X_Y single underscores (no exception needed for NNNN_NNN, NNNN_NN_NN to avoid conversion into spaces between numbers)
+** optional convert any *N_N* to *N-N* because actual ISO Date category names YYYY-DDD and YYYY-MM-DD read nicer than with underscores, and numbers rarely (if ever?) use underscores for separators for anything meaningful, whereas dashes between numbers are common in serial numbers, product codes, confirmation numbers etc.  
+
+Document chosen design as a brainstorm:
+* in [[hashtags#Brainstorming]]
+
+Implementation:
+* Implement space separated labels via __ or _ per design above in hashtags, in [[auto-tag]] function
+
 === better post creation UI ===
 Iteratively incrementally improve Falcon post [[create|creation]] UI.
 
