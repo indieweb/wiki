@@ -141,19 +141,42 @@ And then send a webmention from your tag reply permalink to <nowiki>http://a.exa
 Doing so will tag that postpermalink37 with the tags "indieweb" and "indiewebcamp".
 
 === tag and fallback ===
-To tag some other post, and provide fallback reply text to display for sites that support receiving [[reply]] posts but not tag-of posts, use the u-tag-of markup, and a u-in-reply-to plus p<span></span>-summary for the fallback text.
+To tag some other post, and automatically provide synthetic fallback reply text to display for sites that support receiving [[reply]] posts but not tag-of posts, use the <code>u-tag-of</code> markup, and a <code>u-in-reply-to</code> plus <code>p<span></span>-summary</code> for the fallback text (and explicitly no <code>e-content</code>)
 
 E.g.
-* "Tantek tagged Sebastian in this photo."
+* summary text: "🏷 Tantek added labels indieweb &amp; indiewebcamp to issue 5 of GitHub project “coolproj”"
+
 Advantages:
 * Something shows up instead of nothing, on sites that at least show [[comments]]
-* Fallback as new technology discovery mechanism. The "third person" verbage implies that there may be more markup for the specific type of response that the receiving site / person may want to investigate and support! 
+* Fallback as new technology discovery mechanism. The "third person" verbiage implies that there may be more markup for the specific type of response that the receiving site / person may want to investigate and support! 
 
-(markup example needed)
+Building on prior example:
+
+<pre>
+<div class="h-entry">
+<span class="p-summary">🏷 
+ <span class="p-author h-card">Tantek</span> added labels 
+ ”<span class="p-category">indieweb</span>“ &amp;
+ ”<span class="p-category">indiewebcamp</span>“
+ to <a class="u-tag-of u-in-reply-to" 
+       href="http://github.com/u/coolproj/issues/5">
+ issue 5 of GitHub project “coolproj”
+ </a>
+</span>
+<time class="dt-published" datetime="YYYY-MM-DD HH:MM">5 hours ago</time>
+</div>
+</pre>
+
+And for a person-tag, see the [[#person tag reply|person tag reply]] brainstorm's second markup example which just adds the necessary <code>p-summary</code> markup.
 
 === tag and comment ===
-Alternatively, does this use-case make sense? To tag some other post, and comment on it at the same time:
+Alternatively, does this use-case make sense?
 
+Tag some other post, and comment on it at the same time?
+
+'''2019-007 answer: No. Based on [https://github.com/snarfed/bridgy/issues/832 Bridgy #832 discussion]''', such a multi-interaction response is both an unnecessary complexification of UX (users understand tagging and commenting as separate actions, thus posts, not as one action/post), and consuming code logic.
+
+<del datetime="2019-01-07><div>
 Inside your usual [[h-entry]], use:
 <pre>
 <a class="u-in-reply-to u-tag-of" href="http://a.example.com/postpermalink37">...</a>
@@ -166,6 +189,7 @@ and <span class="p-category">indiewebcamp</span>.
 And then send a webmention from your tag reply permalink to <nowiki>http://a.example.com/postpermalink37</nowiki>.
 
 Doing so will tag that postpermalink37 with the tags "indieweb" and "indiewebcamp", as well as make the comment <blockquote>This is a great post about the indieweb and indiewebcamp</blockquote>
+</div></del>
 
 Related [[Bridgy]] issue:
 * [https://github.com/snarfed/bridgy/issues/832 #832: github publish: crash on reply post with tag-of]
@@ -193,6 +217,23 @@ Interested:
 * {{t}} is interested in implementing this.
 ** [[Falcon#one-off_person-tag_response_to_photo]]
 * ...
+
+With explicit fallback markup p-summary to generate summary text for receivers that don't recognize u-tag-of (yet)
+* "Amber tagged Bea and Crystal in Dawn’s photo of Bea and Crystal"
+
+<pre><nowiki>
+<span class="h-entry">
+<span class="p-summary">
+ <a class="p-author h-card" href="http://a.example.com/">Amber</a> 
+  tagged 
+ <a href="http://b.example.com/" class="u-category h-card">Bea</a> and 
+ <a href="http://c.example.com/" class="u-category h-card">Crystal</a> 
+ in 
+ <a class="u-tag-of u-in-reply-to" href="http://d.example.com/permalink47">
+  <img src="http://d.example.com/photo47.png" alt="Dawn’s photo of Bea and Crystal" /></a>
+</span>
+</span>
+</nowiki></pre>
 
 ==== person tag multiple URLs ====
 Similar to [[person-tag]]s in posts themselves, a person-tag reply should be able to embed an h-card with multiple URLs, e.g. a primary URL to the person's personal site, and URLs for their [[identity-elsewhere]].
