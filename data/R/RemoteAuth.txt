@@ -1,0 +1,69 @@
+https://indieweb.org/RemoteAuth
+
+<dfn>'''RemoteAuth'''</dfn> is the working title of a conceptual extension to IndieAuth that allows an external system to approve login requests. It is still in the early prototype phase.
+
+== Goals ==
+Allow an remote application to approve login requests to a secure server. It's goal is to ensure the integrity of communication between a secure server and a remote application that can be used either as a no password login or as a 2FA system.
+
+== use cases ==
+* allow for no password logins through the use of trusted PWAs or Native apps.
+* allow for 2FA support in systems that don't want to have to build their own 2FA integration
+
+== initial draft ==
+This is a brainstorming of a proposed extension to IndieAuth that would allow for a remote application to confirm the login for a user. This could potentially be used either for 2FA or as a primary login.
+
+The idea was first conceived in this issue: https://github.com/EdwardHinkle/indigenous-ios/issues/99
+
+The initial proposed concept for discussion is as follows:
+
+* User's Site defines their existing Authentication System
+* RemoteAuth App an external app that can approve and reject RemoteAuth requests
+
+=== System Setup Flow ===
+* Within the User's Site, after they are already authenticated, they select the fact that they want to enable RemoteAuth.
+* The User's Site will send a Remote Approval Request to their Authorization Endpoint.
+** The Remote Setup Request is similar to the standard Authorization Request (6.2.1) to request a token, but it sends a special scope.
+** <code>scope=remote_auth:request</code> the remote_auth:request scope is asking for a token that allows it to initiate a remote_auth session.
+** The Remote Setup Response is identical to the standard Authorization Response (6.2.2) and then the rest of the IndieAuth flow is completed (6.3.1, 6.3.2, 6.3.3) in order to retrieve a token with the <code>remote_auth:request</code> scope.
+
+=== Remote Setup Flow ===
+* User logs in to a mobile app that supports RemoteAuth, from here on called the RemoteAuth App, using IndieAuth.
+* The RemoteAuth App sends a Remote Confirm Setup Request to the Remote Authorization Endpoint it essentially uses the standard Authorization Request (6.2.1) to request a token, but sends a special scope and two extra parameters.
+** <code>scope=remote_auth:confirm</code> the remote_auth:confirm scope is asking for a token that allows it to approve or reject a remote_auth session.
+** <code>remote_auth_uri</code> that is the callback url that the authorization endpoint will contact when a login request is issued. The remote_auth_uri has to match the same requirements of a callback_uri such as being the same domain as the client_id or having the value found on the h-app of the client_id.
+** <code>remote_auth_state</code> is a string that the authorization endpoint must send so that the app knows it came from the auth endpoint.
+* The Remote Authorization Endpoint should store the <code>remote_auth_state</code> and the <code>remote_auth_uri</code> along with the <code>client_id</code>. so it can be used in the future, and sends uses the rest of the information to send a standard Authorization Request (6.2.1) to the Authorization Endpoint replacing the <code>client_id</code> and <code>redirect_uri</code> with it's own information so that the IndieAuth Authorization Screen will display the client as the Remote Auth Endpoint since it may be hosted separately from the Authorization Endpoint and should be treated as a completed separate client.
+* When the user approves the Remote Confirm Setup Request, the authorization endpoint sends the standard Authorization Response (6.2.2) back to the Remote Authorization Endpoint, which then forwards that information back to the original <code>redirect_uri</code>.
+* The rest of the IndieAuth flow is completed (6.3.1, 6.3.2, 6.3.3), returning a token with the <code>remote_auth:confirm</code> scope to the App that can be used to confirm or reject a Remote Confirmation Request.
+
+=== Remote Login Flow for Primary Login ===
+* User arrives at their site's login page
+* The User's site knows it wants to use Remote Login, so it sends a Remote Authorization Request to the Remote Authorization Endpoint. This endpoint can be bundled with an Authorization and Token endpoint or separate.
+** A Remote Authorization Request should be a POST request to the Remote Authorization endpoint with a Token that contains the <code>remote_auth:request</code> scope in the Authorization HTTP header. It also contains the following parameters in the body.
+*** <code>response_type=id</code> - (optional) Indicates that this is an authentication request. if this parameter is missing, the endpoint MUST default to <code>id</code>.
+*** <code>me</code> - The profile URL of the user trying to login
+*** <code>redirect_uri</code> the redirect URL indicating where the Remote Authorization Response should be sent.
+*** <code>state</code> A parameter set by the client which will be included when the user is redirected back to the client. This is used to prevent CSRF attacks. The state value MUST be returned unmodified.
+** When a Remote Authorization Request is retrieved, the Remote Authorization Endpoint must Verify the Access Token using IndieAuth 6.3.4 and confirm the scope is <code>remote_auth:request</code>.
+* The Remote Authorization Endpoint upon receiving a valid Remote Authorization Request should send a Remote Confirmation Request to the <code>remote_auth_uri</code> that is stored with this <code>client_id</code>.
+** The Remote Confirmation Request must contain the following parameters:
+*** <code>remote_auth_state</code> - the state stored from the original Remote Confirm Setup Request.
+*** <code>me</code> the me value
+*** <code>redirect_uri</code> - the url on the Remote Auth Endpoint that is waiting for the Remote Confirmation Response.
+*** <code>state</code> - A state that must be returned unmodified in the response.
+** The RemoteAuth App will display a notification to the user that a login request has been requested. The user can Accept or Deny.
+** The RemoteAuth App will send a Remote Confirmation Response back to the <code>redirect_uri</code> it received in the request. A Token with the <code>remote_auth:confirm</code> scope needs to be in the Authorization http header of the response, along with the following parameters:
+*** <code>remote_auth_login</code> as a boolean where true is approved and false is rejected.
+*** <code>state</code> - the unmodified state from the original request.
+* When the remote Authorization Endpoint receives the Remote Confirmation Response, it verifys the token with the Token endponit using IndieAuth 6.3.4, and if it finds a valid token with the <code>remote_auth:confirm</code> scope, it will send a Remote Authorization Response back to the User's site.
+** The Remote Authorization Response must contain the following parameters:
+*** <code>code</code> - This would be an authorization code generation by the remote authorization endpoint. The code MUST expire shortly after it is issued. This should be treated just like a regular authorization endpoint code.
+*** <code>remote_auth_login</code> as a boolean where true is approved and false is rejected
+*** <code>state</code> the unmodified state from the original request.
+* When the User's Site received the Remote Authorization Response, it should verify that the <code>state</code> matches the original state sent, and then it should send a Remote Authorization Code Verification Request back to the Remote Authorization Endpoint.
+** The Remote Authorization Code Verification should be a POST request with the following parameters:
+*** <code>code</code> - the remote authorization code received in the Remote Authorization Response.
+*** <code>client_id</code> - MUST match the original client_id sent
+*** <code>redirect_uri</code>
+* A Remote Authorization Code Verification Response will send back HTTP 200 with a JSON object with the <code>me</code> if it is valid. If it is not valid, it will send back an HTTP 400 as specified in OAuth 2.0.
+* The User's Site should consider the user logged in and start a session with the provided <code>me</code>.
