@@ -53,6 +53,44 @@ I'd want to have a way to detect and authenticate with a site that provides [[h-
 
 The above would expose to a site in question that the app can syndicate to a particular set of destinations. One could then use these values (<code>u-target</code>) in their syndication endpoint. Ideally, the app would know which user it's coming from based on the host name provided or via a [[webmention]] to determine the user in question.
 
+=== Format Detection ===
+A request to one's [[Micropub]] endpoint can give information about the kind of formats in which one can set information to for creating new contet.
+
+==== Determining ====
+
+<pre>
+GET /micropub?q=formats&for[]=entry
+
+{
+  "type": ["h-entry"],
+  "formats": [
+    {
+      "name": "GitHub Flavored Markdown",
+      "uid": "markdown-ghe",
+      "help": "https://github.github.com/gfm/"
+    },
+    {
+      "name": "Gruber's  Markdown",
+      "uid": "markdown",
+      "help": "https://daringfireball.net/projects/markdown/"
+    },
+    {
+      "name": "Liquid",
+      "uid": "liquid",
+      "help": "https://shopify.github.io/liquid/"
+    }
+  ]
+}
+</pre>
+
+==== Posting With it ====
+
+<pre>
+POST /micropub?h=entry&content[type]=markdown-ghe&content[formatted]=<FORMATTED>
+
+201
+</pre>
+
 == See Also ==
 
 * https://twitter.com/seldo/status/1083214027289899008
