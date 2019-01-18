@@ -57,6 +57,13 @@ The above would expose to a site in question that the app can syndicate to a par
 A request to one's [[Micropub]] endpoint can give information about the kind of formats in which one can set information to for creating new contet.
 
 ==== Determining ====
+Another option to [https://www.w3.org/TR/micropub/#querying query from a Micropub client]. The fields that come back under 'formats' would have the keys:
+
+* '''name''': The name to show to the client
+* '''uid''': The unique ID that the [[Micropub]] server would recognize.
+* '''help''': Link to help information about formatting options.
+
+If we use common UIDs all around then clients can switch to compatible editors with no problem.
 
 <pre>
 GET /micropub?q=formats&for[]=entry
@@ -66,7 +73,7 @@ GET /micropub?q=formats&for[]=entry
   "formats": [
     {
       "name": "GitHub Flavored Markdown",
-      "uid": "markdown-ghe",
+      "uid": "markdown+ghe",
       "help": "https://github.github.com/gfm/"
     },
     {
