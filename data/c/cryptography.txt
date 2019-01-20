@@ -4,6 +4,18 @@ https://indieweb.org/cryptography
 
 '''<dfn>cryptography</dfn>''' is a way of protecting communications and data so that only the intended recipients can access it.
 
+== Cryptography in Protocol Design ==
+
+Including cryptography in the application layer of protocols has not worked well historically. It's best to use cryptography in the transport layer so that the cryptography can evolve and improve, while the application layer doesn't need to change.
+
+=== Successful Examples ===
+* [[HTTPS]] - The HTTP vocabulary does not include any cryptography, it is just a mechanism of describing requests and responses. Instead, the HTTP client first initiates a TLS connection, and then sends the plain HTTP commands over that. From the client's point of view, the cryptography is transparent. This has allowed the SSL/TLS versions to change over the years without having to change the HTTP vocabulary and applications.
+* [[OAuth 2.0]] - OAuth 2.0 relies on HTTPS for all of its security rather than defining its own cryptographic methods. This has led to widespread adoption and makes libraries much easier to write.
+
+=== Failed Examples ===
+* OAuth 1 - The original version of OAuth included cryptographic signatures as part of the protocol. This led to complex implementations, and also required that secret keys were maintained in every OAuth client. Since it's not possible to ship secret keys in mobile apps, this prevented OAuth 1 from gaining widespread use in mobile apps, and eventually led to its deprecation and eventual replacement by OAuth 2.
+
+
 == See Also ==
 
 * [[HTTPS]]
