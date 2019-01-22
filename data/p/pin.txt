@@ -71,6 +71,19 @@ Any special presentational considerations for pinned posts? Besides being shown 
 * {{t}} Just an [[h-entry]]. Should a pinned post have any different markup than a regular post? Only if there is a specific use-case need, otherwise, it's just a post.
 * {{t}} Still part of explicit (or implicit) [[h-feed]] on the page. Since a pinned post should only be shown once in a stream (instead of twice, at the top and in the stream in sort order), the pinned post h-entry should be either explicitly in the same h-feed, or at least at the same level (from a [[microformats2]] parser perspective) as the other h-entrys on the page, so that h-feed consuming code will just include it in the overall stream it presents to readers etc.
 
+* {{kevinmarks}} mastodon's api has a 'pinned' [https://github.com/tootsuite/documentation/blob/master/Using-the-API/API.md#status boolean] but that doesn't show up in the h-feed except as:
+
+ <nowiki><div class="status__prepend">
+<div class="status__prepend-icon-wrapper">
+<i class="status__prepend-icon fa fa-fw fa-thumb-tack"></i>
+</div>
+<span>
+Pinned toot
+</span>
+</div>
+</nowiki>
+The Atom feed doesn't have the pinned statuses in.
+
 === tag or category specific ===
 * I want to be able to pin posts in different feeds, ie. on certain tag pages. So the post could still appear chronologically in places where it's not pinned. - {{rhiaro}}
 * Note: {{aaronpk}} has implemented this, e.g. https://aaronparecki.com/tag/100daysofindieweb
