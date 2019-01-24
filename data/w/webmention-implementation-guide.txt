@@ -4,7 +4,7 @@ https://indieweb.org/webmention-implementation-guide
 
 The beauty of simple protocols is that you can do most of this manually very easily.
 <span id="rel_webmention"></span>
-* Given a target to which you want to send a webmention, you need to first discover it's webmention endpoint:
+* Given a target to which you want to send a webmention, you need to first discover its webmention endpoint:
  <nowiki>curl -i -s $target | grep 'rel="webmention"'</nowiki>
 ** Note: this is only an approximation, your implementation MUST accept a "webmention" value among the space separated set of terms in the 'rel' attribute. Older implementations may use <code style="display:block"><nowiki>rel="http://webmention.org/"</nowiki></code> and some may use both: <code style="display:block"><nowiki>rel="webmention http://webmention.org/"</nowiki></code> neither of which are discovered by the grep above. Some may use single quotes (or no quotes at all) to surround the <code>webmention</code> rel value. Still others may only support discovery with an HTTP Link header (e.g. [[Taproot]]). Compliant implementations must check the HTTP Link headers for the rel value first, and if not found then parse for the rel value on a <code>&lt;link></code> or <code>&lt;a></code> element in the <code>&lt;head></code> per the HTML specification on parsing rel values.
 
