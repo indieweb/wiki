@@ -5,12 +5,33 @@ https://indieweb.org/h-feed
 == How ==
 === How to markup ===
 Mark up your 
-* index page with class="h-feed" (e.g. on the <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code>)
+* index your feed container with class="h-feed" (e.g. on the <code>&lt;html&gt;</code> or <code>&lt;body&gt;</code> or within a <code>section</code>)
 * its top level <code>&lt;h1&gt;</code> with class="p-name"
 ** if it links to the index (itself) then class="u-url" on that hyperlink
 ** otherwise if you lack any top level links, this works: <code><nowiki><a class="u-url" href="/"></a></nowiki></code>
 * markup the [[h-card]] you already have on your index page with class="p-author"
 * and add class="u-photo" on the representative photo of your index page (e.g. banner etc.), or leave it out and let consumers imply/use the u-photo of the p-author h-card you marked up in the previous step
+* add <code>rel=prev</code> and <code>rel=next</code> links within your h-feed to provide support for [[pagination]]
+
+Example markup below:
+
+<pre>
+<section class="h-feed">
+  <h2 class="p-name"><a href="/feed" class="u-url">My h-feed</a></h2>
+  <div class="h-entry">
+    <a href="/entry/1" class="u-url p-name">Entry #1</a>
+  </div>
+  <div class="h-entry">
+    <a href="/entry/2" class="u-url p-name">Entry #2</a>
+  </div>
+    ...
+  <div class="h-entry">
+    <a href="/entry/5" class="u-url p-name">Entry #5</a>
+  </div>
+  <a href="/next" rel="next">Next</a> &mdash; <a href="/previous" rel="prev">Previous</a>
+</section>
+<a class="h-card u-url u-uid p-name">Jane S. Doe</a>
+</pre>
 
 === How to test ===
 Feeds marked up with h-feed should work in the same way as simple lists of h-entries. See [[feed#How_To_Test|How to Test Feeds]].
