@@ -6,6 +6,45 @@ https://indieweb.org/RDFa
 
 RDFa adds several attributes to standard HTML: <code>typeof</code> to specify an RDF resource type, <code>vocab</code> to specify the schema containing the type, and (much more plentifully) <code>property</code> to specify the field names described by markup nodes. Microformats use the already existing <code>class</code> attribute for all these purposes, following common [[Semantic HTML]] practices.
 
+== Minimal markup example ==
+
+This is a minimal article, with [[microformats]], [[microformats2]], and RDFa, in HTML5.
+<pre>
+<main role="main" vocab="http://schema.org/" typeof="Blog WebPage">
+    <article class="h-entry hentry singular" property="blogPost" typeof="BlogPosting" lang="en">
+        <header>
+            <h1 class="entry-title p-name" property="headline">article title</h1>
+            <img class="u-featured" property="image" src="https://domain.com/article.jpg" />
+        </header>
+
+        <div class="e-summary entry-summary" property="description">
+            <p>Short summary of the article.</p>
+        </div>
+
+        <div class="e-content entry-content" property="articleBody">
+            Long article body
+        </div>
+
+        <footer>
+            <time class="dt-published dt-updated published updated" datetime="1970-01-01T00:00:00+00:00" property="dateModified datePublished">1970-01-01 00:00</time>, by
+            <span class="p-author h-card vcard" property="author" typeof="Person">
+                <img class="photo avatar u-photo u-avatar" property="image" src="https://domain.com/author.jpg" alt="Photo of author" />
+                <a class="fn p-name url u-url u-uid org" property="url" href="https://domain.com/">
+                    <span property="name">Author Name</span>
+                </a>
+            </span>, published by
+            <span property="publisher" typeof="Organization">
+                <span property="logo" typeof="ImageObject">
+                    <img src="https://domain.com/logo.jpg" alt="publisher image" property="url" />
+                </span>
+                <span property="name">domain.com</span>
+                <a href="https://domain.com" property="url">https://domain.com</a>
+            </span>
+        </footer>
+    </article>
+</main>
+</pre>
+
 == See Also ==
 * [[RDF]]
 * [http://enwp.org/RDFa Wikipedia:RDFa]
