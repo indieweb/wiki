@@ -6,7 +6,9 @@ An '''<dfn>RSVP</dfn>''' is a [[reply]] to an [[event]] post that says whether t
 
 * See '''[[rsvps]]''' for how to and examples of displaying RSVPs received on your events from other sites!
 
-<div style="background:#ffffcc; padding: 8px; margin: 20px 0; border-radius: 8px;">Looking for a quick way to RSVP to [[next-iwc|the next IndieWebCamp]? [https://gist.github.com/aaronpk/c40a01bd4ffb8e62dcbb9a9e1bf0759d Try this HTML template]!</div>
+<div style="background:#ffffcc; padding: 8px; margin: 20px 0; border-radius: 8px;">Looking for a quick way to RSVP to [[next-iwc|the next IndieWebCamp]]? See:
+* '''[[#How_to_publish|How to publish an RSVP]]'''
+</div>
 
 == Why ==
 Why implement RSVP posts?
@@ -46,12 +48,16 @@ Or if you're using another tool (like your own [[CMS]]) then:
 '''1.''' Create a [[reply]] post and use the [http://microformats.org/wiki/h-entry#p-rsvp h-entry <code>p-rsvp</code> property] to specify your RSVP status. Here's a minimal RSVP post example:
 <pre>
 &lt;div class="h-entry"&gt;
+  &lt;a class="p-author h-card" href="HTTP://YOURSITE.EXAMPLE.ORG/"&gt;
+    &lt;img src="HTTP://EXAMPLE.ORG/YOURPHOTO.JPG" alt=""/&gt;
+      YOUR FULL NAME HERE&lt;/a&gt;:
  RSVP &lt;span class="p-rsvp"&gt;yes&lt;/span&gt; 
- to &lt;a href="http://example.com/event" class="u-in-reply-to"&gt;IndieWeb Example Event&lt;/a&gt;
+ to &lt;a href="HTTP://EXAMPLE.ORG/EVENTURL" class="u-in-reply-to"&gt;INDIEWEB EVENT&lt;/a&gt;
 &lt;/div&gt;
 </pre>
+Replace the ALLCAPS URLs and LINK TEXT with info for you (your site, photo, name), and the event (event link, name).
 
-Note: If your theme already adds the <code>h-entry</code> class, then you will need to leave out the wrapper <code>&lt;div class="h-entry"&gt;</code> tag.
+Note: If your theme already adds the <code>h-entry</code> class, then you will need to leave out the wrapper <code>&lt;div class="h-entry"&gt;</code> tag, and the <code>"p-author h-card"</code> if your theme already includes authorship information.
 
 See example as a whole page: http://codepen.io/iamjessklein/pen/rLXwOw
 
@@ -60,19 +66,6 @@ Possible RSVP values: <samp>yes</samp>, <samp>no</samp>,  <samp>maybe</samp>, <s
 '''2.''' Send a [[Webmention]] to the event post as you would for a reply to any post.
 
 '''3.''' You should include author information in your RSVP post so the event knows who is attending (and then send another Webmention so the event page gets the update).
-
-Here's another example with explicit author name and icon, in case your site or blog does not already provide that on the page.
-
-<pre>
-&lt;div class="h-entry"&gt;
- &lt;a class="p-author h-card" href="http://mysite.example.org"&gt;
-   &lt;img alt="" src="http://mysite.example.org/icon.jpg"/&gt;
-   Supercool Indiewebauthor&lt;/a&gt;: 
- RSVP &lt;span class="p-rsvp"&gt;yes&lt;/span&gt; 
- to &lt;a href="http://example.com/event" class="u-in-reply-to"&gt;IndieWeb Example Event&lt;/a&gt;
-&lt;/div&gt;
-</pre>
-
 
 See [[reply#Make_a_comment]] for more general details on posting replies.
 
