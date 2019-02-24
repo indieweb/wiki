@@ -15,6 +15,30 @@ https://indieweb.org/migration
 # ... 
 # ...
 
+=== Previewing your site at the new host ===
+If you'd like to preview your site at the new host, before switching DNS or before your DNS changes have propagated, you can "trick" your computer into thinking that your domain has moved by editing your hosts file.
+
+First you'll need to know the IP address of your new host. You can ask your new DNS servers this if you don't know it some other way:
+
+<pre>
+dig +short a example.com @ns1.dreamhost.com
+</pre>
+
+* Replace example.com with the domain you are moving
+* Enter your new host's nameservers in place of ns1.dreamhost.com
+
+You should see the IP address returned on the command line. If you don't get back an answer, then something isn't ready at the new web host. 
+
+Then you'll need to edit your hosts file (<code>/etc/hosts</code>). This will usually have to be done by the root user on your computer. Add a line to your hosts file with the new IP address and the domain name.
+
+<pre>
+75.119.207.166  example.com
+</pre>
+
+Now when you visit your domain it should be pulling from the new host. You may have to close all existing tabs, or restart your browser, in order for your browser to not return the old cached IP address.
+
+If you aren't sure whether you're looking at the new host, you can make some change on the new server and see if it's reflected. For example adding a new file to your server, or changing some text on your home page.
+
 == Organization Examples ==
 === DreamHost Community ===
 [[DreamHost]] moved their community discussion platform from [[MyBB]] to [[Discourse]], and migrated their previous user accounts and forum content as well. They migrated some URLs from the old platform to the new platform, but apparently did not migrate the section under "old forums". 
