@@ -9,7 +9,7 @@ https://indieweb.org/rsync
 
 == Example Commands ==
 
-The command below can be used to migrate a website from one host to another. This would be run on the host you are migrating **from**.
+The command below can be used to migrate a website from one host to another. This would be run on the host you are migrating ''from''. (You can swap the order of the from and to paths if you wanted to run this on the new host and pull from the old host.)
 
 <pre>
 rsync -avz --delete --progress public/ aaronpk@caldera.dreamhost.com:~/aaronpk.com/
@@ -28,13 +28,13 @@ Details
 ** <code>A</code> - this option preserves acls, so "a" disables it
 ** <code>X</code> - this option preserves extended attributes, so "a" disables it
 * <code>v</code> - "verbose" shows each file that is copied
-* <code>z</code> - compresses data in transit, can significantly speed things
-* <code>--delete</code> - removes any files at the destination that are not present in the source folder. **Make sure you don't have anything at the destination you care about if you include this!**
+* <code>z</code> - compresses data in transit, can significantly speed things up
+* <code>--delete</code> - removes any files at the destination that are not present in the source folder. ''Make sure you don't have anything at the destination you care about if you include this!''
 * <code>--progress</code> - will report the progress as a percentage so that you can see how far along the copy is
-* <code>public/</code> - The first path is where to copy **from**. 
+* <code>public/</code> - The first path is where to copy ''from''. 
 ** By including the trailing slash, this will copy the entire contents of this folder, including hidden files, which would not be included if you specified <code>*</code>.
 ** The files will be created at the remote destination directly, the "public" folder will not be created at the destination.
-* <code>aaronpk@caldera.dreamhost.com:~/aaronpk.com/</code> - The second path is where to copy **to**.
+* <code>aaronpk@caldera.dreamhost.com:~/aaronpk.com/</code> - The second path is where to copy ''to''.
 ** <code>aaronpk@caldera.dreamhost.com</code> - This should match however you SSH into your new server. username @ hostname
 ** <code>:</code> - This is a separator between the SSH command and the path
-** <code>~/aaronpk.com/</code> - The tilde is the home directory, then specify the folder of the web root at the new host. **Make sure to include the trailing slash** in order to get the files to end up in the right spot
+** <code>~/aaronpk.com/</code> - The tilde is the home directory, then specify the folder of the web root at the new host. ''Make sure to include the trailing slash'' in order to get the files to end up in the right spot
