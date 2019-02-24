@@ -9,10 +9,12 @@ https://indieweb.org/rsync
 
 == Example Commands ==
 
-The command below can be used to migrate a website from one host to another. This would be run on the host you are migrating ''from''. (You can swap the order of the from and to paths if you wanted to run this on the new host and pull from the old host.)
+The command below can be used to migrate a website from one host to another. This would be run on the host you are migrating ''from''. 
+
+Doing it from the 'from' host (pushing) is better than from the 'to" host (pulling) because this avoids an errant temporary sshkey entry in the ~/.ssh/known_hosts file on your destination (new) host. (You could swap the order of the from and to paths if you wanted to run this on the new host and pull from the old host, but this is the reason not to do that.)
 
 <pre>
-rsync -avz --delete --progress public/ aaronpk@caldera.dreamhost.com:~/aaronpk.com/
+rsync -avz --delete --progress ~/aaronpk.com/public_html/ aaronpk@caldera.dreamhost.com:~/aaronpk.com/
 </pre>
 
 Details
