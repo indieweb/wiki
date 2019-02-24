@@ -1,0 +1,138 @@
+https://indieweb.org/2019/Austin/webhost
+
+'''<dfn>Web Hosting and Migration</dfn>''' was a session at [[2019/Austin|IndieWebcamp Austin 2019]].
+
+Notes archived from https://etherpad.indieweb.org/webhost
+----
+IndieWebCamp Austin 2019<br>
+Session: Web Hosting and Migration<br>
+When: 2019-02-23 14:00
+
+== Participants ==
+* {{tantek}} (facilitator)
+* Cornelius
+* {{aaronpk}}
+* {{dgtd}}
+* {{gRegor}}
+* Rayna
+* {{jackjamieson}}
+* {{mt}}
+
+== Notes ==
+
+=== Use-cases ===
+The very personal use-case is that Tantek's webhost is shutting down in like less than 2 weeks.
+Webshost acquired by another company that you might not want to do business with
+
+=== Overview ===
+https://en.wikipedia.org/wiki/Web_hosting_service web hosting overview
+https://indieweb.org/web_hosting indie web version of web hosting 
+* See [[migration]]
+
+=== Static Hosting ===
+GitHub is a subset, it's static so you can't run things https://pages.github.com/
+
+=== Dedicated Machine ===
+Dedicated Servers
+* can maybe setup a cron job to automate OS / language / web server updates
+* about half dozen people use dedicated (virtual) machine
+
+[[Linode]]
+* {{aaronpk}}
+
+[[Docker]], Containers
+
+== Shared Hosting ==
+* [[Dreamhost]]
+** allows shell access
+** {{gregorlove}} - been with close to a decade, they have [[LetsEncrypt]], "no" limits on bandwidth or storage or domains, unlimited email forwards
+*** email forwarding, can copy/paste all the from/to: in one text field
+*** couple of issues, they were pretty responsive, answer within 10 hours, solution within 24
+*** can configure PHP version per domain, "always latest", or pin it to a stable version
+** {{aaronpk}} - good, for software that don't want to deal with the dependencies, e.g. WordPress, knows it will run fine on shared hosting, also doesn't want it on his main server because WordPress gets hacked, and doesn't want his main server hacked like that
+*** shutdown his own SMTP email server, and exported his forwarding rules, pasted into DreamHost and they all worked
+
+* [[Media Temple]]
+** {{davidjohnmead}} Run Known and Wordpress on the Grid shared option they have.
+*** minimal issues, good documentation and helpful support
+*** runs PHP, can FTP, use SSL, SSH, mySQL
+** ran into issue with DB export to big to be re-uploaded using their own tools
+
+* [[Bluehost]]
+** Blue host is being recomended and is popular in some circles https://www.bluehost.com/
+** free [[HTTPS]] automatic with [[LetsEncrypt]]
+** {{jackjamieson}}  - seems stable, low maintenance, easily supports multiple sites and simple WordPress integration
+
+* HostGator
+** {{dgtd}} 
+*** Responsive support
+*** Generally supports common software like WordPress out of the box
+*** Sometimes enforces weird Cpanel changes
+*** Their user portal sometimes has serious issues with authentication
+** {{jackjamieson}} (for client site) - I also had a good experience with support
+
+BlueHost, HostGator, iPage, and nearly 40 other independently owned brands have been absorbed by Endurance International Group over the past decade. 
+* verified https://en.wikipedia.org/wiki/Endurance_International_Group
+
+* Webfaction, got bought by GoDaddy https://www.webfaction.com/
+
+* Nearlyfreespeech.net
+** Guy who wrote the Erlang book uses it
+** no one in room uses it
+** has been around since 2002
+
+=== CPanel ===
+Weird confusion with WHM - Web Host Manager
+
+=== How much devops ===
+How do I get started with devops?
+* ssh / shell access - even if I don't want to touch it, sometimes I have to
+* PHPadmin access - good way to start looking
+* .htaccess - blocking bots, bad IPs e.g. with Apache rules
+
+=== Cloudflare ===
+* cloudflare https://www.cloudflare.com/
+* In addition to webhosting, can put it in front of your webhost
+* Not clear how to put it infront of a site, e.g. caching rules for admin / posting interfaces
+* Very easy for mostly static content sites
+* static backend could be GitHub
+
+=== App Hosting ===
+* [[Heroku]] - can run a bunch of different languages https://www.heroku.com/
+* Google [[App Engine]] https://cloud.google.com/appengine/
+* [[Glitch]] 
+
+Portability/migration across these? Not good. E.g.
+* nothing exactly equivalent to Heroku, moving stuff over.
+** you have to filehosting, database access in a certain way, which there are often exact parallels on other vendors that you can move to
+* App Engine forces you to build your app in a way that depends on certain backend things being there which makes it harder to pick it up and move it elsewhere
+
+=== Questions ===
+What's your stack?
+A: 
+* {{t}}: static files, PHP, .htaccess (Apache or lightspeedhttp), sftp, shell access would be nice
+* {{aaronpk}}: I need a database for my caches
+
+Is there a place listing different IndieWeb stacks?
+* [[Projects]] is perhaps the closest we have for this
+Siftery is a place for finding software stacks, but its not necessarily indie https://siftery.com/
+
+Which webhost to get started on? 
+And what are you depending on when you make a choice?
+
+Vs which webhost to move to?
+
+Exports?
+* WordPress has an export
+** limitations: e.g. {{manton}} lost his categories when he exported from WordPress and imported
+
+When this stuff breaks, I can take it somewhere else, or I can fix it.
+
+rsync to move large numbers of files, depends on ssh, or sftp
+
+moving large files is difficult, e.g. podcasts, most podcast hosts don't have ssh access
+
+== See Also ==
+* [[2019/Austin/Schedule]]
+
+[[Category: 2019 sessions]]
