@@ -3,3 +3,38 @@ https://indieweb.org/rsync
 {{stub}}
 
 '''<dfn>rsync</dfn>''' is a command line tool to copy files from one server to another, which can be used for incremental backups or migrating web hosts.
+
+== IndieWeb Examples ==
+* {{aaronpk}} - I use rsync to back up all my web servers onto a backup server at home. A cron job runs nightly and rsyncs the entire "web" folder on all my servers
+
+== Example Commands ==
+
+The command below can be used to migrate a website from one host to another. This would be run on the host you are migrating **from**.
+
+<pre>
+rsync -avz --delete --progress public/ aaronpk@caldera.dreamhost.com:~/aaronpk.com/
+</pre>
+
+Details
+* <code>a</code> - "archive mode" - enables rlptgoD, disables HAX
+** <code>r</code> - recurse into directories
+** <code>l</code> - copy symlinks as symlinks. without this, it would follow symlinks and copy the files, which can lead to duplicate data at the destination. however this can also cause missing data if there are symlinks at the source that are linked to things outside the folder you're copying.
+** <code>p</code> - preserve permissions of the files you're copying
+** <code>t</code> - preserve modification times
+** <code>g</code> - preserve group
+** <code>o</code> - preserve owner (only works if you are the superuser at the destination, otherwise has no effect)
+** <code>D</code> - preserve device files (only works for superuser), preserve special files
+** <code>H</code> - this option preserves hardlinks, so "a" disables it
+** <code>A</code> - this option preserves acls, so "a" disables it
+** <code>X</code> - this option preserves extended attributes, so "a" disables it
+* <code>v</code> - "verbose" shows each file that is copied
+* <code>z</code> - compresses data in transit, can significantly speed things
+* <code>--delete</code> - removes any files at the destination that are not present in the source folder. **Make sure you don't have anything at the destination you care about if you include this!**
+* <code>--progress</code> - will report the progress as a percentage so that you can see how far along the copy is
+* <code>public/</code> - The first path is where to copy **from**. 
+** By including the trailing slash, this will copy the entire contents of this folder, including hidden files, which would not be included if you specified <code>*</code>.
+** The files will be created at the remote destination directly, the "public" folder will not be created at the destination.
+* <code>aaronpk@caldera.dreamhost.com:~/aaronpk.com/</code> - The second path is where to copy **to**.
+** <code>aaronpk@caldera.dreamhost.com</code> - This should match however you SSH into your new server. username @ hostname
+** <code>:</code> - This is a separator between the SSH command and the path
+** <code>~/aaronpk.com/</code> - The tilde is the home directory, then specify the folder of the web root at the new host. **Make sure to include the trailing slash** in order to get the files to end up in the right spot
