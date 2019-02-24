@@ -5,7 +5,8 @@ https://indieweb.org/DreamHost
 
 '''<dfn>[http://dreamhost.com DreamHost]</dfn>''' is a [[web hosting]] company that is used by several members of the IndieWeb community.
 
-== How to setup ==
+== How to ==
+=== How to get started ===
 Try searching for "Dreamhost deals" in your favorite browser/search engine and you may find some promotions by Dreamhost.com as ads in the search results. If you find one you like, click it. This may save you some money compared to just going directly to dreamhost.com.
 
 Choose the "Shared [Unlimited]" option because you it includes unlimited [[email]] at your domain, and you should use your own domain for your primary email (instead of a gmail etc.), and 
@@ -16,6 +17,37 @@ If you’re asked if you want a new domain or not, choose the option like:
 
 Once you have gone through the payment options, login to the panel to configure your setup!
 * https://panel.dreamhost.com/
+
+=== How to setup a static site ===
+From the panel (https://panel.dreamhost.com/)
+* Choose Domains, Manage Domains from the left column.
+* If you don't see your domain in the list
+** Click "Add Hosting to a Domain / Sub-Domain"
+** Enter your domain name
+* Otherwise click "Edit" on the row with your domain
+* (*) Remove WWW.
+* Create a New User (something short you'll use to sftp/ssh with)
+* [x] HTTPS
+* [x] Automatically upgrade PHP
+* If you have a [[CloudFlare]] account already (or want to create one now)
+** [x] Enable CloudFlare on this domain
+* Click "Change Settings" (or "Fully host this domain" if you just added it)
+
+* ... copy static files over
+* ... switch your [[domain name registrar]] DNS settings to Dreamhost
+<pre>
+NS1.DREAMHOST.COM            64.90.62.230
+NS2.DREAMHOST.COM            208.97.182.10
+NS3.DREAMHOST.COM            66.33.205.230
+</pre>
+
+If this is a new domain it should work within a few minutes.
+
+If this a migrated domain, it will work after your [[TTL]] on your domain has expired. 
+
+You should be able to browse to your domain being hosted at DreamHost.
+
+(How can you verify DreamHost is serving your site?)
 
 == Services ==
 * Shared hosting: includes free [[https]] from [[https#Let.E2.80.99s_Encrypt|Let's Encrypt]], [[One-click install]] for [[WordPress]], [[MediaWiki]], [[Open Web Analytics]], and other web software, "unlimited" storage & bandwidth, the usual [[Apache]] / [[PHP]] / [[MySQL]] plus [[Rails]], [[Python]], & [[Perl]], shell access, and cron jobs
