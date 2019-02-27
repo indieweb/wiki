@@ -2,7 +2,12 @@ https://indieweb.org/related_reading
 
 {{stub}}
 
-'''<dfn>Related Reading</dfn>''' is a feature of some blogging [[silo]]s (like [[Medium]], [[Wordpress.com]]) where at the end of a blog post, the system suggests another deemed-likely-interesting-to-you given your assumed interest in the topic that you just read about.
+'''<dfn>Related Reading</dfn>''' or '''<dfn>related posts</dfn>''' or '''<dfn>related content</dfn>''' is a [[discovery]] feature of some blogging [[silo]]s (like [[Medium]], [[Wordpress.com]]) where at the end of a blog post, the system suggests another deemed-likely-interesting-to-you given your assumed interest in the topic that you just read about.
+
+Depending on the site there are one or more user interfaces for implementing this sort of functionality:
+* Continuous scrolling functionality where additional articles simply appear and the URL of the site changes automatically as one scrolls down the page
+* Related Posts block which can typically have one to three links to related posts and may also included titles, synopses, and even [[featured]] photos. This method is often used on websites by leveraging [[algorithms]] and meta data (post titles, content, [[tags]], categories, custom taxonomies, etc.) to typically present one to three posts that are related to the current post. These blocks are sometimes done as an [[SEO]] method which also creates additional internal links to one's site.
+
 
 == Why ==
 === Smoother cross-article reading experience ===
@@ -14,17 +19,32 @@ It's a different UI on links, one that has no "UI" beyond scrolling.
 
 === Reach a broader audience ===
 You should enable your posts to show up in other sites's related reading sections if you care about the ideas inside the post reaching a broader audience.
+
 === Silo UX parity ===
 By providing a Related Reading feature that shows other indieweb articles, you can provide the benefit of a smoother cross-site experience without your readers having to use a silo.
 
 By enabling your posts to be syndicated into others indieweb sites's Related Reading feature, you enable those sites to similarly provide as smooth as (or better) an experience than silos.
+
+=== Increased engagement ===
+These features often help to direct people (especially those arriving via search) to potentially useful and related content on your site.
+
 
 == How to ==
 How to implement a cross-indieweb-site Related Reading feature.
 * no idea - please add to [[#Brainstorming]].
 
 == IndieWeb Examples ==
-* none yet 
+=== Kartik Prabhu === 
+* {{kartik}} occasionally includes related reading on his website: https://kartikprabhu.com/articles/equal-height-images-flexbox#notes 
+
+=== Ryan Barrett ===
+* {{snarfed}} [https://chat.indieweb.org/2019-02-19#t1550612008226300 indicated that he used to have related posts] show up on his website.
+
+=== gRegor ===
+* {{gRegor}} [https://chat.indieweb.org/2019-02-19#t1550611381655500 "I sometimes link to similar posts with "previously" at the bottom. The webmention shows up on those previous posts as generic mentions currently"]
+** example: https://gregorlove.com/2016/11/my-indieweb-commitment-is-finish/
+
+=== {{addyourself}} ===
 
 == Silo Examples ==
 * [[Medium]]
@@ -32,6 +52,12 @@ How to implement a cross-indieweb-site Related Reading feature.
 
 * [[Wordpress.com]]
 ** '''screenshot needed'''
+
+== Related examples in the wild ==
+* [https://jetpack.com Jetpack Blog] uses their own [https://jetpack.com/support/related-posts/ Related Posts functionality]  ([[self-dogfooding]])
+** [[File:related_articles_on_JetPack.PNG]]
+* The news site [https://www.axios.com Axios] has a continuous scroll functionality that shows either related or more recent news posts that one may be interested in reading. As one scrolls down the URL in the browser changes to match that of the current permalink for the article.
+* {{addyourself}}
 
 == Brainstorming ==
 * how to publish an article that can be included in others's Related Reading features:
@@ -42,11 +68,41 @@ How to implement a cross-indieweb-site Related Reading feature.
 ** how do you figure out what articles from another site are related to yours, or similarly interesting? would a [[recommendation engine]] help?
 ** consider providing a JS-required related reading feature so that others's content that you display DOES NOT get indexed by search engines as being on your site.
 
+* Ideas from https://chat.indieweb.org/2019-02-19#t1550611145929000
+** update the webmention processing to have your own articles show up as "related posts" instead of mentions
+** using self-detection of webmentions to group is as related posts
+** you could also use tags/categories
+** how you display webmentions is totally up to you so that is within the rules ;)
+** I might do something with tags bc I would like a bit of granular control over it. Maybe `u-category h-entry` similar to person tag
+
+
+== Services / Plugins ==
+* [[JetPack]] for [[WordPress]] has the [https://jetpack.com/support/related-posts/ ability to add a related post feature to a website]. 
+* [https://www.addthis.com/ AddThis] - has a number of tools including a Related Posts JS tool.
+* [https://www.shareaholic.com/website-tools/related-content Shareaholic]
+* ...
+
+== Articles ==
+* 2019-02-18 [https://ramblinggit.com/ Brad Enslen] [https://ramblinggit.com/2019/02/18/microblog-adding-hosted.html Micro.blog: Adding Hosted Related Posts]
+** 2019-02-21 [https://ramblinggit.com/ Brad Enslen] [https://ramblinggit.com/2019/02/21/update-on-related.html Update on Related Posts on Micro.blog]
+* 2016-10-14 Yoast: [https://yoast.com/related-posts-relevant/ Related posts need to make sense, not just be there] (Includes some interesting philosophy about doing related posts.)
+* [https://yoast.com/fast-related-posts/ 2016-12-05 Yoast: We’ve created the fastest related posts ever]
+
 == Previous Technologies ==
 * Webrings
 
+== Criticism ==
+* Depending on the implementation, self-hosting algorithmic search to generate related posts may create an undue load on one's server which could cause issues with your [[web hosting|hosting]].
+* May increase page load time
+* Some services do a poor job of intuiting relevant related posts
+* It may be better/easier to link directly to your related content in a meaningful context, than to use a generic related posts box somewhere else on your page.
+
+
 == See Also ==
+* [[discovery]]
 * [[related]]
 * [[recommendation engine]]
 * [[UX]]
 * [[webring]]
+* [[tags]]
+* [[algorithms]]
