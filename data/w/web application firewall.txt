@@ -2,4 +2,11 @@ https://indieweb.org/web_application_firewall
 
 {{stub}}
 
-'''<dfn>Web application firewall</dfn>s''' are software that inspects HTTP requests and tries to block malicious or suspect requests, often with a high risk of false positives due to broad defaults, and limited effectiveness against a motivated attacker.
+'''<dfn>Web application firewall</dfn>s''' are software that inspects HTTP requests and tries to block malicious or suspect requests, often with a high risk of false positives due to broad defaults, and limited effectiveness against a motivated attacker. 
+
+An example is [[mod_security]]
+
+If you are on shared hosting, your hoster might have one enabled by default, so be on the lookout for its reports in server logs when requests are failing without an obvious reason. It should log that it blocked a request and why it did so.
+
+== encountered issues ==
+* the [OWASP Core ModSecurity rule set https://coreruleset.org/] has a rule allowing only some content-types for POST requests, forbidding JSON-based requests used e.g. by Micropub and IndieAuth. potential fix: https://stackoverflow.com/questions/31537106/core-owasp-modsecurity-allowing-json
