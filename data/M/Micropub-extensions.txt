@@ -267,6 +267,47 @@ The follow example would be returned as part of the <code>?q=category&search=ind
 ==== Brainstorming ====
 [[category]] - [https://chat.indieweb.org/2017-01-18#t1484741717234000 suggestion] to get all existing tags/categories in the client. Expectation is client would cache and do autocomplete
 
+
+=== Query for Supported Properties/Queries ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/7
+: https://github.com/indieweb/micropub-extensions/issues/8
+
+These are two extensions for returning queries that a Micropub server will respond to and properties that a server knows about, so that a client like [[Quill]] or [[Indigenous]] could present only options appropriate to that server. It is similar to the idea about querying for supported vocabulary, except that proposal only covers properties that are part of post-type discovery. Like with the other proposal, the absence of this instruction would show everything.
+
+The following example would be returned as part of the <code>?q=config</code> query for supported queries.
+<pre>
+{
+  "q": [
+    "config",
+    "syndicate-to",
+    "category",
+    "source",
+    "geo",
+  ]
+}
+</pre>
+
+The following would be returned as part of the <code>?q=config</code> query for supported experimental properties unrelated to post-types. These are experimental properties that would require a field within the UI.
+<pre>
+{
+  "properties": [
+    "location-visibility",
+    "visibility",
+    "post-status",
+  ]
+}
+</pre>
+
+==== Implementations ====
+* Clients
+** None
+* Servers
+** [[Micropub for WordPress]]
+** [[IndieWeb for Drupal]]
+
+==== Brainstorming ====
+
 === Ideas for other types of queries ===
 * [[mp-config]]
 * [[venue]] - not yet implemented suggestion of a venue query for a client to retrieve venues as part of check-in functionality.
