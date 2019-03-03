@@ -306,6 +306,49 @@ The following would be returned as part of the <code>?q=config</code> query for 
 ** [[Micropub for WordPress]]
 ** [[IndieWeb for Drupal]]
 
+
+=== Query for Location/Venue ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/6
+
+{{jonnybarnes}} originally added Query for Places in 2015. His implementation was for /micopub?q=geo=lat.lng;u=XX, returning a JSON response for each place containing a display name, lat/lng value, and a URL that could be used as the location value in a subsequent request. 
+
+{{gwg}} expanded on that to be consistent with the current thinking that returns should be inside a property and to allow for a geo URI or the individual parameters. The geo=lat.lng;u=xx is close to the geo URI format of geo:37.786971,-122.399677;u=35 but in the interest of consistency should actually be a GEO URI and a separate property. Therefore, the query for a request with a Geo URI should be ?q=geo&uri=geo:37.786971,-122.399677;u=35  or optionally, each variable individually... q=geo&lat=x&lon=y&u=z 
+
+The following example would be returned as part of the <code>?q=geo&lat=x&lon=y</code> query. Return would contain two properties, 'venues' and 'geo'. Geo would be a suggestion for the queried location perhaps returned using reverse geolocation, and venues would be one or more venues. The lack of either property assumes nothing could be found about the location.
+
+All returns would follow the common properties of an h-adr object with only label and latitude/longitude being mandatory. There is one optional extra parameter, following the proposed [https://indieweb.org/Micropub-extensions#Location_Visibility Location Visibility] property which would allow the query to suggest whether this location should be publicly displayed, allowing for private venues. 
+<pre>
+{
+  "geo": [
+    "label" : "123 Main Street",
+    "latitude": "18.1123",
+    "longitude": "-72.1933",
+    "visibility": "public",
+  ],
+  "venues": [
+   { 
+     "label" : "Main Street Apothecary",
+     "latitude": "18.1123",
+     "longitude": "-72.1931",
+     "url": "https://example.com/venues/apothecary",
+   },
+   { 
+     "label" : "Main Street Market",
+     "latitude": "18.1123",
+     "longitude": "-72.1931",
+     "url": "https://example.com/venues/market",
+   },
+  ]
+}
+</pre>
+
+==== Implementations ====
+* Clients
+** [[Indigenous for Android]] - uses the geo property only
+* Servers
+** [[Micropub for WordPress]] - uses the geo property only
+
 ==== Brainstorming ====
 
 === Ideas for other types of queries ===
