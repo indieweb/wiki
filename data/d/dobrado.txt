@@ -1,7 +1,7 @@
 https://indieweb.org/dobrado
 
 [[Category:CMS]]
-<div class="floatright"><img alt="dobrado logo" src="http://dobrado.net/public/title6.png" width="240" height="100"></div>
+<div class="floatright"><img alt="dobrado logo" src="https://dobrado.net/public/title6.png" width="240" height="100"></div>
 
 '''<dfn>[http://dobrado.net dobrado]</dfn>''' is an open source multi-user content management system that supports many indieweb features.
 
@@ -27,9 +27,9 @@ It has wiki-like features, users can grant permission for other users (or groups
 
 ''Features specific to the indieweb:''
 
-* [[Posts]] can send and receive [[webmention]]s and have [[webactions]] set via [[indie-config]]. Subscribers can be notified about new posts by either [[PuSH]] or [[rssCloud]].
+* [[Posts]] can send and receive [[webmention]]s and have [[webactions]] set via a [[webaction_handler|webaction handler]]. Subscribers can be notified about new posts by either [[PuSH]] or [[rssCloud]].
 
-* Users can set a web action handler on the page they choose to write from.
+* Users can set their web action handler to the page they choose to write from.
 
 * Users can choose to send their [[like]]s, shares and [[reply|replies]] to different feeds from their normal posts.
 
@@ -45,9 +45,22 @@ It has wiki-like features, users can grant permission for other users (or groups
 
 * [[Micropub]] client and server support.
 
+* [[Microsub]] server support.
+
 === IndieWeb Examples ===
 ==== Malcolm Blaney ====
 {{mblaney}} uses dobrado on https://unicyclic.com - an example of dobrado set up as both an indieweb reader and publishing site for multiple users. The site also allows anyone to log in via [[IndieAuth]], and to publish via [[Micropub]].
+
+== Brainstorming ==
+=== Microsub ===
+
+dobrado supports Microsub via a Reader module, which had it's own session based client/server communication method before support for the Microsub API was added. This section lists the current differences and how this affects interaction with the server.
+
+Paging: "GET timeline before" currently returns all posts up to the "before" value. The Microsub spec says that the "limit" value should be used and multiple requests used.
+
+Multi-author feeds: dobrado supports splitting a feed into different channels based on author, so "POST follow" accepts an extra "author" value to handle this.
+
+Features not mentioned in the spec: dobrado doesn't support the full Microsub spec as yet, but it does a few things that aren't mentioned. It can change the unread type per channel, the options are "true", "false" and "count". It can also import opml files to allow subscribing to multiple feeds at once.
 
 == See Also ==
 * [[projects]]
