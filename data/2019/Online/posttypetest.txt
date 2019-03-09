@@ -1,0 +1,73 @@
+https://indieweb.org/2019/Online/posttypetest
+
+'''<dfn>Post Type Testing</dfn>''' was a session at [[2019/Online|IndieWebcamp Online 2019]].
+
+Notes archived from https://etherpad.indieweb.org/posttypetest
+
+------------
+IndieWebCamp [[2019/Online|Online 2019]]<br>
+Session: Post Type Testing<br>
+
+== Participants ==
+* {{grantcodes}}
+* {{eddiehinkle}}
+* {{jacky}}
+* {{martijnvdven}} (listening only)
+* {{chrisaldrich}} (listening, taking some notes)
+* {{sknebel}}
+
+== Notes ==
+
+* Purposes I thought of:
+** Testing your site frontend ( similar to WordPress theme unit test: https://codex.wordpress.org/Theme_Unit_Test )
+** Testing post rendering in readers
+
+* Other purposes:
+** Examples of how to mark up post types
+** Testing micropub endpoint
+** Testing what microsub servers can accept
+** Testing mf2 markup on a post
+
+I imagine there being a few parts to this:
+1. A list of example posts in some format that can be converted ( http://examples.tpxl.io/ )
+2. A micropub "client" that can automatically create these posts from the list of posts - this would probably be for people making sites / themes. Also very similar to micropub.rocks but more aimed at testing UI? Would also be very useful if it could easily be run locally for development sites
+3. Feeds that can be followed to test a reader. ( h-feed: http://examples.tpxl.io/feeds/hfeed/ )
+4. Doug also mentioned he would like to test that his mf2 markup is correct for a post type with best practices (e.g. His podcast must have an audio file, but would be recommendable to have a name, description and photo)
+
+* Jacky created this h-card testing page: https://static-relme-site.jacky.wtf/
+
+{{cleverdevil}} has created a schema tester that checks if a complete (parsed) microformats2 object seems to contain the expected properties: https://github.com/cleverdevil/microformats2
+
+[[Mastodon]] tests mf2 automatically
+
+Different levels of validation (errors, warnings, improvements / notes).
+
+Potentially can run tests automatically in the future to check that nothing has broken
+
+Static Site generators are a thing as well. They might create the post, but there might be a delay and need confirmation that the site has rebuilt before the site tries to test for the existence of the posts (potentially using a button when it's available).
+
+{{snarfed}} and {{GWG}} have built some unit tests into the Webmention plugin for WordPress. It's not a full test suite, but does catch some common errors.
+
+* Examples of some errors often seen:
+** Mixing up u- and p- prefixes on properties,
+** Nested h-* objects that end up putting their property name on the same object, actually putting it in a property on its parent
+** Missing u-url in h-* objects that are within an h-feed.
+** u-url (or other, but typically) properties leaking from h-cards all over the page
+** smell: information duplicated a few times
+    
+* Post Types (https://indieweb.org/posts#Types_of_Posts)
+** Work down this list, things at the top are higher priority.
+
+https://indieweb.org/posts - collection of posts and also somewhat ordered by use.
+Editor draft of PTD: http://ptd.spec.indieweb.org/ - https://indieweb.org/post-type-discovery
+
+
+== See also ==
+* [[Indiewebify.me]]
+* [[validators]] - may want to create a page on the wiki for this
+* [[2019/Online/Schedule]]
+
+
+[[Category: 2019]]
+[[Category: 2019 sessions]]
+[[Category: 2019 Online]]
