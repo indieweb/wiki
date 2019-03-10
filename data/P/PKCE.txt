@@ -2,10 +2,25 @@ https://indieweb.org/PKCE
 
 {{stub}}
 
-'''<dfn>PKCE</dfn>''' is an extension to [[OAuth 2.0]] that protects against intercepted authorization codes during the OAuth flow.
+'''<dfn>PKCE</dfn>''', Proof-Key for Code Exchange, (pronounced "pixie") is an extension to [[OAuth 2.0]] that protects against intercepted authorization codes during the OAuth flow.
+
+It allows an OAuth 2.0 token server to confirm that the client attempting to redeem an authorization code is the same client that requested it.
+
+=== How it Works ===
+
+# The client establishes its identity by generating a random secret.
+# When the client redirects the user to the authorization server, it includes a one-way hashed version of this secret, known as the <code>code_challenge</code>, which the server will store, along with a <code>code_challenge_method</code> describing the hashing algorithm used to make the hash.
+# After authorizing, the user returns to the client with an authorization code.
+# When the client makes a request to redeem the authorization code for an access token, it sends along the original secret that it generated as the <code>code_verifier</code>.
+# The token server verifies that the code_verifier, when hashed with the code_challenge_method, hashes to the same value as the code_challenge it received originally. If it matches, the server returns a token as normal.
+
+=== Backwards Compatibility ===
+
+PKCE extends OAuth flow requests with new parameters rather than introducing new values for existing ones. This allows clients to pro-actively implement PKCE without breaking compatibility with OAuth providers that do not yet support it.
 
 == See Also ==
 
+* [https://youtu.be/H6MxsFMAoP8?t=938 Aaron Parecki describes PKCE]
 * https://oauth.net/2/pkce/
 * https://www.oauth.com/oauth2-servers/pkce/
 * https://tools.ietf.org/html/rfc7636
