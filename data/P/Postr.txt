@@ -1,0 +1,80 @@
+https://indieweb.org/Postr
+
+'''<dfn>[https://postr.dev Postr]</dfn>''' is a open source IndieWeb backend for [[node.js]] developed by {{grantcodes}}
+
+== Usage ==
+Currently being used to run the following sites:
+* [https://grant.codes grant.codes] – eating his own cooking
+
+== Functionality ==
+
+=== Database ===
+* Posts are stored as [[microformats2]] json
+* Uses [https://rxdb.info RxDB] as an extendible database
+* Supports real time replication, both to [[couchdb]] compatible servers and clientside databases
+
+=== [[Micropub]] ===
+* The <code>@postr/core</code> package provides a fully functional micropub endpoint, with support for: posting, media, updates, deletes, undeletes, queries and more
+
+=== Clientside Support ===
+
+Postr is built in an isomorphic fashion, meaning it can also be run clientside. A lot of functionality is not possible clientside (such as the micropub endpoint) but there the database containing your posts / content can be fully replicated to the client and the same api used to query the database on the frontend and backend.
+
+=== Miscellaneous ===
+* Plain text posts will be parsed for [[markdown]]
+* Mf2 posts are automatically validated
+* References to external media files are automatically copied locally
+* Photos can be automatically resized for thumbnails etc.
+* Slugs are automatically generated from the post name / content
+
+=== Glitch support ===
+
+Postr can run on [[Glitch]], although not everything may be supported due to the limited nature of glitch hosting.
+
+A basic example site can be found and remixed at [http://postr.glitch.me/ postr.glitch.me]
+
+== Plugins ==
+
+Postr is highly extendible, plugins can be used to modify data in the database, provide express endpoints and pretty much whatever else you could want.
+
+<code>@postr/plugin</code> is the base plugin class, plugins can extend this and then be dropped into any postr instance.
+
+=== [[Webmention]] Endpoint ===
+
+<code>@postr/plugin-webmention-endpoint</code> provides a webmention endpoint that plugs directly into the post storage and will update posts when they receive a webmention.
+
+=== Syndication ===
+
+<code>@postr/syndicator</code> is a base plugin, designed to be extended to create syndication plugins.
+
+
+==== [[Instagram]] ====
+
+<code>@postr/syndicator-instagram</code> supports syndicating photos, likes and reposts to instagram.
+
+==== [[Superfeedr]] ====
+
+<code>@postr/syndicator-superfeedr</code> notifies superfeedr of new posts
+
+==== [[Twitter]] ====
+
+<code>@postr/syndicator-twitter</code> supports syndicating to twitter
+
+=== Feeds ===
+
+There is a feeds plugin in development that will enable content to be automatically output in different feed formats.
+
+=== Planned Plugins ===
+
+There are a number of other planned plugins, with the goal of making postr a fully functional IndieWeb backend:
+
+* Importer to import your content from somewhere else
+* Backup to automatically backup your content
+* Token endpoint
+* Webhook plugin to send webhooks that could trigger site build or send notifications
+* Auth endpoint
+
+
+== See Also ==
+* [[projects]]
+* [[node.js]]
