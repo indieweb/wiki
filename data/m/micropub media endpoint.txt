@@ -98,6 +98,29 @@ The practical reason is that naming photos allows them to be retrieved.
 
 Tagging would allow a query for images that matched a tag for a possible suggested image library search if someone wanted to implement that into a client.
 
+=== Query media by URL ===
+
+[[inari]] allows you to query for media by URL. The request/response looks like this:
+
+<pre>
+GET /media-endpoint?q=source&url=https://micropub.funabashi.co.uk/media/2018/8f4d5ef8e12e608eba1605bcf09fa086.jpg
+Authorization: Bearer XYZ123
+</pre>
+<pre>
+{
+    "uid": "abffa609-df23-4f4c-a117-f762777e97ec",
+    "url": "https://micropub.funabashi.co.uk/media/2018/8f4d5ef8e12e608eba1605bcf09fa086.jpg",
+    "file_key": "2018/8f4d5ef8e12e608eba1605bcf09fa086.jpg",
+    "file_hash": "8f4d5ef8e12e608eba1605bcf09fa086",
+    "mime_type": "image/jpeg",
+    "date_time": "2018-05-20T22:31:50Z",
+    "lat": 53.830398399972225,
+    "lng": -1.5584950999722222
+}
+</pre>
+
+The important things here are date_time and lat, lng which has been extracted from the photo EXIF data. Clients can then add this data to posts
+
 == See Also ==
 * [[Micropub]]
 * https://www.w3.org/TR/micropub/#media-endpoint
