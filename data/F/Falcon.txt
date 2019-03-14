@@ -1608,6 +1608,56 @@ Legacy feed requests are routed by '''.htaccess''' directives to '''falcon.php''
 RewriteRule ^updates\.atom falcon.php
 </pre>
 
+== Completed Tasks ==
+Archiving completed tasks here when they are non-trivial and especially when they require various bug fixes / improvements to Falcon accordingly.
+
+=== Migrate to new web host ===
+Completed 2019-03-04! Summary improvements:
+* protocol relative links in various places
+
+I need to [[migrate]] to a new [[webhost]] by 2019-03-06. Existing host is literally shutting down.
+* figure out what set of [[webhosts]] to research
+** '''Chose [[DreamHost]]''' - lots of friends/colleagues use them and they like it
+*** supports [[HTTPS]] for free automatically via [[LetsEncrypt]]
+** [[Bluehost]] - recommended by my current host as a place to migrate to
+*** supports [[HTTPS]] for free automatically via [[LetsEncrypt]]
+** [[Reclaim Hosting]] - folks in IndieWeb community have great experiences with them. 
+*** Supposedly $30/year with ssh access.
+*** storage: $30/y for 2GB? $50/y for 10GB?
+** others?
+* what questions to ask of each host?
+** automatic and free [[HTTPS]]? (if I'm switching hosts, this is a requirement in 2019)
+*** yes
+** ssh access? I depend on scp for my current workflow
+*** yes DreamHost
+** Apache or equivalent support? (I depend on .htaccess files)
+*** yes DreamHost
+** storage levels?
+*** unlimited(?) DreamHost
+** bandwidth? 
+*** unlimited(?) DreamHost
+** automatic OS and web server software updates? - I have zero interest in maintaining these
+*** yes
+** automatic PHP updates? - I depend on PHP and don't care to bother with updating. I deliberately write minimally dependent PHP (mostly in [[CASSIS]]) that I want to require it (my code) to work forward/backward compatibly with any version of PHP 5.2+
+*** yes / opt-in auto-update PHP DreamHost 
+** unlimited email aliases / forwarders? I have dozens (100+?) of email addresses on my domain that I need to have aliases/forwarders for
+*** yes DreamHost
+*** a format for importing/exporting list of email aliases? so I don't have to enter/create them all by hand (but I can if I have to :/)
+**** simple text file one line per alias mapping - DreamHost
+** ...
+* choose a web host and document methodology / reasoning why
+* [[migrate]] and document steps necessary
+** figure out what files/dirs of my site I can redirect to Internet Archive instead of maintaining, copying over
+*** none for now. [[rsync]] made it easy to maintain all files as-is.
+** figure out what minimum files/dirs I need to copy over and how to most efficiently do so
+*** /log
+*** /YYYY - YYYY = 2010…2019
+*** postponed: [[rsync]] all files instead
+* flip DNS switches and hopefully it all works!
+** first test it at a subdomain of another domain - worked in general
+** fixed a bunch of protocol-specific links (http:) to be protocol relative, start with "//"
+** flip DNS for tantek.com.
+
 == Canceled Features ==
 === auto Bridgy POSSE to FB ===
 '''2010-08-01 Bridgy shutdown POSSE to FB due to FB posting API shutdown.'''
