@@ -96,7 +96,7 @@ Avatar/Author photos by default in WordPress is derived from Gravatar. The WordP
 
 It stores the type of response in the comment_type as opposed to the meta and only stores the protocol in the meta. This mirrors a proposal that has been in the Semantic Linkbacks plugin for some time, but would require the migration of old data to a new system.
 
-The latest proposal is to adopt a new comment structure for these social protocols.
+The latest proposal is to adopt a new comment structure for these social protocols and migrate all data to a common storage method.
 
 WP_Comment Table Properties
 
@@ -107,7 +107,12 @@ WP_Comment Table Properties
 Comment Meta Properties
 
 * source_url - Will reflect the source URL of a comment. For webmentions, etc this would be the source url
-* avatar or avatar_url - The Activity Pub version is avatar_url
+* avatar or avatar_url - The Activity Pub version is avatar_url, Semantic Linkbacks uses semantic_linkbacks_avatar. Now, the issue with the _url addition is that this assumes the only way to store avatars is by URL. Avatars might be stored as attachment IDs, etc. This requires further discussion.
+* date_created - This again, to cover the lack of a modified option, using the table property for comment time as last modified and this as original creation time. The question is if this should be local time, GMT, or iso8601 with timezone offset.
+
+The storage of parsed microformats would not change.
+
+The usage of target properties is specific to Linkbacks. In order to address whether this should remain webmention_ or not is whether or not a new proposal would involve Pingbacks, Trackbacks, and Refbacks. Refbacks are a custom plugin, and therefore no issue in changing, but it is still a question as to whether the other standards should be included.
 
 == Location ==
 
