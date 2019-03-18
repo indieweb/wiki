@@ -94,6 +94,21 @@ Avatar/Author photos by default in WordPress is derived from Gravatar. The WordP
 * avatar_url 
 * protocol
 
+It stores the type of response in the comment_type as opposed to the meta and only stores the protocol in the meta. This mirrors a proposal that has been in the Semantic Linkbacks plugin for some time, but would require the migration of old data to a new system.
+
+The latest proposal is to adopt a new comment structure for these social protocols.
+
+WP_Comment Table Properties
+
+* comment_type - Would refer to the type of response. Reply, like, etc. For compatibility with existing WordPress comments, an empty comment type would indicate a reply or traditional comment
+* comment_approved - Used for moderation. There is no comment_status option to allow for a queued or verification status unless this is custom implemented.
+* comment_author_url - For pingbacks, trackbacks this was used as the source URL. For comments, author URL. For the new version, it would only be used for the author URL.
+
+Comment Meta Properties
+
+* source_url - Will reflect the source URL of a comment. For webmentions, etc this would be the source url
+* avatar or avatar_url - The Activity Pub version is avatar_url
+
 == Location ==
 
 WordPress currently provides a [http://codex.wordpress.org/Geodata Geodata] data structure. 
