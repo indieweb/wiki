@@ -47,7 +47,15 @@ However, the rel-me silo URLs were not prefaced with mf2_ as using just the site
 
 == Comment ==
 
-[[Webmention Plugin]] adds an additional comment type of 'webmention' to comments.
+[[Webmention Plugin]] adds an additional comment type of 'webmention' to comments. Webmention stores the following properties in the mention:
+
+* webmention_target_url
+* webmention_source_url
+* webmention_target_fragment - The Fragment of the Target, this is so fragments can be searched/matched
+* webmention_created_at - Comments only have a timestamp, not a modified stamp, so this stores the original creation time.
+* webmention_response_code - registered but not currently in use. This was meant to store the response code returned during verification
+* webmention_vouch_url - Stored if sent
+* webmention_vouched - Whether or not this webmention was vouched for - only if vouches are enabled
 
 [[Semantic Linkbacks]] stores extra information in the comment metadata.
 
@@ -80,11 +88,11 @@ Built into the WordPress Comment Database, the following relevant properties are
 
 Avatar/Author photos by default in WordPress is derived from Gravatar. The WordPress Webmention plugin does not modify this in any way, but [[Semantic Linkbacks]] sets an external URL for the avatar. There are multiple plugins for local avatar storage, but they only store photos for users, not for commenters. 
 
-Possible storage structure
+{{pfefferle}} launched the ActivityPub plugin for WordPress, which also stores in comments. ActivityPub stores three meta properties.
 
-* For webmentions, source could be stored in metadata as 'mf2_url' keeping the practice of the object being the top-level microformat element.
-* Being as comment_author_url is used for source, actual author URL could be kept in mf2_author.
-* The author could either be stored in the comment metadats or a new subscriber role user created to store it.
+* source_url
+* avatar_url 
+* protocol
 
 == Location ==
 
@@ -114,21 +122,19 @@ A taxonomy called 'kind' is currently used for the [[Post Kinds Plugin]]. This i
 
 == Post Kinds Plugin ==
 
-In response to {{snarfed}}'s proposal to organize using mf2_ as a key prefix, {{gwg}} changed to using 'mf2_cite' as a key instead of 'response'. All fields are optional(See Below)
+In response to {{snarfed}}'s proposal to organize using mf2_ as a key prefix, {{gwg}} changed to using the citation nested inside the property for the specific type of post instead of 'response'. All fields are optional(See Below)
 
-* mf2_cite
 ** ['url'] - The URL the post is responding to.
 ** ['name'] - The title of same
 ** ['author'] - The URL of an h-card (if external)
 ** ['published'] - URL publish date in ISO8601 with timezone offset
 ** ['updated'] - URL updated date in ISO8601 with timezone offset
 ** ['publication'] -  The name of the site, or for citing articles in publications with more than one author.
+** ['featured'] - Featured Image
 ** ['content'] - the content or partial content of the work itself.
 ** ['card']['name'] = Author Name / Artist Name
 ** ['card']['photo'] = Author photo
-* mf2_in-reply-to, mf2_like-of, mf2_repost-of are now supported as URL properties. Any details are still stored in mf2_cite.
-* mf2_dt-start and mf2_dt-end to indicate duration
-* mf2_duration is deprecated in the interface, but will still be used in lieu of dt-end minus dt-start if set.
+
 
 === Deprecated ===
 
