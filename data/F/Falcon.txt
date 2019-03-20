@@ -20,7 +20,8 @@ Thanks!
 
 == Open Source ==
 Open source portions of Falcon:
-* http://cassisproject.com/ - general string and datetime processing
+* http://cassisproject.com/ - general string and datetime processing, including key functionality:
+** [[autolink]], [[autoembed]], [[auto-space]], and some experimental functions in <samp>cassis-lab.php</samp> like  [[auto-url-summary]]
 * https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/link_rel_parser.php — arbitrary link relationships from HTTP headers and HTML documents
 * https://github.com/indieweb/link-rel-parser-php/blob/master/src/IndieWeb/get_rel_webmention.php — uses the output of link_rel_parser.php functions to return a webmention endpoint and or a pingback endpoint if any
 * ...
@@ -91,7 +92,9 @@ Falcon supports the following specific kinds of [[posts]].
 === Photo ===
 '''[[photo]]''' posts are similar to notes, but start with a photo image URL which is then automatically marked up with <code>u-photo</code>. Supported [http://tantek.com/2015/244/t1/did-entire-npsf-trackattack since 2015-244] (though older notes starting with images may have been upgraded to photo posts). Full bleed photo styling on home page recent posts stream since 2015-346.
 
-* automatic [[POSSE]] to [[Facebook]], [[Flickr]], and [[Twitter]] directly using [[Bridgy]] Publish (automatic since 2015-312 ([[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
+* automatic [[POSSE]] to [[Flickr]], and [[Twitter]] directly using [[Bridgy]] Publish (automatic since 2015-312 ([[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
+
+* <span id="alt_text_on_photos">[[alt]] text on photos</span> supported [https://tantek.com/2019/078/t1/last-saturday-sfrc-clear-skies since 2019-078] via [http://tantek.com/w//Markdown#Alttextforimages alt text support in CASSIS auto_link], including automatic POSSEing of alt text to Twitter since [[Bridgy]] Publish to Twitter [https://github.com/snarfed/bridgy/issues/756 supports alt text].
 
 === Video ===
 '''[[video]]''' posts are similar to photo posts, but start with a video URL which is then automatically marked up with <code>u-video</code>. Supported [http://tantek.com/2015/346/t3/world-of-laughter-tears-hopes-fears since 2015-346] (though older notes starting with videos (if any) may have been upgraded to video posts).
@@ -741,12 +744,6 @@ Send [[webmentions]] for other posted links (beyond links I'm [[in-reply-to|repl
 I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook.[http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter!
 
 There are several key improvements (beyond the default mobile presentation - see above) that I want (and some that I explicitly postponed at the time).
-
-==== alt text on photos ====
-Since [[Bridgy]] Publish to Twitters [https://github.com/snarfed/bridgy/issues/756 supports alt text], I should start including alt text on all my photo posts!
-
-* implement [http://tantek.com/w//Markdown#Alttextforimages alt text support in CASSIS] auto_link
-* practice writing alt-text after images!
 
 ==== document how and why photos ====
 Document on this page, the specifics '''how to do photo posting''' (current required user flow)
