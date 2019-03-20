@@ -15,9 +15,11 @@ You should add descriptive alt text to all your [[photo]] posts and content imag
 (this section is a stub)
 
 So far people are using the following tools to add alt text to their photos and other images:
+* use [[Quill]] image posting UI with alt text field
+* use [[WordPress]] image upload UI with alt text field
+* write in plain text and put (parenthetical alt text) just after your image URL and use the latest [[CASSIS]] (https://tantek.com/cassis.js) to auto-embed the text + alt
 * write in Markdown which has a [[#Markdown|syntax for adding alt text]]
 * write in HTML, where you can directly add the <code>alt=</code> to an <code>&lt;img&gt;</code> tag.
-* use [[WordPress]] image upload UI
 * ... add yours here, after you've added yourself with permalinks to examples to the IndieWeb Examples section (no theoretical how-tos please!)
 
 === Wiki instructions ===
@@ -73,9 +75,16 @@ For additional details on the WordPress UI see [https://codex.wordpress.org/Inse
 
 * {{gRegor}}: When publishing with [[ProcessWire]], I usually insert images into posts using the rich text editor ([[CKEditor]]). Then I click "Source" to modify the HTML and update the alt text. The editor inserts a blank <code>alt=""</code> attribute by default.
 
+* {{t}}: Supports alt text on his image posts since 2019-078 (using latest deployed [[CASSIS]] auto_link), starting with adding alt text after the fact to his [https://tantek.com/2019/077/t1/sunset-crashing-waves-stained-glass most recent photo post the day before] adding alt text support.
+
 * {{addyourself}}
 
 == Tools ==
+=== Quill ===
+[[Quill]] supports publishing alt text to your site using [[Micropub]]
+
+[[File:Quill-alt-text-2019-03-19.png|none|thumb]]
+
 === Bridgy Publish Images ===
 [[Bridgy Publish]] supports publishing alt text to [[Twitter]] as of 2018-07-27. [https://github.com/snarfed/bridgy/issues/756#issuecomment-408479810]
 * Example: http://jgregorymcverry.com/6851-2/ ([http://web.archive.org/web/20180917231349/http://jgregorymcverry.com/6851-2/ archived]) -> https://twitter.com/jgmac1106/status/1041295971911696385
@@ -85,35 +94,8 @@ For additional details on the WordPress UI see [https://codex.wordpress.org/Inse
 * Image embed: <kbd><nowiki>![](http://w3.org/Icons/text.gif)</nowiki></kbd>
 * With alt text: <kbd><nowiki>![text icon](http://w3.org/Icons/text.gif)</nowiki></kbd>
 
-=== Quill ===
-[[Quill]] supports publishing alt text to your site using [[Micropub]]
-
-[[File:Quill-alt-text-2019-03-19.png|none|thumb]]
-
-== Issues ==
-Alt text on images in a post can cause issues when trying to display that post in a [[reader]].
-
-On adactio.com, the img alt text is the same as the post contents. Since alt text is included in the p-name parsed result, this results in duplicated text for the posts.
-
-Below is a screenshot showing a few recent posts from adactio.com as rendered in an IRC-based reader.
-
-[[File:adactio-posts-in-irc-reader.png|500px]]
-
-Below are two posts from tantek.com in the same reader. Note that the text of the first post includes "a jpg" which is the alt text of the image.
-
-[[File:tantek-posts-in-irc-reader.png|500px]]
-
-Currently the python mf2 parser does not include alt text in the parsed result, so these posts look fine in [[Woodwind]]. However, if it did, as the parsing algorithm suggests, this is how a post would look. (with more representative alt text)
-
-[[File:adactio-post-with-alt-text-in-woodwind.png|500px]]
-
-Woodwind has no way of knowing the first line of the name property came from the alt text.
-
-== Brainstorming ==
-Ideas for improving the adding of alt text to images, photo posts, etc.
-
-=== Markdown alternative ===
-As part of an [http://tantek.com/w/Markdown#ThoughtsonMarkdown alternative to Markdown], {{t}} is exploring the following auto-embed syntax for an image with alt text
+=== CASSIS auto_link ===
+If you use the [[CASSIS]] auto_link function (latest deployed version), you can add alt text to your plain text content like this:
 * embed an image:
 ** <kbd><nowiki>http://w3.org/Icons/text.gif</nowiki></kbd>
 * image with alt: 
@@ -124,10 +106,36 @@ And similarly for a linked image with alt:
 * hyperlink image with alt: 
 ** <kbd><nowiki>http://w3.org/Icons/text.gif (text icon) http://indiewebcamp.com/text</nowiki></kbd>
 
+This is part of a larger [http://tantek.com/w/Markdown#ThoughtsonMarkdown alternative to Markdown].
+
 See: http://tantek.com/w/Markdown#Alttextforimages for more.
 
-Implementation strategy for [[Falcon#alt_text_on_photos|support in Falcon]]:
-* add it to [[CASSIS]] [[autolink]] function which also supports [[autoembed]]s by default
+== Issues ==
+Alt text on images in a post can cause issues when trying to display that post in a [[reader]].
+
+On adactio.com, the img alt text is the same as the post contents. Since alt text is included in the p-name parsed result, this results in duplicated text for the posts.
+
+Below is a screenshot showing a few recent posts from adactio.com as rendered in an IRC-based reader.
+
+[[File:adactio-posts-in-irc-reader.png|500px]]
+
+Currently the python mf2 parser does not include alt text in the parsed result, so these posts look fine in [[Woodwind]]. However, if it did, as the parsing algorithm suggests, this is how a post would look. (with more representative alt text)
+
+[[File:adactio-post-with-alt-text-in-woodwind.png|500px]]
+
+Woodwind has no way of knowing the first line of the name property came from the alt text.
+
+=== Resolved ===
+Previous to 2019-078:
+
+Below are two posts from tantek.com in the same reader. Note that the text of the first post includes "a jpg" which is the alt text of the image.
+
+[[File:tantek-posts-in-irc-reader.png|500px]]
+
+Resolution: Starting 2019-078, tantek.com supports showing alt text on images so now it just depends on the author taking the time to add them (parenthetically as it were) to each photo post moving forward (and perhaps adding alt to past photo posts incrementally).
+
+== Brainstorming ==
+Ideas for improving the adding of alt text to images, photo posts, etc.
 
 == See Also ==
 * [[photos]]
