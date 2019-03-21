@@ -115,7 +115,7 @@ Inside a plain [[h-entry]], use:
 <div class="h-entry">
 <span class="p-summary">🏷 added label 
  ”<span class="p-category">indieweb</span>“
- to <a class="u-tag-of" href="http://git.example.com/user1/proj2/issues/5">
+ to <a class="u-tag-of" href="https://git.example.com/user1/proj2/issues/5">
  issue 5 of Git project “proj2”
  </a>
 </span>
@@ -130,7 +130,7 @@ How to mark-up a tag reply, e.g. with the tags "indieweb" and "indiewebcamp":
 <span class="p-summary">🏷 added labels 
  ”<span class="p-category">indieweb</span>“ &amp;
  ”<span class="p-category">indiewebcamp</span>“
- to <a class="u-tag-of" href="http://git.example.com/user1/proj2/issues/5">
+ to <a class="u-tag-of" href="https://git.example.com/user1/proj2/issues/5">
  issue 5 of Git project “proj2”
  </a>
 </span>
@@ -165,8 +165,8 @@ Building on prior example:
  ”<span class="p-category">indieweb</span>“ &amp;
  ”<span class="p-category">indiewebcamp</span>“
  to <a class="u-tag-of u-in-reply-to" 
-       href="http://github.com/u/coolproj/issues/5">
- issue 5 of GitHub project “coolproj”
+       href="https://git.example.com/user1/proj2/issues/5">
+ issue 5 of Git project “proj2”
  </a>
 </span>
 <time class="dt-published" datetime="YYYY-MM-DD HH:MM">5 hours ago</time>
@@ -175,30 +175,6 @@ Building on prior example:
 
 And for a person-tag, see the [[#person tag reply|person tag reply]] brainstorm's second markup example which just adds the necessary <code>p-summary</code> markup.
 
-=== tag and comment ===
-Alternatively, does this use-case make sense?
-
-Tag some other post, and comment on it at the same time?
-
-'''2019-007 answer: No. Based on [https://github.com/snarfed/bridgy/issues/832 Bridgy #832 discussion]''', such a multi-interaction response is both an unnecessary complexification of UX (users understand tagging and commenting as separate actions, thus posts, not as one action/post), and consuming code logic.
-
-<del datetime="2019-01-07><div>
-Inside your usual [[h-entry]], use:
-<pre>
-<a class="u-in-reply-to u-tag-of" href="http://a.example.com/postpermalink37">...</a>
-<p class="e-content">
-This is a great post about the <span class="p-category">indieweb</span>
-and <span class="p-category">indiewebcamp</span>.
-</p>
-</pre>
-
-And then send a webmention from your tag reply permalink to <nowiki>http://a.example.com/postpermalink37</nowiki>.
-
-Doing so will tag that postpermalink37 with the tags "indieweb" and "indiewebcamp", as well as make the comment <blockquote>This is a great post about the indieweb and indiewebcamp</blockquote>
-</div></del>
-
-Related [[Bridgy]] issue:
-* [https://github.com/snarfed/bridgy/issues/832 #832: github publish: crash on reply post with tag-of]
 
 === person tag reply ===
 To tag someone in someone else’s photo, post a person tag reply such as this, and send webmentions to all the links.
@@ -246,6 +222,34 @@ Similar to [[person-tag]]s in posts themselves, a person-tag reply should be abl
 See [[person-tag#Tantek]] examples for person-tag h-cards with multiple URLs.
 
 (needs markup example, e.g. above markup but with h-cards that have multiple URLs per person)
+
+== Abandoned Brainstorming ==
+Brainstorming that’s been rejected or found to not work / make sense. Kept here for historical value (especially if the idea comes up again).
+
+=== tag and comment ===
+Alternatively, does this use-case make sense? '''tl;dr: It does not.'''
+
+Tag some other post, and comment on it at the same time?
+
+'''2019-007 answer: No. Based on [https://github.com/snarfed/bridgy/issues/832 Bridgy #832 discussion]''', such a multi-interaction response is both an unnecessary complexification of UX (users understand tagging and commenting as separate actions, thus posts, not as one action/post), and consuming code logic.
+
+<del datetime="2019-01-07><div>
+Inside your usual [[h-entry]], use:
+<pre>
+<a class="u-in-reply-to u-tag-of" href="http://a.example.com/postpermalink37">...</a>
+<p class="e-content">
+This is a great post about the <span class="p-category">indieweb</span>
+and <span class="p-category">indiewebcamp</span>.
+</p>
+</pre>
+
+And then send a webmention from your tag reply permalink to <nowiki>http://a.example.com/postpermalink37</nowiki>.
+
+Doing so will tag that postpermalink37 with the tags "indieweb" and "indiewebcamp", as well as make the comment <blockquote>This is a great post about the indieweb and indiewebcamp</blockquote>
+</div></del>
+
+Related [[Bridgy]] issue:
+* [https://github.com/snarfed/bridgy/issues/832 #832: github publish: crash on reply post with tag-of]
 
 == See Also ==
 * [[edit]]
