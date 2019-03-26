@@ -2,110 +2,27 @@ https://indieweb.org/Micropub-extensions
 
 This page is for documenting extensions to [[Micropub]]. Please use this page to document the list of current and proposed extensions, as well as document implementations of them. Development and discussion of the extensions should happen in a GitHub issue. 
 
-Please open a new issue [https://github.com/indieweb/micropub-extensions/issues here] if you would like to propose a new extension, then you can add a new section to document your implementation of it here.
+Please open a new issue [https://github.com/indieweb/micropub-extensions/issues here] if you would like to propose a new extension, then you can add a new section in the [https://indieweb.org/Micropub-extensions#Proposed_Extensions Proposed Extensions section] to document your implementation of it here.
 
-[https://github.com/indieweb/micropub-extensions/projects Discussion on GitHub]
+== Approval of Extensions ==
+The core Micropub spec isn't expected to change, however additional specifications built to extend the Micropub spec are possible. In order to ensure that extensions have diverse implementations there is a three stage process for extensions.
 
-== Server Commands ==
-The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
+=== Proposed ===
+Anyone can create a '''proposed''' extension. A proposed extension should have an issue [https://github.com/indieweb/micropub-extensions/issues in the Micropub Extensions GitHub Repo] and a stub under the [https://indieweb.org/Micropub-extensions#Proposed_Extensions Proposed Extensions section] on this page.
 
-=== Slug ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/1
+=== Stable ===
+A stable extension is when a proposed extension has gotten multiple implementations from various people and/or organizations and is considered complete in functionality. This ensures that Micropub extensions work for a variety of use-cases and not just for a single project or company. The general rule of thumb is that there should be 3 server implementations and 3 client implementations.
 
-Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
+When an extension becomes a '''stable''' extension, it should be moved under [https://indieweb.org/Micropub-extensions#Stable_Extensions Stable Extensions section] and there should be clear technical specifications for how a client and server would utilize this extension. All brainstorming under this extension should either be finished and cleared out, or logged under a different proposed extension.
 
-[[File:wordpress-customize-slug.png]]
+=== Official ===
+An extension only becomes an official Micropub extension when it has been published as part of a broader ranged official Spec extension for Micropub. Currently there are no official extensions.
 
-This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
- 
-* <code>mp-slug=</code>
 
-The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
+== Official Extensions ==
+There are not currently any Official Extensions
 
-==== Implementations ====
-* Clients
-** [[Quill]]
-** [[Micropublish]]
-* Servers
-** [[p3k]]
-** [[Transformative]]
-** [[Micropub for WordPress]]
-** [[Postr]]
-
-=== Destination ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/4
-
-* <code>mp-destination=https://mysite.example.com/</code>
-
-Specify a destination to create a new post on a web site other than the default. The value of <code>mp-destination</code> should be a uid from the array of destinations returned from q=config. See [https://gist.github.com/manton/52e0015f87fcf50c687a0c64e392fc37 an example query response here].
-
-==== Implementations ====
-* Clients
-** [[Monocle]] - Monocle will check if your Micropub server returns a list of destinations and will then provide an account chooser UI in the footer when viewing a timeline. Selecting an account will cause any of the response buttons to be sent with the corresponding <code>mp-destination</code> value.
-* Servers
-** [[p3k]]
-** [[micro.blog]]
-
-== New Properties ==
-
-=== Post Status ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/2
-
-* <code>post-status=published</code> (or no post-status set) - The post is published, or when the published date is in the future, the post is scheduled.
-* <code>post-status=draft</code> - The post is a draft, and should not be shown in lists. (Of course it's up to the implementation whether it wants to use a capability URL for draft posts or actually restrict it to logged-in users.)
-
-==== Implementations ====
-* Clients
-** [[Quill]]
-** [[Indigenous for Android]]
-* Servers
-** [[p3k]]
-** [[Micropub for WordPress]]
-** [[IndieWeb for Drupal]]
-** [[Postr]] - also uses <code>post-status=deleted</code>
-
-=== Visibility ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/3
-
-* <code>visibility=public</code> (or no visibility set)
-* <code>visibility=private</code>
-
-In addition to public/private visibility, [[Wordpress]] also supports password-protected posts. However, passwords are inherently insecure and also not very user friendly, and there are likely better solutions to the problem. Essentially the goal of password-protected posts on Wordpress is to provide "guest access" to posts, where the viewer does not need an account at the site. Flickr accomplishes this with something they call "guest passes".
-
-As well as <code>public</code> or <code>private</code> there could also be use in a value to hide posts from a main feed. {{grantcodes}} uses <code>visibility=unlisted</code> for this with his photo posts that appear in a gallery collection - The photos have their own post with a unique viewable url, but appear in a gallery post in the main feed, not as multiple individual photos. "unlisted" is [https://gist.github.com/joyeusenoelle/74f6e6c0f349651349a0df9ae4582969#how-do-privacy-settings-work already in use by mastodon].
-
-==== Implementations ====
-* Clients
-** [[OwnYourSwarm]]
-** ?
-* Servers
-** [[Micropub for WordPress]]
-** [[p3k]]
-** [[abode]]
-** [[Postr]]
-
-=== Location Visibility ===
-
-Proposal by {{gwg}} 
-
-* <code>location-visibility=public</code> (or no visibility set)
-* <code>location-visibility=private</code>
-* <code>location-visibility=protected</code>
-
-This is based on {{gwg}}'s implementation in Simple Location, an Indieweb friendly location plugin, of the WordPress Geodata unofficial guidelines. It states a single property which can be set to public or private, with the absence of the property being considered to be public. Proposing the third property, which will allow for a less specific text only display, but no actual coordinates.
-
-==== Implementations ====
-* Clients
-** Indigenous for Android
-* Servers
-** [[Micropub for WordPress]]
-
-== Query ==
-Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
+== Stable Extensions ==
 
 === Query for Supported Vocabulary ===
 ; '''Issues and discussion:''' 
@@ -164,7 +81,110 @@ This is an extension for returning what properties a Micropub server supports, s
 ** [[abode]]
 ** [[IndieWeb for Drupal]]
 
-=== Query for Post List ===
+== Proposed Extensions ==
+
+=== Server Commands ===
+The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
+
+==== Slug ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/1
+
+Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
+
+[[File:wordpress-customize-slug.png]]
+
+This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
+ 
+* <code>mp-slug=</code>
+
+The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
+
+===== Implementations =====
+* Clients
+** [[Quill]]
+** [[Micropublish]]
+* Servers
+** [[p3k]]
+** [[Transformative]]
+** [[Micropub for WordPress]]
+** [[Postr]]
+
+==== Destination ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/4
+
+* <code>mp-destination=https://mysite.example.com/</code>
+
+Specify a destination to create a new post on a web site other than the default. The value of <code>mp-destination</code> should be a uid from the array of destinations returned from q=config. See [https://gist.github.com/manton/52e0015f87fcf50c687a0c64e392fc37 an example query response here].
+
+===== Implementations =====
+* Clients
+** [[Monocle]] - Monocle will check if your Micropub server returns a list of destinations and will then provide an account chooser UI in the footer when viewing a timeline. Selecting an account will cause any of the response buttons to be sent with the corresponding <code>mp-destination</code> value.
+* Servers
+** [[p3k]]
+** [[micro.blog]]
+
+=== New Properties ===
+
+==== Post Status ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/2
+
+* <code>post-status=published</code> (or no post-status set) - The post is published, or when the published date is in the future, the post is scheduled.
+* <code>post-status=draft</code> - The post is a draft, and should not be shown in lists. (Of course it's up to the implementation whether it wants to use a capability URL for draft posts or actually restrict it to logged-in users.)
+
+===== Implementations =====
+* Clients
+** [[Quill]]
+** [[Indigenous for Android]]
+* Servers
+** [[p3k]]
+** [[Micropub for WordPress]]
+** [[IndieWeb for Drupal]]
+** [[Postr]] - also uses <code>post-status=deleted</code>
+
+==== Visibility ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/3
+
+* <code>visibility=public</code> (or no visibility set)
+* <code>visibility=private</code>
+
+In addition to public/private visibility, [[Wordpress]] also supports password-protected posts. However, passwords are inherently insecure and also not very user friendly, and there are likely better solutions to the problem. Essentially the goal of password-protected posts on Wordpress is to provide "guest access" to posts, where the viewer does not need an account at the site. Flickr accomplishes this with something they call "guest passes".
+
+As well as <code>public</code> or <code>private</code> there could also be use in a value to hide posts from a main feed. {{grantcodes}} uses <code>visibility=unlisted</code> for this with his photo posts that appear in a gallery collection - The photos have their own post with a unique viewable url, but appear in a gallery post in the main feed, not as multiple individual photos. "unlisted" is [https://gist.github.com/joyeusenoelle/74f6e6c0f349651349a0df9ae4582969#how-do-privacy-settings-work already in use by mastodon].
+
+===== Implementations =====
+* Clients
+** [[OwnYourSwarm]]
+** ?
+* Servers
+** [[Micropub for WordPress]]
+** [[p3k]]
+** [[abode]]
+** [[Postr]]
+
+==== Location Visibility ====
+
+Proposal by {{gwg}} 
+
+* <code>location-visibility=public</code> (or no visibility set)
+* <code>location-visibility=private</code>
+* <code>location-visibility=protected</code>
+
+This is based on {{gwg}}'s implementation in Simple Location, an Indieweb friendly location plugin, of the WordPress Geodata unofficial guidelines. It states a single property which can be set to public or private, with the absence of the property being considered to be public. Proposing the third property, which will allow for a less specific text only display, but no actual coordinates.
+
+===== Implementations =====
+* Clients
+** Indigenous for Android
+* Servers
+** [[Micropub for WordPress]]
+
+=== Query ===
+Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
+
+==== Query for Post List ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/4
 
@@ -216,7 +236,7 @@ Another advantage of this extension is that your micropub server is just respons
 }
 </pre>
 
-==== Implementations ====
+===== Implementations =====
 * Clients
 ** [[Indigenous for Android]]
 * Servers
@@ -226,7 +246,7 @@ Another advantage of this extension is that your micropub server is just respons
 ** [[Micropub for WordPress]]
 ** [[Postr]]
 
-=== Query for Category/Tag List ===
+==== Query for Category/Tag List ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/5
 
@@ -256,7 +276,7 @@ The follow example would be returned as part of the <code>?q=category&search=ind
 }
 </pre>
 
-==== Implementations ====
+===== Implementations =====
 * Clients
 ** Indigenous for Android
 * Servers
@@ -266,11 +286,11 @@ The follow example would be returned as part of the <code>?q=category&search=ind
 ** [[Micro.blog]]
 ** [[Postr]]
 
-==== Brainstorming ====
+===== Brainstorming =====
 [[category]] - [https://chat.indieweb.org/2017-01-18#t1484741717234000 suggestion] to get all existing tags/categories in the client. Expectation is client would cache and do autocomplete
 
 
-=== Query for Supported Properties/Queries ===
+==== Query for Supported Properties/Queries ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/7
 : https://github.com/indieweb/micropub-extensions/issues/8
@@ -301,7 +321,7 @@ The following would be returned as part of the <code>?q=config</code> query for 
 }
 </pre>
 
-==== Implementations ====
+===== Implementations =====
 * Clients
 ** None
 * Servers
@@ -309,7 +329,7 @@ The following would be returned as part of the <code>?q=config</code> query for 
 ** [[IndieWeb for Drupal]]
 
 
-=== Query for Location/Venue ===
+==== Query for Location/Venue ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/6
 
@@ -345,25 +365,25 @@ All returns would follow the common properties of an h-adr object with only labe
 }
 </pre>
 
-==== Implementations ====
+===== Implementations =====
 * Clients
 ** [[Indigenous for Android]] - uses the geo property only
 * Servers
 ** [[Micropub for WordPress]] - uses the geo property only
 
-==== Brainstorming ====
+===== Brainstorming =====
 
-=== Ideas for other types of queries ===
+==== Ideas for other types of queries ====
 * [[mp-config]]
 * extended markup formats – right now it is relatively dependent on the server implementation how text content is treated (1:1, basic processing like linking URLs, Markdown, ...). A query could expose information about this (and maybe even be part of a way to choose for the user)
 * media endpoint history – query recent uploads to the media endpoint, e.g. the last X photos uploaded from a phone
 
-=== Questions ===
+==== Questions ====
 
 * According to the current spec (2017-01), a <code>GET ?q=config</code> should also include the <code>syndicate-to</code> property. If the collection of supported properties grows, is this still a thing to hold on to? Venues and tags can make the response potentially large. {{Sebsel}}
 ** Agreed, I think the empty <code>GET ?q=config</code> should be very limited, and clients should reqest things with potentially large responses separately. <span class="h-card" style="white-space:nowrap">{{sparkline|https://aaronparecki.com/photo.jpg}} [[User:Aaronparecki.com|Aaron Parecki]]</span> 11:40, 11 April 2018 (PDT)
 
-== Location checkin information ==
+=== Location checkin information ===
 
 Indigenous for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI. The payload property is 'checkin'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post my geocache logs, see https://indieweb.org/geocaching
 
