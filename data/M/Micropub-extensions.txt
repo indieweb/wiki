@@ -28,7 +28,13 @@ There are not currently any Official Extensions
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/1
 
-This is an extension for returning what properties a Micropub server supports, so that a client like [[Quill]] or [[Indigenous]] could know to hide or rename the common choices in the UI. This is essentially using reverse [[Post Type Discovery]]. The following example would be returned as part of the [https://www.w3.org/TR/micropub/#configuration Micropub Configuration query]
+This is an extension for returning what properties a Micropub server supports, so that a client like [[Quill]] or [[Indigenous]] could know to hide or rename the common choices in the UI. This is essentially using reverse [[Post Type Discovery]].
+
+This extension adds additional data to the [https://www.w3.org/TR/micropub/#configuration Micropub Configuration query] that allows the server to tell the client what types of posts it can receive as well as what those post types should be called in the UI.
+
+When a Micropub client retrieves the [https://www.w3.org/TR/micropub/#configuration Micropub Configuration query], a server supporting this extension should return an array of objects inside the <code>post-types</code> attribute. Each object should represent a post type and have a <code>type</code> attribute that matches the [[PTD]] post type and a <code>name</code> that is a string that should represent the post type in the UI.
+
+An example response is below:
 
 <pre>
   "post-types": [
@@ -45,24 +51,8 @@ This is an extension for returning what properties a Micropub server supports, s
       "name": "Photo"
     },
     {
-      "type": "video",
-      "name": "Video"
-    },
-    {
       "type": "reply",
       "name": "Reply"
-    },
-    {
-      "type": "like",
-      "name": "Like"
-    },
-    {
-      "type": "repost",
-      "name": "Repost"
-    },
-    {
-      "type": "rsvp",
-      "name": "RSVP"
     },
     {
       "type": "bookmark",
@@ -70,6 +60,8 @@ This is an extension for returning what properties a Micropub server supports, s
     }
   ]
 </pre>
+
+If a Micropub client checks the Micropub Configuration query for a <code>post-types</code> array and it doesn't exist or it is empty, the client should assume the server does not support this extension and just default to its regular post types and names. However, if at least one object exists in the <code>post-types</code> array, the Micropub client '''should''' only display features related to the post types found in the array, and any text in the UI should reflect the name presented in the post-types array.
 
 ==== Implementations ====
 * Clients
