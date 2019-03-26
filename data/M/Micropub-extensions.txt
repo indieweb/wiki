@@ -139,19 +139,20 @@ Specify a destination to create a new post on a web site other than the default.
 
 ==== Visibility ====
 ; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/3
+: https://github.com/indieweb/micropub-extensions/issues/11
+
+This extension proposed a new property for use in Micropub requests called <code>visibility</code> that informs a server whether a post should be public, private or unlisted. If no visibility is set, a server '''should''' assume the visibility is meant to be public. If the visibility is set to unlisted, a server has flexibility to treat that how it wants, however this typically means the post wouldn't appear in feeds such as galleries, timelines or streams. If the visibility is set to private, that means this post should not be accessible unless the user is authenticated.
 
 * <code>visibility=public</code> (or no visibility set)
 * <code>visibility=private</code>
+* <code>visibility=unlisted</code>
 
-In addition to public/private visibility, [[Wordpress]] also supports password-protected posts. However, passwords are inherently insecure and also not very user friendly, and there are likely better solutions to the problem. Essentially the goal of password-protected posts on Wordpress is to provide "guest access" to posts, where the viewer does not need an account at the site. Flickr accomplishes this with something they call "guest passes".
-
-As well as <code>public</code> or <code>private</code> there could also be use in a value to hide posts from a main feed. {{grantcodes}} uses <code>visibility=unlisted</code> for this with his photo posts that appear in a gallery collection - The photos have their own post with a unique viewable url, but appear in a gallery post in the main feed, not as multiple individual photos. "unlisted" is [https://gist.github.com/joyeusenoelle/74f6e6c0f349651349a0df9ae4582969#how-do-privacy-settings-work already in use by mastodon].
+Beyond the scope of this discussion is how a user authenticates for a private post, and if they are authenticated how the access control is managed for said post. But this means depending on the server a private post could be viewable by a single person, or it could allow a group of authorized people to view it as long as they are authenticated.
 
 ===== Implementations =====
 * Clients
 ** [[OwnYourSwarm]]
-** ?
+** ...
 * Servers
 ** [[Micropub for WordPress]]
 ** [[p3k]]
