@@ -40,14 +40,24 @@ Bridgy Publish feature request:
 === How to mark up? ===
 
 Possible tags:
-* <code>untag-of</code> - only delete the tag
-* <code>delete-of</code> - can also be used for the whole photo (?)
+* <code>untag-of</code> - only delete the tag(s) in the post
+** issue: too specific to just tags (does that mean <code>[[u-tag-of]]</code> is also too specific?)
+** issue: the name is not necessarily correct, and you may be removing the tag someone else added, thus it's not really an "un-*" action, it's a remove or delete
+* <code>delete-of</code> - can be used for any number of tags/<code>u-category</code>, and also for requesting removal of other properties such as one <code>u-photo</code> of a [[multiphoto]]
+** which other properties would indicate things to remove? vs about the h-entry delete-of post itself
+*** remove: category, photo, ??? others (perhaps make this an explicit list that delete-of applies to?)
+*** about the h-entry itself: dt-published, dt-updated, ??? should this be the default for any new properties e.g. dt-created?
+** +1 {{t}} leaning towards this choice, feels like it strikes a good balance between simplicity and ability to extend to additional properties. 'delete' in the name directly corresponds to Micropub "delete".
+*** Does this mean we should consider "add-of" similarly more general than "tag-of"? Maybe worth discussing in the context of [[edit]] posts in general.
+** ...
+* <code>h-delete</code> - an entire object to represent the full set of properties and values to be removed, close parallel of the Micropub "delete" JSON property.
+** issue: nested object more cumbersome (for publishing and consuming), especially for common case of one property with one value
 
 See also:
 * https://micropub.net/draft/#remove
 
 === hide the untag request ===
-Since the untag request also links the identity and the photo, it should not be easily discovered and thus be a [[private post]] of some kind, e.g. not listed in feeds and at a non-guessable URL. If the other parties abide the request, it can be deleted - once the original tag-post is gone, the tag won't be accidentially recreated.
+Since the untag request also links the identity and the photo, it should not be easily discovered and thus be a [[private post]] of some kind, e.g. not listed in feeds and at a non-guessable URL. If the other parties abide the request, it can be deleted - once the original tag-post is gone, the tag won't be accidentally recreated.
 
 == See Also ==
 
