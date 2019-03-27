@@ -38,23 +38,26 @@ Bridgy Publish feature request:
 
 == Brainstorming ==
 === How to mark up? ===
-
+{{main|edit#add_remove_properties_on_other_posts}}
 Possible tags:
-* <code>untag-of</code> - only delete the tag(s) in the post
+* <code>u-untag-of</code> - only delete the tag(s) in the post
 ** issue: too specific to just tags (does that mean <code>[[u-tag-of]]</code> is also too specific?)
 ** issue: the name is not necessarily correct, and you may be removing the tag someone else added, thus it's not really an "un-*" action, it's a remove or delete
-* <code>delete-of</code> - can be used for any number of tags/<code>u-category</code>, and also for requesting removal of other properties such as one <code>u-photo</code> of a [[multiphoto]]
+* <code>u-delete-of</code> - can be used for any number of tags/<code>u-category</code>, and also for requesting removal of other properties such as one <code>u-photo</code> of a [[multiphoto]]
 ** which other properties would indicate things to remove? vs about the h-entry delete-of post itself
 *** remove: category, photo, ??? others (perhaps make this an explicit list that delete-of applies to?)
 *** about the h-entry itself: dt-published, dt-updated, ??? should this be the default for any new properties e.g. dt-created?
 ** +1 {{t}} leaning towards this choice, feels like it strikes a good balance between simplicity and ability to extend to additional properties. 'delete' in the name directly corresponds to Micropub "delete".
 *** Does this mean we should consider "add-of" similarly more general than "tag-of"? Maybe worth discussing in the context of [[edit]] posts in general.
 ** ...
-* <code>h-delete</code> - an entire object to represent the full set of properties and values to be removed, close parallel of the Micropub "delete" JSON property.
+* <code>u-edit-of</code> and then p-update/p-add/p-delete with an entire embedded object to represent the full set of properties and values to be updated/added/removed, close parallel of the Micropub‘s JSON.
 ** issue: nested object more cumbersome (for publishing and consuming), especially for common case of one property with one value
 
 See also:
 * https://micropub.net/draft/#remove
+
+See the broader discussion for deleting (and adding) specific property values as variants of an [[edit]] post:
+* '''[[edit#add_remove_properties_on_other_posts|Edit brainstorm: add remove properties on other posts]]'''
 
 === hide the untag request ===
 Since the untag request also links the identity and the photo, it should not be easily discovered and thus be a [[private post]] of some kind, e.g. not listed in feeds and at a non-guessable URL. If the other parties abide the request, it can be deleted - once the original tag-post is gone, the tag won't be accidentally recreated.
