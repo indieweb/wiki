@@ -67,19 +67,14 @@ A Pull Request could be a published as:
 There are a few edit posts that are special enough (i.e. how they are typically presented, and the UI for creating / interacting with them) to be worth discussing separately:
 * [[tag-reply]] - adding tags or [[person-tag]]s to posts (typically others's posts, or your old posts)
 * [[location-of]] - adding a location to a post (in particular others's posts, but could also be explicit additions to your own posts after the fact)
-
-These seem to be for adding/removing entire property values (rather than just changing the content property) and thus may merit a different approach e.g. additional responses like:
-* '''add-of''' when you want to add specific properties, tags, location
-* '''delete-of''' when you want to request removing specific property values, tags, person-tags, location (e.g. someone tagging your home as the location of a post)
-Where "add" and "delete" are taken from [https://micropub.net/draft/#add Micropub: Add] (and Remove)
-* Though 'replace' could be worth considering as well, perhaps for the use-case of updating a location tag (though that would be simpler with just multiple "location-of" posts instead of dealing with add vs replace.)
+Despite the difference in UI for those special "edit" posts, it may be worth using a single unified "edit-of" markup model for them. See the [[#Brainstorming|brainstorming section]] for more. 
 
 == How ==
 We haven't quite figured out the "how" of a good way to markup edit posts.
 
 A good start seems to be to write an "edit" like a [[reply]], but with <code>class="u-edit-of"</code> instead of <code>class="u-in-reply-to"</code>
 
-The details of how to markup the diffs (deletions, insertions, replacements) of an edit are still being figured out.
+The details of how to markup the diffs (deletions, insertions, replacements) of an edit are still being figured out in the [[#Brainstorming|brainstorming section]].
 
 == IndieWeb Examples ==
 === Kyle Mahan ===
@@ -232,6 +227,28 @@ Related:
 
 === reuse structure from Micropub? ===
 Micropub has edits, maybe that structure could be adapted? (With the benefit that accepting an edit could be a straight-forward translation of a proposed edit to an MP-request). 
+
+=== add remove properties on other posts ===
+There are particularly common use-cases for (requesting) adding and or removing specific properties on other people's posts.
+* [[tag-of]] (and [[person-tag]])
+* [[untag]] (and removal of a [[person-tag]])
+* [[location-of]] (and perhaps remove of location information)
+
+As these are adding/removing entire property values (rather than just changing the content property) and thus may merit a different approach.
+
+Three approaches:
+# Separate custom markup for each property and adding/removing, e.g.
+#* [[tag-of]] has '''<code>u-tag-of</code>''' for a simple [[h-entry]] response that adds tags to another post.
+#* brainstorms for [[untag]] <code>u-untag-of</code>, and [[location-of]] <code>u-location-of</code>
+# New *-of properties to indicate adding or deleting the properties mentioned in the h-entry.
+#* e.g. additional responses properties like:
+#** '''<code>u-add-of</code>''' when you want to add specific properties, tags, location
+#** '''<code>u-delete-of</code>''' when you want to request removing specific property values, tags, person-tags, location (e.g. someone tagging your home as the location of a post)
+#* Where "add" and "delete" are taken from [https://micropub.net/draft/#add Micropub: Add] (and Remove)
+#* Though 'replace' could be worth considering as well, perhaps for the use-case of updating a location tag (though that would be simpler with just multiple "location-of" posts instead of dealing with add vs replace.)
+# Use '''<code>u-edit-of</code>''' as the response property linking to the post to edit / request changes in, with properties <code>p-update</code>, <code>p-add</code>, <code>p-delete</code> each with an embedded h-* object that they intend to edit.
+#* Though perhaps with a <code>-mp-</code> prefix to indicate literal Micropub update/add/delete semantics: <code>p-mp-update</code>, <code>p-mp-add</code>, <code>p-mp-delete</code> since we don't necessarily expect other uses (in other microformats) for these properties outside of edit posts.
+#* As proposed in the [[#Edit_a_specific_property|Edit a specific property]] proposal above.
 
 === [[fragmention]] ===
 A very basic option (e.g. to propose a spelling correction) could be a fragmention for content selection and just the proposed replacement text.
