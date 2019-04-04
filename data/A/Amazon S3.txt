@@ -64,6 +64,12 @@ This setup is quite slow because Fuse is slow, but it was made for someone not r
 * It is not possible to perform advanced URL rewriting on the server.
 * You cannot run your own software (e.g. PHP or Perl scripts) server-side.
 
+== Brainstorming ==
+=== S3 as a Media Endpoint ===
+[https://indieweb.org/AWS_Lambda#AWS_Lambda_as_a_media_endpoint After trying AWS Lambda as a media endpoint], {{eddiehinkle}} decided to try Amazon s3 as a media endpoint. The idea was that the micropub endpoint would return a presigned s3 url inside the Micropub config query for the media endpoint. This would allow a user that retrieves the url to be able to upload a file directly to s3. This would be less secure because there would be no way to verify the authorization token so it would be assuming the person has access simply because they had a valid access token when they fetched the Micropub config query.
+
+The issue with this is that Micropub clients tend to hold onto Media Endpoint urls for awhile and presigned s3 urls expire in a maximum of 7 days, which means I would need a new Media Endpoint url every 7 days which doesn't work with most Micropub apps currently.
+
 == Outages ==
 Times when there was a noticeable S3 [[outage]]:
 * ...
