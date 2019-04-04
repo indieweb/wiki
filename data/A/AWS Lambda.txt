@@ -4,6 +4,13 @@ https://indieweb.org/AWS_Lambda
 
 '''<dfn>[http://aws.amazon.com/lambda/ AWS Lambda]</dfn>''' is a service from Amazon Web Services that runs individual functions of code rather than running a server. It currently (04-2017) has a quite generous [https://aws.amazon.com/lambda/pricing/ free tier].
 
+== Considerations ==
+* AWS Lambda restricts payload sizes to 10mb, which means you can start having rejection issues if you try to upload more than a 5mb file.
+
+== Brainstorming ==
+=== AWS Lambda as a media endpoint ===
+{{eddiehinkle}} has investigated using AWS Lambda as a media endpoint. It did not go well. AWS Lambda and its Gateway API restrict payload size limits to 10mb, which means actual files being uploaded can't reliable be more than 5mb. (Note: this is a common restriction among serverless functions). Which is a bad restriction for a media endpoint.
+
 == See Also ==
 
 * https://github.com/jimpick/lambda-comments a blog commenting system for static blogs running on Lambda
