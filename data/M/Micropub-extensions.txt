@@ -245,12 +245,14 @@ Another advantage of this extension is that your micropub server is just respons
 ===== Implementations =====
 * Clients
 ** [[Indigenous for Android]]
+** [[Micro.blog]]
 * Servers
 ** [[abode]]
 ** {{j4y_funabashi}}
 ** [[IndieWeb for Drupal]]
 ** [[Micropub for WordPress]]
 ** [[Postr]]
+** [[Micro.blog]]
 
 ==== Query for Category/Tag List ====
 ; '''Issues and discussion:''' 
@@ -389,7 +391,21 @@ All returns would follow the common properties of an h-adr object with only labe
 * According to the current spec (2017-01), a <code>GET ?q=config</code> should also include the <code>syndicate-to</code> property. If the collection of supported properties grows, is this still a thing to hold on to? Venues and tags can make the response potentially large. {{Sebsel}}
 ** Agreed, I think the empty <code>GET ?q=config</code> should be very limited, and clients should reqest things with potentially large responses separately. <span class="h-card" style="white-space:nowrap">{{sparkline|https://aaronparecki.com/photo.jpg}} [[User:Aaronparecki.com|Aaron Parecki]]</span> 11:40, 11 April 2018 (PDT)
 
-=== Location checkin information ===
+=== Other ===
+
+==== Dealing with Expiring Tokens ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/17
+
+Currently IndieAuth and Micropub don't talk about how to deal with expired tokens, whether auto-expiring tokens or revoked tokens. To get a new token, most Micropub clients will make you log out and back in. However in the new Micropub client era with native apps and Reader web apps, you might not want to have to log out and back in just to refresh your token. (more details for brainstorming available in GitHub issue)
+
+==== Dealing with Expiring Configuration ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/18
+
+There are instances where the configuration of a Micropub endpoint can change. Currently both the Media Endpont url and the syndication values are in the Micropub's config query. Because the Media Endpoint is an external service it makes sense that at times this url may change, and the user shouldn't have to log out and back in to update that value. (more details for brainstorming available in GitHub issue)
+
+==== Location checkin information ====
 
 Indigenous for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI. The payload property is 'checkin'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post my geocache logs, see https://indieweb.org/geocaching
 
