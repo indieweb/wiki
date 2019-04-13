@@ -220,6 +220,56 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== Template all pages ===
+Create [[template]]s for all pages created / returned by Falcon.
+
+Goals: 
+* short term:
+** identify page types (verify with falcon.php code review)
+** templatize color palette, e.g. easily switch between daylight, Matrix, TRON:Legacy color palettes
+*** identify color palette semantic labels (verify with simple.css code review)
+*** identify color palettes for daylight (default), Matrix, TRON:Legacy
+*** use CSS Variables in Simple.css to reduce color duplication to minimum, daylight fallback
+** perhaps Alternate Style Sheets for color palette switching
+** templatize typography, e.g. daylight (Helvetica) vs Matrix (monospace) vs TRON:Legacy (???)
+*** identify type semantic labels (if any different from [[h-entry]])
+*** use CSS Variables in Simple.css to reduce font-family duplication to minimum, daylight fallback
+* medium term:
+** identify content modules
+** identify composite modules of content modules
+* long term:
+** zero inline HTML page construction in PHP
+** develop an HTML-native [[template]] language preferably based on prior art, perhaps using a [[microformats2]] design.
+
+MVF/increments:
+* color templatized/switching
+* color+typography
+* atomic content boxes layout
+* composite content boxes layout
+* page layout
+
+Design:
+* page types:
+** home page
+** post permalink
+** archive specific post type on a day, all posts on a day, new month, year
+** Atom [[feed file]]
+* color palette semantic labels
+** post content text, link text, visited text
+** post background
+** post info text, link text, visited text
+** post webactions text, link text, visited text, form input field
+** [[reply-context]] text, link text, visited text
+** reply-context background, border
+* color palettes
+** daylight (default)
+*** ...
+** Matrix
+*** ... #0C0/#000, #ddd/#d5d5d5, #666 ???
+** TRON:Legacy https://twitter.com/ColorsEffect/status/1114584965218312194
+*** <img src="https://pbs.twimg.com/media/D3fNG2cUYAALUAC.jpg" alt="TRON:Legacy frame of Rinzler on his lightcycle with orange wheels at the edge of the Game Grid next to a giant hole in the wall looking at the Outlands with Quora speeding away in the distance" style="max-height:5em" />
+*** hex values: ...
+
 === HTML5 semantic elements for accessibility ===
 Add the following HTML elements to post permalink, post archives lists, and home page for their [http://www.weba11y.com/blog/2016/04/22/screen-reader-support-for-new-html5-section-elements/ documented positive impact on desktop screen readers]:
 * article - around each h-entry
