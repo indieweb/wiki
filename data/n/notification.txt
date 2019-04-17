@@ -247,6 +247,24 @@ Notices are divided by project. Each entry shows the title of the issue/PR and a
 == Articles ==
 * https://medium.com/@intercom/designing-smart-notifications-36336b9c58fb
 
+== Brainstorming ==
+=== Notification Protocol ===
+There is evidence of demand from [[IndieAuth]] consumers (clients) e.g. that [https://github.com/go-gitea/gitea/issues/3837 Gitea OAuth Github thread], that they want a way to notify such SSO users.
+
+Ideally this would be a formally specified Notification Protocol that could be used by any service to notify users of that service, via the URL they used to identify themselves.
+
+The key building blocks here are:
+# the service has a page where it lists notifications for you (see examples above for real world examples of such pages)
+# each such notification is itself an [[h-entry]] and has its own permalink
+# thus when it is generated, it sends a [[Webmention]] to your identity, in essence, it sends a '''[[person mention]]'''
+
+That process in total (publishing a notification for you at a permalink, then sending a person mention) is a simple Notification Protocol building block that can be implemented by an [[IndieAuth]] consuming service to notify you of anything to do with the service! (thereby eliminating any need to ask you for your email address)
+
+In order to provide some amount of privacy, these notification permalinks could be obscured "capability URLs", public, but unlinked from elsewhere (except your logged-in private notifications page listing them all).
+
+For further privacy enhancement, use a '''[[private-webmention]]''' to send the notification.
+
+
 == See Also ==
 * [[webmentions]]
 * [[growl]]
@@ -258,4 +276,4 @@ Notices are divided by project. Each entry shows the title of the issue/PR and a
 * [[GitHub notifications]]
 * https://twitter.com/iamdevloper/status/1090589206013976576
 ** "Browsing the web in 2019...<br><br>@bruised_blood" [https://teespring.com/en-GB/stores/iamdevloper @iamdevloper] January 30, 2019
-* https://pbs.twimg.com/media/DyKNGQSWkAUJQn4.jpg
+* <img src="https://pbs.twimg.com/media/DyKNGQSWkAUJQn4.jpg" style="max-width:100%" />
