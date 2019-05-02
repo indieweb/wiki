@@ -1,0 +1,55 @@
+https://indieweb.org/2018/Nuremberg/storage
+
+'''<dfn>Storage / YAML, JSON, etc.</dfn>''' was a session at [[2018/Nuremberg|IndieWebCamp Nuremberg 2018]].
+
+Notes archived from: https://etherpad.indieweb.org/storage
+----
+IndieWebCamp Nürnberg 2018<br>
+Session: Storage / YAML, JSON, etc.<br>
+When: 2018-10-20 11:00
+
+== Participants ==
+* Jan Sauer
+* Philip Saa
+* Jeremy Cherfas
+* Sebastiaan Andeweg (sebsel, seblog.nl)
+* Calum Ryan (calumryan.com)
+* Sebastian Lasse (sl007)
+
+== Notes ==
+* Philip got interested in YAML as a storage format. He was using XML before.
+* Jan: XML has more options, but, writing by hand is really hard.
+* Philip has a lot of steps to get from XML to HTML via JSON (in his Javascript framework), etc.
+** He has one big file with all his site-content.
+* Sebastiaan A. uses folders with files with 'Kirby Data' in it, which looks like YAML, but is more human friendly
+** fields can contain real YAML too
+** storage is in folders like /YYYY/ddd/n, with YYYY being the year, ddd being the number of the day in the year, and n being the number of post on the day. In that folder is an entry.txt.
+** All the files are indexed in a sqlite database for better searching.
+* JSON is valid YAML
+
+* Jeremy is on Grav
+* Grav (getgrav.org) uses YAML too, as YAML-frontmatter.
+** YAML-frontmatter and then content in markdown, with a YAML part at the top of the file.
+** You can add any fields you like in the frontmatter and they are available to the template.
+
+* Jan wants to use event-sourcing
+** is using MongoDB for storage, because of the way it can search
+** wants to store the events (like 'PostCreated', 'PostUpdated'), of which he can derrive the current state of the 
+
+* Sebastian Lasse wants to store lexical data as well
+** wants a database that he can install for the user in one click
+** Jan recommends ArangaDB
+
+At this point aaronpk let the Google Hangouts join.
+
+* Sebastiaan A. wants to use git for the event sourcing part
+* Jan: that's nice, but you're not able to extract the exact 'Webmention' events. You are stuck with the format (aggregate) you get now.
+
+* Nice thing about having multiple files (e.g. one per post) is that if you break one, the rest of your site still works.
+
+* event sourcing is nice, but event driven architecture might be enough.
+** post-content, external content (the page you mention) and incoming webmentions are different kinds of data and might deserve different kinds of storage.
+
+
+[[Category: 2018 sessions]]
+[[Category: IndieWebCamp Nuremberg 2018]]
