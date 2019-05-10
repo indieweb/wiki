@@ -226,14 +226,9 @@ Create [[template]]s for all pages created / returned by Falcon.
 Goals: 
 * short term:
 ** identify page types (verify with falcon.php code review)
-** templatize color palette, e.g. easily switch between daylight, Matrix, TRON:Legacy color palettes
-*** identify color palette semantic labels (verify with simple.css code review)
-*** identify color palettes for daylight (default), Matrix, TRON:Legacy
-*** use CSS Variables in Simple.css to reduce color duplication to minimum, daylight fallback
-** perhaps Alternate Style Sheets for color palette switching
-** templatize typography, e.g. daylight (Helvetica) vs Matrix (monospace) vs TRON:Legacy (???)
-*** identify type semantic labels (if any different from [[h-entry]])
-*** use CSS Variables in Simple.css to reduce font-family duplication to minimum, daylight fallback
+*** fix archive pages to have <code>&lt;link rel=canonical&gt;</code> without query params
+** identify color palettes for TRON:Legacy, and inverses of daylight (default), Matrix
+** use media query for darkmode to switch between dark/light variants of each theme
 * medium term:
 ** identify content modules
 ** identify composite modules of content modules
@@ -242,8 +237,6 @@ Goals:
 ** develop an HTML-native [[template]] language preferably based on prior art, perhaps using a [[microformats2]] design.
 
 MVF/increments:
-* color templatized/switching
-* color+typography
 * atomic content boxes layout
 * composite content boxes layout
 * page layout
@@ -283,7 +276,7 @@ Add the following HTML elements to post permalink, post archives lists, and home
 === tags with spaces ===
 Use-case: 
 * setting or adding labels to issues (typically on GitHub) that are already using labels with spaces in them. 
-** Enable automatic Bridgy Publish [[POSSE]] a hashtag to [[GitHub]] as a Label (which may have spaces), both on new issues, and tag-of replies.
+** Enable automatic Bridgy Publish [[POSSE]] a hashtag to [[GitHub]] as a Label (which may have spaces), on [[tag-of]] replies (which itself is a separate implementation task!)
 ** Example existing labels with spaces: [https://github.com/w3c/w3process/labels/Needs%20Review W3C Process: Needs Review], (examples needed from CSSWG, SocialWG repos/issues)
 
 Designs:
@@ -349,6 +342,21 @@ Improvements:
 #** “;shrug” gives ¯\_(ツ)_/¯
 #** etc.
 # Stage 6: Implement micropub client and server support, figuring out what is missing for undo etc.
+
+=== UI for many drafts ===
+{{main|draft#UI_for_many_drafts}}
+
+Brainstormed this generically [[draft#UI_for_many_drafts|draft page]] since I think it would be useful as both a local application (where the drafts are stored in local text files) or as a [[Micropub]] client.
+
+For Falcon, I'd likely evolve the abovementioned Post Creation UI to something web-based ([[offline first]] using local storage) with:
+* explicit support for (JS auto-saving) an unpublished draft, like Gmail (no URL? or use post status or something similar)
+* support for multiple unpublished drafts (not just a "current draft" you can come back to)
+** with a simple "pick one" list UI, click to select a draft as the "current draft" you're editing, and preserve that state on the server (which draft), as well as draft scrolling position if possible.
+** upon publishing something it's removed from the list
+** upon undoing a publishing it's added back to the list
+* hashtag buttons by frequency, clicking each filters on that one hashtag (like radio buttons)
+* clicking hashtags highlights them and adds/removes them from filtering (like checkboxes)
+* search box for filtering as well
 
 === Display Likes Reposts ===
 Implement a minimal display of [[likes]] &amp; [[reposts]] on posts.
