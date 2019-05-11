@@ -1,0 +1,114 @@
+https://indieweb.org/2019/D%C3%BCsseldorf/offline
+
+'''<dfn>Offline Strategies</dfn>''' was a session at [[2019/Düsseldorf|IndieWebCamp Düsseldorf 2019]].
+
+Watch: {{videoduration|link=https://www.youtube.com/watch?v=jQ--HhgHkus|duration=44:12}}
+
+Notes archived from: https://etherpad.indieweb.org/offline
+------------
+IndieWebCamp Düsseldorf 2019
+Session: Offline Strategies
+When: 2019-05-11 12:20
+
+== Participants ==
+{{jgmac1106}} -remote
+{{voss}}
+
+=== Notes ===
+
+#offline with Jeremy Keith
+
+IT could be offliney, or not
+
+Who has experience with serviceworkers.
+
+Step 1, you need to run https, except if you run a local version, you can do this on localhost, where it's not an issue.
+
+
+Andreas: switched page to PWA a few years ago after talk by JK. Static site. Whenever someone writes some content, it should update the static files. Some users still see the old content posted, instead of the new one.
+
+How to debug?
+
+Chrome has the best tools, for troubleshooting.
+
+Are there tools or services that track versions of your site, so you can see what's happening?
+
+
+Let's go back a bit, what are your strategies? Go to the cache first, a cache-first strategy.
+
+You have code that is deployed when somenthing changes
+
+on phone you can't hard refresh etc, to make sure you have the latest version.
+
+Someone hits your URL, serviceworker hits the cache version first.
+
+With cache-first the first hit will show outdated content.
+
+Jeremy to the whiteboard to explain serviceworkers in general how they work:
+    
+    - register the service worker
+    - install (this is where you pre-cache and give a list of file to be pre-cached)
+    - activates: serviceworker then activates and listen for every request that comes through
+    - fetch (unsure of the right term here)
+
+        if you change a single byte in your serviceworker script, then it's a different file, and would cause the serviceworker to be installed again
+
+    - there can be issues with browser cache (jeremy says Chrome is the best at respecting the single-byte change to cause a refresh - usually 24hrs is the longest it takes: Charlie: Google docs says as soon as a single byte changes it will reload it)
+
+
+Andreas: Can we trigger a browser refresh from a reinstall of the serviceworker? No, because the DOM is not available
+Might be fixed with postMessage? Not sure, user experience would be bad.
+
+JK: The two interesting elements or the serviceworker is: install and fetch. Here you can build in logic in your code to handle those events.
+
+Possible strategies for any/personal website
+
+    - you probably have an assett folder with images, fonts, etc. Even though you already have instructions to cache them, you can do it even more explicit with the serviceworker, to force getting these from the cache.
+
+    - usually you want to serve html cache first, use a content card on the site. Book example, published book doens't change, serve it from cache
+
+
+Q: Is there a limit on how much you can store?
+A: Depends on the browser. Various browsers have different cache policies for serviceworkers - safari has 30-45 days, I think. Firefox and Chrome has a % measure of total storage available that it won't exceed.
+
+Q: Is there a limit on how much you can store?
+A: not really, just your conscience
+There's a caching strategy for storing the last 100 images loaded in cache, and then popping the first in from this array as more images are loaded
+
+using serviceworkers are great for minimizing network requests, not just for performance (to avoid network requests), but also for minimizing load on data plan for user. If left to the cache, you have improved performance. 
+
+What is your strategy? Do you want to optimize performance, or also consider the data usage ?
+
+Q: Can you minimize the request for when a user is only on WIFI? In practice, yes, but it's not tell you anything about the speed of the connection. Wifi vs 3G. You would still be infering that wifi is "free" while 3g would have a cost. Wifi might have cost as well (metered). You could set your preference in the setting (don't do updates on cellular, there's a string in the request that says "cellular" or "wifi" - but support is not great)
+
+Fresh -1 strategy, definitely use it on assets, not a bad strategy for blogposts either, ex: someone revisits a blog post, I can serve them a stale version. For some content this is total acceptable, but that really depends on the content. You could time it as well (if no data received within 3 sec = serve cached). Another proxy, how long has it taken for the page to load?
+
+Cache as you go strategy: can apply to anything. For any resource requested, make a cached version.
+
+Store different type of content in different caches, so it's easier to validate specific content later on.
+
+At install time you could have a /offline page that loads when visitors are offline. "Sorry you are offline", for example. You can access the API regardless, and you could say "sorry, you are offline, but here are the pages I've cached from the site"
+
+Demo by JK on clearleft, showing how this /offline is implemented there. Browses his website a bit to cache some pages, then goes offline. Not working as he'd like it to, he cached too much! Finally gets to a page that hasn't been cached, shows his Offline page, and a long list of all the pages that has been cached. Quick reference to the URL talk earlier on how to construct URLs
+Another option is to us a different API to store the metadata for the blogposts (IndexDB you can use from a serviceworker, as it's async). LocalStorage is sync, can't use it for serviceworker, but is easier to work with, because it's not IndexDB (:
+
+An example of using localstorage, on thesession.org, where localstorage is used to storing the metadata which shows a nicer list of offline pages. Check source on the site entries to see examples on how it was implemented.
+
+Put the control in the hands of the user: https://una.im has an option for the user to save a page for offline reading.  sarasoueidan.com has example of this as well. This is sort of the indieweb version of instapaper/pocket, let the user decide what they want to have in there. You can also use this to save video/images/assets etc.
+
+Q: Is there a specific way to store this in an indieweb-friendly way, so you could build a service that looped through what in your offline page? No, it's private cache, it's not accessible.
+
+it's annoying you have to be offline, to see what's accessible offline, how to fix? Example is archive.dconstruct.org, which shows at the bottom of the page, what has been saved offline already, which will be accessible in case you loose connection.
+
+Q: Should we implement a indieweb read later button? Would be great if browsers had this, a view to see what article are already availble in the cache, and you could use this as your own
+Note: https://indieweb.org/webactions discusses "read later" as known webaction that some sites have, there is prior UI art there to take a look at.
+It's a case of nudging the web in the direction.  Remember when Google Maps came out, and you would go to look at a map that did not have map tiles that you could zoom and pan, you would see it as broken.
+
+...
+Tantek wants to ask about "local first" -> lunchtime discussion topic!
+...
+
+
+[[Category: IndieWebCamp Düsseldorf 2019]]
+== See Also ==
+* [[2019/Berlin/Schedule]]
