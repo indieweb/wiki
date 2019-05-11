@@ -1,0 +1,90 @@
+https://indieweb.org/2019/D%C3%BCsseldorf/privateui
+
+'''<dfn>Private Posts UI</dfn>''' was a session at [[2019/Düsseldorf|IndieWebCamp Düsseldorf 2019]].
+
+Watch: {{videoduration|link=https://www.youtube.com/watch?v=ZQCFgykTb4A|duration=45:45}}
+
+Notes archived from: https://etherpad.indieweb.org/privateui
+------------
+IndieWebCamp Düsseldorf 2019
+Session: Private Posts UI
+When: 2019-05-11 12:20
+
+== Participants ==
+* {{t}}
+* {{aaronpk}}
+* {{rose}}
+* {{jansauer.de}}
+* {{sebsel}}
+* {{martijnvdven}} – remote
+
+* ... add names
+
+== Notes ==
+* {{aaronpk}} wants to talk from the UI perspective.
+** His website supports creating and finding private posts already, just not super well.
+* Aspects of private posts:
+** Want to be able to share with a number of people.
+** These need to be able to see the posts: both when visiting the site and using a /Reader.
+** The permalink needs to be accesscontrolled and only visible if you are one of the people who is allowed to see it.
+* When visiting a private post: it needs to be visible that it is a private post.
+** Keep people from accidentally sharing.
+** How do other platforms do it? Colours?
+*** Known has a members only post but you have to be a a registered user of the website
+*** [https://quickthoughts.jgregorymcverry.com/2019/05/11/no-distinction-between-a-members-only-group-private-and-private Known Example of Published Post]
+*** [https://quickthoughts.jgregorymcverry.com/2019/05/11/withknown-publicmembers-only-private-posting-ui-indiewebcamp Known Example of UI for Publishing]
+* Hard to build something like this on your site without an idea of what it is supposed to look like.
+* Not just private to 1 person, also private to a group of people.
+** Do you want to advertise it is shared to a group?
+* {{aaronpk}} has the ability to share a post to a list of URLs.
+** Wants internal grouping of these URLs, so posts can be shared with “close friends”.
+** Multiple people can be in multiple groups.
+* Browser UI? Colour the URL bar? Not for security but also for privacy.
+* {{aaronpk}} shows his old UI on /private_posts#Aaron_Parecki.
+** Shows a “to” bar.
+** Do not share information about who a post is shared with, apart from the person reading it.
+*** Maybe do tell them it isn’t '''exclusively''' visible to them.
+* Do you ever want to publish / share something to a single person?
+**  Yes: starts looking like private messages.
+* Three states? 1: everyone can see it, 2: a group can see it, 3: only you (the viewer) can see it.
+* “This is just for me” should be obvious. People use browsers on phones all the time without knowing they use a browser.
+* The Facebook indicator is not enough of an indicator:
+** Easy for people reading a post on Facebook to not know whether something is supposed to be public or not.
+* Computer readable data as well:
+** Clients should be able to warn people when they may be trying to share a private post.
+
+* As soon as private posts can go into a list, readers can start subscribing to them. (Internals unimportant at the moment.)
+* Would you want to not show the post in the list at all, and force every reader to fetch them seperately? Thus informing readers that something truly is locked down.
+** This is very important to me ({{jgmac1106}}), if a post is private I do not want to show in every feed saying "Private Post" or "Password Protected"
+** On WordPress.com people make private post bty password protecting. When this post shows in a reader you see "password protected" I would rather not signal to people they were not invited
+* Problem with Instagram: Instagram does not have sharing (“regram”), so people use external apps. These external apps do not know when you are trying to share a private post or not. Leading to possible private photo leaks.
+* Instagram and Facebook also have a problem where they let you share things that you can see, and then the recipient of the share cannot see it at all because of access control. As sharer you will not know about this, because you can still see the shared content.
+* Mastodon has worked around the issue by not having URLs. They work mostly with message passing, and can then chose not to pass certain messages on.
+* Twitter presentation of private posts (and accounts) seems to be better than Instagram.
+** Twitter shows a 
+** lot of prior art here (mainly from the wiki) https://www.google.com/search?tbm=isch&source=hp&biw=1157&bih=646&ei=EKnWXJKLHOzO5gKZ276gDg&q=private+post&oq=private+post&gs_l=img.3..0l3j0i5i30j0i8i30l6.1264.3646..3860...0.0..0.79.817.12......1....1..gws-wiz-img.....0.iFRDrWsKqTY
+* Readers you also have the trust issue, they will be collecting private posts in someone else’s stead.
+* Subscription servers (Aperture) need to make clear to a reading application (Monocle) that a certain post is actually private.
+* Readers should opt-in / explicitly ask for private posts. That way a server would not be pushing private posts to an unexpecting reader, like legacy applications.
+* Server could put number-of-private-posts in the Notifications channel, if a reader does not support private posts (and those are not being sent there).
+* But how does Aperture know if a post is private? -> How do we represent the information of a post being private in the feed?
+* Start designing what we '''intent''' readers to do, so future readers may stick to a similar design. First implementation will likely get copied.
+* Another version of this is /audience.
+** Not all audiences mean the post is actually private.
+** A post may be aimed at a group of people, but this may be privately targetted or also publicly available.
+** What is the design difference in a reader between “post for group A” and “group for group A and the World”.
+*** Important for the user of the reader to know what the scope of privacy of a post is. Can they go out and share it?
+** Example of sharing to a group and being public: https://aaronparecki.com/2017/03/22/4/micropub-pr
+* Is this like Linux access control? self / group / public?
+** What if it was the web ring metaphor? Removed from the ring you lose private post viewing
+** Wonder if many people would be okay with somethign like xfn for semi-private (as just unlisted)
+* Tantek brings up important point of how groups and private post can lead to bullying
+** Google Docs and youth
+** Text message groups
+** Shared photo albums, where people get addded to album but blocked to edit
+
+Groups as their own entity that changes over time (people get added or removed), vs group as a shorthand for a specific static set of individuals
+
+[[Category: IndieWebCamp Düsseldorf 2019]]
+== See Also ==
+* [[2019/Berlin/Schedule]]
