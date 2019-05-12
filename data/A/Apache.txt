@@ -4,6 +4,20 @@ https://indieweb.org/Apache
 
 '''<dfn>Apache</dfn>''' is widely deployed open source web server software.
 
+== HTTP 406 Not Acceptable Error ==
+
+In some cases, Apache returns HTTP 406 when fetched from a client that does not include <code>*/*</code> in the Accept header. This is due to a common misconfiguration where PHP is enabled by using the <code>AddType</code> declaration instead of a proper solution.
+
+* https://stackoverflow.com/a/24598848/712641
+* https://stackoverflow.com/a/41793472/712641
+
+This error surfaced when [[XRay]] was unable to fetch posts on adactio.com because XRay does not include <code>*/*</code> in its Accept header. The fix was to remove the <code>AddType</code> declaration and include the below instead.
+
+<pre><Files "*.php">
+    MultiviewsMatch Any
+</Files></pre>
+
+
 == Permissions ==
 
 Summary (from [http://serverfault.com/questions/357108/what-are-the-best-linux-permissions-to-use-for-my-website serverfault thread]):
