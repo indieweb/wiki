@@ -263,9 +263,13 @@ Generically, "Quote this" is a better non-silo-specific phrase for this function
 __TOC__
 == Brainstorming ==
 === emoji text labels ===
-Visual design of web action buttons can minimally (and perhaps as a fallback) be represented using emoji and text labels, e.g.:
+Visual design of web action buttons can minimally (and perhaps as a fallback) be represented using emoji/unicode and plain text labels, e.g.:
 
-<pre>♥ Like  ♺ Repost  ↩ Reply</pre>
+<pre>♥ Like  ♺ Repost  ↵ Reply</pre>
+
+Consider using CSS generated content to create the labels, e.g. 
+<code style="display:block">.reply-web-action::before { content: '↵ '; }<br/>.reply-web-action { white-space:nowrap; }</code>
+The first rule avoids having the emoji/unicode symbols be unnecessarily read out loud by a screen reader, and the second rule avoids a linebreak between the symbol and the text label.
 
 === which actions ===
 There are many possible web actions to place on / above / in a post. Here are some suggestions.
