@@ -8,11 +8,13 @@ https://indieweb.org/WordPress/Themes
 == Why ==
 Why use a particular WordPress theme?
 
-WordPress themes primarily change the look and feel of a site through the use of CSS and often the underlying HTML that displays your content.
+[[WordPress Themes]] are meant to abstract away the look and feel of a website from the text, photos, and other content that they present. This will allow your website to change themes the way a person might change their clothes&mdash;the person (or website) stays fundamentally the same, but their appearance to the outside world changes.
+
+WordPress themes primarily change the look and feel of a site through the use of CSS and often the underlying HTML that displays your content, which is stored separately in a database.
 
 Different themes may do this in different ways, with differing levels of markup quality.
 
-Selecting a theme that provides higher markup quality (valid, semantic, proper use of [[microformats]]) improves the computer-readability of your pages, for peer-to-peer interactions, clients, and search engines. In particular high quality support of microformats will improve the way your content appears on your own site and when linked ''via'' [[webmentions]] at sites you reply, respond, react, or even just link to.
+Selecting a theme that provides higher markup quality (valid, semantic, proper use of [[microformats]]&mdash;see below) improves the computer-readability of your pages, for peer-to-peer interactions, clients, and search engines. In particular high quality support of microformats will improve the way your content appears on your own site and when linked ''via'' [[webmentions]] at sites you reply, respond, react, or even just link to.
 
 For the best indieweb support, use one of the WordPress themes that supports microformats2, as that will make it easier for plugins, clients, etc. to interact with your site:
 * [[WordPress/Themes#Themes_Supporting_Microformats|Themes Supporting Microformats]]
@@ -20,13 +22,21 @@ For the best indieweb support, use one of the WordPress themes that supports mic
 Another option is to use or add a microformats-compatible child theme to an existing theme.
 
 == Theme Sources ==
-In general, the best and safest place to download themes is directly from the [https://wordpress.org.themes/ official Wordpress Theme Directory]. Themes can also be found on Github and other repositories, but one should take appropriate care to check that they don't include malicious code.
+In general, the best and '''safest''' place to download free themes is directly from the [https://wordpress.org/themes/ official Wordpress Theme Directory]. Themes here are regularly and rigorously reviewed for levels of quality and security.
 
-Keep in mind that WordPress maintains two different theme repositories: one on their .com domain which is meant for their own hosted service and a second one on their .org domain. Often popular themes from the .org platform will often be forked and offered on the .com domain, but then aren't always maintained in parallel. Thus there are examples (like [[Independent Publisher]] - see below) which have Indieweb related updates which are usable on self-hosted locations, but aren't available to .com customers.
+WordPress maintains two different theme repositories: one on their .com domain which is meant for their own hosted service and a second one on their .org domain. Often popular themes from the .org platform will often be forked and offered on the .com domain, but then aren't always maintained in parallel. Thus there are examples (like [[Independent Publisher]] - see below) which have Indieweb related updates which are usable on self-hosted locations, but aren't available to .com customers.
 
+Themes can also be found on Github and other (usually commercial) repositories, but one should take appropriate care to check that they don't include malicious code.
+
+=== Security ===
+{{main|WordPress/Security}}
+
+A [https://web.archive.org/web/20131204234741/http://premium.wpmudev.org/blog/why-you-should-never-search-for-free-wordpress-themes-in-google-or-anywhere-else/ 2011 study] found that almost every other source in the top 10 Google results contained malicious code (a [https://premium.wpmudev.org/blog/free-wordpress-themes-ultimate-guide/ 2014 update] says the situation has improved but still recommends caution).
+
+Child themes (see below) allow for better future security updates without overriding additional modifications.
 
 == Child Themes ==
-When working with WordPress themes, it's common practice (for security and update reasons) to create a child theme of the original. This allows the user to make any necessary modifications to the functions.php and CSS Style files in the child theme. Doing this will allow the main theme to be updated in the future with bug patches and security updates without overriding the changes made in the child theme.
+When working with WordPress themes, it is common practice (for security and update reasons) to create a child theme of the original. This allows the user to make any necessary modifications to the functions.php and CSS Style files in the child theme. Doing this will allow the main theme to be updated in the future with bug patches and security updates without overriding the usually minor changes made in the child theme.
 
 If you do the additional work to make sure that another specific theme properly supports microformats, either with a child theme or by modifying the parent theme, submit your changes/patches upstream to the theme so others benefit as well. This can be a great way to improve that specific theme and indieweb support in the broader community.
 
@@ -39,18 +49,46 @@ For details on how to create a child theme, see some of the following resources:
 === IndieWeb Examples ===
 * {{chrisaldrich}} has a child theme somewhat customized for the [[WordPress]] Twenty Sixteen theme [https://github.com/chrisaldrich/2016-child-theme-for-indieweb available on GitHub] as an example of files and code a child theme should/could contain.
 
-== Microformats ==
-Once you have a site running WordPress, you'll want to add [[microformats]] 2 (sometimes referred to as mf2) support to your theme if possible. Some themes support [[microformats]] or other semantic markup like schema.org. Microformats 2 is not (yet) supported by WordPress or the majority of WordPress themes out of the box, though we hope this situation will change over time. Many services will also fall back to the original microformats standard, which many WordPress themes support.
 
-There are three ways to add microformats2 support (listed in increasing levels of ease-of-use):
-* Modify your theme by hand to add support directly
-* Use the uf2 plugin to add support programatically
+== Microformats ==
+=== Introduction ===
+Some of the most basic inter-website functionalities within the IndieWeb are enabled by simple web standards. These standards make it easier for individual sites to communicate with each other. Among these fundamental standards is the use of [[microformats]] which are semantic classes added to [[HTML]] tags. Some examples of microformats include <code>h-card</code>, <code>p-street-address</code>, or <code>u-photo</code>. Many of these microformats are relatively straightforward and indicate exactly what they mean, so <code>p-street-address</code> on a bit of HTML naturally indicates that the item it's wrapped around is a street address. 
+
+Microformats are embedded in web pages and aren't necessarily seen by people, but instead are used by other computers, servers, and programs to help them understand the content on the page and how it is structured. In our example above, <code>h-card</code>, is tells other computers that the content that will be found inside it is the online equivalent of a business card which generally includes other microformats like <code>u-photo</code> which specifies a photo of the person about whom the business card is for along with their name (<code>p-name</code>), address, and country (<code>p-country-name</code>). 
+
+Here's a relatively simple example of an h-card in which all the classes are microformats:
+ 
+<pre>
+<p class="h-card">
+  <img class="u-photo" src="http://example.org/photo.png" alt="" />
+  <a class="p-name u-url" href="http://example.org">Joe Bloggs</a>
+  <a class="u-email" href="mailto:joebloggs@example.com">joebloggs@example.com</a>, 
+  <span class="p-street-address">41 Automattic Lane</span>
+  <span class="p-locality">Reykjavík</span>
+  <span class="p-country-name">Iceland</span>
+</p>
+</pre>
+
+These microformats become more important when you are writing a reply on your own website to a post on another site. To show your reply, the receiving website has a [[parser]] that will look at your web page with the reply and be able to quickly and easily identify things like which part of your page contains your name, your photo, and the ''exact'' portion of your webpage that is the actual reply (as opposed to the header, footer, or sidebar content that perhaps isn't as directly relevant). 
+
+While one doesn't need to know much, if anything, about microformats, suffice it to say that they're relatively important for site-to-site intercommunication. Fortunately for the average user, one's [[WordPress theme]] is responsible for handling and placing the microformats in the proper locations on your behalf&mdash;this is why you can promptly forget about them.  Because there are currently not many WordPress themes which properly implement the widest variety of microformats, we '''highly recommend''' starting out using the themes [[SemPress]], one of its [[SemPress#Child_Themes|many child themes]], or [[Independent Publisher]] which do an excellent job of integrating the most modern implementation of microformats version 2.
+
+People often choose WordPress because of its power and flexibility. As part of this flexibility, there are thousands of available themes (and plugins) to choose from. Each theme may behave slightly differently within an IndieWeb context based on how compliant it is with modern web standards. Often you can choose almost any theme from the [https://wordpress.org/themes/ WordPress repository] or other reliable sources and they will work reasonably well because WordPress has portions of the older microformats version 1 built into it. However, because of how some themes implement their microformats (some themes do a poor job), your results may not be quite what you expect (or want). Often these small cosmetic issues will be seen when interacting with other websites and how they will automatically display your responses or replies.
+
+Using the theme of your choice may work, but it may require additional testing, plugins, or custom code to display exactly what you want to inter-operate properly with other websites using these standards. We expect that over time and with growth, more and more themes will better support these simple standards.
+
+=== Adding Microformats ===
+Once you have a site running WordPress, you'll want to add [[microformats]] version 2 (sometimes referred to as mf2) support to your theme if possible. Some themes support [[microformats]] or other semantic markup like schema.org out of the box. Microformats 2 is not (yet) supported by WordPress or the majority of WordPress themes, though we hope this situation will change over time. Many services will also fall back to the original microformats standard, portions of which are supported by core WordPress functionality and which some WordPress themes extend.
+
+There are three ways to add microformats2 support to your WordPress site (listed from the easiest to implement to more difficult):
 * Use one of the themes mentioned below that support mf2 out of the box
+* Use the uf2 plugin to add support programatically
+* Modify your theme by hand to add support directly
 
 Further reading: [https://david.shanske.com/2016/06/22/converting-wordpress-themes-microformats-2-part-1/ Converting WordPress Themes for Microformats 2] by {{GWG}}
 
 === Themes Supporting Microformats ===
-* The [https://github.com/pfefferle/SemPress SemPress] theme by {{pfefferle}} is currently the only theme to support microformats, microformats2 and schema.org. The [https://wordpress.org/themes/sempress/ official version of the theme] can be found in the WordPress.org repository. There are also several child themes available on Github listed in the project's instructions as well.
+* The [[SemPress]] theme by {{pfefferle}} is currently the only theme to support microformats, microformats2 and schema.org. The [https://wordpress.org/themes/sempress/ official version of the theme] can be found in the WordPress.org repository. There are also several child themes available on Github listed in the project's instructions as well.
 ** [https://github.com/jihaisse/SemPress-Lite SemPress Lite]
 ** [http://cmx.org.uk/indextheme/ Index]
 ** [https://github.com/pfefferle/SenPress SenPress] or [https://wordpress.org/themes/senpress/ WordPress.org version]
@@ -63,29 +101,23 @@ Further reading: [https://david.shanske.com/2016/06/22/converting-wordpress-them
 * [[IndieWeb Publisher]] is a forked version of Independent Publisher (above) that continues to add additional IndieWeb [[friendly]] elements to the original theme.
 
 * [[Autonomie]] by {{pfefferle}} is a clean WordPress theme inspired by Medium.com. It is SEO optimized, accessibility ready and highly semantic. The theme is made with HTML5 (POSH) and flavoured with Microformats(2) and Microdata/Schema.org. It is based on the SemPress theme code.
-* [https://github.com/dshanske/mf2_s MF2_s] is a starter theme from {{gwg}} which supports microformats. It is a fork of the popular [https://underscores.me Underscores] starter theme which many developers use as a base for building custom themes. It is under active development with the hopes it will form the basis of future themes. Because it is a "starter theme" which is meant as something to build upon, it generally wouldn't be used out of the box in an as-is theme since it has very little structure and most would consider it not very user friendly.
+
+* [https://github.com/dshanske/mf2_s MF2_s] is a starter theme from {{gwg}} which supports microformats. It is a fork of the popular [https://underscores.me Underscores] starter theme which is primarily meant for developers to use as a base for building custom themes. It is under active development with the hopes it will form the basis of future themes. Because it is a "starter theme" meant for developers, average users will likely find that it doesn't meet their needs without changing it significantly.
 
 === Solutions for Themes not Natively Supporting Microformats ===
 Rather than a theme supporting it natively, [https://github.com/pfefferle/wordpress-uf2 uf2] is a plugin that attempts to add microformats2 data to an existing theme. The author admits it is very limited and recommends using a theme that supports microformats natively. In practice it works well enough with most out-of-the box themes as to be very useful for lots of basic functionality. Be aware that some themes unfortunately use microformat classes for CSS styling rather than just semantics, and this can cause issues (typically only with the way the pages display) when using the uf2 plugin.
 
 Examples of themes that don't work well with the uf2 plugin:
 * Twenty Fourteen - styles the hentry class and causes display issues when uf2 is activated.
+** See also details at [[WordPress hentry problem]]
 
 One can also create a new theme from scratch to support microformats.
-
-See also details at [[WordPress hentry problem]]
 
 == Other Interesting Themes ==
 * [http://p2theme.com/ P2] is a microblog theme for WordPress that might be adaptable for indiewebsters, but doesn't have mf2 support out of the box. (See also the [https://geto2.com/ O2 child theme].)
 * [http://planetozh.com/blog/my-projects/ozh-tweet-archive-theme-for-wordpress/ Ozh Tweet Archive Theme] was originally made as a Twitter knockoff theme to be used with the [http://planetozh.com/blog/my-projects/ozh-tweet-archiver-backup-twitter-with-wordpress/ Ozh Twitter Archiver Plugin], but could certainly be used on its own.
 * [[GeneratePress]]
 
-== Security ==
-{{main|WordPress/Security}}
-
-The safest place to download free themes is the [https://wordpress.org.themes/ official Wordpress Theme Directory]. A [https://web.archive.org/web/20131204234741/http://premium.wpmudev.org/blog/why-you-should-never-search-for-free-wordpress-themes-in-google-or-anywhere-else/ 2011 study] found that almost every other source in the top 10 Google results contained malicious code (a [https://premium.wpmudev.org/blog/free-wordpress-themes-ultimate-guide/ 2014 update] says the situation has improved but still recommends caution).
-
-Child themes (see above) allow for better future security updates without overriding additional modifications.
 
 
 {{WordPress}}
