@@ -1,0 +1,120 @@
+https://indieweb.org/2019/Utrecht/buildingblocks
+
+'''<dfn>Building Blocks (with WordPress)</dfn>''' was a session at [[2019/Utrecht|IndieWebCamp Utrecht 2019]].
+
+Notes archived from: https://etherpad.indieweb.org/buildingblocks
+----
+IndieWebCamp Utrecht 2019<br>
+Session: Building Blocks and IndieWeb WordPress<br>
+When: 2019-05-18 12:20
+
+== Participants ==
+* {{Zegnat}} (session facilitator)
+* {{sebsel}}
+* {{rose}}
+* {{tonz}}
+* {{doubleloop}}
+* Ewout
+* {{addyourself}}
+
+== Notes ==
+Identity
+* own your own identity, don't let others decide what you can and can't put online
+  
+microformats
+* microformats.io
+* microformats is nearly at 15th birthday
+* you want to put info about yourself online - you want it to be also machine readable
+* many ways to do machine readability - schema.org, json-ld, microformats
+* add class names in to existing html, to allow parsing of class names
+* parsers available for lots of different languages on top of this spec
+* e.g. h-card - html version of v-card
+* php.microformats.io as a way of parsing microformats and seeing how it looks in json
+* rel=me as a way of connecting to other services e.g. github
+
+posts
+* marked up with microformats again
+* specifications grown up by convention
+* if you're using a reader that understands these properties, they can figure out how to display them
+* posts can include citations - you would then send them a mention
+
+(question about getting microformats in wordpress - use a specifically designed theme, or can try mf2 plugin)
+
+mentions
+* first interaction building block
+* related to pingbacks, linkbacks, a way of interacting on early web
+* webmentions is a w3c spec
+* a way of figuring out that there is a webmention endpoint as somewhere to interacting with them
+* when you've been webmentioned, your site may then go and figure out what is the content of the post that mentions you - and pull it to your site
+
+(question: how does in build on ping/linkbacks?)
+* in pingbacks you sent all the content of the interaction
+* led to a lot of spam
+* webmention only sends the ur
+* is it more resilient for spam?  we hope!
+* it implicitly adds more hurdles for a spammer to spam via webmention
+* spec includes sections on how to verify if a webmention is real
+* Vouch is an extension that is currently being worked out 
+* using a network of trust - Frank knows Ton, Frank mentions Martijn - Frank could then choose to trust Martijn
+* it might not be only means of spam, but could be an extra part of a heuristic
+* puts more work on the sender
+* you can choose to whitelist certain domains (or not, if you prefer)
+
+login and IndieAuth
+* can use your own site as your authn provider
+* you could also make use of rel=me and then choose to use e.g. github as your authn provider
+* always starts with 'enter your web address'
+
+Web Actions
+* allow a way to choose what like, reply buttons do when you click on them on someone else's site
+* it can call through to configuration on your own site to find out what action to invoke
+* some people are replacing this kind of interaction within readers instead, but this was an early attempt at this
+
+Micropub
+* what should an API look like if every blog had the same API?
+* allows everyone to use the same writing applications for different websites
+* e.g. quill
+* 3rd party tools may also make use of micropub - e.g. instagram syncing tool like ownyourgram
+
+Microsub
+* an alternative to RSS readers, with extra goodies
+* e.g. Indigenous
+* channels - analogous to folders
+* special channel called Notifications - for receiving mentions from across various services
+* microsub clients usually allow interactions within the reader (via micropub!)
+
+(also showing overland to pick up the weather of the current location when creating post!)
+
+Wordpress for setting up the IndieWeb building blocks
+* completely fresh WordPress install
+* start with IndieWeb plugin
+* installing a theme to begin - SemPress is a good one to start with - has all the microformats needed built in
+* there's a fork of 2016 theme with all microformats built in
+* IndieAuth - makes our WP site own way to log in to other indie services
+* also set up Micropub
+* now we can use Quill as a posting interface
+* quill will ask us to authenticate, then we'll allow quill to perform certain actions
+* now can use it to post!
+* note: this is CMS independent!
+
+(things like hootsuite and buffer do similar things - but with closed apis and charges etc)
+
+post kinds
+* notes, photos, reading, listening, etc
+* we can configure in WP all the different kinds that we want
+* we now see these options when we create a new post 
+* creating a like - paste the url in and the details of the post we're liking will be parsed
+
+syndication links
+* we can use this to send our posts and interactions out to other sites (via brid.gy)
+* and interactions will come back too!
+* this allows you to interact with other networks that aren't indiewebifyied yet
+* from our site we're still using the usual building blocks - brid.gy does the heavy lifting of taking content from external networks and adding microformats
+
+[[Category: 2019 sessions]]
+[[Category: IndieWebCamp Utrecth 2019]]
+<!-- add other categories as appropriate -->
+
+== See Also ==
+* [[2019/Utrecht/Schedule]]
+<!-- Add relevant wiki pages discussed here -->
