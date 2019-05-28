@@ -24,6 +24,33 @@ Status: [https://git.jacky.wtf/indieweb/koype/issues/169|'''working on''']
 
 [[private_posts|Private posts]] are intended to allow people to visit a instance of Koype and view content addressed to them. This would also involve sending [[webmention|WebMentions]] to sites that are addressed in the post as well.
 
+=== Address List ===
+An address list in Koype is an extension of the [[Koype#Address_Book|address book]] feature. People are represented using [[h-card]]s and can be put into multiple address lists. The HTML representation of said list would look something like this:
+
+<pre>
+<main class="h-feed">
+  <h1 class="p-name">Avengers</h1>
+  <p class="p-note">These are people I can trust to avenge us; whatever it takes.</p>
+  <a class="h-card u-url" href="https://shield.mil/agents/black-widow">Natasha Romonov</a>
+  <a class="h-card u-url" href="https://sword.mil/agents/marvel">Carol Danvers</a>
+  <a class="h-card u-url" href="https://stark.com/staff/walters-jennifer">Jennifer Walters</a>
+  <a class="h-card u-url" href="https://tony.stark">Anthony Edward Stark</a>
+  <a class="h-card u-url" href="https://avengers.org/staff/rogers-steve">Stephen Rogers</a>
+</main>
+</pre>
+
+
+=== Implementation Path ===
+The route for implementation would be something like the following:
+
+* Require that a user has been authenticated to the site (using [[IndieAuth]] or [[AutoAuth]])
+** If not, give <code>401</code>
+* Fetch list of addresses (cc'd folk) for a post
+** Enumerate all users in remote resources
+* Find authenticated user against list of addresses
+** If authenticated user is not in 'any list', give <code>403</code>
+** Else, show post!
+
 == Webmention Sending and Receiving ==
 Status: [https://git.jacky.wtf/indieweb/koype/issues/6|'''working on''']
 
