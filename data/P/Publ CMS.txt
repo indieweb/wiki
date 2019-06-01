@@ -2,8 +2,20 @@ https://indieweb.org/Publ_CMS
 
 {{stub}}
 
-'''<dfn>[http://publ.beesbuzz.biz/ Publ]</dfn>''' is a [[CMS]] written in Python.
+'''<dfn>[http://publ.beesbuzz.biz/ Publ]</dfn>''' is a [[CMS]] written in Python. It is billed as "like a static site generator, only dynamic."
+
+Its design is based on static publishing systems such as [[Jekyll]] or [[Pelican]], but rather than generate static HTML content, it instead dynamically maps index and entry views to page/entry content based on metadata. It's specifically designed to allow for heterogeneous types of content; for example, [https://beesbuzz.biz/ the author's site] uses the same publishing framework to provide vastly-different presentation and, in some cases, navigation mechanisms for disparate content types such as music, comics, art, and blogs.
+
+It's also designed to keep "legacy" links intact; for example, an entry or category view can claim ownership of an older URL, and it's relatively simple to add regular expression-based URL rewriting as well. Further, if an entry is moved to a different part of the site, old links to its prior location(s) will be automatically redirected to the new permalink.
+
+Another core tenet is that images are rendered based on the page template's requirements, and image renditions support high-DPI displays by default. Individual entries can also override the template rules as necessary, and can even specify different overrides based on which template is rendering it.
+
+While Publ itself doesn't contain any IndieWeb functionality, it is generally a trivial matter to add such functionality in the page templates. For example, the [https://github.com/PlaidWeb/Publ-templates-beesbuzz.biz beesbuzz.biz templates] support [[microformats]], [[Atom]] (including  [[WebSub]]), [[Webmention]] (both outgoing and incoming, via [[webmention.io]] and client-side JavaScript), and [[ActivityPub]] via [[Bridgy Fed]]. 
+Publ is provided as a Python library that is installable via PyPI, and can run on any WSGI-based hosting (including [[Heroku]] and [[Dreamhost]]).
 
 == See Also ==
 * https://github.com/fluffy-critter/Publ
 * [[publ micropub client]]
+* [[Pushl]]
+
+[[Category:CMS]]
