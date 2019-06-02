@@ -9,6 +9,36 @@ https://indieweb.org/Dat
 * {{kevinmarks}} has been experimenting with [[Fritter]] in early 2018
 * {{jimpick}} did some experimentation at [[2017|IndieWeb Summit 2017]] which can be found in the [[2017/Demos#Jim_Pick|Demos section]].
 
+== How to run dat dat as a daemon on linux ==
+
+This only works with static websites that use relative URLs to navigate.
+
+    # get the latest binary release of dat cli
+    cd /tmp
+    wget https://github.com/datproject/dat/releases/download/v13.13.1/dat-13.13.1-linux-x64.zip
+    unzip dat-13.13.1-linux-x64.zip
+    cd dat-13.13.1-linux-x64
+    # make the dat binary executable and copy it to a folder in $PATH
+    chmod  0755 dat
+    sudo cp dat ~/.local/bin
+    # go to your website's root directory
+    cd /var/www
+    # create the dat information - this will be interactive
+    dat create
+    # create a file to tie your domain to your dat hash
+    mkdir .well-known
+    grep dat dat.json | sed -r 's/.*: "(.*)"/\1/' > .well-known/dat
+    echo "TTL=3600" > .well-known/dat
+    # open iptables for dat
+    sudo iptables -A INPUT -p tcp -m tcp --dport 3282 -m state --state NEW -j ACCEPT
+    # switch to a screen session, because dat doesn't seem to have a real daemon 
+    # mode yet
+    screen -S dat
+    # start sharing - this will import every file it finds in the directory
+    # it's running from and will keep watching for changes
+    dat share --port 3282 --watch --import
+
+
 == See Also ==
 * [[Beaker Browser]]
 * {{citation
