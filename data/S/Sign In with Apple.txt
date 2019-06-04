@@ -1,0 +1,31 @@
+https://indieweb.org/Sign_In_with_Apple
+
+{{stub}}
+
+<div class="p-summary">'''<dfn>Sign In with Apple</dfn>''' is an authorization api similar to social silo login buttons that allows a user to sign in using their Apple device. Personal websites could allow this as a more secure sign in when IndieAuth is not available but social silos are not preferred.</div>
+
+In order to implement this on a personal website, the website owner does have to enroll with an Apple Developer account. It is currently not defined whether a free Apple Developer account can be used or if it has to be a paid Apple Developer account. This will be updated with clarification once that is determined.
+
+== IndieWeb Examples ==
+* No IndieWeb examples currently.
+
+== Brainstorming ==
+=== Alternative to IndieAuth ===
+* {{eddiehinkle}} is investigating using sign in with Apple on his website as an alternative for friends and family that don't have IndieAuth.
+=== handler for rel me to email ===
+{{t}}: thinking out loud: since we (e.g. signing into the wiki) used to support rel=me links to email addresses using [[Persona]], and Apple sign-in depends on email addresses, couldn't we also use Sign in with Apple to support email rel=me links as part of a [[RelMeAuth]] solution? Maybe have [[IndieLogin]] support it? Worth filing an issue on that for this idea? 
+
+== Notes ==
+
+* You need [[SPF]] records configured on the domain you want to use Sign In with Apple on.
+* Their token endpoint requires including a <code>User-Agent</code> header, otherwise you get an HTML error page back
+* Their authorization endpoint is not documented, but it is <code>https://appleid.apple.com/auth/authorize</code>
+* The client_id value is the Services ID that you create during setup
+
+== See Also ==
+
+* https://developer.apple.com/documentation/signinwithapplerestapi
+* https://developer.apple.com/sign-in-with-apple/get-started/
+* https://github.com/aaronpk/sign-in-with-apple-example
+* 2019-06-03 https://techcrunch.com/2019/06/03/apple-sign-in-privacy/ <blockquote>when you don’t want to provide your real email address to protect your privacy, Apple will auto-generate a random “relay” email address that hides your real email address.</blockquote>
+* 2019-06-04 https://developer.okta.com/blog/2019/06/04/what-the-heck-is-sign-in-with-apple
