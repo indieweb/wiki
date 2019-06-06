@@ -3,3 +3,22 @@ https://indieweb.org/Cloudinary
 {{stub}}
 
 '''<dfn>[https://cloudinary.com/ Cloudinary]</dfn>''' is a hosting and management service for images and video which can be used as an [[image proxy]].
+
+== IndieWeb Examples ==
+
+=== Marty McGuire ===
+
+{{martymcguire}} uses Cloudinary as a resizing and cropping image proxy for media that he uploads to his site. The process works in three parts:
+* a [[micropub media endpoint]] running at <code>media.martymcgui.re</code> accepts uploads and then serves the uploaded file back as-is.
+* a static site powered by [[Hugo]] recognizes URLs for files at <code>media.martymcgui.re</code> and re-writes them into proxied URLs through Cloudinary.
+* Cloudinary fetches the original file from <code>media.martymcgui.re</code>, performs any resizing and other transforms such as face-finding and cropping, and caches the result.
+
+Example flow:
+# Marty creates a [[photo]] post with [[Indigenous]].
+#* In the background, Indigenous has micropub media endpoint support. It uploads the photo to <code>media.martymcgui.re</code> and gets back the URL to the new image: <code><nowiki>https://media.martymcgui.re/10/2b/b7/d9/d1ec6f8345dc908e0098eb033f931de82b3cea1456f81fb6a7a056b3.jpg</nowiki></code>
+#* That URL is in the <code>photo</code> property for the new post.
+# Marty's site rewrites the <code>photo</code> URL so that the request will be proxied through Cloudinary.
+#* <code><nowiki>https://res.cloudinary.com/schmarty/image/fetch/w_960,c_fill/https://media.martymcgui.re/10/2b/b7/d9/d1ec6f8345dc908e0098eb033f931de82b3cea1456f81fb6a7a056b3.jpg</nowiki></code>
+#** This will restrict the resulting image to 960px width, and will crop the image in "fill" mode.
+#** More info about URL parameters in the [https://cloudinary.com/documentation/image_transformation_reference Cloudinary image transformation reference docs].
+# When a browser visits the [https://martymcgui.re/2018/09/18/191827/ resulting post] it requests the image from Cloudinary, which will fetch it from <code>media.martymcgui.re</code>, transform, and cache it for future requests.
