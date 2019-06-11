@@ -13,6 +13,31 @@ Another core tenet is that images are rendered based on the page template's requ
 While Publ itself doesn't contain any IndieWeb functionality, it is generally a trivial matter to add such functionality in the page templates. For example, the [https://github.com/PlaidWeb/Publ-templates-beesbuzz.biz beesbuzz.biz templates] support [[microformats]], [[Atom]] (including  [[WebSub]]), [[Webmention]] (both outgoing and incoming, via [[webmention.io]] and client-side JavaScript), and [[ActivityPub]] via [[Bridgy Fed]]. 
 Publ is provided as a Python library that is installable via PyPI, and can run on any WSGI-based hosting (including [[Heroku]] and [[Dreamhost]]).
 
+== Planned features ==
+
+=== Private Entries ===
+
+One of the biggest planned features is the ability to make private entries which require logging in via some sort of identity provider to become known. While adding just [[IndieAuth]] would be a good start, the reality is that many people do not have the desire or ability to set up their own domain or identity site with which to provide a supported mechanism (including [[RelMeAuth]]). To that end, the [https://github.com/PlaidWeb/Authl Authl project] is an attempt at building a generic Python framework that will allow logging in via both IndieAuth and siloed OAuth identifiers, as well as being able to send an emailed "magic link," and manage the cookie/session/etc. for that purpose.
+
+On the Publ side of things, the intent is to be able to declare various groups (similar to G+ Circles) which identifiers can be a member of (in some config file format such as Yaml or common config or the like), and then auth-required entries would have a header line like e.g.:
+
+<code><nowiki>
+Restrict: friends https://example.com/~fred !bob@example.com !https://mastodon.example.com/@alice !family
+</nowiki></code>
+
+which would mean "allow friends to see it, as well as Fred, but not Bob or Alice or anyone in the family group."
+
+Another planned feature is being able to allow an entry to be visible to anyone who's logged in, or only to people who ''aren't'' logged in, for example (possibly using <code>*</code> as the generic group indicating people who are logged in and <code>!*</code> to indicate its opposite).
+
+To improve the experience, Publ templates will also be able to see what the current logged-in identity is, and for those who aren't logged in, whether there are entries which would be visible if they were, improving the UX for less-technically-inclined Internet users.
+
+Some design thoughts about how this might work in an Atom feed context are documented at the following blog entries:
+
+* [https://beesbuzz.biz/blog/6128-Federated-access-control-with-Atom-and-WebSub Federated access control with Atom and WebSub] (a proposal for DVDCSS-style E2EE, now deprecated)
+* [https://beesbuzz.biz/blog/3106-Some-more-on-authenticated-Atom Some more on authenticated Atom]
+* [https://beesbuzz.biz/blog/4594-The-authenticated-Atom-musings-continue The authenticated Atom musings continue]
+* [https://beesbuzz.biz/blog/4122-Authl-Yet-another-project-I-dont-have-time-for Authl: Yet ''another'' project I don't have time for]
+
 == See Also ==
 * https://github.com/fluffy-critter/Publ
 * [[publ micropub client]]
