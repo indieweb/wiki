@@ -301,6 +301,25 @@ Iteratively incrementally improve Falcon post [[create|creation]] UI.
 
 Current: hand-editing flat file HTML+microformats storage file to add a new post.
 
+Prototype:
+* Stage 0: start with a minimal UI to post a DM to a URL
+*# Minimimum Viable Feature
+*#* to: URL field
+*#* message: textarea
+*#* (Send) button
+*#* if it's a Twitter profile URL, use Twitter API to send the DM
+*# check [[private messaging]] for more destinations and how to handle
+*# 30 second undo! (client side)
+*#* Send button disables text fields, turns into Sending…:nn (Undo Send) <- different hit target
+*#* with a count down timer :nn that goes from 30 to 0
+*#* At 0, hide :nn counter, (Undo Send) button, use Twitter API to send
+*#* When it returns success, Change Sending… to Sent.
+*#* If user clicks (Undo Send) button, hide button, 
+*#** change Sending… back to (Send) button
+*#** re-enable text fields for editing
+*# 30 second undo (client and server side — so it would work/show status across multiple clients)
+* ...
+
 Improvements:
 # Stage 1: simplify/minimize post origin format as much as possible (to minimum that a UI would "submit", re-use minimum expected properties from [[Micropub]])
 #* scheduled post heads-up / warning: prominent heads-up in the UI if dt-published is more than a whole minute in the future.
