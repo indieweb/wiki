@@ -82,7 +82,6 @@ Falcon supports the following specific kinds of [[posts]].
 ** "no" via text starting with: "not going to " ([http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people since 2015-043]) or "missing "
 ** "interested" via text starting with: "considering today", "considering tonight", "considering going to "
 * [[webmention]](s) sent automatically (or pingbacks if no webmention endpoint) to the indie events being responded to (multi-rsvp supported). ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
-* automatic [[POSSE]] to [[Facebook]] to RSVP to FB events, using [[Bridgy]] Publish
 
 === Comics ===
 '''[[comics]]''' - similar to articles, except the post name is incorporated into the image and not displayed separately. The image is served wider than images in articles, and is marked up with: <blockquote><nowiki><div class="comic"><object type="image/jpeg" ...> fallback markup </object></div></nowiki></blockquote> In addition to the image, there's a further visible description, hyperlinked, semi-structured.
@@ -92,7 +91,7 @@ Falcon supports the following specific kinds of [[posts]].
 === Photo ===
 '''[[photo]]''' posts are similar to notes, but start with a photo image URL which is then automatically marked up with <code>u-photo</code>. Supported [http://tantek.com/2015/244/t1/did-entire-npsf-trackattack since 2015-244] (though older notes starting with images may have been upgraded to photo posts). Full bleed photo styling on home page recent posts stream since 2015-346.
 
-* automatic [[POSSE]] to [[Flickr]], and [[Twitter]] directly using [[Bridgy]] Publish (automatic since 2015-312 ([[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
+* automatic [[POSSE]] to [[Flickr]] & [[Twitter]] directly using [[Bridgy]] Publish (automatic since 2015-312; [[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
 
 * <span id="alt_text_on_photos">[[alt]] text on photos</span> supported [https://tantek.com/2019/078/t1/last-saturday-sfrc-clear-skies since 2019-078] via [http://tantek.com/w//Markdown#Alttextforimages alt text support in CASSIS auto_link], including automatic POSSEing of alt text to Twitter since [[Bridgy]] Publish to Twitter [https://github.com/snarfed/bridgy/issues/756 supports alt text].
 
@@ -100,12 +99,12 @@ Falcon supports the following specific kinds of [[posts]].
 '''[[video]]''' posts are similar to photo posts, but start with a video URL which is then automatically marked up with <code>u-video</code>. Supported [http://tantek.com/2015/346/t3/world-of-laughter-tears-hopes-fears since 2015-346] (though older notes starting with videos (if any) may have been upgraded to video posts).
 * 2015-360 [[poster frame]] support added[http://tantek.com/2015/360/t2/best-starwars-speak-droid]. When the video URL is followed by an image URL, that image URL is used for the <code>poster</code> attribute of the <code>&lt;video&gt;</code> tag, per http://tantek.com/w/Markdown#Videowithposter
 
-* automatic POSSE to [[Facebook]], [[Flickr]], and [[Twitter]] directly using [[Bridgy]] Publish (automatic since [http://tantek.com/2016/055/t12/fast-walk-hike-beach-video 2016-055])
+* automatic POSSE to [[Flickr]] & [[Twitter]] directly using [[Bridgy]] Publish (automatic since [http://tantek.com/2016/055/t12/fast-walk-hike-beach-video 2016-055])
 ; manually POSSEing via silo UIs before that: since [[video#Tantek|2015-12-14 to Twitter]] and [https://www.flickr.com/photos/tantek/24235088549/in/datetaken/ 2016-025 to Flickr].
 
 === Event ===
 '''[[event]]''' posts are similar to article posts, but with explicit datetime start and optional datetime end, location (venue), and host. Supported [http://tantek.com/2017/179/e1/homebrew-website-club since 2017-06-25].
-* Automatic POSSE to [[Twitter]] (from there indirectly to [[Facebook]])
+* Automatic POSSE to [[Twitter]]
 ** with automatic mapping of known venue URLs to their equivalent Twitter @-name
 * Optional manual POSSE to a Facebook event
 * Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06], including [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.com/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])
@@ -146,11 +145,8 @@ Falcon currently supports automatically [[POSSE]]ing to:
 ** '''[[Twitter#original_has_POSSE_tweet|reply threading on Twitter]]''' - reply notes are [[Twitter#POSSE_Replies_to_Tweets|POSSE'd as @-replies]] with proper threading (currently requires user input of original tweet permalink URL that is being replied to) - complete direct implementation.
 ** '''[[Twitter#POSSE_Favorites_of_Tweets|POSSE Favorites of Tweets]]''' via [[Bridgy]] Publish (since 2015-092)
 ** '''[[Twitter#POSSE_Favorites_to_Twitter|POSSE Favorites of indie posts]]''' by favoriting their POSSE tweet copies (if any), again via [[Bridgy]] Publish (since 2015-092)
-* '''[[Facebook]]: [[RSVP]] to [[Facebook]] events, photos, and notes*'''
 ** [[RSVP]] posts are automatically POSSEd to the FB event using [[Bridgy]] Publish (since 2015-145)
 ** [[photo]]s are automatically POSSEd to Facebook using [[Bridgy]] Publish (since 2015-312)
-** *[[notes]] are POSSEd to [[Facebook]] indirectly via Twitter to Facebook bridge, per same limitations as POSSEing notes to Twitter.
-** Occasionally longer notes are manually POSSEd directly in their entirety from tantek.com to Facebook using Bridgy Publish, and then the Falcon original is manually edited to link to the Facebook POSSE copy. Falcon then automatically displays the syndication link to the Facebook POSSE copy on the Falcon post permalink.
 
 == FAQ ==
 === Open Source ===
@@ -876,7 +872,7 @@ Send [[webmentions]] for other posted links (beyond links I'm [[in-reply-to|repl
 ** Enable syndicating posts to [[IndieNews]] (assuming I have [[u-syndication]] links to IndieNews implemented - perhaps as post option in my UI). Help demonstrate IndieNews as a proof of concept of an indieweb-friendly link aggregator.
 
 === improve photo posts ===
-I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook.[http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter!
+I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook [http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter! Then Facebook dropped their API 2018-08-01 and I stopped POSSEing to Facebook.
 
 There are several key improvements (beyond the default mobile presentation - see above) that I want (and some that I explicitly postponed at the time).
 
@@ -890,7 +886,7 @@ New photo post process (as of 2017-088)
 # When bored: edit/curate photos locally on device
 # Later at fast wifi: upload (edited) photo(s) to respective Swarm checkins
 # Later on laptop: Create photo post (or multi-photo of same venue photos) using Swarm width960 jpg for display, link to full "original" 1920x1440 resolution
-#* Automatically POSSE to Facebook, Flickr, Twitter
+#* Automatically POSSE to Facebook (until 2018-08-01), Flickr, Twitter
 # Optionally manually POSSE to IG:
 #* Open Twitter app, go profile
 #* Tap photo POSSE copy
@@ -937,7 +933,7 @@ I also really want to:
 
 ==== photo web action fallbacks ====
 (reprioritize "improve photo posts" at this point)
-Consider providing Instagram/Facebook/Flickr/Twitter web action fallbacks (options?) for photo posts, e.g. to
+Consider providing Instagram/Flickr/Twitter web action fallbacks (options?) for photo posts, e.g. to
 * like a photo or 
 * person-tag it? e.g. [[tag-of]] response (postpone)
 
@@ -1020,7 +1016,7 @@ I want to be able to repost others’ photos from Instagram to my own site, and 
 * POSSE that photo to Twitter, with proper attribution to original author
 ** requires Instagram -> Twitter identity correlation
 ** document existing [[repost#Silo_Examples]] on Instagram using 3rd party tool, what graphical / textual conventions they use
-* POSSE that photo to Facebook, as photo post but with proper attribution to original author / permalink
+* POSSE that photo to Flickr, as photo post but with proper attribution to original author / permalink
 ** figure out how to best use Bridgy Publish to post a photo post with custom text for a repost
 
 ==== reposts of indieweb posts ====
@@ -1639,7 +1635,7 @@ write/publish/syndicate: (live at http://tantek.com/falcon/ )
 
 Note: as I cleanup, refine, and rewrite useful functions in Falcon in CASSIS, I've been open sourcing them in [[cassis.js]]. The following building block functions have been incorporated into other [[projects]]:
 * <code>ellipsize_to_word()</code> - particularly useful for [[POSSE]]ing out to [[Twitter]]
-* <code>auto_link()</code> - better plain text autolinker (and embedder) than Twitter, Facebook, and G+.
+* <code>auto_link()</code> - better plain text autolinker (and embedder) than Twitter, Facebook.
 - [[User:Tantek.com|Tantek]]
 
 Also using [[webmention#Discovery_in_PHP|Discovery in PHP]] approach to find webmention endpoints then <code>curl</code> to send.
@@ -1785,6 +1781,16 @@ I need to [[migrate]] to a new [[webhost]] by 2019-03-06. Existing host is liter
 ** first test it at a subdomain of another domain - worked in general
 ** fixed a bunch of protocol-specific links (http:) to be protocol relative, start with "//"
 ** flip DNS for tantek.com.
+
+== Dropped Features ==
+=== POSSE RSVP video photo to FB ===
+Before 2018-08-01, Falcon supported some POSSEing to Facebook:
+* RSVP: automatic [[POSSE]] to [[Facebook]] to RSVP to FB events, using [[Bridgy]] Publish
+* Video: automatic POSSE to [[Facebook]]
+* Event summary as text indirectly to [[Facebook]] from POSSE Tweet
+* '''[[Facebook]]: [[RSVP]] to [[Facebook]] events, photos, and notes*'''
+** *[[notes]] are POSSEd to [[Facebook]] indirectly via Twitter to Facebook bridge, per same limitations as POSSEing notes to Twitter.
+** Occasionally longer notes wer manually POSSEd directly in their entirety from tantek.com to Facebook using Bridgy Publish, and then the Falcon original is manually edited to link to the Facebook POSSE copy. Falcon then automatically displays the syndication link to the Facebook POSSE copy on the Falcon post permalink.
 
 == Canceled Features ==
 === auto Bridgy POSSE to FB ===
