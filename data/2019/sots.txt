@@ -1,0 +1,101 @@
+https://indieweb.org/2019/sots
+
+------------
+IndieWebCamp PDX 2019
+Session: State of the Suite (of Protocols)
+When: 2019-06-29 15:15
+
+== Participants ==
+* {{mime}}
+* {{nadreck}}
+* {{donp}}
+* {{martymcguire}}
+* katie
+* {{jgmac1106}}
+
+== Introductions ==
+* '''Mime''': has been doing indieweb work for a long time. Currently working on sort of the javascript version of bridgy/granary (social-butterfly) https://www.npmjs.com/package/social-butterfly (Btw, we should use Hackpad! https://github.com/dropbox/hackpad  (Mime worked on this, fork of Etherpad, so I'm biased :) )
+* '''Marty''': doing indieweb for the past few years. Slowly accreting new work. Previously did a weekly podcast, summarizing this week in indieweb into a 10 minute podcast. https://martymcgui.re/tag/this-week-indieweb-podcast/
+* '''Nabil''': last indiewebcamp was 2012, been doing it for a while. blogging for 17 years, still got all that content. experimented with lots of software and CMSes. wants to get a sense of where things are now. https://nadreck.me/
+* '''Don''': general developer, backend-ish, very into protocols. site has IndieAuth (showed off this morning). interested in ActivityPub. working on a Fediverse Reader, currently targeting reading Mastodon feeds.https://donpark.org/
+* '''Katie''': Excited about a lot of the new decentralized web technologies and standards. Have been involved but more on the design side, excited to learn more about the nuts and bolts and capabilities are.
+
+== Notes == 
+
+General agreement is that, deep tech background or not, it is hard to get started. What protocols exist? What problems do they solve? Which should we use?
+
+Should we come up with a "How to get started in IndieWeb?" IndieWeb suggests starting with the simplest/most useful thing (publish human-readable content on a public website) and combine smaller building blocks to get complex behavior.
+
+Mastodon has become a "standard" but ActivityPub leaves a lot unanswered as far as implementation is concerned.
+
+Finding ways to fill the gaps caused by loose interpretations of a spec vs. actual implementation is hard, but improving.
+
+There's also some non-web decentralized work (IPFS and similar).
+
+Mime: Feel like there's a critical mass building up around the "fediverse"
+To scope this talk about protocols: we're not talking about auth protocols like indieauth and such, only talking about protocols related to passing activity/information between sites.
+
+One question is around broader adoption of protocols outside of indieweb folx, broader adoption. 
+
+Don: Maslow's "hierarchy of protocols": HTML, microformats, webmentions.
+
+Bifurcation of the indieweb/fediverse: IndieWeb "vs." ActivityPub. i.e. HTML/Microformats/Webmention vs. ActivityPub
+* https://indieweb.org/Mastodon#IndieWeb_Support - prior suggestions from IndieWeb community. some adopted, some in-progress, some rejected.
+* Mastodon won't support webmentions: https://github.com/tootsuite/mastodon/issues/6074#comment-378452136
+* Marty's attempt at summarizing: mastodon/activitypub model strongly built around only notifying subscribers of new posts, privacy-first push-based delivery. webmention would draw attention to what might otherwise be very limited audience posts (even if they exist at publicly-accessible URLs).
+         
+Challenge: there is lossiness in federating to Pixelfed/Mastodon/other sites b/c of "formats" that they are trying to conform to.
+
+== Protocols ==
+
+=== Active ===
+* '''ActivityPub''': Seems to be active and high interest. (v1: still used in the wild somewhere?, v2: the current standard)
+* '''WebMention''': still experimental with larger sites, maybe confined to IndieWeb?
+* '''MicroFormats''': definitely used still, supported by Mastodon for interoperability with IndieWeb.
+* '''RSS/Atom''': standard for feeds
+* '''LRDD''' ("host-meta"): standard, not necessarily required by ActivityPub
+* '''WebFinger''': standard, but not required for ActivityPub... kinda. Mastodon uses it so you do need it though.
+* '''WebSub''' (née PubSubHubBub): can be replaced by ActivityPub which has its own push mechanism WebSub is a simple protocol that basically says "let me know when bob does something new"
+* '''XFN''': rel="me"
+
+=== Up and coming ===
+* '''JSON Feeds''': up and coming? used in some places. not too widely supported yet
+* '''Microsub''': fetching feeds, decoupling feeds and try to normalize them.
+* '''Micropub''': posting side client -> server
+
+=== Dead ===
+* '''Salmon''': Dead protocol, not really being supported by anyone these days.
+* '''FOAF''': dead; maybe replaced by "so-and-so follows these people" features, like on mastodon; indieweb has /following pages, for example.
+
+=== Unclear/Zombie? ===
+* '''OStatus''': complicated and it's not entirely clear how to implement (Mastodon implemented some of it, which means some pure ActivityPub tools stumble because they're missing ostatus for account discovery)
+
+=== Related ===
+* '''oEmbed'''/'''Open Graph''': find rich object for embedding in posts.
+
+(A recurring theme is that some protocols aren't "officially" dead, but aren't really being used or maintained.)
+
+== Resources ==
+
+=== Models and Tools ===
+* '''Spec collection''': https://spec.indieweb.org/
+* '''Conceptual Model''': https://indieweb.org/graphics
+* '''Tools''': https://indieweb.org/tools
+* '''Building Blocks''': https://indieweb.org/Category:building-blocks
+
+=== List of libraries ===
+* https://indieweb.org/projects (specific software projects implement specific protocols, may use external libraries)
+* https://indieweb.org/Micropub#Libraries (Micropub libs)
+* https://indieweb.org/Webmention-developer#Libraries
+* http://microformats.org/wiki/microformats2#Parsers (somewhat out of date? https://microformats.io/ has some newer references and live demos of libs)
+* https://indieweb.org/WebSub (links to some test suites and running services?)
+
+=== Test suites ===
+There's a .rocks suite of protocol domains for exposing what these protocols show.
+* '''ActivityPub''': https://test.activitypub.rocks/   ...broken though: https://gitlab.com/dustyweb/activitypub.rocks/issues/9   :(
+* '''WebMention''': https://webmention.rocks/
+
+
+----
+
+Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
