@@ -1,0 +1,97 @@
+https://indieweb.org/2019/staticdynamic
+
+'''<dfn>Static Websites with IndieWeb Dynamism</dfn>''' was a session at [[2019|IndieWeb Summit 2019]].
+
+Notes archived from: https://etherpad.indieweb.org/staticdynamic
+----
+IndieWeb Summit 2019<br>
+Session: Static Websites with IndieWeb Dynamism<br>
+When: 2019-06-29 15:15
+
+== Participants ==
+* Dave Peck (davepeck.org) (facilitator)
+* {{tbbrown}}
+* John Karabaic (jk)
+* Cheryl Crowe
+* David Bryant (orangemoose.com)
+* Jordan Brady (mjordan.codes)
+* fluffy (http://beesbuzz.biz)
+* Flaki (flak.is)
+* Jared White (https://jaredwhite.com)
+* Lillian Karabaic (anomalily.net) 
+* {{jgmac1106}}
+* Tomas Quinones (adventuring.bike)
+* Ben Turner
+* {{jnoh}}
+
+== Notes ==
+Setting the agenda: Dave's vision for the conversaion
+* Dave has a static website made with jekyll
+* (A static website is one where the HTML exists as files on the website, generated ahead of time.  A dynamic website has its HTML generated from a program at the time you browse to it.)
+
+SITE  ---------->  HTML -------------> Netlify, github pages, AWS S3 + Cloudfront, FTP, sometimes assisted by a Content Distribution Network, which puts the HTML on servers around the world closer to where people's web browsers are
+         static 
+         generator
+         like
+         jekyll
+         hugo
+         gatsby
+
+This is *somewhat* incompatible with the IndieWeb view of the world
+
+Static websites can't receive the dynamic requests that the IndieWeb needs for the social networks aspects of the IndieWeb
+
+If your website changes because it receives a WebMention, then it's dynamic. Static websites can't do that.
+
+[[microblog]] and other static site generators implement IndieWeb protocols on top of them, so that when the static HTML is generated, it puts the IndieWeb stuff in the HTML
+
+WebMention.io + webhooks can make changes to your static site in github or wherever whenever a webmention is make
+
+WebMention.js -> https://github.com/PlaidWeb/Publ-templates-beesbuzz.biz/blob/master/static/webmention.js
+Jekyll plugin for working with WebMention.io
+
+One of the complications is that as your static site gets built, it's pulling data from Webmention.io to add content to the website.  That can make building your site take a long time without optimizations
+
+Discussion about ownership of your data.  Some aspects
+* Can I move it to another provider?
+* Can I delete it and know it stays deleted?
+* Do I have the copyright?
+
+Discussion about WebSub & WebMention 
+* [[Pushl]] http://github.com/PlaidWeb/Pushl
+
+[[Webmention]] is a way to tell a site you linked to that you linked to it
+
+[[WebSub]] is a kind of feed where you get a notification of new content, like a push notification on your mobile device
+
+There's a list of [[readers]] and other software that supports Websub
+* https://beesbuzz.biz/blog/8139-Some-WebSub-Atom-observations
+
+Static site
+* [[OwnYourGram]] (instagram)
+* [[OwnYourSwarm]] (4square)
+* [[PESOS]] (Publish Elsewhere, Syndicate to your Own Site   https://indieweb.org/PESOS)
+
+[[Gatsby]] has Disqus, a comment engine that requires registration but allows authentication via FB and other sites)
+
+discussion about whether IndieWeb needs a friendly [[Disqus]] replacement
+
+Client-side JavaScript to pull data out, no other good mechanism for doing so
+* to clarify, it's client-side JS to read/publish comments, there is also a separate exporter mechanism on the admin API (although I haven't looked into it)
+
+(2 minutes later) the exporter is documented at https://help.disqus.com/articles/1717164-comments-export
+
+Audio & Video
+* gitlfs + github
+* gitlfs is a filesystem that works with git for storing large binary files, which git isn't good at doing on its own
+* gitlfs with S3 backing store, all hosted thru a docker image: https://github.com/jasonwhite/rudolfs
+
+Questions about SEO
+What it 
+
+"What the IndieWeb needs is more listicles" -- Dave
+
+[[Category: 2019 sessions]]
+[[Category: IndieWeb Summit 2019]]
+== See Also ==
+* [[2019/Schedule]]
