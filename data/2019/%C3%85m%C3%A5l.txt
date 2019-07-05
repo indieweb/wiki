@@ -1,0 +1,161 @@
+https://indieweb.org/2019/%C3%85m%C3%A5l
+
+= IndieWebCamp Åmål =
+
+'''<dfn>IndieWebCamp Åmål</dfn>''' joined IndieWeb Summit 2019 for several sessions. 
+
+== Participants ==
+* {{sknebel}}
+* {{sebsel}}
+* {{Zegnat}}
+* {{jgmac1106}}  remote     
+* {{jeremycherfas}}  remote
+
+== Schedule ==
+(times can move around during the day depending on participants) 
+
+=== SATURDAY 29  ===
+* [13:30] Doors open 
+* [14:00] Introduction by Martijn van der Ven 
+* [14:15] Keynote: Rosemary Orchard, What I Can Do With My Own Website 
+* [14:45] Introduction of participants 
+* [15:15] Planning the day 
+* [15:30] 3x 40 minute sessions 
+* [17:45] Wrap-up and info for day 2 
+
+==== For nightowls:  ====
+* [19:00] Portland Keynotes: Tantek Çelik (State of the IndieWeb), Kitt Hodsden (On Contractions & Expansions), Aaron Parecki (Cutting Edge IndieWeb), Marty McGuire (Own Your Mobile Experience), Jacky Alciné (Making the IndieWeb for All) 
+* [20:00] Portland sessions streams (https://indieweb.org/2019/Schedule) 
+* [03:00] Estimated end time for Portland 
+
+=== SÖNDAG 30  ===
+* [13:30] Doors open [    4.330771] systemd[1]: Starting Journal Service...
+
+* [14:00] Kick-off 
+* [14:15] Be creative! 
+* [17:30] Wrap-up and demonstrations by participants 
+* [18:00] Possibly: opportunity to stream your demonstration to Portland if you want to share your day with the world! 
+
+
+== Sessions ==
+Not on a fixed schedule, we 
+
+*  Private Posts / [[AutoAuth]]
+ 
+* [[Travel]] Logging
+
+* Recent posts on [[read|Reading]]
+
+* Indieweb physical
+
+* [[microformats]]
+
+== Notes ==
+
+* Meeting: https://zoom.us/j/251913730
+
+=== Private Posts ===
+{{main|private posts}}
+* {{sebsel}} showing his private posts implementation
+** he has feeds of private posts for everyone who logs in to his site, showing only the posts shared between him and that person
+** Walking through the https://svgshare.com/i/BhB.svg diagram, and showing the spec for [[AutoAuth]]
+***Q for seblog: logged in state seems not to be persistent. Is there any way to make it persistent?
+***A for {{jeremycherfas}}: yes, but I need a bit more code to make it work! I can make a checkbox to remember the session.
+
+
+* Talking about using user accounts in [[WordPress]] and [[Known]] for private posts
+** I either manually add you as a user with no rights 
+** You sign in with [[IndieAuth]] and a user is created
+** Then you can publish members only posts
+** Recieve a webmention, click on the domain, you parse the website and a user is created with rights to read private posts
+** Doesn't help with [[readers]], but would work with [[Yarns Microsub Server]] on WordPress (paraphasing {{gwg}}, personal correspondence)
+** Known has three post states private (author only, member only, and public)
+
+*Thinking about [[Kirby]] and a following directory and users for private posts {jgmac1106}}
+** Make a template for a new user that publishes a following page of h-cards, have them be users with only read access
+
+Plan for tomorrow: Get sebsel AutoAuth, get something that can fetch it.
+
+=== travel logging ===
+{{main|travel}}
+* sknebel wants to log his travels, but not have it be on his site publicly
+* first implementation could be just private for himself, later private for friends as well
+
+* seb is using [[Swarm]] to create checkins because comfortable
+
+* {{jgmac1106}} is using [https://play.google.com/store/apps/details?id=org.y20k.trackbook&hl=en_US Trackbook] to keep his IndieWeb Summit trip logged
+** All posts get geo tagged and timestampped
+** Wants to build a way where the photos show on map
+** Want to build a view of all the posts and photos within the trip time frame
+** {{cleverdevil}} uses overwatch to add the geolocation of everyone of his posts. Wondering if trackbook good do the same
+
+* {[jgmac1106}} Trying to build checkins into Kirby
+** http://testkirby.jgregorymcverry.com/checkin/indieweb-summit-amal
+** Having trouble with Nomatim lookup, I can search for Portland, Or but not an entire address. Get warning not enough info found
+** Not getting the maptiles to load
+** Going to try mapbox
+
+* [[Known]]
+** [Known Checkin https://github.com/idno/known/tree/master/IdnoPlugins/Checkin]
+ 
+ * [[Kirby]]
+ ** https://github.com/sylvainjule/kirby-locator
+ 
+* interesting challenge: create overviews of trips, e.g. showing interesting things on a map
+** if you post a lot, you might want to exclude "boring" bits - e.g. that you had starbucks at the airport isn't that interesting
+
+* https://johnjohnston.info/walks/maps.html?f=72157691301429443&m=2019-05-06-Glen-Finlas.gpx
+
+Where to get data for venues?
+* https://developer.foursquare.com/places-api -> free tier for personal use. (needs creditcard to confirm before it's free)
+[https://operations.osmfoundation.org/policies/nominatim/ Nominatim]
+[https://docs.mapbox.com/api/ Mapbox API]
+OSM raw data, turn into map tiles
+
+=== Recent posts on Reading ===
+
+* http://beesbuzz.biz/blog/5896-RSS-theres-nothing-better
+* http://beesbuzz.biz/blog/chatter/8263-Re-RSS-Theres-nothing-better
+* http://beesbuzz.biz/blog/5709-Keeping-it-personal
+* 
+
+Martijn and Sven are not using microsub and stopped looking at it, because the protocol does not do folders, nested folders, or get only items from one feed. Example: a folder has 64 unread items. Martijn opens the folder. 35 are from one feed he is only casually interested in, and there is 1 post in one feed he really likes to see. His current reader shows all those. He can just click on that one feed, read that one post.
+He has 'Comics', with sub-categories of 'Manga', 'WebComics', 'Korean'. He can then choose to read all comics, or just a sub-category of it.
+
+Ton uses social distance to sort his feeds. He reads the posts, with the closest social distance first.
+He would like to be able to sort his feeds based on categories, at the same time, to get a different view of the same feeds.
+
+Martijn uses a reader where he can use folders and tags. He can also see posts by a certain tag. But: the interface is a bit cluttering, so he does not use all the tags, just the folders.
+
+Ton primarily follows persons, not feeds. Wants to tag people with 'Berlin' or 'into AI', so he can query more specific.
+
+Sven has a folder with 'hack related', which is dominated by two feeds that are publishing a lot. Considers a new folder with 'firehose', to easily filter those two out.
+
+Martijn mentions a few feed readers that use machine learning to filter feeds (feedafever, no longer operational). Sven and Seb mention training spam-filters to get interesting posts out of noisy feeds. (A simple Bayes filter could be a good start: add all what the filter sees as 'spam'.)
+
+Seb had a reader-project (from before microsub exists) that had two modes of reading: first, you scroll through all your posts, marking posts as 'interesting for later'. Any posts you scrolled past will not be shown again in this view. Then, later, you could scroll through the posts you selected. These posts are then marked as read only if you explicitly say so.
+
+
+* https://feedwrangler.net/welcome.html
+
+==== See Also ====
+* [[read]]
+* [[readers]]
+* [[microsub]]
+
+=== Physical IndieWeb ===
+
+Sven shows NFC-stickers, brainstorm about uses
+* using in an IndieAuth flow?
+* checking into your house or work by just putting your phone on a certain place with a tag.
+* bluetooth beacons and QR codes could fit in this category as well
+* get a digital photo frame, follow an RSS feed with all your friend's photo's
+* aaron has a clock at home that shows his location (like in the Harry Potter books)
+* there are raspberry pi projects with mirrors, that show weather and calendar, and maybe friends posts
+* can use e-ink screens for that as well, as to not have light
+* but do we really want these things in our faces all day? we have a phone and a computer for that.
+* post your weight from your scale to your site (for Martijn)
+** you can just create a website with a post-form, and add a URL to that page in a NFC-sticker next to the scale.
+** this is: using NFC-stickers to add links to specific pages at places in your house.
+* using washable NFC-stickers, you can add them to your clothes, so you can check in your clothes on your website
+** and then change the background of your site to the color of your shirt!
