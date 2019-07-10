@@ -49,7 +49,21 @@ none for sure, but anecdotally several community members report doing this with 
 === public homepage and unlisted blog ===
 {{t}}: consider designing and documenting a [[Getting Started]] setup with:
 * a public home page that links to 
-* a separate entirely unlisted blog (like in a subfolder) that is blocked from bots and search. 
+* a separate entirely unlisted blog (like in a /blog subfolder or maybe just /2019 to allow changing policy later by year, deciding to leave past years unlisted) that
+*# still has (monthly etc.) [[archives]] (in addition to the [[composite stream]] at the top of the subfolder)
+*# has no separate [[feed file]] (as these are sometimes separately indexed, often harvested by bots, sometimes used to seed spamblogs)
+*# is blocked from bots and search, i.e. using site [[robots txt]] to block that entire subfolder i.e. with:
+<pre>
+User-agent: Googlebot
+Disallow: /blog
+
+User-agent: msnbot
+Disallow: /blog
+
+User-agent: *
+Disallow: /blog
+</pre>
+Alternatively if the blocking is per year like <code>Disallow: /2019</code> that provides easier future flexibility, yet more (once a year?) maintenance to add an explicit disallow for each unlisted year. From my ({{t}}) experience (see [[#IndieWeb_Examples]] above), this was worth doing, and nice that I didn't have to re-review (or edit / redact) previous years when deciding to start blogging publicly, discoverably. I've kept those few starting years unlisted since.
 
 Goals: 
 * immediately have a public presence on the web (useful for [[contact]], [[payment]] etc. as well as [[IndieAuth]] sign-ins), and 
