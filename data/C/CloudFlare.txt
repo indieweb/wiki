@@ -25,6 +25,36 @@ The ability to use [[HTTPS]] is included in every plan and CloudFlare provides 
 * A lot of global traffic passes through CloudFlare, which means the Internet is becoming more centralized.
 * According to [https://www.cloudflare.com/terms/ CloudFlare Terms of Service], "copies of [abuse complaints] may be provided to the CloudFlare user, the user’s hosting provider, posted on CloudFlare’s website, and/or provided to third party services such as ChillingEffects.org". Which already [http://www.idigitaltimes.com/wtf-cloudflare-sending-personal-data-abuse-reporters-8chan-owner-fredrick-brennan-407414 resulted in people being targeted for reporting abuse].
 
+=== avoiding captcha pages with Python ===
+
+Cloudflare seems to be looking for "real" browser request headers and the ability to store session cookies. If this doesn't happen, it'll show a HTTP 403 page with a captcha challenge.
+
+In order to avoid this, the [https://2.python-requests.org/en/master/ requests] Python module has a functionality called Session. By sending a dummy request, the Session object will store the session cookie, and each consecutive request will use this session cookie, thus behaving "properly" in the eyes of CloudFlare. 
+
+Example code:
+
+    import requests
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:67.0) Gecko/20100101 Firefox/67.0",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+        "Accept-Encoding": "gzip, deflate, br",
+        "DNT": "1",
+        "Connection": "keep-alive",
+        "Upgrade-Insecure-Requests": "1",
+        "Pragma": "no-cache",
+        "Cache-Control": "no-cache",
+    }
+    session = requests.Session()
+    # make the dummy request
+    url = "https://www.artstation.com/"
+    session.get(url, headers=headers)
+    # make the real request, which now should work:
+    url = "https://www.artstation.com/users/%s/likes.json?page=%s" % ("username", 1)
+    res = session.get(url, headers=headers)
+    print(res.json())
+
+
 == See Also ==
 * [[cloud]]
 * [[Cloudfront]]
