@@ -111,6 +111,14 @@ Due to the variety of ways and environments in which WordPress can be installed,
 
 The IndieAuth plugin has a test built into the setup page to check to see if the Authorization header is being passed or blocked by your hosting provider. If it is blocked, it suggests possible mitigations. If they do not work, you may need to contact your provider.
 
+=== Apache htaccess solutions ===
+
+For servers where the test built into the app fails, you can try adding one of the following lines to your .htaccess
+<pre>SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1</pre>
+If that doesn't work: 
+<pre>RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]</pre>
+
+
 === ModSecurity Firewall blocking requests ===
 
 On servers using the [https://modsecurity.org/ ModSecurity Web Application Firewall], with [https://wiki.atomicorp.com/wiki/index.php/Atomic_ModSecurity_Rules Atomicorp.com WAF Rules] requests may be blocked because of [https://wiki.atomicorp.com/wiki/index.php/WAF_340162 WAF 340162]. This rule blocks requests that use external URLs in the URL, to protect against Remote File Injection.
