@@ -111,6 +111,9 @@ Due to the variety of ways and environments in which WordPress can be installed,
 
 The IndieAuth plugin has a test built into the setup page to check to see if the Authorization header is being passed or blocked by your hosting provider. If it is blocked, it suggests possible mitigations. If they do not work, you may need to contact your provider.
 
+You may want to disable some plugins during troubleshooting to see if they are interfering with IndieAuth. Likely possibilities are plugins related to login, such as those that enable login with a third-party provider or two-factor authentication. Any plugin that disables or alters the WordPress REST API may also interfere as this is used to enable IndieAuth functionality. You can report any conflict for troubleshooting. 
+
+
 === Apache htaccess solutions ===
 
 For servers where the test built into the app fails, you can try adding one of the following lines to your .htaccess
@@ -119,6 +122,8 @@ If that doesn't work:
 <pre>RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]</pre>
 
 The HTTP_AUTHORIZATION rule should come before the other RewriteRule entries.
+
+Please note that WordPress may overwrite 
 
 === ModSecurity Firewall blocking requests ===
 
