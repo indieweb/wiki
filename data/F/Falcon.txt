@@ -107,7 +107,7 @@ Falcon supports the following specific kinds of [[posts]].
 * Automatic POSSE to [[Twitter]]
 ** with automatic mapping of known venue URLs to their equivalent Twitter @-name
 * Optional manual POSSE to a Facebook event
-* Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06], including [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.com/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])
+* Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06]
 
 === Issue ===
 '''[[issue]]''' posts are also similar to article posts, but with explicit reply to the source code repo or its issues page, e.g. on GitHub. Supported [http://tantek.com/2018/052/b1/bridgy-github-support-images-hyperlinks since 2018-052] with POSSE to GitHub.
@@ -145,8 +145,6 @@ Falcon currently supports automatically [[POSSE]]ing to:
 ** '''[[Twitter#original_has_POSSE_tweet|reply threading on Twitter]]''' - reply notes are [[Twitter#POSSE_Replies_to_Tweets|POSSE'd as @-replies]] with proper threading (currently requires user input of original tweet permalink URL that is being replied to) - complete direct implementation.
 ** '''[[Twitter#POSSE_Favorites_of_Tweets|POSSE Favorites of Tweets]]''' via [[Bridgy]] Publish (since 2015-092)
 ** '''[[Twitter#POSSE_Favorites_to_Twitter|POSSE Favorites of indie posts]]''' by favoriting their POSSE tweet copies (if any), again via [[Bridgy]] Publish (since 2015-092)
-** [[RSVP]] posts are automatically POSSEd to the FB event using [[Bridgy]] Publish (since 2015-145)
-** [[photo]]s are automatically POSSEd to Facebook using [[Bridgy]] Publish (since 2015-312)
 
 == FAQ ==
 === Open Source ===
@@ -649,6 +647,11 @@ Events are a key post type to POSSE, to both reach friends not yet on the indiew
 
 Always POSSE semi-public events to:
 * [[Twitter]] (event microsyntax shorthand) - serves as replacement for RSVP and its POSSE to Twitter
+** add features:
+*** featured speakers — what would Twitter summary look like?
+*** [[invitations]] — explicitly invite by @-name in the event post (as long as there is space)
+*** hashtags — read all p-category from event post, and POSSE as hashtags in the tweet (after invitations, first one being "the" event hashtag, as many as will fit)
+
 Specific use-cases:
 * personal / social events (public gatherings, races)
 ** POSSE to [[Facebook]] (if they don't already have a page)
@@ -1793,12 +1796,17 @@ I need to [[migrate]] to a new [[webhost]] by 2019-03-06. Existing host is liter
 == Dropped Features ==
 === POSSE RSVP video photo to FB ===
 Before 2018-08-01, Falcon supported some POSSEing to Facebook:
-* RSVP: automatic [[POSSE]] to [[Facebook]] to RSVP to FB events, using [[Bridgy]] Publish
+* [[RSVP]] posts were automatically POSSEd to [[Facebook]] to RSVP to FB events, using [[Bridgy]] Publish (since 2015-145)
+* [[photo]]s were automatically POSSEd to Facebook using [[Bridgy]] Publish (since 2015-312)
 * Video: automatic POSSE to [[Facebook]]
 * Event summary as text indirectly to [[Facebook]] from POSSE Tweet
 * '''[[Facebook]]: [[RSVP]] to [[Facebook]] events, photos, and notes*'''
 ** *[[notes]] are POSSEd to [[Facebook]] indirectly via Twitter to Facebook bridge, per same limitations as POSSEing notes to Twitter.
 ** Occasionally longer notes wer manually POSSEd directly in their entirety from tantek.com to Facebook using Bridgy Publish, and then the Falcon original is manually edited to link to the Facebook POSSE copy. Falcon then automatically displays the syndication link to the Facebook POSSE copy on the Falcon post permalink.
+
+=== Backfed RSVP from FB ===
+From mid 2017 until 2018-08-01, Falcon supported some backfeed from Facebook:
+* Displaying [[backfed]] RSVPs from a Facebook POSSE event (if any) (e.g. [http://tantek.com/2017/183/e1/sunday-yoga-presidio 2017-07-02 event])  
 
 == Canceled Features ==
 === auto Bridgy POSSE to FB ===
