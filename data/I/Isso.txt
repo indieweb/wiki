@@ -6,6 +6,24 @@ https://indieweb.org/Isso
 
 It is written in Python and supports features such as multi-tenant operation, built-in Disqus import (with an API for other comment sources), and a simple moderation queue with various notification mechanisms including SMTP. It is also built for smaller sites and uses a local SQLite database for its comment storage.
 
+== Features ==
+
+Supports federated avatars with [[Gravatar]] and Gravatar-like systems such as [[libravatar]].
+* Unfortunately it only supports the md5-hash mechanism, which is a privacy issue.
+* Also it doesn't currently provide libravatar federation support
+
+== Shortcomings ==
+
+Unlike Disqus, Isso does not allow specifying a thread ID separately from the embed page URL, and all comment reply emails assume that the thread ID itself is the URI/path for the comment thread's page, which is a problem when using it for [[private posts]] or in contexts where post URLs can change. {{beesbuzz.biz}} uses [http://beesbuzz.biz/blog/4678-Proper-comment-privacy-Yay a page redirection mechanism] to keep thread IDs unguessable.
+
+The administration/moderation mechanism is quite limited; there is no way to mark comments as spam (only delete them), the admin UI does not provide a text search mechanism to actually find specific comments to edit, and the moderation queue is all-or-nothing (i.e. either ''all'' comments are held for moderation or ''none'' are).
+
+The client-side JavaScript needs to be configured independently of the server side, and the configurations must match. This does improve performance somewhat (since the client doesn't need to fetch its configuration) but it's an additional point of confusion in the initial setup.
+
+And some gripes from {{beesbuzz.biz}}:
+* The code isn't written in a particularly-modular way, so extending it with more functionality is rather difficult. The primary author/maintainer also seems to not be very active in the project at this point.
+* The admin documentation could also use a lot of work, IMO
+
 ==IndieWeb users==
 
-* {{beesbuzz.biz}} is migrating to it as of 2019-08-04
+* {{beesbuzz.biz}} has migrated to it as of 2019-08-04
