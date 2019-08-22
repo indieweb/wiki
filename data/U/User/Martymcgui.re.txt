@@ -148,6 +148,53 @@ While I try to treat [[silos]] as purely places where I publish syndication, the
 
 == Itches ==
 
+=== Clean Up Webmentions ===
+
+==== Outgoing ====
+
+* reduce noise
+** my webmention sender gets triggered by any changes to a published permalink'd post, including when the post template changes. this results in resending every webmention 😱.
+*** could keep track of sent mentions and not resend when "content is unchanged". requires some template-independent diff engine. maybe hashed mf2+json.
+** could disable the webmention sender under certain conditions:
+*** if some threshold of changed posts?
+*** if the list of recently changed source files doesn't include any content files?
+*** if the list of changed source files includes any template files?
+** (is this still a problem?) don't send WMs to authors' homepage when a post links to their post.
+*** would need to be <code>h-entry</code> aware, ignore <code>author</code> info.
+
+==== Incoming ([[Morris]]) ====
+
+* display homepage mentions (this is a whooooole thing)
+* handle deletes!
+* keep changes over time?
+* re-build on new mentions so they show up right away
+
+==== Notifications ====
+
+Want a better way of interpreting incoming WMs in a notifications-friendly way.
+
+* de-dupe! i shouldn't get multiple notifications for a given post just because the mention is sent again
+* mf2-awareness!
+** i shouldn't get a notification if there's a new comment on a post i'm mentioned in
+*** maybe my notifier could let me opt-in to follow replies? maybe i already could with Aperture??
+** i should (maybe) get a notification if a post i'm mentioned in is updated, content-wise
+** be aware of like, repost, bookmark, listen, and other verbs. ("so-and-so liked ...")
+** be aware of [[person-tag]]s (e.g. "so-and-so tagged you in...")
+** be aware of other attributes like [[post-type-discovery]] (e.g. "... posted a photo of you", "mentioned you in a checkin", ...)
+* probably lots more!
+
+==== Micropub De-Duping ====
+
+I'd like to catch and reject posts that might be considered "dupes". e.g. don't let me like or bookmark posts more than once.
+
+* <code>like-of</code>
+* <code>repost-of</code>
+* <code>bookmark-of</code>
+* <code>read-of</code>
+** difficulty: only if <code>read-status</code> is the same as latest read-of post for the same read.
+** more difficulty: read-of is often some title + author string (+ optional ISBN), so dupe detection is weird
+* others?
+
 === Lazy Load YouTube Embeds ===
 
 * https://dev.to/haggen/lazy-load-embedded-youtube-videos-520g
