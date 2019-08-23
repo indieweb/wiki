@@ -17,26 +17,29 @@ Post (even short) videos on [[own your data|your own site]] instead for all the 
 === How to markup ===
 Use an [[h-entry]] as always, and then an HTML5 <code>&lt;video&gt;</code> element with class name <code>u-video</code> and <code>src</code> attribute of the URL of the video file, e.g.
 
+Simple example of a video with a single source and a poster image. Note only the video src will be picked up by microformats parsing (currently, there are discussions to do something special with the poster attribute in such cases).
 <pre><nowiki>
-<video class="u-video" src="http://ben.example.com/camcorder.mp4" controls="controls">
-alternate text content - like a transcript
+<video class="u-video" controls="controls"
+       src="http://ben.example.com/camcorder.mp4" 
+       poster="http://ben.example.com/camcorder.png">
+alternate text content only for browsers that do not support the video tag
 </video>
 </nowiki></pre>
 
-Alternatively (with poster frame and fallback img tag)
+Alternatively (with separate source element from poster frame, and fallback img tag for browsers that do not support the video tag) this provides a way of mf2 parsing the poster image as a featured image for the video:
 <pre><nowiki>
 <video class="u-featured" controls poster="http://ben.example.com/camcorder.png">
-<source class="u-video" src="http://ben.example.com/camcorder.mp4">
-<img src="http://ben.example.com/camcorder.png" class="u-photo" />
+  <source class="u-video" src="http://ben.example.com/camcorder.mp4">
+  <img src="http://ben.example.com/camcorder.png" class="u-photo" />
 </video>
 </nowiki></pre>
 
-Alternatively
+Alternatively multiple formats for the same video can each be provided as a u-video, though it’s unclear if any consuming application would treat these as different formats for the same video, or more likely, different videos in a multi-video post:
 <pre><nowiki>
 <video controls="controls">
-<source class="u-video" src="http://ben.example.com/camcorder.webm" >
-<source class="u-video" src="http://ben.example.com/camcorder.mp4" >
-alternate text content - like a transcript
+  <source class="u-video" src="http://ben.example.com/camcorder.webm" >
+  <source class="u-video" src="http://ben.example.com/camcorder.mp4" >
+  alternate text content only for browsers that do not support the video tag
 </video>
 </nowiki></pre>
 
