@@ -4,6 +4,25 @@ https://indieweb.org/Add_to_Calendar
 
 '''<dfn>Add to Calendar</dfn>''' is a common button or menu option shown on [[event]] user interfaces that a user can click to add the event to their calendaring program; consider putting an "✚🗓 Add to Calendar" button your indie [[event]] posts as an easy way for your readers to keep track of your event in their calendar.
 
+== How to ==
+=== How to publish ICS ===
+(section stub)
+
+As part of implementing an "Add to Calendar" link that provides ICS, you have to generate (or use a service to generate) a valid and compatible ICS file.
+
+Generating ICS is non-trivial. There are many non-obvious gotchas.
+
+For example, Apple Calendar on MacOS will ONLY handle datetimes (DTSTART or DTEND) that:
+* '''T separator''': use a "T" separator between date and time (no " " allowed)
+* '''explicit seconds''': must provide explicit seconds with the time, i.e. requiring artificial 00 seconds precision be added if your published datetime lacks it
+* '''no tz offset''', e.g. only these two options work:
+*# Z time: <code>20181005T174800Z</code> or 
+*# floating time: <code>20150120T190000</code>
+
+Even though it (currently) requires classic [[hCalendar]] markup, you may want to consider using this to generate your ICS for you:
+* [[h2vx]] event conversion service
+** https://h2vx.com/ics
+
 == IndieWeb Examples ==
 === Marty McGuire ===
 {{martymcguire}} implements "Add to Calendar" functionality for each [[event]] post on his site since 2017-07-13, including options for [[ICS]] and [[Google Calendar]].
