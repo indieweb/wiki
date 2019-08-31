@@ -74,6 +74,30 @@ Starting with [[2019]], the main [[2019|IndieWeb Summit wiki page]] has an Add t
 
 "Add to Calendar" link appears under the date and time. Clicking it pops up options for [[Google Calendar]], [[iCal]], Outlook, and Yahoo Calendar.
 
+== Brainstorming ==
+=== How to make Add to gCal ===
+(this section is a stub and incomplete)
+
+An Add to [[Google Calendar]] link also has two essential pieces:
+# <code>href</code> — URL of <nowiki>http://www.google.com/calendar/render?action=TEMPLATE</nowiki> and a bunch more query parameters
+# link text — something like: <blockquote>🗓 Add to Google Calendar</blockquote>
+
+The query parameters in the URL the hard part:
+* text
+* dates
+* details
+* location
+
+From easiest to hardest:
+;text
+:plain text name of your event, URL escaped for a query parameter, e.g. you may use "+" to replace " " instead of "%20".
+;details
+:plain text summary of your event that you want added in the body of the event in Google Calendar. Also requires similar URL escaping.
+;location
+:human readable plain text venue with address, comma delimited between name of venue and address parts, again similarly URL escaped. No linebreaks (as you might normally write a human readable address)
+;dates
+:iCalendar dtstart "/" dtend, e.g. of the form YYYYMMDDTHHMMSSZ/YYYYMMDDTHHMMSSZ. Note this also means for "whole day" events, you must put a dtend of one day AFTER the last day of the event, due to the [http://microformats.org/wiki/dtend-issue dtend-issue] (which microformats fixed in hCalendar to be more user/author friendly).
+
 == See Also ==
 * [[event]]
 * https://h2vx.com/ics/
