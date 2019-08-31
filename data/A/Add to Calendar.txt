@@ -8,8 +8,6 @@ https://indieweb.org/Add_to_Calendar
 
 == How to ==
 === How to publish ICS ===
-(section stub)
-
 As part of implementing an "Add to Calendar" link that provides ICS, you have to generate (or use a service to generate) a valid and compatible ICS file.
 
 Generating ICS is non-trivial. There are many non-obvious gotchas.
@@ -24,7 +22,27 @@ For example, Apple Calendar on MacOS will ONLY handle datetimes (DTSTART or DTEN
 Even though it (currently) requires classic [[hCalendar]] markup, you may want to consider using this to generate your ICS for you:
 * [[h2vx]] event conversion service
 ** https://h2vx.com/ics
-** If you link from your event page to <nowiki>https://h2vx.com/ics/referrer</nowiki>, then H2VX will automatically get the URL of your page from the HTTP referer headers.
+
+=== How to make Add to Calendar ===
+An Add to Calendar link has two essential pieces:
+# <code>href</code> — this should be the URL to your ICS that you figured out in [[#How_to_publish_ICS]]
+# link text — consider using something like: <blockquote>📆 Add to Calendar</blockquote>
+
+If you’re using [[H2VX]] to generate your ICS, you may link from your event page to <nowiki>https://h2vx.com/ics/referrer</nowiki>, to tell H2VX to automatically get the URL of your page from the HTTP referer headers.
+
+'''Optional:''' — the following two attributes are proper semantic HTML, however it is not clear if there is anything that does anything with them:
+* <code>rel="alternate"</code>
+* <code>type="text/calendar"</code>
+Theoretically a calendar app or service (aggregator), could do auto-discovery on your event page to find the ICS by looking for a link with these two attributes (similar to how RSS aggregators do auto-discovery on blogs by looking for a link with rel=alternate and a content type for a [[feed file]]).
+
+Complete example:
+<pre>
+<a href="https://h2vx.com/ics/https://indieweb.org/events"
+   rel="alternate"
+   type="text/calendar">📆 Add IndieWeb Events to Calendar</a>
+</pre>
+
+Will show: <blockquote><a href="https://h2vx.com/ics/https://indieweb.org/events" type="text/calendar">📆 Add IndieWeb Events to Calendar</a></blockquote>
 
 == IndieWeb Examples ==
 === Jeena ===
