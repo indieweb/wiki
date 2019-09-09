@@ -27,17 +27,21 @@ My CMS is [https://git.fireburn.ru/pyindieblog pyindieblog] which is written by 
 ==== Not working on yet ====
 * Aperture instance saves only last 7 days of posts (maybe implement my own Microsub server?)
 * No comment form for people without IndieWeb-enabled sites (use commentpara.de for providing pseudonymous/anonymous identities, but beware of spam)
-
+* No [[PuSH]] support (pyindieblog-micropub pinged switchboard in the old version, I need to reimplement that!)
 * Search - may be done differently:
-** Server-side search (may be faster, but harder to implement)
-** Reuse lunr.js from static site and build index dynamically (requires JS and still some server-side work)
+** Server-side search (may be faster, but harder to implement - requires a good database, maybe Couch or Mongo?)
+** Reuse lunr.js from static site and build index dynamically (requires JS and still some server-side work - publish an index of posts)
+* the name "pyindieblog" is too technical and isn't cute enough
 
 ==== Solved ====
 * Micropub is slow (solved with advent of Flask IndieWeb API written by me)
 * Almost nobody reads me ([[syndication]] supported to various services via [[Webmention]] and potentially [[bridgy]])
-* No [[PuSH]] support (pyindieblog micropub pings switchboard for main page, typed feed and tag feeds)
+* Check-in support
+** pyindieblog-micropub stores arbitrary MF2-JSON blobs
+** Renderer takes posts and renders every property it knows about
+** currently it can be taught to render check-ins too
+** Form-encoded posts may be a problem; they need to be special-cased sometimes
 
 === Plans and possibilities ===
 * Make Webmentions static
 * Implement [[salmention]]
-* Check-in support (pyindieblog technically supports ANY kind of posts, the bottleneck is only the frontend)
