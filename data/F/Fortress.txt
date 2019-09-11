@@ -5,12 +5,47 @@ https://indieweb.org/Fortress
 == Features ==
 * Sign in support using [[IndieAuth]]
 * Generating placeholder profile URIs for non-IndieWeb users (see [[Fortress#Shadow_Profiles]]).
+* Provide out-of-band authentication (see [[Fortress#Out_of_Band_Authentication]]).
 
 === Shadow Profiles ===
 In order to support identification of people who don't have IndieWeb sites but are requested to have access to one's site (in the case of [[private posts]]), Fortress aims to generate short-lived [[h-card]] powered pages that can be used to help people hold onto a temporary identifier. They come with a few quirks:
 
 * They expire after a month after their creation
 * They only expose only one identity at a time
+
+=== Out of Ban Authentication ===
+This occurs by associating a compatible device with your identity on Fortress. This way, you can use that device as a way to confirm your identity as another level of security. This will only be available to people who expose Fortress as their site's IndieAuth provider _or_ add hooks into their IndieAuth flow that allow for out of band authentication support.
+
+There's an assumption of support of pre-shared keys here.
+
+TODO: There's a more common term for this (probably just MFA / two-step verification) - rename to be that.
+
+'''Device Registration Flow''':
+* Person visits Fortress
+* They sign into the dashboard using their site
+* They confirm that their site is using Fortress as their IndieAuth provider
+** ... click on "Add Device"
+* A separate application is in their possession (desktop, mobile, another web-app)
+* They enter the specified host of the IndieAuth provider they'd like to use in a separate app (defaults to fortress.black.af) 
+* The app tells the IndieAuth provider information about it and sends a public cryptographic key (the type doesn't matter)
+* Fortress tells the app its public key (doesn't matter what kind)
+* Fortress presents a one-time code
+* They enter the one-time code into the app (or scan, or click link)
+* The device tells Fortress the code with a signed message, signed using the private key
+* Fortress confirms the signatures and sends the app a confirmation as a signed message
+* Fortress reports to user that the app is synced
+* App should report and store information about this app being synced.
+
+'''Authorization Request''':
+* Fortress shows the request to the user with instructions
+* The user opens their app
+** It's suggested that things like [[websocket|websockets]] or event emitters are used to have the app appear quickly
+* The app displays a challenge
+** On confirmation, send signed confirmation of message
+** On rejection, send signed rejection of message
+* The message will last as long as noted on setup (maybe like 10 minutes?)
+* Fortress now continues the authentication flow
+
 
 == Screenshots ==
 [[File:Fortress_ScopeSelection.png]]
