@@ -14,7 +14,7 @@ In order to support identification of people who don't have IndieWeb sites but a
 * They only expose only one identity at a time
 
 === Out of Band Authentication ===
-This occurs by associating a compatible device with your identity on Fortress. This way, you can use that device as a way to confirm your identity as another level of security. This will only be available to people who expose Fortress as their site's IndieAuth provider _or_ add hooks into their IndieAuth flow that allow for out of band authentication support.
+This occurs by associating a compatible device with your identity on Fortress. This way, you can use that device as a way to confirm your identity as another level of security. This will only be available to people who expose Fortress as their site's IndieAuth provider ''or'' add hooks into their IndieAuth flow that allow for out of band authentication support.
 
 There's an assumption of support of pre-shared keys here.
 
@@ -33,19 +33,18 @@ TODO: There's a more common term for this (probably just MFA / two-step verifica
 * They enter the one-time code into the app (or scan, or click link)
 * The device tells Fortress the code with a signed message, signed using the private key
 * Fortress confirms the signatures and sends the app a confirmation as a signed message
-* Fortress reports to user that the app is synced
+* Fortress reports to the user that the app is synced
 * App should report and store information about this app being synced.
 
 '''Authorization Request''':
 * Fortress shows the request to the user with instructions
 * The user opens their app
-** It's suggested that things like [[websocket|websockets]] or event emitters are used to have the app appear quickly
+** It's suggested that things like [[websockets]] or event emitters are used to have the app appear quickly
 * The app displays a challenge
-** On confirmation, send signed confirmation of message
-** On rejection, send signed rejection of message
+** On confirmation, send signed confirmation of the message
+** On rejection, send signed rejection of the message
 * The message will last as long as noted on setup (maybe like 10 minutes?)
 * Fortress now continues the authentication flow
-
 
 == Screenshots ==
 [[File:Fortress_ScopeSelection.png]]
