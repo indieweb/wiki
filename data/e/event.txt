@@ -59,17 +59,6 @@ A site publishing event posts '''should''' <span id="Accepting_Invitations">acce
 
 <!-- See: http://microformats.org/wiki/invitation -->
 
-=== How to limit capacity ===
-Some events have limited capacity and want to offer "tickets," ie only accept the first N RSVPs.
-
-To do this, the site that hosts the canonical h-event should set the capacity. When it renders the event, it should show the space remaining based on its current number of <code>yes</code> [[rsvp]]s.
-
-It should handle RSVP [[webmention]]s for the event in serial. When it gets a <code>yes</code> RSVP, it should check the capacity against the current number of yes RSVPs. If the event is full, it should reject the RSVP webmention. This could be done with either an explicit 403 Forbidden, or an implicit status like 203 Non-Authoritative Information or 304 Not Modified along with a human-readable message saying the event is full.
-
-The host could also put overflow yes RSVPs on an ordered waiting list, mention that in the reject message, and automatically upgrade people on the waitlist when existing yes RSVPs are withdrawn.
-
-[http://indiewebcamp.com/irc/2015-11-29#t1448841891092 IRC discussion of whether/how this fits into the webmention spec.]
-
 == IndieWeb Examples ==
 In implementation order:
 === Ben Werdmuller ===
@@ -197,7 +186,7 @@ He's been posting [http://boffosocko.com/kind/RSVP/ RSVPs to his WordPress site]
 
 {{jamietanna}} has an [https://www.jvt.me/events/ /events/] page on his website, which is currently only populated for Homebrew Website Club Nottingham.
 
-Jamie's set up also generates [https://www.jvt.me/posts/2019/05/22/ical-events-hugo/ iCalendar feeds for events since 2019-05-22], which allows interested people to add the event to their calendar, so they can see when the next one is more easily.
+Jamie's set up also generates [https://www.jvt.me/events/homebrew-website-club-nottingham/2019/10/02/ iCalendar feeds for events] [https://www.jvt.me/posts/2019/05/22/ical-events-hugo/ since 2019-05-22], which allows interested people to add the event to their calendar, so they can see when the next one is more easily.
 
 === Former Examples ===
 The following examples have been offline for some time — please update them with Internet Archive links if possible for historical purposes!
@@ -529,6 +518,17 @@ Similar to the general [[reply-context#CRUD|reply context: CRUD]] protocol, when
 Some event hosting silos, such as [[Eventbrite]] offer "[[Add to Calendar]]" functionality which allow users to add event reminders to the calendar system of their choice. Some example export options include [[ICS]] for standalone calendar software such as Apple Calendar or Microsoft Outlook and links that pre-populate the event creation form for web-based calendars such as [[Google Calendar]].
 
 See also: [[Add_to_Calendar#IndieWeb_Examples|Add to Calendar: IndieWeb Examples]]
+
+=== How to limit capacity ===
+Some events have limited capacity and want to offer "tickets," ie only accept the first N RSVPs.
+
+To do this, the site that hosts the canonical h-event should set the capacity. When it renders the event, it should show the space remaining based on its current number of <code>yes</code> [[rsvp]]s.
+
+It should handle RSVP [[webmention]]s for the event in serial. When it gets a <code>yes</code> RSVP, it should check the capacity against the current number of yes RSVPs. If the event is full, it should reject the RSVP webmention. This could be done with either an explicit 403 Forbidden, or an implicit status like 203 Non-Authoritative Information or 304 Not Modified along with a human-readable message saying the event is full.
+
+The host could also put overflow yes RSVPs on an ordered waiting list, mention that in the reject message, and automatically upgrade people on the waitlist when existing yes RSVPs are withdrawn.
+
+[http://indiewebcamp.com/irc/2015-11-29#t1448841891092 IRC discussion of whether/how this fits into the webmention spec.]
 
 == Silo Examples ==
 === Attending ===
