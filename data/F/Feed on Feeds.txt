@@ -9,5 +9,39 @@ https://indieweb.org/Feed_on_Feeds
 * Silo-specific support for [[Reddit]] and [[YouTube]]
 * An "inbox"-style view, with accessibility-minded keyboard shortcuts
 * SQLite, Postgres, or MySQL for the database
+* Responsive mobile layout
+* The ability to sort content from oldest to newest (useful for long-form serial content)
 
 It was originally written by Steve Minutillo in 2006 but was abandoned in 2011 or so; afterwards several parallel efforts took place to resuscitate it, with the current one being handled primarily by [https://github.com/RomanSixty Alexander Schulze], {{beesbuzz.biz}}, and [https://github.com/thylacine Justin Wind].
+
+== Overall usage ==
+
+Feed on Feeds provides a content-first view of your items; by default it shows all items across all subscribed blogs in chronological order (typically newest-first, although it's possible to configure it to be oldest-first, useful for serial content). It's straightforward to narrow a view down to a single feed, or to look at all items (rather than just the newest).
+
+Rather than provide an infinite scroll, it uses a paging-based design, with a specific transaction for marking the visible items read. Using keyboard shortcuts you can also quickly skim through items (reading them in-place or opening them in another browser tab), and as items have been read/skimmed via the keyboard they get flagged for being marked as read. When reaching the end of a page of items, it prompts the user to ask if they would like to mark all of the flagged items as being read. This is all keyboard-accessible and makes for a very fast, comfortable approach for reading a lot of content without having to keep track of where you are (especially helpful for long-form serial content such as serial fiction or comics).
+
+== IndieWeb integration ==
+
+Items can be starred/favorited, which can also optionally re-share them through an Atom feed, which others can subscribe to or which could conceivably be consumed by another tool to provide `u-like-of` links, although no mf2-type markup is currently supported.
+
+FoF is extensible via plugins, and historically had ones for various bookmarking services. Theoretically one could build a MicroPub plugin for it.
+
+Being a legacy reader it wasn't designed with MicroSub/IndieAuth/etc. in mind, and is instead a single isolated reader app. There has been some interest in adding an access API of some sort to it so that external reader apps can work with it, and theoretically it could be adapted to work as a MicroSub server although a lot of the plumbing would have to change.
+
+== Screenshots ==
+
+Stream view:
+
+[[File:Feed on Feeds-stream-view.png]]
+
+Single-feed view:
+
+[[File:Feed on Feeds serial content.png]]
+
+Item folding/hiding:
+
+[[File:Feed on Feeds item folding.png]]
+
+Mobile layout:
+
+[[File:Feed on Feeds mobile.png|400px]]
