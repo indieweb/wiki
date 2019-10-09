@@ -218,235 +218,6 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
-=== Template all pages ===
-Create [[template]]s for all pages created / returned by Falcon.
-
-Goals: 
-* short term:
-** identify page types (verify with falcon.php code review)
-*** fix archive pages to have <code>&lt;link rel=canonical&gt;</code> without query params
-** identify color palettes for inverses of daylight (default), Matrix, and TRON:Legacy
-** use media query for darkmode to switch between dark/light variants of each theme
-* medium term:
-** identify content modules
-** identify composite modules of content modules
-* long term:
-** zero inline HTML page construction in PHP
-** develop an HTML-native [[template]] language preferably based on prior art, perhaps using a [[microformats2]] design.
-
-MVF/increments:
-* atomic content boxes layout
-* composite content boxes layout
-* page layout
-
-Design:
-* page types:
-** home page
-** post permalink
-** archive specific post type on a day, all posts on a day, new month, year
-** Atom [[feed file]]
-* color palette semantic labels
-** post content text, link text, visited text
-** post background
-** post info text, link text, visited text
-** post webactions text, link text, visited text, form input field
-** [[reply-context]] text, link text, visited text
-** reply-context background, border
-
-=== HTML5 semantic elements for accessibility ===
-Add the following HTML elements to post permalink, post archives lists, and home page for their [http://www.weba11y.com/blog/2016/04/22/screen-reader-support-for-new-html5-section-elements/ documented positive impact on desktop screen readers]:
-* article - around each h-entry
-* header - maybe around reply-context and author h-card?
-* section role=search - around search input form
-* nav - around prev/next sequential navigation links
-* main - maybe if it has the same impact as "Section role=main"? needs research
-* footer - for datetime stamp, tagged in post / tags, maybe citation UI
-
-=== tags with spaces ===
-Use-case: 
-* setting or adding labels to issues (typically on GitHub) that are already using labels with spaces in them. 
-** Enable automatic Bridgy Publish [[POSSE]] a hashtag to [[GitHub]] as a Label (which may have spaces), on [[tag-of]] replies (which itself is a separate implementation task!)
-** Example existing labels with spaces: [https://github.com/w3c/w3process/labels/Needs%20Review W3C Process: Needs Review], (examples needed from CSSWG, SocialWG repos/issues)
-
-Designs:
-* Mediawiki-ish style: [[hashtag]] underscores (_) converted to spaces for their equivalent "category", with exceptions:
-** NNNN_NNN, NNNN_NN_NN = dates, convert those to "-" (perhaps convert any *N_N* to *N-N*)
-** X__Y treat as literal "_" and convert to X_Y
-* OR Backcompat: [[hashtag]] double underscore (__) convert to space for their equivalent "category". Notes:
-** "__" rare (not used?) in hashtags today (certainly not in any more my posts)
-** maintains any/all existing X_Y single underscores (no exception needed for NNNN_NNN, NNNN_NN_NN to avoid conversion into spaces between numbers)
-** optional convert any *N_N* to *N-N* because actual ISO Date category names YYYY-DDD and YYYY-MM-DD read nicer than with underscores, and numbers rarely (if ever?) use underscores for separators for anything meaningful, whereas dashes between numbers are common in serial numbers, product codes, confirmation numbers etc.  
-
-[[auto-tag]] markup if there are any double underscores:
-* <code>#&lt;abbr class="p-category auto-tag" title="tag with spaces"&gt;tag__with__spaces&lt;/abbr&gt;</code>
-
-Document chosen design as a brainstorm:
-* in [[hashtags#Brainstorming]]
-** 2019-058 noted preference for __
-
-Implementation:
-* Implement space separated labels via __ or _ per design above in hashtags, in [[auto-tag]] function
-** 2019-058 implemented __ per design but did not yet deploy. Waiting for real-world use-case to try it out (might need to [[Falcon#one-off_tag-of_post|implement tag-of reply]] to start labeling [[microformats2]] parser and vocabulary (e.g. [[h-entry]]) issues to exercise labels with spaces).
-** 2019-070 debugged and deployed. fixed remaining syntax bugs and deployed with no regressions in existing tags, and functional tests, but have not yet tested __ hashtags in practice with a real world example post that is then POSSEd to GitHub or Flickr.
-** ... actual real world post with __ hashtags POSSEd successfully to GitHub and/or Flickr with spaces in the labels/tags there.
-
-Reference:
-* Background: chat how to create space separated labels via _ in hashtags [https://chat.indieweb.org/dev/2018-11-16#t1542392876812700 2018-11-16 #dev chat discussion], [https://chat.indieweb.org/meta/2019-01-02#t1546458658761500 2019-01-02 #meta chat] (which should have been in dev)
-
-=== better post creation UI ===
-Iteratively incrementally improve Falcon post [[create|creation]] UI.
-
-Current: hand-editing flat file HTML+microformats storage file to add a new post.
-
-==== prototype DM UI ====
-Prototype:
-* Stage 0: start with a minimal UI to post a DM to a URL
-*# Minimimum Viable Feature
-*#* to: URL field
-*#* message: textarea
-*#* (Send) button
-*#* if it's a Twitter profile URL, use Twitter API to send the DM
-*# check [[private messaging]] for more destinations and how to handle
-*# 30 second undo! (client side)
-*#* Send button disables text fields, turns into Sending…:nn (Undo Send) <- different hit target
-*#* with a count down timer :nn that goes from 30 to 0
-*#* At 0, hide :nn counter, (Undo Send) button, use Twitter API to send
-*#* When it returns success, Change Sending… to Sent.
-*#* If user clicks (Undo Send) button, hide button, 
-*#** change Sending… back to (Send) button
-*#** re-enable text fields for editing
-*# 30 second undo (client and server side — so it would work/show status across multiple clients)
-* ...
-
-==== post creation UI improvements ====
-Improvements:
-# Stage 1: simplify/minimize post origin format as much as possible (to minimum that a UI would "submit", re-use minimum expected properties from [[Micropub]])
-#* scheduled post heads-up / warning: prominent heads-up in the UI if dt-published is more than a whole minute in the future.
-#** e.g. "This post will be visible in xx days/hours/minutes"
-#** and disable "Publish" button (since no auto-POSSEing in the future support yet)
-#* warning if next post number (day scoped) is discontiguous (e.g. if next post is /t3 and previous was /t1)
-#* default/auto-add "with BBEdit" content/markup even if missing; simplifies post origin format
-#* store slug as visible content (instead of as part of uid)
-#** then auto-generate ordinal days and post number (from previous "s" file published post number)
-#** and post type: default "t", unless h-event then "e", or explicit h1 class="entry-title" then "b", or like-of then use "f",
-#* default/auto-add dt-published (even if missing "published"); simplifies post origin format (I think I implemented this ~ 2017 June maybe IWS? [[2017]]?)
-# Stage 1.5: Document Save/Publish/Delete/Undo user flow design in [[create#Brainstorming]] (from original 2010-era notes, with updates, use-cases)
-# Stage 2: Save/publish form submission to storage file
-#* UI: Form with minimal fields to write notes, replies, likes, articles (model after Micropub clients)
-#* Server: "Save" submission to store in post origin storage (perhaps with dt-created)
-#* Server: "Publish" submission to do "Save" and current POSSE+PuSH support
-# Stage 3: Delete/undelete saved posts
-#* UI: Delete after Saving, Undelete after deleting
-#* Server: Handle delete saved unpublished post, undelete deleted unpublished post
-# Stage 4: Undo publishing
-#* UI: Undo after publishing
-#* Server: Handle undo after publishing -> saved state, plus delete any POSSE copies if any
-#* Server: Handle publish with 30(?) second delay, so undo can happen without having to delete any POSSE copies
-# Stage 5: Whatever else I have in my 5-6 year old UI flow sketches re: (auto-)save, delete/undelete, publish/undo
-# Stage 5.5: interactive <a href="#prose_improvement" id="prose_improvement">prose improvement</a> highlighting / fixing support in the primary writing field. Pick and choose which of these to implement, consider open sourcing as its own library:
-#* '''Hemingway '''. Investigate how much work it would be to implement an open source (licensing?) version of [[Hemingway App]], and implement it if it can be done in a day at an IndieWebCamp.
-#* '''words to turn around'''. Also implement word/phrase replacement suggestions in 2017-12-04 [https://www.theguardian.com/science/2017/dec/04/would-you-be-willing-words-turn-conversation-around words to turn a conversation around]
-#* '''inclusivity suggestions'''. Implement [https://betterallies.com/language/ suggestions for more inclusive words and phrases] as documented in a [https://github.com/randsleadershipslack/documents-and-resources/blob/master/RandsInclusiveLanguage.tsv table of Slackbot responses].
-#** '''Start with AlexJS'''. Open source [https://alexjs.com/ AlexJS] has a bunch of inclusive language suggestions already coded/supported. Re-use and contribute to its vocabulary.
-#** '''write-good'''. Open source [https://github.com/btford/write-good write-good] is a “Naive linter for English prose” for words like 'simply' 'easy' 'just'.
-#* '''short codes like TypeIt4Me'''. Like [https://twitter.com/zeldman/status/1108702389685637121 @Zeldman summarized]:
-#** Typing “ttt” access to typographic symbols: ✎ ✩ ✩ ♛ ☞ ★ ★ ☞ ☛ ♛ ⇛ ❝ ❦ ❞ ¶ ✺
-#** “;shrug” gives ¯\_(ツ)_/¯
-#* '''additional improvements''' - one-off ideas for linting prose / suggesting
-#** '''Actually,''' - When a sentence starts with "Actually ," or "Actually ", drop it and start with the next word, or if it is necessary to connect that sentence to the previous statement, replace "Actually, " with "And " or "Yes, and ", but don't if the next word is already an implied connector of sorts like "Another ".
-#** '''Yes but''' - similarly to Actually, drop "Yes but", or replace with "Yes, and " or "And ".
-#** ...
-#* etc.
-# Stage 6: Implement micropub client and server support, figuring out what is missing for undo etc.
-
-=== UI for many drafts ===
-{{main|draft#UI_for_many_drafts}}
-
-Brainstormed this generically [[draft#UI_for_many_drafts|draft page]] since I think it would be useful as both a local application (where the drafts are stored in local text files) or as a [[Micropub]] client.
-
-For Falcon, I'd likely evolve the abovementioned Post Creation UI to something web-based ([[offline first]] using local storage) with:
-* explicit support for (JS auto-saving) an unpublished draft, like Gmail (no URL? or use post status or something similar)
-* support for multiple unpublished drafts (not just a "current draft" you can come back to)
-** with a simple "pick one" list UI, click to select a draft as the "current draft" you're editing, and preserve that state on the server (which draft), as well as draft scrolling position if possible.
-** upon publishing something it's removed from the list
-** upon undoing a publishing it's added back to the list
-* hashtag buttons by frequency, clicking each filters on that one hashtag (like radio buttons)
-* clicking hashtags highlights them and adds/removes them from filtering (like checkboxes)
-* search box for filtering as well
-
-=== Display Likes Reposts ===
-Implement a minimal display of [[likes]] &amp; [[reposts]] on posts.
-* {{snarfed}} wants (me to do) this
-
-Perhaps:
-* just lists of @-names & domains
-* maybe [[facepile]]s linked to URLs with names as alt text
-* maybe counts of both and a list?
-** Is it good or distracting / emphasizing the wrong thing to show counts (like every [[silo]] does)?
-
-* Perhaps query webmention.io for likes and reposts separately, then pipe through stream.thatmustbe.us, and display as inline list of author names linked to their URLs
-* Perhaps process queue of [[webmentions]] at webmention.io
-
-==== Display likes facepile on events ====
-As a small incremental step, display just a likes facepile, just on event posts.
-
-This will be a good way to experiment with presentational issues without impacting all posts.
-
-Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
-
-==== Display reposts facepile on events ====
-Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
-
-This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
-
-==== Display likes reposts all posts ====
-These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
-* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
-* <s>Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]</s> done!
-
-This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
-* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
-
-Scaling display: How to handle a facepile with 100s of items?
-
-E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
-* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
-** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
-** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
-<pre>
-{
-  "count": 312,
-  "type": {
-    "like": 110,
-    "mention": 33,
-    "post": 2,
-    "reply": 36,
-    "repost": 128
-  }
-}
-</pre>
-
-Real world example:
-* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
-
-----
-'''Homepage mentions'''
-
-Showing [[homepage]] mentions is an entirely different scale of design problem:
-* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
-<pre>
-{
-  "count": 101737,
-  "type": {
-    "like": 30,
-    "mention": 99995,
-    "post": 5,
-    "reply": 1660,
-    "repost": 4
-  }
-}
-</pre>
-
 === improve replies details ===
 ==== improve reply-context support ====
 Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup), with a bit of smarts to show type of response (in reply, RSVP etc.).
@@ -675,6 +446,280 @@ Specific use-cases:
 ** POSSE to [[Lanyrd]] (if event doesn't already have a page)
 ** POSSE IndieWeb related talks to IndieWeb Wiki [[Events]] page
 
+=== Display RSVPs summary ===
+Display summary of number of people going and interested like:
+* "3 Going · 3 Interested"
+just above the facepile of RSVPs
+
+Use Webmention.io API to retrieve # of people going, # of people interested, and turn it into HTML. (implemented per [https://github.com/aaronpk/webmention.io/issues/82 gh wmio #82])
+
+JSON API example:
+* https://webmention.io/api/count?target=http://tantek.com/2017/183/e1/sunday-yoga-presidio provides a result like:
+<pre>
+{
+  "count": 47,
+  "type": {
+    "invite": 26,
+    "like": 11,
+    "mention": 1,
+    "reply": 1,
+    "repost": 1,
+    "rsvp-maybe": 1,
+    "rsvp-yes": 6
+  }
+}
+</pre>
+(summary totals from e.g. https://webmention.io/api/mentions.jf2?perPage=1000&target=http://tantek.com/2017/183/e1/sunday-yoga-presidio which shows all responses)
+
+* Need PHP/CASSIS to parse out the rsvp-maybe and rsvp-yes fields from that JSON into $rsvp_yes and $rsvp_maybe.
+* CASSIS to generate summary something like
+<pre>
+$rsvp_summary = strcat($rsvp_yes>0 ? strcat($rsvp_yes, ' Going') : '', 
+        $rsvp_yes>0 && $rsvp_maybe>0 ? ' · ' : '',
+        $rsvp_maybe>0 ? strcat($rsvp_maybe, ' Interested') : '');
+</pre>
+
+
+=== HTML5 semantic elements for accessibility ===
+Add the following HTML elements to post permalink, post archives lists, and home page for their [http://www.weba11y.com/blog/2016/04/22/screen-reader-support-for-new-html5-section-elements/ documented positive impact on desktop screen readers]:
+* article - around each h-entry
+* header - maybe around reply-context and author h-card?
+* section role=search - around search input form
+* nav - around prev/next sequential navigation links
+* main - maybe if it has the same impact as "Section role=main"? needs research
+* footer - for datetime stamp, tagged in post / tags, maybe citation UI
+
+While adding, document work necessary and how it would/could be improved if such markup came from templates instead per [[#Template_all_pages]] task.
+
+=== Template all pages ===
+Create [[template]]s for all pages created / returned by Falcon.
+
+Goals: 
+* short term:
+** identify page types (verify with falcon.php code review)
+*** fix archive pages to have <code>&lt;link rel=canonical&gt;</code> without query params
+** identify color palettes for inverses of daylight (default), Matrix, and TRON:Legacy
+** use media query for darkmode to switch between dark/light variants of each theme
+* medium term:
+** identify content modules
+** identify composite modules of content modules
+* long term:
+** zero inline HTML page construction in PHP
+** develop an HTML-native [[template]] language preferably based on prior art, perhaps using a [[microformats2]] design.
+
+MVF/increments:
+* atomic content boxes layout
+* composite content boxes layout
+* page layout
+
+Design:
+* page types:
+** home page
+** post permalink
+** archive specific post type on a day, all posts on a day, new month, year
+** Atom [[feed file]]
+* color palette semantic labels
+** post content text, link text, visited text
+** post background
+** post info text, link text, visited text
+** post webactions text, link text, visited text, form input field
+** [[reply-context]] text, link text, visited text
+** reply-context background, border
+
+=== Recent Articles improvements ===
+The Recent Articles box on my home page can be improved a number of ways.
+* Re-use common code between Recent Articles box and articles-only Atom feed
+And while in there, consider:
+* [[#mobile_recent_articles_box]]
+* "More articles..." link that goes to a separate articles-only page of the most recent (perhaps 10?) articles
+** at what URL?
+** link rel alternate link from that articles-only page to articles-only Atom feed
+
+=== tags with spaces ===
+Use-case: 
+* setting or adding labels to issues (typically on GitHub) that are already using labels with spaces in them. 
+** Enable automatic Bridgy Publish [[POSSE]] a hashtag to [[GitHub]] as a Label (which may have spaces), on [[tag-of]] replies (which itself is a separate implementation task!)
+** Example existing labels with spaces: [https://github.com/w3c/w3process/labels/Needs%20Review W3C Process: Needs Review], (examples needed from CSSWG, SocialWG repos/issues)
+
+Designs:
+* Mediawiki-ish style: [[hashtag]] underscores (_) converted to spaces for their equivalent "category", with exceptions:
+** NNNN_NNN, NNNN_NN_NN = dates, convert those to "-" (perhaps convert any *N_N* to *N-N*)
+** X__Y treat as literal "_" and convert to X_Y
+* OR Backcompat: [[hashtag]] double underscore (__) convert to space for their equivalent "category". Notes:
+** "__" rare (not used?) in hashtags today (certainly not in any more my posts)
+** maintains any/all existing X_Y single underscores (no exception needed for NNNN_NNN, NNNN_NN_NN to avoid conversion into spaces between numbers)
+** optional convert any *N_N* to *N-N* because actual ISO Date category names YYYY-DDD and YYYY-MM-DD read nicer than with underscores, and numbers rarely (if ever?) use underscores for separators for anything meaningful, whereas dashes between numbers are common in serial numbers, product codes, confirmation numbers etc.  
+
+[[auto-tag]] markup if there are any double underscores:
+* <code>#&lt;abbr class="p-category auto-tag" title="tag with spaces"&gt;tag__with__spaces&lt;/abbr&gt;</code>
+
+Document chosen design as a brainstorm:
+* in [[hashtags#Brainstorming]]
+** 2019-058 noted preference for __
+
+Implementation:
+* Implement space separated labels via __ or _ per design above in hashtags, in [[auto-tag]] function
+** 2019-058 implemented __ per design but did not yet deploy. Waiting for real-world use-case to try it out (might need to [[Falcon#one-off_tag-of_post|implement tag-of reply]] to start labeling [[microformats2]] parser and vocabulary (e.g. [[h-entry]]) issues to exercise labels with spaces).
+** 2019-070 debugged and deployed. fixed remaining syntax bugs and deployed with no regressions in existing tags, and functional tests, but have not yet tested __ hashtags in practice with a real world example post that is then POSSEd to GitHub or Flickr.
+** ... actual real world post with __ hashtags POSSEd successfully to GitHub and/or Flickr with spaces in the labels/tags there.
+
+Reference:
+* Background: chat how to create space separated labels via _ in hashtags [https://chat.indieweb.org/dev/2018-11-16#t1542392876812700 2018-11-16 #dev chat discussion], [https://chat.indieweb.org/meta/2019-01-02#t1546458658761500 2019-01-02 #meta chat] (which should have been in dev)
+
+=== better post creation UI ===
+Iteratively incrementally improve Falcon post [[create|creation]] UI.
+
+Current: hand-editing flat file HTML+microformats storage file to add a new post.
+
+==== prototype DM UI ====
+Prototype:
+* Stage 0: start with a minimal UI to post a DM to a URL
+*# Minimimum Viable Feature
+*#* to: URL field
+*#* message: textarea
+*#* (Send) button
+*#* if it's a Twitter profile URL, use Twitter API to send the DM
+*# check [[private messaging]] for more destinations and how to handle
+*# 30 second undo! (client side)
+*#* Send button disables text fields, turns into Sending…:nn (Undo Send) <- different hit target
+*#* with a count down timer :nn that goes from 30 to 0
+*#* At 0, hide :nn counter, (Undo Send) button, use Twitter API to send
+*#* When it returns success, Change Sending… to Sent.
+*#* If user clicks (Undo Send) button, hide button, 
+*#** change Sending… back to (Send) button
+*#** re-enable text fields for editing
+*# 30 second undo (client and server side — so it would work/show status across multiple clients)
+* ...
+
+==== post creation UI improvements ====
+Improvements:
+# Stage 1: simplify/minimize post origin format as much as possible (to minimum that a UI would "submit", re-use minimum expected properties from [[Micropub]])
+#* scheduled post heads-up / warning: prominent heads-up in the UI if dt-published is more than a whole minute in the future.
+#** e.g. "This post will be visible in xx days/hours/minutes"
+#** and disable "Publish" button (since no auto-POSSEing in the future support yet)
+#* warning if next post number (day scoped) is discontiguous (e.g. if next post is /t3 and previous was /t1)
+#* default/auto-add "with BBEdit" content/markup even if missing; simplifies post origin format
+#* store slug as visible content (instead of as part of uid)
+#** then auto-generate ordinal days and post number (from previous "s" file published post number)
+#** and post type: default "t", unless h-event then "e", or explicit h1 class="entry-title" then "b", or like-of then use "f",
+#* default/auto-add dt-published (even if missing "published"); simplifies post origin format (I think I implemented this ~ 2017 June maybe IWS? [[2017]]?)
+# Stage 1.5: Document Save/Publish/Delete/Undo user flow design in [[create#Brainstorming]] (from original 2010-era notes, with updates, use-cases)
+# Stage 2: Save/publish form submission to storage file
+#* UI: Form with minimal fields to write notes, replies, likes, articles (model after Micropub clients)
+#* Server: "Save" submission to store in post origin storage (perhaps with dt-created)
+#* Server: "Publish" submission to do "Save" and current POSSE+PuSH support
+# Stage 3: Delete/undelete saved posts
+#* UI: Delete after Saving, Undelete after deleting
+#* Server: Handle delete saved unpublished post, undelete deleted unpublished post
+# Stage 4: Undo publishing
+#* UI: Undo after publishing
+#* Server: Handle undo after publishing -> saved state, plus delete any POSSE copies if any
+#* Server: Handle publish with 30(?) second delay, so undo can happen without having to delete any POSSE copies
+# Stage 5: Whatever else I have in my 5-6 year old UI flow sketches re: (auto-)save, delete/undelete, publish/undo
+# Stage 5.5: interactive <a href="#prose_improvement" id="prose_improvement">prose improvement</a> highlighting / fixing support in the primary writing field. Pick and choose which of these to implement, consider open sourcing as its own library:
+#* '''Hemingway '''. Investigate how much work it would be to implement an open source (licensing?) version of [[Hemingway App]], and implement it if it can be done in a day at an IndieWebCamp.
+#* '''words to turn around'''. Also implement word/phrase replacement suggestions in 2017-12-04 [https://www.theguardian.com/science/2017/dec/04/would-you-be-willing-words-turn-conversation-around words to turn a conversation around]
+#* '''inclusivity suggestions'''. Implement [https://betterallies.com/language/ suggestions for more inclusive words and phrases] as documented in a [https://github.com/randsleadershipslack/documents-and-resources/blob/master/RandsInclusiveLanguage.tsv table of Slackbot responses].
+#** '''Start with AlexJS'''. Open source [https://alexjs.com/ AlexJS] has a bunch of inclusive language suggestions already coded/supported. Re-use and contribute to its vocabulary.
+#** '''write-good'''. Open source [https://github.com/btford/write-good write-good] is a “Naive linter for English prose” for words like 'simply' 'easy' 'just'.
+#* '''short codes like TypeIt4Me'''. Like [https://twitter.com/zeldman/status/1108702389685637121 @Zeldman summarized]:
+#** Typing “ttt” access to typographic symbols: ✎ ✩ ✩ ♛ ☞ ★ ★ ☞ ☛ ♛ ⇛ ❝ ❦ ❞ ¶ ✺
+#** “;shrug” gives ¯\_(ツ)_/¯
+#* '''additional improvements''' - one-off ideas for linting prose / suggesting
+#** '''Actually,''' - When a sentence starts with "Actually ," or "Actually ", drop it and start with the next word, or if it is necessary to connect that sentence to the previous statement, replace "Actually, " with "And " or "Yes, and ", but don't if the next word is already an implied connector of sorts like "Another ".
+#** '''Yes but''' - similarly to Actually, drop "Yes but", or replace with "Yes, and " or "And ".
+#** ...
+#* etc.
+# Stage 6: Implement micropub client and server support, figuring out what is missing for undo etc.
+
+=== UI for many drafts ===
+{{main|draft#UI_for_many_drafts}}
+
+Brainstormed this generically [[draft#UI_for_many_drafts|draft page]] since I think it would be useful as both a local application (where the drafts are stored in local text files) or as a [[Micropub]] client.
+
+For Falcon, I'd likely evolve the abovementioned Post Creation UI to something web-based ([[offline first]] using local storage) with:
+* explicit support for (JS auto-saving) an unpublished draft, like Gmail (no URL? or use post status or something similar)
+* support for multiple unpublished drafts (not just a "current draft" you can come back to)
+** with a simple "pick one" list UI, click to select a draft as the "current draft" you're editing, and preserve that state on the server (which draft), as well as draft scrolling position if possible.
+** upon publishing something it's removed from the list
+** upon undoing a publishing it's added back to the list
+* hashtag buttons by frequency, clicking each filters on that one hashtag (like radio buttons)
+* clicking hashtags highlights them and adds/removes them from filtering (like checkboxes)
+* search box for filtering as well
+
+=== Display Likes Reposts ===
+Implement a minimal display of [[likes]] &amp; [[reposts]] on posts.
+* {{snarfed}} wants (me to do) this
+
+Perhaps:
+* just lists of @-names & domains
+* maybe [[facepile]]s linked to URLs with names as alt text
+* maybe counts of both and a list?
+** Is it good or distracting / emphasizing the wrong thing to show counts (like every [[silo]] does)?
+
+* Perhaps query webmention.io for likes and reposts separately, then pipe through stream.thatmustbe.us, and display as inline list of author names linked to their URLs
+* Perhaps process queue of [[webmentions]] at webmention.io
+
+==== Display likes facepile on events ====
+As a small incremental step, display just a likes facepile, just on event posts.
+
+This will be a good way to experiment with presentational issues without impacting all posts.
+
+Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
+
+==== Display reposts facepile on events ====
+Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
+
+This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
+
+==== Display likes reposts all posts ====
+These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
+* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
+* <s>Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]</s> done!
+
+This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
+* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
+
+Scaling display: How to handle a facepile with 100s of items?
+
+E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
+* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
+** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
+** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
+<pre>
+{
+  "count": 312,
+  "type": {
+    "like": 110,
+    "mention": 33,
+    "post": 2,
+    "reply": 36,
+    "repost": 128
+  }
+}
+</pre>
+
+Real world example:
+* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
+
+----
+'''Homepage mentions'''
+
+Showing [[homepage]] mentions is an entirely different scale of design problem:
+* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
+<pre>
+{
+  "count": 101737,
+  "type": {
+    "like": 30,
+    "mention": 99995,
+    "post": 5,
+    "reply": 1660,
+    "repost": 4
+  }
+}
+</pre>
+
 === Own my public list emails and replies ===
 Goal: start posting [[email]]s & email replies to public lists on my own site first, and POSSEing them (perhaps manually at first) to their public email list destination(s).
 
@@ -731,48 +776,6 @@ Implement basic [[on this day]] functionality:
 Why:
 * I expect both emotional value and challenges - a good combination to inspire in-person discussion
 * show value of indieweb posting all your things as compared to any one silo
-
-=== Display RSVPs summary ===
-Display summary of number of people going and interested like:
-* "3 Going · 3 Interested"
-just above the facepile of RSVPs
-
-Use Webmention.io API to retrieve # of people going, # of people interested, and turn it into HTML. (implemented per [https://github.com/aaronpk/webmention.io/issues/82 gh wmio #82])
-
-JSON API example:
-* https://webmention.io/api/count?target=http://tantek.com/2017/183/e1/sunday-yoga-presidio provides a result like:
-<pre>
-{
-  "count": 47,
-  "type": {
-    "invite": 26,
-    "like": 11,
-    "mention": 1,
-    "reply": 1,
-    "repost": 1,
-    "rsvp-maybe": 1,
-    "rsvp-yes": 6
-  }
-}
-</pre>
-(summary totals from e.g. https://webmention.io/api/mentions.jf2?perPage=1000&target=http://tantek.com/2017/183/e1/sunday-yoga-presidio which shows all responses)
-
-* Need PHP/CASSIS to parse out the rsvp-maybe and rsvp-yes fields from that JSON into $rsvp_yes and $rsvp_maybe.
-* CASSIS to generate summary something like
-<pre>
-$rsvp_summary = strcat($rsvp_yes>0 ? strcat($rsvp_yes, ' Going') : '', 
-        $rsvp_yes>0 && $rsvp_maybe>0 ? ' · ' : '',
-        $rsvp_maybe>0 ? strcat($rsvp_maybe, ' Interested') : '');
-</pre>
-
-=== Recent Articles improvements ===
-The Recent Articles box on my home page can be improved a number of ways.
-* Re-use common code between Recent Articles box and articles-only Atom feed
-And while in there, consider:
-* [[#mobile_recent_articles_box]]
-* "More articles..." link that goes to a separate articles-only page of the most recent (perhaps 10?) articles
-** at what URL?
-** link rel alternate link from that articles-only page to articles-only Atom feed
 
 === Display Received Webmentions ===
 * {{snarfed}} wants (me to do) this
