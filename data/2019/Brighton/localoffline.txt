@@ -1,0 +1,130 @@
+https://indieweb.org/2019/Brighton/localoffline
+
+'''<dfn>Local first, offline first vs no cloud and multidevices</dfn>''' was a session at  [[2019/Brighton|IndieWebCamp Brighton 2019]].
+*Session: Local first, offline fist vs no cloud and multidevices
+*When: 2019-10-19 14:45
+
+== Participants ==
+* {{t}}
+* {{aaronpk}}
+* {{zegnat}}
+* {{adactio}}
+* {{calumryan}}
+* {{sebsel}}
+* {{sknebel}}
+* Juan Carlos
+* {{petermolnar}}
+* {{qubyte}}
+
+* {{LCowles}} (remote in zoom)
+* {{gwg}} (lurking remotely)
+
+== Notes ==
+Post to introduce: https://tantek.com/2019/292/t5/indiewebcamp-brighton-local-offline
+
+{{t}} Who's heard of offline first? - What do you see as the difference?
+
+{{adactio}} Offline first: faster quicker (maybe not fresh). Local first: generate/create/edit/delete
+
+{{aaronpk}} Reading vs creating
+
+{{adactio}} mentions web beacons
+
+https://indieweb.org/offline_first
+
+{{adactio}} Offline first from cache. Local first could be "posting" locally (no network) and waiting until online to really post.
+
+{{aaronpk}} uses an offline version of Teacup posts with micropub when online
+
+{{petermolnar}} secure scuttlebutt (SSB) - https://github.com/ssbc - sync with "local" - same local network - clients first, doesn't require over the internet connectivity
+
+{{LCowles}} used it with HospitalRun which is a SPA (JS Node app) using CouchDB & PouchDB to design healthcare solutions which work without persistent network connectivity
+{{LCowles}} Asked Tantek about LocalFirst the other day as it sounds a little like 90's apps where network was at most optional enhancement
+
+{{LCowles}} also have a ServiceWorker which defaults to checking network, but after 500ms bails to cached copy (attempts to get)
+
+https://www.inkandswitch.com/local-first.html
+
+{{adactio}} See the verbs of creating in above link
+
+{{t}} Principles:
+* no spinners
+* work not trapped on one device (is this true of local first?)
+* network optional
+* seamless colab
+* ... see above link
+
+
+{{LCowles}} Question? If you are not trapped on a device, do you imply a master-node or outer category / context which persists? For the battery dying case, it seems to imply something has power or remains available
+    
+{{adactio}} Without opening browser background sync can be useful here.
+* https://caniuse.com/#feat=background-sync
+* https://developer.mozilla.org/en-US/docs/Web/API/SyncManager
+* https://bugzilla.mozilla.org/show_bug.cgi?id=1217544
+Appears blink only. In development on firefox
+
+{{aaronpk}} My thing requires user interaction to trigger.
+
+{{t}} What does seamless mean?
+
+{{adactio}} Big fan of seamful. You expose the boundaries because it's less magical.
+
+{{aaronpk}} Building blocks approach to design.
+
+{{LCowles}} Would existing technologies such as patches be a way to provide seamful design, which the user can reason about? Seems to work for OpenSource & Libre
+
+{{t}} Seams even visible in things like etherpad (colours). Too many seams can be bad, ceremony, git incantations etc. Worse for usability and accessibility.
+
+{{adactio}} These principles are not technology speciftc.
+
+{{aaronpk}} You should be able to open old files.
+
+{{t}} Security / privacy by default because nothing is transmitted.
+
+{{zegnat}} My GPS logger is an example. Just logs locally. I can use whatever app to open logs.
+
+{{t}} Maybe local first is in how the timeline starts. Sync happens later to peers or mothership. Then it's offline first.
+
+{{zegnat}} My software is offline first. Data I create is local first.
+
+{{note-taker}} Conflict Free Replicated Datatypes (CRDT) has come up a few times as a means to sync. Sounds like there could be some in-principle issues though.
+
+{{LCowles}} Defining version-ed envelopes and action-oriented schema's / specification formats to assist with editing complex content. What if I wanted to collaborate on an image file (traditionally difficult to diff)
+{{LCowles}} Perhaps rabbit hole, perhaps #FirstWorldProblems I just was online, but unavailable because I was called to help
+{{L Cowles}} Is Git an example of  tool enabling LocalFirst? (not providing complete solution)
+
+
+{{LCowles}} https://phil.tech/api/2016/05/03/put-vs-patch-vs-json-patch/
+
+Also: http://offlinefirst.org/
+
+{{t}} I think they're talking about the software being local first.
+
+{{petermolnar}} git is a data type. PR is people side of things.
+
+{{t}} git doesn't require network. Can just be fs and patches.
+
+{{martijnvdven}}: the application is offline first, I want to be able to start it without a network connection. But then when I start entering data, that *data* is local first: only existing on the local device. Once the data has been shared in some way (e.g. over the network to a “mothership”) we are no longer in a local first, but the app could actually go back to offline first where the offline cache is now equal to the public/online/shared data. When we are talking data is starts locally, may be stored locally, and is thus local first. Applications have a network connection or no network connection and are thus offline first. (– thought captured after the discussion)
+
+
+{{petermolnar}} mks integrity example of mothership
+
+{{t}} Back to practical: 3 scanarios for local first content. 
+# 1. By myself writing. On beach. Focus. 
+# 2. Partial attention: On mobile device. With other people. Short notes. Quick data like teacup. Maybe chatting with other folk. 
+# 3. You're responding to something you're reading. Creating content dependent on offling first context.
+
+{{adactio}} I consider local last which grabs content and stores it locally. If I close a tab by accident I can retrieve it. Local as enhancement.
+
+{{zegnat}} Is that not local first_
+
+{{jeremy}} Applies to filling in an online form. Text box borks. Firefox restores it.
+
+URL as state
+limit is 4k of data {{LCowles}} This is client dependent
+https://itty.bitty.site/#About/XQAAAAI9BwAAAAAAAAAeHMqHyTY4PyKmqfkwr6ooCXSIMxPQ7ojYR153HqZD3W+keVdvwyoyd+luwncAksvskG/my97qDaUEyfDGB0QDbdURMwS0L90o5EpQ7O+BMmWrcB7fs71TJEJv1I/T/JfksoiYu9CqkeO/3MjEVGWv6XhfDjWJZ9laLARogtAZtwl7FltrwO/ppSfgeKOjxCxTNdUQH9WBM3de22qOzClzeZaSsSM+/ETbHBIHe1Qc+UF7PDfY470lZNjQg3wfOam9KudUiHOOQD3Kn8FLfaae0lmdK4VHRgxpDtL1nExkdF+pzNQAIyktIv3dQUPDKhGJ61c+WBTNP6NI5AvZ0uFT+Mc2oG0mMUwwuupCrjTxxpYv3l4L3W5lBXqWDjEH+cL8VZc6xz4WwIMG5J9jaQTv1SSxJ1dLg2Z2F7iNQ0fCFI74yeqBM1koHGbscBj4GpwWuA7y/fMCu3sEzcwefjBOuUwDdDfsdxqQLnjywtBxR5qHmngo/agjHyILkZxU8IiTgJeSbjcEOWdiVxcb9tEdtZ7eDwWQcwMsQdU9A9sCnargxl1IdVsbB9dfcFTQL8OpvjdqnmFZZJ6n2cKr51FonrcrMjm68aS4Lemk+D4sRaHnN+O5BrF10BiSfjumSkvhZ0Uwu/tR35LSmtC1UmVPgRNMwWkSHZjfjEdqueqhYglmB7nHQ8TDWCTb7lJLtTdhx1btg7UWsAuNIhffUpBo+T+3oh8sg8c41WaX5JaNL19UkD2M0qFd8Sayfr0qeGXnrLrKkS0t56ckjui2rTTmUDKFup4CnEtE7fu6nGYeGSoCwGoRlYQD/SU1/GSIWfs8hSpK3KeSZgUQXk14b7dh2LaqrVKGJLja/hFcQCt2gdGD+Ml+iH+Cy0lqj3D32RSarS3k4mJyTKsGnETyXVlCbJtC7kiZ/gZ7i8ChR2hL1qWb7ZInxaHN7WVbsLxZmEIp0Bf+we6YCbg0JrLMoTqXqfx7lb4bGgIRzD4Kz+U9pve9VS4eU4c7JKX6XVLqg56dRO7Kw8MVipjdSANC/f54eQJ+YfB3RYT4eih7PAmHp62d8GiCJABN36B6oiENrnHkBvFu9JPTwo6BStvfP+fZEKFoxaKO3f78thxD7GZdMp0PLwZagS3G6TDAdY1nwSqtQC0G/9GR+VUHkDi2Mz5yxc/r8tfic+7p22WjmOGSge8joCeO7y5NARFillrggokK5I9rjSYy/pnNrfHBbORUL1ZCBf4FrD4=
+
+{{LCowles}} https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&code=fn%20main()%20%7B%0A%20%20%20%20println!(%22Hello%2C%20world!%22)%3B%0A%7Dv (another example)
+{{LCowles}} I did mistakenly think this was automatic (maybe it used to be)
+
+== See Also ==
