@@ -1,0 +1,79 @@
+https://indieweb.org/2019/Brighton/photovideo
+
+'''<dfn>Photos and videos</dfn>''' was a session at [[2019/Brighton|IndieWebCamp 2019 Brighton]].
+* Session: Photos and videos
+* When: 2019-10-19 16:25
+
+== Participants ==
+* {{aaronpk}}
+* {{adactio}}
+* {{rose}}
+* {{t}}
+* {{jeremycherfas}}
+* {{petermolnar}}
+* {{sknebel}}
+* {{calumryan}}
+* chris burnell
+* {{martymcguire}} (remote)
+
+== Notes ==
+Session pre-notes:
+* https://indieweb.org/User:Aaronparecki.com#Brighton_2019
+
+
+* Aaron:
+** making a photo post with one or more post is relatively simple, it can be parsed in a reader and looks very similar to how it did originally.
+** On instagram you can have a photo/video post (combination), which works. But there's no microformats way of doing this.
+
+Challenge:
+* no reader can display posts with multiple photos and videos and keep the order
+
+Currently photos and videos have different u-properties, so if you post "photo, video, photo" the parser sees "photo, photo, video", so you lose the ordering. By putting them in the h-entry (no separate markup), you don't get understood as a media post in readers (e.g. Together's gallery view)
+
+
+* possible solution: go back to a single list (all photo, video, media, etc) but add mime type value
+
+
+* browses embracing image tag with video content and dealing with it differently (more or less like a gif)
+
+{{rose}} - is there something like a gallery post?
+* gallery: bunch of photos
+* photo essay: the photos are part of the story (the flow) of the entry
+* special case of {{t}}: inline references to images- ( {{adactio}} this is what figure element is for - {{t}} disagrees)
+** footnote -> "fignote" ({{t}} coined a new word)
+
+collections are collections of posts - not just a collection of media elements
+
+photo essay: text with formatting, headers, ... - like an article, but interspread with images, and e.g. schmarty arguing that in some cases the photos are more important.
+
+lots of detail descussion of tanteks example post -
+
+{{martymcguire}}: as tantek pointed out, the photos in my example post (https://martymcgui.re/2019/10/15/indiewebcamp-nyc-2019-photos-and-some-lessons-learned/) tell a story. a consuming case that I have is a little photo frame on my desk. it can display photos, subscribe to feeds via microsub, but can't really show text along with those photos. i would like to be able to indicate to these types of readers that while this post is an article with embedded photos, i think those photos should show up for that photo-only reader.
+* {{martymcguire}} also wants to consume photos from other people's posts this way! no hints required!
+
+for mixed medie types, one suggestion 
+*add* new u-media property to all photo/video/audio. this provides an order, a reader can still determine the type from the other lists. if it does not support u-media, it falls back.
+
+
+{{tantek}} - there is clearly a human need to consume these posts as just looking through the images without reading the captions, there is value to people to just look at the photos
+* consuming the post, even in incomplete form (e.g. photos only) has value
+
+{{adactio}} - i'm interested in text-only, sometimes, and don't want or need to see the photos.
+
+https://index.hu/nagykep/2019/10/17/end_of_industry_-_john_myers_az_ipar_vege_nagykep/
+
+* posts could indicate if the photos make sense on their own, the text makes sense on it's own, or it's preferred to be both for the reader - indication only
+
+in-depth discussion about images marked up with microformats2 u-photo inside of e-content. this results in readers showing duplicate photos.
+* [[post type discovery]] says "presence of u-photo" means this post "is" a photo post
+* but it "is" an article with content being a mix of text and photos.
+
+aaronpk shows how XRay parsing lib handles this. attempts to de-dupe photos inside of e-content by hunting for photos marked up with u-photo and removing <img> tags that match.
+* in-depth discussion continues, suggestions of ways of marking sections up differently.
+* all photos at the top? (what if they're nested in links, figures)
+* mark up each paragraph as e-content or p-content, with u-photo interspersed? parsed mf2 can't accurately reconstruct the full post in this way.
+
+session time ran out!
+
+== See Also ==
+* [[2019/Brighton]]
