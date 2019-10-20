@@ -1,0 +1,76 @@
+https://indieweb.org/2019/Brighton/searching
+
+'''<dfn>Search your content</dfn>''' was a session at [[2019/Brighton|IndieWebCamp Brighton 2019]].
+
+Notes archived from: https://etherpad.indieweb.org/searching
+----
+IndieWebCamp Brighton 2019<br>
+Session: Search your content<br>
+When: 2019-10-19 11:40
+
+== Participants ==
+* {{petermolnar}} (facilitator)
+* {{sebsel}}
+* {{calumryan}}
+* {{rose}}
+* {{Zegnat}}
+* {{sknebel}}
+* {{aaronpk}}
+* lcowles
+
+== Notes ==
+* {{sebsel}} tried stuff for searching for his site, but has nothing working in place now
+** Tried to shell out to (rip)grep, to get a shortlist of content files, then parse those to filter out results in hidden fields or private posts.
+* {{Zegnat}} wrote an IndieWeb search engine in Utrecht powered with temporary SQLite in memory to order all of the externally fetched content by search relevancy
+* {{petermolnar}} is using SQLite, but it is not very good with Hungarian content, and uses a separate system to seed the database
+** not using grep, because he wants to search more dynamic content, like generated URLs
+* Should you search external data? Should you search your private posts? Should you search your tracking data?
+** Search with completely public data can at least be run on the front end, but as soon as you want to bring in private data as well you need some form of authentication
+** Do you want to offer a private search?
+* Azure and Agolia offer free options for outsourced search.
+* https://github.com/teamtnt/tntsearch came up to {{Rose}} as a PHP search engine when a Grav extension for it was published.
+** Found pages that she thought she had lost.
+* {{petermolnar}} tried Pyhton’s NLTK.
+* {{aaronpk}} uses ElasticSearch, set it up once and has not set it up since. 
+* If the outsourced search only returns URLs, that might be a way to get around some of the privacy problems.
+* {{sebsel}} wants to get search on his site. He is running Kirby. Kirby’s old own search was not “good enough”.
+** Thinking about where to index the data. Possible idea: doing a grep search through the flat file storage, than using that short list of files for the “real” search.
+* What happens if you then allow regular expressions through?
+* Three options:
+** Just accept text
+** Accept text and small combnators like “OR” and “AND”
+** Accept full regular expressions
+* {{calumryan}} was looking into search for the indieweb guides. It currently would search the titles from a JSON file.
+* In display: think about relevancy. Do you need to make a difference between when someone looks for a tag versus just a random word?
+
+XKCDs:
+* https://xkcd.com/208/
+* https://xkcd.com/155/
+----
+
+
+topics:
+* UI
+** presenting results: snippets, highlights, etc
+* searchbox functionality:
+** to regex or no regex- regex DoS is possible, see https://www.checkmarx.com/wp-content/uploads/2015/03/ReDoS-Attacks.pdf
+** how to indicate functionality (glob, regex, search AND OR etc)
+* insource or outsource 
+** sqlite/mysql/postgres all have built in fts engines
+** free cloud solutions with api - azure, algolia
+* technical resource
+** nltk
+** elasticsearch
+** sql
+** tntsearch
+* privacy issues
+** searching content with private data included - let it be tracking, actually private posts, etc - can only be done on server side safely
+
+Lcowles would like to consider inter-lingual and cognitively diverse searches
+
+Also the difficulty of dealing with symlink or redirected content without dynamism
+
+[[Category: IndieWebCamp Brighton 2019]]
+[[Category: 2019 sessions]]
+== See Also ==
+* [[2019/Brighton/Schedule]]
