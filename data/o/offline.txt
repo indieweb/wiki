@@ -15,8 +15,17 @@ People are often places without an internet connection, however they may have pr
 === Offline page ===
 Perhaps the simplest bit of user visible offline support is an explicit offline page, so when a user is offline and browses to a page on your site that is not cached, they will see a friendlier message from you about being offline instead of the default browser "network unavailable" error message.
 
-In {{adactio}}’s [https://adactio.com/journal/13540 Minimal viable service worker] article, he links to an example minimum viable service worker that also has offline page support (from the 2018 Ampersand event site). Start with this service worker:
-* https://2018.ampersandconf.com/serviceworker.js
+In {{adactio}}’s [https://adactio.com/journal/13540 Minimal viable service worker] article, he links to an example minimum viable service worker that also has offline page support (from the 2018 Ampersand event site). Using that example, follow these steps to create a custom offline page and service worker to support it:
+
+# Start with a minimal static offline page, like the Ampersand event site offline page:
+#* https://2018.ampersandconf.com/offline/
+# Customize it for your own site (e.g. with your site banner and footer) and save it somewhere like <kbd>offline.html</kbd>.
+# Use a minimal service worker that has explicit offline page support built-in like:
+#* https://2018.ampersandconf.com/serviceworker.js
+# Customize it at least as follows:
+#* Update the offlinePage variable to point to your offline page path, e.g. if you put offline.html at the root of your site, then use <code>"/offline.html"</code>.
+#* Update the <code>cache.addAll</code> block with resources you want to optionally pre-cache, like perhaps your home page and home page CSS file.
+#* ...
 
 ...
 
