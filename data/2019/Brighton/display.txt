@@ -1,0 +1,72 @@
+https://indieweb.org/2019/Brighton/display
+
+'''<dfn>Display of tracking data</dfn>''' was a session at [[2019/Brighton|IndieWebCamp Brighton 2019]].
+
+Notes archived from: https://etherpad.indieweb.org/display
+----
+IndieWebCamp Brighton 2019<br>
+Session: Display of tracking data<br>
+When: 2019-10-19 14:00
+
+== Participants ==
+* {{rose}}
+* {{zegnat}}
+* {{aaronpk}}
+* {{adactio}}
+* {{sebsel}}
+* {{petermolnar}}
+* {{sknebel}}
+* Mark (qubyte.code)
+* Chris Bromley
+* Jack T...
+
+== Notes ==
+* How should we track data, how to store, how to display?
+* Should it be static?
+** It's easier to do things client-side. Javascript libraries are very good in this these days. -> drawing images / lines.
+* Downloading maps / tiles is often not allowed. This makes it harder to do stuff server-side (Caching is sometimes allowed)
+* Javascript is pulled in at the client, and that's allowed.
+** But it's a third party that you're loading in
+
+* Martijn is using Javascript to draw his weight graph. The data itself is in the HTML, as a table. The Javascript is just looking in the table and rendering the map, so it's a progressive enhancement. https://gionkunz.github.io/chartist-js/
+* {{rose}} has use Chart.js before https://www.chartjs.org/
+
+* gpx and kml are both XML... could they be transformed with XSLT on the fly to become dynamic maps?
+
+* {{aaronpk}} also wants to talk about daily summaries of his data.
+* All the data he has now, is bound to a post.
+* This way he's never going to do steps, because he does not want a post per step, and he does not want the steps posted in batches, because there is no real batch-size.
+* Should this data go to his day-overview-pages? 
+** Is this a post, that is sticked on the top of the day-overview-page?
+** Or is this an element on that page, that just lists data?
+* Extra complication: he travels a lot between timezones, so some days are much longer or shorter than usual.
+
+* {{adactio}} shows four different summaries of his archives:
+** List of posts on the month
+** Circles on a graph
+** graph of posts as a line
+** even audio!
+
+WordPress has day/month archives, but the data isn't aggregated by anything right now.  WordPress stores data in key/value pairs based on the WordPress geodata format.  https://codex.wordpress.org/Geodata Simple Location, written by {{gwg}} stores in this format on all WordPress objects and displays them.
+
+{{petermolnar}} shows https://logstalgia.io/ for getting visuals out of an apache access log - just as potential inspiration for, say, end of the year video summaries
+
+* {{rose}} is thinking about throwing data into Grafana (https://grafana.com/)
+
+* how do you combine data of different sources? e.g. from Compass or other tracking devices.
+** {{aaronpk}} has logic in his micropub endpoint to get location data from Compass into his posts.
+
+* {{petermolnar}} stores metadata about photo's in the photo files itself (using EXIF metadata).
+
+* {{aaronpk}}'s monthly overview has all the location data in microformats, so it would be possible to parse those into GeoJSON and then make a map out of it.
+** https://aaronparecki.com/2019/10
+
+* {{aaronpk}} is thinking about using his new unlisted posts feature to store listening history from last.fm, so as not to clutter his timelines
+
+* {{sknebel}} brought up the ideaof moving "tag-cloud" (treemap) visualisation for music data to show how listening to artists/albums/songs change through time
+
+
+[[Category: IndieWebCamp Brighton 2019]]
+[[Category: 2019 sessions]]
+== See Also ==
+* [[2019/Brighton/Schedule]]
