@@ -252,6 +252,19 @@ Next gen: have every page on my site by default be a wiki page made "wiki-like" 
 Brainstorm started here:
 * [[wiki-projects#Brainstorming|wiki-projects: Brainstorming]]
 
+=== improve offline support ===
+Added offline support on 2019-10-21 per https://tantek.com/2019/293/t1/indiewebcamp-brighton-hackday-offline
+
+More [[offline]] / [[service worker]] support:
+# what Jeremy got working with [https://adactio.com/journal/15844 Going offline with microformats]
+# document my example and "levels" on [[offline#Indieweb_Examples]]
+# document possible IndieMark levels for an “Offline” category based what I got incrementally working.
+
+Design, document, and implement three levels of offline support depending on user interaction:
+# Permalink posts (e.g. referral from search engines). No expected relationship with user, so no pre-caching of content. Maybe minimum service worker with *only* offline page and cache as you go for home page only, so that if it is loaded next, it gets cached.
+# Home page visit. User is visiting me, not just a post, and thus is starting to build a relationsip. Existing service-worker that precaches /contact /pay and adds cache-as-you-go to all other pages
+# PWA install. User has gone to the trouble to *install* my site. Precache all my post content storage files through 2010 up to the most recent 5MB. Precache recent photos. Enable offline page to dynamically render any permalinks from my cached storage files.
+
 === improve replies details ===
 ==== improve reply-context support ====
 Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup), with a bit of smarts to show type of response (in reply, RSVP etc.).
