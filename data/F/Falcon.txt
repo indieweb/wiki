@@ -218,6 +218,40 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== named pages ===
+Named pages (used to be captured as an <span id="Indie_Wiki">Indie Wiki</span> itch) are pages on my site that have a name as their primary identity, instead of being primarily identifed by their date of being posted (as [[posts]] are).
+
+Use-case: 
+* a mechanism to handle editing and display of "simple" pages that may or may not have versioning. E.g.
+** /[[contact]] page
+** /[[pay]] page
+** a speaker's bio (currently using PBWiki for this)
+** ...
+* lots of "wiki-this" content in local text files where they're more convenient than dealing with a slow online service, however, slso heldback per:
+** feeling of creativity being heldback (by putting stuff in local files) per [https://twitter.com/scottjenson/status/714256272367886336] <blockquote>@scottjenson: Personal epiphany: Locking my creative output into opaque files and using the Finder to organize it is massively holding me back</blockquote>
+ 
+Reduce annoyances with existing setup:
+* feeling icky about hosting my personal wiki on the [[PBWorks]] [[wiki]] [[silo]]
+* tired of not being able to edit it on mobile
+* disgusted with the ugly PBworks URLs
+* dislike the PBworks UI
+* PBworks latency too high
+
+First level solution:
+* Named pages handled by Falcon doing all [[routing]] for all URLs (inside the folder its in and children thereof. e.g. if falcon.php is at the root then it handles all site URL requests.)
+* Smart defaults that make authoring easy:
+** automatic site header, footer, style sheets to make it fit in with site design/theme
+** No title element? Look for an h1 and synthesize it from that
+
+Next gen: have every page on my site by default be a wiki page made "wiki-like" by Falcon, where wiki-like means:
+* editable with web UI on any reasonably modern web browser, not requiring [[javascript]]
+* browsable version history (maybe with [[web sign-in]] only? no need to index version history)
+* browsable versions (maybe with [[web sign-in]] only? no need to index old versions)
+* some method of auto-syncing local text file copies of such pages (as simple as or better than [[Dropbox]] sync of a local folder)
+
+Brainstorm started here:
+* [[wiki-projects#Brainstorming|wiki-projects: Brainstorming]]
+
 === improve replies details ===
 ==== improve reply-context support ====
 Currently works for showing all in-reply-to URLs (union of explicit [[rel-in-reply-to]] and u-in-reply-to markup), with a bit of smarts to show type of response (in reply, RSVP etc.).
@@ -1418,25 +1452,6 @@ Beyond that, I find my prioritization changes often enough that I just keep a lo
 
 == Itches ==
 <span id="Itching">Itches</span> are other things I want on my site but haven't started implementing yet. They are a collection of annoyances that have respective features / improvements. As their annoyance level bubbles to the top, they're likely to become concrete "[[#Working_On|Working On]]" tasks.
-
-=== Indie Wiki ===
-Itches: 
-* feeling icky about hosting my personal wiki on the [[PBWorks]] [[wiki]] [[silo]]
-* tired of not being able to edit it on mobile
-* disgusted with the ugly PBworks URLs
-* dislike the PBworks UI
-* PBworks latency too high
-* lots of "wiki-this" content in local text files where they're more convenient that dealing with a slow online service
-** feeling of creativity being heldback (by putting stuff in local files) per [https://twitter.com/scottjenson/status/714256272367886336] <blockquote>@scottjenson: Personal epiphany: Locking my creative output into opaque files and using the Finder to organize it is massively holding me back</blockquote>
-
-Scratch: have every page on my site by default be a wiki page made "wiki-like" by Falcon, where wiki-like means:
-* editable with web UI on any reasonably modern web browser, not requiring [[javascript]]
-* browsable version history (maybe with [[web sign-in]] only? no need to index version history)
-* browsable versions (maybe with [[web sign-in]] only? no need to index old versions)
-* some method of auto-syncing local text file copies of such pages (as simple as or better than [[Dropbox]] sync of a local folder)
-
-Brainstorm started here:
-* [[wiki-projects#Brainstorming|wiki-projects: Brainstorming]]
 
 === Delegation ===
 I need [[delegation]] on my site, so I can let a few trusted folks post on my behalf while I’m on vacation, e.g. indie events for [[Homebrew Website Club]] meetups. per http://tantek.com/2018/019/t2/need-implement-delegation
