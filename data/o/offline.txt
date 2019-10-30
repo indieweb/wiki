@@ -47,6 +47,17 @@ Brainstorming for offline features for a personal site
 === Offline Reading of Posts ===
 * {{kartikprabhu}} enable offline reading of posts using a [[service worker]]. When you visit my site, it allows you to cache some article offline. then later you can read my article without network. can also be implemented for [[readers]] though. could also be useful in [[micropub]] clients for saving drafts of posts offline, so you can write your post without connection (also known as a [[local first]] approach), then sync/publish when you get back the network
 
+=== Behavior when online ===
+* {{LewisCowles}} try to get the resource in a set period of time, forwarding server responses regardless of if `response.ok`. This can relieve pressure on a site if many visitors come; if they also have modern ServiceWorker respecting browsers.
+* {{LewisCowles}} If the request takes too long, which I've set as 500ms or half a second, then try to fallback to cached content if available. If cached content is not available, then I believe the offline version should be served if the resource requested accepts html.
+* {{LewisCowles}} there could be corner cases for 4XX responses to remove resources from the client cache. This is a very risky data strategy, which could and should probably be handled better by checking for etag or similar expiry on the response.
+
+=== Behavior when offline ===
+* {{LewisCowles}} if something is in cache, then retrieve it and serve it to the user.
+* {{LewisCowles}} if something is not in cache and indicates via request header that it accepts text/html, then I serve from /offline.html which is deliberately vague about something existing or not [[https://www.lewiscowles.co.uk/offline.html Example]]. I actually borrowed the guard on http header from {{tantek}} implementation.
+* {{LewisCowles}} My offline html fallback page includes some extra JavaScript and strips some metadata. It's purpose is to communicate to the user what they are seeing and why
+* {{LewisCowles}} In addition to communicating why the visitor see's the page, my offline page attempts to indicate to the visitor if they are online or offline, using progressive enhancement. If the browser does not support this, then I present the page as offline. If it does support this, then I additionally add an onClick handler which reloads the page.
+
 == App examples ==
 === in general ===
 ==== text editor ====
