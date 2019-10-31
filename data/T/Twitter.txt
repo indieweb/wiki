@@ -79,6 +79,16 @@ From that page, scroll down to where it says either:
 
 One of those two "here" links should take you to a support form so you can file a support request as noted above.
 
+=== How to unfollow everyone but still read their tweets ===
+
+{{snarfed}} reads Twitter in his [[reader]], using [https://twitter-atom.appspot.com/ twitter-atom] and a [https://help.twitter.com/en/using-twitter/twitter-lists list], but he still regularly found himself reading inside the app anyway, due to their engagement hacking. So on 2019-10-31 he [https://twitter.com/schnarfed/following unfollowed everyone he was following]. Now, he still reads tweets from people in his list, but when he opens the app (or web), it only shows him his own tweets and ads, nothing actually interesting or personalized. Success!
+
+To do this, [[#How_to_export_your_data|download your archive]], extract <code>following.js</code>, [https://developer.twitter.com/en/docs/tutorials/using-twurl.html set up twurl], then run this in a shell:
+
+<pre>
+grep accountId following.js | cut '-d"' -f4 | xargs -n 1 -I %% twurl /1.1/friendships/destroy.json -d user_id=%%
+</pre>
+
 == Porting to the IndieWeb ==
 === Implementations ===
 [http://www.freedom.io/ freedom.io] ([https://github.com/snarfed/freedom source]) can copy all of your tweets to [[WordPress]], [[Tumblr]], [[Blogger]], creating a new blog post for each, with the original dates and with replies and retweets (yours and others') included as comments.
