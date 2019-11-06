@@ -1,0 +1,29 @@
+https://indieweb.org/size
+
+{{stub}}
+
+'''<dfn><code>size</code></dfn>''' is an emerging [[microformats2]] property that indicates the size in bytes of an [[audio]] and/or [[video]] file in the same item, eg a [[podcast]].
+
+
+== How to ==
+=== How to publish ===
+
+Use a <code>data</code> element with the exact integer number of bytes in the <code>value</code> attribute, and any human-readable representation you choose in the contents. Example:
+
+<pre>
+<data class="p-size" value="45678">45.7 KB</data>
+</pre>
+
+[[podcast#Brainstorming|Some examples in the wild]] only include human-readable string approximations, eg <code>17.43mb</code> and <code>62.2 MB</code>, but these can't be used in places that need the exact number of bytes, eg RSS enclosures.
+
+== IndieWeb Examples ==
+
+* {{aaronpk}}: [https://indieweb.org/podcast#Brainstorming details]
+* {{martymcguire}}: [https://indieweb.org/podcast#Brainstorming details]
+
+== Services ==
+=== Granary ===
+{{main|granary}}
+[[granary]] converts podcast h-feeds and h-entries to RSS with enclosures, including iTunes extension elements.
+
+It reads episode size from the <code>size</code> mf2 properties, and supports both integer bytes and human-readable string approximations. It emits a <code>&lt;data&gt;</code> tag with both integer bytes and human-readable approximation, as described above. [https://github.com/snarfed/granary/issues/169 Background discussion].
