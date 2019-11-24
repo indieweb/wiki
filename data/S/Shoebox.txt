@@ -46,6 +46,10 @@ The following file types are supported natively. Any other file can be uploaded,
 ** Dimensions
 ** Duration
 ** Pages (PDF)
+* Source
+** user-created name of source device
+** may be automatically set via which access token was used to upload a file
+** e.g. Scanner, Digital Camera, Phone, Screenshot
 
 == Micropub Support ==
 This application can also be used as a Micropub media endpoint.
@@ -58,10 +62,15 @@ Unorganized braindump thoughts that should be pulled out into separate sections 
 * The DB index knows where to find the file data by looking up the hash in the table
 * Associated files (thumbnails, etc) can be stored on disk named with this hash
 * Link the JPG and RAW versions of a file
+** Should this allow linking any number of files? e.g. an edited photo and its original?
 * Automatic tagging of images like Flickr
 ** Might need to send photos to a third-party API for tagging, such as https://developer.clarifai.com/
 ** Could upload a backup to Flickr as well, and pull down the automatic tags they add
-* Consider using [[git lfs]] to handle storing and hashing the large files
+* Folder structure:
+** <code>/2019/11 Nov/Event Name</code>
+** <code>/2019/11 Nov/Event Name/Sub Event</code>
+** add tags to photo based on folder names (e.g. "Event Name", "Sub Event" above)
+** should year and month be mandatory? or just ignored when creating tags?
 
 === Video Previews ===
 Create a scaled-down preview of a video file:
