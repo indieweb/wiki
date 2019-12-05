@@ -401,7 +401,44 @@ All returns would follow the common properties of an h-adr object with only labe
 ** [[Micropub for WordPress]] - uses the geo property only
 ** [[IndieWeb for Drupal]] - uses the geo property, can return places
 
-===== Brainstorming =====
+==== Query for contacts ====
+
+For apps to be able to autocomplete by known contacts we need some way to query these values. This would be very useful for [[person-tag]] 
+
+This is supported by the Drupal IndieWeb module and Indigenous for Android.
+
+* Discovery of the endpoint (as in, it exists), happens through the query for supported queries, see https://github.com/indieweb/micropub-extensions/issues/7
+* <code>q=contact&search=aaron</code> would do a search for any field which matches .<code>*aaron.*</code> thereby allowing the client application to [[autosuggest]] and insert links.
+* <code>q=contact</code> would return the complete list, which should only be so that clients (e.g. [[Indigenous]]) can cache all contacts locally.
+* The response in JSON is a list of [[h-card]]s.
+===== Example response =====
+'''GET ?q=contact'''
+
+<pre>
+  "contacts": [
+    {
+      "name": "Kevin Marks",
+      "photo": "http://known.kevinmarks.com/file/9255656669173b7867ab839ee6556f9e",
+      "url": "http://known.kevinmarks.com/profile/kevinmarks",
+      "nickname": "kevinmarks",
+    },
+    {
+      "name": "Kristof De Jaeger",
+      "photo": "https://realize.be/vue/images/swentel-200.png",
+      "url": "https://realize.be",
+      "nickname": "swentel"
+    },
+  ]
+</pre>
+
+===== Implementations =====
+
+* Clients
+** [[Indigenous for Android]] - see https://realize.be/notes/1970
+* Servers
+** [[IndieWeb for Drupal]]
+
+==== Brainstorming ====
 
 ==== Ideas for other types of queries ====
 * [[mp-config]]
