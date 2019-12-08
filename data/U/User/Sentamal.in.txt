@@ -51,4 +51,50 @@ I'm a minimalist at heart (or, perhaps, by circumstance/profession) so the thing
 * Pagination: The home page feed is growing large; should I paginate? I've already finished the pagination on a local topic branch; it's just a matter of merging to enable it. However, this will currently break some u-syndication links present on the canonical post URL that describes the places on my site where it's been syndicated.
 * Automation: Every step done on my site right now is essentially manual via command line. I need to add some automation—if only to save me the costs of time for sharing content. I could probably cron some of my tasks on my home computer, for example.
 * Posting on Mobile: Right now that's done by Termux in exactly the same process I do at home on Linux. It's good in that I post the same way no matter what device I'm using. It's not so good in that the time cost for posting that way is significantly higher than posting at home.
-* Flight Logs: MyFlightradar24 is the only silo—if it can be counted as one—that I'm still dependent on. Considering the (self-professing) data-driven nature of my site at its heart it should be easy for me to implement this on my site and step out of that service.
+
+=== Flight Logs ===
+
+[https://my.flightradar24.com/sentamalin MyFlightradar24] is the only silo—if it can be counted as one—that I'm still dependent on. Considering the (self-professing) data-driven nature of my site at its heart it should be easy for me to implement this on my site and step out of that service. My brainstormed actionable steps at the moment include:
+
+* Create an Archetype in Hugo for Flights, ergo creating a new Section (Type on my site)
+ <nowiki>---
+title: "{{ replace .Name "-" " " | title }}" # Create title from file name
+date: {{ .Date }} # Probably should use the flight's departure here
+draft: true
+airline: # Enum taking either ATA, ICAO, Callsign, or Full Airline Name
+flight_number: # Flight number without the Airline Code
+departure_airport: # Enum taking either ATA or ICAO of airport
+departure_datetime: # Datetime should be local to the airport
+arrival_airport: # Enum taking either ATA or ICAO of airport
+arrival_datetime: # Datetime should be local to the airport
+flight_duration: # Number of seconds?
+aircraft_type: # Enum of ICAO Code (A20N), IATA Type Code (32N) or Aircraft Name (A320neo)
+aircraft_registration: # Like N720FR
+flight_class: # Enum of First, Business, EconPlus, Economy, or Private
+flight_seat_type: # Enum of Window, Middle, or Aisle
+flight_seat_number: # Like 13F
+flight_reason: # Enum of Leisure, Business, Crew, or Other
+tags: # Like other Types, flights can be tagged to be put in various tag taxonomies
+  - furry
+  - eurofurence
+  - firstclass
+  - inflightmeals
+syndicated_links: # Like other types, this can be POSSE'd
+  - https://twitter.com/sentamalin/3987500323804 # This is a fake link
+  - https://social.librem.one/@sentamalin/87508082323 # Another fake link
+---
+
+Personal notes, summaries, or anything else to describe this flight goes here. Hugo allows this section to be formatted _in Markdown_!</nowiki>
+* Create new data for all enums in Archetype
+** This is to further separate data from the Archetype front matter.
+** This also allows other information in the future to be added without having to re-edit single flights
+* Create its single page template, using the data from content (inherited from Flights archetype) and relevant data
+** Use Mapbox to grab a static image of the flight plan as a fallback/preview
+** Use Leaflet to show an interactive map with the specific flight plan visible
+** Decide on using [[h-entry]] or [[h-event]] as a method to describe the flight, or both
+* Deviate from my normal list template to create a custom list template for flights
+** Use Mapbox to grab a static image of all flights taken as a fallback/preview
+** Use Leaflet to show an interactive map with all flights visible
+** Underneath this show the list of flights
+
+It's not necessary for me or my job, but it would be also nice if I do some research and add a raw format of flight logs as associated in Pilot Logs and a method of accepting digital signatures. I'm 95% sure that software requires some compliance certification/verification, but an ability for pilots to Own Their Logbooks would be nice because the best option is, alack, paper for that purpose.
