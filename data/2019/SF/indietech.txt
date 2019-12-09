@@ -4,7 +4,8 @@ https://indieweb.org/2019/SF/indietech
 
 <!-- Watch: {{videoduration}}-->
 
-Notes archived from: https://etherpad.indieweb.org/indietech
+Notes archived from: https://etherpad.indieweb.org/indietech (with some additions/clarification from {{j12t}} based on the whiteboard photo)
+
 ----
 IndieWebCamp SF 2019<br>
 Session: IndieWeb Tech Critical Appraisal<br>
@@ -29,49 +30,74 @@ Main question: If we were to rebuild this all over again from the start, what wo
 
 === Basic Choices Made ===
 ==== DNS ====
-* Everyone has a [[DNS]] resolvable domain name
-** How does Secure Scuttlebut do this? (there was some discussion about this in a session earlier this morning)
-** Alternatives being public PHP keys
-** Tor to aoid DNS, location independence
-     
-==== Domain names ====
-     
-==== HTTP/HTML ==== 
-* Alternatives, [[IPFS]], [[Dat]] NNTP, Gopher, etc
-* Primary probems: sniffability, security, speed
-* Markdown, JSON, RSS/Atom/Jsonfeed - none are as expressive as HTML
-* What should the user see versus what does the computer see?
-JSON - poor internationalization support, (a11y), also poor it8n 
-*Adactio has noted and uptake of RSS recently
+
+Everyone has a [[DNS]] resolvable domain name
+* Alternative: (public key pairs -- but we don't know for how to make it work)
+** Pro: avoid DNS
+** Con: reach (doesn't work in standard browser)
+* Alternative: Tor
+** Pro: avoid DNS, location independence:
+** Con: reach (doesn't work in standard browser)
+
+How does Secure Scuttlebut do this? (there was some discussion about this in a session earlier this morning)
+
+==== HTTP/S ==== 
+* Alternatives: [[IPFS]], [[Dat]] and the like
+** Pro: availability, immutability
+** Con: reach, access control/sniffability/security, performance/speed
+* Alternatives: NNTP, Gopher etc
+
+==== HTML ====
+
+* Alternatives: Markdown, JSON, RSS/Atom/Jsonfeed
+** Pro: Easier to parse, but only if a single format is required (otherwise all have to implemented)
+** Con: none are as expressive as HTML
+** Con: JSON - poor internationalization support, (a11y), also poor it8n 
+
+What should the user see versus what does the computer see?
+
+Adactio has noted and uptake of RSS recently
+
 Is anything more expressive than HTML?
       
 ==== A website representing you/your identity ==== 
 
 ====  [[Microformats]]  ====
-* Alternatives, vcard, RSS, ActivitiyStream, etc
-* Issues with multiple formats in the same HTML page
-* Own all the parsers! ;) 
-* DRY violations?
+* Alternatives: vcard, RDFa, JSON-LD, RSS, ActivitiyStream, etc
+** Pro: More strict
+** Con: fallback?
+
+Issues with multiple formats in the same HTML page
+
+Own all the parsers! ;) 
+
+DRY violations?
 
 ==== Webmention ====
+
 * Outdated but still useful.  What can we use instead of Webmention?  
 * Find something to flag abuse .  We could use a tool to moderate content at a prototocol level.  
 * Let's explore solutions to replace Webmention and reduce harassment online
 * Someone mentioned economics this morning, so could one need to earn some sort of value store and then spend it as time goes by to post, like, webmentions, etc.?
 
 ==== Rel-me and rel-me auth ====
-* OpenID as an alternate provider
-* PGP? rel-PGP key 
-** Have a site with a limited amount of user access plus have a public site with a broader user base
+
+* Alternative: OpenID
+* Alternative: single key pair with public keys published on multiple sites
+** Pro: Reduces exposure of semi-private sites into the public sites (Have a site with a limited amount of user access plus have a public site with a broader user base)
+** Con: needs challenge scheme
 
 ==== IndieAuth ====
 
 ==== Micropub ====
+
 * Micropub is for publishing
-* XML-RPC (still used by Micro.blog, WordPress), client tools, 
-* Could be bend old chat protocols to work for this use case?
-* Negatives:  Security: Pre O-AUTH, forces users to give their usernames and passwords to untrusted applications  ??????!!!!!!!!!!???? <- what does this negative refer to?  i missed some of the context, but @t should know. 
-* Post what you want to your server, easy to post
+* Alternative:s XML-RPC (still used by Micro.blog, WordPress)
+** Pro: there are client tools, Post what you want to your server, easy to post
+* Con:  Security: Pre O-AUTH, forces users to give their usernames and passwords to untrusted applications
+
+* Could we bend old chat protocols to work for this use case?
+
 * Someone proposed Markdown as a global solution inside of Micropub
 * Difficult to use for newbies.  Want to make it easier to use.  
 * Extensible vocabulary
