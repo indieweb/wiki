@@ -23,12 +23,7 @@ Example Fragmention:
 __TOC__
 
 == Behavior ==
-Fragmentions find the first matching word or phrase in a document and focus its closest surrounding element. The match is determined by the case-sensitive string following the # The closest surrounding element may be a span, paragraph, heading, button, input, or any other container.
-
-== Previous URL style ==
-The first draft of this used double hash anchors <code>##</code> and escaped the spaces in the fragment with <code>+</code> signs. Experimentation shows that this causes problems with URL parsing in some cases as double-hash is an invalid URL, and plus signs in fragments are not escaped as spaces, only in the query string. 
-
-As id's and anchors are not able to contain spaces, this extra markup is unnecessary.
+Fragmentions find the first matching phrase in a document and focus its closest surrounding element. The match is determined by the case-sensitive string following the # The closest surrounding element may be a span, paragraph, heading, button, input, or any other container.
 
 == Open Source ==
 * [https://github.com/chapmanu/fragmentions client-side script] and 
@@ -79,7 +74,10 @@ Examples of user-interfaces for generating a fragmention from some selected text
 == Challenges ==
 While most find the idea of fragmentions delightful, there are differing ideas on how they should work. We ask contributors to justify feature requests with concrete real world examples, as tests in the wild may reveal best practices. Otherwise, any of these challenges could be appended with, ''“So, uh, what do you think?”''
 
-=== Double-hashes in the wild ===
+== rejected double-hash URL style ==
+The first draft of this used double hash anchors <code>##</code> and escaped the spaces in the fragment with <code>+</code> signs. Experimentation shows that this causes problems with URL parsing in some cases as double-hash is an invalid URL, and plus signs in fragments are not escaped as spaces, only in the query string. 
+
+As id's and anchors are not able to contain spaces, this extra markup is unnecessary.
 
 The [http://tools.ietf.org/html/rfc3986#appendix-A URL spec] doesn't define fragments to contain hash signs, so links like <nowiki><a href="##foo"></nowiki> may fail validation, or be misparsed by strict URL parsers. if this is an issue, we may need to switch to #*
 : For future reference. Valid characters as per URL spec are: <nowiki>ALPHA / DIGIT / "-" / "." / "_" / "~" / "%" HEXDIG HEXDIG / "!" / "$" / "&" / "'" / "(" / ")" / "*" / "+" / "," / ";" / "=" / ":" / "@" / "/" / "?" </nowiki> -[[User:Sandeep.io|Sandeep.io]] 20:58, 23 April 2014 (PDT)
