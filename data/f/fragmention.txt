@@ -45,6 +45,28 @@ As an HTML [https://html.spec.whatwg.org/#the-id-attribute id] [https://html.spe
 :Fragmentions are decoded before search, which means <nowiki>+</nowiki> plus signs can be interpreted as spaces and thus MUST be escaped (<nowiki>%2B</nowiki>) if you mean to refer to a literal "+" character like "a+b" (<nowiki>a%2Bb</nowiki>).
 ;<nowiki>#</nowiki>
 :If your fragmention text contains a literal "#" e.g. "Use my #hashtag", you MUST URL-escape it, e.g. "<nowiki>Use+my+%23hashtag</nowiki>".
+
+== Processing Model ==
+To process a fragmention, we don't need a big change to the HTML spec. The [https://html.spec.whatwg.org/multipage/browsing-the-web.html#scroll-to-fragid HTML 5 §7.8.9 Navigating to a fragment] section has a subsection [https://html.spec.whatwg.org/multipage/browsing-the-web.html#find-a-potential-indicated-element find a potential indicated element] as follows:
+<blockquote>
+<p>To <dfn id="find-a-potential-indicated-element">find a potential indicated element</dfn> given a string <var>fragment</var>, run these
+  steps:</p>
+<ol><li><p>If there is an element <a href="https://dom.spec.whatwg.org/#in-a-document-tree" id="scroll-to-fragid:in-a-document-tree" data-x-internal="in-a-document-tree">in the document tree</a> that has an <a href="https://dom.spec.whatwg.org/#concept-id" id="scroll-to-fragid:concept-id-2" data-x-internal="concept-id">ID</a> equal to <var>fragment</var>, then return the first such element in <a id="scroll-to-fragid:tree-order" href="https://dom.spec.whatwg.org/#concept-tree-order" data-x-internal="tree-order">tree order</a>.</p></li><li><p>If there is an <code id="scroll-to-fragid:the-a-element"><a href="text-level-semantics.html#the-a-element">a</a></code> element <a href="https://dom.spec.whatwg.org/#in-a-document-tree" id="scroll-to-fragid:in-a-document-tree-2" data-x-internal="in-a-document-tree">in the document
+   tree</a> that has a <code id="scroll-to-fragid:attr-a-name"><a href="obsolete.html#attr-a-name">name</a></code> attribute whose value is equal to
+   <var>fragment</var>, then return the first such element in <a id="scroll-to-fragid:tree-order-2" href="https://dom.spec.whatwg.org/#concept-tree-order" data-x-internal="tree-order">tree order</a>.</p></li><li><p>Return null.</p></li></ol>
+</blockquote>
+
+We propose amending this to add a 3rd step after the existing id and name searching so it reads as follows:
+
+<blockquote>
+<p>To <dfn id="find-a-potential-indicated-element">find a potential indicated element</dfn> given a string <var>fragment</var>, run these
+  steps:</p>
+<ol><li><p>If there is an element <a href="https://dom.spec.whatwg.org/#in-a-document-tree" id="scroll-to-fragid:in-a-document-tree" data-x-internal="in-a-document-tree">in the document tree</a> that has an <a href="https://dom.spec.whatwg.org/#concept-id" id="scroll-to-fragid:concept-id-2" data-x-internal="concept-id">ID</a> equal to <var>fragment</var>, then return the first such element in <a id="scroll-to-fragid:tree-order" href="https://dom.spec.whatwg.org/#concept-tree-order" data-x-internal="tree-order">tree order</a>.</p></li><li><p>If there is an <code id="scroll-to-fragid:the-a-element"><a href="text-level-semantics.html#the-a-element">a</a></code> element <a href="https://dom.spec.whatwg.org/#in-a-document-tree" id="scroll-to-fragid:in-a-document-tree-2" data-x-internal="in-a-document-tree">in the document
+   tree</a> that has a <code id="scroll-to-fragid:attr-a-name"><a href="obsolete.html#attr-a-name">name</a></code> attribute whose value is equal to
+   <var>fragment</var>, then return the first such element in <a id="scroll-to-fragid:tree-order-2" href="https://dom.spec.whatwg.org/#concept-tree-order" data-x-internal="tree-order">tree order</a>.</p></li>
+<li><p>Search through the plain [https://html.spec.whatwg.org/multipage/dom.html#text-content text content] of the document tree for contiguous text that matches the <var>fragment</var> with white space collapsing. If there is a mtach, return the outer element that contains the text completely. </p></li><li><p>Return null.</p></li></ol>
+</blockquote>
+
 == Open Source ==
 * [https://github.com/chapmanu/fragmentions client-side script] and 
 * [https://chrome.google.com/webstore/detail/fragmentions/pgajkeekgcmgglngchhmcmnkffnhihck Chrome extension] 
