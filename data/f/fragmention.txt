@@ -25,6 +25,15 @@ __TOC__
 == Behavior ==
 Fragmentions find the first matching phrase in a document and focus its closest surrounding element. The match is determined by the case-sensitive string following the # The closest surrounding element may be a span, paragraph, heading, button, input, or any other container.
 
+== Syntax ==
+As an HTML [https://html.spec.whatwg.org/#the-id-attribute id] [https://html.spec.whatwg.org/#The%20value%20must%20not%20contain%20any%20ASCII%20whitespace must not contain any whitespace], we can be sure that a fragment that includes space characters will not conflict with any existing element ID's. A fragmention MUST include at least one space character.
+
+;(space)
+:Use <nowiki>%20</nowiki> (instead of <nowiki>+</nowiki> ) for space characters in your fragmention. 
+;+
+:Fragmentions are decoded before search, which means <nowiki>+</nowiki> plus signs can be interpreted as spaces and thus MUST be escaped (<nowiki>%2B</nowiki>) if you mean to refer to a literal "+" character like "a+b" (<nowiki>a%2Bb</nowiki>).
+;<nowiki>#</nowiki>
+:If your fragmention text contains a literal "#" e.g. "Use my #hashtag", you MUST URL-escape it, e.g. "<nowiki>Use+my+%23hashtag</nowiki>".
 == Open Source ==
 * [https://github.com/chapmanu/fragmentions client-side script] and 
 * [https://chrome.google.com/webstore/detail/fragmentions/pgajkeekgcmgglngchhmcmnkffnhihck Chrome extension] 
@@ -74,7 +83,7 @@ Examples of user-interfaces for generating a fragmention from some selected text
 == Challenges ==
 While most find the idea of fragmentions delightful, there are differing ideas on how they should work. We ask contributors to justify feature requests with concrete real world examples, as tests in the wild may reveal best practices. Otherwise, any of these challenges could be appended with, ''“So, uh, what do you think?”''
 
-== rejected double-hash URL style ==
+=== rejected double-hash URL style ===
 The first draft of this used double hash anchors <code>##</code> and escaped the spaces in the fragment with <code>+</code> signs. Experimentation shows that this causes problems with URL parsing in some cases as double-hash is an invalid URL, and plus signs in fragments are not escaped as spaces, only in the query string. 
 
 As id's and anchors are not able to contain spaces, this extra markup is unnecessary.
@@ -100,13 +109,6 @@ Matching case is strict, but makes it easier to target specific text. Ignoring c
 
 The initial feedback is conflicting. Some expected fuzzy matching. Others expected specific matching. Most agreed that it depends on your specific use-cases, which are sorely lacking in most of the annotations discussions. Fuzzy matching could be seen as a further fallback strategy if direct matching fails.
 
-=== URL encoding ===
-;(space)
-:Use <nowiki>%20</nowiki> (instead of <nowiki>+</nowiki> ) for space characters in your fragmention. 
-;+
-:Fragmentions are decoded before search, which means <nowiki>+</nowiki> plus signs can be interpreted as spaces and thus must be escaped (<nowiki>%2B</nowiki>) if you mean to refer to a literal "+" character like "a+b" (<nowiki>a%2Bb</nowiki>).
-;<nowiki>#</nowiki>
-:If your fragmention text contains a literal "#" e.g. "Use my #hashtag", you MUST URL-escape it, e.g. "<nowiki>Use+my+%23hashtag</nowiki>".
 
 === Icon proposals ===
 (Todo: upload images instead of linking.)
