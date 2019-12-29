@@ -54,47 +54,12 @@ I'm a minimalist at heart (or, perhaps, by circumstance/profession) so the thing
 
 === Flight Logs ===
 
-[https://my.flightradar24.com/sentamalin MyFlightradar24] is the only silo—if it can be counted as one—that I'm still dependent on. Considering the (self-professing) data-driven nature of my site at its heart it should be easy for me to implement this on my site and step out of that service. My brainstormed actionable steps at the moment include:
+Flight logs have been added to my site: [https://sentamal.in/articles/got-flights-added-to-my-website/ Got Flights Added to My Website]
 
-* Create an Archetype in Hugo for Flights, ergo creating a new Section (Type on my site)
- <nowiki>---
-title: "{{ replace .Name "-" " " | title }}" # Create title from file name
-date: {{ .Date }} # Probably should use the flight's departure here
-draft: true
-airline: # Enum taking either ATA, ICAO, Callsign, or Full Airline Name
-flight_number: # Flight number without the Airline Code
-departure_airport: # Enum taking either ATA or ICAO of airport
-departure_datetime: # Datetime should be local to the airport
-arrival_airport: # Enum taking either ATA or ICAO of airport
-arrival_datetime: # Datetime should be local to the airport
-flight_duration: # Number of seconds?
-aircraft_type: # Enum of ICAO Code (A20N), IATA Type Code (32N) or Aircraft Name (A320neo)
-aircraft_registration: # Like N720FR
-flight_class: # Enum of First, Business, EconPlus, Economy, or Private
-flight_seat_type: # Enum of Window, Middle, or Aisle
-flight_seat_number: # Like 13F
-flight_reason: # Enum of Leisure, Business, Crew, or Other
-tags: # Like other Types, flights can be tagged to be put in various tag taxonomies
-  - furry
-  - eurofurence
-  - firstclass
-  - inflightmeals
-syndicated_links: # Like other types, this can be POSSE'd
-  - https://twitter.com/sentamalin/3987500323804 # This is a fake link
-  - https://social.librem.one/@sentamalin/87508082323 # Another fake link
----
+==== Next Steps: ====
 
-Personal notes, summaries, or anything else to describe this flight goes here. Hugo allows this section to be formatted _in Markdown_!</nowiki>
-* Create new data for all enums in Archetype
-** This is to further separate data from the Archetype front matter.
-** This also allows other information in the future to be added without having to re-edit single flights
-* Create its single page template, using the data from content (inherited from Flights archetype) and relevant data
-** Use Mapbox to grab a static image of the flight plan as a fallback/preview
-** Use Leaflet to show an interactive map with the specific flight plan visible
-** Decide on using [[h-entry]] or [[h-event]] as a method to describe the flight, or both
-* Deviate from my normal list template to create a custom list template for flights
-** Use Mapbox to grab a static image of all flights taken as a fallback/preview
-** Use Leaflet to show an interactive map with all flights visible
-** Underneath this show the list of flights
+* Import all data from MyFlightradar24 to my site
+* Create airport, airline, and aircraft data for my site to consume
+* Should I share said datasets in YAML format somewhere? Will it be useful to someone?
 
 It's not necessary for me or my job, but it would be also nice if I do some research and add a raw format of flight logs as associated in Pilot Logs and a method of accepting digital signatures. I'm 95% sure that software requires some compliance certification/verification, but an ability for pilots to Own Their Logbooks would be nice because the best option is, alack, paper for that purpose.
