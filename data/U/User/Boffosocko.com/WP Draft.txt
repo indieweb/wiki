@@ -134,41 +134,31 @@ You can then begin [[wikify]]ing yourself and contribute to the wiki.
 
 
 == Post Kinds Plugin ==
+{{main|Post Kinds Plugin}}
+
 To quickly and easily support a broad array of [[post]] types (with the correct [[microformats]]) install the [https://wordpress.org/plugins/indieweb-post-kinds/ Post Kinds plugin] (also install-able from the Indieweb plugin). The following post types are supported by the plugin: [[article]], [[reply]], [[repost]], [[like]], [[favorite]], [[bookmark]], [[photo]], [[listen]], [[watch]], [[wish]], [[play]], [[jam]], [[read]], and [[mood]] with others forthcoming in future development work. It can also be extended to allow people to create their own kinds. The plugin's admin interface is intuitive and auto-scrapes data from sites for post types that benefit from [[reply-context|reply contexts]] (like replies and bookmarks). It also does a good job of employing [[oEmbed]] (a small card-like version of a post) in posts too.
 
-
 == Webmentions ==
-'''TK to fix''
-'''TK add semantic linkbacks'''
+{{main|Webmention}}
 
-'''TK: modify this portion to fit in better'''
-One would generally like to have one's site be able to handle [[responses]] from other sites. Toward this end, one wants to be able to receive [[webmentions]] and display [[comments]] on every post type you publish. The webmention plugin discussed above handles both the sending and receiving of webmentions, so that is already covered. To better display these received webmentions one wants to install and activate the following plugin:
-* '''[[Semantic Linkbacks]]''' - makes IndieWeb responses (comments/interactions) look better on your site, recognizing them as being likes, replies, etc. and displaying them appropriately. 
+@mentions, the ability for one post to let another know the first has linked to the second, were popularized by Twitter, but are also built into services like Facebook and Medium. Unfortunately these mentions only work ''within'' the specific site and do not inter-operate from site to site. (Example: you can't @mention someone on Facebook using Twitter.)
 
-
-
-* set up
-* configuration
-* home page webmentions
-
-@Mentions, the ability for one webpage or post to let another know the first has linked to the second, were popularized by Twitter, but are also built into services like Facebook and Medium. Unfortunately these mentions only work ''within'' the specific site and do not inter-operate from site to site.
-
-In IndieWeb, we use an open protocol called [[webmention]], which is a W3C recommendation, to allow independently operated sites to interact with each other just the way @mentions do on Twitter and other services. For those familiar with pingbacks or trackbacks in WordPress, webmentions are very similar, but are more secure, robust, and, importantly, display much better.
-
-To enable this functionality the [[Webmention Plugin]] allows you to both send and receive [[webmention]]s by adding support to WordPress. Mentions sent to your site will show up as comments to posts or pages on your site. To use it you will want to install and active both the [[Webmention Plugin]] (for basic webmention functionality) and the [[Semantic_Linkbacks|Semantic Linkbacks plugin]](which will handle making the webmentions format properly within your comments section). 
+One use an open protocol called [[Webmention]], which is an open web standard and W3C recommendation, to allow independently operated sites to interact with each other similar to the way @mentions do on Twitter and other services. For those familiar with [[TrackBack]] or [[pingback]] in WordPress, webmentions are very similar, but are more secure, robust, and, importantly, display much better.
+ 
+To enable this functionality the [[Webmention Plugin]] allows you to both send and receive notifications by adding support to your WordPress site. Notifications sent to your site may show up as comments or reactions to posts or pages on your site (potentially with moderation and anti-spam features). To use it you will want to install and active both the [[Webmention Plugin]], which provides for basic notification functionality, and the [[Semantic_Linkbacks|Semantic Linkbacks plugin]], which will handle making the webmentions format and display more flexibly within your comments sections. Semanti
 
 === Configuration ===
-Neither of the two plugins require any significant configuration as the defaults generally satisfy most people. 
+Neither of these two plugins require any significant configuration as the defaults generally satisfy most peoples' needs. 
 
 The Webmention plugin respects the Discussion settings about notifying other blogs when they are mentioned, but also has its own settings page which can be configured. These are generally self-explanatory and are as follows:
 
 * Disable self-pings on the same permalink or URL (for example "https://example.com/?p=123")
 * Disable self-pings on the same domain (for example "example.com")  
 * Enable Webmention support for pages  (otherwise Webmention is only set up for posts)
-* Automatically approve Webmention from these domains (a pre-approved list of domains to auto-approve incoming mentions)
-* Show a Webmention form at the comment section, to enable manual pings.  (This shows a small UI box at the bottom of your posts/pages to let people who don't have webmention enabled to manually send you webmentions.)
+* Automatically approve Webmention from these domains (a pre-approved list of domains from which to auto-approve incoming mentions)
+* Show a Webmention form in the comment section, to enable manual pings.  (This shows a small UI box at the bottom of your posts/pages to let people who don't have webmention enabled to manually send you webmentions.)
 * Customize the explanatory text for the Webmention form
-* Set a page for mentions of the homepage to be sent to
+* Set a page for mentions of the site's homepage to be sent to
 * Show avatars on webmentions when possible
 
 For [[homepage webmentions]], some people prefer not to show them as comments there, but on a separate [[mentions|mentions page]]. If this is the case, one should create a new page with an appropriate name (many use "Mentions"), designate it as public or private depending on your preference, and save it. Then revisit the settings page above and select that page name from the drop down menu. Now when people send webmentions to your home page, they will be collected at the designated page.
@@ -189,6 +179,8 @@ Because Micropub is an official W3C Recommendation as an open standard, it is po
 Naturally one wants a better way to tell the world when one updates one's site with new content. This is best done with [[WebSub]] (formerly known as PubSubHubbub or PuSH) support for posts, and it can be handled by installing and activating the [https://wordpress.org/plugins/pubsubhubbub/ PubSubHubbub plugin]. No configuration is generally necessary as it comes pre-configured with custom hubs including [[Superfeedr]] at http://pubsubhubbub.superfeedr.com and http://pubsubhubbub.appspot.com. Others may be added if desired.
 
 == Syndication ==
+{{main|syndication}}
+
 === POSSE ===
 {{main|POSSE}}
 
@@ -209,7 +201,6 @@ This plugin provides a text box in the admin UI for posts which one can include 
 The plugin also has code for automatically importing/storing these permalinks based on other POSSE plugins including support for [[SNAP]] as well as Tumblr CrossPoster, WordPress CrossPoster, Diaposter (for Diaspora), Medium, and Mastadon AutoPoster. Integrations may be possible with other POSSE plugins on request.
 
 Unfortunately, this doesn't extend to the Jetpack suggestion above due to the current inability to retrieve the URL, so one will need to copy and paste the POSSE URLs into the Syndication Links field manually. But then again, [[manual until it hurts]] is often a worthwhile philosophy.
-
 
 == Backfeed with Brid.gy ==
 {{main|Bridgy}}
