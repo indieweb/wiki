@@ -10,16 +10,10 @@ Advanced users and developers are more than welcome to browse through these as w
 
 == Rel-Me ==
 {{main|rel-me}}
-WordPress sites can add [[rel-me|rel="me"]] classes in several locations including:
-* Indieweb Plugin ('''Recomended''', see details at [[Getting Started on WordPress#Identity]] ) 
-* directly in the header (potentially with a plugin)
-** [https://wordpress.org/plugins/all-in-one-webmaster/ All in One Webmaster] has a header/footer text boxes for adding html in the header
-** [https://wordpress.org/plugins/insert-headers-and-footers/ Insert Headers and Footers plugin]
-* in a text widget to a sidebar, footer, or other location
-* in the footer (see details for header above)
-* For sites that have a (usually secondary) [https://en.support.wordpress.com/menus/social-links-menu/ social links menu], one can add the classes directly into the menu. On your site go to <code>/wp-admin/nav-menus.php</code> to create the menu; you may need to go to "Screen Options" pulldown in the top right corner and check the "Link Relationship (XFN)" option which will reveal a box into which one can simply type "me" to create the rel-me class on the URL.
 
-Rel-me is usually added within an &lt;a> tag, but can also be done within a &lt;link> tag, so either of the following will usually work, however the link version isn't human readable (won't render on the web page) so you may forget it's there. If you do use link, it may be best done in the page header.
+One of the first things you will want to set up are [[rel-me]] links to your other profiles on the web. This will enable [[web-sign-in]] using [[RelMeAuth]] by using your domain as your identity. You can then sign into this wiki and begin [[wikifying]].
+
+Rel-me is usually added as an attribute within an <code>&lt;a></code> tag, but can also be done within a <code>&lt;link></code> tag, so either of the following will usually work, however the link version isn't human readable (it won't render on the web page) so you may forget it's there. If you do use link, it may be best done in the page header.
 
 <pre>
 <head>
@@ -31,6 +25,64 @@ Rel-me is usually added within an &lt;a> tag, but can also be done within a &lt;
 Or like this somewhere on your home page:
 
 <pre><a href="https://example.com" rel="me" />Micro.blog</a></pre>
+
+
+WordPress sites can add [[rel-me|rel="me"]] classes on links in several locations including:
+
+=== Indieweb Plugin ===
+'''Recommended Method''', see also details at [[Getting_Started_on_WordPress#IndieWeb_Plugin|Getting Started on WordPress]]
+
+The easiest way to add rel="me" support to your site is to install the [https://wordpress.org/plugins/indieweb/installation/ Indieweb Plugin]. This will add several common social media site fields to your "Edit User" page in the admin panel at <nowiki>yoursite.example.com/wp-admin/profile.php</nowiki>. (Be sure to change this URL to include your particular domain.) Fill these in with the usernames for your identities on the various services you use (Telephone, Github username, Twitter username (without @), Facebook ID, Last.fm username, Instagram username, Flickr username) and the plugin will create the proper (invisible) rel-me links in the head of your site. There is a field at the bottom of the "Edit User" page that one can list additional URLs for adding rel-me to as well. The [[rel-me]] and [[WordPress with Bridgy#Rel-me links]] pages can provide additional information if necessary.
+
+If you view the source for your website afterwards, you'll see a number of links like <code><link rel="me" href="https://twitter.com/username" /></code> in the <code><head></code>. If you want the links to be visible on your site, you can use the rel-me widget, which will replace the hidden links with icons.
+
+=== Directly in the header ===
+Potentially by using a plugin:
+* [https://wordpress.org/plugins/all-in-one-webmaster/ All in One Webmaster] has a header/footer text boxes for adding html in the header
+* [https://wordpress.org/plugins/insert-headers-and-footers/ Insert Headers and Footers plugin]
+
+=== Text widget or HTML widget ===
+These can be added to a sidebar, footer, header or other location within a theme.
+
+=== Social Links Menu ===
+For sites that have a (usually secondary) [https://en.support.wordpress.com/menus/social-links-menu/ social links menu], one can add the classes directly into the menu. On your site go to <code>/wp-admin/nav-menus.php</code> to create the menu; you may need to go to "Screen Options" pulldown in the top right corner and check the "Link Relationship (XFN)" option which will reveal a box into which one can simply type "me" to create the rel-me class on the URL. (See details below.)
+
+If you're on WordPress.com using their Business plan or higher, you can use the IndieWeb plugin mentioned above. If not, or if you're using a WordPress.org self-hosted version you'll need to use the WordPress menu and widget system.
+
+* In the admin, go to Appearance > Menus
+* Create a new menu
+** [[File:WordPress-com-rel-me1.png]]
+* Click ''Screen Options'' at the top and check the box to display ''Link Relationships (XFN)''
+** [[File:WordPress-com-rel-me2.png]]
+* Click ''Custom Links'' and add the link to your profile, e.g <nowiki>https://twitter.com/username</nowiki>. Enter the link text and click ''Add to Menu''. Repeat for as many profile links as you want to add.
+** [[File:WordPress-com-rel-me3.png]]
+* Under ''Menu Structure'' click the arrow beside the newly-added link. In the ''Link Relationship (XFN)'' field enter <kbd>me</kbd> and click ''Save''
+** [[File:WordPress-com-rel-me4.png]]
+* Go to Appearance > Widgets
+* Drag a ''Custom Menu'' widget into the ''Sidebar''
+* Click the arrow to expand the ''Custom Menu'', select the menu you created, then click ''Save''
+** [[File:WordPress-com-rel-me5.png]]
+* Your profile links should now appear in your sidebar, or wherever your theme places the widget. 
+** [[File:Wordpress-com-rel-me6.png]]
+
+
+
+=== Reciprocal links ===
+Now that your site has rel-me links pointing to your presences on several services, log into those services and include the URL of your site in the appropriate website fields of your profile so that they point back to your website in return. Having the ability to add rel-me links in your sites helps to indicate your ownership of them. 
+
+Some services like Twitter and Instagram, which only allow one URL in your profile, support putting a second URL into your bio field if you have second personal site. Examples: {{kevinmarks}} and  {{chrisaldrich}} have [https://indieweb.org/multi-site_indieweb indiewebified  primary and secondary sites].
+
+If your site has multiple Wordpress users, and you want to use it as an Indieweb site for one of the users, change the Indieweb identity settings in its "Options" pane:
+* click IndieWeb in the admin sidebar
+* click Options under the IndieWeb item in the admin sidebar
+* In the main window:
+** Check: '''Single Author Site [x]'''
+** Pick yourself in '''Default Author _____v''' drop down menu.
+** Save Changes
+
+You can now '''test''' your rel-me setup with: [http://indiewebify.me/validate-rel-me/ IndieWebify.Me Web Sign In validator]
+
+'''Nota bene''': In late July 2016, [http://indiewebify.me/validate-rel-me/ IndieWebify.Me] was [https://github.com/indieweb/indiewebify-me/issues/47 having problems] which may cause it to return incorrect results. If you think this may be the case, you can do an additional test described in "Authentication" below.
 
 == Pull your content from other sites ==
 If [[POSSE]] is not an option or can't be done for various reasons (see [[Instagram]] for example), you probably still have the possibility of pulling content ([[PESOS]]), automatically creating a "backup" on your site. 
