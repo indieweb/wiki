@@ -142,6 +142,25 @@ Bridgy source is maintained on [[GitHub]]:
 ** Inspected 40k (estimated) pages for webmention endpoints
 ** Sent 4,576 successful webmentions to 702 different posts on 39 domains
 
+== Brainstorming ==
+=== Minimize Publish Rerequests ===
+{{t}} tl;dr: minimize:
+* How many times you Webmention Bridgy to ask it to publish a post (should only be once, since updates aren't supported yet.
+* How many "command" links to Bridgy you have on your post (should only need them until you’ve Webmentioned Bridgy Publish and gotten back a syndication URL)
+
+"command links" being links of the form <nowiki>https://brid.gy/publish/...</nowiki> like <nowiki>https://brid.gy/publish/twitter</nowiki>
+
+General idea: check for an existing syndication link to a destination before attempting to syndicate to it! (Except for [[update]] (including [[salmentions]]) and [[delete]] changes in a post obviously).
+
+Specific method: test for the existence of a syndication link to a particular destination before outputting the command link to Bridgy Publish for that destination. Will reduce requests to Bridgy Publish which don’t actually do anything, both any requests from your own site, and potentially any crawlers that automatically send Webmentions to all links on a page.
+
+pseudo-code: 
+<pre><nowiki>if !(.u-syndication[href^="https://twitter.com"])
+then output Bridgy Publish To Twitter Link</nowiki></pre>
+
+* {{t}}: I’d like to implement this in [[Falcon]]. 
+* ...
+
 == History ==
 [[User:snarfed.org|Ryan]] started working on Bridgy in the summer of 2011, [http://snarfed.org/2012-01-08_bridgy_launched launched the first (WordPress-only) version] on 2012-01-08, and [http://snarfed.org/2013-12-09_brid-gy-meet-webmentions relaunched it with webmention support] on 2013-12-09.
 
