@@ -2,4 +2,29 @@ https://indieweb.org/systemd
 
 {{stub}}
 
-'''<dfn>systemd</dfn>''' is a co-ordination tool, for maintaining process state and system initialisation for complex sets of services required to run a modern server. It is one of many systems which handle long-running tasks such as application, web and database servers to name a few.
+'''<dfn>systemd</dfn>''' is a linux system tool, used to run services, like web servers, database servers, system background processes.
+
+It is a co-ordination tool, for maintaining process state and system initialisation for complex sets of services required to run a modern server. It is one of many systems which handle long-running tasks such as application, web and database servers to name a few.
+
+== Contraversy ==
+
+Many system administrators have received the news of systemd becoming a new default alternative to their existing tooling, by attacking it's large software surface area, bugs etc.
+
+It is a technology choice, not important to delivery of IndieWeb services. If you wish to use another, please do.
+
+== Troubleshooting ==
+
+* Systemd scripts must be enabled before they are able to run, and usually before you are able to check on their state.
+
+* On a modern ubuntu & centos system the following command shows all enabled services
+    service --status-all
+
+* You can turn on and off services using `chkconfig` for newer systems, or it's older cousin `update-rc.d`
+
+* Lifecycle such as `start`, `stop`, `restart`, `status` are available to start a stopped service; stop a service; restart a service or check it's status. Generally these are of little use to look at the health of a system.
+
+* You can alter your systemd services which usually have a `.service` extension to have restart and process monitoring policies, to alter the commands called. However you may lose upstream support if you do so.
+
+* Systemd has the concept of user-defined and run services, as well as system services. Whilst it is most likely web-servers, docker daemons, database servers and ssh will be managed through the system; it is also possible (with limitations) for users to register and launch systemd services
+
+* Most services should store independent logs in `/var/logs`. Some may require administrator access, and may provide more information than the `system status` sub-command, which may have no information beyond the life-cycle of the process on some systems.
