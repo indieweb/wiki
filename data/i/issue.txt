@@ -100,8 +100,25 @@ For the purposes of an "issue", what is perhaps special is the added expectation
 ** prior comments
 ** original issue
 
+=== Special Responses ===
+[[GitHub]] allows a set of special responses to issues, which alter the issue state in various ways:
+* [[#close-re-open|close]] (see below for some previous exploration of details)
+* re-open
+* [[#lock-unlock|lock]] (see below for some previous exploration of details)
+* unlock
+Only some people (the issue "creator"? the repo "owner"?) can take some/most of these actions.
+
+Nonetheless we should model these special responses so we can own these interactions on our own sites as well (and not have to use the GitHub UI to do so).
+
+This requires exploring at least:
+#. How does the GitHub API represent and support these special responses?
+#. Do other issues/ticketing systems (Bugzilla? Trac? Jira?) support these special responses or others, and how can we model them as a set? (perhaps similar to how we modeled special [[RSVP]] responses to events, by studying event hosting services and systems).
+
+Issue for Bridgy Publish to GitHub to at least explore the feasibility of (1), upon which we can further explore (2) with other systems.
+* ...
+
 === Close and re-open issues when commenting ===
-[[GitHub]] allows commenters (with authorization) to close / re-open an issue at the same time as submitting a comment.
+[[GitHub]] allows commenters (with authorization) to <span id="close-re-open">close / re-open an issue</span> at the same time as submitting a comment.
 
 How should we model this?
 
@@ -122,8 +139,9 @@ Some discussion:
 Perhaps for now we can come up with plain text to communicate the intent of "closing" an issue or "re-opening it".
 
 Closing:
-* "Closing issue." at end of reply content (if you know you can do so)
-** E.g. http://tantek.com/2018/185/t4/ and [https://github.com/w3c/csswg-drafts/issues/1988#issuecomment-402620825 on GitHub]
+* "Closing issue." at end of reply content (if you know you can do so). E.g.:
+** https://tantek.com/2018/185/t4/ and [https://github.com/w3c/csswg-drafts/issues/1988#issuecomment-402620825 on GitHub]
+** https://tantek.com/2020/042/t2/ and [https://github.com/privacycg/privacycg.github.io/issues/3#issuecomment-584937108 on GitHub]
 * "Issue may be closed."
 * "Please close this issue."
 
@@ -133,7 +151,7 @@ Re-opening:
 * ... other thoughts?
 
 === Lock and unlock issues ===
-[[GitHub]] allows someone with authorization to lock / unlock an issue, which blocks comments from unauthorized commenters.
+[[GitHub]] allows someone with authorization to <span id="lock-unlock">lock / unlock an issue</span>, which blocks comments from unauthorized commenters.
 
 How or should we model this?
 
@@ -154,7 +172,6 @@ Everything peer to peer, no need for any central location to POSSE to / backfeed
 As far as we know, NO ONE (using any technology / standards) has this working, anywhere.
 
 By exploring the space with POSSE + backfeed as described previously, it is likely we can figure out how to do all this via Webmention.
-
 
 == See Also ==
 * [[issue tracker]]
