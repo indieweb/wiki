@@ -19,8 +19,33 @@ For individual '''[[posts]]''', (such as a post displayed on its [[permalink]]),
 ==== Full author information in each post ====
 If your posts have your name and photo already visible, then your [[h-entry]] for the post can include a full [[h-card]] with the complete author info for the post, by adding an explicit <code>p-author</code> or <code>u-author</code> property with an embedded [[h-card]], e.g. <code>&lt;a class="u-author h-card" href="/">…&lt;/a></code>
 
+Example:
+
+<pre><nowiki>
+<div class="h-entry">
+  <a href="/" class="u-author h-card"><img src="/me.jpg"> Author Name</a>
+  <div class="e-content">This is an example note</div>
+</div>
+</nowiki></pre>
+
 ==== Author information in a header or footer ====
 If you have an [[h-card]] on your website in a header or footer, you can avoid duplicating the author information inside the [[h-entry]] by establishing a link between the two: add a <code>&lt;a class="u-author" href="/">&lt;/a></code> inside your post h-entry (an invisible link to your home page), and ensure the [[h-card]] in your header or footer has a <code>url</code> property that also links to your home page.
+
+Example:
+
+<pre><nowiki>
+<div class="h-entry">
+  <div class="e-content">This is an example note</div>
+  <a href="/" class="u-author"></a>
+</div>
+
+...
+
+<footer>
+  <a href="/" class="h-card"><img src="/me.jpg"> Author Name</a>
+</footer>
+
+</nowiki></pre>
 
 === Authorship for streams of posts ===
 
@@ -51,4 +76,4 @@ See [[authorship-spec]].
 * [[h-entry]]
 * [[h-card]]
 * [[rel-author]]
-* https://sturdy-backbone.glitch.me/ – simple testing tool by {{sknebel}} showing how the algorithm plays out for a given URL
+* https://sturdy-backbone.glitch.me/ – a testing tool by {{sknebel}} to check whether your authorship markup is working
