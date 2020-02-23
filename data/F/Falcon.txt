@@ -219,6 +219,154 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== improve photo posts ===
+I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook [http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter! Then Facebook dropped their API 2018-08-01 and I stopped POSSEing to Facebook.
+
+There are several key improvements (beyond the default mobile presentation - see above) that I want (and some that I explicitly postponed at the time).
+
+==== mobile friendly recent photos box ====
+[[recent photos]] on my home page!
+
+I want a box on my home page that shows the recent n (maybe in a grid?) photos that I've posted/embedded.
+* Most recent '''photo posts''' (i.e. only show first photo of a [[multiphoto]] post, perhaps with optional overlaid "stack" icon/emoji like IG does)
+* OR most recent '''photos''', including all photos from multiphoto posts
+** leaning towards this one, as I kinda dislike that the IG approach 'buries' 2…nth photos of multiphoto posts on the summary profile page etc.
+
+For mobile perhaps a simple row of only 3 square cropped/shaped photos, similar to the sizing in [[Instagram]]'s profile view.
+
+For desktop (taller displays), perhaps a 3x3 grid, or 5x5 grid?
+
+I'd prefer this show only photos I've taken.
+* Fallback / first attempt - I'd be ok with showing all auto-embedded images from notes.
+
+Clicking on photos would go to the specific post of that photo.
+
+Clicking on the "Recent photos" heading should go to a photos-only stream view, similar to [[Instagram]]'s one photo full-width on the mobile device view.
+
+And then have that link to my [[photo grid]] page.
+* OR have a photo grid vs photo stream toggle, again like IG (used to have)
+** perhaps with only CSS and fragment links and :target selector?
+
+==== mobile friendly photos only stream ====
+I want a separate [[photo stream]] page on my site
+* likely "/photos"
+that looks
+* at least as beautiful as Instagram for browsing through recent [[photos]] on mobile
+* at least as beautiful as instagram.com/tantek for browsing on desktop
+
+Even if all I'm doing is PESOSing from IG or manually posting [[notes]] that happen to hot-embed images from IG.
+
+Why: I think showing such a page will start to demonstrate the power of owning your own design on the indieweb - and how we make things just as beautiful as any app.
+
+And I know for one thing at least my parents will use it.
+
+Bonus:
+* [[webaction]] buttons that let them "like" or ''comment'' on the photo on Instagram
+While not ideal - it provides at least:
+* some interaction/UX
+* visual cues that help the scrolling list of photos "feel" as nice as Instagram
+
+==== mobile friendly photo grid ====
+Implement a mobile friendly:
+* [[photo grid]]
+
+==== document how and why photos ====
+Document on this page, the specifics '''how to do photo posting''' (current required user flow)
+
+New photo post process (as of 2017-088)
+
+# Any time: take photo(s) when the moment calls for it
+# Right after: quick checkin to Swarm (sticker only, no description/pix) to the venue where I took the photo(s) to record a spacetime coordinate
+# When bored: edit/curate photos locally on device
+# Later at fast wifi: upload (edited) photo(s) to respective Swarm checkins
+# Later on laptop: Create photo post (or multi-photo of same venue photos) using Swarm width960 jpg for display, link to full "original" 1920x1440 resolution
+#* Automatically POSSE to Facebook (until 2018-08-01), Flickr, Twitter
+# Optionally manually POSSE to IG:
+#* Open Twitter app, go profile
+#* Tap photo POSSE copy
+#* Select all text, copy
+#* Open Instagram app, create photo post with local photo, paste description incl permashortlink copied from the POSSE tweet.
+#* On laptop: open Instagram profile, click on latest photo, copy URL, add "u-syndication" link to it on my original photo post, scp update the photo post
+
+'''Why post photos?''' Document the motivating use-cases for posting photos, publicly, privately, realtime-ish, after the fact, etc.
+
+Document some specific why material about the current design, and ongoing motivations for photo posting design:
+* Three motivating use-cases (the first two motivated me, third was an afterthought)
+*# Reduce annoyance/frustrations with the [[Instagram]] iOS app crashing repeatedly (since/on 2017-085)
+*#* why switched from manual IG PESOS to Swarm PESOS: I started to explore other mobile photo posting UIs, and discovered that [[Swarm]] posted photos have much higher resolution (original?) as compared to [[Instagram]].
+*# publishing photos with resolution high enough for laptop backgrounds / screensavers
+*# POSSEing of higher resolution photos (than the reduced resolution JPGs hosted by Instagram)
+*# wanting to publish more photos (on my site, POSSE Flickr etc) than on IG
+* low-latency / in-person interruption to photograph moments, capture location & time
+* no pressure to "insta"-post
+* option to provide high-res (1920x1440) pictures for desktop/screensaver use
+* minimize steps
+
+==== cluster photos ====
+Sequential photo posts that are related (typical) should be clustered in displayed in-stream.
+
+Wrote up some thoughts here on:
+* [[photo_brainstorming#Clustering|photo brainstorming: clustering]]
+
+Should [[multiphoto]] posts be shown with photos clustered as well?
+
+Should adjacent mulitphoto + multiphoto posts be clustered at all?
+
+Or adjacent photo + multiphoto or multiphoto + photo posts?
+
+==== person tags ====
+I really want to
+* tag people in the photos on my site using [[person-tag]]s 
+** to be able to do at least step 1 of [[SWAT0#A_must_support]] (requires more UI work, e.g. [[person-tag#minimal_separate_field_UI|person-tag minimal separate field UI]])
+*** in particular [[person-tag#With_other_profiles|with other profiles]] - to provide a real world example of that, to help with:
+* have Bridgy Publish propagate those person-tags to the POSSE copies on Twitter
+** rather than waiting for https://github.com/snarfed/bridgy/issues/547
+** prototype it via Bridgy-Publish-Twitter-only in-content person-tags so they look good on Twitter!
+*** per [[person-tag#tweet_text]]
+*** use that as input for solving [https://github.com/snarfed/bridgy/issues/547 Bridgy #547]
+
+I also really want to:
+* tag lots of people in a photo quickly, e.g. [http://tantek.com/2016/138/t1/bay-to-breakers-nov-project-rainbow this photo has ~40-50 people]
+** typing in all their names, URLs, etc., even copy/pasting them from a person-tags text file is too much work.
+** iterate on building [[person-tag#minimal_separate_field_UI]]
+** more UI work, e.g. [[person-tag#auto-suggest_separate_field_UI|person-tag auto-suggest separate field UI]].
+
+==== photo web action fallbacks ====
+(reprioritize "improve photo posts" at this point)
+Consider providing Instagram/Flickr/Twitter web action fallbacks (options?) for photo posts, e.g. to
+* like a photo or 
+* person-tag it? e.g. [[tag-of]] response (postpone)
+
+==== own photo src URLs ====
+Create photos.tantek.com URLs (or other subdomain) purely to own the actual img src= URLs, regardless of where I statically serve them from, whether 4sq or [[S3]] etc.
+
+==== improve photo permalinks ====
+My photo post permalinks are good, and their design can be improved:
+* analyze other [[photo#IndieWeb_Examples]]
+* consider what to show at the absolute top (date? my icon/name? location? date? why?)
+* ..
+
+=== Recent Articles improvements ===
+The Recent Articles box on my home page can be improved a number of ways.
+* Re-use common code between Recent Articles box and articles-only Atom feed
+And while in there, consider:
+* [[#mobile_recent_articles_box]]
+* "More articles..." link that goes to a separate articles-only page of the most recent (perhaps 10?) articles
+** at what URL?
+** link rel alternate link from that articles-only page to articles-only Atom feed
+
+=== mobile recent articles box ===
+There have been enough times that I've referred to recent articles in a mobile context (while walking around with someone) on my or another's mobile device, that it would be useful to move my recent articles box to the top of my site even in the mobile view. Longer term, such a box should simply be a movable Falcon template item.
+
+=== articles only stream page ===
+The header for the recent articles box (and a "More articles..." link after the list of recent articles should link to a:
+
+* "articles only" stream of recent articles
+* perhaps at tantek.com/articles 
+for anyone that wants to read a scrolling list of my recent blog posts (e.g. load it while connected, and then be able to read for many minutes (hours?) when on a subway or plane etc.)
+
+Perhaps build it as a variant of my [[photo stream]], just with a different "type".
+
 === minimize Bridgy Publish links ===
 Implement [[Bridgy#Minimize_Publish_Rerequests]] and document my techniques / code there so others can also do so. Part of treating a shared volunteer service like Bridgy kindly/politely, shared care for part of our broader IndieWeb [[commons]], setting an explicit example by doing so.
 
@@ -594,15 +742,6 @@ Design:
 ** [[reply-context]] text, link text, visited text
 ** reply-context background, border
 
-=== Recent Articles improvements ===
-The Recent Articles box on my home page can be improved a number of ways.
-* Re-use common code between Recent Articles box and articles-only Atom feed
-And while in there, consider:
-* [[#mobile_recent_articles_box]]
-* "More articles..." link that goes to a separate articles-only page of the most recent (perhaps 10?) articles
-** at what URL?
-** link rel alternate link from that articles-only page to articles-only Atom feed
-
 === tags with spaces ===
 Use-case: 
 * setting or adding labels to issues (typically on GitHub) that are already using labels with spaces in them. 
@@ -949,134 +1088,6 @@ Send [[webmentions]] for other posted links (beyond links I'm [[in-reply-to|repl
 ** To comment on IndieNews posts (assuming I have [[rel-in-reply-to]] links to IndieNews URLs implemented) as a proof of concept of an indieweb-friendly comment aggregator/threader.
 * ''Why?'' 
 ** Enable syndicating posts to [[IndieNews]] (assuming I have [[u-syndication]] links to IndieNews implemented - perhaps as post option in my UI). Help demonstrate IndieNews as a proof of concept of an indieweb-friendly link aggregator.
-
-=== improve photo posts ===
-I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook [http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter! Then Facebook dropped their API 2018-08-01 and I stopped POSSEing to Facebook.
-
-There are several key improvements (beyond the default mobile presentation - see above) that I want (and some that I explicitly postponed at the time).
-
-==== mobile friendly recent photos box ====
-[[recent photos]] on my home page!
-
-I want a box on my home page that shows the recent n (maybe in a grid?) photos that I've posted/embedded.
-* Most recent '''photo posts''' (i.e. only show first photo of a [[multiphoto]] post, perhaps with optional overlaid "stack" icon/emoji like IG does)
-* OR most recent '''photos''', including all photos from multiphoto posts
-** leaning towards this one, as I kinda dislike that the IG approach 'buries' 2…nth photos of multiphoto posts on the summary profile page etc.
-
-For mobile perhaps a simple row of only 3 square cropped/shaped photos, similar to the sizing in [[Instagram]]'s profile view.
-
-For desktop (taller displays), perhaps a 3x3 grid, or 5x5 grid?
-
-I'd prefer this show only photos I've taken.
-* Fallback / first attempt - I'd be ok with showing all auto-embedded images from notes.
-
-Clicking on photos would go to the specific post of that photo.
-
-Clicking on the "Recent photos" heading should go to a photos-only stream view, similar to [[Instagram]]'s one photo full-width on the mobile device view.
-
-And then have that link to my [[photo grid]] page.
-* OR have a photo grid vs photo stream toggle, again like IG (used to have)
-** perhaps with only CSS and fragment links and :target selector?
-
-==== mobile friendly photos only stream ====
-I want a separate [[photo stream]] page on my site
-* likely "/photos"
-that looks
-* at least as beautiful as Instagram for browsing through recent [[photos]] on mobile
-* at least as beautiful as instagram.com/tantek for browsing on desktop
-
-Even if all I'm doing is PESOSing from IG or manually posting [[notes]] that happen to hot-embed images from IG.
-
-Why: I think showing such a page will start to demonstrate the power of owning your own design on the indieweb - and how we make things just as beautiful as any app.
-
-And I know for one thing at least my parents will use it.
-
-Bonus:
-* [[webaction]] buttons that let them "like" or ''comment'' on the photo on Instagram
-While not ideal - it provides at least:
-* some interaction/UX
-* visual cues that help the scrolling list of photos "feel" as nice as Instagram
-
-==== mobile friendly photo grid ====
-Implement a mobile friendly:
-* [[photo grid]]
-
-==== document how and why photos ====
-Document on this page, the specifics '''how to do photo posting''' (current required user flow)
-
-New photo post process (as of 2017-088)
-
-# Any time: take photo(s) when the moment calls for it
-# Right after: quick checkin to Swarm (sticker only, no description/pix) to the venue where I took the photo(s) to record a spacetime coordinate
-# When bored: edit/curate photos locally on device
-# Later at fast wifi: upload (edited) photo(s) to respective Swarm checkins
-# Later on laptop: Create photo post (or multi-photo of same venue photos) using Swarm width960 jpg for display, link to full "original" 1920x1440 resolution
-#* Automatically POSSE to Facebook (until 2018-08-01), Flickr, Twitter
-# Optionally manually POSSE to IG:
-#* Open Twitter app, go profile
-#* Tap photo POSSE copy
-#* Select all text, copy
-#* Open Instagram app, create photo post with local photo, paste description incl permashortlink copied from the POSSE tweet.
-#* On laptop: open Instagram profile, click on latest photo, copy URL, add "u-syndication" link to it on my original photo post, scp update the photo post
-
-'''Why post photos?''' Document the motivating use-cases for posting photos, publicly, privately, realtime-ish, after the fact, etc.
-
-Document some specific why material about the current design, and ongoing motivations for photo posting design:
-* Three motivating use-cases (the first two motivated me, third was an afterthought)
-*# Reduce annoyance/frustrations with the [[Instagram]] iOS app crashing repeatedly (since/on 2017-085)
-*#* why switched from manual IG PESOS to Swarm PESOS: I started to explore other mobile photo posting UIs, and discovered that [[Swarm]] posted photos have much higher resolution (original?) as compared to [[Instagram]].
-*# publishing photos with resolution high enough for laptop backgrounds / screensavers
-*# POSSEing of higher resolution photos (than the reduced resolution JPGs hosted by Instagram)
-*# wanting to publish more photos (on my site, POSSE Flickr etc) than on IG
-* low-latency / in-person interruption to photograph moments, capture location & time
-* no pressure to "insta"-post
-* option to provide high-res (1920x1440) pictures for desktop/screensaver use
-* minimize steps
-
-==== cluster photos ====
-Sequential photo posts that are related (typical) should be clustered in displayed in-stream.
-
-Wrote up some thoughts here on:
-* [[photo_brainstorming#Clustering|photo brainstorming: clustering]]
-
-Should [[multiphoto]] posts be shown with photos clustered as well?
-
-Should adjacent mulitphoto + multiphoto posts be clustered at all?
-
-Or adjacent photo + multiphoto or multiphoto + photo posts?
-
-==== person tags ====
-I really want to
-* tag people in the photos on my site using [[person-tag]]s 
-** to be able to do at least step 1 of [[SWAT0#A_must_support]] (requires more UI work, e.g. [[person-tag#minimal_separate_field_UI|person-tag minimal separate field UI]])
-*** in particular [[person-tag#With_other_profiles|with other profiles]] - to provide a real world example of that, to help with:
-* have Bridgy Publish propagate those person-tags to the POSSE copies on Twitter
-** rather than waiting for https://github.com/snarfed/bridgy/issues/547
-** prototype it via Bridgy-Publish-Twitter-only in-content person-tags so they look good on Twitter!
-*** per [[person-tag#tweet_text]]
-*** use that as input for solving [https://github.com/snarfed/bridgy/issues/547 Bridgy #547]
-
-I also really want to:
-* tag lots of people in a photo quickly, e.g. [http://tantek.com/2016/138/t1/bay-to-breakers-nov-project-rainbow this photo has ~40-50 people]
-** typing in all their names, URLs, etc., even copy/pasting them from a person-tags text file is too much work.
-** iterate on building [[person-tag#minimal_separate_field_UI]]
-** more UI work, e.g. [[person-tag#auto-suggest_separate_field_UI|person-tag auto-suggest separate field UI]].
-
-==== photo web action fallbacks ====
-(reprioritize "improve photo posts" at this point)
-Consider providing Instagram/Flickr/Twitter web action fallbacks (options?) for photo posts, e.g. to
-* like a photo or 
-* person-tag it? e.g. [[tag-of]] response (postpone)
-
-==== own photo src URLs ====
-Create photos.tantek.com URLs (or other subdomain) purely to own the actual img src= URLs, regardless of where I statically serve them from, whether 4sq or [[S3]] etc.
-
-==== improve photo permalinks ====
-My photo post permalinks are good, and their design can be improved:
-* analyze other [[photo#IndieWeb_Examples]]
-* consider what to show at the absolute top (date? my icon/name? location? date? why?)
-* ..
-
 === Select Text Fragmention UI ===
 Add JS that enhances text selection by providing a fragmention link to copy to reference that specific selected text.
 * Precondition: update my use of [https://github.com/chapmanu/fragmentions fragmention.min.js] to latest version (to hopefully not require ##)
@@ -1286,18 +1297,6 @@ And these are not visible on Linux (Fedora 20)
 
 === Atom feed past 24h ===
 Change Atom feed to provide at least 1 entry and then past 24 hours of entries like what {{mblaney}} does.
-
-=== mobile recent articles box ===
-There have been enough times that I've referred to recent articles in a mobile context (while walking around with someone) on my or another's mobile device, that it would be useful to move my recent articles box to the top of my site even in the mobile view. Longer term, such a box should simply be a movable Falcon template item.
-
-=== articles only stream page ===
-The header for the recent articles box (and a "More articles..." link after the list of recent articles should link to a:
-
-* "articles only" stream of recent articles
-* perhaps at tantek.com/articles 
-for anyone that wants to read a scrolling list of my recent blog posts (e.g. load it while connected, and then be able to read for many minutes (hours?) when on a subway or plane etc.)
-
-Perhaps build it as a variant of my [[photo stream]], just with a different "type".
 
 === mobile friendly recent talks box ===
 Recent talks (as a form of [[recent videos]]) on my home page!
