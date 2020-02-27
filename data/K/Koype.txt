@@ -49,11 +49,12 @@ The route for implementation would be something like the following:
 
 * Require that a user has been authenticated to the site (using [[IndieAuth]] or [[AutoAuth]])
 ** If not, give <code>401</code>
-* Fetch list of addresses (cc'd folk) for a post
-** Enumerate all users in remote resources
-* Find authenticated user against list of addresses
-** If authenticated user is not in 'any list', give <code>403</code>
-** Else, show post!
+** If so, go back to the page in question with elevated permissions.
+
+The next part is interesting because it can be something that works across ranges. Things I'd want:
+
+* client understanding of the expiry of access
+* authorization to view post to be relatively fast (implementation-specific)
 
 == Webmention Sending and Receiving ==
 Status: [https://git.jacky.wtf/indieweb/koype/issues/6|'''working on''']
