@@ -1,0 +1,61 @@
+https://indieweb.org/2020/London/staticmicropub
+
+'''<dfn>Static Websites and Micropub</dfn>''' was a session at [[2020/London|IndieWebCamp London 2020]].
+
+Notes archived from: https://etherpad.indieweb.org/staticmicropub
+<!--* Video: {{videorudation}}--> 
+----
+IndieWebCamp London 2020<br>
+Session: How to set up/use Micropub with Static Sites<br>
+When: 2020-03-14 13:50
+ 
+== Participants ==
+* {{jamietanna}} (session facilitator)
+* {{jgmac1106}}
+* {{addyourself}}
+
+== Notes ==
+[[2019/staticdynamic]]
+
+When using a static website it may mean that something had to be done manually (Example RSVPs)
+
+* publishes via micropub from micropublish.net
+* keeps raw microformats of the posts in gitlab
+* micropub endpoint write to gitlab using gitlab api
+
+* micropub is a standard format,  so multiple clients can publish to one endpoint
+* clients don't need to know how the site is dealng with it on the backend
+** minimum you need to support is a form post request
+
+* jamie's endpoint writes to gitlab via api
+
+Jamie created a micropub using java and is available in a repo in gitlab.
+
+are there any JS only micropub endpoints?
+* kevin: there is a library for it
+** demos a glitch project [https://glitch.com/~it-me-web https://glitch.com/~it-me-web]
+** https://paulrobertlloyd.github.io/indiekit/
+
+* netlify functions is another option
+** aws lambda that does the work for you
+** still use nodejs on the backend
+* jamie stores images on netlify
+** static page that posts to a aws lambda on netlify that sends a post request somewhere else
+
+* can you have multiple micropub endpoints?
+** no
+** what is the use case? using for example standard WP endpoint to publish content to website, but another endpoint (e.g. jamie's software) to post also to git repo
+** could make use of mp-extension https://indieweb.org/Micropub-extensions#Destination
+** could also write a wrapper so that existing endpoint forwards to both
+
+* jamie demos posting via micropub to both staging and production sites (given you can only have one endpoint)
+
+[[Category: IndieWebCamp London 2020]]
+[[Category: 2020 sessions]]
+== See Also ==
+* [[2020/London/Schedule]]
+* [https://www.youtube.com/watch?v=gwECN4uVuHg Indigenous Demo] (not static site)
+* https://www.jvt.me/posts/2019/12/26/micropub-staging-server/
+* https://www.jvt.me/posts/2019/10/30/reader-mail-hugo-micropub/
+* https://www.jvt.me/posts/2019/08/26/setting-up-micropub/
+* https://goaccess.io/
