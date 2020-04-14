@@ -235,6 +235,13 @@ Webmention senders may wish to keep track of the status of webmentions they send
 ** the request failed due to a server error (returned 5xx)
 * webmention displayed - the target URL sent a webmention back to you after displaying your comment
 
+=== "pure web" backfeed ===
+
+We've thought a lot about [[backfeed]] for [[silos]] and [[POSSE]] copies. How would backfeed work for "pure web" syndicated copies that aren't the original post, but fully cooperate with web standards and indieweb protocols as much as possible? Here's a sketch.
+
+First, on the webmention sending side, when a sender fetches a target link to perform webmention discovery, it could also look for a [[rel-canonical]] link. If one exists, it would then send a second webmention to that rel-canonical page, with the same source URL.
+
+Second, on the receiving end, when an incoming webmention's target URL isn't found in the source page, the receiver should also look for known syndicated URLs, e.g. <code>u-syndication</code> links. If one is found, the receiver would then handle the webmention as if the source linked to original post URL.
 
 === receiving webmentions for POSSE copies ===
 What do people think about receiving a webmention for a [[POSSE]] copy?
@@ -269,6 +276,31 @@ One way to implement it would be something like:
 *** recheck to see if that is one of my posts (same as normal target verification)
 *** if so, use that as the verified target, like you would for redirect processing of a target URL
 
+
+=== receiving webmentions for syndicated copies ===
+
+Some websites supports syndicating posts, in part or in full, such as Medium, Dev.to, Lobsters, Reddit, etc. Many of those also provide a commenting feature, which is one of the motivations for people to syndicate their posts there in the first place. Those syndication destinations could support webmention natively rather than having to build a third-party webmention proxy service to handle it like [[Bridgy]]. In that case, here are some thoughts on how those services could support webmentions to send comments back to peoples' original posts.
+
+* Alice writes a blog post on her site, alice.example.com
+* Alice copies the post to a community site, Dev.to, and enters the original post URL in the "canonical" field
+* Optional: Alice includes a [[u-syndication]] link from her site to the copy on Dev.to (helps prevent Dev.to being used to send spam to other blogs)
+* Bob writes a comment on the syndicated copy on Dev.to
+* Dev.to displays the comment on the syndicated post
+* Dev.to creates a permalink for the comment in order to send it as a [[webmention]] to Alice's original post, adding [[reply]] Microformats to the post (
+** Optional: Dev.to checks that the canonical URL does include a u-syndication link to the Dev.to copy (prevents Dev.to from sending webmentions to random websites)
+** Dev.to includes the link to Alice's original post on the comment page (marked up as u-in-reply-to)
+** Dev.to sends a webmention from the comment URL to Alice's original URL
+** Alice's website parses the comment as a regular [[reply]] and displays it on her post
+
+Here is the example markup for Dev.to showing what needs to be added in order to have a comment on Dev.to work as a webmention:
+
+https://gist.github.com/aaronpk/85e4adc582aeb6add7876b9f5a006e42/revisions
+
+Here is how a Microformats parser will see that page:
+
+https://gist.github.com/aaronpk/784caabe2649b9c759e6afec80827145
+
+Note on the optional steps: A simpler option could be to have Alice verify her domain once at Dev.to, then Dev.to will only send comments back to the canonical URL if the canonical URL is on the same domain. This is slightly less strict than checking every post, but means authors don't have to have the ability to link to syndicated copies.
 
 == Alternatives ==
 Alternatives to webmention.
