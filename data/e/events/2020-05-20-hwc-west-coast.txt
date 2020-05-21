@@ -1,0 +1,128 @@
+https://indieweb.org/events/2020-05-20-hwc-west-coast
+
+{{stub}}
+
+[https://events.indieweb.org/2020/05/online-homebrew-website-club-west-coast-XIt73Q3mAjaM HWC West Coast Online 2020-05-20]
+* Session: 6pm - 8pm, May 20th, 2020
+* Held on [[Zoom]]
+
+Notes archived on 2020-05-21 from [[Etherpad]] at https://etherpad.indieweb.org/2020-05-20-hwc-west-coast
+
+== Participants ==
+* {{jgmac1106}}
+* {{gwg}}
+* [https://www.shimmy1996.com/ shimmy1996]                               
+* {{kevinmarks}}
+* {{angelo}}
+* {{t}}
+* {{chrisaldrich}}
+
+== Topics ==
+* (2) IndieNews (semi-)automatic syndication - e.g. https://chat.indieweb.org/dev/2020-05-15#t1589580639531400
+* (2) Best of Lists
+* (1) software project commit webmentions, keeping repos in sync
+* (2) real time a/v for streaming, hosting & active progress watch, active realtime watch posts
+* (2) image storage not in git / IPFS
+** SSG with markdown files in git, wanted a way to version control images, but not in a git repo, e.g. check IPFS hashes for images git
+* (4) physical media library tracking, digital media libraries and playlists, representing media and media feeds, h-feed for podcasts, h-media
+
+
+== Notes ==
+                                                                                                                                                                                                                                                                                                           
+=== Media libraries and playlists ===
+Goals:
+* organize my media so I can find things
+** e.g. music collection (LPs, mp3, CDs)
+** big on meta data, artists, when released
+
+Challenges: 
+* metadata attempts are inconsistent, e.g. composer vs performer, movements in classical music
+** {{jgmac1106}} example: https://jgregorymcverry.com/musiccollection.txt list of 1,000s folders (realized OwnCloud doesn't allow more than 1,000 files and figured out why half his music was missing)
+*** unkown artist my most popular
+
+Structured data for that:
+* MusicBrainz.org https://musicbrainz.org/doc/MusicBrainz_Database/Schema
+* Discogs.com
+* https://www.wikidata.org/wiki/Q169226 WikiData of Sgt Peppers Album
+* Musicbrainz equivalent https://musicbrainz.org/release-group/9f7a4c28-8fa2-3113-929c-c47a9f7982c3
+
+Another current example https://timstwitterlisteningparty.com/
+
+[[radio|Radio]] station of media posts from your friends
+
+See [[Huffduffer]]
+
+Brainstorming
+* https://indieweb.org/podcast#How_to_podcast_with_h-feed
+
+What is the media equivalent of author?
+* executive producer? (joke...)
+
+Specifically for music, who is the "author"?
+* performer
+* composer
+* lyric writer
+* producer
+* MP3 ID3 tag has only one field for this
+
+Is there markup on the sites for ASCAP or BMI who handle payments to creators?
+
+https://www.theverge.com/2019/5/29/18531476/music-industry-song-royalties-metadata-credit-problems
+
+fuzzy matching graphs of media content https://fornax.readthedocs.io/en/latest/
+
+Status property = https://github.com/microformats/h-entry/issues/18
+
+Who is the author for a video?
+* e.g. a Zoom meeting recording?
+* Author is the person who recorded it in simple video/audio
+* contributor for people involved - is part of the podcast spec
+
+=== Best of lists ===
+
+Examples:
+* Bass players: http://longthoughts.jgregorymcverry.com/doku.php?id=musichour
+** Use-case: toward creating something
+* Favorite films:  http://tantek.com/w/WatchFilms#Favoritemoviesyoushouldsee
+
+How about list to experience?
+* Films/movies to watch:  http://tantek.com/w/WatchFilms#MoviesIwanttosee
+ 
+
+=== Streaming from your own site ===
+* real time a/v for streaming, hosting & active progress watch, active realtime watch posts
+
+What {{aaronpk}} showed up last week
+* Facebook Live like streaming
+* aaronpk built this setup for someone else
+* aaronpk said he hacked up a chat for his live stream
+
+How do you have live reactions
+* Send a webmention from a site
+* you in-reply-to the moment in the media
+* You need both the time of published and to the reply time in the media
+** [[media fragment]] JS  https://aaronparecki.com/2017/02/19/4/day-61-media-fragments
+** working example:
+<code><audio src="https://feedproxy.google.com/~r/SingularityWeblogPodcasts/~5/4471ZdmO-Go/821277562-singularity1on1-ada-palmer.mp3#t=02:17:30" controls />
+</code>
+
+=== Media storage alternatives ===
+E.g. storing images on IPFS instead of git
+for http://www.shimmy1996.com/
+Tried a few other git extension 
+* GitLFS, requires special support on the host server
+* GitAnnex can sync between a few sources you know, but no way to go beyond the number of devices you have
+With IPFS it can mount as a filesystem on your computer. 
+No special headers like HTTP
+To have compatibility with user space file system at /ipfs.
+Can then keep images as symlinks to their /ipfs location.
+Makes the whole blog git repo more portable, size is not that large.
+DNSLink offers compatibility with existing domain names, and HTTP gateways allows accessing IPFS contents via regular web browsers, i.e. http://ipfs.io/ipns/shimmy1996.com
+
+https://www.marcus-povey.co.uk/2019/02/21/ipfs-support-for-known/
+
+
+== Demos ==
+* https://svgiconeditor.lahacker.net/
+**already wants to use this to make badges
+* browser extension
