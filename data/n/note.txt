@@ -225,104 +225,32 @@ Problems:
 Past Example when Twitter used to show a map on tweet permalinks of the location:
 * http://www.flickr.com/photos/aaronpk/7771330904/
 
-=== Whitespace ===
-(Please help consolidate this section into '''[[space]]''', and keep a summary here about the brainstorming, as well as summarize consensus conclusions and document them in "How To" sub-sections above)
+=== Space characters ===
+{{main|space#Space_characters_in_text}}
+<span id="Whitespace">Space characters</span> are often entered into text posting UIs, and more and more preserved when presented, and when exported or edited.
 
-Typical [[silo]] notes implementations display most whitespace written in their posting interfaces. IndieWeb implementations should preserve whitespace also.
-==== Why Preserve Whitespace ====
-There are some interesting use cases to preserving white space, in particular line breaks. 
+Typical [[silo]] notes implementations display most space characters written in their posting interfaces. IndieWeb implementations should preserve space characters also.
 
-Besides the obvious use-cases of poetry, paragraphs, and lists, there is for example, chess games (and moves!)
+See the [[space]] page for more details, IndieWeb Examples, Silo Examples, and further brainstorming.
 
-* https://twitter.com/alapapa/status/312053522755641344
+==== Indieweb space characters thinking ====
+{{main|space#Indieweb_space_characters_thinking}}
+Summary: IndieWeb implementations would have to preserve space characters in posting UI to storage to display round-trips. See below for presentation details.
 
-This leads us to the use case of '''indieweb spectator [http://en.wikipedia.org/wiki/Correspondence_chess correspondence chess]'''. That is, two players could play a chess game just by posting moves on their own indieweb sites as replies to each others' moves.
-
-Perhaps chess moves (and resulting board state) could be posted as a special kind of [[note]] [[post]] type (a game-move or game-turn?) and then [[POSSE]]'d to Twitter with whitespace intact. 
-
-If the move is response to a move on another indiewebsite, then in addition to using [[webmention]] for move completion notification, the POSSE'd response move could also indicate with Twitter's in-reply-to-status-id the POSSE'd tweet of the previous move. See [[comment#POSSE_a_comment|how to POSSE a comment]]/[[in-reply-to]]/[[u-syndication]] for details of how to do this.
-
-Such public posting of moves would also allow for anyone to jump in and attempt to play a next move by posting a reply move. The player of the previous move would then receive multiple webmentions and could decided which move (or both) to reply to in turn.
-
-==== Indieweb whitespace thinking ====
-Due to the expectations set by dominant [[silo]] implementations, any note authoring/composing UI should preserve line-breaks, blank lines, and multiple space characters when writing/authoring, displaying/presenting, and ideally, when syndicating ([[POSSE]]ing, e.g. whitespace preserved by POSSE via [[Twitter]] API, Twitter->FB cross-posting / downstream-POSSEing, [https://github.com/snarfed/bridgy/issues/446 and Bridgy Publish]).
-
-Especially now that even Twitter has set consistent expectations from its posting UI, there's a strong case that a user switching from Twitter to an indieweb note posting UI would expect whitespace and linebreaks to "just work".
-
-Summary, two options for publishers:
+Two options for publishers:
 # Use <code>p-content</code> if you expect only the plain text of your post to be retrieved, and then (preferably, but possibly only optionally) have its white-space preserved.
 # Use <code>e-content</code> if you publish fully marked up links, embeds, and whitespace (e.g. with <code>&lt;br/&gt;</code>, <code>&nbsp;</code> etc.) and expect whitespace in source to be collapsed per HTML parsing rules.
 
-More analysis:
+When presenting space characters implementations should:
+* Do '''&lt;br/> substitutions''' - Indieweb implementations could (are any already?) automatically insert <code>&lt;br></code> tags for linebreak space characters (a kind of [[auto-space]], similarly to auto-linking URLs in notes). In addition, there would need to be an approach to handling multiple sequential space characters, and leading spaces on a line.
+* Substitute multiple sequential inline space characters to &amp;nbsp; if that behavior is really desired (I've never needed/wanted to preserve multiple spaces in a note) [[User:Kylewm.com|Kylewm.com]] 18:14, 20 August 2015 (PDT)
+* Two more [[auto-space]] cases (pretty sure this should take care of mimicking pre-wrap behavior - [[User:Tantek.com|Tantek]])
+*# line-break then inline space: turn the inline space into an <code>&amp;nbsp;</code>
+*# sequence of inline spaces: turn every adjacent pair into <code>_&amp;nbsp;</code> (where _ represents a inline space character)
+* [[CASSIS]] <code>auto_space()</code> now implements this, and live on tantek.com
 
-Obviously indieweb implementations would have to preserve white-space in posting UI to storage to display round-trips. Then in the presentation they could either:
-* a. '''&lt;br/> substitutions''' - Indieweb implementations could (are any already?) automatically insert <code>&lt;br></code> tags for linebreak whitespaces (a kind of [[auto-space]], similarly to auto-linking URLs in notes). In addition, there would need to be an approach to handling multiple sequential space characters, and leading spaces on a line.
-** Substitute multiple sequential space characters to &amp;nbsp; if that behavior is really desired (I've never needed/wanted to preserve multiple spaces in a note) [[User:Kylewm.com|Kylewm.com]] 18:14, 20 August 2015 (PDT)
-** Two more [[auto-space]] cases (pretty sure this should take care of mimicking pre-wrap behavior - [[User:Tantek.com|Tantek]])
-**# line-break then space: turn the space into an <code>&amp;nbsp;</code>
-**# sequence of spaces: turn every adjacent pair into <code>_&amp;nbsp;</code> (where _ represents a space)
-** Update: [[CASSIS]] <code>auto_space()</code> now implements this, and live on tantek.com
-* b. '''white-space:pre-wrap''' - Alternatively indieweb implementations should use <code>white-space:pre-wrap</code> similar to how Twitter does.
-** As of 2015-08-24 tweet permalinks (e.g. [https://twitter.com/t/status/634507922157006854]) have markup for hyperlinks, but use <code>&amp;#10;</code> for linebreaks, instead of <code><nowiki><br/></nowiki></code>.
-** -1 This is a strange divergence from expected HTML with the big disadvantage that consumers need to implement post-type detection to check if a post is a note and/or heuristics to infer whether whitespace in a post is meaningful. As an implementer of a reader that consumes lots of different posts from different sources, I would much prefer that e-content whitespace be consistent between sources and post types. [[User:Kylewm.com|Kylewm.com]] 18:14, 20 August 2015 (PDT)
-*** e-content consistency is a good argument. perhaps white-space preservation with white-space:pre-wrap should only be applied to a plain p-content "value", and if there is any e-content, even if just via [[auto-link]]ing, it should [[auto-space]] as well. - [[User:Tantek.com|Tantek]] 16:41, 24 August 2015 (PDT)
-
-History:
-* b. white-space:pre-wrap seemed to be the logical choice for indieweb implementations
-** However, it became clear that doing just "some" auto-markup (e.g. [[autolink]] and [[autoembed]] but not [[autospace]]) was too (unnecessarily) hard for consuming code (e.g. readers, other sites) to have a chance at getting right.
-** After more brainstorming, [[autospace]] algorithms and code were figured out and seem to be working fine, thus the approach documented in a) made more sense.
-
-==== IndieWeb Whitespace Examples ====
-* '''tantek.com''' [[Falcon]] [[notes]] as of 2013-105 (retroactively supported in storage & styling back to 2013-001) preserve whitespace, present it, and [[POSSE]] it to [[Twitter]] which then preserves the whitespace when copying it to [[Facebook]], e.g.:
-** Original post: http://tantek.com/2013/105/t1/thoughts-boston-finished-deadline-whitespace-falcon
-*** auto-POSSE tweet with linebreaks: https://twitter.com/t/status/323994155690909699
-*** Tweet copy to FB with linebreaks: https://www.facebook.com/tantek.celik/posts/10100581192582203
-** Original post: http://tantek.com/2014/210/t1/trackattack-warmup-laps-first-time-did-all
-*** manual-via-[[Bridgy]] POSSE to FB with ws: https://www.facebook.com/tantek.celik/posts/10101200515439233
-
-* '''kylewm.com''' [[Red Wind]] [[notes]] are just articles without a title. So they are processed by Markdown which converts whitespace to HTML.
-** Example post with linebreaks: https://kylewm.com/2016/05/i-think-this-is-great-feedback-for-known-and-the
-
-* '''gregorlove.com''' notes are also just articles without a title. http://ma.tt/scripts/autop/ is used to convert 2+ new line characters to paragraphs and single new line characters to line breaks.
-** Example: http://gregorlove.com/2015/08/revisiting-imogen-heaps-speak/
-
-* '''kartikprabhu.com''' using [[Bundle]]; [[notes]] are authored as plain-text, and white-space is preserved on display using CSS <code>white-space: pre-wrap</code>. Example: https://kartikprabhu.com/notes/like-wed-design-100-years
-* '''snarfed.org''' uses HTML tags to represent meaningful whitespace. The HTML itself has plenty of meaningless whitespace in both note and non-note posts. This is generally true of all [[WordPress]] sites. [https://kylewm.com/services/mf2?url=https://snarfed.org/2015-07-13_14722 Example.] (search for the content property containing ''I often sign off on code reviews''...)
-* '''aaronparecki.com''' uses white-space:pre-wrap on notes with significant white-space, e.g.
-** http://aaronparecki.com/notes/2015/08/03/4/cocktail
-** with a hyperlink: http://aaronparecki.com/notes/2015/08/03/3/cocktail
-** review as note: http://aaronparecki.com/notes/2015/06/23/1/echo
-*** POSSE copy (uses brs instead of linebreaks): http://www.amazon.com/gp/customer-reviews/R3SBOFS3P8WJC4/ref=cm_cr_pr_rvw_ttl?ie=UTF8&ASIN=B00X4WHP5E
-
-* '''veganstraightedge.com''' [[Dark Matter]] [[notes]] have whitespace preserved using [[Ruby on Rails]]' <code>simple_format()</code> function which converts new lines ("\n") to <code>&lt;p&gt;</code> tags.
-** Example post with linebreaks: http://veganstraightedge.com/notes/2016/01/15/on-2016-01-10-i-launched-my-site-running-my-indie
-
-* ...
-
-==== Silo Whitespace Examples ====
-===== Facebook =====
-[[Facebook]] status updates are notes (no post title) that preserve sequential space characters and line breaks.
-===== Google =====
-[[Google+]] posts are similarly just notes (no post title) that also preserve sequential space characters and line breaks.
-===== Twitter =====
-[[Twitter]] now has multiple implementations that preserve white space characters in presentation:
-* '''Twitter.com''' (as of ~2013-03-13)[http://news.cnet.com/8301-1023_3-57574167-93/twitter-adds-line-breaks-and-gets-hit-with-the-ugly-stick/][http://mashable.com/2013/03/13/twitter-line-breaks/][http://www.digitaltrends.com/social-media/twitter-linebreaks/][http://smallbiztrends.com/2013/03/twitter-line-breaks.html][http://techcrunch.com/2013/03/14/what-are-twitter-line-breaks-good-for/]
-** e.g. https://twitter.com/hotdogsladies/status/4809602603
-** based on a test ( [[User:Tantek.com|Tantek]] 18:13, 15 April 2013 (PDT) ), when posting to Twitter.com, Twitter's server
-*** preserves simple linebreaks
-*** preserves multiple spaces between words
-*** preserves spaces at the start of a line
-*** but collapses multiple linebreaks into a maximum of one blank line between lines.
-* '''Twitter iOS client''' (previously: Tweetie)
-
-Encoding - analysis of the above tweet:
-* View Source: The linebreaks are encoded as <code>&amp;#10;</code> character entitites, without any visible line breaks in the code.
-* View Selection Source (FF) and Inspect Element (FF, Safari): The linebreaks appear to be simple "carriage return" characters (<code>\r</code>, ASCII 13), showing visible line breaks in the code.
-* In either case, the visual presentation of the whitespace characters is achieved using CSS: <blockquote style="white-space:pre"><code><nowiki>.js-tweet-text {
-    white-space: pre-wrap;
-}</nowiki></code></blockquote>
-
-__TOC__
+----
+For more details and history, see: [[space#Space_characters_in_text|space characters in text]].
 
 == Screenshots ==
 * [[User:waterpigs.co.uk|Barnaby Walters]] has a collection of annotated screenshots [http://photos.waterpigs.co.uk/photos/tags-note/list here], including examples from:
