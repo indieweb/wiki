@@ -1,0 +1,82 @@
+https://indieweb.org/User%3AJan.boddez.net
+
+__NOTOC__
+{{Infobox person
+|name = Jan Boddez
+|url = https://jan.boddez.net/
+|photo_url = https://jan.boddez.net/images/photo.jpg
+|summary = Engineer, amateur guitarist, web developer
+|elsewhere = [https://geekcompass.com/@jan Mastodon] [https://github.com/janboddez GitHub]
+}}
+
+= [https://jan.boddez.net/ Jan Boddez] =
+I'm a mechanical engineer, amateur guitarist, and after-hours web developer from Belgium.
+
+== IndieWeb Setup ==
+My current site is a Laravel app, but uses WordPress as its CMS, in a "false" headless setup of sorts. (Rather than use the JSON API, Laravel reads from WordPress's database directly.)
+
+The front end is all driven by fairly minimal, handcrafted, and mostly semantic Blade templates, with support for mf2, and heavily cached.
+
+I send (through my own little WordPress plugin) webmentions whenever I first publish new posts, and am able to receive webmentions as well. I've yet to somehow implement Vouch.
+
+IndieAuth is covered by the [[IndieAuth]] [https://wordpress.org/plugins/indieauth/ plugin] for WordPress. I often post through [[Micropub]], courtesy, again, of an amazing  WordPress [https://wordpress.org/plugins/micropub/ plugin].
+
+I host my own fork of [[Aperture]], using Docker containers, and a PHP-based Microsub reader that very heavily borrows from [Monocle] and has fully replaced my previous RSS reader (which was self-hosted as well). Both my reader and my blog run on shared hosting, which I think is cool. Most other stuff is typically Docker-based.
+
+I also use Indigenous, on Android, for posting to my site(s).
+
+== Projects and Itches ==
+=== Threaded Notes ===
+I'm relying on webmentions and a custom field (in WordPress) to direct "replies-to-self" to the "top-most" post of a thread.
+
+I'm also heavily filtering all sorts of Share on Mastodon (cf. [[#Plugins]]) arguments to ensure "threaded notes" end up as "threaded toots" on the federated microblogging service.
+
+(I ''think'' I've got this one figured out.)
+
+=== WordPress ===
+==== Custom Post Types ====
+On my site, I chose to limit the number of WordPress plugins and leave out several "typical" IndieWeb plugins. I originally wanted to use WordPress's built-in Post Formats, and somehow map them to typical IndieWeb post types, but settled on Custom Post Types instead. A solution, I find, that greatly minimizes WP Admin "clutter."
+
+For the Micropub plugin to play nice with CPTs, however, requires a fair bit of "low-level" WordPress filtering. (The thing WordPress filter hooks exist for, I mean. I plan to eventually share more on my blog.)
+
+=== Post Slugs ===
+Another silly thing I'm rather proud of is the random [[note]] slugs. ([[article|Articles]] get a proper, human-readable slug, still.) I tackle these things in a custom theme (which, unlike most WordPress themes, doesn't actually contain any front-end templates), though a must-have plugin would work equally well.
+
+=== Plugins===
+I have written a couple WordPress plugins, some of which somewhat touch on typical IndieWeb matter:
+* [https://wordpress.org/plugins/import-bookmarks/ Import Bookmarks]: import browser bookmarks as (custom) posts
+* [https://wordpress.org/plugins/sync-opml-to-blogroll/ Sync OPML to Blogroll]: for those using web-based feed readers that expose an OPML endpoint, and want to have it automatically update their blogroll
+* [https://github.com/janboddez/share-on-pixelfed Share on Pixelfed]: POSSE to Pixelfed (a federated, open-source Instagram "clone")
+* [https://wordpress.org/plugins/share-on-mastodon/ Share on Mastodon]: POSSE to Mastodon (like Twitter, but federated and open source)
+* [https://github.com/janboddez/import-from-mastodon Import from Mastodon]: haven't used this one in quite a while, and it's kind of tricky to set up, but it did what it had to do (PESOS from Mastodon) before I moved to Micropub
+* ...
+
+I really have to better credit some of the folks and projects that inspired these, by the way. And implement unit/integration tests, and so on.
+=== Aperture ===
+I'm sharing the [https://github.com/janboddez/aperture-docker-compose Docker Compose] setup I use to self-host [[Aperture]].
+
+Also, there's aforementioned Aperture [https://github.com/janboddez/Aperture/tree/develop fork], which features:
+* improved, I find, keyboard navigation
+* OPML import/export
+* an optional site URL setting, which is included in the OPML
+* "Fetch original content": fetch and parse complete entries, even for summary-only feeds (uses XRay for mf feeds, or an optional XPath selector [the default for all other feed types] to locate ''actual'' post content within a web page)
+
+The latter two features are channel-specific, as we woulnd't want to mess up sources and entries shared with other users' channels.
+
+I aim to also include an alternative feed setting (though I might just use the site URL field), so that it's possible to always specify both an "HTML" URL and a more traditional feed URL for a source, and thus offer a more complete OPML export, to be imported elsewhere (or synced to folks' WordPress blogrolls!) or serve as a complete backup solution.
+
+Something I hope to one day have, too, is a dynamically populated "channel" that groups all of a user's unread entries.
+
+=== Reader ===
+"Reader," the aforementioned [[Monocle]] "fork," for lack of a better term:
+* is entirely Laravel-based
+* has but a limited feature set (no public timelines, etc.)
+* supports unfollowing sources (though I had to slightly diverge from the Microsub spec to make it so, and slightly modify my Aperture fork as well)
+* is able to run on (some) shared hosting environments
+* is "progressively enhanced"
+
+Still unsure if I should default to showing only unread entries, like classic feed readers. One thing I'd like to see, too, is individual entry "pages," something I miss particularly for longer posts. (The "timeline" experience is fine for short, rapidly moving, Tweet-like statuses, but less so for entire articles.)
+
+I'd love to be able to add source-specific CSS, too, to, say, float the tiny (inline) thumbnails in certain RSS feeds, etc. But this'd be user-specific again, and then I'd have to either add it to Aperture, which doesn't really feel right, or support user accounts and all that. Like Monocle, the current app is session-based instead, and does not store anything other than cached thumbnails.
+
+I'm ''almost'' happy with it, for my needs, (I'm still figuring out some accessibility issues) and plan to share the source code ''soon''.
