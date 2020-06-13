@@ -10,7 +10,7 @@ __NOTOC__
 }}
 
 = [https://jan.boddez.net/ Jan Boddez] =
-I'm a mechanical engineer, amateur guitarist, and after-hours web developer from Belgium.
+I'm a mechanical engineer, web developer, and amateur guitarist from Belgium.
 
 == IndieWeb Setup ==
 My current site is a Laravel app, but uses WordPress as its CMS, in a "false" headless setup of sorts. (Rather than use the JSON API, Laravel reads from WordPress's database directly.)
@@ -29,7 +29,7 @@ I also use Indigenous, on Android, for posting to my site(s).
 === Webmention Context ===
 I've added this bit of code that makes incoming webmentions look a bit more like the '''pingbacks''' of old, where the comment text is that part of the source post that actually contains the backlink (to my site).
 
-It's now baked into the plugin I'm using, but I'd like to research and share a way to use it with the popular [https://wordpress.org/plugins/webmention/ Webmention] plugin, too.
+It's now baked into the WordPress plugin I'm using, but I'd like to research and share a way to use it with the popular [https://wordpress.org/plugins/webmention/ Webmention] plugin, too.
 
 === Threaded Notes ===
 I'm relying on webmentions and a custom field (in WordPress) to direct "replies-to-self" to the "top-most" post of a thread.
@@ -38,10 +38,14 @@ I'm also heavily filtering all sorts of Share on Mastodon (cf. [[#Plugins]]) arg
 
 (I ''think'' I've got this one figured out.)
 
-=== Post Types ===
+=== Post Types and h-feeds ===
 I've spent a great deal of time thinking about the post types I'd support. So far, that's articles and notes, and likes.
 
-Both articles and notes may at the same time be bookmarks, or replies. (Which'd ''make'' them bookmarks or replies. I just haven't found a reason to pull these categories apart. Long-form "replies" that come with a title and look nothing like, say, a Twitter reply, probably ''do'' belong in the articles section rather than anywhere else.)
+Both articles and notes may at the same time be bookmarks, or replies. (Which'd ''make'' them bookmarks or replies. I just haven't found a reason to pull these clearly overlapping categories apart. Long-form "replies" that come with a title and look nothing like, say, a Twitter reply, probably ''do'' belong in the articles section rather than anywhere else.) This is not at all problematic, though. All I'm saying is, there's no feed for ''only'' replies, or ''only'' bookmarks (although a search goes a long way).
+
+I've also added a bit of a hidden [[firehose]] h-feed that still needs improved. (Articles aren't included, yet.)
+
+Should really add a [https://marcus.io/blog/making-rss-more-visible-again-with-slash-feeds /feeds] page, too.
 
 === WordPress ===
 ==== Custom Post Types ====
@@ -49,10 +53,10 @@ On my site, I chose to limit the number of WordPress plugins and leave out sever
 
 For the Micropub plugin to play nice with CPTs, however, requires a fair bit of "low-level" WordPress filtering. (The thing WordPress filter hooks exist for, I mean. I plan to eventually share more on my blog.)
 
-=== Post Slugs ===
+==== Post Slugs ====
 Another silly thing I'm rather proud of is the random [[note]] slugs. ([[article|Articles]] get a proper, human-readable slug, still.) I tackle these things in a custom theme (which, unlike most WordPress themes, doesn't actually contain any front-end templates), though a must-use plugin would work equally well.
 
-=== Plugins===
+==== Plugins ====
 I have written a couple WordPress plugins, some of which somewhat touch on typical IndieWeb matter:
 * [https://wordpress.org/plugins/import-bookmarks/ Import Bookmarks]: import browser bookmarks as (custom) posts
 * [https://wordpress.org/plugins/sync-opml-to-blogroll/ Sync OPML to Blogroll]: for those using web-based feed readers that expose an OPML endpoint, and want to have it automatically update their blogroll
@@ -83,9 +87,15 @@ Something I hope to one day have, too, is a dynamically populated "channel" that
 * has but a limited feature set (no public timelines, etc.)
 * supports unfollowing sources (though I had to slightly diverge from the Microsub spec to make it so, and slightly modify my Aperture fork as well)
 * is able to run on (some) shared hosting environments
+* has an image proxy built in
 * is "progressively enhanced"
+* does '''not''' automatically mark entries as read as they scroll by
+
+The latter is important to me, as I'm using this reader much like a more traditional feed reader, with channels representing different categories rather than different "timelines." (As it turns out, Aperture already supports a per-channel read tracking setting, so that it can be disabled completely, e.g., for fast-moving, Twitter-like channels.)
 
 Still unsure if I should default to showing only unread entries, like classic feed readers. One thing I'd like to see, too, is individual entry "pages," something I miss particularly for longer posts. (The "timeline" experience is fine for short, rapidly moving, Tweet-like statuses, but less so for entire articles.)
+
+It also runs HTML through <code>wpautop</code> and plain text and summaries through <code>make_clickable</code>, two helper functions lifted from WordPress core that lead to more uniform markup (and, as a result, more consistent styling) and clickable URLs, respectively.
 
 I'd love to be able to add source-specific CSS, too, to, say, float the tiny (inline) thumbnails in certain RSS feeds, etc. But this'd be user-specific again, and then I'd have to either add it to Aperture, which doesn't really feel right, or support user accounts and all that. Like Monocle, the current app is session-based instead, and does not store anything other than cached thumbnails.
 
