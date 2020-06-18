@@ -91,6 +91,10 @@ Used by:
 ** Changes can be pushed in the "pure code" remote without causing a live deployment
 ** Pushing code to the deployment remote invokes a post-receive hook that checks the code out to the domain's document root
 ** In addition to checking out, an update script is run that updates feeds with the latest posts and renders menus around the blog posts contents
+* {{beesbuzz.biz}}
+** git repo for content and for deployment lockfile
+** commit hook signals to the live site to do a <code>git pull</code>, and then to redeploy code if the lockfile has changed; see [http://publ.beesbuzz.biz/manual/deploying/441-Continuous-deployment-with-git the recommended setup for that]
+** some smaller sites host the repo on GitHub (e.g. [https://github.com/fluffy-critter/novembeat.com/ novembeat.com] and use a [https://github.com/fluffy-critter/novembeat.com/blob/master/app.py#L58 GitHub webhook] to run the [https://github.com/fluffy-critter/novembeat.com/blob/master/deploy.sh deploy script] instead
 
 ==== Heroku git push ====
 [https://devcenter.heroku.com/articles/multiple-environments Use Heroku with git]
