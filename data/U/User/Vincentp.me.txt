@@ -10,41 +10,32 @@ https://indieweb.org/User%3AVincentp.me
 
 == Introduction ==
 
-Hello. I'm Vincent Pickering a Service Designer & UI/UX Consultant, based in the U.K
+Hello. I'm Vincent Pickering a Service Designer from the UK, based in Wellington, New Zealand .
 I've been working in the industry for nearly 20 years building websites at scale.
 I love pulling apart complex things and working out new ways to view or combine them.
 
 == My site ==
 
-My site is a static site built on [https://jekyllrb.com Jekyll]. The code is hosted on [https://github.com/vipickering/vincentp Github] and deployed to [https://www.netlify.com Netlify]. IndieWeb content such as Webmentions are managed via a custom Node.JS server called [https://github.com/vipickering/mastr-cntrl Mastr Cntrl] which is hosted on [https://heroku.com Heroku]. In the future I may port this to Lamda functions and remove the dependancy on Heroku.
+My site is a static site built on [https://www.11ty.dev/]. The code is hosted on [https://github.com/vipickering/vincentp Github] and deployed to [https://www.netlify.com Netlify]. IndieWeb content is managed via Microservices built on Node.JS which are hosted on [https://heroku.com Heroku]
+
+[https://github.com/vipickering/mastr-cntrl] - The Micropub Service
+[https://github.com/vipickering/mc-syndication] - Syndication Service
+[https://github.com/vipickering/mc-webmention] - Webmention Service
 
 '''Content'''
 The basic model to update content is to push in to the Github API. This triggers Netlify to build and deploy the site. At that point a variety of things can happen.
 
 '''Receiving Webmentions''' 
-Webmention.io posts to Mastr Cntrl. Webmentions are formatted and posted in to a JSON file via the Github API. This triggers a rebuild on Netlify and displays the webmentions.
+Webmention.io posts to the Micropub service. Webmentions are formatted and posted in to a JSON file via the Github API. This triggers a rebuild on Netlify and displays the webmentions.
 
 '''Sending Webmentions''' 
-On publish I create a temporary queue of source/target pairs to send. Publishing fires a webhook which makes Mastr-Cntrl get the feed and loop through sending each Webmention.
+On publish I create an RSS feed of source/target pairs to send. The Webmention service checks this feed periodically for new items and when found passes them to Telegraph for sending.
 
 '''Syndication'''
-Working on it.
+On publish I create an RSS feed of syndication items. The Syndication service checks this feed periodically for new items and when found Sends them to the relevant targets.
 
 '''PESOS/Micropub''' 
-Content from other sites such as ownyourswarm and all Micropub types are supported. Content hits my micropub endpoint on Mastr Cntrl where content is formatted in to a markdown file and pushed in to the Github API.
+Content from other sites such as ownyourswarm and all Micropub types are supported. Content is directed to my micropub service where content is formatted in to a markdown file and pushed in to the Github API.
 
 '''Media Endpoint'''
 Uploading images when using Micropub works by uploading images in to the Github API and passing back the URL location.
-
-== Working On ==
-
-* Syndicating content from the website. (documented here https://github.com/vipickering/mastr-cntrl/issues/23).
-* Syndicate to other sites without minor Zapier dependancy.
-* Rollup Bookmarks in to a feed or weekly newsletter.
-* Accept Last.FM content and format in a nice way.
-* Port Mastr Cntrl to Lamda functions. In theory this is possible and would reduce the amount of hosting involved.
-* Porting static Jekyll website to 11ty.
-* Supporting h-review
-* Supporting delete webmention
-* Supporting Direct Messages
-* Social Reader integration
