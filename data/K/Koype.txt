@@ -85,6 +85,41 @@ Koype provides an internal system for processing and handling [[webmention|WebMe
 === Code Generation for Private Webmentions ===
 By default, Koype would generate a random code per recipient and associate it with the post. This way, only the intended recipient would be able to use the code. Providing an interface to edit said code can help with personalization.
 
+=== Configuration ===
+Following in the spirit of [[Micropub]], I want to extend Koype to have some functionality that allow for remote adjustments of this endpoint. This is largely to enable "one click" support for [[Lighthouse]] into Koype instances. Upon requesting the <code>webmention</code> scope from Koype when executing [[IndieAuth]], the field <code>webmention_configuration_endpoint</code> is provided as one of the result fields. It'll allow for you to query against it for things like 
+
+* currently exposed Webmention endpoint
+* the status callback URL to use (see [[Webmention#Asynchronous_status_notification]]
+
+The flow for setting up a hosted Webmention client would be the following:
+
+* Sign into service using IndieAuth with the [[scopes]] <code>webmention</code> and <code>update</code>
+* Take the configuration endpoint and call the change command on it.
+
+This flow is similar for setting up the async status URL as well.
+
+==== Updating Asynchronous Callback URL ====
+<pre>
+POST /endpoints/webmention-configuration
+
+q=async-callback
+action=update
+url=$NEW_CALLBACK_URL
+
+200 OK
+</pre>
+
+==== Setting new Webmention Endpoint ====
+<pre>
+POST /endpoints/webmention-configuration
+
+q=endpoint
+action=update
+url=$NEW_WEBMENTION_ENDPOINT
+
+200 OK
+</pre>
+
 == IndieAuth Provider ==
 Status: [https://git.jacky.wtf/indieweb/koype/issues/1|'shipped' (baseline)], [https://git.jacky.wtf/indieweb/koype/issues/31|'backlog' (alt)]
 
