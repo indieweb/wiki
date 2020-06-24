@@ -109,6 +109,9 @@ url=$NEW_CALLBACK_URL
 200 OK
 </pre>
 
+'''Notes'''
+* Should this field just be <code>callback</code> to match what's conventionally expected when sending async Webmentions?
+
 ==== Setting new Webmention Endpoint ====
 <pre>
 POST /endpoints/webmention-configuration
@@ -116,6 +119,33 @@ POST /endpoints/webmention-configuration
 q=endpoint
 action=update
 url=$NEW_WEBMENTION_ENDPOINT
+
+200 OK
+</pre>
+
+==== Getting [[Vouch]] values ====
+<pre>
+POST /endpoints/webmention-configuration
+
+q=vouch
+
+200 OK
+
+{
+  "vouch": [
+    "https://indieweb.org/chat-names",
+    "https://public-vouch-engine.org",
+  ]
+}
+</pre>
+
+==== Adding [[Vouch]] values ====
+<pre>
+POST /endpoints/webmention-configuration
+
+q=vouch
+action=add
+url=$VOUCH_URL
 
 200 OK
 </pre>
