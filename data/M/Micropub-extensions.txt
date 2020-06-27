@@ -24,6 +24,35 @@ There are not currently any Official Extensions
 
 == Stable Extensions ==
 
+==== Slug ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/projects/1
+
+Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
+
+[[File:wordpress-customize-slug.png]]
+
+This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
+ 
+* <code>mp-slug=</code>
+
+The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
+
+===== Implementations =====
+* Clients
+** [[Quill]]
+** [[Micropublish]]
+** [[Koype/Publish]]
+* Servers
+** [[p3k]]
+** [[Transformative]]
+** [[Micropub for WordPress]]
+** [[Postr]]
+** [[abode]]
+** [[IndieKit]]
+** [[Koype]]
+
+
 === Query for Supported Vocabulary ===
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/1
@@ -79,35 +108,10 @@ If a Micropub client checks the Micropub Configuration query for a <code>post-ty
 === Server Commands ===
 The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
 
-==== Slug ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/1
-
-Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
-
-[[File:wordpress-customize-slug.png]]
-
-This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
- 
-* <code>mp-slug=</code>
-
-The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
-
-===== Implementations =====
-* Clients
-** [[Quill]]
-** [[Micropublish]]
-* Servers
-** [[p3k]]
-** [[Transformative]]
-** [[Micropub for WordPress]]
-** [[Postr]]
-** [[abode]]
-** [[IndieKit]]
 
 ==== Destination ====
 ; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/4
+: https://github.com/indieweb/micropub-extensions/issues/3
 
 * <code>mp-destination=https://mysite.example.com/</code>
 
@@ -116,6 +120,7 @@ Specify a destination to create a new post on a web site other than the default.
 ===== Implementations =====
 * Clients
 ** [[Monocle]] - Monocle will check if your Micropub server returns a list of destinations and will then provide an account chooser UI in the footer when viewing a timeline. Selecting an account will cause any of the response buttons to be sent with the corresponding <code>mp-destination</code> value.
+** TODO: there are probably some micro.blog clients to add to this list
 * Servers
 ** [[p3k]]
 ** [[micro.blog]]
@@ -136,6 +141,7 @@ This is currently under consideration for becoming a "stable" extension. Please 
 ** [[Quill]]
 ** [[Indigenous for Android]]
 **[[Micro.blog]]
+** [[iA Writer]]
 * Servers
 ** [[p3k]]
 ** [[Micropub for WordPress]]
@@ -254,6 +260,7 @@ Another advantage of this extension is that your micropub server is just respons
 * Clients
 ** [[Indigenous for Android]]
 ** [[Micro.blog]]
+** [[Together]]
 * Servers
 ** [[abode]]
 ** {{j4y_funabashi}}
