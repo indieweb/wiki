@@ -124,6 +124,31 @@ If a Micropub client checks the Micropub Configuration query for a <code>post-ty
 ** [[Micro.blog]]
 ** [[abode]]
 
+=== Visibility ===
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/11
+
+This extension proposed a new property for use in Micropub requests called <code>visibility</code> that informs a server whether a post should be public, private or unlisted. If no visibility is set, a server '''should''' assume the visibility is meant to be public. If the visibility is set to unlisted, a server has flexibility to treat that how it wants, however this typically means the post wouldn't appear in feeds such as galleries, timelines or streams. If the visibility is set to private, that means this post should not be accessible unless viewed by an authenticated user. (See [[Micropub-extensions#Audience|audience]] for more details.)
+
+* <code>visibility=public</code> (or no visibility set)
+* <code>visibility=unlisted</code>
+* <code>visibility=private</code> (this may need to be renamed "protected", [https://github.com/indieweb/micropub-extensions/issues/11 see discussion])
+
+Beyond the scope of this discussion is how a user authenticates for a private post, and if they are authenticated how the access control is managed for said post. But this means depending on the server a private post could be viewable by a single person, or it could allow a group of authorized people to view it as long as they are authenticated.
+
+==== Implementations ====
+* Clients
+** [[OwnYourSwarm]]
+** [[Quill]]
+** [[Together]]
+** ...
+* Servers
+** [[Micropub for WordPress]]
+** [[p3k]]
+** [[abode]]
+** [[Postr]]
+
+
 == Proposed Extensions ==
 
 === Server Commands ===
@@ -147,30 +172,6 @@ Specify a destination to create a new post on a web site other than the default.
 ** [[micro.blog]]
 
 === New Properties ===
-
-==== Visibility ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/11
-
-This extension proposed a new property for use in Micropub requests called <code>visibility</code> that informs a server whether a post should be public, private or unlisted. If no visibility is set, a server '''should''' assume the visibility is meant to be public. If the visibility is set to unlisted, a server has flexibility to treat that how it wants, however this typically means the post wouldn't appear in feeds such as galleries, timelines or streams. If the visibility is set to private, that means this post should not be accessible unless viewed by an authenticated user. (See [[Micropub-extensions#Audience|audience]] for more details.)
-
-* <code>visibility=public</code> (or no visibility set)
-* <code>visibility=unlisted</code>
-* <code>visibility=private</code> (this may need to be renamed "protected", [https://github.com/indieweb/micropub-extensions/issues/11 see discussion])
-
-Beyond the scope of this discussion is how a user authenticates for a private post, and if they are authenticated how the access control is managed for said post. But this means depending on the server a private post could be viewable by a single person, or it could allow a group of authorized people to view it as long as they are authenticated.
-
-===== Implementations =====
-* Clients
-** [[OwnYourSwarm]]
-** [[Quill]]
-** [[Together]]
-** ...
-* Servers
-** [[Micropub for WordPress]]
-** [[p3k]]
-** [[abode]]
-** [[Postr]]
 
 ==== Location Visibility ====
 
