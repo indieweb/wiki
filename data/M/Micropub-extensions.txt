@@ -148,67 +148,11 @@ Beyond the scope of this discussion is how a user authenticates for a private po
 ** [[abode]]
 ** [[Postr]]
 
-
-== Proposed Extensions ==
-
-=== Server Commands ===
-The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
-
-
-==== Destination ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/3
-
-* <code>mp-destination=https://mysite.example.com/</code>
-
-Specify a destination to create a new post on a web site other than the default. The value of <code>mp-destination</code> should be a uid from the array of destinations returned from q=config. See [https://gist.github.com/manton/52e0015f87fcf50c687a0c64e392fc37 an example query response here].
-
-===== Implementations =====
-* Clients
-** [[Monocle]] - Monocle will check if your Micropub server returns a list of destinations and will then provide an account chooser UI in the footer when viewing a timeline. Selecting an account will cause any of the response buttons to be sent with the corresponding <code>mp-destination</code> value.
-** TODO: there are probably some micro.blog clients to add to this list
-* Servers
-** [[p3k]]
-** [[micro.blog]]
-
-=== New Properties ===
-
-==== Location Visibility ====
-
-Proposal by {{gwg}} 
-
-* <code>location-visibility=public</code> (or no visibility set)
-* <code>location-visibility=private</code>
-* <code>location-visibility=protected</code>
-
-This is based on {{gwg}}'s implementation in Simple Location, an Indieweb friendly location plugin, of the WordPress Geodata unofficial guidelines. It states a single property which can be set to public or private, with the absence of the property being considered to be public. Proposing the third property, which will allow for a less specific text only display, but no actual coordinates.
-
-===== Implementations =====
-* Clients
-** Indigenous for Android
-* Servers
-** [[Micropub for WordPress]]
-
-==== Audience ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/12
-
-This is a proposed extension that allows a Micropub client to tell a server who should be able to access a private post. This is specifically useful with the draft of [[AutoAuth]] and the idea of sending private webmentions or creating posts that can be read by only a small group of people.
-
-===== Implementations =====
-* Clients
-** ...
-* Servers
-** [[abode]]
-
-=== Query ===
-Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
-
-==== Query for Post List ====
+=== Query for Post List ===
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/4
 
-This is a possible extension to the q=source query on my micropub endpoint, if no url is provided it returns a list of posts. This makes the url part of the query really into more of a filter. This would be super handy for clients wanting to present a list of posts to edit/delete/undelete.
+This is an extension to the q=source query. If no url is provided it returns a list of posts. URL becomes a filter on this list. However...the discussion of what additional query modifiers might be available continues as experimental. Only the basic usage is stable.
 
 Another advantage of this extension is that your micropub server is just responsible for storing and listing posts as microformats, rendering posts can be another bit of software's responsibility 
 
@@ -270,11 +214,13 @@ Another advantage of this extension is that your micropub server is just respons
 ** [[Micro.blog]]
 ** [[IndieKit]]
 
-==== Query for Category/Tag List ====
+=== Query for Category/Tag List ===
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/5
 
-This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This also incorporates the possibility of being able to search for categories that would match an auto-complete.
+This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This usage is stable.
+
+There is a proposal to extend this stable extension to search for categories that would match an auto-complete.
 
 The following example would be returned as part of the <code>?q=category</code> query.
 <pre>
@@ -310,6 +256,63 @@ The follow example would be returned as part of the <code>?q=category&search=ind
 ** [[Micro.blog]]
 ** [[Postr]]
 ** [[IndieKit]] ({{paulrobertlloyd}})
+
+
+== Proposed Extensions ==
+
+=== Server Commands ===
+The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
+
+
+==== Destination ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/3
+
+* <code>mp-destination=https://mysite.example.com/</code>
+
+Specify a destination to create a new post on a web site other than the default. The value of <code>mp-destination</code> should be a uid from the array of destinations returned from q=config. See [https://gist.github.com/manton/52e0015f87fcf50c687a0c64e392fc37 an example query response here].
+
+===== Implementations =====
+* Clients
+** [[Monocle]] - Monocle will check if your Micropub server returns a list of destinations and will then provide an account chooser UI in the footer when viewing a timeline. Selecting an account will cause any of the response buttons to be sent with the corresponding <code>mp-destination</code> value.
+** TODO: there are probably some micro.blog clients to add to this list
+* Servers
+** [[p3k]]
+** [[micro.blog]]
+
+=== New Properties ===
+
+==== Location Visibility ====
+
+Proposal by {{gwg}} 
+
+* <code>location-visibility=public</code> (or no visibility set)
+* <code>location-visibility=private</code>
+* <code>location-visibility=protected</code>
+
+This is based on {{gwg}}'s implementation in Simple Location, an Indieweb friendly location plugin, of the WordPress Geodata unofficial guidelines. It states a single property which can be set to public or private, with the absence of the property being considered to be public. Proposing the third property, which will allow for a less specific text only display, but no actual coordinates.
+
+===== Implementations =====
+* Clients
+** Indigenous for Android
+* Servers
+** [[Micropub for WordPress]]
+
+==== Audience ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/12
+
+This is a proposed extension that allows a Micropub client to tell a server who should be able to access a private post. This is specifically useful with the draft of [[AutoAuth]] and the idea of sending private webmentions or creating posts that can be read by only a small group of people.
+
+===== Implementations =====
+* Clients
+** ...
+* Servers
+** [[abode]]
+
+=== Query ===
+Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
+
 
 ===== Brainstorming =====
 [[category]] - [https://chat.indieweb.org/2017-01-18#t1484741717234000 suggestion] to get all existing tags/categories in the client. Expectation is client would cache and do autocomplete
