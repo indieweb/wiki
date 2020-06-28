@@ -1,0 +1,120 @@
+https://indieweb.org/2020/West/posting-privately
+
+Session: Posting Privately
+
+== Participants ==
+* {{fluffy}}
+* {{schmarty}}
+* {{manton}}
+* {{sknebel}}
+* {{gwg}}
+* {{aaronpk}}
+* {{jackyalcine}}
+* {{gRegor}}
+* {{t}}
+* {{mjordan}}
+* {{ben_thatmustbeme}}
+* scott gruber
+
+== Notes ==
+
+fluffy introduces the topics, including silo examples like livejournal, G+ and many more.
+
+demonstrates how private posts work on her site. her site has a login button. once you log in (indieauth is supported), you can see private posts show up in between the public posts you were able to see before.
+
+* atom feeds show a "stub entry" including a message to log in. if you somehow include your auth cookie in your reader's request, the content is there
+* syndication to twitter also gets a "stub entry". can click through to a login page.
+** says folks tend to click on these and then just click away. none seem to request access
+* autoauth - isn't working yet!
+* mentions hidden URLs as another approach
+* difficulty of content discovery - how do you even let people know there is new private content for them?
+* there's no working private subscription model (autoauth should fix this but no impls yet)
+* private webmentions can in theory be another way to "push" the fact that a new private post is available. do any wm endpoints support this?
+
+jacky: commits to making private posts a priority in what he is building.
+* autoauth for private WMs and landing pages that say "this is private, here is how to get access"
+
+fluffy: autoauth is being held up by indieauth implementations not supporting it yet.
+* but there are other ways of doing this. for example wanting to share private posts to users on silos.
+
+aaronpk: discovery and letting people know they'll get something for logging in is key!
+* also wants to support folks logging in to his site from silos, but this is a design challenge first.
+
+WordPress cannot support AutoAuth in its current configuration, without some massive IndieAuth retooling. 
+
+schmarty: has been seeing mailing list mailings and patreon subscribers-only posts mentioned a lot on social media
+- email is a whole different channel. sender controls the distribution list completely. need people to subscribe, though.
+- patreon and other subscription content platforms work similarly - users are locked into their silo
+
+fluffy: has offered to give people access as soon as they try to sign in. not seeing uptake.
+
+jacky: how about a feed that lists private posts?
+* fluffy talks about how publ's atom feed sharing stuff and atom private URLs
+** too easy to share a feed item and leak the private URL for that item or the URL for the private feed.
+** tbh as a note-taker i got a bit lost here! --{{schmarty}}
+
+manton: subscription services like patreon
+* per-user private feeds (nice because if it leaks you can shut down only one)
+* community-wide private feeds (harder to manage control)
+* the risk of leaks are low for a podcast, but a private journal might have serious consequences if there's a privacy leak.
+** wants private / protected to have a specific meaning that users can understand. "how private is it? really??"
+* fluffy: nothing can stop a malicious actor, but design so that private behavior is _implied_ rather than _requested_.
+
+aaronpk: gumroad has ebook PDFs with no DRM, but they do watermark it by stamping the purchaser's email into the PDF.
+* so if it does get shared, they know the source of the leak.
+* fluffy: interested in maybe watermarking images or content based on recipient.
+
+tantek: rather than broadcasting that private content is available, publisher should notify the recipients that there is new private content they can check out.
+- webments, maybe, if that's available? but many won't support that now. fall back to another private channel. private channel is the important aspect because whatever link is shared this way can include info about how to log in etc.
+
+schmarty: before sending folks a notification they usually have to sign up or at least consent. seems like there is a missing user experience step to reach out to the audience for a private post to ask them to engage in notifications
+
+manton: activitypub has private accounts that require requests to follow and for those requests to be approved.
+* fluffy: it's a tempting model, but implementing all of activitypub is a big sledge hammer to solve this problem.
+
+t:  Tom Morris(tommorris.org)  had prior art about this? eventually became a whole audiences feature. Allowed FB users to view by implementing Facebook Connect, and then engaged with "signing up" people via Facebook.
+
+Some use-cases / user-flows documented here:
+* https://indieweb.org/sign-in-use-cases
+
+jacky: is there a way with indieauth / oauth2 to ask for a very specific resource?
+* would like to be able to let people sign up / log in with emails. one-time access would be possible.
+* aaronpk: there's an oauth extension (resource indicators?) https://tools.ietf.org/id/draft-ietf-oauth-resource-indicators-02.html
+
+t: what would a private consent-to-notification handshake protocol look like?
+* fluffy: sends folks info through many channels. email, mastodon, twitter, ...
+* t: maybe that's what "following" is?
+
+(missed some discussion in here)
+
+aaronpk: websub would allow you to send unique content per subscriber. in theory. it's like halfway there.
+
+manton: in micro.blog everything comes from a feed.
+* aaronpk: do people ask for this? manton: oh yeah.
+* folks now are leaving facebook and still want that kind of privacy. sharing to friends & family, a small list of people to have (semi-)private posts. would solve a lot of problems for people.
+
+fluffy: one of my friends doesn't use feeds or notifications, just signs into the site occasionally (usually via email) and sees the private posts. he may have the best experience with these private posts.
+
+t: like slack shows a blue dot in the tab when there's a new notification, what if you had tabs open for all your friends' websites, and those sites were aware when there were new posts _for you to see_, and they showed some kind of blue dot?
+* fluffy: i don't keep open that many tabs (jacky agrees!)
+
+gRegor: if you have a nicknames cache in your posting system and you have the email / twitter DM / etc for the people you are granting access for the post, you could choose how you notify them that way. assuming they consented before.
+
+jacky: you could use a private list of h-cards with the preferred contact method for each. SMS? send a shortlink.
+
+fluffy: publ allows users and groups. groups can be nested and for people with lots of ways to be contacted a single person might get a group for all their contact methods.
+
+schmarty:
+* is it possible to break down autoauth into partial steps that are worth implementing?
+** fluffy: implemented bearer tokens but not clear where next step would be
+* folks seem to like the mastodon request-to-follow / notify-of-follow-request / accept request / notify-the-requester-they-can-follow / some-protocol-handshake
+** t: wrong to put the burden on the person being asked about whether to allow following. alternative: dopplr - you can give someone permission to look at your private stuff, but you can't request access, via dopplr, access to someone's private stuff!
+*** putting the burden on the requestee is a very privileged design
+** aaronpk: making a request-to-share makes this easier as a protocol. e.g. i notify fluffy "hey i am trying to share with you" as a notification simplifies things a lot.
+
+gwg: how many people have a private posts feature at all?
+* about half of the folks show hands
+* jacky: static sites make this really hard. client side encryption?
+** fluffy: "And this is why I made Publ dynamic instead of static"
+
+* ... add notes
