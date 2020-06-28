@@ -223,8 +223,6 @@ Another advantage of this extension is that your micropub server is just respons
 
 This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This usage is stable.
 
-There is a proposal to extend this stable extension to search for categories that would match an auto-complete.
-
 The following example would be returned as part of the <code>?q=category</code> query.
 <pre>
 {
@@ -234,17 +232,6 @@ The following example would be returned as part of the <code>?q=category</code> 
     "tag3",
     "tag4",
     "tag5",
-  ]
-}
-</pre>
-
-The follow example would be returned as part of the <code>?q=category&search=indie</code> query.
-<pre>
-{
-  "categories": [
-    "indieweb",
-    "indieweb-goals",
-    "indienews"
   ]
 }
 </pre>
@@ -265,7 +252,6 @@ The follow example would be returned as part of the <code>?q=category&search=ind
 
 === Server Commands ===
 The Micropub spec reserves the <code>mp-</code> prefix in the form-encoded syntax as a mechanism for clients to give commands to servers. This section is for brainstorming additional uses of the <code>mp-</code> functionality.
-
 
 ==== Destination ====
 ; '''Issues and discussion:''' 
@@ -315,6 +301,43 @@ This is a proposed extension that allows a Micropub client to tell a server who 
 
 === Query ===
 Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
+
+==== Filter Parameters in Query for Post List ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/4
+
+The extension of q=source to allow a list of posts being returned if there is no URL parameter is now stable. However...the discussion of what additional query modifiers might be available continues as experimental.
+
+This includes:
+* limit - limits the number of returned values
+* after, before - for a cursor based pagination model(see [[Microsub-spec]] ). 
+** As far as the client is concerned, the "before" and "after" values are arbitrary strings. This allows the server to internally use whatever specific implementation is most appropriate for its backend technology. (Often this will be either a timestamp or a unique ID identifying the first and last items in the returned list.) 
+
+==== Search Parameter in Query for Category/Tag List ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/5
+
+This is an extension to extend the category/tag list query to allow search for categories that would match an auto-complete.
+
+
+The follow example would be returned as part of the <code>?q=category&search=indie</code> query.
+<pre>
+{
+  "categories": [
+    "indieweb",
+    "indieweb-goals",
+    "indienews"
+  ]
+}
+</pre>
+
+===== Implementations =====
+
+* Clients
+** Indigenous for Android
+* Servers
+** [[Micropub for WordPress]]
+** [[IndieWeb for Drupal]]
 
 
 ===== Brainstorming =====
