@@ -1,0 +1,109 @@
+https://indieweb.org/User%3AMartymcgui.re/IndieWeb-Sandbox
+
+Ideas for an "IndieWeb Sandbox"
+
+Goals:
+
+* give people something to let them try-before-they-buy for some IndieWeb building blocks and features.
+* make it free to get started
+** watch for tradeoffs, though. e.g. "Free Domain" services tend to have lock in, so starting without their own domain might be better as long as there is an upgrade path to using their own domain later.
+* minimize signup processes
+** sure, AWS has a free tier, but good luck walking folks through setting it up.
+* make it all as open as possible!
+** yes, open source, but more than that.
+** try to make individual parts of the system more visible.
+*** will apply differently to each building block. e.g. making IndieAuth "visible" vs making Micropub "visible".
+
+Features I think could be pulled off:
+
+* IndieAuth (both as part of the app or supporting external auth / token endpoints)
+* Micropub (as long as there's at least a static file host)
+** New posts
+** Query / Edit / Delete+Undelete
+* Micropub media (again, as long as there's a static file host)
+* "subscribability"
+** templates w/ h-feed go a long way.
+** sending websub pings goes even further
+* webmentions
+** sending: sure! this bit could be spun off as long as the site has a public feed. websub would make it near real time.
+** receiving and more:
+*** want to avoid the model of store-on-an-external service and pull in with JS
+*** gotta put 'em somewhere, but sure. lots of prior art to at least verify and accept WMs.
+** moderation and review (lots of UX work TBD here!)
+** display
+*** as long as it's clear how to integrate with templates!
+
+That above list feels pretty clearly biased so I must have some ideas I am trying to play with. 😂
+
+This page is to explore whether this can be pulled off with the following services...
+
+=== Neocities.org ===
+
+A static web host with a built-in editor, file uploader, file management. Would host the actual content.
+
+* a modern take on the old geocities model. meant for learning and playing with HTML/CSS/JS and more.
+* has an API for listing files, uploading files: https://neocities.org/api
+
+==== free tier limits ====
+
+* 1GB of file space
+* no custom domain (e.g. myproject.neocities.org)
+
+Paid Supporter plan, $5/mo
+
+* 20GB of space
+* custom domains allowed
+* a supporter plan can have multiple websites. all share the same pool of resource limits.
+
+=== glitch.com ===
+
+"A simple tool for creating web apps" would host the dynamic bits like handling IndieAuth, Micropub, and more.
+
+* can host server-side code in a variety of languages (most common is javascript via node.js)
+
+==== free limits ====
+
+* apps have space limitations (200mb?), go to sleep after some period of being unused.
+* paid (~$10/mo) allows up to 5 apps to be "boosted" to stay awake, increase space to 400mb
+
+custom domains?
+
+* shouldn't be as important since these are support services rather than the main web host
+* are available if you help two other glitch community members with their own projects.
+* or via a paid service like fly.io
+
+== Onboarding Brainstorming ==
+
+=== Glitch Setup ===
+
+Start with a glitch app they can fork. This requires a glitch.com account!
+
+At writing time, Glitch accounts can be made by signing in with GitHub, Facebook, Google, or email.
+
+[[File:Screenshot_2020-06-28_Sign_In_to_Glitch.png]]
+
+From there a kind of wizard can walk through setup. Will check variables that should be set in <code>.env</code> and prompt for how to get them.
+
+* neocities API key - show instructions on how to create a neocities account / site, how to create an API key
+** if neocities API key is present, the API can be used to fetch info about the site it belongs to, so that can be shown for confirmation
+*** https://neocities.org/api <code>GET /api/info</code>
+*** returns sitename and custom domain, if any.
+** domain or sitename can and should be cached cuz it'll be the value of "me" for IndieWeb and Micropub and etc.
+* a password for authenticating
+** explain why
+** maybe advanced options if they want to bring their own auth / token stuff but since this is a sandbox let's just do a very simple self-contained thing for now!
+
+I think once those things are configured, the app can ask them to log in with the password that they set and that home page can be treated like a dashboard to continue with other steps!
+
+=== Neocities setup ===
+
+once the glitch app is configured, it's time to start setting things up on the neocities side. starting with making sure the homepage has all the right things.
+
+* <code>&lt;link&gt;</code> headers for auth and token endpoints, micropub endpoint.
+* placeholders for bio with h-card markup
+** could offer a UI for editing them or encourage them to hit the HTML directly. offering a UI that works via micropub sounds fun??
+* placeholder for feed of recent posts
+
+if these are missing, the app can add them, though this can probably best be handled by a template.
+
+if that's in place then honestly things can probably get started? we can direct them to various micropub clients to try, along with prompts for how to log in (for example "Sign in as https://yourproject.glitch.org/")
