@@ -2,39 +2,45 @@ https://indieweb.org/User%3AAaronparecki.com/IndieAuth_Ticket_Auth
 
 
 == Step 1 ==
-I would like to notify you that I am following you
-so that you can choose to share more things with me.
+Bob would like to notify Alice that Bob is following Alice
+so that Alice can choose to share more things with Bob.
 
 * (TODO)
 
+(This step isn't strictly necessary but may provide a better user experience for granting these tokens)
+
 == Step 2 ==
-Ok now I am ready to send an access token to you
+Ok now Alice is ready to send an access token to Bob
 
-* Feed URL = https://www.svenknebel.de/posts/
+* Feed URL = https://alice.example.com/
 * Ticket = 32985723984723985792834
-* (For: sven)
-* Deliver to auth endpoint of: https://www.svenknebel.de/
+* Deliver to auth endpoint of: https://bob.example.org/
 
-Discover auth endpoint of https://www.svenknebel.de/
+Discover auth endpoint of https://bob.example.org/
 
-* https://www.svenknebel.de/auth
+* https://auth.example.org/auth
 
-Post ticket to https://www.svenknebel.de/auth
+Post ticket to https://auth.example.org/auth
 
-<pre>curly https://avocado.lol/u/auth.php
+<pre>curl https://auth.example.org/auth
    -d ticket=32985723984723985792834
-   -d resource=https://www.svenknebel.de/posts/</pre>
+   -d resource=https://alice.example.com/</pre>
 
-User's auth endpoint redeems the ticket for an access token
-Fetch resource https://avocado.lol/z/ to discover authorization endpoint
+(Note: This might need another parameter to indicate that this ticket is meant for Bob)
 
-<pre>curly https://avocado.lol/z/auth.php
+This is basically saying "if you wanted to fetch this resource and see private stuff, here's a ticket you can use to get an access token".
+
+Bob's auth endpoint redeems the ticket for an access token
+
+Fetch resource https://alice.example.com/ to discover authorization endpoint
+
+<pre>curl https://alice.example.com/auth
    -d ticket=32985723984723985792834</pre>
 
-response is an access token
+Response is an access token
 
 == Step 3 ==
 
-now the authorization endpoint has the remote access token
-how to get it to the reader or the webmention endpoint verifier
-is up to those implementations
+Now Bob's authorization endpoint has the remote access token that could be used to fetch Alice's feed.
+
+How to get it to the reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
