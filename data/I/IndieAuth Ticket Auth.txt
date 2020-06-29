@@ -2,6 +2,8 @@ https://indieweb.org/IndieAuth_Ticket_Auth
 
 == Use-cases ==
 Use-cases that inspired the development of this protocol:
+* be able to fetch private posts from someone's feed
+* don't rely on a "follow request" in order to do so
 * ...
 
 == Brainstorming ==
@@ -60,3 +62,16 @@ Response is an access token
 Now Bob's authorization endpoint has the remote access token that could be used to fetch Alice's feed.
 
 How to get it to the reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
+
+=== Notes ===
+Advantages:
+* The thing that gets tokens only needs one new public endpoint, the endpoint that receives tokens
+** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
+* Issuing tokens is compltely voluntary, and does not have to be prompted by an action by the eventual receiver of the token
+
+== Token Issuing ==
+How a website decides to issue tokens does not need to be defined by this spec.
+
+{{aaronpk}} created an interface to be able to send tickets to arbitrary URLs, and shows the token info after the ticket has been redeemed.
+
+[[File:aaronpk-ticket-admin.png]]
