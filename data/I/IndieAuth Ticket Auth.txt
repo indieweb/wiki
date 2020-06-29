@@ -1,0 +1,62 @@
+https://indieweb.org/IndieAuth_Ticket_Auth
+
+== Use-cases ==
+Use-cases that inspired the development of this protocol:
+* ...
+
+== Brainstorming ==
+
+=== Step 1: Decide to issue an access token ===
+Bob would like to notify Alice that Bob is following Alice
+so that Alice can choose to share more things with Bob.
+
+* TODO: this could be a [[follow]] post, or some other protocol, but is not related to authentication
+
+This step isn't strictly necessary but may provide a better user experience for granting these tokens.
+
+This is in contrast to a mechanism of advertising the fact that there may be private/protected content at a URL by using something like a WWW-Authenticate header. By indicating there may be more to see at a URL, that itself is leaking information.
+
+
+=== Step 2: Issue an access token ===
+Alice has decided to send an access token to Bob. (Either because Alice decided to out of the blue, or because Alice noticed Bob's follow notification.)
+
+==== Create the IndieAuth ticket ====
+Alice generates a short-lived ticket which will last approximately a minute at most.
+
+* Feed URL = https://alice.example.com/
+* Ticket = 32985723984723985792834
+* Deliver to ticket endpoint of: https://bob.example.org/
+
+Discover ticket endpoint of https://bob.example.org/
+
+* https://auth.example.org/ticket
+
+Post ticket to https://auth.example.org/ticket
+
+<pre>curl https://auth.example.org/ticket \ 
+   # a random string that can be redeemed for an access token
+   -d ticket=32985723984723985792834 \ 
+   # the access token will work at this URL
+   -d resource=https://alice.example.com/ \ 
+   # the access token should be used when acting on behalf of this URL
+   -d audience=https://bob.example.org/ </pre>
+
+This is basically saying "if you wanted to fetch this feed as this person and see private stuff, here's a ticket you can use to get an access token".
+
+==== Redeem the ticket for an access token ====
+
+Bob's ticket endpoint redeems the ticket for an access token
+
+Fetch resource https://alice.example.com/ to discover token endpoint
+
+<pre>curl https://alice.example.com/token
+   -d grant_type=ticket
+   -d ticket=32985723984723985792834</pre>
+
+Response is an access token
+
+=== Step 3: Use the access token ===
+
+Now Bob's authorization endpoint has the remote access token that could be used to fetch Alice's feed.
+
+How to get it to the reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
