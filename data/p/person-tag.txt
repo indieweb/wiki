@@ -243,6 +243,48 @@ After the checkin is created, the person-mention still appears inline with the c
 [[File:foursquare-person-tag-permalink.png|400px]]
 
 == Brainstorming ==
+=== Rethinking tagging and untagging user flow ===
+Existing person-tagging systems allow people to tag others in their photos typically without prior permission or even interaction which presumes good behavior and puts the burden of handling and undoing misbehavior on those who may be harmed by the tagging. 
+
+We should rethink the user flow of person-tagging to instead design for default respect and safety, putting more burden on the folks doing the person-tagging than the folks who may be errantly mistagged.
+
+Silos like [[Flickr]], [[Facebook]], [[Instagram]], and [[Twitter]] all have the ability to tag people in photos by default, and then present the person that is tagged with the option of [[untag]]ging themselves. People can opt-out of being person-tagged, but that's not necessarily ideal as a default. Some(which?) have defaults that only allow person-tagging of people who have designated you as a friend, which again might be too much of a bundling of a permission with the expression of a relationship.
+
+This current state of this user flow is something like:
+# A tags B in a [[photo]]
+# B is [[notified]] that they’ve been tagged
+# B can tap that notification or view their [[notifications]] and tap the entry to view it
+# B when viewing the photo, B can see that they’ve been tagged in it and has the option to [[untag]] themselves, 
+# B can optionally also [[block]] A so they cannot person-tag B in the future
+
+Another variant involves three people (e.g. [[Flickr]] and [[Facebook]] allow this):
+# A posts a photo
+# C sees that post in their reader
+# C recognizes B and tags B in the photo
+# B receives a notification and can view the photo, untag themselves etc. just like before
+# B can optionally also block C so they cannot person-tag B in the future
+
+These default user flows generally assume good relationships and behavior among A,B,C and only handle misbehaviors after the fact, putting the burden on B to undo or repair the situation.
+
+
+'''Instead we should rethink this entire flow in terms of respect, safety, and consent, and design a new suggested user flow accordingly, using that to drive any new protocol interactions that may be needed.'''
+
+
+One model to consider is a
+* '''grant permission to allow tagging of yourself'''
+rather than
+* ok to be tagged by anyone or even by friends
+* ask permission to tag someone
+
+[[Dopplr]] had a model for "friending" like this. You would:
+* grant permission to allow viewing of content
+Specifically instead of requesting to follow protected content (e.g. Twitter, Instagram).
+In the example of Dopplr, that protected content was your upcoming travel plans. And there was no "request to follow".
+
+
+... continue brainstorming here, including what a step-by-step interaction could look like ...
+
+
 === Plain text authoring ===
 A key challenge for person-tagging is how to easily enter person-tags in a simple text-only UI (e.g. [[SMS]], [[email]], HTML textarea etc.)
 
