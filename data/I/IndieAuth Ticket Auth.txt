@@ -67,7 +67,7 @@ How to get it to the reader or the webmention endpoint verifier is up to those i
 Advantages:
 * The thing that gets tokens only needs one new public endpoint, the endpoint that receives tokens
 ** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
-* Issuing tokens is compltely voluntary, and does not have to be prompted by an action by the eventual receiver of the token
+* Issuing tokens is completely voluntary, and does not have to be prompted by an action by the eventual receiver of the token
 
 == Token Issuing ==
 How a website decides to issue tokens does not need to be defined by this spec.
@@ -79,3 +79,9 @@ How a website decides to issue tokens does not need to be defined by this spec.
 == Open questions ==
 
 Would a token grant access to anything more specific than the provided resource, or would it be only for that specific resource? (e.g. should a token for <code>https://example.com/alice/</code> also work on <code>https://example.com/alice/feed</code>)
+* Giving meaning to the URLs like this is convenient but may be misleading or break security boundaries in unexpected ways.
+* An alternative would be to include another parameter, such as the previously discussed "realm", or somehow using scopes for this.
+* TODO: look at the OAuth Resource Indicator spec to see if they have solved it some way
+
+Any provision for providing an expiry time as part of the granted ticket?
+* What would the use case be? Just like OAuth authorization codes, these are extremely short lived and there is no recourse if they expire other than starting over
