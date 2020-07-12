@@ -1,8 +1,8 @@
 https://indieweb.org/User%3AMartymcgui.re/IndieAuth-Endpoint-Testing
 
-== Goal ==
+== Goals ==
 
-a test suite to verify the implementation of IndieAuth authorization endpoints. And token endpoints.
+a test suite to verify the implementation of IndieAuth authorization endpoints. And token endpoints. maybe at indieauth.rocks?
 
 === Guidance ===
 
@@ -112,6 +112,41 @@ tbd
 
 == Resources ==
 
-- https://indieauth.spec.indieweb.org/
-- https://github.com/aaronpk/indieauth.rocks (placeholder project. file issues here.)
-- webmention.rocks is a good template for some tests without state or login! https://github.com/aaronpk/webmention.rocks
+* https://indieauth.spec.indieweb.org/
+* https://github.com/aaronpk/indieauth.rocks (placeholder project. file issues here.)
+* webmention.rocks is a good template for some tests without state or login! https://github.com/aaronpk/webmention.rocks
+
+== Brainstorming ==
+
+=== Authorization Endpoint Testing ===
+
+Some things can be tested with a single GET or POST from the server:
+
+* 400 fail on missing auth requests params (client_id, redirect_uri, state)
+* 400 fail on missing code verification params (code, client_id, redirect_uri)
+* fail (what code?) on unrecognized code (just make up a code, client_id, redirect_uri)
+
+Some things will require human intervention
+
+* can't automate the actual authentication step at the auth endpoint
+* can't automate testing what the authorization screen displays
+* can't automate accepting or rejecting
+
+Can automate verifying that auth endpoint fetches client_id URL
+
+* e.g. <code>indieauth.rocks/indieauth-client/TEST-IDENTIFIER</code>
+** things that we need to know:
+*** the auth endpoint under test
+*** what redirect_uri info to include and where (HTTP header vs HTML head)
+*** what h-app info to include (if any)
+** if we don't want to save state, we could encode these things into the URL itself as part of the TEST-IDENTIFIER or as other query components?
+
+Can automate verifying that auth endpoint redirects user back with proper code stuff
+
+* e.g. <code>redirect_uri</code> redirects back to <code>indieauth.rocks/indieauth-client/redirect/TEST-IDENTIFIER</code>
+** can check for standard oauth2.0 <code>access_denied</code>, etc.
+** to verify that an auth endpoint will allow a redirect_uri to a different domain than indieauth.rocks - we'd also need this to run on a second domain! or subdomain. like other-domain.indieauth.rocks.
+** again, test identifier could encode the values we are expecting
+** could also store useful things in browser cookies, since full-path testing will require a human-with-a-browser-in-the-loop. e.g. <code>state</code>
+** this is also the point where we could test code verification:
+*** send the wrong client_id or redirect_uri
