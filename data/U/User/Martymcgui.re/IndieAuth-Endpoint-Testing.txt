@@ -1,0 +1,117 @@
+https://indieweb.org/User%3AMartymcgui.re/IndieAuth-Endpoint-Testing
+
+== Goal ==
+
+a test suite to verify the implementation of IndieAuth authorization endpoints. And token endpoints.
+
+=== Guidance ===
+
+Don't have any state. or logins. or ways a test could be used to attack ppls sites.
+
+== Spec details to test ==
+
+=== Authorization Endpoint ===
+
+Definition: https://indieauth.spec.indieweb.org/#x2-1-1-authorization-endpoint
+
+<blockquote>An IndieAuth Authorization Endpoint is responsible for obtaining authentication or authorization consent from the end user and generating and verifying authorization codes.</blockquote>
+
+==== Authentication Flow ====
+
+===== Auth Request =====
+
+Check for query components. 400 if any are missing
+
+* client_id
+* redirect_uri
+* state
+
+Auth Endpoint SHOULD resolve client_id as a URL and fetch it to look for allowed redirect_uri values. Test cases:
+
+* client_id and redirect_uri are on the same domain (technically fetching the client info is optional in this case?
+* client_id and redirect_uri on are different domains (auth endpoint must fetch the canonicalized URL for client_id and look for allowlisted redirect_uri values):
+** Link rel=redirect_uri HTTP header
+** <code>&lt;link rel="redirect_uri" ...&gt;<code> in HTML head.
+** sub-cases:
+*** redirect_uri is in the discovered list - succeed and continue to authentication
+*** redirect_uri is not in the discovered list - fail (400? or other?)
+
+===== URL Canonicalization =====
+
+https://indieauth.spec.indieweb.org/#url-canonicalization
+
+Probably not many testable cases for an authorization endpoint other than resolving client_id.
+
+===== Authorization Screen =====
+
+List of things to show about a client:
+
+https://indieauth.spec.indieweb.org/#client-information-discovery
+
+(hard to test if this actually shows since every auth endpoint will have a different authentication mechanism)!
+
+Things to show:
+
+* redirect_uri - no matter what, this should be shown!
+* client_id
+* if fetched and parsed h-app from client_id:
+** name
+** logo
+** url (what if different from client_id?)
+
+Depending on the request type (id vs code):
+
+* what the app wants
+** in the id case, it wants your me URL
+** in the code case, it wants your me URL + scopes
+
+===== Authentication Response =====
+
+If user accepts request, auth server should:
+
+* redirect to redirect_uri
+* with same <code>state</code> value it received in the authentication request
+* and a <code>code</code>
+** this code should be short lived with recommended max 10 minute lifetime. testing this will require actually waiting. 😂
+
+===== Auth Code Verification =====
+
+Client POSTs to auth endpoint with the code and gets back <code>me</code> value.
+
+Auth endpoint should 400 if any of these are missing:
+
+* code
+* client_id
+* redirect_uri
+
+auth endpoint should fail the request (not sure HTTP response code) if:
+
+* code is not recognized as one issued by the auth endpoint
+* client_id does not match the one from the initial auth request
+* redirect_uri dose not match the one from the initial auth request
+
+if everything checks out, auth endpoint should:
+
+* respond with <code>application/json</code>
+* containing an object
+* with a <code>me</code> property
+* containing the canonical user profile URL for the user who signed in
+* which must be on the same domain as the initial <code>me</code> value in the initial authentication request.
+
+==== Authorization (Token) Flow ====
+
+https://indieauth.spec.indieweb.org/#authorization
+
+tbd
+
+=== Token Endpoint ===
+
+<blockquote>An IndieAuth Token Endpoint is responsible for generating and verifying OAuth 2.0 Bearer Tokens.</blockquote>
+
+tbd
+
+== Resources ==
+
+- https://indieauth.spec.indieweb.org/
+- https://github.com/aaronpk/indieauth.rocks (placeholder project. file issues here.)
+- webmention.rocks is a good template for some tests without state or login! https://github.com/aaronpk/webmention.rocks
