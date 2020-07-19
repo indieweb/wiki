@@ -87,7 +87,9 @@ add:
 * callback=URL
 to the webmention POST request.
 
-Webmention receivers should optionally support the "callback" parameter by calling it back (doing an HTTP POST to it) upon completion of processing of the webmention, with a "status" query parameter indicating the outcome of webmention processing. See "More status codes" below for possible values for that parameter.
+Webmention receivers that support the callback URL could acknowledge that it will eventually send a POST to the callback by responding to the webmention request with either (tbd): a specific HTTP code, an HTTP header, or something in the body of the response.
+
+The Webmention receiver would then send a POST request upon completion of processing of the webmention, with a "status" query parameter indicating the outcome of webmention processing. See "More status codes" below for possible values for that parameter.
 
 Example payload sent to the callback URL:
 <pre>
@@ -95,7 +97,6 @@ source=URL&
 target=URL&
 status=200
 </pre>
-
 
 === Variable Response Body Problem ===
 To deal with the variable response body problem:
