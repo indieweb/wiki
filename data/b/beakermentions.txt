@@ -2,11 +2,11 @@ https://indieweb.org/beakermentions
 
 {{stub}}
 
-'''<dfn>beakermentions</dfn>''' is an application to read and send responses on what you're currently viewing on Beaker Browser, specially designed to be run from an attached pane.
+'''<dfn>beakermentions</dfn>''' is an application to read and send responses on what you're currently viewing on [[Beaker Browser]], specially designed to be run from an attached ''[https://docs.beakerbrowser.com/apis/beaker.panes/ pane]''.
 
 == Beakermentions Endpoint ==
 
-Beakermentions Endpoint is an endpoint implementation of the W3C Webmention recommendation for Beaker Browser users. Webmentions are a simple way to notify any URL when you mention it from another URL. This implementation utilizes Beaker Browser's hyperdrive and peersockets API. Deviations exist from the official recommendation due to the unique environment Beaker Browser provides:
+Beakermentions Endpoint is an endpoint implementation of the W3C [[Webmention]] recommendation for Beaker Browser users. Webmentions are a simple way to notify any URL when you mention it from another URL. This implementation utilizes Beaker Browser's [[hyperdrive]] and [https://docs.beakerbrowser.com/apis/beaker.peersockets/ peersockets] API. Deviations exist from the official recommendation due to the unique environment Beaker Browser provides:
 
 The source may reference the target URL of the Webmention through the file's metadata keys (like @inReplyTo, @likeOf, @rsvpTo, etc.) in addition to the file's content.
 
@@ -17,7 +17,8 @@ Communication between the users and the Beakermentions Endpoint are done through
 Mentions are not limited to HTML; any file can mention any other file using metadata key-value pairs.
 
 Do note that this is only an endpoint implementation; an endpoint only stores and provides the source URLs that mention a particular target URL. Any rendering of mentions (including which mentions to render) is done by an application itself after retrieving a target's sources.
-How This Works
+
+==How This Works==
 
 Alice writes a new file and saves it to hyper://alice/microblog/a-good-day.md.
 
@@ -36,7 +37,6 @@ After verification, Alice's Beakermentions Endpoint stores the mention in hyper:
 As an alternative to step 5, Bob may interactively send the webmention (instead of their application) by visiting Alice's Beakermention Endpoint, entering their response as the source and Alice's file as the target, and pressing send.
 
 Now, when an application opens Alice's file, they may notice the @webmention key in the metadata. They may get all the stored mentions from the Beakermentions Endpoint by reading hyper://alice-beakermentions/mentions/hyper/alice/microblog/a-good-day.md.json and display whichever mentions they want to present by processing each URL.
-
 
 == Project Links ==
 
