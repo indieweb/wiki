@@ -42,31 +42,98 @@ We use an Etherpad to take notes on the event.
 If you feel able, add yourself to the event, [https://events.indieweb.org/2020/07/micropub-pop-up-session-kGMIMOXFUdBn at Meetable], or post an [[RSVP|indie RSVP]] on your own website.
 
 
-== Questions ==
-* ...
+== Notes ==
 
 
-== Proposed Items to Discuss ==
 * forking the spec to github.com/indieweb and its living specification URL to micropub.spec.indieweb.org
-* The search modifier for stable extension, [https://github.com/indieweb/micropub-extensions/issues/5 Query for Category/Tag List] The search modifier would search for categories for an auto-complete. 
-* Modifiers for stable extension, [https://github.com/indieweb/micropub-extensions/issues/4 Query for Post List]. q=source is now stable, but the filters: query, limit, before, after, order, exists, not-exists, etc are still in need of further discussion.
+** {{t}} pointed out as {{aaronpk}} is the spec editor and wrote the text, he can relicense it with attribution.
+* The search modifier for stable extension, Query for Category/Tag List The search modifier would search for categories for an auto-complete. 
+** https://github.com/indieweb/micropub-extensions/issues/5 is the stable extension for querying category/tag
+** intended use is autocomplete. other things to autocomplete are nicknames for @-mentions
+** https://github.com/indieweb/micropub-extensions/issues/34
+** {{gwg}} will modify his code to match this, as will {{manton}} and {{barryf}}
+* Modifiers for stable extension, Query for Post List. q=source is now stable, but the filters: query, limit, before, after, order, exists, not-exists, etc are still in need of further discussion.
+** https://github.com/indieweb/micropub-extensions/issues/4
+** https://github.com/indieweb/micropub-extensions/issues/35 - Limit as a parameter for limiting all return queries. How it behaves/chooses will vary based on endpoint decisions.
+** Offset vs before/after
+** {{gwg}} willl support offset
+** {{jackyalcine}} supports before/after [chronological pagination] and not offset [sequential pagination]
+** {{manton}} supports limit and offset already
+** [[post-status]] - Show only drafts or published. 
+*** {{gwg}} will commit to supporting this
+*** {{jackyalcine}} supports this in {{Koype/Publish}} and {{Lwa}} but will not support in {{Lighthouse}}
+*** {{aaronpk}} will support this
+*** {{barryf}} will commit to support this
+*** {{manton} will support this
+** visibility - public, unlisted, private
+*** {{gwg}} will commit to support this
+*** {{jackyalcine}} will work on supporting this in {{Koype/Publish}}, {{Lighthouse}} and {{Lwa}}
+*** {{barryf}} will commit to support this
+** Any microformats properties would go in as a theoretical property query, but anything such as status or visibility would be their own query.
+*** properties[key]=value - Tabled for further discussion
+*** post-type  - querying for post types as defined by PTD. - Further discussiion needed, issue needs to be opened.
 * Draft Scope - https://github.com/indieweb/micropub-extensions/issues/24
+** Trust / Privacy
+*** This could also be a useful feature for location-based apps to ensure privacy
+*** Making sure one trusts an app before they have the ability to publish directly.
+** Also good for initial posts to make sure the UI and details are done correctly. 
+**{{chrisaldrich}} noticed some odd formatting issues with respect to his theme when posting via ThreadReaderApp initially; draft would have mitigated this
+** iA Writer did this voluntarily; they set the status as draft as default
+** {{gwg}} already implements this
+** {{aaronpk}} will be implementing this
+** {{jackyalcine}} will look into this at https://git.jacky.wtf/indieweb/koype/issues/212
+
 * Link Rel for Media Endpoint - https://github.com/indieweb/micropub-extensions/issues/15
+** {{manton}} -1
+** {{jackyalcine}} -1 `q=config` handles this well
+** Consensus is not yet a compelling reason to add this complexity
 * Standalone Pages - https://github.com/indieweb/micropub-extensions/issues/25
+** Proposal includes / in the mp-slug other h=page.
+** {{jackyalcine}} to drop `h-x-page` in favor for `h-page`
+** {{jackyalcine}} will confirm if the Elixir IndieWeb library supports PTD for pages
+** Using h=page seems to be the most straightforward approach.
+***  {{gwg}} will commit to supporting this in WordPress and will decide about whether to mark up the page with h-page later
+*** {{aaronpk}} to implement as wel
+*** {{manton}} will implement this too (dropping the x- I'm currently using)
+**** {{manton}} will also add h-page to manton.org before rolling it out to all of Micro.blog
+** How to handle page heirarchies - parent/child
+** Define h-page on MF wiki, add PTD to add page to the algorithm, define ?q=source&post-type=* as querying all types defined by post type discovery
+** Add to indieweb.org/page examples of people using pages.
+** Prior art / references:
+***  https://microformats.org/wiki/page
+***  https://indieweb.org/page
 * Add Checked Property to Syndication Target - https://github.com/indieweb/micropub-extensions/issues/23, Needs Implementations.
-* Configuration Queries
-**Query for Supported/Unsupported Properties - https://github.com/indieweb/micropub-extensions/issues/8, https://github.com/indieweb/micropub-extensions/issues/21
-** Query for Supported Queries - https://github.com/indieweb/micropub-extensions/issues/7
+** {{jacky}}, {{gwg}} and {{aaronpk}}, {{barryf}} to implement
+** {{jacky}} tracking progress at https://git.jacky.wtf/indieweb/koype/issues/213
+**  Clients would have to change behavior to offer this. Some may be caching this only once.
+**  Second idea, when querying for targets, add `post-type` to allow for customized targets based on context. Possibly add url later.  https://github.com/indieweb/micropub-extensions/issues/23#issuecomment-663887155
 * Location Checkin Information - Overloading geo URI https://github.com/indieweb/micropub-extensions/issues/32
 * Response from Media Endpoint - https://github.com/indieweb/micropub-extensions/issues/13
+** {{gwg}} and {{jackyalcine}} will implement a minimal form of this
+** {{manton}} will update response from upload to include JSON
+*** Minimum URL
+*** Optional Width + Height, Mime-type, children for alternative size files - Mirror EXIF vocabulary?
 * Query for Media from Endpoint - https://github.com/indieweb/micropub-extensions/issues/14
+** q=last is superseded by q=source
+** {{aaronpk}} will add q=source to his website and drop from Quill in favor of q=source&limit=1
+** {{manton}} already supports this, going to remove properties except url
+** Same as response, except item property with list of response styles from above
 * Query for Location/Venue - https://github.com/indieweb/micropub-extensions/issues/6
+** h-adr geo, h-card venue
+** Documenting other systems that have this feature...screenshots...data used
+*** Microformats displayed for location
+*** Document tagging posts plus checkin as user cases for this
 * Deleting uploaded media - https://github.com/indieweb/micropub-extensions/issues/30
+** Should require delete + media scope
+** action=delete to mirror Micropub endpoint syntax
+** {{manton} will support this
 
-== To Do List ==
-* <s>create events.indieweb.org event</s>
-* <s>instructions for rsvp: events, this page, or directly on the etherpad</s>
-* Add agenda.
+* Configuration Queries - Tabled and not discussed
+** Query for Supported/Unsupported Properties - https://github.com/indieweb/micropub-extensions/issues/8, https://github.com/indieweb/micropub-extensions/issues/21
+** Query for Supported Queries - https://github.com/indieweb/micropub-extensions/issues/7
+** Query for supported properties, for a supported post-type https://github.com/indieweb/micropub-extensions/issues/33
+
+
 
 == See Also ==
 {{#categorytree:IWC Pop-ups 2020 Organizing|mode=pages}}

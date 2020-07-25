@@ -316,7 +316,6 @@ Micropub supports making a GET request to a Micropub endpoint with a <code>q=</c
 The extension of q=source to allow a list of posts being returned if there is no URL parameter is now stable. However...the discussion of what additional query modifiers might be available continues as experimental.
 
 This includes the following possible options implemented by some.
-* limit - limits the number of returned values
 * offset
 * after, before - for a cursor based pagination model(see [[Microsub-spec]] ). Problem being how does the client know what arbitrary options to use here, unless in this implementation it is set to date string or such.
 ** As far as the client is concerned, the "before" and "after" values are arbitrary strings. This allows the server to internally use whatever specific implementation is most appropriate for its backend technology. (Often this will be either a timestamp or a unique ID identifying the first and last items in the returned list.)
@@ -326,14 +325,38 @@ This includes the following possible options implemented by some.
 * not-exists[] = Inverse of exists
 * property-property-name (Example: property-rsvp=yes) - Allows filtering by a specific property value
 
-==== Search Parameter in Query for Category/Tag List ====
+==== Limit Parameter in any Query that Returns a List of Items ====
 ; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/5
+: https://github.com/indieweb/micropub-extensions/issues/35
 
-This is an extension to extend the category/tag list query to allow search for categories that would match an auto-complete.
+This is an extension to extend any query that returns a list of items to be limited to a specific number of returns. The logic behind how to fulfill to be handled by the server. 
+
+For example...
+
+The follow example would be returned as part of the <code>?q=category&limit=1</code> query.
+<pre>
+{
+  "categories": [
+    "indieweb",
+  ]
+}
+</pre>
+
+===== Implementations =====
+
+* Clients
+* Servers
 
 
-The follow example would be returned as part of the <code>?q=category&search=indie</code> query.
+==== Filter Parameter in any Query that Returns a List of Items ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/34
+
+This is an extension to extend any query to allow autocomplete matching using a string. Prior discussion suggested 'search', but search was deemed to have other meanings.
+
+For example...
+
+The follow example would be returned as part of the <code>?q=category&filter=indie</code> query.
 <pre>
 {
   "categories": [
@@ -347,15 +370,7 @@ The follow example would be returned as part of the <code>?q=category&search=ind
 ===== Implementations =====
 
 * Clients
-** Indigenous for Android
 * Servers
-** [[Micropub for WordPress]]
-** [[IndieWeb for Drupal]]
-
-
-===== Brainstorming =====
-[[category]] - [https://chat.indieweb.org/2017-01-18#t1484741717234000 suggestion] to get all existing tags/categories in the client. Expectation is client would cache and do autocomplete
-
 
 ==== Query for Supported or Unsupported Properties/Queries ====
 ; '''Issues and discussion:''' 
