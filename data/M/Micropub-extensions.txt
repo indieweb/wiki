@@ -414,14 +414,21 @@ These are two extensions for returning queries that a Micropub server will respo
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/23
 
-Proposes an optional checked property to the syndicate-to query that, if present/true, would instruct clients to pre-check the syndication target.
+Proposes an optional checked property to the syndicate-to query that, if present/true, would instruct clients to pre-check the syndication target. 
+
+It further proposes, to allow for customized responses, to allow post-type to be passed to the syndicate-to query to return a list of options appropriate to that specific type of post.
 
 ===== Implementations =====
+
+Implements the checked property
 * Clients
 ** [[Indigenous_for_Android]]
 * Servers
 ** [[IndieWeb for Drupal]]
 
+Implements the post-type query
+* Clients
+* Servers
 
 ==== Query for Location/Venue ====
 ; '''Issues and discussion:''' 
@@ -530,6 +537,13 @@ This proposal deals with how to create standalone pages, as opposed to posts.
 
 Options include using a '/' in the mp-slug parameter, or overloading the h property with h=page. 
 
+Consensus after the Microformats Pop-Up 2020 session was that h=page was the most clear solution to this issue.
+
+==== Implementations ====
+
+* Clients
+* Servers
+
 ==== Dealing with Expiring Tokens ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/17
@@ -543,6 +557,8 @@ Currently IndieAuth and Micropub don't talk about how to deal with expired token
 There are instances where the configuration of a Micropub endpoint can change. Currently both the Media Endpont url and the syndication values are in the Micropub's config query. Because the Media Endpoint is an external service it makes sense that at times this url may change, and the user shouldn't have to log out and back in to update that value. (more details for brainstorming available in GitHub issue)
 
 ==== Location checkin information ====
+
+https://github.com/indieweb/micropub-extensions/issues/32
 
 Indigenous for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI. The payload property is 'geo'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post my geocache logs, see https://indieweb.org/geocaching
 
@@ -613,21 +629,6 @@ This is a proposed extension to the [https://www.w3.org/TR/micropub/#media-endpo
 
 
 
-
-==== Last Uploaded Query ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/10
-
-This is a proposed extension to the [https://www.w3.org/TR/micropub/#media-endpoint Media Endpoint] section of the Micropub spec, where the Media Endpoint will return the last uploaded media element.
-
-===== Implementations =====
-* Clients
-** [[Quill]]
-** ...
-* Servers
-** [[Micropub for WordPress]]
-** [[IndieWeb for Drupal]]
-** [[IndieKit]]
 
 ==== Link Rel for Media Endpoint ====
 ; '''Issues and discussion:''' 
