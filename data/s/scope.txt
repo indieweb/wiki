@@ -13,9 +13,9 @@ For example, you can choose to allow one application to read your basic profile 
 Listed below are the currently supported Micropub scopes across most clients and servers.
 
 * '''<code>create</code>''' - allows the client to create posts on behalf of the user
+* '''<code>draft</code>''' - allows the client to create draft posts only on behalf of the user (requested in lieu of create scope
 * '''<code>update</code>''' - allows the client to edit existing posts
 * '''<code>delete</code>''' - allows the client to delete posts
-* '''<code>undelete</code>''' - allows the client to undelete a deleted post, if possible
 * '''<code>media</code>''' - allows the client to upload files to the [[media endpoint]]
 
 These are distinct permissions, so e.g. granting a client only "create" scope means it will not be able to update or delete existing posts.
@@ -37,7 +37,7 @@ Use the sections below to document additional experimental scopes that software 
 [[File:aaronpk auth form.png|thumb|right]]
 * Known supports _____
 * The Wordpress Micropub plugin supports _____
-* {{aaronpk}} requires the "create" scope in order for a client to create new posts, "update" for updates, and "delete" for deletes. "media" for file uploads.
+* {{aaronpk}} requires the "create" scope in order for a client to create new posts, "update" for updates, and "delete" for deletes. "media" for file uploads. if the client is issued a token that contains the "draft" scope, that client can ''only'' create draft posts.
 * {{voxpelli}}, using his [https://github.com/voxpelli/webpage-micropub-to-github micropub-to-github] endpoint, requires the "create" or "post" scope for a client to give access, treating "create" as the preferred one
 * {{sebsel}} uses scopes "create", "update", "delete", "media" (for photo upload) and "media-plus" (for uploads without limitations on file extension)
 
@@ -56,7 +56,7 @@ Some sites may choose to return this to all. For sites that choose not to, there
 
 * '''<code>profile</code>''' - provide basic profile data. Sites can optionally require this for all profile data, or provide some profile data in all returns.
 * '''<code>email</code>''' - request email address
-
+* '''<code>undelete</code>''' - allows the client to undelete a deleted post, if possible
 
 == Scopes used by Silos ==
 === [[Github]] ===
