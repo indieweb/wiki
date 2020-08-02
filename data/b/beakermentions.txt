@@ -6,15 +6,15 @@ https://indieweb.org/beakermentions
 
 == Beakermentions Endpoint ==
 
-Beakermentions Endpoint is an endpoint implementation of the W3C [[Webmention]] recommendation for Beaker Browser users. Webmentions are a simple way to notify any URL when you mention it from another URL. This implementation utilizes Beaker Browser's [[hyperdrive]] and [https://docs.beakerbrowser.com/apis/beaker.peersockets/ peersockets] API. Deviations exist from the official recommendation due to the unique environment Beaker Browser provides:
+Beakermentions Endpoint is an endpoint implementation of the W3C [[Webmention]] recommendation for Beaker Browser users. This implementation utilizes Beaker Browser's [[hyperdrive]] and [https://docs.beakerbrowser.com/apis/beaker.peersockets/ peersockets] API. Deviations exist from the official recommendation due to the unique environment Beaker Browser provides:
 
-The source may reference the target URL of the Webmention through the file's metadata keys (like @inReplyTo, @likeOf, @rsvpTo, etc.) in addition to the file's content.
+* The source may reference the target URL of the Webmention through the file's metadata keys (like <code>@inReplyTo</code>, <code>@likeOf</code>, <code>@rsvpTo</code>, etc.) in addition to the file's content.
 
-The sender may look for a metadata key @webmention in the target's URL to discover the target's Beakermentions Endpoint in addition to the sender looking for an HTTP link header, a <link> element, or an <a> element with a @rel value of "webmention."
+* The sender may look for a metadata key @webmention in the target's URL to discover the target's Beakermentions Endpoint in addition to the sender looking for an HTTP link header, a <link> element, or an <a> element with a @rel value of "webmention."
 
-Communication between the users and the Beakermentions Endpoint are done through Location search strings and beaker.peersockets instead of HTTP POST.
+Communication between the users and the Beakermentions Endpoint are done through <code>Location</code> search strings and <code>beaker.peersockets</code> instead of a conventional HTTP POST request.
 
-Mentions are not limited to HTML; any file can mention any other file using metadata key-value pairs.
+Mentions are not limited to HTML &mdash; any file can mention any other file using metadata key-value pairs.
 
 Do note that this is only an endpoint implementation; an endpoint only stores and provides the source URLs that mention a particular target URL. Any rendering of mentions (including which mentions to render) is done by an application itself after retrieving a target's sources.
 
