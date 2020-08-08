@@ -109,7 +109,11 @@ https://github.com/indieweb/indieauth/milestone/1
 ** A workaround is to have your web server translate the Authorization header into another name before it hits your backend, no client changes needed
 ** Some servers already provide the Authorization header as different environment variables by the time it hits your code, e.g. "REDIRECT_HTTP_AUTHORIZATION"
 ** Conclusion: there is nothing we can add at the spec level to guarantee a more reliable experience since any combination of these options are still highly dependent on individual hosting environments
-* Add option prompt=login inspired by openid connect?
+* Add option prompt=login inspired by OpenID connect?
+** Specifically this provides a mechanism for the client to request that the user authenticates rather than is immediately redirected
+** There is a difference between the client requesting this and the server enforcing it. The server can already enforce this for risky scopes or requests without any spec change needed.
+** Most clients probably shouldn't be requesting this, because it is specifically only for when clients need additional assurance of the user having recently authenticated. It will lead to a worse UX since users will need to authenticate again.
+** Need to do some research on this, and revisit after some of the other changes are made
 
 === Pushed to next time ===
 ** Adopt Pushed Authorization Requests https://github.com/indieweb/indieauth/issues/40
