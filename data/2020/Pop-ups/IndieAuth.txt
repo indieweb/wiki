@@ -87,7 +87,7 @@ https://github.com/indieweb/indieauth/milestone/1
 ** And also drop response_type=id and make it match OAuth using response_type=code
 ** Micro.blog already ignores response_type
 ** Add a compatibility note about some old clients including response_type=id and how to handle that
-
+** Authorization servers do want to be able to show a different UI to users depending on whether an access token will be issued (e.g. authorization vs authentication), but that can still be done by looking at the scopes requested
 
 === New Features ===
 * Adopt PKCE  https://github.com/indieweb/indieauth/issues/39
@@ -104,7 +104,8 @@ https://github.com/indieweb/indieauth/milestone/1
 ** Logging systems often block certain known headers from being logged e.g. the Authorization header, using an alternative name would prevent avoiding writing it to logs
 ** A workaround is to have your web server translate the Authorization header into another name before it hits your backend, no client changes needed
 ** Some servers already provide the Authorization header as different environment variables by the time it hits your code, e.g. "REDIRECT_HTTP_AUTHORIZATION"
-* Add option prompt=login inspired by openid connect? 
+** Conclusion: there is nothing we can add at the spec level to guarantee a more reliable experience since any combination of these options are still highly dependent on individual hosting environments
+* Add option prompt=login inspired by openid connect?
 
 === Pushed to next time ===
 ** Adopt Pushed Authorization Requests https://github.com/indieweb/indieauth/issues/40
