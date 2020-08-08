@@ -17,15 +17,12 @@ If possible, attendees should familiarize themselves with existing [https://gith
 
 __TOC__
 
-=== Organizers ===
+== Organizers ==
 * {{aaronpk}} - Facilitator
 * {{gwg}} organizer
 * {{addyourself}} (we're always happy to have additional organizers and facilitators to help out)
 
-=== Volunteers ===
-* {{addyourself}} (we're always happy to have additional help!)
-
-=== Interest ===
+== Interest ==
 
 Add your +1 for interest in this topic:
 * {{gwg}}
@@ -37,9 +34,76 @@ Add your +1 for interest in this topic:
 * {{t}}
 * {{manton}}
 * {{martijnvdven}} (also [https://licit.li/5f2019d936827 RSVP’d])
-* {{addyourself}}
 
-=== Etherpad ===
+== Participants ==
+* {{aaronpk}}
+* {{martymcguire}}
+* {{rose}}
+* {{GWG}}
+* Pelle
+* [[User:Omz13.com|David Somers]]
+* {{martijnvdven}}
+* Tony Burns {{craftyphotons}}
+* {{tbbrown}}
+* {{manton}}
+* {{chrisaldrich}}
+* {{angleo}}
+* ... add yourself here!
 
-We use an Etherpad to take notes on the event.
-* [https://etherpad.indieweb.org/IndieAuth-Popup Etherpad Link]
+== Notes ==
+https://github.com/indieweb/indieauth/milestone/1
+
+=== Include user profile information in response ===
+* Include user profile information in response https://github.com/indieweb/indieauth/issues/41
+** Earlier discussion also important: https://github.com/indieweb/indieauth/issues/31
+** Instead of having to parse for an h-card which can be finicky/flakey depending on setup
+** The profile data is not guaranteed to be verified in any way. It is what the user chooses to provide to the application for display purpos3es only. Definition of profile data and its authoritative nature has to be added to the spec.
+*** For example, if email is included in the profile information, it *should not* be used to associate this users with a user profile in another system.
+** Existing producing implementations: WordPress, Drupal, p3k, micro.blog, imoxia.com, tonyburns.net via [[Singulus]]
+** Plan to add: {{rose}}, {{jackyalcine}} via [[Koype]], [[Koype/Publish]], [[Lighthouse]] and [[Lwa]], {{martijnvdven}} in [[Sink]]
+** Existing consuming applications: Quill, Publ, Indigenous (https://github.com/indieweb/indieauth/issues/31#issuecomment-589521727)
+** First URL is the identifier (e.g. on micro.blog, it's the URL the user entered when logging in with indieAuth)
+** The auth provider could offer the abiility to change what data is provided on the fly (e.g. change your name to "Jacky the Conquerer") - as done by Apple with Sign in with Apple.
+** Scopes: profile, email, 
+*** What would a profile scope return, as there is basic profile info returned by default? Or would some endpoints want it for everything?
+** Multi-user websites may return the same "me" URL (e.g. microformats.org) but depending on the admin who's logged in the profile info would be different
+** The "profile" section is specifically providing details about the user authorizing the request, and may not be the same as the "me" URL
+
+=== Allow the 'me' parameter to authorization endpoints to be omitted ===
+* Allow the 'me' parameter to authorization endpoints to be omitted? https://github.com/indieweb/indieauth/issues/19
+** General consensus to drop, and leave standalone implementations up to people if they want to do that
+** It is possible to do a standalone implementation by either unique endpoints per user (e.g. how Aperture provides unique Microsub endpoints), or encoding data in the authorization code itself
+
+=== Drop specification for communication between authorization and token endpoints ===
+* Drop specification for communication between authorization and token endpoints https://github.com/indieweb/indieauth/issues/44
+** +1 from {{gwg}} for moving the definition of  independent endpoints on a wiki page somewhere, but not citing it in the IndieAuth spec as an extension.
+** An extension would need to define the stuff removed in #19 in order to do this
+** {{aaronpk}} has no interest in creating this extension and plans on discontinuing tokens.indieauth.com anyway
+
+=== Consolidate authentication and authorization sections ===
+* Consolidate authentication/authorization sections because they are actually the same https://github.com/indieweb/indieauth/issues/42 
+** And also drop response_type=id and make it match OAuth using response_type=code
+** Micro.blog already ignores response_type
+** Add a compatibility note about some old clients including response_type=id and how to handle that
+
+
+=== New Features ===
+* Adopt PKCE  https://github.com/indieweb/indieauth/issues/39
+** PKCE RFC: https://tools.ietf.org/html/rfc7636
+** https://indieweb.org/PKCE
+** Clients and servers can start adding this today because of the way it's written as being backwards compatible
+** Require S256 algorithm
+** Depends on removing the token-auth endpoint communication (or extending it to include PKCE)
+** Depends on consolidating the authn/authz sections into one section
+** For now, IndieAuth servers will need to support non-PKCE clients. If the auth code request contains a code_challenge then the token request MUST include code_verifier. If the auth code request does not contain code_challenge, the token request MUST NOT include a code_verifier.
+* Putting the Bearer in the X-Auth-Token Header {{ omz13.com }}
+** Some HTTP servers and proxies strip the Authorization header
+** Some HTTP servers only pass through an explicitly allowed list of headers
+** Logging systems often block certain known headers from being logged e.g. the Authorization header, using an alternative name would prevent avoiding writing it to logs
+** A workaround is to have your web server translate the Authorization header into another name before it hits your backend, no client changes needed
+** Some servers already provide the Authorization header as different environment variables by the time it hits your code, e.g. "REDIRECT_HTTP_AUTHORIZATION"
+* Add option prompt=login inspired by openid connect? 
+
+=== Pushed to next time ===
+** Adopt Pushed Authorization Requests https://github.com/indieweb/indieauth/issues/40
+** Consider using OAuth Server Metadata https://github.com/indieweb/indieauth/issues/43
