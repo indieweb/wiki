@@ -371,7 +371,7 @@ This is an extension to extend any query to allow autocomplete matching using a 
 
 For example...
 
-The follow example would be returned as part of the <code>?q=category&filter=indie</code> query.
+The following example would be returned as part of the <code>?q=category&filter=indie</code> query.
 <pre>
 {
   "categories": [
@@ -420,7 +420,7 @@ For the source query:
 : Supported Properties - https://github.com/indieweb/micropub-extensions/issues/8
 : Unsupported Properties - https://github.com/indieweb/micropub-extensions/issues/21
 
-These are two extensions for returning queries that a Micropub server will respond to and properties that a server knows about, so that a client like [[Quill]] or [[Indigenous]] could present only options appropriate to that server. It is similar to the idea about querying for supported vocabulary, except that proposal only covers properties that are part of post-type discovery. Like with the other proposal, the absence of this instruction would show everything.
+These are two extensions for returning queries that a Micropub server will respond to and properties that a server knows about, so that a client like [[Quill]] or [[Indigenous]] could present only options appropriate to that server. It is similar to the idea about querying for supported vocabulary, except that proposal only covers properties that are part of post-type discovery. Like with the stable supported vocabulary extension, the absence of this instruction would show everything.
 
 
 ===== Implementations =====
@@ -430,14 +430,13 @@ These are two extensions for returning queries that a Micropub server will respo
 ** [[Micropub for WordPress]] - returns a simple list of query parameters supported.
 ** [[IndieWeb for Drupal]]
 
-
 ==== Add Checked Property to Syndication Target Query ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/23
 
 Proposes an optional checked property to the syndicate-to query that, if present/true, would instruct clients to pre-check the syndication target. 
 
-It further proposes, to allow for customized responses, to allow post-type to be passed to the syndicate-to query to return a list of options appropriate to that specific type of post.
+It further proposes, to allow for customized responses, to allow post-type to be passed to the syndicate-to query to return a list of options appropriate to that specific type of post. This is referenced more generally in a sepatate [https://github.com/indieweb/micropub-extensions/issues/42 issue].
 
 ===== Implementations =====
 
@@ -461,7 +460,7 @@ Implements the post-type query
 
 The following example would be returned as part of the <code>?q=geo&lat=x&lon=y</code> query. Return would contain two properties, 'venues' and 'geo'. Geo would be a suggestion for the queried location perhaps returned using reverse geolocation, and venues would be one or more venues. The lack of either property assumes nothing could be found about the location.
 
-All returns would follow the common properties of an h-adr object with only label and latitude/longitude being mandatory. There is one optional extra parameter, following the proposed [https://indieweb.org/Micropub-extensions#Location_Visibility Location Visibility] property which would allow the query to suggest whether this location should be publicly displayed, allowing for private venues. 
+All geo returns would follow the common properties of an h-adr object with only label and latitude/longitude being mandatory, All places returns would follow the properties of an h-card object. There is one optional extra parameter, following the proposed [https://indieweb.org/Micropub-extensions#Location_Visibility Location Visibility] property which would allow the query to suggest whether this location should be publicly displayed, allowing for private venues. 
 <pre>
 {
   "geo": [
@@ -472,13 +471,13 @@ All returns would follow the common properties of an h-adr object with only labe
   ],
   "places": [
    { 
-     "label" : "Main Street Apothecary",
+     "name" : "Main Street Apothecary",
      "latitude": "18.1123",
      "longitude": "-72.1931",
      "url": "https://example.com/venues/apothecary",
    },
    { 
-     "label" : "Main Street Market",
+     "name" : "Main Street Market",
      "latitude": "18.1123",
      "longitude": "-72.1931",
      "url": "https://example.com/venues/market",
