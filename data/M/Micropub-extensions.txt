@@ -26,18 +26,14 @@ There are not currently any Official Extensions
 == Stable Extensions ==
 
 ==== Slug ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/projects/1
 
-Many posting UIs provide an option for the user to choose a slug for the post that will be created. 
+Many posting UIs provide an option for the user to choose a slug for the post that will be created. This extension allows a Micropub client to suggest a slug to the Micropub endpoint.
 
 [[File:wordpress-customize-slug.png]]
 
-This proposal is for a new mp- command for the client to suggest a slug to the Micropub endpoint.
- 
 * <code>mp-slug=</code>
 
-The server may or may not decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
+The server MAY or MAY NOT decide to respect the requested slug, based on whether it would cause conflicts with other URLs on the site. For example, some URL structures are <code>{year}/{slug}</code>, so the server may decide to modify the slug to avoid conflicting with an existing one.
 
 ===== Implementations =====
 * Clients
@@ -108,11 +104,11 @@ If a Micropub client checks the Micropub Configuration query for a <code>post-ty
 ** [[Postr]]
 
 === Post Status ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/19 - Discussion to remain open for additional statuses.
 
-* <code>post-status=published</code> (or no post-status set) - The post is published, or when the published date is in the future, the post is scheduled.
-* <code>post-status=draft</code> - The post is a draft, and should not be shown in lists. (Of course it's up to the implementation whether it wants to use a capability URL for draft posts or actually restrict it to logged-in users.)
+* <code>post-status=published</code> (or no post-status set) - The post is published, or when the published date is in the future, the post is scheduled. In most implementations, not passing a post-status is assumed to be published.
+* <code>post-status=draft</code> - The post is a draft, and should not be shown in lists.
+** It is up to the implementation whether it wishes to use a capability URL for draft posts or actually restrict it to logged-in users.
+** There is a separate proposal for a [https://github.com/indieweb/micropub-extensions/issues/24 draft scope] as an alternative to create that would only allow draft posts to be created.
 
 ===== Implementations =====
 * Clients
