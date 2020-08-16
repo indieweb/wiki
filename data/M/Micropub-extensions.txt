@@ -494,19 +494,18 @@ All geo returns would follow the common properties of an h-adr object with only 
 ** [[IndieWeb for Drupal]] - uses the geo property, can return places
 
 ==== Query for contacts ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/39
 
 For apps to be able to autocomplete by known contacts we need some way to query these values. This would be very useful for [[person-tag]] 
 
-This is supported by the Drupal IndieWeb module and Indigenous for Android.
-
 * Discovery of the endpoint (as in, it exists), happens through the query for supported queries, see https://github.com/indieweb/micropub-extensions/issues/7
-* <code>q=contact&search=aaron</code> would do a search for any field which matches .<code>*aaron.*</code> thereby allowing the client application to [[autosuggest]] and insert links.
+* <code>q=contact&filter=aaron</code> would do a search for any field which matches .<code>*aaron.*</code> thereby allowing the client application to [[autosuggest]] and insert links.
 * <code>q=contact</code> would return the complete list, which should only be so that clients (e.g. [[Indigenous]]) can cache all contacts locally.
-* The response in JSON is a list of [[h-card]]s.
+
+* The response in JSON is a list of [[h-card]]s using the h-card vocabulary.
 ===== Example response =====
 '''GET ?q=contact'''
-
-Note: the _internal_url can be used for updating the contacts via micropub.
 
 <pre>
   "contacts": [
@@ -515,24 +514,24 @@ Note: the _internal_url can be used for updating the contacts via micropub.
       "photo": "http://known.kevinmarks.com/file/9255656669173b7867ab839ee6556f9e",
       "url": "http://known.kevinmarks.com/profile/kevinmarks",
       "nickname": "kevinmarks",
-      "_internal_url": "https://example.com/contact/1",
     },
     {
       "name": "Kristof De Jaeger",
       "photo": "https://realize.be/vue/images/swentel-200.png",
       "url": "https://realize.be",
       "nickname": "swentel",
-      "_internal_url": "https://example.com/contact/2",
     },
   ]
 </pre>
 
+Note: The Indigenous for Android/IndieWeb for Drupal implementation add a property to the h-card called _internal_url which can be used for updating the contacts via micropub. This is included as a note as there is wider consensus on the h-card vocabulary.
+
 ===== Implementations =====
 
 * Clients
-** [[Indigenous for Android]] - see https://realize.be/notes/1970 - it fetches the full list, filtering happens in the client. Create, update and delete are also possible using micropub so you can manage your contacts.
+** [[Indigenous for Android]] - see https://realize.be/notes/1970 - it fetches the full list, filtering happens in the client. Create, update and delete are also possible using micropub so you can manage your contacts using the _internal_url property. Supports using `search` as opposed to filter.
 * Servers
-** [[IndieWeb for Drupal]]
+** [[IndieWeb for Drupal]] - Supports using `search` as opposed to filter.
 ** {{aaronpk}}'s Micropub endpoint supports querying and filtering contacts, intended to be used for typeahead nickname suggestions in micropub clients
 
 ==== Filter Parameters in Query for Post List ====
@@ -555,7 +554,6 @@ This includes the following possible options implemented by some.
 ==== Ideas for other types of queries ====
 * [[mp-config]]
 * extended markup formats – right now it is relatively dependent on the server implementation how text content is treated (1:1, basic processing like linking URLs, Markdown, ...). A query could expose information about this (and maybe even be part of a way to choose for the user)
-* media endpoint history – query recent uploads to the media endpoint, e.g. the last X photos uploaded from a phone
 
 ==== Questions ====
 
