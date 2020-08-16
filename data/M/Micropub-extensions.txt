@@ -155,14 +155,14 @@ This extension does not address how a user authenticates for a private post, and
 ** [[Postr]]
 
 === Query for Post List ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/4
 
-This is an extension to the q=source query. If no URL is provided, it returns a list of posts. The discussion of what ''additional query modifiers''  continues as experimental, though. There's also no expectation for a full Microformats2 JSON representation to be returned (though doing so will make the editing of content easier for Micropub clients). Some properties that have appeared for filtering are:
+This is a primarily extension to the [https://micropub.spec.indieweb.org/#source-content q=source] query.
 
-* <code>post-type</code>: As determined by [[ptd|post type discovery]]
-* <code>post-status</code>: As determined by [[post status]]
-* <code>limit</code>: The maximum numbers of items to return
+If no URL is provided, a query SHOULD return a list. Specifically for q=source, this is a list of posts wrapped in an `items` property.
+
+Being as many possible query extensions will return lists, the discussion of what ''additional query modifiers''  continues as experimental and ideally modifiers will be scoped to any query when appropriate.
+
+Servers, consistent with the spec use of q=source, SHOULD return a full Microformats2 JSON representation, but this is not a requirement. Proposed properties for filtering appear in the proposal section.
 
 Another advantage of this extension is that your Micropub server can solely be  responsible for storing and listing posts as Microformats. Rendering posts can be done elsewhere. An example response follows:
 
@@ -210,6 +210,10 @@ GET ?q=source
   }
 }
 </pre>
+
+; '''Original discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/4
+
 
 ===== Implementations =====
 * Clients
