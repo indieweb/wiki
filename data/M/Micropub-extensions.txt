@@ -233,7 +233,7 @@ GET ?q=source
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/5
 
-This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This usage is stable.
+This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This usage is stable, though there are proposed modifiers to limit returns.
 
 The following example would be returned as part of the <code>?q=category</code> query.
 <pre>
@@ -317,31 +317,15 @@ Micropub supports making a GET request to a Micropub endpoint with a <code>q=</c
 
 If a query parameter acts as a filter on a query, such as 'limit', 'offset', etc...if feasible this should be proposed as vocabulary for all queries, as opposed to just a specific one.
 
-==== Filter Parameters in Query for Post List ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/4
-
-The extension of q=source to allow a list of posts being returned if there is no URL parameter is now stable. However...the discussion of what additional query modifiers might be available continues as experimental.
-
-This includes the following possible options implemented by some.
-* offset
-* after, before - for a cursor based pagination model(see [[Microsub-spec]] ). Problem being how does the client know what arbitrary options to use here, unless in this implementation it is set to date string or such.
-** As far as the client is concerned, the "before" and "after" values are arbitrary strings. This allows the server to internally use whatever specific implementation is most appropriate for its backend technology. (Often this will be either a timestamp or a unique ID identifying the first and last items in the returned list.)
-* post-type - Filter by a post type from the Post Type Discovery spec
-* order - Proposed a reverse order for the list. Other common options for this might be ascending/descending
-* exists[] - Matches one or more property names
-* not-exists[] = Inverse of exists
-* property-property-name (Example: property-rsvp=yes) - Allows filtering by a specific property value
-
 ==== Limit Parameter in any Query that Returns a List of Items ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/35
 
-This is an extension to extend any query that returns a list of items to be limited to a specific number of returns. The logic behind how to fulfill to be handled by the server, but may optionally be paired with limit.
+This is an extension to extend any query that returns a list of items to be limited to a specific number of returns. The logic behind how to fulfill to be handled by the server, but may optionally be paired with offset.
 
 For example...
 
-The follow example would be returned as part of the <code>?q=category&limit=1</code> query.
+The following example would be returned as part of the <code>?q=category&limit=1</code> query.
 <pre>
 {
   "categories": [
@@ -360,11 +344,11 @@ The follow example would be returned as part of the <code>?q=category&limit=1</c
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/36
 
-This is an extension to extend any query that returns a list of items to be offset by n. The logic behind how to fulfill to be handled by the server, but must be paired with limit. 
+This is an extension to extend any query that returns a list of items to be offset by n. The logic behind how to fulfill to be handled by the server, but MUST be paired with limit. 
 
 For example...
 
-The follow example would be returned as part of the <code>?q=category&limit=1</code> query.
+The following example would be returned as part of the <code>?q=category&limit=1&offset=1</code> query.
 <pre>
 {
   "categories": [
@@ -551,6 +535,21 @@ Note: the _internal_url can be used for updating the contacts via micropub.
 * Servers
 ** [[IndieWeb for Drupal]]
 ** {{aaronpk}}'s Micropub endpoint supports querying and filtering contacts, intended to be used for typeahead nickname suggestions in micropub clients
+
+==== Filter Parameters in Query for Post List ====
+; '''Issues and discussion:''' 
+: https://github.com/indieweb/micropub-extensions/issues/4
+
+The extension of q=source to allow a list of posts being returned if there is no URL parameter is now stable. However...the discussion of what additional query modifiers might be available continues as experimental.
+
+This includes the following possible options implemented by some.
+* after, before - for a cursor based pagination model(see [[Microsub-spec]] ). Problem being how does the client know what arbitrary options to use here, unless in this implementation it is set to date string or such.
+** As far as the client is concerned, the "before" and "after" values are arbitrary strings. This allows the server to internally use whatever specific implementation is most appropriate for its backend technology. (Often this will be either a timestamp or a unique ID identifying the first and last items in the returned list.)
+* order - Proposed a reverse order for the list. Other common options for this might be ascending/descending
+* exists[] - Matches one or more property names
+* not-exists[] = Inverse of exists
+* property-property-name (Example: property-rsvp=yes) - Allows filtering by a specific property value
+
 
 ==== Brainstorming ====
 
