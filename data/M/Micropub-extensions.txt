@@ -27,7 +27,7 @@ There are not currently any Official Extensions
 
 ==== Slug ====
 
-Many posting UIs provide an option for the user to choose a slug for the post that will be created. This extension allows a Micropub client to suggest a slug to the Micropub endpoint.
+Many posting UIs provide an option for the user to choose a slug for the post that will be created. This extension allows a Micropub client to suggest a slug to the Micropub endpoint by passing through the proposed slug as mp-slug.
 
 [[File:wordpress-customize-slug.png]]
 
@@ -53,8 +53,6 @@ The server MAY or MAY NOT decide to respect the requested slug, based on whether
 ** [https://github.com/skpy/micropub Skippy's micropub]
 
 === Query for Supported Vocabulary ===
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/1
 
 This is an extension for returning what properties a Micropub server supports, so that a client like [[Quill]] or [[Indigenous]] could know to hide or rename the common choices in the UI. This is essentially using reverse [[Post Type Discovery]].
 
@@ -91,6 +89,9 @@ An example response is below:
 
 If a Micropub client checks the Micropub Configuration query for a <code>post-types</code> array and it doesn't exist or it is empty, the client should assume the server does not support this extension and just default to its regular post types and names. However, if at least one object exists in the <code>post-types</code> array, the Micropub client '''should''' only display features related to the post types found in the array, and any text in the UI should reflect the name presented in the post-types array.
 
+; '''Additional Discussion''' 
+: https://github.com/indieweb/micropub-extensions/issues/1
+
 ==== Implementations ====
 * Clients
 ** [[Quill]]
@@ -109,6 +110,9 @@ If a Micropub client checks the Micropub Configuration query for a <code>post-ty
 * <code>post-status=draft</code> - The post is a draft, and should not be shown in lists.
 ** It is up to the implementation whether it wishes to use a capability URL for draft posts or actually restrict it to logged-in users.
 ** There is a separate proposal for a [https://github.com/indieweb/micropub-extensions/issues/24 draft scope] as an alternative to create that would only allow draft posts to be created.
+
+; '''Original Discussion''' 
+: https://github.com/indieweb/micropub-extensions/issues/19
 
 ===== Implementations =====
 * Clients
