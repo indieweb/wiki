@@ -6,9 +6,7 @@ Feeds, if correctly marked up, can be subscribed to, parsed and presented by [[r
 
 Historically feeds have been served in separate [[feed file]]s, in specialized XML formats like [[RSS]] or [[Atom]], that are typically polled for updates by [[feed readers]] or [[aggregators]]. Feeds can also be (and are more and more often) served simply as HTML marked up with [[h-feed]]/[[h-entry]], often on an existing page (e.g. [[homepage]]) thus not requiring a separate URL (and all the downsides thereof).
 
-__TOC__
 == IndieWeb Examples ==
-
 Many examples of feeds marked up with HTML+microformats can be found, e.g. on [http://microformats.org/wiki/h-entry#Examples_in_the_wild h-entry examples in the wild] and [[h-feed#IndieWeb_Examples|h-feed indieweb examples]]. Add yourself below!
 
 === Aaron Parecki ===
@@ -77,14 +75,12 @@ If you don't find a feed on a page, or want to discover all available feeds, loo
 
 See also: microformats wiki section about [http://microformats.org/wiki/h-feed#Parsing Parsing h-feed].
 
-__TOC__
-
 == Past Work ==
 There is a long history ([[timeline#1997|since 1997]]) of the development of feeds, most of which has died to due the widespread abandonment of XML as a foundation of anything actually served on the web (largely replaced by HTML and JSON).
 
 There is however still some inertial legacy XML support, some of which you may find sufficiently useful to implement — see [[feed#Backward Compatibility|backward compatibility]].
 
-=== Criticism ===
+== Criticism ==
 XML feeds like RSS and Atom are known to be problematic for a variety of reasons, here are a few.
 * '''[[DRY]] violation''' - feed/post content is typically already visible on HTML pages, thus the XML version is a (sometimes lower fidelity even) duplicate.
 ** [http://rssdateformats.tumblr.com/ RSS Date Formats] blog documents the many hilarious ways people publish date-times in RSS/Atom feeds.
@@ -100,42 +96,55 @@ XML feeds like RSS and Atom are known to be problematic for a variety of reasons
 
 All of the above should not obliterate the fact that RSS can be used a signal for new content and as a failover mechanism when microformats or other richer format is not available.
 
-=== Backward Compatibility ===
+== Backward Compatibility ==
 There are legacy systems, e.g. some [[feed readers]], which only support older technologies such as XML-based feeds. For backward compatibility with those you may want to consider publishing the following:
 * [[Atom]]
 ** Atom [[ActivityStreams]] object-type annotations, e.g. inside entry elements: <blockquote><nowiki><object-type xmlns="http://activitystrea.ms/spec/1.0/">http://activitystrea.ms/schema/1.0/note</object-type></nowiki></blockquote> or <blockquote><nowiki><object-type xmlns="http://activitystrea.ms/spec/1.0/">http://activitystrea.ms/schema/1.0/article</object-type></nowiki></blockquote> for the [[note]] and [[article]] post types respectively.
 *** (any known live Atom ActivityStreams consumers?)
 * [[How to set up your realtime feed]] - lots of helpful information related to setting up and testing an ATOM+ActivityStreams+PuSH feed
 
-=== Shutdowns ===
+== Shutdowns ==
 Documentation of when sites stop publishing and/or consuming legacy RSS/Atom feeds. See also [[site-deaths]].
 
-==== 2018 ====
-===== Mozilla Firefox =====
+=== 2018 ===
+==== Mozilla Firefox ====
 * 2018-12-02 [https://support.mozilla.org/en-US/kb/feed-reader-replacements-firefox] Firefox removes built in support for web feeds, citing small use, high maintenance, ready alternatives and other initiatives like Pocket and Reader mode.
 
-==== 2015 ====
-===== Google Calendar =====
+=== 2015 ===
+==== Google Calendar ====
 * 2015-11-18 '''Starting on November 18th, 2015, [Atom] XML feeds from Google Calendar will no longer be available.'''[https://support.google.com/calendar/answer/37083].
-==== 2013 ====
-===== Apple iTunes =====
+=== 2013 ===
+==== Apple iTunes ====
 * 2013-11-06 '''Apple iTunes 11.1 reduced RSS functionality.''' Not a shutdown (yet), but reduced/damaged functionality to RSS Podcasts in Apple iTunes 11.1 per Apple Communities post: [https://discussions.apple.com/thread/5333380 Figuring out podcasts in iTunes 11.1 and iOS 7]
-===== HubMed =====
+==== HubMed ====
 * 2013-08-14 '''[http://hublog.hubmed.org/archives/001969.html Switching off HubMed's RSS and Atom feeds]''': <blockquote>I've been considering stopping HubMed's feeds, and the demise of Google Reader seemed like a good incentive to do some spring cleaning. '''They were quite inefficient''' old scripts, which '''made the shared hosting provider unhappy''', so today I decided to switch the feeds off.</blockquote> '''emphasis''' added.
-===== Yahoo RSS Alerts =====
+==== Yahoo RSS Alerts ====
 * 2013-07-01 '''Yahoo! RSS Alerts''' shut down.[http://yahoo.tumblr.com/post/54125001066/keeping-our-focus-on-whats-next][http://www.webpronews.com/yahoo-kills-altavista-axis-webplayer-browser-plus-downloads-more-2013-07]
-===== Google Reader =====
+==== Google Reader ====
 * 2013-06-30 '''[[Google]] Reader''' (RSS and Atom consumer) shut down.
-===== Evernote =====
+==== Evernote ====
 * 2013-04-11 '''[http://discussion.evernote.com/topic/37000-removing-rss-feed-support-from-public-notebooks/ Evernote Removing RSS support for public notebooks]''': <blockquote>We currently have support for RSS feeds for public notebooks to allow subscribers to automatically get updates to those notebooks. Last night's (4/10/2013) release of the web service removed this support. Attempts to access Public Notebook RSS feeds will return a 404 HTTP response code instead of the heretofore expected content. At this point, the feature was imposing excessive load on the service relative to its use and utility, and the decision was made to remove it.</blockquote>
-===== Twitter =====
+==== Twitter ====
 * 2013-03 '''[http://brodiesnotes.blogspot.co.uk/2013/03/workarounds-for-people-who-used-rss.html Twitter removed RSS feeds]'''. [https://dev.twitter.com/discussions/11582 Twitter support discussion]: <blockquote>Keep in mind though that v1 of the API is now deprecated and will cease functioning in March 2013. RSS feeds are no longer supported by the API after that date.</blockquote>
 
-==== 2012 ====
-===== FeedBurner APIs =====
+=== 2012 ===
+==== FeedBurner APIs ====
 * 2012-10-20 [[FeedBurner]] APIs shut down (per https://developers.google.com/feedburner/ ). See also: http://pleasedontkillfeedburner.com/
-===== Apple Safari Mail =====
+==== Apple Safari Mail ====
 * 2012 [[Apple]] quietly removes RSS support from OSX Mountain Lion's Safari and Mail  [http://www.smh.com.au/digital-life/computers/blogs/gadgets-on-the-go/apple-joins-the-war-on-rss-20120731-23d8y.html]
+
+== Brainstorming ==
+=== Can we deprecate feeds ===
+Is it time to deprecate feeds, or at least drop any federated social dependence on feeds?
+
+With [http://microformats.org/w/uf2#h-entry microformats2 h-entry], generic [http://microformats.org/w/uf2#implementations microformats2 parsers] for Node and PHP is there any more need for bespoke <s>XML or </s>JSON feeds/formats when you can get any HTML page as JSON?﻿
+
+== Books About ==
+{{main|Books_about_the_IndieWeb#Feed}}
+Books about feeds:
+
+[https://en.wikipedia.org/wiki/Feed_(Grant_novel) <img src="https://web.archive.org/web/20130114172320if_/http://photos.waterpigs.co.uk/photos/custom/201210/2d4d55-1F7129CF-02D0-42AE-928C-534F73D2196C_870x550.jpg" alt="Front and back of 2010 book Feed by Mira Grant" style="max-height:12em" />] [http://en.wikipedia.org/wiki/Feed_%28Anderson_novel%29 <img src="http://24.media.tumblr.com/tumblr_loj43ynRdR1qgeclyo1_400.jpg" alt="Front of 2002 book Feed by M.T. Anderson" style="max-height:12em" />]
+
 
 == See Also ==
 * [[feed reader]]
