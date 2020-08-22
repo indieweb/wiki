@@ -118,3 +118,70 @@ https://github.com/indieweb/indieauth/milestone/1
 === Pushed to next time ===
 ** Adopt Pushed Authorization Requests https://github.com/indieweb/indieauth/issues/40
 ** Consider using OAuth Server Metadata https://github.com/indieweb/indieauth/issues/43
+
+== Notes from 2020-08-22 ==
+
+=== Attendees ===
+
+* {{aaronpk}} - Facilitator
+* {{gwg}}
+* {{craftyphotons}}
+* {{omz13}}
+* {{martijnvdven}}
+* {{manton}}
+* {{t}}
+* {{fluffy}}
+
+=== Issue 41 - Profile Info ===
+* scopes: profile - name + photo, email - email
+* response_type=id replaced...should assume if no scopes require a token, it is an ID request. Section 5.2 needs to be rephrased.
+* scope is a request from the app to the AS, the AS can always issue scopes the app doesn't request based on its own policies. apps always have to be able to handle getting back different data than they request. 
+* no scope == only user's URL is returned
+* profile == user's URL + name + photo
+* email == email (could be used for account recovery for example)
+* create/update/etc (micropub scopes) == access token 
+* define these scopes in the spec, and point to indieweb wiki as a place to find other scopes (maybe here https://indieweb.org/scope)
+* account recovery use case: ask for email, but if the app doesn't get email, then it can give the user some recovery codes. Wiki should have a page on the topic of account recovery methods.
+** Can WebAuthn be used for recovery or should it be part of scope? Yes and no:
+*** 1 A site (IndieAuth Provider) can itself use WebAuthn for authenticating the user as part of an IndieAuth sign-in request from a IndieAuth CP, e.g. instead of email/pw, or Apple sign-in etc.
+*** 2 It makes no sense for WebAuthn to be part of any requested scope because WebAuthn credentials are per-site (per consuming site) and thus the provider would not be able to provide any useful WebAuthn credential for use by another site.
+*** 3 However a CP could, once a user has successfully signed in with IndieAuth, prompt the user to add Account Recovery via WebAuthn to their account on that CP. Note that would be a separate (optional) user-flow, after a successful IndieAuth sign-in, potentially something that the user could enable (disable / change) at a much later time if they chose to.
+
+=== Issue 39 - PKCE ===
+
+* PKCE waiting on other merges, but is otherwise decided on.
+
+=== Issue 19 - Allow me parameter to auth endpoints to be omitted ===
+* Proposal to make me parameter optional in an initial request. If it is optional, it will simplify and allow greater OAuth2 capability
+* Suggest that reasons why the optional parameter SHOULD be sent should be documented in the spec.
+* Mention use cases for when the AS might want to use the `me` value
+** indieauth.com use case
+** someone can have multiple micro.blog domain names, without the parameter it would have to show a list of domains or use a default one, with the parameter it can choose the right one earlier
+
+=== Issue 36 - Ambguity in Handling Redirections ===
+https://github.com/indieweb/indieauth/issues/36
+
+* Add text to https://indieauth.spec.indieweb.org/#redirect-examples saying these examples are not canonical, pointing to the normative paragraph
+
+=== Issue 53 ===
+https://github.com/indieweb/indieauth/pull/53
+* TODO: Note that the extra verification applies only if the original and current profile URL do not match EXACTLY.
+* This could allow removal of the same domain return requirement in 5.3.2 and allow for multiple identities being linked, but this would be a separate issue.
+* TODO: open new issue to talk about removing the same-domain check once the auth endpoint check is in place
+* add another sentence to https://github.com/indieweb/indieauth/pull/53/files#diff-e5fe492096c54e1b1f5f3290055a2660R635 to make sure clients don't allow the profile URL to change again (ignore the profile URL bits in the discovery section)
+* TODO: follow both temporary and permanent redirects when rediscovering the authorization endpoint
+
+=== Issue 33 - Support OAuth2 Introspection ===
+* Already can experiement with adding this to the token endpoint because OAuth introspection is a POST and IndieAuth is a GET
+* Need information on whether existing OAuth libraries would even be compatible with the IndieAuth introspection response
+* Would existing OAuth libraries need updating in order to handle the IndieAuth response
+* TODO: Call out expiration (expires_in or exp/expires_at) in the IndieAuth response if the token expires
+
+=== Issue 43 - Consider Using OAuth Server Metadata ===
+* Good to have, but only if we have features that require it and therefore also premature, see #40
+
+=== Issue 40 - PAR ===
+* Marginal benefit right now, unless more gets added to the authorization request (e.g. account numbers, identifying or personal information)
+* Premature to adopt any specific OAuth extension draft?
+** Wait instead for https://oauth.xyz/?
+* If we do find that we may want to add things to thet authorization request that are "sensitive" then it's worth revisiting this
