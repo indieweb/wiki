@@ -31,11 +31,19 @@ The name is a portmanteau of [[#Salmon]] and [[mention]].
 
 == Summary ==
 
-A Webmention is a notification that one URL links to another. When Bob writes a post on his website which is a response to a post on Alice's website, his site sends a webmention notifying her of this, which her site's software can do with as it wishes. When Carol writes a post on her site which is a response to Bob's response, her site would send a webmention to Bob...but what about Alice, who may wish to share in this interaction? 
+A Webmention is a notification that one URL links to another, usually a [[comment]] or other [[response]]. A Salmention is a special Webmention notification both that one URL links to another, and that one URL received and displayed the result of a Webmention itself. For example:
 
-Bob would update his post based on Carol's webmention and send a webmention update to Alice. Alice's website software would update any data it picked up from Bob's post originally, which would now include information about Carol's response and be able to display it as an additional response on the original post.
+When Bob writes a reply on his website in response to a post on Alice's website, his site sends a webmention notifying her of his response, which her site's software can do with as it wishes, like display it as a comment on her post. 
 
-The protocol adds no parameters to webmention that must be recognized.
+When Carol writes a reply on her site in response to Bob's comment, her site similarly sends a webmention to Bob … but what about Alice, who may wish to display this nested comment on her post? 
+
+This is where the Salmention extension comes in.
+
+When Bob's post is updated to display Carol's reply, Bob's site '''sends a webmention update (a salmention)''' to Alice, even though Bob's post content itself hasn't changed. Alice's website software '''looks for new information on Bob's post, which now includes Carol's response and displays it''' as a nested response.
+
+Salmention is a protocol between a salmention sender and a salmention receiver. In the example above:
+* The '''salmention sender''' is Bob’s site, it sends a webmention upstream whenever it itself displays the result of receiving a webmention.
+* The '''salmention receiver''' is Alice's site, when it receives the webmention update from Bob's site, it not only parses Bob's reply for any updates, but it also explicitly looks for responses to Bob's post, parses those, finds Carol's reply to Bob, and displays it as well.
 
 == Protocol ==
 === Sending Salmentions ===
