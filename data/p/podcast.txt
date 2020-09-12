@@ -167,6 +167,30 @@ Essentially the process involves setting an additional property in the feed URL.
 
 == Brainstorming ==
 === How to podcast with h-feed ===
+
+Based on the examples, a podcast h-feed would be an h-feed of h-entry and may have some of the following.
+
+* Minimum properties
+** audio - the url of the podcast file.
+** name - episode name
+* Additional h-entry properties
+** summary - representing a summary of the episode meant to be displayed in players
+** content - Used by several as HTML contents of episode page. May include audio tag, summary, length, download link etc, and may be used as a fallback for readers that don't have special handling for audio.
+** photo - {{schmarty}} uses this as the poster image for the episode, however, it might be better to use featured for this.
+** published - Publish time of the episode
+** category - Categories for this episode
+* Currently Proposed Properties
+** size - The size of the audio file
+** duration - The duration of the episode
+* Areas Not Covered by current properties
+** episode/season - Episode and season numbers for podcasts current have no vocabulary. In media files, it is common to use SXXEXX(Season and Episode number). 
+** Chapter/Scene information. This can be done with media fragments, but how to mark these up?
+** h-entry has a concept of authors, but in podcast context, this is who uploaded the episode. We need vocabulary to cover contributors...such as hosts, guests, etc.
+** Episode Type - iTunes markup has the concept of episode type, being full, trailer, or bonus content.  If a trailer and no season or episode number, this represents a show trailer, otherwise, a season or episode trailer/teaser. If a bonus, and no season or episode number: a show bonus, but if it has either a season or season and episode number, a bonus representing the season or the individual episode. Feed has a concept of type which allows for episodic or serial.
+
+
+The other issue is a multi-format podcast...if you have a video and an audio component, or multiple file formats of the same type, and how to mark this up.
+
 === Indieweb Examples ===
 {{aaronpk}} publishes an h-feed for his podcast:
 
