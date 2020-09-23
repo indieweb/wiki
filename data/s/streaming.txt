@@ -5,13 +5,76 @@ https://indieweb.org/streaming
 '''<dfn>streaming</dfn>''' is a method of content delivery where the user can start viewing or listening to media without downloading the entire file in advance. [[live streaming|Live streaming]] is a special case where media is streamed as it is created.
 
 == IndieWeb Examples ==
-None so far.
+
+* {{aaronpk}} published a streaming video of his ActivityPub conference talk on his website on 2020-09-23
+** https://aaronparecki.com/2020/09/22/25/activitypub-oauth-2-1
 
 == Silo Examples ==
 * [[Netflix]] - streaming [[video]]
 * [[Spotify]] - streaming [[audio]]
 * [[YouTube]] - in particular at https://www.youtube.com/tv
 * Twitch does live [[video]] streaming
+
+== How To ==
+
+
+=== How to publish a video for streaming from your own website ===
+
+Assuming you already have a video file created, here is how to turn it into a format for streaming. This assumes you'll want to publish an HLS format, a widely supported format ([https://caniuse.com/HLS native support] in Safari, Edge, Android, and support in other browsers via [https://videojs.com video.js]). The overall idea is to splice up the video into short segments and publish a playlist that references all the segments. The resulting files can be hosted on a static web server, there is no server-side code needed for this.
+
+First, you'll need to use a tool like Apple's mediafilesegmenter or [https://www.bento4.com/ Bento4] to produce the segments and playlist. Apple's tools are hard to find because they keep moving the URLs around, so blog posts and Stackoverflow posts that reference the URLs keep breaking. [https://developer.apple.com/download/more/?=http%20live%20streaming%20tools This link to a search result on Apple's developer website] may work to turn up the downloads. Another option is using [https://www.bento4.com/ Bento4], an open source toolkit.
+
+You can either publish a single video at one resolution and bitrate, or you can provide alternatives at different resolutions and bitrates so that your viewers have different quality options to play to save bandwidth. Creating these alternative formats is not something the media segmenter tools will do. Instead, you can export several versions from your video editor, or use a tool like Handbrake or ffmpeg to create the additional files. You can also include captions by generating a WebVTT file.
+
+==== Using Bento4 ====
+
+We'll use Bento4 to create the playlist and segments for 3 different resolutions of a video by following the instructions on the [https://www.bento4.com/developers/hls/ HLS documentation page].
+
+[https://www.bento4.com/downloads/ Download] Bento4.
+
+Prepare your media files by creating one or more versions of your video at the desired resolutions and bitrates, and captions in a .vtt file if you have them.
+
+This command will slice up your videos and prepare the playlist.
+
+<code>mp4hls --output-dir=stream --master-playlist-name=stream.m3u8 video1.mp4 video2.mp4 video3.mp4</code>
+
+If you look in the resulting "stream" folder, you'll see the main playlist <code>stream.m3u8</code>, and if you open that in a text editor you'll see that it references all the different resolutions of your video you included.
+
+Now you're ready to upload these files to a server.
+
+==== Creating a Web Player ====
+
+[https://caniuse.com/HLS Some browsers] will be able to play this video without any additional libraries by creating a video tag and pointing the source to the main playlist. For broader browser support, and to add some additional features, you can use a library like video.js.
+
+Here is the bare minimum markup to set up HLS playback:
+
+<pre>
+<video controls crossorigin preload="auto" poster="poster.png" width="750" height="422" class="video-js vjs-big-play-centered" id="video">
+  <source src="stream/stream.m3u8" type="application/x-mpegURL" />
+  <track kind="captions" src="captions.vtt" srclang="en" label="English" default>
+</video>
+</pre>
+
+Make sure to change the paths to your poster image, m3u8 file, and caption file appropriately. If your browser supports HLS natively (Safari, Chrome on Android, etc), then this markup doesn't actually need any Javascript and it will work as is.
+
+To enable HLS playback on browsers that don't have native support, you need to add a bit of Javascript to glue it together.
+
+Download the latest [https://github.com/videojs/video.js/releases video.js release], as well as the [https://github.com/jfujita/videojs-http-source-selector videojs-http-source-selector] and [https://github.com/videojs/videojs-contrib-quality-levels videojs-contrib-quality-levels] extensions. 
+
+<pre>
+<link href="/assets/video-js-7.8.4/video-js.css" rel="stylesheet" />
+<link href="/assets/videojs-http-source-selector-1.1.6/videojs-http-source-selector.css" rel="stylesheet" />
+<script src="/assets/video-js-7.8.4/video.js"></script>
+<script src="/assets/videojs-contrib-quality-levels/videojs-contrib-quality-levels.min.js"></script>
+<script src="/assets/videojs-http-source-selector-1.1.6/videojs-http-source-selector.min.js"></script>
+<script>
+var player = videojs('video');
+player.ready(function(){
+  player.httpSourceSelector();
+});
+</script>
+</pre>
+
 
 == Brainstorming ==
 === Indieflix ===
