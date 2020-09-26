@@ -4,7 +4,7 @@ https://indieweb.org/2020/Pop-ups/IndieWeb_Friendly_WordPress_Themes
 [[Category: IWC Pop-ups 2020 Sessions]]
 {{pagelogo|http://s.w.org/about/images/logos/wordpress-logo-notext-rgb.png}}
 
-'''<dfn>IndieWeb Friendly WordPress Themes</dfn>''' is a session at [[2020/Pop-ups|IndieWebCamp Pop-ups 2020]].
+'''<dfn>IndieWeb Friendly WordPress Themes</dfn>''' was a session at [[2020/Pop-ups|IndieWebCamp Pop-ups 2020]].
 
 IndieWebCamp Pop-ups 2020<br>
 Session: IndieWeb Friendly WordPress Themes<br>
@@ -66,9 +66,109 @@ If you feel able, add yourself to the wiki below, [https://events.indieweb.org/2
 * (Optional) Create a GitHub account which you can use/learn during the process
 ** Those who don't want a GitHub account can simply use their text editor of choice to modify the relevant theme files
 
+== Participants ==
+<!-- 
+Add yourself as {{username}} if you've set one up on the IndieWeb wiki (see https://indieweb.org/wikifying#How_to_Join_the_IndieWeb_Wiki and https://indieweb.org/Template:sparkline), otherwise use [http://yourwebsite.com First Last Name] and include the name and a link of the theme you're working on.
+-->
+* {{GWG}} (co-facilitator), working on Twenty Fourteen theme
+* {{chrisaldrich}} (co-facilitator), working on [https://www.andersnoren.se/teman/davis-wordpress-theme/ Davis theme] 
+* [http://cascadiainspired.com Tracy Durnell] - working on [https://wordpress.org/themes/spacious/ Spacious theme]
+* [https://suzspot.com Sue Hanen], working on Astra
+* {{jeremycherfas}}
+* 
+* ... add names
 
 == Notes ==
-* ...
+Sometimes the Etherpad may cause visual contrast problems involving the various colors it assigns to the edits of different authors. To fix this, click on the gear icon in the upper right, and uncheck the box for "Authorship colours" to see a more readable black and white version of the page.
+
+IndieWebCamp [[2020/Pop-ups]] [[2020]]
+Session: [[2020/Pop-upsIndieWeb Friendly WordPress Themes]]
+
+* Jeremy using: 
+** https://www.fornacalia.com/2020/flaxseed-currant-ciabatta/ with missing faces
+** https://www.eatthispodcast.com/china-chilli/ - long list
+
+== Curriculum==
+=== Prerequisites ===
+* Bring your own theme or a theme you'd like to make more IndieWeb friendly by adding Microformats v2 support
+** Ideas for possible themes can be found at https://indieweb.org/WordPress/Development#Themes 
+
+* (Optional) Create a [[GitHub]] account which you can use/learn during the process
+** Those who don't want a GitHub account can simply use their text [[editor]] of choice to modify the relevant theme files
+
+=== Microformats ===
+* Definition of [[Microformats]]
+** Microformats.org has a wiki describing the various microformats with definitions and details for each
+* Examples
+** [[h-card]]
+** [[h-entry]]
+** [[h-feed]]
+
+* Difference between prefixes
+** "h-*" for top level or root class names, e.g. "h-card", "h-event", "h-entry"
+** "p-*" for plain (text) properties, e.g. "p-name", "p-summary"
+** "u-*" for URL properties, e.g. "u-url", "u-photo", "u-logo"
+*** <a class="u-in-reply-to" href="https://example.com" >example.com</a>
+** "dt-*" for datetime properties, e.g. "dt-published",  dt-start", "dt-end", "dt-bday"
+** "e-*" for element tree properties where the entire contained element hierarchy is the value, e.g. "e-content". The 'e-' prefix can also be mnemonically remembered as "element tree", "embedded markup", or "encapsulated markup".
+
+
+=== Tools ===
+The following are some parsers and tools that will show what a particular URL will look like when parsed:
+** https://microformats.io 
+** https://monocle.p3k.io/preview - will parse an article and show how an article will look when displayed in the [[Monocle]] r
+** Post Kinds Plugin - Many of the post kinds will provide reply contexts, so entering a URL into the meta box will display titles, summaries, authors, avatars, and other meta data based on how pages are parsed
+** https://indiewebify.me/ - has a good visual interface for testing various IndieWeb [[building blocks]] including microformats for h-card and h-entry. If portions are missing or are broken, the tool will also provide examples of code and mark up that one can add to improve them.
+
+=== WordPress Themes ===
+* Definition
+* Various common parts
+** style.css
+** functions.php
+** index.php
+** https://developer.wordpress.org/themes/basics/template-hierarchy/
+* Parent themes versus child themes 
+
+We'll be looking most closely today at {{gwg}}'s post: [https://david.shanske.com/2016/06/22/converting-wordpress-themes-microformats-2-part-1/ Converting WordPress Themes for Microformats 2 – Part 1], which has some details for beginning.
+
+David working on converting https://github.com/dshanske/iw2014 - A fork of the 2014 theme. Pushed the original, with all twentyfourteen strings changed to iw2014, and will start modding.
+
+
+=== Procedure ===
+Outline for converting a theme to be microformats v2 compatible
+* Rename any hentry, hfeed, h-entry, h-feed classes within the style.css file (remember, it's a bad practice to style using microformats)
+* Add the code blocks from {{gwg}}'s [https://david.shanske.com/2016/06/22/converting-wordpress-themes-microformats-2-part-1/ post] to the functions.php file
+** You can add the entire chunk if there isn't body_class or post_class predefined. If there are those classes predefined, then one can add a smaller subset of those code blocks into those portions of the functions.php file (this prevents the duplication of the function which may throw an error) 
+* h-card
+** May be added as a widget (using the IndieWeb plugin)
+*** Some may accidentally add both the h-card widget and the rel-me widget which can duplicate data depending on use. 
+** may be better added into the theme
+** can use code from {{gwg}} article, or be handwritten into the meta portion of a theme
+*** difference of adding this code into the main post (example: TwentyFifteen theme) versus being added into a separate block from the post (example: TwentySixteen theme)
+** u-photo for an avatar needs to be nested within the h-card otherwise parsers will think that the post is specifically about that particular photo and highlight it more specifically. This problem is sometimes seen when syndicating to Twitter using Brid.gy publish which will send a large version
+* u-featured for featured photos
+** Is there a plugin that does this? This code snippet could be added simply to a functions.php file.
+* u-category to mark up both tags and categories (IndieWeb doesn't differentiat
+
+
+* David's 2016 IndieWeb Friendly Theme commits for the 2016 Theme are a great place to see some step-by-step changes to make a theme more IndieWeb friendly:
+** https://github.com/dshanske/iw26/commits/trunk
+
+=== Declaring Support for IndieWeb ===
+* code snippet for declaring microformats v2 compatibility 
+** {{GWG}} will add this shortly
+** There were some instances with regard to Micropub which used this declaration, but not sure if anything does now
+* Simple Location
+** There are code snippets for declaring support for some IndieWeb friendly plugins like this
+** One can remove the default display of some data (often in the_body, which may cause unwanted display of that data when syndicating)
+** One can then add special code to display that data almost anywhere within a particular theme.
+
+
+=== Jetpack ===
+Discussion of problems concerning [[Jetpack]]
+* data can be added in the_body to cause things like "Like: like loading" to appear on syndicated copies with tools like Brid.gy publish
+** {{gwg}} has a work around for this that allows excluding this problem
+
 
 == Questions ==
 * ...
@@ -81,9 +181,7 @@ If you feel able, add yourself to the wiki below, [https://events.indieweb.org/2
 * <s>create events.indieweb.org event</s>
 * <s>instructions for rsvp: events, this page, or directly on the etherpad</s>
 * outline of curriculum
-
 * list of resources/links for attendees 
-
 * promotion, promotion, promotion
 * outreach 
 ** to WordPress community
@@ -100,6 +198,9 @@ If you feel able, add yourself to the wiki below, [https://events.indieweb.org/2
 * [[WordPress]]
 * [[WordPress/Themes|WordPress Themes]]
 * [[WordPress/Development#Themes]]
+* http://microformats.org/wiki/microformats2
+* http://microformats.org/wiki/microformats2-prefixes
+* [[microformats]]
 
 {{#categorytree:IWC Pop-ups 2020 Organizing|mode=pages}}
 {{#categorytree:IWC Pop-ups 2020 Sessions|mode=pages}}
