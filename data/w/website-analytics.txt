@@ -75,17 +75,34 @@ People using it on their own site:
 == Passive Analytics ==
 Passive analytics are implemented on the server side, usually at the server or application level. Some of them work with server logs (e.g. AWStats) while others are more integrated to the platform they are running on (WordPress plugins).
 
-=== Dobrado ===
+=== Advantages ===
+
+* Passive analytics do not affect the load time of a web page.
+** Users do not need to download a JavaScript script every time they visit a page.
+* Passive analytics scripts are easy to write for Nginx and Apache because logs are available in plain text. 
+
+=== Disadvantages ===
+
+* Passive analytics require more technical knowledge
+* You must have access to a server environment to implement passive analytics
+* Depending on the software you use, you are unlikely to receive real-time updates without developing an extension.
+* ...
+
+=== Examples ===
+
+==== Dobrado ====
 
 [[dobrado]] includes an analytics module that can record all page requests and referers where provided. It was added to avoid the overhead of running Piwik/Matomo on the same server, which requires extra javascript on the page and an extra network request.
 
-=== Log Analyzers ===
+==== Log Analyzers ====
 This type of analytics software collect their data from server logs. The data in these logs are considerably less than the ones provided by active analytics, but they are still enough to generate useful reports. There are several tools to analyze these files.
 
 * [http://goaccess.io/ GoAccess] command-line, realtime log analyzer written in C. Single executable, no configuration necessary.
 ** [[User:rascul.io]] uses it on his personal site to see high-level visit information
 ** {{kylewm}} has also had good, albeit limited experiences with it
 * [[awstats]] is another popular tool. It can generate pretty graphs and it's written in Perl.
+* {{jamesgoca}} uses his own log analyzer script to view analytics for his website.
+** The log analyzer is open source on [https://gist.github.com/capjamesg/641fe600ebb58389a52ad4199eed2d4c GitHub Gists].
 
 == Criticism ==
 === Makes Your Site Slower ===
