@@ -242,17 +242,6 @@ Private webmention responses are only visible to aaronpk when he's logged in to 
 
 First successful private webmention between independent implementations was sent 2016-10-01 from {{aaronpk}} to {{sknebel}}. Private post: https://aaronparecki.com/2016/09/30/15/
 
-=== gRegor Morrill ===
-{{gRegor}} can send private webmentions as of 2016-10-01.
-* [[private post]]: https://gregorlove.com/2016/09/this-is-a-test-private/
-* authorization code is a [[JWT]] that expires after 5 minutes, with keys
-** <code>me</code>: webmention source URL
-** <code>target</code>: webmention target URL
-* access token is a JWT that expires after 1 hour, with keys
-** <code>me</code>: same as authorization code
-** <code>nonce</code>: random nonce
-** <code>extra</code>: array of any of the extra parameters from the authorization code. Currently this only includes the <code>target</code>
-
 === TheGillies ===
 {{TheGillies}} can send and receive private webmentions on an [http://github.com/tjgillies/indie elixir demo app]. He doesn't have a permanent site setup yet. Although, a test site can be found to be [http://tyler.cat:4000/private/test.html up periodically].
 
@@ -270,6 +259,21 @@ First successful private webmention between independent implementations was sent
 Since 2017-05-21, he can also receive them. This was tested on the same day, again with {{sknebel}}s site.
 
 === add yourself! ===
+
+== Past Examples ==
+
+=== gRegor Morrill ===
+{{gRegor}}: gregorlove.com could send/receive private webmentions between 2016-10-01 and 2020-10-25. I initially set this up as an experiment and never moved beyond the initial proof-of-concept. In theory the code still worked, but I decided to remove it from my site 2020-10-25 since I wasn't actively using it.
+
+Implementation details:
+* [[private post]]: https://gregorlove.com/2016/09/this-is-a-test-private/
+* authorization code is a [[JWT]] that expires after 5 minutes, with keys
+** <code>me</code>: webmention source URL
+** <code>target</code>: webmention target URL
+* access token is a JWT that expires after 1 hour, with keys
+** <code>me</code>: same as authorization code
+** <code>nonce</code>: random nonce
+** <code>extra</code>: array of any of the extra parameters from the authorization code. Currently this only includes the <code>target</code>
 
 == Design Considerations ==
 === Rely on https for security ===
