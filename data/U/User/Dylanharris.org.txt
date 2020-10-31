@@ -14,14 +14,20 @@ https://indieweb.org/User%3ADylanharris.org
 
 I'm dylan harris, [https://dylanharris.org/ arts & ego] is my identity website. It's been online, in one form or another, since 1996. It's currently got 47G of content, including ... oh, I won't bore you with that.
 
-I visited last year's [https://indieweb.org/2018/Berlin indieweb camp in berlin], and came away fired up to introduce webmentions. I promptly translated the site, instead, into four languages, badly. That summerises how it's been built: if it were a house, it'd have 7 wings, secret passages, fake ghosts, real cobwebs, naughty kitties, and a cellar running a cloud data centre, backwards.
+I visited 2018's [https://indieweb.org/2018/Berlin indieweb camp in berlin], and came away fired up to introduce webmentions. Instead, I promptly translated the site into four languages, badly. That summerises how it's been built: if it were a house, it'd have 7 wings, secret passages, fake ghosts, real cobwebs, naughty kitties, and a cellar running a cloud data centre, backwards.
 
 More than once, I've looked at the various CMSs, and more than once I've rejected them for not providing me the precise control & freedom of layout that I want. In consequence, everything is laid out entirely to my own sensibility, a bizarre combination of strange ideas and ancient mistakes. It certainly shows off my own ignorance of standards.
 
-== to do ==
+== static site checker ==
 
-[https://dylanharris.org/ arts & ego] is built with hand-coded compiled shtml. It runs on [https://man.openbsd.org/httpd.conf.5 httpd], the native [https://www.openbsd.org/ openbsd] webserver, on an [https://pcengines.ch/apu2.htm PC Engines APU 2]. I build it on an elderly Mac Mini with a dreadfully slow home made bash & python suite. My long term goal is to rewrite the suite in C/C++.
+I built a [https://dylanharris.org/ssc/index.shtml static site checker], an opinionated HTML nitpicker, to provide detailed verification of static HTML websites. It's pretty complete, better than anything I found online, which is why I wrote it, of course. It handles almost all published versions of HTML, except early WhatWG and most MathML, plus schema.org and microformats semantic data, and other stuff. It does NOT handle script or style languages (yet). 
 
-And the rewrite is underway! I spent easter weekend writing my own static website link checker ([https://dylanharris.org/swlc/index.shtml swlc], also at [https://github.com/devongarde/swlc github]), to replace a bash script that uses find to call [https://wummel.github.io/linkchecker/ linkchecker] --- that bash script runs for about four days (my site is not small). My new utility takes about an hour for the same site, and finds many more snafus. The speed gain is partially because swlc (i) checks the whole site, not just individual pages one by one; (ii) analyses source HTML rather than asking a local web server for a local page (which is why swlc only works on static sites), and (iii) is written in C++. TODO apply [https://en.wikipedia.org/wiki/CMake CMake] to swlc.
+It's a command line utility to effectively lint a complete HTML site. I've built executables for Windows 10 x64, macOS High Sierra & Catalina, and Centos. In theory, it can be built on any system that supports cmake, boost, and a C++ compiler (gcc / clang / msvc). You can find the source on [https://github.com/devongarde github].
 
-I intend to visit [https://indieweb.org/2019/Utrecht the forthcoming Utrecht indieweb camp], mostly for the exchange of ideas, but partially because I love [https://dylanharris.org/nl/foto/foto/utrecht.shtml photographing the city].
+I don't recommend using it to analyse untrusted code. That's because it's pre-alpha software. It needs testing by other people on their own data. I'm going to start looking for suckers ... er ... heroes ... who might find it useful soon.
+
+Why did I write it? Well, as I said above, I find the design decisions of popular content managers to be somewhat strangling. I can't believe for one moment that I'm the only one who feels the same way. I don't like the visual design that's forced on people, even though that design works for what it is : I strongly believe there should be the freedom to permit decent artistic exploration of possibilities. How can digital aesthetics progress if not by experimentation? How can the experiments be successful if an experimenter has no proper means to make sure it does what it's supposed to do?
+
+To build an effective website that does what you want, using the complex, evolved, and horribly inconsistent world wide web language families, by hand, requires some mechanism to proof the code. That's where ssc comes in. Given ssc has found basic HTML errors in example documentation on major sites, I think this opinion is unarguable.
+
+ssc has also found quite more than a few issues on my site which I'm slowly addressing.
