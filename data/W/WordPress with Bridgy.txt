@@ -10,6 +10,8 @@ This page is under a lot of construction.
 
 Below we'll detail some of the requirements for setting up Bridgy to work with your self-hosted [[WordPress]].com website. If you have questions/comments, please stop by in [https://indiewebcamp.com/irc/today#bottom chat]/[[IRC]] for assistance.
 
+The IndieWebCamp pop-up session [[2020/Pop-ups/GettingStartedWithWordPress|Getting Started with WordPress]] covers some of of this related set up and configuration.
+
 == Overview of Bridgy's functionality ==
 
 Bridgy is a "magical" IndieWeb [[project]] built by {{snarfed}}, {{kylewm}}, and others and will help you to do two primary functions with your WordPress blog:
@@ -101,21 +103,27 @@ Additional pieces this page could expand upon:
 == Set up for Publishing ==
 With the basic set up for a Bridgy service taken care of (see above), one only need to click the social media button next to the text "Click to enable publishing" on the right hand side of the middle of the page. This will initiate an OAuth handshake to the intended service, so authorize the Bridgy app. Once you've been returned to Bridgy you're ready to go.
 
-To test the publication functionality, one can put a URL from a post on their site into the URL box (labeled "Enter post URL") for that Bridgy service and click "preview" to see what the post will potentially look like. Some of the appearance of the post will depend on your [https://indieweb.org/WordPress/Themes theme] and the markup and [[microformats]] on the page. Images within the post (or from the theme which are also included on the page) with the <code>u-photo</code> microformat will appear in the post along with the title of the post. If your test preview post doesn't look as you expect it, you may need to modify the markup either on the post itself, or within the theme.
+To test the publication functionality, one can put a URL from a post on their site into the URL box (labeled "Enter post URL") for that Bridgy service and click "preview" to see what the post will potentially look like. The appearance of the post will depend on your [https://indieweb.org/WordPress/Themes theme] and the [[microformats]] on the page. Images within the post (or from the theme which are also included on the page) with the <code>u-photo</code> microformat will appear in the post along with the title of the post. If your test preview post doesn't look as you expect it, you may need to modify the markup either on the post itself, or within the theme.
 
-With Bridgy now set up, one could potentially manually publish all of their POSSE posts from the Bridgy interface for a particular service, but quicker means will be described below.
+A frequent error is that an author avatar on a page will have u-photo mark up without being enclosed in an h-card microformat. Modifying your theme's markup properly is necessary to achieve the results you want in properly syndicating your content using Bridgy publish functionality.  The tool [[Indiewebify.me]] may help you in achieving the appropriate theme markup.
+ 
+With Bridgy now set up, one could potentially manually publish all of their POSSE posts from the Bridgy interface for a particular service, but automated means will be described below.
 
 === Manual POSSE to Bridgy using HTML markup ===
 Outline for material to come:
 * details for manual POSSE using webmention
-* see also Bridgy documentation
+* see also Bridgy documentation: https://brid.gy/about#publishing
+
+=== POSSE to Bridgy using Syndication Links ===
+{{main|Syndication Links}}
+While it can be instructive to hand code HTML to publish through [[Bridgy]], it can be very time consuming. Toward that end {{GWG}} has added additional automation functionality to the [[Syndication Links]] plugin. 
+
+In addition to displaying links to syndicated copies of content (see backfeed section above), the plugin also adds a meta-box with  a simple checkbox interface in the sidebar of the WordPress post editor for indicating where to send POSSE copies of one's post. To configure available syndication endpoints, go to the Syndication Links settings in your WordPress admin (at <code>/wp-admin/admin.php?page=syndication_links</code>) to configure them.
+
+After sending a webmention to Bridgy to publish your post on your behalf, the Syndication Links plugin will automatically discover and save the URL of the POSSEd copy.
 
 === POSSE to Bridgy using Bridgy Publish Plugin ===
-While it can be instructive to handcode HTML to publish through Bridgy, it can be very time consuming. Toward that end {{GWG}} has created the [https://wordpress.org/plugins/bridgy-publish/ Bridgy Publish Plugin] for [[WordPress]]. With minimal configuration settings it provides a simple checkbox interface in the sidebar of the post editor for indicating where to send POSSE copies of one's post. 
-
-In conjunction with the Syndication Links plugin, it also automatically imports and saves the URL of the POSSEd copy both for possible display (see settings for Syndication Links) and to allow Bridgy to parse the post's page to allow for [[backfeed]] of comments, likes, etc.
-
-* Link to documentation
+'''Nota Bene''': While you may find it in the repository and it may still work, the [https://wordpress.org/plugins/bridgy-publish/ Bridgy for WordPress plugin] has been deprecated in favor of the [[Syndication Links]] plugin which is now recommended (see just above).
 
 == Bridgy with WordPress.com ==
 * Details and caveats for using Bridgy 
@@ -131,4 +139,3 @@ In conjunction with the Syndication Links plugin, it also automatically imports 
 * [https://brid.gy/about Bridgy Documentation]
 * [[POSSE]]
 * [[backfeed]]
-* ...
