@@ -71,6 +71,23 @@ Such a redesign can affect other aspects of an indiewebsite some of which are do
 * [[Bridgy]] using [[posse-post-discovery]] might resend some [[backfeed]] webmentions to the new permalink. These should be suitably de-dupped.
 
 [[Category:building-blocks]]
+
+=== Redirecting old URLs with [[Hugo]]'s alias mechanism ===
+
+[https://gohugo.io/content-management/urls/ URL management]
+
+When the front matter includes one or more aliases, Hugo adds the following HTML code to a page generated for the old URL (i.e., the alias of the new URL). <code>
+  <head>
+    <title>https://example.com/posts/my-intended-url</title>
+    <link rel="canonical" href="https://example.com/posts/my-intended-url"/>
+    <meta name="robots" content="noindex">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="refresh" content="0; url=https://example.com/posts/my-intended-url"/>
+  </head>
+</code>
+
+The above code redirects users to the new URL and tells search engine robots not to index this older page.
+
 == See also ==
 * [[permashortlinks]]
 * [[IndieArchive]]
