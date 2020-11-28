@@ -26,6 +26,37 @@ Although {{jamietanna}} is still building the initial version of his IndieAuth s
 
 <img src="https://i.imgur.com/OmAdhzD.png" style="max-width:100%" alt="Screenshot of a consent user interface with checkboxes for scopes, a disclosure triangle for custom scopes, and a set of profile fields that will be shared" />
 
+=== Aaron Parecki ===
+
+[[File:aaronpk-p3k-consent-screen.png|600px|The consent screen of p3k, showing the profile and micropub and microsub scopes with checkboxes next to each]]
+
+The consent screen of [[p3k]] contains the following features:
+
+At the top, identifies the application requesting permission. It will show either the plain client ID URL or the application name and logo.
+
+If the client ID URL contains [[h-app]] markup, then the application's name and icon will appear instead of the URL.
+
+[[File:aaronpk-p3k-consent-screen-app-info.png|600px|screenshot of quill icon with the name quill in place of the previously shown application URL]]
+
+If the app requests profile scopes (profile and/or email), the profile section appears and shows which profile scopes the app is requesting. These are checkboxes and can be enabled or disabled by the user.
+
+If the app requests any scopes for publishing or reading (e.g. create or read), the next section appears and shows which scopes the app is requesting. Each is a checkbox and can be enabled or disabled by the user. The special scope "draft" can be turned on in which case any post the application creates will be set as a draft regardless of whether the app sets draft status in the Micropub request. This is a way to safely try out micropub clients without risking accidentally publishing posts publicly. The "media" scope is required for the app to upload to the media endpoint, and since some clients don't request it, I have to enable it when using those apps.
+
+[[File:aaronpk-p3k-consent-screen-channels.png|600px|the text "If any channels below are checked, all posts created with this access token will be added to the channels checked", followed by a list of channel names]]
+
+The "Channels" section can be expanded to enable this option. By default, posts go through an automatic filtering process to determine which channel the post appears in based on the contents of the post. (e.g. checkins go into the checkins channel, replies go into replies, photo posts that aren't replies go into the photos channel, etc). However if I choose, I can force every post this app makes to go into a certain channel bypassing the normal automatic sorting rules.
+
+[[File:aaronpk-p3k-consent-screen-security.png|600px|green box containing a lock icon emoji and the text "This client is using PKCE with method S256!", followed by a orange warning box explaining that the redirect URL does not match the domain of the client ID]]
+
+Lastly, two security features are shown. If the client included [[PKCE]] parameters in the request (recommended as of the 2020 IndieAuth spec), this is shown in green with a closed lock icon.
+
+If the redirect URL of the application has a different host than the client ID, then a warning is shown letting the user know where they will be sent to after authorizing the application.
+
+
+=== WordPress IndieAuth Plugin ===
+
+{{stub}}
+
 == See Also ==
 * https://www.oauth.com/oauth2-servers/authorization/the-authorization-interface/
 * https://www.flickr.com/photos/factoryjoe/sets/72157624457629866/
