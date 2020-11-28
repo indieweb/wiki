@@ -20,16 +20,28 @@ Make your permalinks more usable by:
 * '''Avoid giant long strings of numbers or characters''', i.e. [[database]] IDs
 
 === Dates ===
-Many people communicate date of publication by using a top-level structure that starts with the date:
+Many people communicate date of publication by using a top-level structure that starts with a date:
 * <code>/YYYY/MM/DD/</code> - the date in order of hierarchical significance
 * <code>/YYYY/DDD/</code> - ISO ordinal date order, saves two characters (shorter is better, though may not be immediately understood by human readers), and communicates a linearity to your year of posts.
 
-Avoid the "literal" ISO 8601 date patterns of use <code>/YYYY-MM-DD/</code> or <code>/YYYYMMDD/</code> because by omitting path separators they are are less URL friendly (less hackable), e.g., [http://indiewebcamp.com/irc/2015-07-26 http://indiewebcamp.com/irc/2015-07-26].
+Avoid the "literal" ISO 8601 date patterns of use <code>/YYYY-MM-DD/</code> or <code>/YYYYMMDD/</code> because by omitting path separators they are are less URL friendly (less hackable), e.g., [https://chat.indieweb.org/2015-07-26 https://chat.indieweb.org/2015-07-26].
 
-This is a very common practice, but possibly more of an implementation detail and convenience than recommended design. Publication date is useful, but can be communicated in the page itself. It's probably not so critical that it ''needs'' to be in the URL, especially if even the more useful [[#Topic|topic]] is considered optional. In particular, some pages are "evergreen" and regularly updated, e.g. the list of books you've read, so their publication date isn't very interesting.
+This is a very common practice for permalinks, but possibly more of an implementation detail and convenience than recommended design. 
+
+Publication date can be useful at a glance, but should be communicated in the page itself regardless. It's probably not so critical that it ''needs'' to be in the URL, especially if even the more useful [[#Topic|topic]] is considered optional. In particular, some pages are "evergreen" and regularly updated, e.g. the list of books you've read, so their publication date isn't very interesting.
 
 As an implementation detail, if you use date ([[bim]], etc) to identify your posts and URLs and ignore any slug, it's easier to change the slug (and your internal identifier) later. You can redirect old slug to new ones without doing this, though. The important thing is that you create and maintain the redirects so that your permalinks keep working. ''How'' you do it is less important. -{{snarfed}}
 
+==== Non-publication dates ====
+Though the predominant default in date-based URLs is the publication date of the page, there are some notable exceptions:
+
+'''Issue date''': magazines/periodicals typically identify a specific issue with a date (or month) that is often in the future. E.g. as of 2020-11-27, the following pages are valid and viewable
+* https://www.newyorker.com/magazine/2020/11/30/how-venture-capitalists-are-deforming-capitalism
+** The date in the URL indicates the "November 30th 2020" issue of The New Yorker; the page itself has an explicit visible publication date of 2020-11-23.
+** This makes the URL "hackable" down to just the date to then display all the articles from that issue, e.g.: https://www.newyorker.com/magazine/1939/01/07
+* https://www.theatlantic.com/magazine/archive/2020/12/can-history-predict-future/616993/
+** For the "December 2020" issue of The Atlantic.
+** Similarly, by trimming the URL down to https://www.theatlantic.com/magazine/archive/2020/12/, it redirects to https://www.theatlantic.com/magazine/toc/2020/12/ which displays a nice overview of that issue of the magazine
 
 === Topic ===
 Communicate topic by using a <span id="slug">"[[slug]]"</span> somewhere after the date, e.g.
