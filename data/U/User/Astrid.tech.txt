@@ -1,8 +1,74 @@
 https://indieweb.org/User%3AAstrid.tech
 
-I'm {{plenglin}}, and I'm a CS student. My blog and portfolio website is https://astrid.tech.
+I'm {{plenglin}}, a CS student at Cal Poly. [https://astrid.tech astrid.tech] is my personal website. The contents of its [https://astrid.tech/projects/astrid-tech/ self-describing webpage], are mirrored here.
 
+After having made a lot of personal projects, I realized that I had forgotten a ton of them, and there wasn't really a place to show them off. This website was made to solve that issue.
 
-Its tech stack is described on [https://astrid.tech/projects/astrid-tech this self-describing webpage]. In a nutshell:
-* Statically-generated [[Gatsby]] frontend, hosted on [[GitHub Pages]]
-* (WIP) Python/Django backend for comments and hopefully other goodies later on
+== Feature List ==
+
+* Tagging system
+** Relatedness measures between tagged items
+* List of projects
+* Blog
+* Comments on blog and project pages
+* Pie chart of open source licenses
+* A resume
+
+=== Planned ===
+
+* Webmentions, sending and receiving
+* Feed aggregation of activity from all my accounts, plus my self-hosted &quot;microblogging&quot; system
+
+== Tech stack summary ==
+
+* '''Frontend''' - statically generated, optimized SPA
+** '''Technologies'''
+*** Gatsby.js
+*** TypeScript
+*** React
+*** Sass
+*** Bootstrap 4
+** '''Deployment'''
+*** Github Actions
+*** Github Pages
+* '''Backend''' - API-only backend (except for the admin panel)
+** '''Technologies'''
+*** Python
+*** Django
+*** Postgres
+** '''Deployment'''
+*** Docker
+*** Docker Hub (with automated testing)
+*** Docker Compose
+
+== Frontend ==
+
+I use Gatsby to statically generate the website. However, [https://astrid.tech/blog/2020-12-20-adding-a-backend/#replacing-gatsby I am considering moving off of it to Next.js].
+
+The static site is hosted via [https://github.com/plenglin/astrid.tech Github Pages] to statically host the website. (Going to [https://plenglin.github.io plenglin.github.io] takes you here!)
+
+There is a [https://github.com/plenglin/astrid.tech/actions Github Actions] workflow that automatically builds on every push to verify that my code compiles. Additionally, if there was a push to the <code>main</code> branch, it will publish the build output to the [https://github.com/Plenglin/plenglin.github.io plenglin.github.io] repo.
+
+=== UX design methodology ===
+
+I've tried to make the browsing experience as user-friendly and inclusive as possible by:
+
+* Adopting a mobile-first methodology for designing views, and responsively sizing elements in CSS
+* Statically generating the site to reduce bandwidth consumption for users
+* Utilizing semantic tags and designing the site to be accessible for screen readers
+
+== Backend ==
+
+Currently, the backend's only functionality is to serve and receive possibly anonymous comments.
+
+I have pointed [https://hub.docker.com/repository/docker/astridyu/astrid_tech_api Docker Hub] at my repo to build, test, and release a new <code>:latest</code> image on every push to main.
+
+It is deployed as a Docker container on a [https://contabo.com Contabo] VPS located in Missouri for about $8/mo. See [https://github.com/Plenglin/astrid.tech/blob/main/docker-compose.yml the <code>docker-compose.yml</code>] for deployment details. I will soon set up [https://github.com/containrrr/watchtower Watchtower] to automatically pull the image, so that the only thing I need to do with deployment is push to <code>main</code>.
+
+== Content ==
+
+The content is in its own [https://github.com/Plenglin/astrid.tech-content Git submodule] as a set of raw files that get aggregated and compiled on each frontend build. It is written in the following file formats:
+
+* Markdown
+* YAML
+* Jupyter notebooks for a few blog posts (I wrote a custom Gatsby plugin that auto-transforms the Jupyter notebooks into Markdown files)
