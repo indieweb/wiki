@@ -1,0 +1,76 @@
+https://indieweb.org/events/2020-12-30-hwc-americas
+
+Homebrew Website Club - The Americas
+
+* 2020-12-30 https://events.indieweb.org/2020/12/homebrew-website-club-the-americas-iCQoviBRPr7r
+* archived from https://etherpad.indieweb.org/hwc-2020-12-30
+
+== Participants ==
+* {{maxwelljoslyn}}
+* {{gwg}}
+* {{astralbijection}}
+* Brian Temblay
+* {{dmitshur}}
+* {{hibs}}
+* {{tantek}}
+* {{schmarty}}
+* {{chrisaldrich}}
+* David Vanadia
+
+== Notes ==
+
+{{schmarty}} gave a demo of many many cats on his website. The "eternal caturday" was it? https://martymcgui.re/tag/caturday/
+
+{{dmitshur}} gave a demo of updating his website's IndieAuth implementation for 2020 spec changes. (https://github.com/shurcooL/home/issues/43)
+
+Dmitri's issue tracker is documented at https://indieweb.org/issue_tracker (FYI for maxwelljoslyn since you commented on it :) ).
+Thanks Dmitri :^)
+
+{{gwg}} gave us a demo of his Create Day results
+
+Discussion of h-review
+* relatively few implementations in the wild
+* why does https://indieweb.org/review say that p-rating is between 1 and 5, even when there are p-best and p-worst properties for explicitly setting those? (defaults)
+* h-review properties tilted towards reviews of products - what about experiences? other concepts?
+
+{{astralbijection}} gave a demo of a commenting system for blog posts. Includes validation. There's a feature to report problematic content.
+
+NewBase60
+* Marty is using it in his shortlinks, wrote his own Python implementation
+** Marty's shortlink service is a Python Flask app, only implements the "sxg2num" conversion: https://git.schmarty.net/schmarty/mmgre/src/branch/master/mmgre_shorturls/__init__.py
+** uses 6 NewBase60 characters - first 3 are "epoch days" (number of days since Unix epoch) and last three are "day seconds" (seconds into that day). Those values are unpacked and converted to a timestamp-based URL structure of /YYYY/MM/DD/hhmmss/ before redirecting to my main site.
+* Tantek's link shortener also uses NewBase60 for days since epoch start
+** recent use-case: permashort links in manual Instagram POSSE copies
+* There's also KevinMarks's Python implementation: https://github.com/kevinmarks/newBase60py 
+
+Instagram, anyone still using?
+* A few people
+POSSEing
+* Chris Aldrich is using snarfed's experimental browser add-on
+* Tantek has changed how he's POSSEing to Instagram recently
+
+Multiphotos:
+* {{t}} posts them
+* {{astralbijection}} does blog posts with multiple photos
+* {{schmarty}} gives example of a "builds" photos of building things in progress. [https://martymcgui.re/2020/12/30/18000/ gallery of photos from the equivalent of a "make" from Thingiverse] and a [https://martymcgui.re/2018/10/06/144700/ gallery of photos from a large sculpture build].
+
+Private posts:
+* KevinMarks shared https://css-tricks.com/learning-to-simplify/ in the IndieWeb chat a few weeks ago and {{schmarty}} got curious as to how it works. Ended up paying for the course to try it out and learned a bit about how it works.
+** Public-facing content (like free sample lessons) are static content and all available online. Private/paid content is not present on this domain, so it 404s.
+** When you pay for the content, or sign in with your browser, a bit of JavaScript is allowed to fetch a bundle of that private content. The JavaScript goes through each entry and makes a browser Cache API entry ''as if'' the entry was at the expected URL on the public site.
+** The public site has a service worker that intercepts requests to itself and uses content in the cache before trying to fetch it, so it will now find that private content, stored in your browser cache, and available even offline!
+  
+Question about automated posting:
+* cleverdevil.io has several projects that automatically post via micropub. One is https://futurepub.cleverdevil.io/ which acts as an intermediary between micropub clients that let you set a future publish date and a micropub server that maybe doesn't know how to handle future posts.
+* OwnYourSwarm https://ownyourswarm.p3k.io/ and similar [[PESOS]]-enabling systems will post to your site via Micropub when something happens on another network.
+* {{chrisaldrich}} uses IFTTT to automate getting content from some silos he uses into his own site.
+** https://boffosocko.com/2020/01/21/using-ifttt-to-syndicate-pesos-content-from-social-services-to-wordpress-using-micropub/
+
+Possible Topics
+------------------
+
+* IndieAuth (the protocol) in 2021 and beyond
+* Being an introvert on the web and IndieWeb (pros and cons, ways around this)
+* real time chat, notifications between websites
+* 2021 Goals for people's website
+* 2020 Personal Year in Review
