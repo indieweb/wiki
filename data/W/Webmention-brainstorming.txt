@@ -303,8 +303,41 @@ https://gist.github.com/aaronpk/784caabe2649b9c759e6afec80827145
 
 Note on the optional steps: A simpler option could be to have Alice verify her domain once at Dev.to, then Dev.to will only send comments back to the canonical URL if the canonical URL is on the same domain. This is slightly less strict than checking every post, but means authors don't have to have the ability to link to syndicated copies.
 
-=== Fetching stored Webmentions ===
-The specification doesn't have a means of presenting all of the Webmention stored in the endpoint. Something like this _SHOULD_ be behind an authorization block.
+=== fetching stored Webmentions ===
+The specification doesn't have a means of presenting all of the Webmention stored in the endpoint. Something like this '''SHOULD''' be behind an authorization block. Adding a means of retrieval would give the implementation a more complete sense - moving away from a write-only endpoint into an endpoint that can give people a means of fetching all of their incoming Webmentions in a uniform and universal way across sites (and tools).
+
+The benefits include:
+* Allow people to build readers that have more intelligent resolution of notifications based on feeds
+** This can be a case where a site returns a specific feed for a particular reader (or a set of them)
+* Expanding the default library to handle said retrieval in a universal way
+* Reducing explicit conflation with (and load on) [[Webmention.io]] since it's the most public Webmention server that ''also'' provides a means of fetching Webmentions stored
+
+The cons:
+* Without authorization, this allows ''everyone'' to read the list. This can also become a problem for static sites that wish to use this as a way to render notifications after-the-fact
+** A unique read-only token can be used here to prevent malicious use (or reading otherwise protected content)
+* This can require more logic regarding permissions for implementations and adding something like that retroactively can be quite tedious.
+
+
+The request could look something like the following:
+<pre>
+GET /api/indieweb/webmention HTTP/1.1
+Host: jacky.example
+Content-Type: application/jf2feed+json
+Authorization: Bearer 1a2bc3d4e5
+
+{
+  "items": [
+    { ... },
+    { ... }
+  ],
+  "paging": {
+    "after": "xxxxx",
+    "before": "xxxxx"
+  }
+}
+</pre>
+
+The structure of the response would be [[Microsub-spec#Retrieve_Entries_in_a_Channel|''very'' similar to that of the timeline response for Microsub]].
 
 == Alternatives ==
 Alternatives to webmention.
