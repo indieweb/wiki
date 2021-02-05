@@ -7,10 +7,12 @@ The '''<dfn>[https://wordpress.org/plugins/webmention/ Wordpress Webmention Plug
 
 Incoming webmentions are added as comments to the original post and webmentions are sent when a post is published/updated.
 
+
 == Installation ==
 
 The WordPress Webmentions plugin is available in the WordPress.org repository. The development version is available on Github.
 It is highly recommended that those using the Webmentions plugin also download and activate the [[Semantic Linkbacks]] plugin as well as it helps to better format and display received webmentions.
+
 
 == Configuration == 
 
@@ -34,6 +36,7 @@ add_filter('pre_comment_approved', 'unspam_webmentions', '99', 2);
 
 To approve webmentions received from previously-approved domains you can use this snippet: https://gist.github.com/gRegorLove/8215cb9c9584b364aaf4ef2999416f56
 
+
 == Issues and Brainstorming ==
 
 * The Webmentions plugin does not currently support asynchronous webmention processing, deleting posts(mostly due to the fact that WordPress doesn't have a status for deleted, only trashed).
@@ -43,6 +46,19 @@ To approve webmentions received from previously-approved domains you can use thi
 * Custom comment types do not have the level of support in WordPress as custom post(content) types or custom taxonomies... See(https://core.trac.wordpress.org/ticket/35214 and related). So, using webmention as a comment type is supported, but not fully integrated. Right now, the plugin only has one comment type...webmention. The question is if it should use the field to reflect 'like', 'bookmark' etc. 
 
 * What properties should be extended off of the WordPress comment type to reflect a webmention need to be considered.
+
+
+== FAQ ==
+Q: Is there a benefit to showing the Webmention field on your site? Does it actually get used? It feels like all of the Webmentions are automated through the protocol/API, not manually by copy and pasting a link.
+
+A: There are some sites that have receiving implemented but not sending, and it was primarily meant for that. (This is probably most often people who are using webmention.io as their proxy endpoint by registering and adding a line of code to their header.)
+
+It also serves to help visually indicate that your site supports the protocol if you don't have a [[button]] for it that points to something like https://example.com/wp-json/webmention/1.0/endpoint. For those that care or are in-the-know there are manual services like https://telegraph.p3k.io/send-a-webmention or http://mention-tech.appspot.com/ which could be used as well.
+
+One can use the box on their own site to manually send oneself webmentions from other sites that don't send them, but which may be found in the wild or via [[refbacks]]. 
+
+In the end, it's your site, so you can show or hide the box at your discression.
+
 
 == Related Plugins == 
 
