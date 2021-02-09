@@ -85,13 +85,13 @@ Note: <em>Prevent</em>, not minimize. The goal here is make spam defense a <stro
 === Degrees of Separation ===
 '''Note:''' The following is a brainstorm, does not reflect current implementations and probably needs work --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 16:21, 22 May 2013 (PDT)
 
-Typically I consider whitelists to be a negative thing for accepting general commentary — it seems elitist and similar to search bubbling (i.e. trapped in a bubble). However, whitelists are the most straightforward and probably most effective prevention measures.
+Typically I consider allowlists to be a negative thing for accepting general commentary — it seems elitist and similar to search bubbling (i.e. trapped in a bubble). However, allowlists are the most straightforward and probably most effective prevention measures.
 
-So, a more flexible whitelist-based approach might be implemented as follows:
+So, a more flexible allowlist-based approach might be implemented as follows:
 
 Initial setup:
 
-* I start with a whitelist of people — e.g. my address book (1st degree contacts)
+* I start with a allowlist of people — e.g. my address book (1st degree contacts)
 * My software crawls their websites and extracts [[XFN]] data and [[mentions]] of people (2nd degree contacts)
 * I associate each 2nd degree contact with their associated 1st degree contact, building a graph without actually adding the 2nd degree people to my address book
 * I periodically re-crawl the graph and update accordingly
@@ -118,12 +118,12 @@ Receiving a comment from an unknown person:
 # Someone I don’t know submits a comment, which is not displayed publicly
 # I receive a notification asking me to approve the person
 #* If I do so, they are added to my address book, their comment goes public and all future comments from them are accepted
-#* If I do not, they are added to a blacklist and any further comments from them are ignored
+#* If I do not, they are added to a blocklist and any further comments from them are ignored
 
 === Twitter follows follows ===
 In a turnabout of sorts, we can use existing [[silo]] connections as a potential spam filter as well.
 
-Here's you could use Twitter's social graph as a dynamic second degree whitelist:
+Here's you could use Twitter's social graph as a dynamic second degree allowlist:
 
 Note: when you visit someone's profile on [[Twitter]], if you're not already following them, it shows you which of the people you <em>are</em> following (your "follows"), are following them. This could be used in the following way:
 
@@ -149,10 +149,10 @@ Perhaps break these into separate sections if you're considering pursuing them:
 ** Example service: [http://akismet.com/ akismet]
 ** [[Pump.io]]'s spam filtering software: [https://github.com/e14n/activityspam e14n/activityspam]
 
-* Blacklisting — figure out from which IPs a lot of spam comes, blacklist them
-** Alternatively blacklist the domains that try to advertise themselves. This is what [[website-analytics#Matomo|Matomo (formerly ''Piwik'')]] does against [https://en.wikipedia.org/wiki/Referer_spam referer spam] using a public domain blacklist: [https://github.com/matomo-org/referrer-spam-blacklist matomo-org/referrer-spam-blacklist]
+* Blocklisting — figure out from which IPs a lot of spam comes, blocklist them
+** Alternatively blocklist the domains that try to advertise themselves. This is what [[website-analytics#Matomo|Matomo (formerly ''Piwik'')]] does against [https://en.wikipedia.org/wiki/Referer_spam referer spam] using a public domain blocklist: [https://github.com/matomo-org/referrer-spam-blacklist matomo-org/referrer-spam-blacklist]
 
-* Whitelisting — the opposite of blacklisting. Have a predetermined list of people from which you will accept data
+* Allowlisting — the opposite of blocklisting. Have a predetermined list of people from which you will accept data
 
 * High barrier to entry — a little similar to a captcha: force the user to perform some task/satisfy some condition before allowing them to enter data.
 ** An example being this very wiki — we have zero spam due to the need to log in using your own domain via [[indieauth]] (we've been lucky / under the radar - spammers have blogs and know how to link to spam profiles on other networks like [[Twitter]].
@@ -207,8 +207,8 @@ Webmention filtering flow:
 Spam reporting flow:
 * one way or another you’ve come across some spam
 * send a POST request to anti-spam.com/report or some such endpoint with the URL
-* that domain gets added to your personal blacklist
-** perhaps also either to a global anti-spam list, or maybe blacklists should be shared in the same way whitelists are, where if a domain is in your blacklist or the blacklist of anyone you’ve linked to, they get blocked.
+* that domain gets added to your personal blocklist
+** perhaps also either to a global anti-spam list, or maybe blocklists should be shared in the same way allowlists are, where if a domain is in your blocklist or the blocklist of anyone you’ve linked to, they get blocked.
 
 Possible other option: webmention proxy. You use anti-spam.com or whatever as your webmention endpoint, which forwards non-spam webmentions to your real endpoint, perhaps with some extra parameter indicating if it needs moderation. Requests would be signed, making it easy to determine that they are in fact from anti-spam
 
