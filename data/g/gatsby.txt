@@ -4,7 +4,7 @@ https://indieweb.org/gatsby
 
 Gatsby uses React to render static pages that follow the [https://developers.google.com/web/fundamentals/performance/prpl-pattern/ PRPL] pattern for exceptional loading speed.  The static pages can be sourced from a huge variety of data, translated into GraphQL, then queried to produce a collection of pages that around generated at build time.
 
-This means that there is HTML markup that's fully machine readable - making it SEO/indie/webmention/js;dr friendly.
+This means that there is HTML markup that's fully machine-readable - making it SEO/indie/webmention/[[js;dr]] friendly.
 
 At the moment it supports many data sources:
 * Filesystem (often Markdown files)
@@ -21,10 +21,38 @@ These data sources can then be transformed:
 
 ''(Note that these are only read during build time - so you must re-build to get new content out)''
 
-== Opportunities ==
-When it comes to "incoming" data to this site generator, it would have to push the data to one of the connected data sources then trigger a rebuild.  At the moment it doesn't support incremental rebuilds but overall the performance is pretty good for small-ish sites to do a complete rebuild.
+=== Incremental Builds ===
+Gatsby officially began supporting incremental builds in April 2020: {{citation
+|title = From static to real-time: introducing incremental builds in Gatsby Cloud
+|url = https://www.gatsbyjs.com/blog/2020-04-22-announcing-incremental-builds/
+|author = [https://www.gatsbyjs.com Gatsby]
+|published = 2020-04-22
+}}
 
-You could probably handle incoming webmentions by having a small app on another subdomain that pushes the webmentions into MongoDB, then triggers a rebuild of the site to include new mentions.
+These are primarily designed to be used in conjunction with their own paid hosting platform, [https://www.gatsbyjs.com/cloud/ Gatsby Cloud], but a [[Netlify]] plugin provides at least partial support:
+* {{citation
+|title = Enable Gatsby incremental builds on Netlify
+|url = https://www.netlify.com/blog/2020/04/23/enable-gatsby-incremental-builds-on-netlify/
+|author = [https://www.netlify.com/authors/jason-lengstorf/ Jason Lengstorf]
+|published = 2020-04-23
+}}
+
+==== See Also ====
+* Official Gatsby docs: {{citation
+|title = Conditional Page Builds
+|url = https://www.gatsbyjs.com/docs/conditional-page-builds/
+}}
+* {{citation
+|title = Incredimental builds!
+|url = https://www.joshwcomeau.com/gatsby/incredimental-builds/
+|author = [https://www.joshwcomeau.com/ Josh W Comeau]
+|published = 2020-04-29
+}}
+
+== Opportunities ==
+When it comes to "incoming" data to this site generator, it would have to push the data to one of the connected data sources then trigger a rebuild. Even without access to incremental builds the performance is pretty good for small-ish sites to do a complete rebuild.
+
+You could probably handle incoming [[webmentions]] by having a small app on another subdomain that pushes the webmentions into MongoDB, then triggers a rebuild of the site to include new mentions.
 
 == Plugins ==
 === Webmentions ===
@@ -65,6 +93,9 @@ You could probably handle incoming webmentions by having a small app on another 
 IndieWeb community members using Gatsby on their own primary sites:
 * [https://theadhocracy.co.uk Murray] - {{murray}} uses Gatsby on his personal site, including displaying [[webmentions]] and providing [[microformats]] feeds.
 * {{addyourself}}
+
+Other independents that are using it on their <em>primary</em> self-identifying site:
+* [https://www.joshwcomeau.com Josh W Comeau] — Josh previously worked for Gatsby and continues to use the platform for his personal site.
 
 == See Also ==
 * [[static site generator]]
