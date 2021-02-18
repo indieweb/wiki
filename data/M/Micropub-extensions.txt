@@ -637,10 +637,15 @@ Properties: h=card&name=Contact name&nickname=Nick&photo=photo&url=url
 Proposal to implement a draft scope. Draft by itself, without (create/update) scope, would only allow draft posts to be created regardless of what post-status is sent by the client.
 
 * Clients
-** ...
+** Micropublish supports an optional draft scope when logging in. If used, all posts will have post-status=draft.
 * Servers
 ** [[WordPress Micropub Plugin]]
 ** {{aaronpk}} supports the draft scope
+*** His consent screen allows the server to change a request for create into draft so that clients who do not know about draft can still use it.
+** {{jamietanna}} has implemented this.
+*** when creating a post, and the draft scope is present, the post-status is forced to draft (even if it's set otherwise in the post)
+*** when updating a post, and the draft scope is present, the update is only allowed when updating a draft post, otherwise returns insufficient_scope
+*** delete/undelete returns insufficient_scope when the draft scope is present
 
 == Media Endpoint Extensions ==
 === Proposed Extensions ===
