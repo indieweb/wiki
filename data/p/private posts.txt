@@ -88,61 +88,6 @@ Or are those the same thing with just different UIs?
 
 Would it be a goal of this use-case to replace group txt messages?
 
-== IndieWeb Examples ==
-
-=== {{kylewm}} ===
-
-[[Red Wind]] has rudimentary support for private posts based on a simple list of the domains of people authorized to view a private post. The posts are viewable only if the [[IndieAuth]]ed user is in the audience list.
-
-Example note from {{kylewm}}'s site:<br>[[File:kmahan-private-note-display.png|border|500px]]<p>[[Posting interface]]:<br>[[File:kmahan-private-note-edit.png|border|500px]]
-
-=== {{aaronpk}} ===
-[[p3k]] (v1) has support for private posts by specifying a list of the domains of people authorized to view a private post. To view the post, the user must identify themselves with [[IndieAuth]] by signing in to the site. After signing in, a session cookie is set which identifies the user.
-
-[[File:p3k-private-post.png|450px]]
-
-=== {{benthatmustbeme}} ===
-[[postly]] has support for private posts as of 2015-11-30, more data forthcoming.
-
-=== gRegor Morrill ===
-{{gRegor}} added basic support for making a page private as of 2016-09-27, as part of work on [[private webmention]]
-* https://gregorlove.com/2016/09/this-is-a-test-private/
-** Returns HTTP 401 Unauthorized
-** Returns WWW-Authenticate: Bearer header
-** Returns Link: header for token endpoint, for authentication
-** See [[private_webmention#gRegor_Morrill|my private webmention notes]] for more details
-
-TODO:
-* [[uid]] for slug so no private information is leaked through the slug
-
-=== Becky Stern ===
-[https://beckystern.com/ Becky Stern] supports private posts on her site with an "Unlock with Patreon" login wall as of 2019-06-01. These allow her to post backers-only content for her [[Patreon]] on her personal site, rather than locking the content to patreon.com. This feature is provided by an official [https://wordpress.org/plugins/patreon-connect/ Patreon Connect] plugin for [[WordPress]].
-
-* Example [https://beckystern.com/2019/06/01/my-worst-mistakes-at-work/ post from 2019-06-01]
-[[File:Screenshot_from_2019-06-03_13-59-25.png|450px]]
-
-=== Eddie Hinkle ===
-{{eddiehinkle}} supports private posts on his site as of [https://eddiehinkle.com/2019/06/16/1/ 2019-06-16].
-* Posts with Protected visibility only appear if a user is authenticated, but they are unrestricted beyond that.
-** Example: [https://eddiehinkle.com/2019/06/16/1/ Protected Post Example]
-* Posts with Private visibility only appear if a user is authenticated AND they are in the audience list
-** Example: [https://eddiehinkle.com/2019/03/10/1/ Private Post with Audience Example]
-*** If you want access to the above post for testing purposes, reach out to me in chat
-* Currently Eddie supports authentication with his website through IndieAuth
-* Other forms of authentication Eddie is working on:
-** [[AutoAuth]]
-** Email Magic Link
-** Twitter Login
-
-
-=== {{beesbuzz.biz}} ===
-
-[[Publ CMS|Publ]] has support for private posts as of [http://beesbuzz.biz/3922 2019-07-13], using [[Authl]] as the authentication broker. This supports both IndieWeb and silo users (via Twitter, Mastodon), as well as login-by-email.
-
-Users can be put into hierarchical groups, and posts can have their visibility made based on groups and individuals. See [http://publ.beesbuzz.biz/manual/formats/322-Entry-files#auth entry auth] and [http://publ.beesbuzz.biz/manual/706-User-authentication#user_list user/group configuration] for more information.
-
-Publ also now (as of [http://publ.plaidweb.site/blog/301-Publ-0-6-9 2020-08-14]) provides a mechanism for retrieving a bearer token to provide to a feed reader; this can be seen on [https://beesbuzz.biz/profile fluffy's site], although at present no known feed readers support this (but it is tested working in cURL, at least).
-
 == Silo Examples ==
 We can learn from the UI that [[silos]] use to present and edit the privacy of posts.
 
