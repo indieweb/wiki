@@ -35,59 +35,6 @@ personal site / profile URL. apply caching as needed. once you make your address
 
 : tl;dr summary: Use <code>WWW-Authenticate</code> headers and a new <code>&lt;link rel&gt;</code> to signal to readers/subscription engines that there's a mechanism to get a bearer token to present for the subscription, and a subscriber can configure their feed reader to send said token with the request for the feed.
 
-=== Partial Page Privacy ===
-
-During IndieWebCamp Online 2014, the question was raised of how to indicate that some or all of a page was not for public consumption.
-
-The Use Case for this came during {{benthatmustbeme}}'s review of his contact page, which displays additional contacts to logged in users. The question was raised of how you would tell a logged in user that you did not want them to share contacts which were not public, as many sites, systems would automatically log in.
-
-The proposed solution was suggested in marking up the information appropriately. Possible parameters might include
-* For Eyes Only - Indicating that the information should not be distributed
-* For Specified Group - Indicating some group it may be shared with
-* The Absence of such markup would suggest public information
-
-=== Public Page Upgrading ===
-
-On IRC it was [http://indiewebcamp.com/irc/2015-09-15#t1442342684222 discussed 2015-09-15] about how to indicate the availability of possible private content for authenticated users on an otherwise public page.
-
-It was suggested to respond with a "WWW-Authenticate" header, like the one used in [[private-webmention]], to indicate the upgrade possibility:
-
-<pre>WWW-Authenticate: IndieAuth</pre>
-
-It was also discussed that the response could include a unique URL as a rel-self to enable realtime [[Pubsubhubbub]] updates on said content.
-
-This would enable [[block]] mechanisms based on eg. [http://microformats.org/wiki/block-list block lists] to advertise both some blocked items to public and additional ones privately to certain trusted users and to have changes propagate in realtime to all clients, such as [[Webmention]] endpoints, that might have use for such data to eg. block mentions from being shown.
-
-It can also be used to upgrade a public [[h-feed]] with private posts when subscribing to it in a [[reader]].
-
-=== Sharing only with approved followers ===
-The ability to share posts only with approved followers (instead of publicly viewable) is a common [[silo]] feature, either as an aspect of a [[private account]], or sometimes as part of sharing to "friends only".
-
-Such posts are sometimes also called a "follower-only post" or a "follower-only message".
-
-=== Sharing With Fewer Friends ===
-There are many times when you may want to share something, like something vulnerable, with only a few friends, a small subset of your "friends" on any particular social media or other service.
-
-Thoughts from (unattributed) private (but not person-specific) messages of specific examples of such times, some ambiguities added:
-
-<blockquote>Where does one go / post when one feels lost or in need of connection or understanding?</blockquote>
-...
-<blockquote>Where do you post when your significant other breaks up with you and you're friends with them and their friends too on every social network?</blockquote>
-...
-<blockquote>Where do you go for support for a problem you're having with someone else in your friend group? Especially when we're so interlinked.</blockquote>
-...
-<blockquote>We're so interlinked superficially. Linked yet feeling disconnected.</blockquote>
-...
-<blockquote>In public or even friends only posts we are compelled to put on an air of invulnerability, of strength, of bouncing back from anything for fear that if we don't we won't seem attractive to others we may be dating or want to date. Or to get a job or funded or whatever we are seeking approval for.</blockquote>
-
-Should you even use the indieweb / web for this?
-
-How could private posts be better than a simple group txt message where you add the people you want to share, then share?
-
-Or are those the same thing with just different UIs?
-
-Would it be a goal of this use-case to replace group txt messages?
-
 == Silo Examples ==
 We can learn from the UI that [[silos]] use to present and edit the privacy of posts.
 
