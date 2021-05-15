@@ -4,6 +4,13 @@ https://indieweb.org/uid
 
 '''<dfn>uid</dfn>''' is a unique identifier.
 
+== IndieWeb examples ==
+
+* {{fluffy}} provides the <code>uid</code> microformat on the <code>h-entry</code> attributes using <code>&lt;data class="p-uid" value="ENTRY_UID"&gt;</code> from both <code>h-feed</code>s and individual entry pages; these UIDs match the matching GUIDs provided in the Atom feeds.
+** Example: [https://beesbuzz.biz/articles/?id=10425 h-feed], [https://beesbuzz.biz/articles/10425-Changes individual entry], [https://beesbuzz.biz/articles/feed?id=10425 Atom feed]
+
 == See Also ==
 * [[GUID]]
 * [[u-uid]]
+* Limitation: GUIDs on the web are not "G". While RSS & Atom assert that post GUIDs (and thus a h-entry uid) can be used to de-dupe entries (avoid new unreads) when a feed moves across domains, that assertion violates modern understanding and restrictions of cross-origin semantics, and cannot be expected to work. Assume such post GUIDs only work in the context of their domain.
+* Caution for 'uid' consuming applications: Even if you use a URL as your uid / GUID, you still need to be careful about how you treat it, like a malicious site alice.example.com could still provide a u-uid of https://bob.example.com/12345 and attempt to "overwrite" a post from another domain
