@@ -1,0 +1,213 @@
+https://indieweb.org/2021/Pop-ups/Webmentions_Beyond_Webmention.io
+
+== Agenda Items ==
+
+https://indieweb.org/Webmention-brainstorming#status_page
+
+== Participants ==
+* {{jacky}} (facilitator)
+* {{chrisaldrich}}
+* {{jamesstallings}} aka sparseMatrix
+* {{aaronpk}}
+* {{omz13}} (david somers)
+* {{gRegor}}
+* {{angelo}}
+* {{snarfed}}
+* {{fluffy}}
+* {{woutergroeneveld}}
+* {{jamietanna}}
+* {{barryf}}
+* {{manton}}
+* {{gwg}}
+* {{maxwelljoslyn}}
+* {{kevinmarks}}
+* {{jeremyfelt}}
+* {{petermolnar}}
+* {{dmitshur}}
+* {{sknebel}}
+* {{martymcguire}}
+* {{barnabywalters}}
+* {{ana-r}}
+* {{kartik}}
+* ... add names
+
+== Jokes ==
+"I want to tell a webmention joke. I know I'm the source, but I don't know who the target is yet..."
+"I'll vouch for that joke."
+
+== Quotes ==
+{{jacky}} "webmentions are like the plywood you build a ship out of to carry your content on"
+{{KevinMarks}} "Stop naming projects webmention"
+{{petermolnar}} "Sounds like you're looking for an ontology..."
+
+== Notes ==
+=== Possible Topics of Discussion===
+Webmention-brainstorming: https://indieweb.org/Webmention-brainstorming
+* Status 
+* Status Page - The purpose of a status page is to notify the sender as to whether the webmention succeeded or failed and why. Standardizing the format and encouraging more implementations to offer this feature would have several positive effects.
+* Status Query Results - Status could also be queried by a header
+* Optional callback in the webmention to indicate the outcome of processing
+in theory, a 200 OK response is accepted, saved, can be seen, and a 202 is the accepted, queued, come back later
+I wonder if webmention processors respect this
+* Retry recommendations.
+* Rate limiting on endpoints
+* Webmention permalinks
+* What to Store about Received Webmentions
+* What to Store about Sent Webmentions...or the failure thereof
+* Should All Types of Posts Send Webmentions?
+* Webmention and POSSE deduplication.
+
+{{fluffy}}: [https://beesbuzz.biz/blog/6982-My-webmention-endpoint-wish-list old blog post with some wishlist items]
+
+Why do people use webmention.io?
+
+* Easy to set up, add one line of HTML
+* Parses the webmention URL and normalizes the content into a JSON format
+* Provides output options for retrieving the data
+** Provides an API to fetch received webmentions
+** Provides a web hook to push comments out too
+
+What are the difficult parts of receiving?
+* Getting authorship and comments formatted nicely
+* Handling different sorts of replies
+** e.g. not showing rsvps to non-RSVPable content
+** collapsing low-content replies like likes, emoji responses etc. into facepiles
+* Handling security issues: safely sanitizing and formatting external HTML, copying external profile photos onto your own domain to avoid cross-domain requests.
+* Dealing with spam
+* Handling updates/deletion of replies
+
+
+How can we remove some of the load from webmention.io and create alternate implementations?
+* Why do so many folks use WM.io?
+** static sites 
+** lot of blog entries on "how to add webmentions to your site simply" pointing to webmention.io
+** self-hosted out of the box receivers are rather rough to set up apart from WordPress (eg. I failed to set up webmentiond (the go one) myself)
+ ** why not webmention.herokuapp.com ? -> are there any posts about it? 
+** why not mention.tech ? (because it is ugly as sin perhaps)
+** {{jamietanna}} static site, just haven't gotten around to it
+* aaronpk: just having the receiver isn't enough; you need to present the parsed results usefully too
+* {{jamietanna}} has seen some folks who store webmentions into a Git repo / raise issues i.e. https://github.com/qubyte/qubyte-codes/issues/167
+* {{woutergroeneveld}}: I have a static Hugo website and stuff gets auto-committed using a few self-written tools. I have written my own webmention endpoint which is a single binary in Go: https://github.com/wgroeneveld/go-jamming to see how it works see https://github.com/wgroeneveld/brainbaking/ (still have to elaborate the README) feel free to ping me if anyone wants to use it. 
+* petermolnar: committing the webmention to github automatically could be good
+* {{martymcguire}}: I use wm.io's webhook feature and save them as Hugo data to sense of in my templates.
+* jacky.wtf: being able to pull the parsed result is important
+** {{barnabywalters}} parsing, sorting and sanitizing webmentions for display is non-trivial, easier to rely on a pre-existing, trusted implementation. mf parsers exist, but how many languages do we have “full-stack” webmention processing libraries for, which handle everything necessary to safely parse and display replies? -> {{woutergroeneveld}} nobody mentioned webmention.rocks test suites yet that can be used to verify the parsing. This saved my ass in my own feeble attempt to implement stuff ;-) +1, webmention.rocks is amazing
+* petermolnar: what are people willing to selfhost? answers from the room: chances are most want to self-host nothing!
+* {{snarfed}} what are stats on webmention recipients? how many use webmention.io? 2%? 10%? 50%?
+Stats from 2017 (https://indiemap.org/docs.html#rel_me_histogram ) showed that the vast majority of indieweb sites were either WordPress or Known, which handled webmentions themselves. Micro.blog is the one new big one, it also builds them in. What's the scope of the wm.io problem specifically? {{woutergroeneveld}} don't forget that wm.io also supports PINGBACK! and I have no idea why it's ignored here. Most sites - blogs on Wordpress - have it built-in. I've received more pingbacks through my pingback endpoint than webmentions... 
+** What percentatge of these users are static sites? +1 +1
+** What percentage of them are platforms without custom implementations?
+* kevinmarks: https://webmention.herokuapp.com/ is a good "one stop shop", too - why aren't we seeing more folks there? - see kevinmarks.com for extensive use of this
+How might we break down webmention.io down into smaller/easier constituent parts as a means of solution for this?
+* manton:  I tried to copy webmention.io format — this help page has the details of asking Micro.blog for JF2 format compatible with Webmention.io: https://help.micro.blog/t/replies-with-conversation-js/67
+* {{kevinmarks}}: I tried to copy webmention.io in mention.tech too by calling mf2tojf2 on the output, and got a version of fluffy's script working - https://tumblelog.xyz/ uses mention.tech with a hacked fluffy script
+
+* snarfed: are we able to do something to build a load of plugins for static site generators, that allow us to build in Webmentions?
+** jamietanna: depending on how the site is served, this may not work (but as snarfed says, there's some interesting technical problems to solve)
+** https://mxb.dev/blog/using-webmentions-on-static-sites/ https://github.com/maxboeck/eleventy-webmentions
+* kartik: before webmention people used disqus - did people build alternatives? yes, lots!
+** https://indieweb.org/comments#Comments_Embeds lists several
+** Disqus? https://disqus.com/
+** {{woutergroeneveld}} commento, for example (self-hosted alt.) https://www.commento.io/
+** {{fluffy}} also [[isso]]
+**  https://utteranc.es/
+** quite a few built around static sites - staticman
+
+q for Aaron: what is rough cost of running wm.io per month?
+* {{woutergroeneveld}}: how do we handle SPAM? Any strategies for that? I've had a few so far. => aaron says pingback endpoints are mostly hit by spam. Is it a matter of time before webmentions get as popular and also become victim of that?
+** {{barnabywalters}} I’ve already had some webmention spam via brid.gy, mostly from twitter accounts -> {{woutergroeneveld}} did you process/delete this manually? -> yup, it’s happened little enough that I haven’t needed to build a UI for it yet, but it’ll definitely be necessary in the future.
+
+Been made a bit more "cool" by Max Böck (mxb.dev),  Shawn Wang (swyx.io), https://www.learnwithjason.dev/, sia.codes
+
+* aaronpk: people get excited about webmentions and webmention.io is easiest - there are vastly more on wordpress or micro.blog, but publicly people get excited about adding it to their sites. It's worth focusing on that narrow use case as that is where the excitement is in public.
+* David somers: how about a webmention receiver that sends out a micropub comment 
+** aaronpk: doable, but not seen anyone doing it, and could involve some extra work / spec investigation
+** kevinmarks: appears to be done already by Bridgy - bridgy will post webmentions as comments on blogger for you , for example
+** snarfed: webmention is often much sooner implemented than micropub
+* tomlarkworthy: offload state storage into s3 buckets, that may be simpler than an API
+    https://geekflare.com/self-hosted-s3/ s3 API is almsot industry standard at this point
+** {{martymcguire}}: a full webmention receiver could be built as a GitHub Pages repo with GitHub actions, "publish" them as JSON data. Many SSGs can pull down data like that for compilation.
+* jacky: webmentions are like the plywood you build a ship out of to carry your content on - is there out of the box
+
+
+* What if webmentions.io did the collection and parsing of things, but quit doing storage and pushed that piece onto one or more other locations/services?
+** This might nudge Netlify or other services to create space to store that data for people's sites and also help encourage other innovation on things like analytics, moderation, etc?
+
+* petermolnar: do peopel who use webmention.io understand what they;re using? Do they see it as a comment system
+* aaronpk: a lot of people see it as getting twitter comments on their website - they don't know about wm.io and bridgy
+* chrisaldrich: when i see this I send webmentions to people so they can see non-twitter use cases
+
+* {{woutergroeneveld}} about auto-Tweets that appear on your website through brid.gy: https://sebastiangreger.net/2018/05/indieweb-privacy-challenge-webmentions-backfeeds-gdpr/ - this involves privacy concerns... That is why I implemented an "anonymous" system for webmentions that come from "webmention silos" such as brid.gy in https://github.com/wgroeneveld/go-jamming
+** Same with fb content — I’ve had one person request that all their responses to my content backfed from FB to my site be removed. This is another thing which it’d be worth having a UI and automation for, in order to be able to easily comply with GDPR. I think it’s less likely with content from twitter, but people who mostly use facebook tend to see it as being cut off from the rest of the web, and are unpleasently surprised when stuff they wrote there mysteriously shows up elsewhere, with their name and profile photo (!) next to it. Also, AFAIK there’s no way for content backfed via bridgy to be deleted automatically if the original comment is deleted +1!
+* web actions are a way to embed arbitrary comment UI  - https://indieweb.org/webactions
+
+* who's interested, but hasn't yet implemented
+** woutergroeneveld: was a pain to get everything implemented (but webmention.rocks helped)
+*** lots of cases for how it's implemented - Header/Link/rel=
+*** there were microformats parsers already there, but deciding how to show it on your site was a lot of choices
+** jamietanna is up for building it - just has higher priority things to do
+*** +1 on needing an MF2 parser, I'd be writing this for Java which doesn't have one (yet) -> http://any23.apache.org/ ? haven't tried it.
+** kevinmarks: updates to Mention.tech harder - AppEngine on Python 2.7 means would have to rebuild in Python 3 also google has deprecated all the libraries I used for it
+** {{barryf}} is interested in building a receiver that will send the parsed webmention to your server via a webhook. He aims to make the JF2 object compatible with webmention.io's format.
+*** https://barryfrost.com/2021/05/building-a-webmention-receiver
+*jacky: should we define a way for a receiver to return mentions in a common form? 
+** aaronpk: the token is optional, you can make them public
+* aaronpk: we should list all the steps involved: +1, something similar to the mf2 parsing prose algorithm for thorough webmention handling would probably ease implementation
+** 1. webmention verification
+** 2. what do you do with the page you found? mf2 parsing is normal
+*** 2.a -> chance to do MF2, JF2, JSON-LD, etc or fb or twitter markup
+*** Potentially also archive the HTML and HTTP headers for future reference or re-parsing
+** 3. take the mf2 and turn it. into a comment - wm.io does this in jf2 with massaging
+*** angelo mf2util in python will do the work here too - is xray the equivalent?
+*** jacky: granary.io is another tool for doing this
+** 4. storage - where do you put it?
+*** Check against existing stored webmentions to determine if we’re updating or deleting a reply
+** 5. retrieval - client side, build process etc
+** 6. rendering - turning the retrived data into page content
+** 7. client storage - adding to receiver's site
+* webmention.io does 1-5
+* Would be great to have a thing that's straightforward to self-host, cf [[selfauth]], where it's a PHP bundle you drop onto a server and it uses local database (incl. SQLite)
+
+petermolnar:
+Could we look at having a comment using an oembed-style representation for a comment?
+Monocle/Quill does preview/reply context, built by the receiver, but OEmbed would produce the data on the sender's side, could then be embedded directly in the received
+
+Granary.io
+
+=== Question about using Webmentions during the break ===
+* Rainey: I would like to set up a page that people could tell me that they have done certain things and I could collect a list of them to display - could webmention help do this? everyone: yes it would be good for that and we can help
+** Hub examples: news.indieweb.org and indieweb.xyz could be used to aggregate content from various places around the web via Webmention.
+** Introductory article about Webmention: https://alistapart.com/article/webmentions-enabling-better-communication-on-the-internet/
+** Article about how to send your first webmention: https://aaronparecki.com/2018/06/30/11/your-first-webmention
+** Service that allows sending webmentions manually: https://telegraph.p3k.io/send-a-webmention
+** {{fluffy}} uses webmention.io + granary to generate an RSS feed of responses, to be notified of incoming mentions -- <code>https://granary.io/url?input=html&output=atom&url=https%3A%2F%2Fwebmention.io%2Fapi%2Fmentions.html%3Ftoken%3DTOKEN_GOES_HERE%26wm-property%5B%5D%3Din-reply-to%26wm-property%5B%5D%3Dmention-of</code>
+
+
+* jacky: this could belong in a social reader too - see the responses to your posts
+** mention.tech kinda works for this as the response pages are h-feeds - eg http://mention.tech/listmentions?target=https%3A%2F%2Ftumblelog.xyz
+
+* Who here is in an SSG?  [5-7 hands]
+* Who'd be interested in working on a plugin for their SSG?
+** {{jacky}} is working on one for 11ty
+** {{fluffy}} wants to build one for [[Publ (CMS)|Publ]] but also wants to do a lot of other stuff with conceptual overlap (e.g. ActivityPub) so it's easy to procrastinate
+** ...?
+* chrisaldrich: could we nudge netlify into building a service to do this kind of storage
+** already a community-built plugin https://github.com/CodeFoodPixels/netlify-plugin-webmentions#readme (for sending)
+* Can we help to center the current implementations at https://indieweb.org/static_site_generator to encourage developers to build plugins for each of the bigger SSGs?
+
+there is this diagram: 
+
+* https://indieweb.org/graphics#Illustrations_and_Sketch_Notes
+* https://www.kartikprabhu.com/articles/indieweb-love-blog ("non-technical" diagrams)
+
+Put issues and thoughts in here:
+* https://github.com/indieweb/webmention-ecosystem
+
+
+Join us via IndieWeb chat: https://indieweb.org/discuss 
+
+
+
+[[Category:Pop-ups]]
+[[Category: IWC Pop-ups 2021 Sessions]]
+[[Category:2021 sessions]]
