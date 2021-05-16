@@ -29,10 +29,19 @@ The following are examples of how to do this for different languages
 ** [https://github.com/mgonto/restangular Restangular] AngularJS doesn't natively support etag's so you have to use a helper component
 
 == IndieWeb Examples ==
+
+Most static site generators will naturally have ETag support, as webservers such as Apache and nginx come with ETag support out of the box for static files.
+
 [[unmung]] uses ETag and Last-Modified to cache fetched pages for parsing - this was built for use with hovercards, as fetching and parsing several per page was slow. Now it prefers the cached version, and refetches if the ETag/last modified misses.
 
-is anyone else programmatically setting ETag / Last-Modified headers?
+[[Publ CMS|Publ]] uses the rendered content hash of a page as an etag, to improve caching behavior.
+
+[[Pushl]] supports ETag and Last-Modified to determine if a page needs to be re-parsed and new notifications sent.
+
+== Criticism ==
+
+* Some websites have been found to use ETags to track users, by generating user-specific ETag headers for static assets (e.g. images) and using the If-None-Match header to track their subsequent accesses to that asset; this technique has been referred to as “super cookies” or [https://lucb1e.com/randomprojects/cookielesscookies/ cookieless cookies]
+
 
 == See Also ==
 * [[HTTP]]
-* Criticism: Some websites have been found to use ETags to track users, by generating user-specific ETag headers for static assets (e.g. images) and using the If-None-Match header to track their subsequent accesses to that asset; this technique has been referred to as “super cookies”
