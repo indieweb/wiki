@@ -4,14 +4,14 @@ https://indieweb.org/Taproot
 
 http://waterpigs.co.uk/taproot/logo.png
 
-<span class="p-summary"><a class="u-url" href="http://taprootproject.com">Taproot</a> is <span class="p-author h-card">[[User:WaterPigs.co.uk|Barnaby Walters]]</span>’ publishing software, written in [[PHP]] 5.4 and driving most of [http://waterpigs.co.uk waterpigs.co.uk]. It is not currently released to the public.</span> However, various parts of it have been extracted into libraries:
+<span class="p-summary"><a class="u-url" href="http://taprootproject.com">Taproot</a> is <span class="p-author h-card">[[User:WaterPigs.co.uk|Barnaby Walters]]</span>’ publishing software, written in [[PHP]] 7 and running [http://waterpigs.co.uk waterpigs.co.uk]. It is not currently released to the public.</span> However, various parts of it have been extracted into libraries:
 
 * [https://github.com/indieweb/php-mf2 php-mf2] for parsing [[microformats]]2 data
 ** also [https://github.com/indieweb/php-mf2-shim php-mf2-shim] for getting mf2 data out of silos
 * [https://github.com/Taproot/authentication taproot/authentication] library concisely implementing indieauth client app + resource server logic
 * [https://github.com/Taproot/subscriptions taproot/subscriptions] for easily subscribing+crawling any web content
 * [https://github.com/Taproot/archive taproot/archive] your personal opinionated indieweb/microformats-oriented HTML archiver
-* [https://github.com/indieweb/php-original-post-discovery original-post-discovery]] for determining the canonical URL from POSSE copies
+* [https://github.com/indieweb/php-original-post-discovery indieweb/original-post-discovery] for determining the canonical URL from POSSE copies
 * [https://github.com/barnabywalters/php-mf-cleaner mf-cleaner] for handling microformats2 array structures better
 * [https://github.com/barnabywalters/diaspora-export diaspora-export] for exporting public posts from Diaspora
 * [https://github.com/barnabywalters/php-abc php-abc] for parsing headers out of ABC notation
@@ -48,26 +48,26 @@ Taproot supports the following:
 * [[reply]] notes parse the URL they’re in-reply-to and display a [[reply-context]] if microformats are present
 * Notes have [[webactions]] with twitter intent fallback if POSSEd to twitter
 * ATOM fallback is provided for all [[feed]]s
-* Notes and articles are [[POSSE]]d to [[twitter]] automatically and manually/indirectly to [[facebook]]
+* Notes and articles are [[POSSE]]d to [[twitter]] automatically and sometimes manually/indirectly to [[facebook]]
 * Logging in using [[indieauth]] and [[distributed-indieauth]]
 * New post UI is publicly viewable and can be used to create new posts on other people’s [[micropub]]-enabled sites
 
-== Itches ==
+== Itches and Roadmap ==
 
 Currently working on:
 * Using Taproot every day to post content
-* [[Shrewdness]]
+* Getting up to speed with all the new stuff from the several years I’ve been idle, implementing it in Taproot
+* Adding better [[micropub]] support via [https://github.com/Taproot/micropub-adapter taproot/micropub-adapter]
+* Moving webhost, upgrading to latest PHP
 
 Next up, in approximate order of priority:
-* Publishing [[events]] and RSVPs, handling incoming RSVPs, figuring out invitations
-* Publishing [[recipes]]
-** Particularly I’m interested in presenting them in a way optimised for use in the kitchen from a laptop or tablet
-* Audio posts, potentially with POSSE to [[Soundcloud]]
-* Publishing likes and reposts
-* DOM [[templating]] for all templates
-* Extract more of the code behind my listeners and services into reusable open-source libraries
+* Refactor app, replace silex with a modern mini web framework based on PSR-7, e.g. Slim
+* Replace DIY CSV indexes with sqlite indexing
+* Re-organise content storage and presentation to make it easier to create feeds with multiple content types in (e.g. homepage feed, tag page feeds)
+* Make it possible to post a wider variety of responses to content, hidden from the homepage feed by default
 
 Done (latest first):
+* 2021-05 Improved styling, fixed bugs in webmention endpoint, updated homepage bio with tag links
 * Implemented anti-[[DDOS]] measures (tried client validation, ditched and went with expiring webmention endpoints)
 * Publishing [[venues]] with reviews, inspired by [[User:Tommorris.org|Tom Morris]]
 * Implemented a basic micropub endpoint, capable of creating notes
@@ -99,71 +99,11 @@ Done (latest first):
 * Frontend js using Backbone and requirejs
 </div>
 
-== Structure ==
+== History and Development ==
 
-I got sick of all the complicated frameworkey nonsense which was accumulating in taproot. Symptoms:
-* not immediately knowing where to look to change any one particular bit of functionality
-* having to change things in different packages+deploy+update to do simple functionality changes
-* too many layers of abstraction+indirection — specifically, mixing abstraction layers
-* no longer fun to work on, simple additions take too much time
-And as such I am rewriting taproot to be smaller and flatter and saner.
-
-Documentation of the aforementioned frameworkey nonsense is retained for posterity at the bottom of the page.
-
-=== Storage ===
-
-==== Mentions ====
-
-Mentions are stored separately from the content they refer to, for ease of editing and moderation. They’re stored with a flattened h-entry-like representation of them which can be easily used in various contexts.
-
-The HTML and HTTP headers from cachable (i.e. public) URLs which are fetched (e.g. webmentioned or webmentioners) are stored in an archive, which also acts as a cache.
-
-Incoming [[webmentions]] are processed by a mentions module, which does the following things:
-* fetches and archives (using [https://github.com/Taproot/archive taproot/archive]) the webmention source URL
-* resolves the target URL and gets it’s path
-* parses microformats on the page, looks for the first h-entry. if found, it’s flattened, normalised and purified to avoid XSS attacks
-* from rel values/u-* values in the h-entry, determine the primary mention relationship type, which is one of [[reply]], [[rsvp]], [[like]], [[repost]] or [[mention]] — mention is used as a fallback if no more specific one is given
-* gives the mention an ID based on the source URI, target URI and current datetime
-* stores the mention in a file containing the source, target, resolved target path and normalised h-entry
-* indexes that file for querying later
-
-Then, when looking for mentions of a particular URL (e.g. http://waterpigs.co.uk/notes/1000/), the following steps are taken:
-* Query the index for rows where the resolved path matches the path of the URL we’re looking for
-* use the rows given to either determine mention type counts for the URL, or fetch the associated files and parse to get the h-entry data for displaying
-
-==== Posts ====
-
-Modules all store their data in flat files (usually YAML) which I index in CSV file indexes, read/written using PHP’s <code>fgetcsv</code> and <code>fputcsv</code> [http://php.net/manual/en/function.fgetcsv.php functions], which are surprisingly speedy.
-
-For content which has an intrinsic name (like pieces of music, contacts or blog posts) I tend to use an ASCII-fied slug of the name for the ID, generated using [https://github.com/barnabywalters/php-helpers/blob/master/BarnabyWalters/Helpers/Helpers.php#L170 Helpers::toAscii]. Otherwise (for notes) I create a <= six-character ID from the newbase60 representation of epoch days + number of seconds into that day.
-
-==== Schema ====
-
-The data is all stored in a [[microformats]]-2 JSON variant structure which is substantially flatter than mf2 JSON — all properties are properties of the parent object, not a properties key, there is no “children” key and only plural properties map to arrays. I keep most of the semantics the same except on the occasions where I prefer a different term (tag over category) or want to aggregate the properties from what would be multiple different mf properties into one (e.g. combining geo, adr and venue into “location”).
-
-* Originally I intended on using the [[activitystreams]] schema to store and represent all my content, the idea being that it would allow me to make listeners which could work seamlessly on all sorts of content types. In actuality, I have nowhere near as many content types as I anticipated, and want to treat each one very differently. In addition to this, I found some of the semantics within activitystreams irritating (e.g. displayName vs title, both horrible names) and the activity ~= object ambiguity confusing. Coupled with the fact that there is no activitystreams client, I decided to drop activitystreams as the basis for representing my data. --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 12:33, 14 June 2013 (PDT)
-
-=== Previous, abandoned structure ===
-
-Taproot has a highly modular structure. It is made up of an Application class, which handles event dispatching, simple dependency injection, routing and module loading. There are two types of modules — full modules, which expose URLs, and listeners, which listen to events dispatched within taproot.
-
-Currently there are modules for Index, Notes, Articles, Contacts, Tunes, Tags and Mentions.
-
-There are a large number of listeners which handle everything from authentication to [[POSSE]] and content transformation. Typically if I want to add a new piece of functionality I’ll do it in a listener, if I want to add a new content type I’ll create a new module.
-
-== Notes ==
-
-(out of date as of 2013-12)
-
-The Notes module is the mainstay of my Taproot usage. It handles the creation and display of short [[note]]s — kinda like tweets, but with a potentially much larger scope through the excessive use of tagging.
-
-As in most of Taproot, the notes module handles basic CRUDL of data, and various listeners do everything else, including converting markdown, interpreting hashtags, autolinking @names, syndication of content.
-
-Posting a note looks like this:
+Some old screencaps from around 2013:
 
 [[File:taproot-posting-ui.gif|class=u-photo|caption]]
-
-A still of the posting UI just after the note has saved:
 
 [[File:note-saved-ui.png|class=u-photo|caption]]
 
