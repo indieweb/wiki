@@ -375,62 +375,62 @@ The following error response shorthands are used in this prose implementation gu
 To handle an HTTP request to a [[micropub-endpoint]]:
 
 * Look for the auth token
-** If the request has an <code>Authorization: Bearer</code> header, set '''auth_token''' to the value of the string after <code>Bearer </code>
+** If the request has an <code>Authorization: Bearer</code> header, set '''auth_token''' to the value of the string after <code>Bearer </code>, stripping whitespace.
 ** Otherwise, if the method is POST and the parsed content of the form-encoded request body contains an '''auth_token''' key, set '''auth_token''' to the value associated with that key.
 * If no '''auth_token''' was found, return '''unauthorized'''
 * If an '''auth_token''' was found, attempt to verify it. Details are out of the scope of micropub, refer to [[IndieAuth]] for more information.
 ** If the '''auth_token''' was invalid, return '''forbidden'''
 ** Otherwise, store the user information associated with the '''auth_token''' for reference later.
 * If any [[micropub-extensions]] are supported, detect whether the request is an extension request and handle it appropriately.
-* Otherwise, if the request is a GET request, parse the query string into '''query_params'''
+* If the request is a GET request, parse the query string into '''query_params'''
 ** If '''query_params''' contains a '''q''' key, store it under '''q'''
 *** If <code>'''q''' == "config"</code>, return a valid JSON-encoded configuration response as defined [https://micropub.spec.indieweb.org/#configuration here]
-*** Otherwise, if <code>'''q''' == "source"</code>, check for a '''query_params''' for a '''url''' key.
+*** Otherwise, if <code>'''q''' == "source"</code>, check '''query_params''' for a <code>url</code> key.
 **** If no '''url''' key exists, or no content identified by '''query_params.url''' exists, return '''invalid_request'''
 **** If content identified by '''query_params.url''' exists, but the current '''auth_token''' doesn’t grant the scope to view it, return '''insufficient_scope'''
 **** Create an empty list called '''source_properties'''
-***** If '''query_params''' contains the key '''properties''', add the value associated under '''query_params.properties''' to '''source_properties'''.
-***** Otherwise, if '''query_params''' contains one or more values associated with the key '''properties[]''', add each value to '''source_properties'''
+***** If '''query_params''' contains the key <code>properties</code>, add the value associated under '''query_params.properties''' to '''source_properties'''.
+***** Otherwise, if '''query_params''' contains one or more values associated with the key <code>properties[]</code>, add each value to '''source_properties'''
 **** Create and return a valid [https://micropub.spec.indieweb.org/#source-content Source Content] response based on the values of '''url''' and '''source_properties'''.
 *** Otherwise, if <code>'''q''' == "syndicate-to"</code>, return a valid JSON-encoded [https://micropub.spec.indieweb.org/#syndication-targets Syndication Target] response.
 *** If you ended up here, the request is an unknown GET request. Return '''invalid_request'''.
-** Otherwise, if the request is a POST request:
-*** If the request has a <code>Content-type: application/json</code> header, parse the request body as JSON and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
-*** Otherwise, if the request has <code>Content-type: x-www-form-urlencoded</code>, parse the request body and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
-*** Otherwise, if the request has <code>Content-type: multipart/form-data</code>, parse the request body. Assign form parts to '''request_body''' and file parts to '''request_files'''
-*** Otherwise, the request is in an unsupported format. Return '''invalid_request'''.
-*** If '''request_body''' contains an '''action''' key:
-**** If <code>'''request_body.action''' == "delete"</code>:
-***** If your endpoint doesn’t support deleting, return '''invalid_response'''.
-***** Check '''request_body''' for a '''url''' key. If it doesn’t have one, or '''request_body.url''' doesn’t identify a piece of content which could be deleted, return '''invalid_request'''.
-***** Check to see if '''access_token''' has the required scope to delete the content identified by '''request_body.url'''. If it doesn’t, return '''insufficient_scope'''.
-***** Delete the content identified by '''request_body.url'''. Return an empty HTTP 204 response.
-**** Otherwise, if <code>'''request_body.action''' == "undelete"</code>:
-***** If your endpoint doesn’t support undeleting, return '''invalid_response'''.
-***** Check '''request_body''' for a '''url''' key. If it doesn’t have one, or '''request_body.url''' doesn’t identify a piece of content which could be undeleted, return '''invalid_request'''.
-***** Check to see if '''access_token''' has the required scope to undelete the content identified by '''request_body.url'''. If it doesn’t, return '''insufficient_scope'''.
-***** Undelete the content identified by '''request_body.url'''.
-****** If the delete was successful and didn’t cause the content’s URL to change, return an empty HTTP 204 response.
-****** Otherwise, if the delete was successful and did cause the content’s URL to change, return a HTTP 201 response with a <code>Location:</code> header pointing to the content’s new URL.
-**** Otherwise, if <code>'''request_body.action''' == "update"</code>:
-***** If your endpoint doesn’t support updating, return '''invalid_response'''.
-***** Check '''request_body''' for a '''url''' key. If it doesn’t have one, or '''request_body.url''' doesn’t identify a piece of content which could be updated, return '''invalid_request'''.
-***** Check to see if '''access_token''' has the required scope to update the content identified by '''request_body.url'''. If it doesn’t, return '''insufficient_scope'''.
-***** Handle the [https://micropub.spec.indieweb.org/#update Update] request according to the spec.
-****** If the update was successful and didn’t cause the content’s URL to change, return an empty HTTP 204 response.
-****** Otherwise, if the update was successful and did cause the content’s URL to change, return a HTTP 201 response with a <code>Location:</code> header pointing to the content’s new URL.
-**** If you got here, an unknown '''action''' was provided. Return '''invalid_response'''
-*** Otherwise (POST request without '''action''' key), assume that the request is a '''create''' request.
-*** Check whether '''access_token''' has the required scope to create new content. If not, return '''insufficient_scope'''.
-*** If the request had a content-type other than <code>application/json</code>, normalize the form-encoded parameters into a canonical mf2 structure as follows:
-**** Let '''normalized_body''' be <code>{'type': ['h-entry'], 'properties': {}}</code>
-**** For each '''key''', '''value''' pair in '''request_body''':
-***** If <code>'''key''' == "h"</code>, set '''normalized_body.type''' to '''[value]'''
-***** Otherwise, if '''key''' ends with <code>"[]"</code>, assign '''normalized_body.properties[key]''' to a list of all values associated with '''key'''
-***** Otherwise, assign '''value''' to '''normalized_body.properties[key]'''
-**** Let '''request_body''' = '''normalized_body'''
-*** Using '''request_body''' and '''request_files''', handle a [https://micropub.spec.indieweb.org/#create Create] request according to the spec.
-**** If the request was successful, return a HTTP 201 response with a <code>Location:</code> header containing the URL of the created content, and optionally <code>Link rel=syndication</code> and/or <code>rel=shortlink</code> headers.
+* Otherwise, if the request is a POST request:
+** If the request has a <code>Content-type: application/json</code> header, parse the request body as JSON and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
+** Otherwise, if the request has <code>Content-type: x-www-form-urlencoded</code>, parse the request body and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
+** Otherwise, if the request has <code>Content-type: multipart/form-data</code>, parse the request body. Assign form parts to '''request_body''' and file parts to '''request_files'''
+** Otherwise, the request is in an unsupported format. Return '''invalid_request'''.
+** If '''request_body''' contains an '''action''' key:
+*** If <code>'''request_body.action''' == "delete"</code>:
+**** If your endpoint doesn’t support deleting, return '''invalid_response'''.
+**** Check '''request_body''' for a <code>url</code> key. If it doesn’t have one, or '''request_body.url''' doesn’t identify a piece of content which could be deleted, return '''invalid_request'''.
+**** Check to see if '''access_token''' has the required scope to delete the content identified by '''request_body.url'''. If it doesn’t, return '''insufficient_scope'''.
+**** Delete the content identified by '''request_body.url'''. Return an empty HTTP 204 response.
+*** Otherwise, if <code>'''request_body.action''' == "undelete"</code>:
+**** If your endpoint doesn’t support undeleting, return '''invalid_response'''.
+**** Check '''request_body''' for a <code>url</code> key. If it doesn’t have one, or '''request_body.url''' doesn’t identify a piece of content which could be undeleted, return '''invalid_request'''.
+**** Check to see if '''access_token''' has the required scope to undelete the content identified by '''request_body.url'''. If it doesn’t, return '''insufficient_scope'''.
+**** Undelete the content identified by '''request_body.url'''.
+***** If the delete was successful and didn’t cause the content’s URL to change, return an empty HTTP 204 response.
+***** Otherwise, if the delete was successful and did cause the content’s URL to change, return a HTTP 201 response with a <code>Location:</code> header pointing to the content’s new URL.
+*** Otherwise, if <code>'''request_body.action''' == "update"</code>:
+**** If your endpoint doesn’t support updating, return '''invalid_response'''.
+**** Check '''request_body''' for a <code>url</code> key. If it doesn’t have one, or '''request_body.url''' doesn’t identify a piece of content which could be updated, return '''invalid_request'''.
+**** Check to see if '''access_token''' has the required scope to update the content identified by '''request_body.url'''. If it doesn’t, return '''insufficient_scope'''.
+**** Handle the [https://micropub.spec.indieweb.org/#update Update] request according to the spec.
+***** If the update was successful and didn’t cause the content’s URL to change, return an empty HTTP 204 response.
+***** Otherwise, if the update was successful and did cause the content’s URL to change, return a HTTP 201 response with a <code>Location:</code> header pointing to the content’s new URL.
+*** If you got here, an unknown '''action''' was provided. Return '''invalid_response'''
+** Otherwise (POST request without <code>action</code> key in parsed body), assume that the request is a '''create''' request.
+** Check whether '''access_token''' has the required scope to create new content. If not, return '''insufficient_scope'''.
+** If the request had a content-type other than <code>application/json</code>, normalize the form-encoded parameters into a canonical mf2 structure as follows:
+*** Let '''normalized_body''' be <code>{'type': ['h-entry'], 'properties': {}}</code>
+*** For each '''key''', '''value''' pair in '''request_body''':
+**** If <code>'''key''' == "h"</code>, set '''normalized_body.type''' to <code>['''value''']</code>
+**** Otherwise, if '''key''' ends with <code>"[]"</code>, assign '''normalized_body.properties[key]''' to a list of all values associated with '''key'''
+**** Otherwise, assign '''value''' to '''normalized_body.properties[key]'''
+*** Let '''request_body''' = '''normalized_body'''
+** Using '''request_body''' and '''request_files''', handle a [https://micropub.spec.indieweb.org/#create Create] request according to the spec.
+*** If the request was successful, return a HTTP 201 response with a <code>Location:</code> header containing the URL of the created content, and optionally <code>Link rel=syndication</code> and/or <code>rel=shortlink</code> headers.
 * If you ended up here, the request could not be handled. Return '''invalid_request'''
 
 === Additional notes for developers ===
