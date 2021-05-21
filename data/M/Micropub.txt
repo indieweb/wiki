@@ -382,8 +382,7 @@ To handle an HTTP request to a [[micropub-endpoint]]:
 ** If the '''auth_token''' was invalid, return '''forbidden'''
 ** Otherwise, store the user information associated with the '''auth_token''' for reference later.
 * If any [[micropub-extensions]] are supported, detect whether the request is an extension request and handle it appropriately.
-* Otherwise, check the request method.
-** If the request is a GET request, parse the query string into '''query_params'''
+* Otherwise, if the request is a GET request, parse the query string into '''query_params'''
 ** If '''query_params''' contains a '''q''' key, store it under '''q'''
 *** If <code>'''q''' == "config"</code>, return a valid JSON-encoded configuration response as defined [https://micropub.spec.indieweb.org/#configuration here]
 *** Otherwise, if <code>'''q''' == "source"</code>, check for a '''query_params''' for a '''url''' key.
@@ -396,10 +395,10 @@ To handle an HTTP request to a [[micropub-endpoint]]:
 *** Otherwise, if <code>'''q''' == "syndicate-to"</code>, return a valid JSON-encoded [https://micropub.spec.indieweb.org/#syndication-targets Syndication Target] response.
 *** If you ended up here, the request is an unknown GET request. Return '''invalid_request'''.
 ** Otherwise, if the request is a POST request:
-**** If the request has a <code>Content-type: application/json</code> header, parse the request body as JSON and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
-**** Otherwise, if the request has <code>Content-type: x-www-form-urlencoded</code>, parse the request body and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
-**** Otherwise, if the request has <code>Content-type: multipart/form-data</code>, parse the request body. Assign form parts to '''request_body''' and file parts to '''request_files'''
-**** Otherwise, the request is in an unsupported format. Return '''invalid_request'''.
+*** If the request has a <code>Content-type: application/json</code> header, parse the request body as JSON and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
+*** Otherwise, if the request has <code>Content-type: x-www-form-urlencoded</code>, parse the request body and assign the result to '''request_body'''. On a parsing error, return '''invalid_request'''
+*** Otherwise, if the request has <code>Content-type: multipart/form-data</code>, parse the request body. Assign form parts to '''request_body''' and file parts to '''request_files'''
+*** Otherwise, the request is in an unsupported format. Return '''invalid_request'''.
 *** If '''request_body''' contains an '''action''' key:
 **** If <code>'''request_body.action''' == "delete"</code>:
 ***** If your endpoint doesn’t support deleting, return '''invalid_response'''.
@@ -433,7 +432,6 @@ To handle an HTTP request to a [[micropub-endpoint]]:
 *** Using '''request_body''' and '''request_files''', handle a [https://micropub.spec.indieweb.org/#create Create] request according to the spec.
 **** If the request was successful, return a HTTP 201 response with a <code>Location:</code> header containing the URL of the created content, and optionally <code>Link rel=syndication</code> and/or <code>rel=shortlink</code> headers.
 * If you ended up here, the request could not be handled. Return '''invalid_request'''
-
 
 === Additional notes for developers ===
 
