@@ -1,115 +1,17 @@
 https://indieweb.org/IRC
 
 {{emojicon|💬}}
-: This page is about the IRC protocol. For details on the IndieWeb IRC channels on Freenode, see '''[[discuss]]'''.
+: This page is about the IRC protocol. For details on the IndieWeb IRC chat rooms, see '''[[discuss]]'''.
 
 == What is IRC ==
-'''<dfn>Internet Relay Chat</dfn>''' (abbreviated <dfn><abbr>IRC</abbr></dfn>), in particular the #indieweb channel on the irc.freenode.net server, is the primary community discussion forum for IndieWebCamp and anything about the IndieWeb.
-
-== People on IRC ==
-{{main|chat-names}}
-
-See our list of [[discuss|chat]] regulars sorted by nickname, with their website and usual timezone(s).
-
-The channel has regular administrators, who are also wiki administrators. If you want to get their attention, just say "adminhelp".
+'''<dfn>Internet Relay Chat</dfn>''' (abbreviated <dfn><abbr>IRC</abbr></dfn>), in particular the #indieweb channels on the irc.libera.chat server, is the primary community discussion forum for IndieWebCamp and anything about the IndieWeb.
 
 __TOC__
-
-== Logs ==
-* [https://chat.indieweb.org/today Today's Logs]
-
-If the logs have stopped logging or have any other problems, notify {{aaronpk}} on the IRC channel.
-
-=== Logs on Your iPhone Home Screen ===
-To add the IRC logs to your iPhone home screen, visit the page below on your phone:
-
-https://chat.indieweb.org/today?bookmark
-
-Follow the link on that page. Then, from Safari, add that page to your home screen.
-
-<span style="float:right;clear:right;max-width:25%">[http://www.kevinmarks.com/joyofsparks.html <img style="max-width:100%" src="http://www.kevinmarks.com/joygraph.svg" alt="Joy Division album cover style chart of 90 days of IRC activity"/>]</span>
-
-=== IRC Log Atom Feed ===
-(Currently unavailable)
-
-An experimental atom feed is available for the IRC logs.  This feed delivers the last full day's log to your feed reader.  
-
-Please report any feed issues to https://github.com/bcomnes/iwc-log-feed/issues
-
-=== Suggestions ===
-We have the most awesome IRC logs on the web. That doesn't mean they can't be even more awesome. Got an idea, suggestion, or issue to report about the logs? Create or comment on a GitHub issue:
-* https://github.com/indieweb/chat.indieweb.org/issues
-
-=== Spam ===
-Occasionally, Freenode gets hit with a wave of IRC spam. Typically the pattern is an account joins many channels across Freenode and sends repeated similar messages to as many channels as it can, often mentioning other peoples' nicknames in order to get their attention. 
-
-* Anyone registered on [[chat-names]] can kick users by telling Loqi to kick them using <code>!kick spammer</code>
-* Any channel op in our channels can also <code>/kick spammer</code> to remove them from the specific channel immediately
-* Other Freenode admins often catch the bots and block them from the server
-
-==== Red Alert Mode ====
-In very large spam waves, such as the one starting on 2018-07-31, we can employ additional tricks to prevent the spam from hitting the channels at all.
-
-* Set everyone currently in the channel to +v (<code>/voice nickname</code>)
-* Set the channel modes to +zm (<code>/mode #indieweb-dev +zm</code>)
-** +m means only people with +v mode can speak in the channel
-** +z allows channel ops to still see the messages from unvoiced users, so Loqi can still see messages from new people and spammers
-** (If the channel is in MLOCK mode, use <code>/msg chanserv set #indieweb-dev mlock +zm</code>)
-* When someone joins a channel, Loqi sets a timer for 30 seconds. If they are still in the channel after 30 seconds, they are automatically given +v
-* When an unvoiced user says something, if it matches a spam keyword phrase, they are immediately kicked.
-** If it does not match a spam phrase, then Loqi says "Welcome, {nickname}. Since you weren't yet recognized as a real person, your message wasn't sent to the channel. I'm repeating it below for you.", repeats their message to the channel, and sets +v
-** If the spam does not consistently match a pattern, this last rule can be dropped
-
-To stand down from red alert, set the channel modes back to <code>-zm</code>, and disable Loqi's auto-voicing hooks.
-
-* <code>/mode #indieweb-dev -zm</code>
-
-==== Spam in Chat Logs ====
-
-The IndieWeb chat logs are all stored as files in a GitHub repo, which is where the web interface pulls from. Individual lines in the file can be marked as deleted to avoid them being shown in the web interface. This should only be used to block actual spam, not remove legitimate text from users, even if it is something you don't agree with.
-
-To help remove spam from the logs, you can send a pull request to the [https://github.com/indieweb/indieweb-chat-archive chat archive] repo to mark specific lines as deleted. Find the specific file containing the messages, and then find the specific chat line to mark as deleted. Each line in the file corresponds to a single IRC message, and begins with a timestamp, followed by a JSON string with the log info. To mark as deleted, add <code>"deleted":true</code> as the first property in the JSON text. 
-
-For example, change:
-
-<pre>2018-01-01 01:05:10.931300 {"type":"message", ... </pre>
-
-to:
-
-<pre>2018-01-01 01:05:10.931300 {"deleted":true,"type":"message", ... </pre>
-
-Send a pull request containing all your edits together, like [https://github.com/indieweb/indieweb-chat-archive/pull/2 this one]. Anyone with write access to the repo can merge the change, and {{aaronpk}} will then deploy it to the server. This will prevent the spam from being shown in the web logs.
-
-==== How-to remove spam ====
-
-This is how {{martijnvdven}} has been removing spam from the chat.indieweb.org logs:
-
-# Find the log file with spam in it on [[GitHub]].
-## Go to [https://github.com/indieweb/indieweb-chat-archive/tree/master/freenode the GitHub archive].
-## Choose the folder of the matching channel.
-## Follow a folder structure down to the specific day’s log file. Note that days are in UTC.
-# Use GitHub’s editor by clicking the pencil icon.<br>[[File:fork-and-edit.png]]
-# Copy the entire file to a plain text editor with [[regular expression]] find and replace support. (E.g. [[BBEdit]].)
-# Run a find and replace that marks all lines from a specified user as <code>deleted</code>.<br>[[File:bbedit-find-and-replace-spam.png|500px]]
-#* Match the pattern: <code>(^[0-9:. -]+ {)(.+?,"author":{"uid":"spammername")</code>. Replace <code>spammername</code> with the actual name of the spammer.
-#* Replace it with: <code>\1"deleted":true,\2</code>.
-# Copy it all back into GitHub’s editor, making sure it ends with exactly 1 empty line.
-# Give it a clear title in the “Propose file change” section identifying what spam you have removed.
-# Press the (green) “Propose file change” button.
-# Check the diff to double check you haven’t made any destructive changes.
-# Press the (green) “Create pull request” button.
-# The [[pull request]] should be auto-filled with the title from step 6. If the title was clear enough you do not need to write anything more, otherwise comment on why/what you changed in the logs.
-
-'''Please also send an email to remove the spam from freenode.logbot.info''' logs per https://freenode.logbot.info/#how-to-scrub:
-<blockquote>[mailto:byron@glob.com.au Send me an email] or message me on IRC ("glob" on irc.mozilla.org) if there's data that you feel should be scrubbed (eg. spam, accidental leakage of passwords, etc).</blockquote>
 
 == Install an IRC app ==
 You can use an IRC application for more convenience. See the section [[#Clients|Clients]] for clients commonly used in the community which you can download and install.
 
-Setup your client to connect with the following:
-* Channels: <code>[irc://irc.freenode.net/indieweb #indieweb]</code>, <code>[irc://irc.freenode.net/indieweb-dev #indieweb-dev]</code>
-* Server: <code>irc.freenode.net</code>
-* Port: <code>6667</code> (usually default)
+See also: [[discuss#Join_via_IRC How to join Indieweb IRC channels]]
 
 IRC applications are convenient for automatically reconnecting you to the discussion channel, with your chosen nickname, and offer more configuration and alerting options than the web interface.
 
@@ -118,26 +20,6 @@ The #indieweb IRC channel is hosted on the freenode.net server.  See [[#Joining_
 
 Use a browser to quickly join the live discussion chat using the freenode webchat:
 * '''[http://webchat.freenode.net/?channels=indieweb&nick=indieweb-visitor webchat #indieweb discussion]'''
-
-== Activity ==
-Anecdotally the channel seems quite active:
-* 08:00-10:00 Pacific Time (-0800/-0700)
-** 16:00-18:00 UK Time (+0000/+0100)
-** 17:00-19:00 EU Time (+0100/+0200)
-
-==Bots on IRC==
-The IRC channel uses these bots:
-
-* [http://aaronparecki.com/Loqi Loqi] -  Contact: [[User:Aaronpk|aaronpk]], [[Loqi|wiki page]]
-** logs all edits to this wiki
-** logs the irc channel itself to archives on the web
-** logs Twitter mentions of #indieweb or #indiewebcamp to the channel
-** logs [[webmentions]] of wiki pages
-* [[Kaja|Kaja]] - Contact: {{sknebel}}
-** microformat parsing commands
-** indieweb youtube channel announcements
-
-want to write your own bots: see [[#bot development]]
 
 == Getting started with IRC ==
 '''Please note:''' These directions relate specifically to the services that [http://freenode.net/ Freenode] offers.  Other IRC servers may differ with the services they offer and how to operate them.  
