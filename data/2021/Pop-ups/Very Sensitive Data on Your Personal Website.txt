@@ -14,13 +14,94 @@ https://indieweb.org/2021/Pop-ups/Very_Sensitive_Data_on_Your_Personal_Website
 * https://etherpad.indieweb.org/sensitivedata-popup
 
 == Possible Topics ==
-* storing X-rays, immunization records, and other protected health information (PHI) on your own website
-* using your website to track, address, or treat conditions like drug addiction or mental health problems
-* Quantified Self
 
+
+Use Case: Storing medical information on your own site
+* Directly provide your past appointment outcomes, diagnosis records, and other forms of medical case history to a doctor or other medical professional 
+* Potentially reduce need for direct authorized contact between providers' offices, or between GP and specialist
+* Your medical history is part of your identity; it's reasonable to want to control/maintain canonical archive of materials
+
+Use Case: Authorizing medical providers to retrieve data from your website
+* In the future, the doctor's receptionist gives you an email address or other identifier...
+** You login to your website, then authorize that identifier to view forms of medical data relevant to your appointment. e.g. authorization to view the x-ray image at example.com/2021/05/28/xray.
+** Medical providers are not yet sophisticated enough for this, but this hypothetical use case is additional motivation for UX features already being discussed, such as "invitation" style interface for adding identities to a private post's [[allow list]].
+* There is, or should be, a difference between authorizing individual medical professionals to view your data, and authorizing the hospital/clinic/group to which the provider belongs. (h/t Johannes Ernst)
+
+
+Use Case: Tracking life data for one's own benefit
+* "Gross" events
+** Some people need to measure "gross" life events for health purposes
+** "literal shit posting" (h/t {{KartikPrabhu}}) 
+* Bad habits
+** Can be embarassing to admit that you're tracking data to ween yourself off, say, alcohol
+* ''Good'' habits
+** Crucially, it can ''also'' be embarrassing to publicly announce that you're learning a good habit
+*** e.g. learning to cook or some other "basic" life skill
+
+Use Case: Protecting the privacy of others on your site
+* Reply contexts
+* Suppose {{angelo}} makes a private post with {{maxwelljoslyn}} in the audience. {{maxwelljoslyn}} sees it and writes a reply.
+** It's probably not OK for {{maxwelljoslyn}} to write a public reply to {{angelo}}'s private post!
+** Even the URL of a private post may be sensitive if it contains a content-based slug! 
+** Implications for reply context UI, which in turn means additional branches in plumbing code
+* ''Private'' RSVPs for ''public'' events
+** If I'm sending a private RSVP to a public event, one would hope both parties correctly implemented the code which keeps the RSVP private!
+*** displaying counts of RSVPs
+*** displaying attendees' names and websites
+
+Plumbing: URL design
+* Opaque/unguessable/capability URLs for posts which are unlisted or private/protected
+* Sortable/guessable URLs can leak existence of private posts
+** Suppose my public permalinks for a given day's posts end in /1, /2, /3, /7, /8, /9, /10.
+** This reveals that I made private posts at /4, /5, and /6!
+
+Use Case: Journals, drafts, and other posts "for my eyes only"
+* May contain ideas formed during heightened emotional states, or which the author later came to regret
+* Must be kept private, lest the author be reflected by material which they did not intend to represent themselves
+
+Plumbing: [[private-webmention]]
+* What is the current status of this WebMention extension?
+** Still in the "building interoperable consensus" stage, with few implementations in the wild?
+* How much is progress on visibility/audience interop tied into the progress of private Webmention?
+
+Plumbing: Post properties [[visibility]] and [[audience]]
+* If someone is on your site, logged in, and viewing your private post, they should be able to see that it's private and they're only able to view it b/c they permission.
+** Should this user be able to see ''the audience list itself'' so they know who they may fruitfully share the link with?
+* How much interop is there currently for the audience property? How much is progress on visibility/audience interop tied into the progress of private Webmention?
+* It's straightforward to add visibility/audience properties to your own plumbing, but...
+* ... No widespread agreement about the structure of the audience property in particular
+** Single names?
+** List of names?
+** Allow lists?
+** Block lists?
+** Both allow and block lists, nested as key-values within the 'audience' property?
+** Changes in allow and block semantics based on visibility (e.g. given an audience list, it's an allow list for a private post, and a block list for a public one?)
+** Permissions varying per-person, e.g. {{t}} can read my post, and {{angelo}} can read it ''or'' edit it with Micropub updates?
+
+
+Use Case: Providing post/data access to users who don't and won't have a website (e.g. non-techie friends and family) 
+* Offering Github, email, and similar 3rd party auth options
+* User/password system
+** more maintenance for the site owner, but is the main way to provide your own authentication, and the only guaranteed way to auth someone even if they're not on social platforms (or email!)
+
+Questions
+1. What do IndieWeb sites in the wild support for 3rd party auth?
+* Twitter
+* email
+* Github all popular 3rd party auth providers. what else?
+* Mastodon
+2. What else might be used?
+
+Use Case: Sensitive files
+* Backups of emails, text messages, and personal photos
+* Owning your participation in a public mailing list, without exposing the emails on your website (what if the other participants don't want their e-mails archived?)
+* Access control on posts is part of the Micropub ecosystem (visibility, audience) but files, and media endpoints, are deliberately underspecified.
+** Sensitive files only accessible when are embedded in posts as images, or otherwise linked to from within the post content?
 
 == References ==
 Useful pre-reading:
+
+* ... add stuff here
 
 
 
