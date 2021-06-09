@@ -4,13 +4,16 @@ https://indieweb.org/authorization-endpoint
 
 An '''<dfn>authorization endpoint</dfn>''' is an HTTP endpoint that [[micropub]] and [[IndieAuth]] clients can use to identify a user or obtain an authorization code (which is then later exchanged for an access token) to be able to post to their website. 
 
-== Creating an Authorization Endpoint ==
+== Authorization Endpoint Flows ==
 
-An authorization endpoint must be able to both generate authorization codes as well as verify the authorization codes it issues.
+=== Flows Required by the Spec ===
 
-=== Flows ===
+From a client app’s point of view (and as required by the indieauth spec), an authorization endpoint must support the following request flows:
 
-A typical authorization endpoint supports three different request flows. Note that only the '''authorization request''' and '''auth code exchange for profile information''' MUST be handled by the authorization endpoint per the spec. Exactly how the consent screen is presented, and at what endpoint, is an implementation detail independent of the spec.
+* A '''GET''' request (sent from the user’s browser via a redirect) with a query string containing authorization code request parameters. The response to this request is shown to the user, and is out of scope of the spec, but if successful it should result in the user being redirected to the <code>redirect_uri</code> parameter with <code>code</code> and <code>state</code> query string parameters.
+* A '''POST''' request to exchange an authorization code for profile information. Should return a JSON response body with either an error or a <code>me</code> response, optionally with profile information.
+
+In practise, the authorization endpoint typically has to handle authenticating the user, presenting a [[consent screen]], and handling the consent screen form submission, before redirecting to the client app’s <code>redirect_uri</code>. A common way to handle this is as follows:
 
 * '''authorization request''': a GET request which the user was redirected to from their client app,  with code request parameters in the query string.
 ** If the request is not authenticated (i.e. the user is currently logged out): perform authentication (usually by redirecting to a login page) and restart the flow.
@@ -19,8 +22,12 @@ A typical authorization endpoint supports three different request flows. Note th
 ** If the submitted data is invalid, return an error response
 ** If the submitted data is valid, build an authorization code, and return a 302 Redirect response to the <code>redirect_uri</code>, with <code>state</code> and <code>code</code> query parameters.
 * '''auth code exchange for profile information''': a POST request with auth code which results in a JSON response. Similar to the [[token endpoint]] flow. MUST NOT be CSRF-protected.
-** If the provided code, verifier and client ID are valid, return a JSON response containing <code>{"me": "https://me.example.com"}</code>
+** If the provided code, verifier and client ID are valid, return a JSON response containing <code><nowiki>{"me": "https://me.example.com"}</nowiki></code> and optionally profile information.
 ** If the request was invalid, return a JSON OAuth2 error response
+
+== Creating an Authorization Endpoint ==
+
+An authorization endpoint must be able to both generate authorization codes as well as verify the authorization codes it issues.
 
 === Web Sign-In Form ===
 The site contains a web sign-in form prompting the user to enter their personal web address to sign in.
