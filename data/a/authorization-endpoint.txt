@@ -8,6 +8,18 @@ An '''<dfn>authorization endpoint</dfn>''' is an HTTP endpoint that [[micropub]]
 
 An authorization endpoint must be able to both generate authorization codes as well as verify the authorization codes it issues.
 
+=== Flows ===
+
+Per the current spec, the authorization_endpoint has three potential request flows:
+
+* '''auth code exchange for profile information''': a POST request with auth code which results in a JSON response. Similar to the [[token endpoint]] flow. MUST NOT be CSRF-protected.
+* '''authorization request''': a GET request which the user was redirected to from their client app,  with code request parameters in the query string.
+** If the request is not authenticated (i.e. the user is currently logged out): perform authentication (usually by redirecting to a login page) and restart the flow.
+** If the request is authenticated (i.e. the user is currently logged in): validate the code request parameters, and return either an error response if invalid, or a [[consent screen]] response if valid.
+* '''consent form submission''': a POST request containing data submitted from the [[consent screen]] form. MUST be CSRF-protected.
+** If the submitted data is invalid, return an error response
+** If the submitted data is valid, build an authorization code, and return a 302 Redirect response to the <code>redirect_uri</code>, with <code>state</code> and <code>code</code> query parameters.
+
 === Web Sign-In Form ===
 The site contains a web sign-in form prompting the user to enter their personal web address to sign in.
 Upon submitting the form, the site begins the auth process by discovering the user's auth endpoint, e.g.:
