@@ -65,6 +65,43 @@ Added an experimental, incredibly ugly, alternative style sheet, which is activa
 
 {{fluffy}}'s [https://beesbuzz.biz/ site] has quite a few animated error pages, complete with theme songs. Try to generate a 403, 404, or 4xx error yourself. (If you give up, here are [https://beesbuzz.biz/music/experiments/2314-error-pages spoilers].)
 
+=== capjamesg ===
+
+{{jamesgoca}}'s website has a custom Konami code activated using the following sequence:
+
+* Up
+* Down
+* Up
+* Down
+* Up
+* Down
+
+The Konami code triggers a change in the HTML inside an announcement banner that is used to show featured posts on his blog. The announcement banner appears on all pages.
+
+Visitors can press the escape key to reset the Konami code if they make a mistake when tying it in or if they have already pressed other keys before trying the code.
+
+The code that powers his Konami code is based on the first example:
+
+<pre>
+function konami() {
+    var input = "";
+    var code = "384038403840";
+    document.addEventListener("keydown", function(e) {
+        if (e.keyCode.toString() === "27") {
+            input = "";
+        } else {
+            input += e.keyCode.toString();
+            if (input === code) {
+                const announcement = document.getElementsByClassName("announcement")[0];
+                announcement.innerHTML = "<p style='color:white;'><b>You have found the secret.</b></p>"
+            }
+        }
+    })
+}
+
+konami();
+</pre>
+
 === aaronpk ===
 
 {{aaronpk}}'s website has an easter egg if you type the Konami code.
