@@ -219,9 +219,44 @@ If you are accepting videos from third parties, you may wish to consider the leg
 
 [[Werd.io|Ben Werdmuller]] works on [http://latakoo.com latakoo], a service that provides apps to compress the video ''before'' upload (making for faster uploads from, eg, mobile devices and shared Internet), but it should be noted that this is a paid service that does not explicitly provide Indieweb support. (It does, however, have an API.)
 
-There is also [https://www.encoding.com/ encode.com] witch compresses video that you host on your own website, they have a paid per ussage service, a monthly plain and a free watermarked trial to test their API. - I ([[https://indieweb.org/User:Tomasparks.name tomasparks]]) have had an free account for years.
+There is also [https://www.encoding.com/ encode.com] which compresses video that you host on your own website, they have a paid per usage service, a monthly plan and a free watermarked trial to test their API. - I ([[https://indieweb.org/User:Tomasparks.name tomasparks]]) have had an free account for years.
 
 There is certainly scope for an indie video app that records video, modifies it in the app, and uploads it to the location of the user's choice (or even makes it available for the user to download and re-upload).
+
+=== Bit Rate and File Size ===
+
+When transcoding video to prepare it for upload to your personal site, the three parameters which have the largest effects on video quality and file size are codec, size (e.g. 720p, 1080p, etc) and bit rate.
+
+In the process of posting [https://waterpigs.co.uk/notes/5D9NcJ/ this 1:43 video], {{barnabywalters}} experimented with various Handbrake/ffmpeg settings to try to find an acceptable size:quality trade-off.
+
+Starting with a 1080p 50fps 10Mb/s QuickTime Movie file exported from DaVinci Resolve weighing 133MB, here’s how varying the following parameters in Handbrake affected the transcoded video:
+
+* Codec: Tried webm and H.264 in mp4 container. For the same settings and quality, webp was typically 1.4x the size of mp4.
+** todo: add actual size data, I deleted most of the webm files before writing this
+* Size: I quickly decided on 720p for the uploaded video
+* Bit Rate: I made many different renders at different bit rates, both fixed and adaptive.
+** 7Mb/s: 90MB file, looks very close to the original
+** 4Mb/s: 54MB, from here each reduction in bit rate results in a minor but noticeable reduction in video quality
+** 3Mb/s: 41MB
+** 2Mb/s: 28MB, hamster fur starts to look much less crisp
+** 1Mb/s: 15MB, noticeably blurry with various compression artifacts
+** RF 0 (adaptive bitrate): 183MB (!) comparable with the orignal
+** RF 11: 183MB, apparently internally the same as RF 0
+** RF 21: 85MB, the Handbrake “Fast 720p30” preset default. Comparable with original.
+** RF 30: 27MB, details start to look slightly less crisp, but still better than the comparable 2Mb/s fixed bitrate. This is the video I ended up using.
+** RF 35: 14MB, very noticeable blur and compression artifacts, but still watchable
+** RF 51: 4.5MB, totally unwatchable, extreme pixelation
+
+Based on these tests, for short (<5min) videos intended to be hosted on personal sites, the following Handbrake/ffmpeg settings are likely a good starting point, resulting in approximately 14MB per minute of 720p video:
+
+* MP4 Codec
+* “Web Optimized” checkbox
+* 1280 x 720 size (720p)
+* Video encoder: H.264
+* 30 frames per second
+* Quality one of
+** Constant Quality: RF 28 (±2)
+** Average Bitrate (kbps): 3000 (i.e. 3Mbps)
 
 == FAQ ==
 === Open realtime video ===
@@ -246,3 +281,4 @@ A: No. With just an iframe, you have no video file to point to. u-video is for t
 * [[transcript]]
 * [[streaming]]
 * [[OwnCast]]
+* [https://slhck.info/video/2017/02/24/crf-guide.html Quality-adaptive Bit Rate Explanation] with starting points for transcoding settings
