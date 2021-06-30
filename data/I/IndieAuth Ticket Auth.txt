@@ -81,10 +81,12 @@ How a website decides to issue tokens does not need to be defined by this spec.
 Would a token grant access to anything more specific than the provided resource, or would it be only for that specific resource? (e.g. should a token for <code>https://example.com/alice/</code> also work on <code>https://example.com/alice/feed</code>)
 * Giving meaning to the URLs like this is convenient but may be misleading or break security boundaries in unexpected ways.
 * An alternative would be to include another parameter, such as the previously discussed "realm", or somehow using scopes for this.
-* TODO: look at the OAuth Resource Indicator spec to see if they have solved it some way
+* Following [https://www.rfc-editor.org/rfc/rfc8707.html#section-2 RFC8707: Resource Indicators for OAuth 2.0] this would mean allowing <code>resource=https://example.com/alice/</code> to be used to retrieve the value of <code>https://example.com/alice/feed</code>
+** This allows the use of multiple <code>resource</code> parameters for the purpose of multiple resource URLs to provide access to
 
 Any provision for providing an expiry time as part of the granted ticket?
 * What would the use case be? Just like OAuth authorization codes, these are extremely short lived and there is no recourse if they expire other than starting over
+** {{jamietanna}} wonders if this is more about allowing the granted token to expire? That should be clear when redeeming the ticket and receiving an <code>expires_in</code> in the response from the token endpoint, and the optional presence of a <code>refresh_token</code>
 
 [[Category:IndieAuth]]
 
