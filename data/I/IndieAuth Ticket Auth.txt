@@ -18,6 +18,9 @@ This step isn't strictly necessary but may provide a better user experience for 
 
 This is in contrast to a mechanism of advertising the fact that there may be private/protected content at a URL by using something like a WWW-Authenticate header. By indicating there may be more to see at a URL, that itself is leaking information.
 
+==== Why not send the access token to the token endpoint? ====
+
+When you send a ticket, you are sending an unsolicited payload to the receiver. The ticket is not requested by the receiver, so you cannot guarantee they will be protecting it if they aren't expecting it. (It may be logged in intermediate proxy servers, written to log files on the server, etc.) If the receiver supports receiving tickets, then they will be explicitly requesting an access token by exchanging the ticket, so you can be more confident they will take measures to protect the access token. This way the access token is only delivered via an explicitly requested HTTPS connection to your server.
 
 === Step 2: Issue an access token ===
 Alice has decided to send an access token to Bob. (Either because Alice decided to out of the blue, or because Alice noticed Bob's follow notification.)
