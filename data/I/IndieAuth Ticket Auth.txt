@@ -23,28 +23,34 @@ This is in contrast to a mechanism of advertising the fact that there may be pri
 When you send a ticket, you are sending an unsolicited payload to the receiver. The ticket is not requested by the receiver, so you cannot guarantee they will be protecting it if they aren't expecting it. (It may be logged in intermediate proxy servers, written to log files on the server, etc.) If the receiver supports receiving tickets, then they will be explicitly requesting an access token by exchanging the ticket, so you can be more confident they will take measures to protect the access token. This way the access token is only delivered via an explicitly requested HTTPS connection to your server.
 
 === Step 2: Issue an access token ===
+
 Alice has decided to send an access token to Bob. (Either because Alice decided to out of the blue, or because Alice noticed Bob's follow notification.)
 
 ==== Create the IndieAuth ticket ====
+
 Alice generates a short-lived ticket which will last approximately a minute at most. The reason for short-lived is that you are sending something unsolicited to someone and it is safer to send something short-lived and single use, and require action to retrieve the actual token.
 
 * Feed URL = https://alice.example.com/
 * Ticket = 32985723984723985792834
-* Deliver to ticket endpoint of: https://bob.example.org/
+* Deliver to ticket endpoint of the subject: https://bob.example.org/
 
-Discover ticket endpoint of https://bob.example.org/
+Alice makes a GET or HEAD request to discover the ticket endpoint of https://bob.example.org/, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>ticket_endpoint</code>.
 
 * https://auth.example.org/ticket
 
-Post ticket to https://auth.example.org/ticket
+Alice makes a POST request to the ticket endpoint.
 
-<pre>curl https://auth.example.org/ticket \ 
-   # a random string that can be redeemed for an access token
-   -d ticket=32985723984723985792834 \ 
-   # the access token will work at this URL
-   -d resource=https://alice.example.com/ \ 
-   # the access token should be used when acting on behalf of this URL
-   -d subject=https://bob.example.org/ </pre>
+* <code>ticket</code> - a random string that can be redeemed for an access token
+* <code>resource</code> - the accesss token will work at this URL
+* <code>subject</code> - the access token should be used when acting on behalf of this URL
+
+<pre>POST https://auth.example.org/ticket
+     Content-Type: application/x-www-form-urlencoded
+
+ticket=32985723984723985792834
+&resource=https://alice.example.com/
+&subject=https://bob.example.org
+</pre>
 
 This is basically saying "if you wanted to fetch this feed as this person and see private stuff, here's a ticket you can use to get an access token".
 
