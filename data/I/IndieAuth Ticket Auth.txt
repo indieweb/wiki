@@ -58,11 +58,22 @@ This is basically saying "if you wanted to fetch this feed as this person and se
 
 Bob's ticket endpoint redeems the ticket for an access token
 
-Fetch resource https://alice.example.com/ to discover token endpoint
+The ticket endpoint makes a GET or HEAD request to discover the token endpoint of https://alice.example.org/, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>token_endpoint</code>. 
 
-<pre>curl https://alice.example.com/token
-   -d grant_type=ticket
-   -d ticket=32985723984723985792834</pre>
+The ticket endpoint makes a POST request to the token endpoint to exchange the ticket for an access token. The POST request contains the following parameters:
+
+* <code>grant_type=ticket</code>
+* <code>ticket</code> - The ticket to be redeemed
+
+===== Example =====
+
+<pre>POST https://alice.example.com/token
+  Content-type: application/x-www-form-urlencoded
+  Accept: application/json
+
+  grant_type=token
+  &ticket=32985723984723985792834
+</pre>
 
 Response is an access token
 
