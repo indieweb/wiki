@@ -9,14 +9,15 @@ Use-cases that inspired the development of this protocol:
 == Brainstorming ==
 
 === Step 1: Decide to issue an access token ===
-Bob would like to notify Alice that Bob is following Alice
-so that Alice can choose to share more things with Bob.
 
-* TODO: this could be a [[follow]] post, or some other protocol, but is not related to authentication
-
-This step isn't strictly necessary but may provide a better user experience for granting these tokens.
+Alice has choosen to share private things with Bob. 
 
 This is in contrast to a mechanism of advertising the fact that there may be private/protected content at a URL by using something like a WWW-Authenticate header. By indicating there may be more to see at a URL, that itself is leaking information.
+
+The decision to share could be triggered by Bob notifying Alice that he is following Alice. This isn't strictly necessary but may provide a better user experience for granting these tokens.
+
+* TODO: methods of Bob notifying Alice could be a [[follow]] post, or some other protocol, but is not related to authentication or required.
+
 
 ==== Why not send the access token directly? ====
 
@@ -98,15 +99,15 @@ How a website decides to issue tokens does not need to be defined by this spec.
 
 == Open questions ==
 
-Would a token grant access to anything more specific than the provided resource, or would it be only for that specific resource? (e.g. should a token for <code>https://example.com/alice/</code> also work on <code>https://example.com/alice/feed</code>)
-* Giving meaning to the URLs like this is convenient but may be misleading or break security boundaries in unexpected ways.
-* An alternative would be to include another parameter, such as the previously discussed "realm", or somehow using scopes for this.
-* Following [https://www.rfc-editor.org/rfc/rfc8707.html#section-2 RFC8707: Resource Indicators for OAuth 2.0] this would mean allowing <code>resource=https://example.com/alice/</code> to be used to retrieve the value of <code>https://example.com/alice/feed</code>
-** This allows the use of multiple <code>resource</code> parameters for the purpose of multiple resource URLs to provide access to
+*Would a token grant access to anything more specific than the provided resource, or would it be only for that specific resource? (e.g. should a token for <code>https://example.com/alice/</code> also work on <code>https://example.com/alice/feed</code>)
+** Giving meaning to the URLs like this is convenient but may be misleading or break security boundaries in unexpected ways.
+** An alternative would be to include another parameter, such as the previously discussed "realm", or somehow using scopes for this.
+** Following [https://www.rfc-editor.org/rfc/rfc8707.html#section-2 RFC8707: Resource Indicators for OAuth 2.0] this would mean allowing <code>resource=https://example.com/alice/</code> to be used to retrieve the value of <code>https://example.com/alice/feed</code>
+*** This allows the use of multiple <code>resource</code> parameters for the purpose of multiple resource URLs to provide access to
 
-Any provision for providing an expiry time as part of the granted ticket?
-* What would the use case be? Just like OAuth authorization codes, these are extremely short lived and there is no recourse if they expire other than starting over
-** {{jamietanna}} wonders if this is more about allowing the granted token to expire? That should be clear when redeeming the ticket and receiving an <code>expires_in</code> in the response from the token endpoint, and the optional presence of a <code>refresh_token</code>
+*Any provision for providing an expiry time as part of the granted ticket?
+** What would the use case be? Just like OAuth authorization codes, these are extremely short lived and there is no recourse if they expire other than starting over
+*** {{jamietanna}} wonders if this is more about allowing the granted token to expire? That should be clear when redeeming the ticket and receiving an <code>expires_in</code> in the response from the token endpoint, and the optional presence of a <code>refresh_token</code>
 
 [[Category:IndieAuth]]
 
