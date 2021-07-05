@@ -14,6 +14,13 @@ https://indieweb.org/IndieAuth_Ticket_Auth
 __TOC__
 
 
+== Summary ==
+
+* Alice has choosen to share private things with Bob. 
+* Bob advertises a ticket endpoint on his website.
+* Alice sends a ticket to Bob's ticket endpoint, which he can redeem for a token to access Alice's private things.
+* Bob's ticket endpoint receives a ticket, which he exchanges for a token at Alice's token endpoint.
+* Bob can now access Alice's private things.
 
 == Use-cases ==
 Use-cases that inspired the development of this protocol:
@@ -21,7 +28,7 @@ Use-cases that inspired the development of this protocol:
 * don't rely on a "follow request" in order to do so
 * ...
 
-== Brainstorming ==
+== Protocol ==
 
 === Step 1: Decide to issue an access token ===
 
@@ -52,7 +59,7 @@ Alice generates a short-lived ticket which will last approximately a minute at m
 * Ticket = 32985723984723985792834
 * Deliver to ticket endpoint of the subject: https://bob.example.org/
 
-Alice makes a GET or HEAD request to discover the ticket endpoint of https://bob.example.org/, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>ticket_endpoint</code>.
+Alice makes a GET or HEAD request to discover the ticket endpoint of the subject, https://bob.example.org/, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>ticket_endpoint</code>.
 
 * https://auth.example.org/ticket
 
