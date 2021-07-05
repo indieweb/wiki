@@ -122,6 +122,18 @@ How a website decides to issue tokens does not need to be defined by this spec.
 ** Something that can be fixed by providing a specific <code>iss</code>/<code>issuer</code> value along with the <code>resource</code> in the POST to the ticket endpoint?
 *** {{jamietanna}} was wondering about the <code>iss</code> matching the issuer of the token (i.e. the IndieAuth server's URL) but agrees with {{zegnat}}'s point about it being in the initial POST to the ticket endpoint, and matching the identity URL of the user who is providing access
 
+== IndieWeb Examples ==
+
+=== Martijn van der Ven ===
+
+As of 2021-07-04 (at [https://chat.indieweb.org/dev/2021-07-04/1625433752084900 21:22 UTC]), {{martijnvdven}} has a token endpoint with the ability for anyone to request a ticket. It is accessible through https://vanderven.se/martijn/token/.
+
+Please treat the whole thing as experimental, and feel free to test your own endpoints against it!
+
+Tokens created through there are meant for the entire domain (the <code>resource</code> is <code><nowiki>https://vanderven.se/</nowiki></code>) and have no <code>scope</code> set. They are purely to identify someone as their URL. Because of the experimental phase of this spec, tokens are kept to short life times (3 days).
+
+* '''Special:''' while requesting tickets is declared out-of-scope for this extension, the way it is implemented here follows the pattern from [[IndieAuth]]’s [https://indieauth.spec.indieweb.org/#token-revocation Token Revocation]. A <code>POST</code> with <code>action=ticket</code> triggers the sending of a ticket.
+
 [[Category:IndieAuth]]
 
 == See Also ==
