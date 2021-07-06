@@ -55,7 +55,7 @@ Alice has decided to send an access token to Bob. (Either because Alice decided 
 
 Alice generates a short-lived ticket which will last approximately a minute at most. The reason for short-lived is that you are sending something unsolicited to someone and it is safer to send something short-lived and single use, and require action to retrieve the actual token.
 
-* Feed URL = https://alice.example.com/
+* Feed URL = https://alice.example.com/private/
 * Ticket = 32985723984723985792834
 * Deliver to ticket endpoint of the subject: https://bob.example.org/
 
@@ -73,7 +73,7 @@ Alice makes a POST request to the ticket endpoint.
      Content-Type: application/x-www-form-urlencoded
 
 ticket=32985723984723985792834
-&resource=https://alice.example.com/
+&resource=https://alice.example.com/private/
 &subject=https://bob.example.org
 </pre>
 
@@ -83,7 +83,7 @@ This is basically saying "if you wanted to fetch this feed as this person and se
 
 Bob's ticket endpoint redeems the ticket for an access token
 
-The ticket endpoint makes a GET or HEAD request to discover the token endpoint of https://alice.example.org/, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>token_endpoint</code>. 
+The ticket endpoint makes a GET or HEAD request to discover the token endpoint of https://alice.example.com/private/, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>token_endpoint</code>. 
 
 The ticket endpoint makes a POST request to the token endpoint to exchange the ticket for an access token. The POST request contains the following parameters:
 
@@ -111,6 +111,9 @@ Now Bob's authorization endpoint has the remote access token that could be used 
 How to get it to the reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
 
 === Notes ===
+
+The current implementation expects that all pages that could be deemed as a <code>resource</code> would have the <code>rel=token_endpoint</code>
+
 Advantages:
 * The thing that gets tokens only needs one new public endpoint, the endpoint that receives tickets
 ** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
