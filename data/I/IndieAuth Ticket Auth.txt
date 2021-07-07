@@ -148,7 +148,9 @@ How a website decides to issue tokens does not need to be defined by this spec.
 ** {{martijnvdven}} ended up setting the resource as their root domain, which made it impossible to go get a token with the token endpoint only discoverable from the /martijn/ path. This was because of the assumption that <code>resource</code> was like <code>realm</code> in that it could be anything, but that stopped the ticket endpoint {{GWG}} was writing from ever redeeming. [https://chat.indieweb.org/dev/2021-07-04#t1625434428477500 Short discussion in chat.]
 ** Something that can be fixed by providing a specific <code>iss</code>/<code>issuer</code> value along with the <code>resource</code> in the POST to the ticket endpoint?
 *** {{jamietanna}} was wondering about the <code>iss</code> matching the issuer of the token (i.e. the IndieAuth server's URL) but agrees with {{zegnat}}'s point about it being in the initial POST to the ticket endpoint, and matching the identity URL of the user who is providing access
-** It was pointed out that by putiting the token endpoint header on a resource URL, you may be indicating there is something there. For example, you choose to have your private pages return 404. Then how does the ticket endpoint discover the token endpoint. It should therefore pass a 'me' property or such.
+** It was pointed out that by putiting the token endpoint header on a resource URL, you may be indicating there is something there. For example, you choose to have your private pages return 404. Then how does the ticket endpoint discover the token endpoint? As above, it should return a <code>me</code>/<code>iss</code>/<code>issuer</code> parameter
+
+* Should we make it clear that multiple <code>resource</code>s could be granted from a single ticket? Following RFC8707 would make it possible to do so
 
 == IndieWeb Examples ==
 
