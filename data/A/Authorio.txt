@@ -4,30 +4,42 @@ https://indieweb.org/Authorio
 
 '''<dfn>[https://github.com/reiterate-app/authorio Authorio]</dfn>''' is a Rails engine / Ruby gem that enables authentication endpoint functionality.
 
-If you are looking for a minimal, self-hostable [[authentication-endpoint]], see [[selfauth]].
+If you are looking for a minimal, self-hostable [[authorization-endpoint]], see [[selfauth]].
 
 == Why ==
 
-* You don't need [[silo]] accounts to use Authorio, so it's [[IndieAuth]] without Twitter or Github.
-* More privacy: you don't tell silos that you want to login somewhere, only your own server.
-* Not vulnerable for social engineering with silo accounts.
 * If you already have your own server running on the Rails framework, Authorio is a simple way to join [[IndieAuth]].
+* You don't need [[silo]] accounts to use Authorio. You can eliminate all dependencies on Twitter or GitHub and enjoy a 100% federated identity.
+* All your data is contained on a server you control.
 
 == How-to ==
 
-# Install the gem from RubyGems <code>gem install authorio</code>
-# Follow the steps in the [https://github.com/reiterate-app/authorio/blob/master/README.md README file]
-# If your site is running the latest Rails (version 6 at least), it should only take a few minutes to set up and configure Authorio.
-# Reboot your site, and then you can use your URL to log in to any IndieAuth client.
+This is a condensed version of the [https://github.com/reiterate-app/authorio/blob/master/README.md Installation instructions] in the README
 
-== Criticism ==
+# Add the gem to your Gemfile <code>gem install authorio</code> and install it <code>bundle</code>
+# Install the Authorio config files: <code>rails generate authorio:install</code>
+# Install and perform the database migrations
+## <code>rails authorio:install:migrations</code>
+## <code>rails db:migrate</code>
+# Add <code>authorio_routes</code> to your <code>routes.rb</code>
+# Add <code><%= indieauth_tag %></code> to your home page
+# Set your initial password: <code>rake authorio:password</code>
+# Add Authorio's assets to your asset pipeline: <code>rails assets:precompile</code>
+# Reboot your site
 
-* It's easier to use rel=me and re-use your existing accounts.
-* This is only useful if you already have a Rails website running.
+Setup complete! You should now be able to use your site's URL to log in to an IndieAuth client.
+
+== Alternatives ==
+
+Authorio can be an excellent solution if you already have your own Rails-based server set up. Otherwise, you might want to look at these alternatives.
+
+* If you don't want to set up and manage your own web server, you're better off using rel=me and [[RelMeAuth]] to manage your identity.
+* If you don't already have a Rails-based server, you might be better with an all-in-one server + IndieAuth solution like [[selfauth]] or [https://github.com/barryf/acquiescence Acquiescence]
 
 [[Category:IndieAuth]]
 
 == See Also ==
 * [[IndieAuth]]
 * [[selfauth]]
+* [https://github.com/barryf/acquiescence Acquiescence]
 * [[authorization-endpoint]]
