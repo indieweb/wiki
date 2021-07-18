@@ -2,33 +2,33 @@ https://indieweb.org/sweetroll
 
 == sweetroll2 ==
 
-[https://github.com/myfreeweb/sweetroll2 '''<dfn>sweetroll2</dfn>'''] is {{myfreeweb}}'s engine that powers [https://unrelenting.technology unrelenting.technology].
+[https://github.com/unrelentingtech/sweetroll2 '''<dfn>sweetroll2</dfn>'''] is {{myfreeweb}}'s engine that used to power [https://unrelenting.technology unrelenting.technology] until mid-2021. Check the {{myfreeweb}} profile page for newer info about that website.
 
 * Written in [[Elixir]] as a monolithic service, with an in-process Mnesia database.
 * Dynamic rendering and static generation at the same time (the latter is mainly kind of a cache for performance, but everything is generated preemptively).
 * Uniform data model: every page is a [[microformats2]] style object, special object types are used for stuff like feeds.
 * Supports only [[micropub]] for posting, updating, deleting and undeleting, no custom endpoints.
-* Includes [https://github.com/myfreeweb/micro-panel micro-panel], a micropub-based admin panel.
+* Includes [https://github.com/unrelentingtech/micro-panel micro-panel], a micropub-based admin panel.
 * (and so on.. read the github readme for a more complete list of stuff)
 
 === Libraries ===
 
-* [https://github.com/myfreeweb/ex_http_link ex_http_link]
-* [https://github.com/myfreeweb/rustled_syntect rustled_syntect]
-* [https://github.com/myfreeweb/ex_early_ret ex_early_ret]
+* [https://github.com/unrelentingtech/ex_http_link ex_http_link]
+* [https://github.com/unrelentingtech/rustled_syntect rustled_syntect]
+* [https://github.com/unrelentingtech/ex_early_ret ex_early_ret]
 
 Funnily enough, I did not end up using HTTPotion, an HTTP client wrapper I wrote years ago that became quite popular. Turns out its backend (ibrowse) is really not that good.
 
-== Old version: sweetroll (1) ==
+== First version: sweetroll (1) ==
 
-[https://github.com/myfreeweb/sweetroll '''<dfn>sweetroll</dfn>'''] "1" was used before the switch to sweetroll2 in 2019. '''This part is left for historical reference only'''.
+[https://github.com/unrelentingtech/sweetroll '''<dfn>sweetroll</dfn>'''] "1" was used before the switch to sweetroll2 in 2019.
 
 === Architecture ===
 
 Sweetroll consisted of:
 * a "backend" service written in [[Haskell]] that's (roughly) responsible for getting data into the database: auth, [[micropub]], receiving [[webmention]]s;
 * a "frontend" service written in [[JavaScript]] ([[node.js]]) that's (roughly) responsible for getting data out of the database: rendering the website, sending [[webmention]]s, publishing [[WebSub]] notifications;
-* a [[PostgreSQL]] database ([https://github.com/myfreeweb/mf2sql mf2sql schema] created for Sweetroll) that's used for storage, full text search and change notifications (LISTEN/NOTIFY).
+* a [[PostgreSQL]] database ([https://github.com/unrelentingtech/mf2sql mf2sql schema] created for Sweetroll) that's used for storage, full text search and change notifications (LISTEN/NOTIFY).
 * a web server that proxies requests to both services (configuration is provided for [[nginx]]).
 
 Pretty much everything in Sweetroll is represented as [[microformats]]2 [[JSON]] objects, including [[feed]] configurations and site settings. (Of course there's no common microformats for that, so it's custom, but stored in the same way.) Stored procedures are used to extract embedded entries (comments, in-reply-to contexts, etc.) into their own records when writing content and to embed them back when reading. And to build feeds.
@@ -39,10 +39,10 @@ This data-driven feed construction allows the engine to know exactly which feeds
 
 === Libraries ===
 The following Haskell libraries were written for Sweetroll 1 (and some of them were abandoned as Sweetroll evolved):
-* [https://github.com/myfreeweb/magicbane a small Dropwizard-like Haskell "framework" based on Servant]
-* [https://github.com/myfreeweb/http-link-header a parser for the HTTP Link header]
-* [https://github.com/myfreeweb/microformats2-parser a parser for Microformats 2]
-* [https://github.com/myfreeweb/indieweb-algorithms implementations of indieweb algorithms] like [[authorship]]
-* [https://github.com/myfreeweb/pcre-heavy a usable PCRE based regular expressions library]
-* [https://github.com/myfreeweb/gitson gitson], a Git+JSON storage library
-* [https://github.com/myfreeweb/hs-duktape hs-duktape], bindings to [http://duktape.org duktape], a small JavaScript interpreter
+* [https://github.com/unrelentingtech/magicbane a small Dropwizard-like Haskell "framework" based on Servant]
+* [https://github.com/unrelentingtech/http-link-header a parser for the HTTP Link header]
+* [https://github.com/unrelentingtech/microformats2-parser a parser for Microformats 2]
+* [https://github.com/unrelentingtech/indieweb-algorithms implementations of indieweb algorithms] like [[authorship]]
+* [https://github.com/unrelentingtech/pcre-heavy a usable PCRE based regular expressions library]
+* [https://github.com/unrelentingtech/gitson gitson], a Git+JSON storage library
+* [https://github.com/unrelentingtech/hs-duktape hs-duktape], bindings to [http://duktape.org duktape], a small JavaScript interpreter
