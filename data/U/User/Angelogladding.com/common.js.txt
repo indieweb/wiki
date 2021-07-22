@@ -1,0 +1,65 @@
+https://indieweb.org/User%3AAngelogladding.com/common.js
+
+/*
+SOLARIZED COLOR THEMES
+======================
+
+- toggle between default black on white and solarized
+- when solarized, toggle between light and dark
+
+To use, copy the code between here and "END SOLARIZED COLOR THEME" to your own user common.js page.
+
+*/
+
+controls = '<div id=solarized_controls style="bottom: 1em; left: 1em; position: fixed;">Solarized <input id=toggle_solarized type=checkbox checked style="transform: scale(.75);"><button id=solarized_theme>Dark</button></div><style id=solarized></style>';
+
+common = 'a { color: #268bd2 !important; } \
+a:visited { color: #6c71c4 !important; } \
+#solarized_theme { background: none; border: 0; color: #2aa198; cursor: pointer; font-size: .9em; font-weight: bold; padding: .5em; } \
+.sponsor-logo-block { display: none; }';
+
+light = 'body, #mw-page-base, #mw-head-base, #mw-head, #content { background-color: #fdf6e3 !important; color: #657b83 !important; } \
+h1, h2, h3, h4, h5, h6 { color: #657b83 !important; } \
+pre, textarea { background-color: #eee8d5 !important; border: 0; color: #657b83 !important; }';
+
+dark = 'body, #mw-page-base, #mw-head-base, #mw-head, #content { background-color: #002b36 !important; color: #839496 !important; } \
+h1, h2, h3, h4, h5, h6 { color: #839496 !important; } \
+pre, textarea { background-color: #073642 !important; border: 0; color: #839496 !important; }';
+
+function darken() {
+    document.querySelector("#solarized").innerHTML = dark + common;
+    btn.innerHTML = "Light"; }
+
+function lighten() {
+    document.querySelector("#solarized").innerHTML = light + common;
+    btn.innerHTML = "Dark"; }
+
+function solarize() {
+    // document.querySelector("body").innerHTML = document.querySelector("body").innerHTML + controls;
+    var btn = document.querySelector("#solarized_theme");
+    document.querySelector("#toggle_solarized").onclick = function() {
+        if (this.checked) {
+            if (btn.innerHTML == "Dark")
+                lighten();
+            else
+                darken();
+            btn.style["display"] = "inline";
+        } else {
+            document.querySelector("#solarized").innerHTML = "";
+            btn.style["display"] = "none";
+        }
+    };
+    btn.onclick = function() {
+        if (btn.innerHTML == "Dark")
+            darken();
+        else
+            lighten();
+    };
+}
+
+// solarize();
+// lighten(document.querySelector("#solarized_theme"));
+
+/*
+END SOLARIZED COLOR THEMES
+*/
