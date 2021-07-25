@@ -9,41 +9,69 @@ https://indieweb.org/2021/Pop-ups/Microsub
 Let's work through and discuss some of the open issues on the Microsub spec issue tracker and find implementers.
 
 == Details ==
-* facilitators: TBA
+* facilitator: {{gwg}}
 * Date: 2021-07-24
 * Time: 11:00 Pacific
 * event: https://events.indieweb.org/2021/07/microsub-popup-session-jjQzemcBDugp
+* Video: {{videoduration|link=https://archive.org/details/microsub-indie-web-popup-2021|duration=01:51:16}} 
 * hashtag: #microsub
 * https://etherpad.indieweb.org/microsub-popup
 __TOC__
-== Possible Topics ==
 
-* Microsub is an early editor's draft. How do we move it to living standard?
+== Participants ==
+* {{gwg}}
+* {{omz13}}
+* {{jamietanna}}
+* {{manton}}
+* {{chrisaldrich}}
+* {{aaronpk}}
+* {{angelo}}
 
+== Topics == 
+
+* Microsub is an early editor's draft. How do we move it to living standard? - Look at what has 2 publishers/consumers and whatever that is would be stable. Someone would have to do this.
 * How do we shift the paradigm to follow people, not feeds?
+* How does the spec do this? Feeds are a technical implementation.
+** What could we do to standardize the user interaction to refocus?
+** On the Publisher side, micro.blog assumes when you are following a person's micro.blog account you are following all of their feeds.
+*** micro.blog lets you follow a domain name, and it picks one feed from their home page to follow
+*** prefers jsonfeed, excludes wordpress comment feeds
+** Spec could focus on entering h-card url and endpoint could figure out how to derive feeds from h-card.
+** Could Microsub make recommendations to publishers to indicate which is a good "primary" feed to follow?
+** Long question of how publishers mark up feeds to indicate what they are so Microsub can take those recommendations.
+** Search parameter should be explained that it does not need to be a URL. But the results would not necessarily be feeds coming from a URL.
+*** Aperture tries to turn search text into a URL. Yarns always assumes a URL. 
+*** Recommendation to have clients emphasize the author property of feeds over the URL.
+*** Change URL in search to optionally opaque UID, so there is no representation of the feed URL in the search response.
 
-* How to Give a Microsub server access to private posts for its user(https://github.com/indieweb/microsub/issues/1) - This is not strictly a Microsub issue, but there is a lot of interest. Assuming your Microsub endpoint is not tightly integrated with other endpoints, there needs to be some way to either pass info to it, or for the Microsub to request it.
+* How to Give a Microsub server access to private posts for its user(https://github.com/indieweb/microsub/issues/1) - This is not strictly a Microsub issue, but there is a lot of interest. Assuming your Microsub endpoint is not tightly integrated with other endpoints, there needs to be some way to either pass info to it, or for the Microsub to request it. - Tabled, possibly for IndieAuth session
 
-* Feed and Item Metadata
-** Indicating Item Source(https://github.com/indieweb/microsub/issues/13)
-** Multiple Authors https://github.com/indieweb/microsub/issues/38
+* Feed and Item Metadata 
+** Indicating Item Source(https://github.com/indieweb/microsub/issues/13) - 
+*** Be able to add unfollow button.
+*** Possible options
+**** _source UID - already implemented by Aperture but was not recalled
+**** Top level item in return with the sources and each item could only have the ID
+**** _source with UID plus name/photo optionally also URL for clicking
+*** Discussion results https://github.com/indieweb/microsub/issues/13#issuecomment-886101131
+** Multiple Authors https://github.com/indieweb/microsub/issues/38 - Make author an array in spec?
+*** Retweets are in a way multi-author posts...
+*** Academic articles
 ** Have Editable Feed Names and Other Feed Metadata(https://github.com/indieweb/microsub/issues/23)
-
 * Channel Method to include all Sources(https://github.com/indieweb/microsub/issues/44)
-
+** Add parameters discussion to issue, allow query for 1 specific channel, and allow optional return of sources.
+** In some cases, it may not make sense for endpoint to return the sources.
+** https://github.com/indieweb/microsub/issues/44#issuecomment-886102612
 * Retrieve Feeds Individually(https://github.com/indieweb/microsub/issues/21)
-
+** Allow source as property in the action=timeline is stable enough to go into spec.
 * Adopt Standardized Format for Errors into Spec (https://github.com/indieweb/microsub/issues/28)
+** Requires examples of implementation.
+* Idea to be added to issues....ask for alternative feeds for the source, in the event you want to find different types, and then update an existing source. This could be done only on the server side as well.
+** Search/Follow/Unfollow should accept either URL or _id
 
-* Photo and Video Sizes (https://github.com/indieweb/microsub/issues/36)
-
-* Allow Channel Ordering (https://github.com/indieweb/microsub/issues/39)
-
-* Add Location Property to Structure of a Single Post (https://github.com/indieweb/microsub/issues/45)
-
-* Does notifications channel order really matter? (https://github.com/indieweb/microsub/issues/46)
-
-* Move read-only mode suggestion into spec (https://github.com/indieweb/microsub/issues/29)
+Next steps:
+    * Check on implementation status of all features in the spec to determine which features can be considered stable/core
+    * Implement things we promised during this session
 
 == Interest ==
 Add your +1 for interest in this topic:
