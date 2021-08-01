@@ -191,6 +191,10 @@ Some properties can be faked if microformats markup isn’t present:
 
 Many semantics similar to microformats ones can be found in invisible metadata like OGP meta elements — whether or not it can be trusted or gives a better search experience requires further experimentation.
 
+You may choose to use other structured data formats for indexing if your website supports them. For instance, you may choose to use JSON-LD, a type of linked structured data, in your indexing if your site is rich in JSON-LD syntax.
+
+Structured data makes it much easier for you to index pages since you can rely on your implementation of a structured data standard when indexing information. For instance, using microformats means you could get any category on a page by looking for the p-category property. Finding a category without structured data present would be much more difficult.
+
 To get the best results a plaintext representation of each page should be indexed. In lieu of a HTML to Plaintext algorithm, some steps to follow include:
 * Remove the <code>head</code> element from the page
 * Remove any other <code>script</code>, <code>style</code> elements from the page
@@ -205,6 +209,19 @@ Results should be displayed in order of relevance by default. Having the option 
 Each result should form a block with clear visual thingness separating it from other results. A click anywhere on the block should navigate immediately to the search result URL, which should be shown in it’s entirety at the bottom of the block.
 * the only reason I can think of to ''not'' navigate immediately, i.e. navigate via an intermediate redirect is to check whether or not the page exists and show an archived copy instead. Perhaps that checking is better left to a browser extension which acts only on a 404 --[[User:Waterpigs.co.uk|Barnaby Walters]] 09:51, 28 February 2014 (PST)
 
+=== Ranking factors ===
+
+You may choose to weigh a certain set of ranking factors to help improve "relevance" of your search engine. For instance, you may decide to weigh titles as more important than content in meta descriptions. Ranking factors to consider:
+
+* Title tags
+* Meta descriptions
+* Image alt text (if you are adding image support to your search engine)
+* Keywords (either identified by an algorithm or those specified in a meta tag)
+* H2s
+* H3s, H4s, H5s, and H6s.
+
+Ranking factors are something you should consider if you have a large repository of content and want to maximize the chance that visitors find a result that meets their needs.
+
 === Advanced Filters ===
 
 Google Search, and many other search engines like GitHub's search feature, support advanced filters that make it easy to find what you are looking for. On Google, these include:
@@ -212,10 +229,28 @@ Google Search, and many other search engines like GitHub's search feature, suppo
 * inurl:
 * intitle:
 * "specific term"
+* AND
+* OR
 
 You can read more about advanced filters on Goggle in this article: https://ahrefs.com/blog/google-advanced-search-operators/
 
 You might also opt to add custom advanced filters based on your needs (i.e. a filter that returns posts published in a specific tag or category).
+
+Some database full text search features, such as the SQLite full text search, already support filters like AND and OR. If you are using a database full text search feature, you should read their documentation to learn about what filters might already be available to you without implementing them directly.
+
+=== Image search ===
+
+It is possible to add image search support to a personal search engine. This is a nice feature to add if you have a lot of images on your site through which you want to search. Having this feature would make it easier for you to find what images you have used and perhaps find images to reuse in future posts or pages.
+
+Image searches are most effective if you have alt text through which to search.
+
+You can index results for image search as part of your regular text index. You should have a separate table in a database for image searching as you will need to keep track of different attributes. A basic image search index should keep track of:
+
+* Image URL
+* Image alt text (through which you will search)
+* The title of the post associated with the image
+
+These attributes will provide a solid foundation that will make it easy for you to find images based on keywords.
 
 == Silo Examples ==
 === Twitter ===
