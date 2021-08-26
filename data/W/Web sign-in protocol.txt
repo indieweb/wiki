@@ -1,0 +1,54 @@
+https://indieweb.org/Web_sign-in_protocol
+
+{{stub}}
+
+This page describes signing in to websites using your personal web address. In the example, sites that have not delegated authorization to a specific endpoint fall back to using [[RelMeAuth]] for authentication rather than [[obtaining-an-access-token|authorization]]. 
+
+If the user did not delegate authorization to a specific endpoint, such as an [[IndieAuth]] endpoint, then the client searches for known authentication providers by other means. 
+
+[[IndieAuth]] is a popular option for authorization, while [[RelMeAuth]] is a popular option to fall back on. However, '''Web sign-in''' does not dictate any particular service.
+
+== Example of Web sign-in ==
+
+In these examples, [[RelMeAuth]] will be used as the example of a fallback method and the following URLs will be used.
+
+The site the user is signing in to is the IndieWeb wiki:
+* client_id = https://indieweb.org
+* redirect_uri = https://indieweb.org/auth/callback
+
+The user signing in is [[User:Aaronparecki.com|Aaron Parecki]]:
+* me = https://aaronparecki.com/
+
+In this example, Aaron has not delegated authorization to an external service, but instead has added a [[rel-me|rel=me]] link to other profiles:
+* <nowiki>&lt;a href="https://github.com/aaronpk" rel="me"&gt;github.com/aaronpk&lt;/a&gt;</nowiki>
+* <nowiki>&lt;a href="https://twitter.com/aaronpk" rel="me"&gt;twitter.com/aaronpk&lt;/a&gt;</nowiki>
+* <nowiki>&lt;link rel="pgpkey" href="/key.txt"&gt;</nowiki>
+
+== Web sign-in Form ==
+
+The site contains a Web sign-in form prompting the user to enter their URL to sign in. Upon submitting the form, the site begins the auth process by discovering the user's auth endpoint, and if none is found, looks for supported rel=me services.
+
+[[File:indieauth-web-sign-in.png]]
+
+== Discovery ==
+
+aaronparecki.com points to multiple silo authorization services by specifying rel=me values on the index page, as well as links to a GPG key.
+
+<pre>&lt;link rel="me" href="https://github.com/aaronpk"&gt;</pre>
+<pre>&lt;link rel="me" href="https://twitter.com/aaronpk"&gt;</pre>
+<pre>&lt;link rel="pgpkey" href="/files/key.asc"&gt;</pre>
+
+=== Authorization ===
+
+If not using a site's delegated auth endpoint, the [[RelMeAuth]] service or other service should present an interface describing the request being made. It must indicate:
+* The name of the site making the request
+* Give the user choices of using any supported auth providers they have listed on their home page
+
+== Complete ==
+
+After the site authenticates the user at one of their mutually agreed upon providers, the site can consider the user signed in.
+
+== See Also ==
+* [[Web sign-in]]
+
+[[Category:IndieAuth]]
