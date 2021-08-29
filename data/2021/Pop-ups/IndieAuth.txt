@@ -16,8 +16,11 @@ It's been a year since the last [[2020/Pop-ups/IndieAuth|IndieAuth protocol sess
 * Time: 11:00 Pacific
 * event: https://events.indieweb.org/2021/08/indieauth-popup-session-8gwaJpICmh79
 * hashtag: #indieauth
+* Video: {{videoduration|link=https://archive.org/details/indieauth-indieweb-popup-2021|duration=02:06:59}} 
 * https://etherpad.indieweb.org/2021-08-indieauth-popup
 __TOC__
+
+
 
 
 == Possible Topics ==
@@ -36,3 +39,29 @@ __TOC__
 * Make IndieAuth token verify endpoint credentialed, so it is clear that this should only be used by Resource Servers
 * Clarification on issuing tokens with only profile scopes. https://github.com/indieweb/indieauth/issues/62
 * Allow clients to always exchange authorization codes at the token endpoint https://github.com/indieweb/indieauth/issues/58
+
+== Notes ==
+Possible topics are visible at https://indieweb.org/2021/Pop-ups/IndieAuth.
+* https://github.com/indieweb/indieauth/issues/81 and expiry:
+** {{jamietanna}} supports expiration, and issuing of `refresh_token`
+** Discussion about whether we should add information about how to handle errors as an IndieAuth app (see RFC6749#7.2) https://github.com/indieweb/indieauth/issues/89
+* {{jamietanna}} would like to discuss "Deprecate / remove the IndieAuth token verify endpoint" and moving the spec to be further aligned with OAuth2
+* https://github.com/indieweb/indieauth/issues/33 - align/adopt RFC7662 token introspection
+** {{jamietanna}} has implemented this, and integrated this using the Spring Security and rack-oauth2 OAuth2 clients, and allows for using empty authentication (which could then be HTTP Basic Auth)
+** Recommendation is to not require authentication
+*** At some point we should look into this though?
+** Recommendation is to provide this under the token endpoint
+*** Does this make sense? Why does RFC7662 expect it to be a separate endpoint?
+*** {{aaronpk}}: it can be under the same endpoint, but Discovery endpoint could point to the same one
+*** {{jamietanna}} should we make it clear in the docs that it could be different
+** should `sub` be a property in the response?
+*** {{jamietanna}} for example has:
+{"active":true,"me":"https://www.staging.jvt.me/","scope":"draft","token_type":"Bearer","client_id":"https://tokens-pls.herokuapp.com","exp":1630780771,"iat":1630175971,"iss":"https://indieauth.jvt.me","aud":["https://www-api.jvt.me/"],"sub":"https://www.staging.jvt.me/"}
+*** parked for now, as it's OPTIONAL and unclear if we need it for OAuth2 resource servers to integrate
+** Authentication is likely to be required, but in practice, requires further investigation (see below)
+
+* Make IndieAuth token verify endpoint credentialed, so it is clear that this should only be used by Resource Servers
+** {{aaronpk}} would like this to be some sort of dynamic client registration / "enrollment" that happens automagically when i.e. setting up a relationship with Aperture
+** Discussion as to whether i.e. Aperture / other shared platforms could lead to needing some out-of-band authentication sharing - follow-up investigation required
+
+* {{jamietanna}} notes that, while integrating his IndieAuth server with OAuth2 clients, he found that the token_endpoint (not the token introspect endpoint, as mentioned on the call) may require `client_id` to be retrieved from `Authorization: Basic ...`, depending on how they work
