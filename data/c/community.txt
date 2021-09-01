@@ -42,21 +42,36 @@ We interact in the following places:
 |1389
 |-
 |2017
-|175
-|1566
+|176
+|1565
 |-
 |2018
 |271
-|1837
+|1836
+|-
+|2019
+|293
+|2129
+|-
+|2020
+|267
+|2396
+|-
+|2021
+|147
+|2543
 |}
 <small>last updated 2021-09-01</small>
 
 <!--
 SQL to generate this data:
 
-SELECT CONCAT("|",YEAR(user_registration),"\n|",COUNT(1),"\n|-") AS line
+SELECT CONCAT("|",year,"\n|",num,"\n|", (SUM(num) OVER(ORDER BY year)),"\n|-") AS line
+FROM (
+SELECT YEAR(user_registration) AS year, COUNT(1) AS num
 FROM user
-GROUP BY YEAR(user_registration)
+GROUP BY YEAR(user_registration) 
+) AS tmp
 
 Or manually by tweaking the offset and limit in this URL to find the first/last new users of a year:
 
