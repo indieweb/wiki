@@ -19,6 +19,32 @@ IndieWeb search supports:
 * Returning rich snippets (also known as "featured snippets") for some queries.
 * Returning h-cards for "what is [domain name]" queries.
 
+The indexing algorithm reads microformats to help retrieve specific pieces of information from a page. But, microformats markup is not required for the indexer to successfully retrieve information about a page.
+
+== Indexing ==
+
+All sites are given a 1,000 page crawl budget. Each page successfully indexed contributes towards this budget. Only HTML pages are indexed and pages that are likely to be tag pages are excluded. There are some tag pages in the index left over from previous indexes that will remain accessible to visitors.
+
 == Development ==
 
 IndieWeb Search is in active development. This project is led by {{jamesgoca}}. The code for the project is [https://github.com/capjamesg/indieweb-search publicly available on GitHub] and welcomes any contributors no matter their experience with search.
+
+== Architecture ==
+
+IndieWeb Search has three main components:
+
+* The indexing algorithm, responsible for adding content into an Elasticsearch store.
+* The Elasticsearch server, used to store documents. This server is what you would call the "search index."
+* The web server through which visitors interact with the website.
+
+The Elasticsearch server has a custom-written, minimal API that lets the web server (which is hosted on a different server), make queries. This API also lets the indexing algorithm add contents to the index.
+
+== Questions and requests for help ==
+
+There are a few questions that need to be reviewed in more depth:
+
+* How do I ensure relevant pages come up when someone searches for their name? I want "jamesg.blog" or "Aaron Parecki" to return top pages on the site.
+* How do I calculate PageRank without running out of memory. The search index will likely reach hundreds of thousands of documents. The current PageRank calculation algorithm requires all documents are in memory which is impractical at scale.
+* How do I enable featured snippets / direct answers on other domains? jamesg.blog, microformats.org/wiki/, and indieweb.org are all granted access to render featured snippets. More work needs to be done to understand how this feature may help other sites.
+
+Have any suggestions for the search engine or thoughts on the questions above? Message capjamesg in the IndieWeb IRC or make a [https://github.com/capjamesg/indieweb-search contribution on GitHub]. All contributions are welcome, from issues to pull requests.
