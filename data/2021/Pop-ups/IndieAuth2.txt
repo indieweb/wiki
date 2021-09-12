@@ -1,0 +1,41 @@
+https://indieweb.org/2021/Pop-ups/IndieAuth2
+
+[[Category: 2021 sessions]]
+[[Category: IWC Pop-ups 2021 Sessions]]
+[[Category: Pop-ups]]
+
+'''<dfn>IndieAuth 2 2021</dfn>''' is an [[2021/Pop-ups|IndieWebCamp Pop-ups 2021]] session and the 2nd IndieAuth session of 2021..
+
+== Summary ==
+
+At the end of the last [[2021/Pop-ups/IndieAuth|IndieAuth protocol session]], there was a discussion of following up in a few weeks to finish what we could not. This popup IndieWebCamp session will continue the discussion to iterate and evolve the IndieAuth protocol. 
+
+== Details ==
+* facilitators: TBA
+* Date: 2021-10-16
+* Time: 07:30 Pacific
+* event: hhttps://events.indieweb.org/2021/10/indieauth-2-popup-session-5y88zAw4LtO9
+* hashtag: #indieauth2
+* https://etherpad.indieweb.org/2021-10-indieauth-popup
+__TOC__
+
+=== Followup from the previous session ===
+* Adding editorial notations to the spec regarding token lifetime, expiration and refresh tokens, to reference the OAuth2 specifications on this, and any specific considerations for IndieAuth. https://github.com/indieweb/indieauth/issues/81 
+* Require IndieAuth servers to align with RFC7662 for OAuth2 Token Introspection was adopted, however, deprecation of the existing endpoint was not confirmed.
+* Clarification on issuing tokens with only profile scopes. https://github.com/indieweb/indieauth/issues/62
+** Discussion about whether we should add information about how to handle errors as an IndieAuth app (see RFC6749#7.2) https://github.com/indieweb/indieauth/issues/89
+* Allow clients to always exchange authorization codes at the token endpoint https://github.com/indieweb/indieauth/issues/58
+
+== Possible Topics ==
+
+* Make IndieAuth token introspection endpoint credentialed, so it is clear that this should only be used by Resource Servers. While there was a consensus on adopting the token introspection endpoint request and response, we did not conclude on authentication.
+** Authentication is likely to be required, but in practice, requires further investigation (see below)
+*** {{aaronpk}} would like this to be some sort of dynamic client registration / "enrollment" that happens automagically when i.e. setting up a relationship with Aperture
+*** Discussion as to whether i.e. Aperture / other shared platforms could lead to needing some out-of-band authentication sharing - follow-up investigation required
+*** {{jamietanna}} notes that, while integrating his IndieAuth server with OAuth2 clients, he found that the token_endpoint (not the token introspect endpoint, as mentioned on the call) may require `client_id` to be retrieved from `Authorization: Basic ...`, depending on how they work
+*** {{jamietanna}} has implemented this, and integrated this using the Spring Security and rack-oauth2 OAuth2 clients, and allows for using empty authentication (which could then be HTTP Basic Auth)
+* Client Information Discovery improvements. 
+** Should this solely rely on Microformats? https://github.com/indieweb/indieauth/issues/23
+** Should we adopt a manifest file and what should be displayed if no app info discovered? https://github.com/indieweb/indieauth/issues/64. #23 suggests other fields that might be relevant, such as the icon and name from the page.
+* Discuss whether IndieAuth adopt resource indicators(https://github.com/indieweb/indieauth/issues/82) as a notation, and note any specific considerations for IndieAuth. Even though Ticket Auth prompted this, this is not specifically a Ticket Auth issue.
+* Introduce OAuth Server Metadata https://github.com/indieweb/indieauth/issues/43
