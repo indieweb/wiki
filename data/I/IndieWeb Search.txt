@@ -56,6 +56,18 @@ IndieWeb Search has three main components:
 
 The Elasticsearch server has a custom-written, minimal API that lets the web server (which is hosted on a different server), make queries. This API also lets the indexing algorithm add contents to the index.
 
+=== Concurrency ===
+
+IndieWeb Search makes use of the Python concurrency.futures library which makes it easy to run the indexing program in multiple threads. Before using concurrency.futures, the search engine only indexed content using one Python thread. This was slow and meant one could only index 5,000-10,000 documents per day.
+
+Using concurrency, the indexer can index content from dozens of sites at the same time. The current rate of indexing is tens of thousands of documents per day.
+
+==== Being kind to servers ====
+
+A big obligation any search engine has is to ensure that the indexing process does not interfere with the usability of a site or cause the site to stop loading. This could be caused by an indexing algorithm trying to request too many pages at once.
+
+Incentives are aligned to prevent against server abuse: if you request resources too fast, the host might block the indexer so you cannot index a site. Conversely, a site may be unable to respond to all of your requests, leading to a partially-complete index of a site and a potentially unhappy site owner.
+
 == Questions and requests for help ==
 
 There are a few questions that need to be reviewed in more depth:
