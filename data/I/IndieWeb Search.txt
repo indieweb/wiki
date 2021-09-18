@@ -42,9 +42,32 @@ This budget ensures that the crawler can cover a wide range of sites as resource
 
 The indexer uses the user agent indieweb-search. You can block the indexer from indexing part or all of your site using directives in your robots.txt file.
 
+While the source code for the project is open sourced, the index used on the public version of the search engine is not accessible programmatically.
+
 == Development ==
 
 IndieWeb Search is in active development. This project is led by {{jamesgoca}}. The code for the project is [https://github.com/capjamesg/indieweb-search publicly available on GitHub] and welcomes any contributors no matter their experience with search.
+
+== Ranking Factors ==
+
+The following pieces of information are used to rank content on IndieWeb Search:
+
+* h1, h2, h3, h4, h5, h6
+* meta description
+* page <title> tag contents
+* URL
+* page word count
+* number of links po[[inting to the page from other sites
+]]
+The number of links pointing to each page in the index takes some time to calculate. This step is executed by running programs manually because: (i) an automated program has not yet been developed; (ii) the process is time-consuming and is not practical to run on a frequent cadence alongside other indexing tasks. As a result, some pages may lag behind where they will eventually rank when the number of pages linking to the page in question is calculated.
+
+You can see the ranking algorithm on the [https://github.com/capjamesg/indieweb-search/blob/main/elasticsearch_server.py public source code].
+
+=== Recency ===
+
+While recency -- the amount of time that has passed since a page was published -- has been considered as a ranking factor, a deliberate decision was made not to use recency in the search engine.
+
+Recency is not a ranking factor because the search engine is not designed to target particularly time-sensitive queries like other search engines. Visitors may ask some time-sensitive questions but these are the exception rather than the rule. A lot of the content indexed is blog posts and pages that are not likely to quickly go out of date.
 
 == Architecture ==
 
@@ -72,8 +95,6 @@ Incentives are aligned to prevent against server abuse: if you request resources
 
 There are a few questions that need to be reviewed in more depth:
 
-* How do I ensure relevant pages come up when someone searches for their name? I want "jamesg.blog" or "Aaron Parecki" to return top pages on the site.
-* How do I calculate PageRank without running out of memory. The search index will likely reach hundreds of thousands of documents. The current PageRank calculation algorithm requires all documents are in memory which is impractical at scale.
 * How do I enable featured snippets / direct answers on other domains? jamesg.blog, microformats.org/wiki/, and indieweb.org are all granted access to render featured snippets. More work needs to be done to understand how this feature may help other sites.
 
 Have any suggestions for the search engine or thoughts on the questions above? Message capjamesg in the IndieWeb IRC or make a [https://github.com/capjamesg/indieweb-search contribution on GitHub]. All contributions are welcome, from issues to pull requests.
