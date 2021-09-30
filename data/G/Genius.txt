@@ -1,0 +1,49 @@
+https://indieweb.org/Genius
+
+{{stub}}
+
+'''<dfn>[http://genius.com/web-annotator News Genius]</dfn>''' is a [[silo]] that allows users to highlight and [[annotation|annotate]] any webpage by prefixing it with http://genius.it/, or using plugin or bookmarklet, and is being [[#Criticism|widely criticized]] for enabling harassment of smaller (indieweb) sites.
+
+== Blocking ==
+* Savant: A [https://github.com/kevinmarks/savant script] to redirect from a [genius.it] wrapped page to the original url. [http://genius.it/8883931/news.genius.com Discussion on their site]
+* Genius Defender: An [http://www.vijithassar.com/2641/how-to-block-genius-annotations approach] that poisons the page with unicode invisible separators. 
+** Looking at [https://github.com/vijithassar/genius-defender/blob/master/genius-defender.php#L9 the code] this is an O(n^2) process on your site that expands it by a factor of 10 in length (yes gzip will help) that can be reversed with a O(n) regex to filter them out again. Not recommended.
+* genius-blocker: [https://github.com/toddself/genius-blocker broader technique] that will block the plugin and bookmarklet too.
+* [https://t.co/844p88i2Nc Alternative approach] (based on savant).
+* [https://github.com/samboy/genius-blocker Samboy's Genius Blocker] - includes a list of additional blockers as well as some history and references
+* [https://github.com/mapkyca/KnownGeniusBlocker Genius Blocker] for [[Known]] (a wrapper for Samboy's version)
+
+== Criticism ==
+The site works by proxying the original page, with the user's Browser signature, and injecting javascript to enable annotation. It puts in a base tag that makes relative css and script work, but not code that uses window.location, so breaks the webmentions on eg [http://genius.it/kevinmarks.com kevinmarks.com]
+
+It does not respect robots.txt so an author cannot block annotation of their site. 
+
+[http://glog.glennf.com/blog/2016/3/25/citation-appropriation-and-fair-use Glenn Fleishman]:
+<blockquote>The Genius Web Annotator is a hybrid of citation and appropriation that doesn't respect the source's owner nor have any mechanism to opt out or block it. The site retrieves the original page through a proxy server and then rewrites it with added JavaScript, which lets it overlay its commentary tool. I wrote the company earlier in the week through its general feedback form asking about how to opt my sites out. I've received no response so far.</blockquote>
+
+[https://ellacydawson.wordpress.com/2016/03/25/how-news-genius-silences-writers/ Ella Dawson]:
+<blockquote>Although the coverage of News Genius praises it as a feature hosts can code into their site, anyone can lay comments on anything by adding some language to a URL address. That is the entire point: according to the annotator’s Twitter bio, “The Genius Web Annotator lets you add line-by-line annotations to any page on the Internet.” Because my blog is currently a free WordPress website, anyone can use Genius to annotate my posts without my control. It is not opt-in for the creator, and if I want to engage with the annotations, I have to sign in using a Genius account. I see no way to report an annotation for abuse or harassment—perhaps that is only available for users?—and I see no way to block a user from annotating my content. 
+
+Genius is officially worse than Twitter: I can block a user on Twitter, and they can then go and scribble whatever they want on my website using Genius.</blockquote>
+
+[https://medium.com/@mostlyoriginal/how-to-design-a-neutral-commenting-system-a4a04666d5b2#.38t89cz6q Rosie Pringle]
+<blockquote>There are dangers in painting with broad strokes. Treating large news orgs with the same software as independent bloggers seems a little shortsighted.
+If the focus of the company is to hold large news orgs accountable, why not implement a whitelist of large, high traffic news organization domains and offer an opt-in option for independent bloggers who want it as their comments system of choice?</blockquote>
+
+2021-09-16 [https://www.niemanlab.org/2021/09/true-genius-how-to-go-from-the-future-of-journalism-to-a-fire-sale-in-a-few-short-years/  True Genius: How to go from “the future of journalism” to a fire sale in a few short years] <blockquote>Genius (née Rap Genius) wanted to “annotate the world” and give your content a giant comment section you can’t control. Now it can’t pay back its investors.</blockquote>
+
+== Articles ==
+* <cite>[http://thinkprogress.org/culture/2016/03/30/3764816/news-genius-definitely-sounds-like-a-great-idea-cant-imagine-what-could-go-wrong/ Genius Wants To Let Readers Annotate Any News Article. What Could Possibly Go Wrong?]</cite> by Jessica Goldstein, <em>ThinkProgress</em> 2016-03-30
+* <cite>[http://recode.net/2016/03/29/genius-responds-to-congresswoman-katherine-clarks-letter-on-preventing-abuse/ Genius responds to Congresswoman Katherine Clark’s letter on preventing abuse]</cite> by Noah Kulwin, <em>Re/code</em> 2016-03-29
+* <cite>[http://www.slate.com/articles/double_x/doublex/2016/03/news_genius_wants_to_annotate_the_entire_web_at_what_cost.html Misguided Genius]</cite> by Chelsea Hassler, <em>Slate</em> 2016-03-28
+* <cite>[http://www.chuqui.com/2016/03/the-genius-problem/ The Genius Problem]</cite> by Chuq Von Rospach 2016-03-28
+* <cite>[http://observer.com/2016/03/genius-web-annotator-emma-dawson-alana-massey/ Genius Web Annotator vs. One Young Woman With a Blog]</cite> by Brady Dale, ''The Observer'' 2016-03-28
+*<cite>[https://hypothes.is/blog/preventing-abuse/ Preventing Abuse]</cite> by Dan Whaley, "Hypothes.is Blog" 2016-03-29 (Note [https://hypothes.is/ Hypothesis] is a competing annotation platform presently geared toward academia.)
+* <cite> [http://www.theverge.com/2016/5/25/11505454/news-genius-annotate-the-web-content-security-policy-vulnerability How Genius annotations undermined web security] </cite> To comment on other people’s websites, Genius broke a 20-year-old browser security system by Vijith Assar  The Verge 2016-05-25
+* <cite>[http://hackeducation.com/2017/04/26/no-annotations-thanks-bye Un-Annotated]</cite> by Audrey Watters in HackEducation.com 2017-04-26; also [https://soundcloud.com/contrafabulists/episode-52 Podcast discussion with more detail] from 2017-04-30
+* . . .
+
+== See Also ==
+* [[annotation]]
+* [[marginalia]]
+* . . .
