@@ -65,7 +65,7 @@ https://auth.example.org/auth
 
 Parameters:
 ;<tt>me</tt>
-: Full URI of the user's homepage
+: Full URI of the user's homepage (not required, as it's not needed for one-user sites [https://aaronparecki.com/2020/12/03/1/indieauth-2020#the-me-parameter])
 ;<tt>client_id</tt>
 : Full URI of the application's/website's home page. Used to identify the application. An authorization endpoint may show the application's icon and title to the user during the auth process.
 ;<tt>redirect_uri</tt>
@@ -74,10 +74,9 @@ Parameters:
 : A random value the app makes up, unique per request. The authorization server just passes it back to the app.
 : Optional. Auth endpoints MUST support them, though.
 ;<tt>response_type</tt>
-: <tt>id</tt> (identification only) or <tt>code</tt> (identification + authorization)
-: Optional. Defaults to <tt>id</tt>.
+: <s><tt>id</tt> (identification only) or <tt>code</tt> (identification + authorization)
+: Optional. Defaults to <tt>id</tt>.</s> Always <tt>code</tt>, but servers should treat <tt>id</tt> as <tt>code</tt> for backwards compatibility.
 ;<tt>scope</tt>
-: Not used and omitted in identification mode (<tt>response_type=id</tt>)
 : For authorization, the scope contains a space-separated list of scopes that the web application requests permission for, e.g. "create". Multiple values are supported, e.g. <tt>create delete</tt>
 
 ==== Redirect URI verification ====
