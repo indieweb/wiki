@@ -226,6 +226,72 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== fix home page photo grid ===
+Sometime in 2020 my home page photo grid mysteriously stopped showing up.
+* Investigate what happened
+* Review photo grid code, adding more tests to check for things (and warnings)
+* Fix photo grid to work properly
+
+=== named pages ===
+Named pages (used to be captured as an <span id="Indie_Wiki">Indie Wiki</span> itch) are pages on my site that have a name as their primary identity, instead of being primarily identifed by their date of being posted (as [[posts]] are).
+
+Use-cases: 
+* a mechanism to handle editing and display of "simple" pages that may or may not have versioning. E.g.
+** /[[contact]] page
+** /[[pay]] page
+** tantek.com/w/WatchFilms page perhaps most frequently edited of PBWiki pages
+*** Consider simple equivalent functionality of [[Letterboxd]] but as lists
+** other PBWiki pages edited perhaps once or twice a year
+** a speaker's bio (currently using PBWiki for this)
+** ...
+* lots of "wiki-this" content in local text files where they're more convenient than dealing with a slow online service, however, also held back per:
+** feeling of creativity being held back (by putting stuff in local files) per [https://twitter.com/scottjenson/status/714256272367886336] <blockquote>@scottjenson: Personal epiphany: Locking my creative output into opaque files and using the Finder to organize it is massively holding me back</blockquote>
+
+Reduce annoyances with existing setup:
+* feeling icky about hosting my personal wiki on the [[PBWorks]] [[wiki]] [[silo]]
+* tired of not being able to edit it on mobile
+* disgusted with the ugly PBWorks URLs
+* dislike the PBWorks UI
+* PBworks latency too high
+
+Versioning thoughts:
+* When do I want an explicit version?
+** Annually? Monthly? End of a day of edits?
+** When changing (add/remove) more than some number of bytes? or some % of the page?
+** When/how to collapse minor edits? Or worth preserving in some private way?
+** Perhaps cluster edits (number, bytes changed) by day? Then only keep stats on them?
+** Explicit "Saved" revision when non-trivial content is added: would help make it feel safer to delete that/any content later, if I knew it was in the history and I could go look what was I previously thinking)
+* Version storage
+** inline in the same file as "current version"
+** separate "-versions" file with all previous revisions
+** separate dated "-YYYY-DDD-n" files for each major version
+** maybe ins/del markup for minor edits to major versions
+*** if it can't be represented by ins/del markup, then it's not a minor revision
+* Version browsing
+** CSS only solution possible if all in the same file or in a single "versions" file?
+** most recent version at the top, oldest at the bottom (for single file or single versions file)
+** some affordance to show version browsing UI (restyled checkbox?)
+*** floating left versions list with radio buttons (to choose a version) or details/summary to view more than one version at a time?
+
+Brainstorming first level solution:
+* Static pages that work (are readable, linked) regardless of any server-side code
+* perhaps common edit functionality in a file in a directory, edit.php, that works for IndieAuth logged in user(s) (allow list), for all files in that directory
+
+Previous brainstorming of a first level solution:
+* Named pages handled by Falcon doing all [[routing]] for all URLs (inside the folder its in and children thereof. e.g. if falcon.php is at the root then it handles all site URL requests.)
+* Smart defaults that make authoring easy:
+** automatic site header, footer, style sheets to make it fit in with site design/theme
+** No title element? Look for an h1 and synthesize it from that
+
+Next gen: have every page on my site by default be a wiki page made "wiki-like" by Falcon, where wiki-like means:
+* editable with web UI on any reasonably modern web browser, not requiring [[javascript]]
+* browsable version history (maybe with [[web sign-in]] only? no need to index version history)
+* browsable versions (maybe with [[web sign-in]] only? no need to index old versions)
+* some method of auto-syncing local text file copies of such pages (as simple as or better than [[Dropbox]] sync of a local folder)
+
+Brainstorm started here:
+* [[wiki-projects#Brainstorming|wiki-projects: Brainstorming]]
+
 === improve photo posts ===
 I hastily implemented [[photo]] posts on 2015-244 as an impulsive itch scratch of wanting the Bridgy Publish Facebook POSSE copy of my "note with photo" to look better on Facebook [http://indiewebcamp.com/irc/2015-09-01/line/1441130045761], and then later 2015-312 implemented automatic Bridgy Publish POSSE of photos to Facebook and Twitter! Then Facebook dropped their API 2018-08-01 and I stopped POSSEing to Facebook.
 
@@ -371,40 +437,6 @@ Perhaps build it as a variant of my [[photo stream]], just with a different "typ
 
 === minimize Bridgy Publish links ===
 Implement [[Bridgy#Minimize_Publish_Rerequests]] and document my techniques / code there so others can also do so. Part of treating a shared volunteer service like Bridgy kindly/politely, shared care for part of our broader IndieWeb [[commons]], setting an explicit example by doing so.
-
-=== named pages ===
-Named pages (used to be captured as an <span id="Indie_Wiki">Indie Wiki</span> itch) are pages on my site that have a name as their primary identity, instead of being primarily identifed by their date of being posted (as [[posts]] are).
-
-Use-case: 
-* a mechanism to handle editing and display of "simple" pages that may or may not have versioning. E.g.
-** /[[contact]] page
-** /[[pay]] page
-** a speaker's bio (currently using PBWiki for this)
-** ...
-* lots of "wiki-this" content in local text files where they're more convenient than dealing with a slow online service, however, slso heldback per:
-** feeling of creativity being heldback (by putting stuff in local files) per [https://twitter.com/scottjenson/status/714256272367886336] <blockquote>@scottjenson: Personal epiphany: Locking my creative output into opaque files and using the Finder to organize it is massively holding me back</blockquote>
- 
-Reduce annoyances with existing setup:
-* feeling icky about hosting my personal wiki on the [[PBWorks]] [[wiki]] [[silo]]
-* tired of not being able to edit it on mobile
-* disgusted with the ugly PBworks URLs
-* dislike the PBworks UI
-* PBworks latency too high
-
-First level solution:
-* Named pages handled by Falcon doing all [[routing]] for all URLs (inside the folder its in and children thereof. e.g. if falcon.php is at the root then it handles all site URL requests.)
-* Smart defaults that make authoring easy:
-** automatic site header, footer, style sheets to make it fit in with site design/theme
-** No title element? Look for an h1 and synthesize it from that
-
-Next gen: have every page on my site by default be a wiki page made "wiki-like" by Falcon, where wiki-like means:
-* editable with web UI on any reasonably modern web browser, not requiring [[javascript]]
-* browsable version history (maybe with [[web sign-in]] only? no need to index version history)
-* browsable versions (maybe with [[web sign-in]] only? no need to index old versions)
-* some method of auto-syncing local text file copies of such pages (as simple as or better than [[Dropbox]] sync of a local folder)
-
-Brainstorm started here:
-* [[wiki-projects#Brainstorming|wiki-projects: Brainstorming]]
 
 === improve offline support ===
 Added offline support on 2019-10-21 per https://tantek.com/2019/293/t1/indiewebcamp-brighton-hackday-offline
