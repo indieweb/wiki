@@ -142,6 +142,12 @@ Content-Type: application/json
 
 {
   "me": "https://aaronparecki.com/"
+  "profile": {
+    "name": "Aaron Parecki",
+    "url": "https://aaronparecki.com/",
+    "photo": "https://aaronparecki.com/images/profile.jpg",
+    "email": "aaron@parecki.com"
+  }
 }
 </pre>
 
@@ -149,6 +155,8 @@ Parameters:
 ;<tt>me</tt>
 : Full URI of the user's homepage
 : This may be different from the <tt>me</tt> parameter that the user originally entered, but MUST be on the same domain.
+;<tt>profile</tt>
+: profile information, included if scope "profile" or "email" was requested. [https://indieauth.spec.indieweb.org/#x5-3-4-profile-information]
 
 ==== Use by Token Endpoints ====
 When used in the flow for [[obtaining an access token]] that can create posts using [[Micropub]], the [[token endpoint]] will be making the request to verify the authorization code, rather than the client. In this case, the client will make the request described above to the token endpoint instead. If the token endpoint and authorization endpoint are part of the same software, then of course the token endpoint can verify the authorization code using a proprietary method, such as looking up the code from the same database that the authorization endpoint stored it in.
