@@ -23,76 +23,46 @@ __TOC__
 * Adding editorial notations to the spec regarding token lifetime, expiration and refresh tokens, to reference the OAuth2 specifications on this, and any specific considerations for IndieAuth. https://github.com/indieweb/indieauth/issues/81 
 * Require IndieAuth servers to align with RFC7662 for OAuth2 Token Introspection was adopted, however auth for same is as yet unclarified.
 * Allow clients to always exchange authorization codes at the token endpoint https://github.com/indieweb/indieauth/issues/58
-
-    Make IndieAuth token introspection endpoint credentialed, so it is clear that this should only be used by Resource Servers. While there was a consensus on adopting the token introspection endpoint request and response, we did not conclude on what type of authentication.  https://github.com/indieweb/indieauth/issues/99
-
-     Authentication is likely to be required, but in practice, requires further investigation (see below) 
-
-    Aaron Parecki would like this to be some sort of dynamic client registration / "enrollment" that happens automagically when i.e. setting up a relationship with Aperture
-
-    Discussion as to whether i.e. Aperture / other shared platforms could lead to needing some out-of-band authentication sharing - follow-up investigation required
-
-    Jamie Tanna notes that, while integrating his IndieAuth server with OAuth2 clients, he found that the token_endpoint (not the token introspect endpoint, as mentioned on the call) may require `client_id` to be retrieved from `Authorization: Basic ...`, depending on how they work
-
-    Jamie Tanna has implemented this, and integrated this using the Spring Security and rack-oauth2 OAuth2 clients, and allows for using empty authentication (which could then be HTTP Basic Auth)
-
-    Consensus for now: Add to PR on introspection it is required, but not specify how at this time, allowing implementers to decide. 
-
-    Introduce OAuth Server Metadata https://github.com/indieweb/indieauth/issues/43
-
-    Jamie Tanna has a metadata endpoint now, getting it working was pretty straightforward
-
-    David Somers has a metadata discovery facility: see https://toolbox.imoxia.com/#authmetadisco (now supports discovery using rel=indieauth_metadata)
-
-    Rel=indieauth-metadata as opposed to rel=indieauth to indicate it is the metadata endpoint over being confused for the issuer URL. Opportunity to use - over _ as _ not allowed in http headers.
-
-    May address #98 in that we could more easily add endpoints.
-
-    Recommend placing it as .well-known for compat, but not require?
-
-    Note about fallback to old endpoints for compat
-
-    Consider adopting the iss parameter https://github.com/indieweb/indieauth/issues/101
-
-    Dependent on the iss parameter being defined in the server metadata document. So, no fallback if there is a metadata document.
-
-    iss value should be the home page of the indieauth server, and is expliclty not the authorization endpoint
-
-    Discuss whether IndieAuth adopt resource indicators(https://github.com/indieweb/indieauth/issues/82) as a notation, and note any specific considerations for IndieAuth. Even though Ticket Auth prompted this, this is not specifically a Ticket Auth issue. Proposed PR https://github.com/indieweb/indieauth/pull/96 
-
-    {{jamietanna}} adds the `aud` of `https://www-api.jvt.me/` into all tokens, and currently does not enforce it anywhere. The enforcement would be added in the future, restricting at a resource server level whether the access token can be utilised
-
-    Discussion is also around whether we use Resource Indicators for Ticket Auth
-
-    Sample private post doing www-authenticate: https://toolbox.imoxia.com/private/codecow with a realm indicator
-
-    Scopes may not be required if resources are provided, and this could be specified in spec.
-
-    Whether an access token is issued changes from only whether scopes are requested to whether scopes or resources are requested
-
-    Making the various token endpoint overrides consistent https://github.com/indieweb/indieauth/issues/98
-
-    Rewrite Introspection PR to support metadata to no longer be part of token endpoint as proposal.
-
-    Consider rewriting revokation to be defined as an endpoint with server metadata.
-
-    Clarifying what names are returned in user profiles https://github.com/indieweb/indieauth/issues/93
-
-    Define name in the spec and its application.
-
-    It feels like the most straightforward solution would be to keep the existing "name" param and define it more specifically in the spec
-
-    Client Information Discovery improvements. 
-
-     Should this solely rely on Microformats? https://github.com/indieweb/indieauth/issues/23
-
-     Should we adopt a manifest file and what should be displayed if no app info discovered? https://github.com/indieweb/indieauth/issues/64. #23 suggests other fields that might be relevant, such as the icon and name from the page.
-
-    Clarify whether profile information is returned when a refresh token is used
-
-    Consider adopting a userinfo endpoint, possibly after OAuth server metadata
+** Make IndieAuth token introspection endpoint credentialed, so it is clear that this should only be used by Resource Servers. While there was a consensus on adopting the token introspection endpoint request and response, we did not conclude on what type of authentication.  https://github.com/indieweb/indieauth/issues/99
+** Authentication is likely to be required, but in practice, requires further investigation (see below) 
+** Aaron Parecki would like this to be some sort of dynamic client registration / "enrollment" that happens automagically when i.e. setting up a relationship with Aperture
+** Discussion as to whether i.e. Aperture / other shared platforms could lead to needing some out-of-band authentication sharing - follow-up investigation required
+** Jamie Tanna notes that, while integrating his IndieAuth server with OAuth2 clients, he found that the token_endpoint (not the token introspect endpoint, as mentioned on the call) may require `client_id` to be retrieved from `Authorization: Basic ...`, depending on how they work
+** Jamie Tanna has implemented this, and integrated this using the Spring Security and rack-oauth2 OAuth2 clients, and allows for using empty authentication (which could then be HTTP Basic Auth)
+** Consensus for now: Add to PR on introspection it is required, but not specify how at this time, allowing implementers to decide. 
+* Introduce OAuth Server Metadata https://github.com/indieweb/indieauth/issues/43
+** Jamie Tanna has a metadata endpoint now, getting it working was pretty straightforward
+** David Somers has a metadata discovery facility: see https://toolbox.imoxia.com/#authmetadisco (now supports discovery using rel=indieauth_metadata)
+** Rel=indieauth-metadata as opposed to rel=indieauth to indicate it is the metadata endpoint over being confused for the issuer URL. Opportunity to use - over _ as _ not allowed in http headers.
+** May address #98 in that we could more easily add endpoints.
+** Recommend placing it as .well-known for compat, but not require?
+** Note about fallback to old endpoints for compat
+* Consider adopting the iss parameter https://github.com/indieweb/indieauth/issues/101
+** Dependent on the iss parameter being defined in the server metadata document. So, no fallback if there is a metadata document.
+** iss value should be the home page of the indieauth server, and is expliclty not the authorization endpoint
+* Discuss whether IndieAuth adopt resource indicators(https://github.com/indieweb/indieauth/issues/82) as a notation, and note any specific considerations for IndieAuth. Even though Ticket Auth prompted this, this is not specifically a Ticket Auth issue. Proposed PR https://github.com/indieweb/indieauth/pull/96 
+** {{jamietanna}} adds the `aud` of `https://www-api.jvt.me/` into all tokens, and currently does not enforce it anywhere. The enforcement would be added in the future, restricting at a resource server level whether the access token can be utilised
+** Discussion is also around whether we use Resource Indicators for Ticket Auth
+** Sample private post doing www-authenticate: https://toolbox.imoxia.com/private/codecow with a realm indicator
+** Scopes may not be required if resources are provided, and this could be specified in spec.
+** Whether an access token is issued changes from only whether scopes are requested to whether scopes or resources are requested
+* Making the various token endpoint overrides consistent https://github.com/indieweb/indieauth/issues/98
+** Rewrite Introspection PR to support metadata to no longer be part of token endpoint as proposal.
+** Consider rewriting revokation to be defined as an endpoint with server metadata.
+* Clarifying what names are returned in user profiles https://github.com/indieweb/indieauth/issues/93
+** Define name in the spec and its application.
+** It feels like the most straightforward solution would be to keep the existing "name" param and define it more specifically in the spec
+* Clarify whether profile information is returned when a refresh token is used
+* Consider adopting a userinfo endpoint, possibly after OAuth server metadata
 
 
-What clients can we test with?
+* What clients can we test with?
 * {{jamietanna}} has used https://github.com/FusionAuth/fusionauth-jwt/ to provide OAuth Server Discovery by $issuer or by $issuer/.well-known/...
-* {{jamietanna}} seems to have found support in Spring Security https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/client/registration/ClientRegistrations.html#fromIssuerLocation(java.lang.String)
+** {{jamietanna}} seems to have found support in Spring Security https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/client/registration/ClientRegistrations.html#fromIssuerLocation(java.lang.String)
+
+
+== Not Discussed ==
+
+* Client Information Discovery improvements. 
+**  Should this solely rely on Microformats? https://github.com/indieweb/indieauth/issues/23
+** Should we adopt a manifest file and what should be displayed if no app info discovered? https://github.com/indieweb/indieauth/issues/64. #23 suggests other fields that might be relevant, such as the icon and name from the page.
