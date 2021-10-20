@@ -226,6 +226,24 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== avoid Twitter POSSE if reply lacks @ ===
+Similar to replies to GitHub issues/comments/PRs:
+
+in falconpost:
+* if a [[reply]] post lacks any @-names in the content
+* then publish it (with published date and send webmentions)
+* and DO NOT POSSE it to Twitter
+
+Maybe set a "POSSE Twitter" flag to true by default and
+* clear it if it's a GitHub post
+* clear it if it's a reply without an @-name
+* optional: clear it if specifically unchecked in the falconpost UI
+
+Use-cases:
+* posting a reply to an IndieWeb post which lacks its own tweet POSSE copy, and I have no desire to broadcast that reply to Twitter ()
+** perhaps this should be a default: i.e. if a reply has no specific in-reply-to tweet URL, then uncheck POSSE to Twitter by default
+* posting a [[reacji]] — which makes no sense to POSSE to Twitter on its own
+
 === fix home page photo grid ===
 Sometime in 2020 my home page photo grid mysteriously stopped showing up.
 * Investigate what happened
