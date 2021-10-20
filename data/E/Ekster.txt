@@ -11,13 +11,16 @@ See the README.md on Github.
 == Features ==
 
 * Realtime updates where supported by WebSub.
-* Three different channel types included:
-** '''sorted-sets''': default channel type
-** '''streams''': channel type based on streams
-** '''null''': channel type that doesn't remember items
-* Include and exclude items. Easily create a Mentions channel, by adding your name to keywords to include.
+* Four different channel types included:
+** '''sorted-sets''': default channel type, based on Redis zsets
+** '''streams''': channel type based on Redis streams
+** '''null''': channel type that drops items, useful to include in other channels
+** '''postgres''': channel type that stores items in a database
+* Include and exclude items. Easily create a Mentions channel, by adding your name to keywords to include. This means that whenever an item matches the keyword it will be posted in that channel.
 * Include can be combined with the null channel type, so you only see matching items.
 * Support for Microsub protocol: channel management, previews and more.
+* Support for Micropub protocol: you can login with Indieauth and post items to a channel. This can be useful for external services.
+* Item search based on full text and JF2 properties, like "name", "published", "author.name".
 * A command-line tool that supports all commands Ekster supports is included to administer the server.
 
 == Examples with ek ==
