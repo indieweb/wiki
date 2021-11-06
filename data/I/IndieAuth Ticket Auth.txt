@@ -90,14 +90,14 @@ When a ticket is sent, if there is no problem with the request, the ticket endpo
 
 Bob's ticket endpoint redeems the ticket for an access token
 
-The ticket endpoint makes a GET or HEAD request to discover the token endpoint of the resource, <code>https://alice.example.com/private/</code>, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>token_endpoint</code>. 
+The ticket endpoint makes a GET or HEAD request to discover the token endpoint of the resource, <code>https://alice.example.com/private/</code>, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value for the IndieAuth metadata endpoint, <code>indieauth-meta</code> or fallback to the older <code>token_endpoint</code>. 
 
 The ticket endpoint makes a POST request to the token endpoint to exchange the ticket for an access token. The POST request contains the following parameters:
 
 * <code>grant_type=ticket</code>
 * <code>ticket</code> - The ticket to be redeemed
 
-The IndieAuth spec does not currently address the issuance of resource-limited tokens. The discussion for that is at https://github.com/indieweb/indieauth/issues/82 
+The IndieAuth spec does not currently address the issuance of resource-limited tokens. The discussion for that is at https://github.com/indieweb/indieauth/issues/82. Regardless of this adoption, if a token endpoint wishes to support the ticket grant type, then it MUST support the issuance of resource-limited tokens.
 
 Should this also include client_id? https://github.com/indieweb/indieauth/issues/85
 
