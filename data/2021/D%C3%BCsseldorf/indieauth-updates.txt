@@ -1,0 +1,50 @@
+https://indieweb.org/2021/D%C3%BCsseldorf/indieauth-updates
+
+[[2021/Düsseldorf|IndieWebCamp Düsseldorf 2021]]
+
+Session: '''What's happening in IndieAuth'''
+
+== Participants ==
+* {{aaronpk}}
+* {{sknebel}}
+* {{sebsel}}
+* {{GWG}}
+* {{martijnvdven}} - remote
+
+== Notes ==
+* ... add notes
+
+* moving more towards OAuth
+
+* consider adopting `iss` parameter
+** in OAuth it is a small addition, but for us it's bigger / more relevant
+** authorzation sends `iss` in addition to `code` and client checks it
+** there is an identifier of the issuer: the one that gives auth and token endpoints
+
+There is also a 'metadata' spec, where servers can publish what is supported etc.
+** you don't have to use .well-known like OAuth, because we have other ways of discovering (e.g link on homepage)
+** link to the metadata endpoint instead of the separate authorization_ and token_endpoints
+
+Then there is Refresh Tokens
+* we include it to make explicit you **can** do it, but you always could have done it before
+
+Token Introspection
+* Important for "resource servers", these are any servers that need to be able to receive a token.
+* IndieAuth previously allowed calls to the token endpoint with the token in the header to receive information about the token, with this change it would become a POST request to whatever the introspection endpoint is.
+** Note that the introspection endpoint can be any URL, including the existing token endpoint.
+* This change means standard OAuth token endpoint can be used without additional features on top of them.
+
+Resource indicators
+* https://github.com/indieweb/indieauth/pull/96
+* Because OAuth does not define scopes itself, it cannot communicate in what context a scope is needed. Within the specs around IndieAuth we define scopes, e.g. Micropub has a "create" scope and means no other specs using IndieAuth are allowed to use "create", is has been reserved.
+* With resource indicators one could request a "create" scope and also say "to be used with Micropub". That way scopes will no longer be reserved by other specs.
+* Would there be things about resource indicators that would be optional in an IndieAuth context?
+* Potential use-case within Ticket Auth, where a scope could be requested within a specific part. E.g. read scope for a feed URL.
+* Side-note: would it be possible for a client to request known scopes from the auth endpoint? To see which scopes exist for Micropub.
+** side-followup: yes, the metadata document has a way to list the scopes supported by the authorization server, but there is still no association between scopes and resource servers
+
+Revocation Endpoint & Info Endpoint
+* https://github.com/indieweb/indieauth/pull/104
+* https://github.com/indieweb/indieauth/pull/107
+* Get rid of the action=revoke extension that IndieAuth introduced, and instead let a revocation endpoint be defined in the metadata.
+* Profile data is currently returned as an extension to an existing endpoint, this would also be able to move to its own endpoint thanks to meta.
