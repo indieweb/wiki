@@ -90,12 +90,14 @@ This is a brainstorm by {{t}}, originally discussed in [[IRC]] 2013-091, capture
 
 * static HTML files as their own storage of their current/latest version
 * previous versions stored elsewhere (e.g. the filesystem)
+** use a h-feed to list keep track of previous versions so that one can easily subscribe to changes made
 ** date-time-stamp filename suffixing convention
-** new link rel to link to the previous [http://microformats.org/wiki/version#brainstorming historical version]
-** each version linking explicitly (via invisible <code>&lt;link></code> or visible hyperlink) to the previous version, and [http://microformats.org/wiki/version#current current version].
 *** this places a content requirement on the otherwise unrestricted HTML files. 
 *** alternatively if this information (what is the previous version) is kept in a database cache, it can be sent with the server as an HTTP LINK Header with rel value.
 ** the combination would satisfy essential qualities 2,3,4 listed above.
+** new link rel to link to the previous [http://microformats.org/wiki/version#brainstorming historical version]
+** each version linking explicitly (via invisible <code>&lt;link></code> or visible hyperlink) to the previous version, and [http://microformats.org/wiki/version#current current version].
+** security: as always, when using HTML files for static storage, one must ensure that their project is not vulnerable to directory traversal where a malicious actor can use manipulated URLs to access private content.
 * for editability, it might be a neat trick to write software that made any static HTML page on your site automatically "editable" if you happened to be signed in with [[Web Sign-in]] / [[IndieAuth]].
 ** similar to revisions/versions, a page could link to its editing interface/version/query parameter with a rel link as well, e.g. rel=edit, which has been previously proposed as part of [http://universaleditbutton.org/Suggestions#JavaScript_links_for_AJAX-driven_edits Universal Edit Button: links for AJAX-driven edits] but could be used for server-based editing state as well. E.g. <code>href="?edit=1"</code>. Again this might be best sent as an HTTP Link Header.
 ** goal: make a page editable without putting any meta/link in the page itself.
@@ -117,6 +119,25 @@ Brainstorm summary:
 
 Related project:
 * http://microformats.org/wiki/version - for new link rels for the previous version/revision and the current/latest version.
+
+=== Features for a personal wiki ===
+
+There was a discussion in chat about what features a "personal wiki" should have. A personal wiki is a wiki written by one person for themselves or for a select audience. A select audience may be enabled to read the wiki using capability URLs or by signing in to view specific pages.
+
+==== {{capjamesg}}'s brainstorm ====
+
+James likes the idea of having a personal wiki for documenting his thoughts on concepts as opposed to writing full blog posts on a particular topic. For instance, James might want to create stubs for topics he is thinking about and add links, quotes, and notes as he learns more about the topic. This would create a useful point of reference for a particular topic.
+
+James is interested in a personal wiki separate from his site. This would help achieve a clear context separation between long-form and short-form content. With that said, the nature of a personal wiki is to serve one's self: it is a personal wiki. Thus, a self-hosted, private wiki may be preferable.
+
+The key features such a wiki would need are:
+
+* create a post
+* update a post
+* delete a post
+* search through posts
+* view revisions to posts
+* find recently updated pages
 
 == Others ==
 Other projects that may be of help with designing/creating/building a wiki content system.
