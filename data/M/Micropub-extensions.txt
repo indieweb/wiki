@@ -356,7 +356,7 @@ Micropub supports making a GET request to a Micropub endpoint with a <code>q=</c
 
 If a query parameter acts as a filter on a query, such as 'limit', 'offset', etc...if feasible this should be proposed as vocabulary for all queries, as opposed to just a specific one.
 
-==== Limit Parameter in any Query that Returns a List of Items ====
+==== Limit Parameter ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/35
 
@@ -382,7 +382,7 @@ The following example would be returned as part of the <code>?q=category&limit=1
 ** [[Micropub for WordPress]]
 ** [[Indieweb for Drupal]]
 
-==== Offset Parameter in any Query that Returns a List of Items ====
+==== Offset Parameter ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/36
 
@@ -405,7 +405,7 @@ The following example would be returned as part of the <code>?q=category&limit=1
 * Servers
 ** [[Micropub for WordPress]]
 
-==== Filter Parameter in any Query that Returns a List of Items ====
+==== Filter Parameter ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/34
 
@@ -430,7 +430,7 @@ The following example would be returned as part of the <code>?q=category&filter=
 * Servers
 ** [[Micropub for WordPress]]
 
-==== Post-Type Parameter in any Query that Returns a List of Items ====
+==== Post-Type ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/42
 
@@ -444,7 +444,7 @@ For the source query:
 * Servers
 ** [[IndieWeb for Drupal]]
 
-==== Post-Status/Visibility Parameters in any Query that Returns a List of Items ====
+==== Post-Status/Visibility Parameters ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/43
 
@@ -456,7 +456,7 @@ For the source query:
 * Clients
 * Servers
 
-==== Query for Supported or Unsupported Properties/Queries ====
+==== Supported Properties/Queries ====
 ; '''Issues and discussion:''' 
 : Queries - https://github.com/indieweb/micropub-extensions/issues/7
 : Supported Properties - https://github.com/indieweb/micropub-extensions/issues/8
@@ -472,7 +472,7 @@ These are two extensions for returning queries that a Micropub server will respo
 ** [[Micropub for WordPress]] - returns a simple list of query parameters supported.
 ** [[IndieWeb for Drupal]]
 
-==== Add Checked Property to Syndication Target Query ====
+==== Checked Syndication Property ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/23
 
@@ -492,7 +492,7 @@ Implements the post-type query
 * Clients
 * Servers
 
-==== Query for Location/Venue ====
+==== Location/Venue ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/6
 
@@ -535,7 +535,7 @@ All geo returns would follow the common properties of an h-adr object with only 
 ** [[Micropub for WordPress]] - uses the geo property only
 ** [[IndieWeb for Drupal]] - uses the geo property, can return places
 
-==== Query for contacts ====
+==== Contacts ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/39
 
@@ -546,6 +546,7 @@ For apps to be able to autocomplete by known contacts we need some way to query 
 * <code>q=contact</code> would return the complete list, which should only be so that clients (e.g. [[Indigenous]]) can cache all contacts locally.
 
 * The response in JSON is a list of [[h-card]]s using the h-card vocabulary.
+
 ===== Example response =====
 '''GET ?q=contact'''
 
@@ -576,7 +577,7 @@ Note: The Indigenous for Android/IndieWeb for Drupal implementation add a proper
 ** [[IndieWeb for Drupal]] - Supports using `search` as opposed to filter.
 ** {{aaronpk}}'s Micropub endpoint supports querying and filtering contacts, intended to be used for typeahead nickname suggestions in micropub clients
 
-==== Filter Parameters in Query for Post List ====
+==== Additional Filter Parameters ====
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/4
 
@@ -627,11 +628,11 @@ Currently IndieAuth and Micropub don't talk about how to deal with expired token
 
 There are instances where the configuration of a Micropub endpoint can change. Currently both the Media Endpont url and the syndication values are in the Micropub's config query. Because the Media Endpoint is an external service it makes sense that at times this url may change, and the user shouldn't have to log out and back in to update that value. (more details for brainstorming available in GitHub issue)
 
-==== Extended GEO URI support for Form-Encoded Requests ====
+==== Extended GEO URI ====
 
 https://github.com/indieweb/micropub-extensions/issues/32
 
-Indigenous for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI. The payload property is 'geo'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post geocache logs, see https://indieweb.org/geocaching
+Indigenous for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI in order to allow more parameters in a form-encoded request. The payload property is 'geo'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post geocache logs, see https://indieweb.org/geocaching
 
 <pre>
 geo:51.5258325,-0.1359825,0.0;name=london;url=https://hwclondon.co.uk
