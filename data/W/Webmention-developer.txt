@@ -1,11 +1,10 @@
 https://indieweb.org/Webmention-developer
 
-{{stub}}
 <span style="margin-top: -2em; background:white; float:right;">[[File:webmention-logo.svg|160px]]<br/><a href="https://webmention.rocks/"><img src="https://webmention.rocks/assets/webmention-rocks.png" alt="Webmention Rocks" style="width:160px"/></a><br/><img src="https://indieweb.org/images/5/56/w3c-logo.svg"/></span>
 
 This page documents technical details of [[Webmention]], specifically for '''<dfn>Webmention developers</dfn>''' so they can support cross-site [[comments]] and other [[responses]] in their code, or on their site or service.
 
-Webmention is a [https://www.w3.org/TR/2017/REC-webmention-20170112/ W3C Recommendation] that supersedes [[Pingback]], using only HTTP and x-www-form-urlencoded content rather than [[XML-RPC]], with additional functionality (e.g. updates & deletes) as well as greater security & robustness from years of experience with prior iterations.
+Webmention is a [https://www.w3.org/TR/webmention/ W3C Recommendation] that supersedes [[Pingback]], using  a simple HTTP POST request and x-www-form-urlencoded content rather than [[XML-RPC]], with additional functionality (e.g. updates & deletes) as well as greater security & robustness from years of experience with prior iterations.
 
 == Get Started Developers ==
 If you already have some idea of what Webmention is and are ready to implement, work your way through:
@@ -31,19 +30,18 @@ If Aaron's blog supports receiving webmentions, and Barnaby's blog supports send
 # User Barnaby writes post on his blog that links to Aaron's post.
 # After publishing the post (i.e. it has a URL), Barnaby's server notices this link as part of the publishing process
 # Barnaby's server does webmention discovery on Aaron's post to find its webmention endpoint (if not found, process stops)
-# Barnaby's server sends a webmention to Aaron's post's webmention endpoint with 
+# Barnaby's server sends an HTTP POST request to Aaron's post's webmention endpoint with two parameters:
 #* <code>source</code> set to Barnaby's post's permalink
 #* <code>target</code> set to Aaron's post's permalink.
 # Aaron's server receives the webmention
 # Aaron's server verifies that <code>target</code> in the webmention is a valid permalink on Aaron's blog (if not, processing stops)
 # Aaron's server verifies that the <code>source</code> (when retrieved, after following redirects) in the webmention contains a hyperlink to the <code>target</code> (if not, processing stops)
 
-Unmentioned but implied (and vaguely mentioned in the pingback spec):
+What to do with the webmention once processed is unmentioned in the spec but implied (and vaguely mentioned in the pingback spec). Aaron's server can display the information about Barnaby's post somewhere on Aaron's post. 
 
-* Aaron's server displays the information about Barnaby's post somewhere on Aaron's post.
-* If a <code>u-url</code> is present at the <code>source</code>, then the receiver could display that URL, and default to showing the <code>source</code> otherwise. This allows services like [[Bridgy]] to render the original tweet URL in the <code>u-url</code> property so receivers will link to the tweet instead of the Bridgy proxy page.
-
-See [[comment#Accept_a_comment|comment: how to accept a comment]] for more details on accepting comments in general and displaying them.
+The most popular display is to display Barnaby's post as a comment, however, how to display can vary based on what Barnaby posted, or Aaron's preferences for display. For more:
+* See [[responses#Displaying_responses_to_a_post|responses: displaying responses]]
+* See [[comments#How_to_display|comment: how to display]]
 
 == How to ==
 === How to implement sending ===
