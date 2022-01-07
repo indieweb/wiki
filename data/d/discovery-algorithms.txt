@@ -1,0 +1,131 @@
+https://indieweb.org/discovery-algorithms
+
+{{stub}}
+
+'''<dfn>Discovery algorithms</dfn>''' are a set of algorithms to start with a URL like a home page or post permalink, and determine information about that URL, such as [[authorship]], [[page-name]], and date published.
+
+On the IndieWeb, you are your URL and your URL is you. With a well-designed IndieWeb site, as humans we can discover all the information you choose to share about yourself.
+
+This page is for documenting and brainstorming ways to discover that same information automatically by following a combination of semantic markup and algorithms.
+
+If you’re looking for a user-centric definition of discovery, see:
+* [[discovery]]
+
+== Algorithms ==
+The following algorithms are fairly well-developed, mature, and well implemented:
+* [[authorship]]
+* [[page-name]]
+* ...
+
+== Profile Info ==
+Typical IndieWeb sites have profile and often contact information right there on the [[home page]].
+
+Best publishing practice: mark it all up with [[hCard]], especially your hyperlinks to other profiles with class="u-url url" and rel="me". This will create a [https://microformats.org/wiki/representative_hCard representative hCard] which can then be used by other sites. Use this [http://www.unmung.com/indiecard tool] to check how your hCard gets parsed.
+
+Examples in the wild:
+* https://tantek.com/
+* https://jnoh.net/
+* ...
+
+Best parsing practice: when given an indieweb URL that represents a person, parse it for a representative hCard and use that hCard for information about that person. Details:
+* https://microformats.org/wiki/representative-hcard-parsing
+
+== Separate Contact Page ==
+Some IndieWeb sites have contact information on a ''separate'' page from the home page, but linked from the home page. While such links may be obvious to humans, e.g. with text labels like "Contact" or "About", it's not at all obvious to parsers where to find more information.
+
+Examples of sites with separate contact/about pages:
+* https://adactio.com/ - contact information at: https://adactio.com/contact/
+* https://voxpelli.com/ - about information at: https://voxpelli.com/about (linked to with rel-me from front page)
+* https://kartikprabhu.com/ - about information at: https://kartikprabhu.com/about (linked with rel-me from homepage)
+* https://jacky.wtf/ - contact information at https://jacky.wtf/contact/
+* ...
+
+Proposal:
+* With a new 'rel' value, e.g. '''rel="contact-info"''', parsers could discover such links, follow them, and then parse the destination for a representative hCard.
+
+== Updates ==
+Most IndieWeb sites have updates on their home page, a stream of updates as it were, for example:
+* https://tantek.com
+* https://adactio.com
+
+Best publishing practice: mark up your posts with [[hAtom]] (and ideally microformats2 [[h-entry]] as well).
+
+Best parsing practice: parse the given URL for hAtom (and preferably microformats2 [[h-entry]]).
+
+Others have a simple introduction/contact page as their home page, and provide updates at another URL, for example: 
+* ... old adactio.com
+* ... any current examples? Maybe folks that have only an IndieWeb contact home page and then link to a separate page for their blog?
+
+Proposal:
+* With a new 'rel' value, e.g. '''rel="updates"''', parsers could discover links to separate "journal", "updates", "notes", "stream" pages and then parse those for hAtom and h-entry.
+
+== Post Information ==
+To discover information about a [[post]] on a post permalink page:
+* Parse the page for [[h-entry]] and retrieve post name, summary, URL, contents, and author accordingly.
+=== Authorship ===
+{{main|authorship}}
+Summary: (see main [[authorship]] page for full algorithm)
+* If the author is also an [[h-card]], parse that for more information about the author such as name, photo, logo, URL, etc.
+* If there is no p-author, then look for a [[rel-author]] link.
+** Follow it, and retrieve the representative h-card from the destination for author information
+=== Post Name ===
+Assuming a post permalink page, see:
+* [[page-name-discovery]]
+=== Publication Date ===
+* If the h-entry has a <code>dt-published</code> property, use that.
+** This is the only thing that's been implemented. Here are some fallbacks:
+* else the following sources may be used to infer it (brainstorming)
+** Check the URL path. If the start (? or somewhere near the start?) of the URL path of the permalink is:
+** <code>/YYYY/MM/DD/</code> = publication date ISO YYYY-MM-DD
+*** Sites using this: aaronparecki.com
+** <code>/YYYY/DDD/</code> = publication date ISO Ordinal YYYY-DDD
+*** Sites using this: tantek.com
+** ...
+
+== POSSE copies ==
+To find the POSSE copies of an original post, on that original post's permalink page:
+* Look for rel=[[syndication]] links
+* Treat their destinations as POSSE'd copies of the original post
+
+== Original post ==
+To find an original post from a POSSE'd copy, on that POSSE'd copy's permalink page:
+* Follow [[original-post-discovery]]
+
+== Real Time Updates ==
+... rel=hub ... on link to PuSH hub for your updates.
+
+== Public Keys ==
+
+For an improved Salmon key-discovery flow (that is, not using DRY-violating XRD files and web-breaking email-like identifiers), we need to expose public keys somehow.
+
+* https://microformats.org/wiki/hcard-brainstorming#key_property_for_webid
+* https://microformats.org/wiki/existing-rel-values#HTML5_link_type_extensions (specifically the <code>pgpkey</code> value
+* [https://microformats.org/wiki/public-key-examples Examples of how people are exposing their public key in the wild]
+
+Public key exchange was also discussed at the [[events/2013-11-01-indieweb-dinner|IndieWeb dinner on November 1st, 2013]], in the context of this in-person using QR codes. Potentially the QR code could simply be a URL pointing to the user's website, where a public key could be extracted from microformat encoding.
+
+== Help or About ==
+HTML has the rel="help" value, but it's not clear that it conveys the "about" kind of resources you link to.
+=== IndieWeb Documentation ===
+For example:
+* Tom Morris has [http://tommorris.org/pages/indieweb-documentation documented the IndieWeb support on his site] on a separate page.
+
+== Legacy Discovery ==
+There are bunch of legacy discovery methods that are worth documenting, in case you want to interoperate with legacy systems that depend on them.
+
+=== Feeds ===
+... rel=alternate ... type=...+xml ...
+
+We should deprecate separate feeds as:
+* Separate feeds are not technically necessary (hAtom or h-entry on visible HTML works just fine).
+* Separate feeds violate the [[DRY]] principle
+
+== Developer Examples ==
+Examples that developers, e.g. folks at least familiar with manipulating and editing XML files, are publishing or can use:
+* {{chrisaldrich}} has a [https://boffosocko.com/about/following/ following page] of people he's subscribed to along with subscribeable [[OPML]] files to allow others to discover those people too.
+* {{Apiratelifefor.me}} has published an OPML file of feeds he subscribes to over at [https://apiratelifefor.me/opml/ OPML]
+* [http://dev.opml.org/share/ Share Your OPML] - A service by Dave Winer for sharing your OPML file and aggregating against others to help uncover popular websites. See also: http://scripting.com/2016/10/12/areYouReadyToShareYourOpml.html The resultant combined data set can be found at http://feedbase.io/
+
+== See Also ==
+* [[discovery]]
+* [[Webfinger]]
