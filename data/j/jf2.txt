@@ -4,7 +4,36 @@ https://indieweb.org/jf2
 
 '''<dfn>[https://jf2.spec.indieweb.org/ jf2]</dfn>''' is a W3C Note and a JSON Post Serialization Format  of [[microformats2]] for that is optimized for [[h-entry]] consuming code, as compared to the standard microformats JSON representation.
 
+;Status
+:This is a living '''Editor's Draft''' yet mature enough to encourage [[#Implementations|implementations]] and [[#Feedback|feedback]].
+;Editor's Draft
+:https://jf2.spec.indieweb.org/
+;W3C Note
+:https://www.w3.org/TR/jf2/
+;Participate
+:Wiki ([[#Feedback|Feedback]], [[#Issues|Open issues]], [https://github.com/indieweb/jf2 issues on GitHub])
+:[[IRC]]: [https://chat.indieweb.org/dev discussion on #indieweb-dev] [irc://irc.libera.chat/indieweb #indieweb-dev on Libera]
+;Editors
+:{{kevinmarks}}
+:[[User:Ben.thatmustbe.me|Benjamin Roberts]] 
+
 jf2 was published by the [[W3C]] Social Web Working Group as a [https://www.w3.org/TR/2018/NOTE-jf2-20180110/ W3C Note on 2018-01-10], and is currently maintained by the IndieWeb community as a Living Standard at https://jf2.spec.indieweb.org/
+
+__TOC__
+
+== Use cases ==
+
+=== Common data structure for Microsub servers ===
+
+The [[Microsub-spec]] draft standard specifies jf2 as the format in which objects should be stored. Servers who aim to comply with the standard must store objects in jf2. Clients must interpret jf2 objects to render content from feeds polled by the server.
+
+=== Personal website feed ===
+
+Some IndieWeb community members publish jf2 feeds directly to their websites.
+
+=== Add more ===
+
+Have a use case for jf2? Add it here.
 
 == Example ==
 <pre>
@@ -72,6 +101,23 @@ This example of jf2 contains an additional "wm-property" value that indicates th
 
 === Post Kinds for WordPress ===
 {{gwg}} began converting his parsing code within the Post Kinds plugin to returnn jf2 and will likely be reimplementing additional code within same to use a mix of jf2 and mf2 as a way of ensuring better consistency and cross-compatibility. This is a work in progress.
+
+=== IndieWeb Search ===
+
+[IndieWeb_Search IndieWeb Search] offers a jf2 feed for all search results. Visitors can subscribe to this feed in any feed reader that parsers jf2. Visitors can also parse this feed to derive insights from search results or watch for search rank changes.
+
+=== capjamesg ===
+
+{{capjamesg}} offers jf2 feeds for his posts, notes, likes, and bookmarks on his personal website:
+
+* https://jamesg.blog/feeds/posts.jf2
+* https://jamesg.blog/feeds/notes.jf2
+* https://jamesg.blog/feeds/likes.jf2
+* https://jamesg.blog/feeds/bookmarks.jf2
+
+James has also implemented logic that converts XML (RSS/Atom), JSON Feed, and h-feeds to jf2 as part of his Microsub reader. This logic is available in files in the following folder on GitHub:
+
+https://github.com/capjamesg/microsub/tree/main/feeds
 
 === more implementations ===
 * See: http://microformats.org/wiki/jf2#Implementations for more open source parsers, jf2 converters, consuming code, etc.
