@@ -7,6 +7,24 @@ The point of a webring is to create a virtuous cycle of recommendations between 
 
 One author sends the 'ring' traffic and expose the ideas that they think are interesting in a way that is more seamless than a "you should read this [link]", and hopefully if that stuff is interesting the other author(s) will reciprocate.
 
+== How ==
+
+To create a webring, you should create an application with a minimum of three endpoints:
+
+* A homepage that provides information about the ring.
+* A /next/ page that takes someone to the next site in the ring.
+* A /previous/ page that takes someone to the previous site in the ring.
+
+The names for each endpoint can vary by implementation.
+
+The next and previous pages can use the Referrer HTTP header to find the site someone was visiting and then query a database to find the previous or next page in the webring. "Previous" and "Next" are usually defined as the sites who joined the webring before and after a member.
+
+If a visitor gets to the end of a webring, the ring should start over again, taking a visitor to the first site in the webring.
+
+'''Note:''' Some webrings opt to send a visitor to a random page when visiting a previous or next endpoint instead of maintaining the sequential order of the ring. This is an implementation detail that you can consider when building a webring.
+
+A webring may or may not choose to list its members in a public directory. The advantage of doing so is that someone can discover many new sites on one page. But, a webring
+
 == History ==
 
 WebRing was originally created by [https://en.wikipedia.org/wiki/Sage_Weil Sage Weil] in 1994, who then sold it in 1997, and then promptly founded [[DreamHost]], a popular web hosting company.
