@@ -1,8 +1,13 @@
 https://indieweb.org/WebFinger
 
-<dfn>'''[https://webfinger.net/ WebFinger]'''</dfn> is a [[discovery]] protocol for the web that uses email address-like identifiers to get info about users. Many IndieWeb projects chose to have people identified by their personal web site’s URL (possibly containing [[representative h-card]]) instead.
+<span style="float:right; margin: 0 0 1em 1em;max-width:75%">[https://xoxo.zone/@KevinMarks/100951539932638956 <img src="https://xoxo-media.sfo2.cdn.digitaloceanspaces.com/media_attachments/files/000/343/577/original/133f36342c4f1a64.png" style="max-width:100%" alt="Three pane comic of two businessmen chatting about how to look up an email address which is actually an acct: URI which requires a complex answer."/>]</span> 
 
-The name "WebFinger" is based on the unix finger tool.
+<dfn>'''[https://webfinger.net/ WebFinger]'''</dfn> is a [[discovery]] protocol for the web that uses email address-like identifiers (or <code>acct:</code> URIs) to get info about users, while IndieWeb sites (and their owners) typically use their personal site address as identifiers instead.
+
+The name "WebFinger" is based on the [https://en.wikipedia.org/wiki/Finger_(protocol) unix finger tool].
+
+== Why not ==
+Many IndieWeb projects choose to have people identified by their personal web site’s URL (possibly containing [[representative h-card]]) instead.
 
 == IndieWeb Examples ==
 
@@ -18,9 +23,7 @@ __TOC__
 
 == Problems ==
 
-
 === Use of email address-like IDs ===
-
 This is widely regarded as a benefit of webfinger (“normal people don’t understand URIs and are more comfortable with email addresses”). Problems with this:
 * [[Why_web_sign-in#Why_not_email|general problems with email addresses]] as personal identifiers
 * looking like email addresses is great for usability, *until* it turns out that sometimes webfinger IDs aren’t email addresses — opening ambiguity and confusion (is this email address a webfinger ID? Can I send email to this webfinger ID?)
@@ -30,13 +33,11 @@ This is widely regarded as a benefit of webfinger (“normal people don’t unde
 ** I think the “one-to-many server-to-user” is still better then completely centralized models and it is easier for non technical people (see micro.blog or mastodon). For people that have their own domain, you can just use your domain name, as webfinger doesn't force the acct: scheme, you can use https: too.
 
 === acct: schema ===
-
 I never figured out exactly what use this is. Someone else care to explain? --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 13:45, 10 March 2013 (PDT)
 
 * It is kind of a unique, url aware identifier: &lt;username&gt;@&lt;domain&gt;. But because it looks like an email address, it is prefixed with the acct: (it think for account) protocol. --[[User:Notizblog.org|Matthias Pfefferle]]
 
 === DRY Violation ===
-
 WebFinger relies on [[DRY]]-violating XRD files (which within themselves sometimes repeat data due to incompatible implementations) for storing information. Extra, non-human-readable files are extremely likely to not be maintained. Better to store profile data and links in HTML(+[[microformats]]) as visible data.
 
 === Well Known URLs ===
@@ -128,6 +129,6 @@ for *ourselves*
 [[Webfist]] is the software used to run a distributed fallback network to enable webfinger on email address from providers that do not yet support webfinger.
 
 == See Also ==
-
 * https://www.w3.org/wiki/Socialwg/AccountDiscovery
-* https://xoxo-media.sfo2.cdn.digitaloceanspaces.com/media_attachments/files/000/343/577/original/133f36342c4f1a64.png
+* https://xoxo.zone/@KevinMarks/100951539932638956
+** "Based on a classic http://howfuckedismydatabase.com/nosql/" [https://xoxo.zone/@KevinMarks @KevinMarks] October 24, 2018
