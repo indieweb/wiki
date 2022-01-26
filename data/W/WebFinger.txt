@@ -25,7 +25,9 @@ This is widely regarded as a benefit of webfinger (“normal people don’t unde
 * [[Why_web_sign-in#Why_not_email|general problems with email addresses]] as personal identifiers
 * looking like email addresses is great for usability, *until* it turns out that sometimes webfinger IDs aren’t email addresses — opening ambiguity and confusion (is this email address a webfinger ID? Can I send email to this webfinger ID?)
 * ''web''finger IDs are not ''web'' addresses — you can’t perform HTTP requests on them
+** That's exactly why webfinger exists. --[[User:ulpaulpa.de|ulpaulpa.de]]
 * WebFinger thinking ties us to the widely failed “one-to-many server-to-user” federated social web model, where there is a federation of servers, each with possibly many users on. Taking an indieweb approach where everyone has at best their own domain name, at worst a subdomain, using webfinger becomes tiresome (why tantek@tantek.com when tantek.com will do? or worse, georgelandon@george.landon.org. Lots of typing)
+** I think the “one-to-many server-to-user” is still better then completely centralized models and it is easier for non technical people (see micro.blog or mastodon). For people that have their own domain, you can just use your domain name, as webfinger doesn't force the acct: scheme, you can use https: too.
 
 === acct: schema ===
 
@@ -45,7 +47,9 @@ Webfinger relies on well-known URLs (namespaced to a certain degree to /.well-kn
 
 Because Webfinger relies on well-known URLs existing on the domain, it is challenging and sometimes not even possible to delegate handling Webfinger queries to an external service. 
 
-You could do some clever reverse proxy configuration with Nginx or Apache to serve the .well-known folder from another system, but if you have a traditional shared host or static website, then this isn't possible. 
+You could do some clever reverse proxy configuration with Nginx or Apache to serve the .well-known folder from another system, but if you have a traditional shared host or static website, then this isn't possible.
+
+* Webfinger allows redirects, so it's easy to delegate it it. --[[user:ulpaulpa.de|ulpaulpa.de]]
 
 == Minimal Usefulness ==
 <blockquote>"the only webfinger relation that matters is email address -> home page. everything else (avatar, blog, homepage, name) is already well defined / implemented / supported as [[hCard]]/[[h-card]] on your home page. <br/>oh and [[rel-me]] for all those "other" profiles for those that spray & pray their content across silos"</blockquote>
@@ -126,3 +130,4 @@ for *ourselves*
 == See Also ==
 
 * https://www.w3.org/wiki/Socialwg/AccountDiscovery
+* https://xoxo-media.sfo2.cdn.digitaloceanspaces.com/media_attachments/files/000/343/577/original/133f36342c4f1a64.png
