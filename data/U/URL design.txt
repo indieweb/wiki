@@ -179,12 +179,20 @@ Alternatively:
 # {{user|ben.thatmustbe.me|Ben Roberts|https://ben.thatmustbe.me/image/static/icon_64.jpg}} puts content type first as a user feature /note/2015/8/12/4/ but do not depend on it for identifying posts (the problem {{aaronpk}} was having).  Putting in an incorrect type will automatically redirect to the correct URL.  This allows for more intuitive URLs for streams of type specific posts.  /note/ will list all notes, /photo/ only photos, etc.
 
 === URL in a URL ===
+Q: How can I put a URL within a URL as in <code><nowiki>http://example.com/other/http://example.org/post</nowiki></code>?
 
-Q: How can I put a URL within a URL as in <code>http://example.com/other/http://example2.com/post</code>?
+Aside: note common use-cases for a URL within a URL:
+* Syndicating in some content from another site, e.g. sites that accept content submissions like [[IndieNews]]
+* Archiving a copy of content from another site, e.g. [[Internet Archive]] Wayback Machine, or personal sites that archive/serve a copy of content from defunct or [[lost sites]] or [[zombie]]s.
 
-A: The problem with the above example is that URLs can have only one instance of <code>http://</code> in them. Instead one could pass the second URL as an encoded parameter (which can be considered ugly), or simply remove the protocol part of the second URL as <code>http://example.com/otherexample2.com/post</code>. 
+'''A: Current best practice: remove the protocol part of the second URL as <code><nowiki>http://example.com/other/example.org/post</nowiki></code>.''' For example:
+* https://news.indieweb.org/en/boffosocko.com/2022/01/28/indiewebcamp-personal-libraries-pop-up-session/
 
-<small>(This appears not to be true in all cases <code>https:// web.archive.org/save/http://your.web.site</code> will save a snapshot of the given URL to the Wayback Machine.)</small>
+The problem with the example  in the question is that URLs should have only one instance of <code>http://</code> in them for readability. 
+
+Alternatives:
+* Pass the second URL as an encoded parameter. Disadvantage: URL encoded parameters are uglier and somewhat obfuscate the other URL.
+* Keep the protocol part. Disadvantage: this makes your URL uglier (and may confuse some [[autolink]]ers). E.g. <code><nowiki>https://web.archive.org/save/http://example.org/post/</nowiki></code> will save a snapshot of the given URL to the [[Wayback Machine]].
 
 == Articles ==
 More thoughts on (potentially additional aspects of) URL design:
