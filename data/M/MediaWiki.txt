@@ -33,9 +33,53 @@ There are a number of proposals to add indieweb building blocks support to Media
 * He's set up a [[rel-me]] on his primary page to enable [[Webmention]] using [[webmention.io]] links in the <code>&lt;header&gt;</code> of the site.
 * Chris has described a way of creating internal backlinks or bi-directional links on a MediaWiki site for use as a digital [[commonplace book]]: https://boffosocko.com/2021/06/01/creating-internal-backlinks-for-mediawiki-for-digital-gardeners/
 
+=== Breakfast and Coffee ===
+
+{{capjamesg}} uses MediaWiki to host Breakfast and Coffee, a wiki to share coffee spot and breakfast recommendations. The wiki supports sign in using [[vouch-proxy]] and [[IndieAuth]], implemented with help from the IndieWeb [[mediawiki-customizations]] guide.
+
+As of February 3rd, 2022, Breakfast and Coffee is the second wiki known to support IndieAuth as its primary method of authenticating users (with the first being the IndieWeb wiki).
+
 == Other Independent Examples ==
 === Friend of GWG ===
 {{gwg}} has setup MediaWiki for a friend as a private thing and maintains it for them.
+
+== Brainstorming ==
+
+=== Setting up MediaWiki with IndieAuth ===
+
+{{capjamesg}} encountered a bit of trouble setting up MediaWiki with IndieAuth.
+
+Setting up MediaWiki itself was not too difficult although he ran into an issue with setting up PHP. MediaWiki, as of February 2022, does not support some specific versions of PHP. Thus, James had to experiment to install a supported version of PHP. Before deploying MediaWiki, it is worth checking that you have a supported version of PHP set up.
+
+After getting MediaWiki set up, James disabled sign ups to the wiki in anticipation of spam. Then, he deployed [[vouch-proxy]], an SSO solution that has a custom extension to support IndieAuth. The Vouch Proxy was quite difficult to set up and James wonders if it would be possible to develop a native MediaWiki extension for IndieAuth.
+
+The following tutorial was helpful in setting up the Vouch Proxy configuration:
+
+* https://developer.okta.com/blog/2018/08/28/nginx-auth-request
+
+However, the tutorial above recommends that you add the "fastcgi_param REMOTE_USER $auth_user;" code after the "auth_request_set" directive in your configuration file. This did not work for James. James instead set the "fastcgi_param REMOTE_USER $auth_user;" directive in the .php location block, like so:
+
+<pre>
+     location ~ \.php$ {
+         fastcgi_param REMOTE_USER $auth_user;
+         fastcgi_pass unix:/var/run/php/php-fpm.sock;
+         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+         include fastcgi_params;
+         include snippets/fastcgi-php.conf;
+     }
+</pre>
+
+Before you start trying to use the Vouch Proxy to authenticate, make sure you are running Vouch Proxy. Vouch Proxy does not automatically run as a service or a program. You can either build Vouch Proxy using Go (go build) then run it as a program or run the program using Docker.
+
+Copy over the IndieWeb LassoAuth.php file from the repository listed on [[mediawiki-customizations]] into your PHP project. Then, add the file to your LocalSettings.php configuration file. You should also make sure you install and use Auth_remoteuser when setting up authentication. Replace any instances of "indieweb.org" domains with the relevant domain for your project and the domain for your Vouch Proxy instance.
+
+If you notice that you can sign in but your session is not saved, create a test.php file with the following contents:
+
+<pre>
+<?php print_r($_SERVER);
+</pre>
+
+Then, try to authenticate again. If you don't see a REMOTE_USER header, there is likely something wrong with your Nginx configuration. Revisit your configuration file to make sure all the auth_request directives are set up in the right order. Also make sure you use the fastcgi_param directive as described in the .php location code snippet provided earlier on this page.
 
 [[Category:Organizing]]
 
