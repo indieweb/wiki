@@ -22,6 +22,15 @@ For counter-example, the [[Quip]] iOS app has an option when launching it to "Sk
 
 When of course, skipping creating an account should not require signing in to Quip, or a network connection, or a "service" at all!
 
+== Brainstorming ==
+=== Blog that loads recent posts ===
+One example of a (at least partial) local first IndieWeb "app" could be a personal site that when the home page is loaded, uses [[offline first]] techniques to proactively load the information necessary to render recent post permalinks, without ever having loaded those pages directly from the server.
+* {{t}} is considering implementing this (describing here in case others can use some of these techniques, rather than only on [[Falcon]] page)
+** load the past year’s bim files via [[offline first]] techniques
+** implement client-side rendering of those bim files via a fully [[CASSIS]] implementation of [[Falcon]] rendering code
+** use [[service worker]] to detect when a permalink is being accessed whose storage file has been cached, and call that client-side rendering code instead
+** challenge: cache invalidation, i.e. when to "reload" older bim files (most recent bim storage file should be loaded whenever online via [[offline first]] techniques) that may have minor fixes/updates.
+
 == See Also ==
 * [[offline first]]
 * IWC Brighton session: [[2019/Brighton/localoffline|Local first, offline first vs no cloud and multidevices]]
