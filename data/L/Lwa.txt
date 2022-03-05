@@ -60,8 +60,15 @@ This request will work once after redemption &mdash; the values should be stored
 * Q: Can we expand this to allow people to always proxy their endpoint - being "Cloudflare of Micropub"?
 * Q: Can requests can be sent elsewhere (e-mail?)
 
-=== Reply Proxy ===
-Using expiring posts and the like
+=== Local Micropub ===
+On the off chance someone doesn't have the ability to use [[Micropub]] on their site, Lwa can store posts for authenticated users for at most a month. An endpoint for querying [[posts]], [[tags]] and the like will be available.
+
+==== Caveats ====
+* No [[nickname cache]] or [[hashtag cache]] support, to prevent spam.
+* The [[published|published date]] cannot be changed.
+* These posts are [[public|listed publicly]] with a [[audience|global audience]].
+* Every post lives as an [[expire|expiring post]] with it being marked as such with <code>dt-expired</code>.
+* These posts do not send Webmentions out, but they can receive them. This is meant to be a [[spam]] prevention measure.
 
 == Goals ==
 
