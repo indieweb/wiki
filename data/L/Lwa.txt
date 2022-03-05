@@ -10,6 +10,56 @@ The composable [[Micropub]] editor provided in Lwa is meant to be the ''advanced
 
 Source code (pending) is at https://git.jacky.wtf/indieweb/lwa-composer
 
+=== Web Proxy ===
+Allowing a [[PWA]] to participate 'natively' with the IndieWeb requires the use of a trusted Web server. This proxy aims to provide an approved PWA to have its requests proxied through. The flow follows.
+
+<pre>
+GET /auth?me=https://jacky.wtf/&redirect_uri=https://pwa.example/auth/callback&state=$TOKEN
+Host: pwa.example
+
+HTTP/1.1 302 Redirect
+Location: https://proxy.example/authorize?id=[random id]
+</pre>
+
+The proxy server would begin the act of signing in, finding all the available endpoints for use (or only the ones specified in <code>rel[]</code> as part of the initial request) and ask for scopes as provided in <code>scope</code>. After the proxy server handles all of that, it'll redirect to the redirect URI provided with a <code>code</code> query parameter. This can be redeemed with the original value of <code>state</code> to another endpoint, <code>/redeem</code>.
+
+<pre>
+POST /redeem
+Host: pwa.example
+.. Browser-specific CORS headers ..
+
+state=$STATE
+code=$CODE
+
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "rels": {
+    "micropub": ["http://proxy.example/endpoint/UUID0"]
+  },
+  "rel-urls": {
+    "http://jacky.example/micropub": {
+       "rels": ["micropub"],
+       "proxy_url": "http://proxy.example/endpoint/UUID0",
+       "title": "Content"
+    }
+  },
+  "me": "https://jacky.example/"
+}
+</pre>
+
+This request will work once after redemption &mdash; the values should be stored into either session or local storage for later use. It returns the following:
+
+* '''rels''': List of endpoint URLs, mapped by their corresponding rel
+* '''rel-urls''': A mapping of relations by their URL. There's an additional key, <code>proxy_url</code> which serves as the CORS-friendly proxy URL for this endpoint.
+
+==== Notes ====
+* Q: Should proxy endpoints have lifespans? This would enforce hygiene on PWA clients.
+* Q: Can we expand this to allow people to always proxy their endpoint - being "Cloudflare of Micropub"?
+* Q: Can requests can be sent elsewhere (e-mail?)
+
 == Goals ==
 
 * [[Micropub]], [[Microsub]] and [[WebSub]] client
