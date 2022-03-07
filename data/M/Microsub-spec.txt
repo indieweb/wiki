@@ -415,14 +415,31 @@ Response
 HTTP/1.1 200 Ok
 </pre>
 
-=== Unmute ===
+=== Unmuting ===
+
 
 '''POST'''
 
-To unmute a user, use <code>action=unmute</code> and provide the URL of the account to unmute. Unmuting an account that was previously not muted has no effect and should not be considered an error.
+* action=mute
+* channel={uid}
+* url={url}
 
+To unmute a user, use <code>action=unmute</code> and provide the URL of the account to unmute. Unmuting an account that was previously not muted has no effect and should not be considered an error. Using the uid <pre>global</pre> will unmute them in every channel.
 
-{{jacky}}: We'd need an example here of what this looks like
+Request
+
+<pre>
+POST /microsub HTTP/1.1
+Content-type: application/x-www-form-urlencoded
+
+action=unmute&channel=indieweb&url=https://annoying.example.com/
+</pre>
+
+Response
+
+<pre>
+HTTP/1.1 200 Ok
+</pre>
 
 === Blocking ===
 
