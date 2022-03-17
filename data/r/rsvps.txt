@@ -168,11 +168,16 @@ Note in the [[#Facebook_2017|Facebook 2017]] example above the text just above t
 === How to markup ===
 We should have a recommended way to markup RSVPs displayed on an event (e.g. https://events.indieweb.org/2022/03/homebrew-website-club-pacific-zNW0jWBDveOD), just as we have a way to [[comments#How_to_markup|markup comments displayed on a post]].
 
-Overloading <code>p-rsvp</code> (or even <code>u-rsvp</code>) would be bad so let’s not do that.
+All markup should have a consuming code use-case, e.g.
+* PESOS with Webmention to take a local RSVP on an event, and use it to create an IndieWeb [[RSVP]] on your own site. Sort of like a Micropub client except without having to give all the posting permissions etc. to the event site to post on your site.
+** e.g. https://events.indieweb.org/2022/03/homebrew-website-club-pacific-zNW0jWBDveOD#rsvps has a link to https://tantek.com/ that should be marked up in such a way that a webmention sent from the HWC event to my site is processed by my site to be a special authenticated RSVP link, which then it can use to create an RSVP post automatically on my own site
+* ... more use-cases?
 
-One thought: since events typically cluster the different types of RSVPs (yesses, nos, maybes), perhaps we could have specific properties for each? E.g.
-* <code>p-rsvp-yes</code> for a local RSVP (or <code>u-rsvp-yes</code> for a link to an IndieWeb RSVP of yes)
-* p-rsvp-no, p-rsvp-maybe, p-rsvp-interested etc.
+Ideas for markup code:
+* Overloading <code>p-rsvp</code> (or even <code>u-rsvp</code>) would be bad so let’s not do that.
+* RSVP-state specific properties: since events typically cluster the different types of RSVPs (yesses, nos, maybes), perhaps we could have specific properties for each? E.g.
+** <code>p-rsvp-yes</code> for a local RSVP (or <code>u-rsvp-yes</code> for a link to an IndieWeb RSVP of yes)
+** p-rsvp-no, p-rsvp-maybe, p-rsvp-interested etc.
 
 ...
 
