@@ -123,13 +123,13 @@ Good retry logic can be hard, regardless of what you're doing, and webmentions a
 
 
 ==== rate-limiting ====
-A webmention endpoint getting too many requests, potentially from a single source, should be able to communicate this to senders, asking them to retry later. (note that it might be necessary to rediscover the endpoint, maybe comparable to [[Webmention-brainstorming#checking_endpoint_once_per_domain.2Fcaching_the_endpoint|caching]])
+An endpoint getting too many requests, potentially from a single source, should be able to communicate this to senders, asking them to retry later. (note that it might be necessary to rediscover the endpoint, maybe comparable to [[Webmention-brainstorming#checking_endpoint_once_per_domain.2Fcaching_the_endpoint|caching]])
 
-If a single sender is sending to many requests, [https://tools.ietf.org/html/rfc6585#section-4 HTTP 429 (Too Many Requests)] seems like the apropriate response. In other cases, [https://tools.ietf.org/html/rfc7231#section-6.6.4 HTTP 503 (Service Unavailable)] can be used to signal temporary failure. Both allow a Retry-After header to give a hint when new submissions are accepted.
+If a single sender is sending too many requests, [https://tools.ietf.org/html/rfc6585#section-4 HTTP 429 (Too Many Requests)] seems like the appropriate response. In other cases, [https://tools.ietf.org/html/rfc7231#section-6.6.4 HTTP 503 (Service Unavailable)] can be used to signal temporary failure. Both allow a Retry-After header to give a hint when new submissions are accepted.
 
 * [[webmention.io]] sends 429[https://github.com/aaronpk/webmention.io/blob/master/controllers/webmention.rb#L37], as does [[Skein]] [https://github.com/notenoughneon/skein/blob/master/api.ts#L69]
 
-The webmention specification currently doesn't mention how responses other than 400 & 500 should be treated.
+The Webmention specification currently doesn't mention how responses other than 400 & 500 should be treated.
 
 For senders that are directly triggered by a user that can not retry later automatically, it might make sense to displays those temporary errors differently to the user than more permanent errors (like a missing WM endpoint), prompting them to retry manually later.
 
