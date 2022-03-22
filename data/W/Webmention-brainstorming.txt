@@ -144,9 +144,14 @@ Webmention spam is not (at time of writing) really a problem; it'd be nice to ke
 ==== epoch hashing ====
 
 Proposed approach (suggestions from crypto people are welcome!)
-In addition to source=http://source/article&target=http://target/whatever POST parameters to the webmention endpoint, also pass two new parameters: time=1417292519&nonce=5684712. The time parameter is UTC epoch time (seconds since 1970), and the nonce is calculated such that sha256(target + "-" + time + "-" + nonce).hexdigest() startswith "000000". The number of zeroes required can be varied before specifying this approach to "tune" the difficulty of creating a nonce; the above (6 zeroes) takes some seconds on a reasonably modern machine.
+In addition to the conventional parameters to a Webmention (i.e: <code>source=http://source/article&target=http://target/whatever</code>), also pass two new parameters, <code>time=1417292519&nonce=5684712</code>. The value ''SHOULD'' be generated as follows:
 
-A webmention endpoint then checks that sha256(target + "-" + time_parameter + "-" + nonce).hexdigest() really does start with "000000", and that time is not too long ago (to prevent replay attacks; "not too long ago" is intentionally vague here because one must consider clock drift and so on).
+* <code>time</code>: [https://en.wikipedia.org/wiki/Epoch_(computing) UTC Epoch time]
+* <code>nonce</code>: a value representing <code>sha256("000000" + target + "-" + time + "-" + nonce).hexdigest()</code> 
+
+The number of zeroes required can be varied before specifying this approach to “tune” the difficulty of creating a nonce; 6 zeroes takes some seconds on a reasonably modern machine.
+
+An endpoint then checks that the code, whenever computed, actually begins with <code>"000000"</code> and that time is not too long ago (to prevent replay attacks; "not too long ago" is intentionally vague here because one must consider clock drift and so on).
 
 ==== hashcash-for-vouches ====
 
