@@ -182,6 +182,9 @@ In responding to a request, the endpoint would take the same approach as the web
 
 * Would it make sense to have <code>resource</code> for specific items, <code>realm</code> for blanket grants for an entire website/URL prefix/etc., and <code>issuer</code> for where to look for the token endpoint as an override if the endpoint can't be determined from <code>resource</code>/<code>realm</code>?
 
+* How to handle non-canonical/redirecting profile URLs? Since the ticket itself never goes through the full IndieAuth flow, the granter can't get the canonical identity URL from the <code>authorization_endpoint</code>.
+** As of [https://github.com/PlaidWeb/Publ/pull/487 this change in Publ], if Publ gets a ticket request for a page with a <code>rel="canonical"</code>, it forwards the request to the canonical page. No trust is assumed based on the original requesting URL, and the ticket only goes to the canonical URL's declared endpoint.
+
 == IndieWeb Examples ==
 
 === Martijn van der Ven ===
