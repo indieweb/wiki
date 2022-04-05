@@ -20,7 +20,9 @@ Koype builds a [[nickname cache]] that's usable for quickly mentioning people in
 This is being tracked at https://git.jacky.wtf/indieweb/koype-next/issues/17
 
 === Asynchronous [[reply context]] hydration ===
-When a URL is encountered when creating a new post, Koype runs it through its set of URL transformers. Depending on the authority of a URL, Koype will attempt to fetch a normalized (formatted in MF2+JSON) representation of the URL. This is built to work with [[Xray]] and can work with any other tool that returns MF2+JSON either as the root object, under a specified key or returns an HTML page formatted with MF2 with an item that has a property named <code>url</code> that contains the URL to be parsed.
+When a URL is encountered when creating a new post, Koype runs it through its set of URL transformers. Depending on the authority of a URL, Koype will attempt to fetch a normalized (formatted in MF2+JSON) representation of the URL. This is built to work with [[XRay]] and can work with any other tool that returns MF2+JSON either as the root object, under a specified key or returns an HTML page formatted with MF2 with an item that has a property named <code>url</code> that contains the URL to be parsed.
+
+In the event that no MF2 can be resolved from the remote URL, OGP, Twitter Card and the HTML is parsed to a minimum viable constraint to permit it as a [[microformats|Microformat item]] usable as a reply context. The resulting parser approach is hinted in the <code>type</code> of the resulting object.
 
 === Planned ===
 * Implementing [[Micropub-extensions|extensions]]
@@ -32,6 +34,12 @@ When a URL is encountered when creating a new post, Koype runs it through its se
 * [[multi-site_indieweb]] support
 * distributed storage support (tracked at https://git.jacky.wtf/indieweb/common/issues/1)
 * async post creation (tracked at https://git.jacky.wtf/indieweb/koype-next/issues/18)
+
+== File System ==
+Koype works on a ''virtual filesystem''. The long-term goal is to allow for it to write to object storage, come preloaded with a sample filesystem for demonstration purposes and simplifying backups.
+
+TODO: Explain where the resources are stored on disk.
+TODO: Explain how information is stored.
 
 [[Category:Software]]
 
