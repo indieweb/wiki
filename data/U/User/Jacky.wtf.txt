@@ -65,16 +65,32 @@ The pages could be both descriptive and interactive, similar to https://www.twil
 The goal of the page is allow people (namely developers or code-friendly people) to "tinker" on their site in real-time and get immediate feedback.
 
 === Post Type "Linting" ===
+Something that's happened to me a lot is the inability to make sure that my MF2 on my site is to my expectations <em>without</em> having to immediately inspect the HTML. The algorithm that I'd take on would be compiling a list of properties that are “known” on the Microformats wiki, grouping some by their expected post type to appear on, and checking the intersection of those properties to the properties present in a provided bit of HTML.
 
-In hopes of improving theme creation for [[Koype]], I wanted a way to hit a service and determine what kind of
-post type information it'd determine the page to have.
+My requirements would be that this is something that I can run either as a binary in the terminal or hit at a URL from a remote service (probably <code>https://ptd-lint.jalcine.dev</code> in a few) and get information.
 
-Flow:
-* Visit the service
-* Enter the URL I want to 'validate'
-* Report back on the discovered post types as well as the properties discovered
+==== Output ====
+The example output of someone messing up a [[like]]:
+<pre>
+{
+  "url": "checked-url",
+  "issues": [
+    {
+       "html": "",
+       "mf2": "",
+       "types": ["note",
+       "errors": [
+          {"name": "property/misnamed", "found": "like-of"},
+          {"name": "qol/missing-published"},
+          {"name": "qol/missing-url"}
+       ]
+    }
+  ]
+}
+</pre>
 
-Wrote a bit about [https://v2.jacky.wtf/post/b6fa599d-e7cd-4375-ad67-e31f0990ffdf this on my site].
+* Collect more examples of unintentional markup
+* Look into making rules something written in a declarative syntax (Lua?)
 
 === Syndication to my Newsletter ===
 
