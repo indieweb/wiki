@@ -24,6 +24,9 @@ When a URL is encountered when creating a new post, Koype runs it through its se
 
 In the event that no MF2 can be resolved from the remote URL, OGP, Twitter Card and the HTML is parsed to a minimum viable constraint to permit it as a [[microformats|Microformat item]] usable as a reply context. The resulting parser approach is hinted in the <code>type</code> of the resulting object.
 
+=== Asynchronous [[Webmention]] processing with polling fallback ===
+Koype ''should'' be used with a [[Webmention#Publisher_Services|Webmention service]] that supports callbacks. That allows Koype to lean into a ''push-centric'' approach on collecting incoming Webmentions and parsing the result of outgoing Webmentions. If the callback hasn't been called within a configured set amount of time, Koype will fall back to fetching Webmentions for pages in regard to their last <code>q=source</code> request within a preconfigured interval. By default, if no incoming Webmention callback has been called in 12 hours, Webmentions for pages are fetched once every two hours (planned and tracked at https://git.jacky.wtf/indieweb/koype-next/issues/32).
+
 === Planned ===
 * Implementing [[Micropub-extensions|extensions]]
 ** [[Micropub-extensions#Audience|audience]]
