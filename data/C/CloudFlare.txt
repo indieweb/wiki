@@ -20,6 +20,7 @@ The ability to use [[HTTPS]] is included in every plan and CloudFlare provides 
 * CloudFlare may block access to fight potential attackers, change the HTML source of your pages (e.g. add some custom code), minify or combine JS/CSS etc., either through services you request ("CloudFlare apps") or on their own because they decide it's required for better performance or security. Generally the less you pay the less control you have over how they "supercharge" your website. There's no visible CloudFlare branding on the site, but it's visible in the source and on the custom error pages they may show on your site.
 ** In particular, CloudFlare shoves annoying CAPTCHAs right in the face of [[Tor]] users by default. You can [https://support.cloudflare.com/hc/en-us/articles/203306930 whitelist Tor traffic].
 * This mechanism also blocks VPNs and other unusual/potentially malicious source IPs, which can interfere with wanted crawlers as well (e.g. [http://www.tedunangst.com/flak/post/cloudflare-and-rss fetching feeds], verifying [[Webmention|Webmentions]])
+** Webmention services like Brid.gy and Webmention.app will return 503 error when "Bot Fight Mode" (free) and/or "Super Bot Fight Mode" (pro) are turned-on. It is not possible to use Firewall rules to bypass these features (frequently requested in Cloudflare forums). The only workaround is to turn these off completely.
 * Universal SSL works with SNI only.
 * If you use your domain for [[email]], you may no longer be able to use email services provides by your registrar and CloudFlare does not provide any email services, so you have to provide MX records for your own or a hosted mail service.
 * A lot of global traffic passes through CloudFlare, which means the Internet is becoming more centralized.
@@ -53,7 +54,6 @@ Example code:
     url = "https://www.artstation.com/users/%s/likes.json?page=%s" % ("username", 1)
     res = session.get(url, headers=headers)
     print(res.json())
-
 
 == See Also ==
 * [[cloud]]
