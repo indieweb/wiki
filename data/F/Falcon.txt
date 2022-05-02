@@ -51,27 +51,25 @@ Falcon supports the following specific kinds of [[posts]].
 * white-space (serial space characters, line-breaks, blank lines)
 * [[auto-link]]ing of URLs, @-names to [[Twitter]]
 * [[auto-embed]]ding of JPG/PNG/GIF/MP4/MOV/OGV and [[YouTube]]/[[Vimeo]] URLs
-* [[POSSE]] to [[Twitter]] of up to 118 chars with permashortid of original post, or first 110-113 chars with ellipsing/truncating and permashortlink to original post. (assuming 6 char personal short domain, e.g. ttk.me)
+* [[POSSE]] to [[Twitter]] of notes up to 256 chars or first ~253 chars of longer notes auto-elided, and [[permashortlink]] to original post.
 * [[webactions]]: like, repost, reply with Twitter fallbacks
 
 === Article ===
 '''[[articles]]''' as blog posts are supported with:
-* [[POSSE]] to [[Twitter]] of up to 113 chars long article name with permashortlink of full post, or first 110-113 chars with ellipsing/truncating and permashortlink to original post. (assuming 6 char personal short domain, e.g. ttk.me)
+* [[POSSE]] to [[Twitter]] of article names up to 255 chars or first ~253 chars of longer article name auto-elided, and [[permashortlink]] to original post.
 * [[webactions]]: Post with Twitter Tweet fallback.
 * [[citation]] UI for copy pasting URL or HTML embed with [[h-cite]] markup.
 
 === Reply ===
-'''[[reply]]''' notes are supported. Replies are similar to notes, but for replying to tweets, commenting on other posts.
-* with minimal [[reply-context]] support (linked URL of original being replied to)
-* with [[multi-reply]] reply-context presentation support too.
+'''[[reply]]''' notes are supported for replying to tweets, commenting (or reacting with [[reacji]]) on other posts, with:
+* minimal [[reply-context]] support (linked URL of original being replied to)
+* [[multi-reply]] reply-context presentation support, with stacked minimal reply-contexts
 * automatic sending of webmentions (or pingbacks if no webmention endpoint) to original post ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
-* reply to tweet permalink posts a POSSE @-reply threaded to the tweet permalink
+* reply to tweet permalink posts a POSSE @-reply threaded to the tweet permalink. This enables POSSEing @-replies to Twitter and have them thread properly on Twitter, which helps interact with friends who use Twitter instead of their own site (most people).
 * reply to GitHub issue posts a POSSE reply on that GitHub issue ([http://tantek.com/2018/050/t1/authorize-bridgy-prompt since 2018-050])
-* current reply limitations: 
-** replies directly to tweets (Tweet permalink URLs) are well supported. This enables POSSEing @-replies to Twitter and have them thread properly on Twitter, which helps interact with friends who use Twitter instead of their own site (most people).
-** replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies.
-** multi-reply support provides a manual work-around for replying to an indieweb URL and also replying to the POSSE copy of that indieweb URL (and thus threading with it on Twitter). This provides the ability to post a reply to an indieweb post that is also a reply to its POSSE tweet, and thus POSSE @-reply to thread properly to the original POSSE tweet. 
-** replies to GitHub issues are deliberately not POSSEd to Twitter
+* current limitations: 
+** manual thread POSSE reply to POSSE copy of an original post. Replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies. multi-reply support provides a manual work-around for replying to an indieweb URL and also replying to the POSSE copy of that indieweb URL (and thus threading that POSSE copy e.g. on Twitter). This provides the ability to post a reply to an indieweb post that is also a reply to its POSSE tweet, and thus POSSE @-reply to thread properly to the original POSSE tweet. 
+** replies to GitHub issues & comments are deliberately not POSSEd to Twitter
 ** Pending: There's two itches below for supporting replies either to POSSE tweets or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
 
 === Like ===
