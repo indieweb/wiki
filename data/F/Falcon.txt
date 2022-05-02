@@ -62,15 +62,21 @@ Falcon supports the following specific kinds of [[posts]].
 
 === Reply ===
 '''[[reply]]''' notes are supported for replying to tweets, commenting (or reacting with [[reacji]]) on other posts, with:
-* minimal [[reply-context]] support (linked URL of original being replied to)
-* [[multi-reply]] reply-context presentation support, with stacked minimal reply-contexts
-* automatic sending of webmentions (or pingbacks if no webmention endpoint) to original post ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
-* reply to tweet permalink posts a POSSE @-reply threaded to the tweet permalink. This enables POSSEing @-replies to Twitter and have them thread properly on Twitter, which helps interact with friends who use Twitter instead of their own site (most people).
-* reply to GitHub issue posts a POSSE reply on that GitHub issue ([http://tantek.com/2018/050/t1/authorize-bridgy-prompt since 2018-050])
-* current limitations: 
-** manual thread POSSE reply to POSSE copy of an original post. Replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies. multi-reply support provides a manual work-around for replying to an indieweb URL and also replying to the POSSE copy of that indieweb URL (and thus threading that POSSE copy e.g. on Twitter). This provides the ability to post a reply to an indieweb post that is also a reply to its POSSE tweet, and thus POSSE @-reply to thread properly to the original POSSE tweet. 
+* [[reply-context]] minimal presentation (linked URL of original being replied to)
+** [[multi-reply]] reply-context presentation support, with stacked minimal reply-contexts
+* webmention sending (fallback to pingback sending) to original post ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
+* peer-to-peer IndieWeb reply posts, without POSSEing to Twitter when there’s no @-mentions (nor reply-to tweet or GitHub link), [https://tantek.com/2022/121/t3/indiewebcamp-wrap-send-webmention since 2022-121].
+* POSSE to Twitter all replies with any @-mentions (or other Twitter links)
+** POSSE tweet threading for a reply to a tweet permalink; requires reply has @-mention of author of tweet. This enables POSSEing @-replies to Twitter and have them thread properly under the original tweet, which helps interact with friends who use Twitter instead of their own site (most people).
+* POSSE to GitHub all replies in reply to a Github issue or comment ([http://tantek.com/2018/050/t1/authorize-bridgy-prompt since 2018-050])
 ** replies to GitHub issues & comments are deliberately not POSSEd to Twitter
+* current limitations: 
+** manual original POSSE tweet permalink entry to thread a POSSE tweet a reply to an original post. Replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies. multi-reply support provides a manual work-around for replying to an indieweb post permalink and also POSSE replying to the POSSE copy of that permalink (thus threading that POSSE copy e.g. on Twitter).
 ** Pending: There's two itches below for supporting replies either to POSSE tweets or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
+
+Use-cases for not POSSEing a reply to Twitter:
+* posting a reply to an IndieWeb post which lacks its own tweet POSSE copy, and/or I have no desire to broadcast that reply to Twitter
+* posting a [[reacji]] — which makes no sense to POSSE to Twitter on its own
 
 === Like ===
 '''[[like]]s''' are supported, and sequential likes are collapsed for presentational purposes on the main home stream.
@@ -224,31 +230,12 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
-=== avoid Twitter POSSE if reply lacks @ ===
-Similar to replies to GitHub issues/comments/PRs:
-
-in falconpost:
-* if a [[reply]] post lacks any @-names in the content
-* then publish it (with published date and send webmentions)
-* and DO NOT POSSE it to Twitter
-
-Maybe set a "POSSE Twitter" flag to true by default and
-* clear it if it's a GitHub post
-* clear it if it's a reply without an @-name
-* optional: clear it if specifically unchecked in the falconpost UI (see below Syndicate to Twitter checkbox)
-
-Use-cases:
-* posting a reply to an IndieWeb post which lacks its own tweet POSSE copy, and I have no desire to broadcast that reply to Twitter ()
-** perhaps this should be a default: i.e. if a reply has no specific in-reply-to tweet URL, then uncheck POSSE to Twitter by default
-* posting a [[reacji]] — which makes no sense to POSSE to Twitter on its own
-
-==== Syndicate to Twitter checkbox ====
-[x] Syndicate to Twitter" checkbox
+=== Syndicate to Twitter checkbox ===
+<samp>[x] Syndicate to Twitter</samp>
 
 What its default state should be (guessing my desired intent)?
-* new GitHub issue: off
-* replies lacking an @-name: off
-* otherwise: on
+* presented preset with existing automatic determination to POSSE or not (falconpost & index.php), tri-state (yes, no, auto), display quad-state manual-on, manual-off, auto-on, auto-off
+* set param to tri-state upon "Publish" submission (falconpost & index.php)
 
 Are there cases where it should be completely hidden (because it would be nonsensical or bad to syndicate a specific post to Twitter)?
 * replies to GitHub posts
