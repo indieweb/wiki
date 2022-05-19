@@ -10,7 +10,8 @@ You would publish a question post in order to both get answers to your question,
 == How ==
 The markup for publishing a question post is not yet defined, yet you can start with just a normal [[h-entry]], like that for a [[note]] post.
 
-=== {{JackyAlcine}}'s Approach ===
+=== {{JackyAlcine}}'s Approaches ===
+==== 2019.06.17 ====
 On June 17, 2019; {{JackyAlcine}} proposed [https://git.jacky.wtf/indieweb/koype/issues/177 markup] for open-ended and multiple choice questions.
 
 Multiple choice:
@@ -43,6 +44,52 @@ Answer Markup:
   I answered <a href="URL" class="u-url">the question</a>.
 </section>
 </pre>
+
+==== 2022.05.09 ====
+After a lot of discussions about how to reply to these things, I ({{jacky}}) think using anchor links as a "choice" for multiple choice or just direct replying for open-ended questions will be ideal. It allows for Webmention to be used as the form of delivery, is friendly to static sites and can be sorted on the server to provide a UX similar to other polling options. The following flows are what I think I'll take on for my site to handle polling:
+
+Multiple Choice:
+
+<pre>
+<section class="h-entry">
+<p class="p-note">How do you feel about my site's new theme?</p>
+<ol>
+  <li><a href="#not-good" class="u-choice">Not that great.</a></li>
+  <li><a href="#eh" class="u-choice">I'm undecided.</a></li>
+  <li><a href="#work" class="u-choice">I'll make it work.</a></li>
+</ol>
+</section>
+</pre>
+
+Open Ended:
+
+<pre>
+<section class="h-entry">
+<p class="p-note">How do you feel about my site's new theme?</p>
+<a href="" class="u-choice u-url"></a>
+</section>
+</pre>
+
+Answer Markup for a Poll:
+
+<pre>
+<section class="h-entry">
+  So, I think <a class="u-choice" href="http://question.example/poll#choice">Choice 1</a> is how I'll vote for <a href="http://question.example/poll" class="u-in-reply-to">the poll</a>.
+</section>
+</pre>
+
+Answer Markup for an Open Ended Question:
+
+<pre>
+<section class="h-entry">
+  Person asked <a href="http://question.example/poll#choice" class="u-in-reply-to">a question</a>.
+  <span class="p-choice">The idea of life is that life is an idea.</span>
+</section>
+</pre>
+
+Note: I was looking for some prior art in the ActivityPub spec for polling but couldn't find any.
+
+The biggest difference is that if the original post has only one choice whose URL value is <em>also</em> the URL of the post, it can be considered an open-ended reply.
 
 == Silo Examples ==
 * [[Quora]]
