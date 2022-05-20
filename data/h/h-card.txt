@@ -5,18 +5,13 @@ https://indieweb.org/h-card
 '''<dfn>[https://microformats.org/wiki/h-card h-card]</dfn>''' is the [[microformats2]] vocabulary for marking up people, organizations, and venues on web sites, and supersedes hCard. Colloquially many will use the term "h-card" as a synonym for an online equivalent of a business card since it often contains identity information including name, address, photo, and related contact information.
 
 == Why ==
-Marking up your [[homepage]] profile with a simple h-card including '''name''', '''url''' and '''photo''' properties covers most h-card usage on the IndieWeb:
+Marking up your [[homepage]] profile with a minimal h-card including '''name''', '''url''' and '''photo''' properties covers most h-card usage on the IndieWeb:
 
-* Allows [[Gravatar]]-like lookups based on [[Why_web_sign-in#Why_not_email|domain instead of email address]]
-* Allows feed [[readers]] to display your profile next to your posts
-* Allows [[reply]] posts to show an author profile in [[reply context]]s
-* Allows posts to show author profiles in [[comments]] received via [[webmention]]
-* Allows apps which you sign into with [[indieauth]] (or which otherwise know your URL) to auto-fill and auto-update your name and photo
-
-Adding more information and additional properties unlocks more possibilities:
-
-* Allows apps to find and display/use your preferred [[pronoun]]s
-* …
+* Feed [[readers]] display your profile photo next to your posts
+* [[reply]] posts to your posts show your author profile in their [[reply context]]s
+* Posts that you reply to show your author profile in their [[comments]] display
+* Apps you sign into with [[IndieAuth]] (or which otherwise know your URL) auto-fill and auto-update your name and photo
+* [[Gravatar]]-like lookups based on [[Why_web_sign-in#Why_not_email|domain instead of email address]]
 
 == How ==
 You can make a simple [[h-card]] that does the above with two elements and one classname, for example:
@@ -138,7 +133,7 @@ The [[microformats]] wiki also collects [https://microformats.org/wiki/h-card#Ex
 
 
 == Brainstorming ==
-
+=== partial vs complete ===
 One possible solution for the [[#Issues|partial plus complete h-card issue]] is to include a rel-me link to the full h-card and *not* mark up the partial profile information on the home page as an h-card. The [https://microformats.org/wiki/representative-hcard-parsing representative-hcard-parsing] algorithm would then follow the rel-me link and use its full data. It doesn't seem ideal, but it'd work.
 
 One problem with this is that the home page usually has many rel-me links, for example, to silos, and we don't yet have a way to denote the "canonical" one. {{gRegor}}, [[User:Mowens.com]], and others have proposed using u-uid and/or a new rel-canonical property for this.
@@ -146,8 +141,15 @@ One problem with this is that the home page usually has many rel-me links, for e
 * I wonder if there is anything we can do with <code>uid</code> to specify which h-card is the most complete / canonical identity h-card. — {{martijnvdven}}
 * {{jacky}} uses "rel=canonical" on his representative h-card to help with disambiguation.
 
-== See Also ==
+=== pronouns use-cases ===
+Adding more information and additional properties unlocks more possibilities:
 
+* Allows apps to find and display/use your preferred [[pronoun]]s
+** which apps? which specific use-cases does a consuming app need to show a pronouns?
+* …
+
+
+== See Also ==
 * [[microformats]]
 * [[h-entry]]
 
