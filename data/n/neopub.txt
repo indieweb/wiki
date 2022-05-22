@@ -17,19 +17,15 @@ neopub has a built-in [[micropub]] endpoint that supports the following post-typ
 * [[bookmarks]]
 * [[likes]]
 * [[reposts]]
+* [[photo]]
+
+Images are uploaded to a GitHub repository by default, but you can change what hosting solution you wanna use in uploader.php (in the utils directory).
 
 It sends webmentions for all of the above-mentioned post-types. It also supports filtering:
 
 * per year
 * per tag
 * per post-type
-
-=== Planned ===
-
-These features are planned, but not yet implemented:
-
-* media endpoint to support posting photos
-* editing or deleting posts
 
 == Design ==
 
@@ -39,17 +35,23 @@ The RSS feed is dynamically built using the current year's JSON file, as are the
 
 neopub sends webmentions using [https://github.com/indieweb/mention-client-php mention-client-php] after a post is published. It receives webmentions using [[webmention.io]] and displays them using a modified version of [https://github.com/PlaidWeb/webmention.js webmention.js] that can be found in the assets directory. It also has a form to allow users to send manual webmentions.
 
-== Source ==
+== Getting started ==
 
-neopub is open-source and available on [https://github.com/RobinBoers/neopub GitHub] and licensed as Apache License 2.0.
-
-If you want to self-host it, these are the requirements:
+You may self-host neopub for your own microblog. These are the requirements:
 
 * PHP 7.4.3
 * Apache (with support for .htaccess)
 
-The main config is in config.php, but you might want to change the theme as well (which can be done by editing the main.css file in the assets directory)
+
+To self-host neopub:
+
+* Get the [https://github.com/RobinBoers/neopub source code]
+
+* Edit the main config in config.php, but you might want to change the theme as well (which can be done by editing the main.css file in the assets directory)
+
+* Copy utils/token_example.php to utils/token.php and enter a GitHub API token. This step is only necessary if you want to upload images to your microblog.
+
 
 == License ==
 
-neopub is released under the Apache 2.0 License, but [https://github.com/michelf/php-markdown php-markdown] and [https://github.com/PlaidWeb/webmention.js webmention.js] are released under the MIT license, while [https://github.com/indieweb/mention-client-php mention-client-php] is released under both.
+neopub is open-source and available on [https://github.com/RobinBoers/neopub GitHub]. It is released under the Apache 2.0 License, but [https://github.com/michelf/php-markdown php-markdown] and [https://github.com/PlaidWeb/webmention.js webmention.js] are released under the MIT license, while [https://github.com/indieweb/mention-client-php mention-client-php] is released under both.
