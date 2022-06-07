@@ -166,6 +166,36 @@ data
 |<code>rel</code>
 |}
 
+== Database ==
+[[SQLite]] is used to handle quick indexing. Koype implements a virtual table that picks up JSON information for entries on disk on every row access to allow for querying for anything that I've liked from a specific URL like:
+
+<pre>
+SELECT
+    uid
+FROM epv, json_each(epv.properties, '$.like-of')
+WHERE
+    (
+        -- nested item
+        json_type(json_each.value) == 'object' AND
+        (
+          json_extract(json_each.value, '$.value') = :expected_link OR
+          json_extract(json_each.value, '$.value') LIKE :expected_link
+        )
+    ) OR (
+        -- nested image
+        json_type(json_each.value) == 'object' AND
+        (
+            json_extract(json_each.value, '$.src') = :expected_link or
+            json_extract(json_each.value, '$.alt') = :expected_link
+        )
+    ) OR (
+        -- a string
+        json_type(json_each.value) == 'text' AND
+        json_each.value = :expected_link
+    )
+ORDER BY uid DESC LIMIT 3
+</pre>
+
 = IndieWeb Examples =
 == {{jacky}} ==
 I use it for my own site at https://jacky.wtf. Planning to use it for my projects home page and to provide hosting via [[Koype Hub]].
