@@ -170,6 +170,9 @@ data
 [[SQLite]] is used to handle quick indexing. Koype implements a virtual table that picks up JSON information for entries on disk on every row access to allow for querying for anything that I've liked from a specific URL like:
 
 <pre>
+-- Load the module only available in-process.
+CREATE VIRTUAL TABLE epv USING MODULE entry_property_values();
+-- Select any entries that use the provided URL.
 SELECT
     uid
 FROM epv, json_each(epv.properties, '$.like-of')
