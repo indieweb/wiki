@@ -2,17 +2,19 @@ https://indieweb.org/Webmention
 
 <span style="margin-top: -2em; background:white; float:right;">[[File:webmention-logo.svg|160px]]<br/><img src="https://indieweb.org/images/5/56/w3c-logo.svg"/></span>
 
-'''<dfn>[https://www.w3.org/TR/webmention/ Webmention]</dfn>''' is a web standard for mentions and conversations across the web, a powerful building block that is used for a growing [[federated]] network of [[comment]]s, [[like]]s, [[repost]]s, and other rich interactions across the decentralized social web.
+'''<dfn>[https://www.w3.org/TR/webmention/ Webmention]</dfn>''' is a web standard for conversations and interactions across the web, a powerful building block used for a growing distributed network of peer-to-peer [[comment]]s, [[like]]s, [[repost]]s, and other [[responses]] across the web.
 
 <blockquote>”… an @ mention that works across websites; so that you don't feel immovable from Twitter or Fb.” <cite class="h-cite">— [https://twitter.com/rngala/status/852354426983591937 <span class="p-author">Rony Ngala</span>]</cite></blockquote>
 
-When you link to a website, you can send it a Webmention to notify it. If it supports Webmentions, then that website may display your post as a [[comment]], [[like]], or other [[response]], and presto, you’re having a conversation from one site to another!
-
 == Why ==
-'''Enables cross-site conversations''', by informing other sites when they are referenced. The receiver can look up the sender's post to consider displaying the response. Mentions can be as simple as adding a link, and content can be enhanced with [[microformats]].
+'''Enables cross-site conversations'''. When you link to a website, you can send it a Webmention to notify it. If it supports Webmentions, then that website may display your post as a [[comment]], [[like]], or other [[response]], and presto, you’re having a conversation from one site to another!
 
 == How to implement or display ==
-Webmentions involve a process (either manually or automatically) for '''sending''' out mentions to sites that have been referenced and an endpoint for '''receiving''' mentions from other sites so they can be displayed.
+When you publish a post with links to other sites, your site should send webmention notifications to sites that accept them.
+
+A webmention receiver provides discovery of their webmention endpoint. When a receiver’s endpoint receives a webmention notification, it looks up the sender’s post and may display it as a response. 
+
+Mentions require a link to the recipient, and can be enhanced into more meaningful [[responses]] (such as [[comments]], [[reposts]], or [[likes]]) by adding [[microformats]] to the sender’s post.
 
 Want to implement Webmention or learn more about its technical details? See:
 * '''[[Webmention-developer]]'''
@@ -84,7 +86,7 @@ Indie Web sites that have <span id="IndieWeb_implementations">implemented</span>
 ** Discovery with <code>rel="webmention"</code> in HTTP header and HTML document
 ** Sends webmentions on create and update, no salmentions yet
 
-==== Andy Sylvester with WordPress Webmention plugin ====
+==== Andy Sylvester with WordPress plugin ====
 * [[User:Andysylvester.com|Andy Sylvester]] using the [http://wordpress.org/plugins/webmention Webmention plugin] for WordPress on [http://andysylvester.com http://andysylvester.com] as of [http://andysylvester.com/2014/01/24/testing-the-wordpress-webmention-plugin/ 2014-01-24]. Details:
 ** All blog posts accept webmentions
 
@@ -110,7 +112,7 @@ Indie Web sites that have <span id="IndieWeb_implementations">implemented</span>
 ** Attempting to keep implementation notes as a modified spec at [http://github.com/dissolve/webmention webmetion0.2-b1]
 ** Sending is done automatically when post is made.
 
-==== Chris Aldrich with boffosocko.com ====
+==== Chris Aldrich with WordPress plugin ====
 * {{chrisaldrich}} using the [[Wordpress Webmention Plugin]] in conjunction with [[Semantic Linkbacks]] (thanks {{snarfed}}, {{pfefferle}}, and {{GWG}}) as of [http://boffosocko.com/2014/07/05/latin-pedagogy-and-the-digital-humanities/ 2014-07-05]
 ** Receives homepage webmentions, but redirects them to a [http://boffosocko.com/mentions/ /mention page]
 ** Has a manual form for inputting webmentions for those without outgoing webmentions enabled on their own site yet.
@@ -182,12 +184,12 @@ Indie Web sites that have <span id="IndieWeb_implementations">implemented</span>
 ==== fluffy with beesbuzz.biz ====
 * [[User:beesbuzz.biz|fluffy]] receives webmentions on [https://beesbuzz.biz busybee] (a site published with [https://github.com/PlaidWeb/Publ Publ]) using [[webmention.io]], and sends them using [https://github.com/PlaidWeb/Pushl Pushl]. Incoming webmentions are displayed via a [https://beesbuzz.biz/blog/3743-More-fun-with-Webmentions Javascript embed].
 
-==== Jamie Tanna with Hugo on www.jvt.me ====
+==== Jamie Tanna with Hugo ====
 * {{jamietanna}} has been receiving webmentions on [https://www.jvt.me www.jvt.me] since January 2019 and rendering them since [https://www.jvt.me/posts/2019/03/18/displaying-webmentions/ 2019-03-18]
 * A manual HTML form is available for manually entering webmentions, too
 * {{jamietanna}} has started to send Webmentions since [https://www.jvt.me/posts/2019/09/10/webmentions-on-deploy/ 2019-09-10]
 
-==== Wouter Groeneveld with Hugo on brainbaking.com ====
+==== Wouter Groeneveld with Hugo ====
 * Wrote his own Webmention sender and receiver called [https://github.com/wgroeneveld/go-jamming go-jamming] and is very easy to use if self-hosted. Go-jamming auto-parses the blog's RSS feed to decide which webmentions to check out.
 * Wrote about self-hosting a webmention sender/receiver on [https://brainbaking.com/post/2021/05/beyond-webmention-io/ https://brainbaking.com/post/2021/05/beyond-webmention-io/] and how to combat spam in [https://brainbaking.com/post/2022/04/fighting-webmention-and-pingback-spam/ https://brainbaking.com/post/2022/04/fighting-webmention-and-pingback-spam/]
 * Is still convinced that Pingbacks and Webmentions aren't that different and that you should still support the former!
@@ -199,27 +201,27 @@ Alberto Mardegan with Bussator, Nikola and Isso on www.mardy.it
 * Comments are handled by [https://posativ.org/isso/ Isso]
 * The receiver is a [https://gitlab.com/mardy/bussator Bussator] instance which transforms webmentions into comments, which are then forwarded into Isso
 
-==== Jan-Lukas Else with Hugo on jlelse.blog ====
+==== Jan-Lukas Else with Hugo ====
 * {{jlelse}} has been receiving webmentions on [https://jlelse.blog jlelse.blog] since [https://jlelse.blog/thoughts/2019/better-webmention/ July 2019] (using [[webmention.io]]) and a self-developed solution since [https://jlelse.blog/micro/2019/12/2019-12-12-znats/ December 2019]. Since then interactions get rendered too.
 * Webmentions can also be submitted via a manual HTML form.
 
-==== Danny Steenman with GatsbyJS on dannys.cloud ====
+==== Danny Steenman with GatsbyJS ====
 * [https://indieweb.org/User:Dannys.cloud Danny] has been receiving webmentions on [https://dannys.cloud dannys.cloud] since [https://dannys.cloud/level-up-cloudformation-with-vs-code March 2020] using [[webmention.io]], [[brid.gy]] and a self-developed solution in GatsbyJS. For now only [https://twitter.com/dannysteenman my twitter] mentions are displayed on the blog posts.
 
-==== Ferdinand Mütsch with Hexo on muetsch.io ====
+==== Ferdinand Mütsch with Hexo ====
 * [https://indieweb.org/User:Muetsch.io Ferdinand] has been receiving webmentions on [https://muetsch.io muetsch.io] since April 2020, using [[webmention.io]] and [https://github.com/muety/telegram-middleman-bot Telegram MiddlemanBot] to receive notifications as instant messages. 
 * Since then, Webmentions are also sent to all referenced articles in his blog posts when a new publication is made
 
-==== Rasul Kireev with Gridsome on rasulkireev.com ====
+==== Rasul Kireev with Gridsome ====
 * [[User:Rasulkireev.com|Rasul Kireev ]] using [https://gridsome.org Gridsome], [[webmention.io]] and [[brid.gy]] on [https://rasulkireev.com/ rasulkireev.com] as of 2020-08-17. Details:
 ** Whenever someone mentions a blog post anywhere on the internet, a webmention is posted in the comments section below the post.
 ** Thanks to [[brid.gy]], whenever someone likes, retweets, replies to the tweet with my link I get a webmention, which also ends up on [https://rasulkireev.com the site].
 
-==== Max Dietrich with Next.js on mxd.codes ====
+==== Max Dietrich with Next.js ====
 * [[User:mxd.codes|Max Dietrich ]] has been receiving webmentions on [https://mxd.codes mxd.codes] since February 2021, using [[webmention.io]] and [[brid.gy]].
 * Webmentions are filtered by typ, e.g. "repost-of", "like-of", etc. and shown at the bottom of articles and notes
 
-==== Mrs. D with Hugo on dianoetic.me ====
+==== Mrs. D with Hugo ====
 * [[User:dianoetic.me|Mrs. D]] dynamically displays webmentions and silo reactions on her static site using some JS derived from [[User:beesbuzz.biz|fluffy]]'s script! Webmentions are sent automatically after the site builds using a [https://gist.github.com/dianoetic/b45466a7c04fa47cf80905b182dbda3c GitHub Action and curl], thanks to [[webmention.app]] and [[brid.gy]].
 
 [[File:dwebmntn.png|400px]]
@@ -234,8 +236,7 @@ Alberto Mardegan with Bussator, Nikola and Isso on www.mardy.it
 ==== Robijntje on geheimesite.nl ====
 * {{robijntje}} has been receiving webmentions on [https://geheimesite.nl geheimesite.nl] since April 2022 using [[webmention.io]], and displaying them using [https://github.com/PlaidWeb/webmention.js webmention.js]. People can also manually send webmentions using a form below posts on [https://micro.geheimesite.nl his microblog] and via webmention.io on [https://blog.geheimesite.nl his main blog].
 
-==== ᜌᜓᜃᜒ (Yuki) with Hugo on im.youronly.one ====
-
+==== ᜌᜓᜃᜒ (Yuki) with Hugo ====
 * [[User:Im.youronly.one|I'M YourOnly.One 🔏]] receives and displays webmentions on his Hugo static blogs ([https://im.youronly.one/snoworld/ Snoworld]; [https://im.youronly.one/techmagus/ techmagus]; [https://im.youronly.one/yuki/ YOOki Chronicles]; [https://im.youronly.one/way/ One Way Faith]; [https://im.youronly.one/love/ Love & Relationships]) since 2022-05-02 06:51+0800.
 ** [[webmention.io]] as receiver
 ** [[brid.gy]] as backfeeder
@@ -250,7 +251,7 @@ Alberto Mardegan with Bussator, Nikola and Isso on www.mardy.it
 * [[brid.gy]] is used as backfeeder from Mastodon.
 * Using notes as a Jekyll collection to reply to other webmention-enabled websites.
 
-==== Owen Young with Zola and Github Actions on www.owenyoung.com ====
+==== Owen Young with Zola and Github Actions ====
 
 * [[User:www.owenyoung.com|Owen Young's Blog]] receives and displays webmentions on his Zola static blog ([https://www.owenyoung.com/en/ Owen's Blog];  since 2022-06-15, details:
 ** [[webmention.io]] as receiver
