@@ -27,6 +27,7 @@ There are not currently any Official Extensions
 
 == Stable Extensions ==
 
+=== Server Commands ===
 
 === Properties === 
 
@@ -58,6 +59,9 @@ There are not currently any Official Extensions
 |-
 |[[#Query_for_Category.2FTag_List|Category/Tag List]]
 |Adds q=category to return a list of existing categories to choose from when creating a new post.
+|-
+|[[#Limit_Parameter|Limit Parameter]]
+|Adds the parameter limit to any query to limit the number of returned results.
 |}
 
 === Slug ===
@@ -390,34 +394,6 @@ This is a proposed extension that allows a Micropub client to tell a server who 
 Micropub supports making a GET request to a Micropub endpoint with a <code>q=</code> parameter, in order to query aspects of the endpoint or for retrieving the original source content of posts. This section is for brainstorming additional uses of the query functionality. See also [[Micropub-brainstorming#Query_for_other_information]]
 
 If a query parameter acts as a filter on a query, such as 'limit', 'offset', etc...if feasible this should be proposed as vocabulary for all queries, as opposed to just a specific one.
-
-==== Limit Parameter ====
-; '''Issues and discussion:''' 
-: https://github.com/indieweb/micropub-extensions/issues/35
-
-This is an extension to extend any query that returns a list of items to be limited to a specific number of returns. The logic behind how to fulfill to be handled by the server, but may optionally be paired with offset.
-
-For example...
-
-The following example would be returned as part of the <code>?q=category&limit=1</code> query.
-<pre>
-{
-  "categories": [
-    "indieweb",
-  ]
-}
-</pre>
-
-===== Implementations =====
-
-* Clients
-** [[Quill]] - uses limit=1 to retrieve the last item from the media endpoint
-** [[Indigenous for Android]]
-** [[Shock]]
-* Servers
-** [[Micropub for WordPress]]
-** [[Indieweb for Drupal]]
-** [[Koype]]
 
 ==== Offset Parameter ====
 ; '''Issues and discussion:''' 
