@@ -23,6 +23,15 @@ https://indieweb.org/Shock
 * Template tag for generating [[The-Open-Graph-protocol|Open Graph Protocol-friendly]] and [[Twitter_Cards|Twitter]] metadata
 * Custom data fetching using Lua scripts to render on the site
 * Based on the <code>Host</code> header, switch the [[destination]] to serve
+* Shows [[Webmention]] and [[WebSub]] endpoint information on [[#Webmention_and_WebSub_Endpoint_Showing|pages that enable it]] [https://git.jacky.wtf/me/shock/issues/33 tracked at git.jacky.wtf]]
+
+=== Webmention and WebSub Endpoint Showing ===
+Since Shock is a [[Micropub]] client, it has no insight into the details of one's Micropub design. The heuristic used to determine if a Webmention endpoint will be shown is as follows:
+
+* if the resource does not have the property 'notifications', show the endpoint
+* if it ''does'' have the property…
+** if the value has the value 'webmention', show the WebSub endpoint to let people when it gets updated
+** if the value has the value 'websub', show the WebSub endpoint to allow incoming Webmentions
 
 === NodeInfo Reporting ===
 I'd like to emit [https://nodeinfo.diaspora.software/protocol.html NodeInfo] information on my site to help non-IndieWeb entities understand what I use in a machine-friendly way. I'll aim to support the 2.1 version first, then work backwards.
