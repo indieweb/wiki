@@ -4,66 +4,46 @@ https://indieweb.org/User%3AFireburn.ru
 |name = Vika
 |url = https://fireburn.ru/
 |photo_url = https://avatars1.githubusercontent.com/u/7953163
-|summary = A trans-person and a clueless amateur coder. Doesn't like her look and uses an anime-styled avatar instead.
-|elsewhere =
-{{twitter-link|username=kisik21}}
-|contact = [mailto:vika@fireburn.ru E-Mail] with [https://keybase.io/kisik21 PGP (from Keybase)]
+|summary = A girl who doesn't know if she's real or merely a vestige of a past long gone.
+|contact = [https://matrix.to/#/@vika:fireburn.ru Matrix]
 |chatname = vikanezrimaya
 }}
 
 Hello. I'm Vika. This is my wiki page. I don't really know what to write here.
 
-== Website ==
-My CMS is [https://gitlab.com/kittybox/kittybox Kittybox] - a blazing-fast IndieWeb suite that's a work in progress. Currently the basic features work, supplemented by some hosted services.
+== Kittybox ==
+[https://sr.ht/~vikanezrimaya/kittybox Kittybox] is a blazing-fast all-in-one website management platform. It's written in Rust and supports a lot of IndieWeb features (or at least will support once I manage to write those features).
 
+* Basic MF2 markup: works, template system is used to generate HTML
+* [[Micropub]]: Full support, including media endpoint uploads
+** Implementing extensions is planned, but not on the roadmap yet
 * [[IndieAuth]]: WIP
-** Would be independent from a website
-** Will support multiple websites (a-la indieauth.com)
-** Will have several authentication methods
-*** Password
-*** WebAuthn (YubiKey)
-*** Notification to a supported phone (maybe)
+** Currently using [[IndieAuth.com]] as a temporary measure while implementing an in-house solution
+** Will use WebAuthn as primary authentication method
+** Passwords will be explicitly unsupported
 * [[Webmentions]]: WIP
 ** Will update the Micropub source with webmentions, archiving them in process for display
 ** The frontend will be responsible for rendering everything
 ** Original links will be preserved so that I can use Salmention
-* [[Microsub]]: [[Aperture]] (for now)
-
+* [[Microsub]]: WIP
+** Haven't started working on it yet
 
 === Itches ===
-==== Working on ====
-* ?q=food in Micropub
-** shows a list of food in h-food format (done)
-** Perfect for creating a food diary
-** Filtering by date and post types (or creating a separate feed) allows to count caloric intake (if nutritional values are specified)
+Itches, confirmed plans and other things for Kittybox are tracked on the [https://todo.sr.ht/~vikanezrimaya/kittybox Kittybox issue tracker].
 
-==== Not working on yet ====
-* Aperture instance saves only last 7 days of posts (maybe implement my own Microsub server?)
-* No comment form for people without IndieWeb-enabled sites (use commentpara.de for providing pseudonymous/anonymous identities, but beware of spam)
-* No [[PuSH]] support (pyindieblog-micropub pinged switchboard in the old version, I need to reimplement that!)
-* Search - may be done differently:
-** Server-side search (may be faster, but harder to implement, may require database support or building a separate index)
-** Reuse lunr.js from static site and build index dynamically (requires JS and still some server-side work - publish an index of posts)
-** Indexing may be taken care of by a separate service, same as feed processing
-* Implement [[salmention]]
-** Client-side support is already there in Blogblaze, but there's no webmention endpoint to accept salmentions
-** Also does Kittybox send webmentions on updates? it should do that according to the spec
-* Make Webmentions static
-** Webmention endpoint should update Micropub content on each webmention
-** Possibility of conflicts while editing
-*** Can be solved with locks on MF2 objects in the database
-*** Or just by making all edits atomic
-
-==== Solved ====
-* Micropub is slow
-* Almost nobody reads me ([[syndication]] supported to various services via [[Webmention]] and potentially [[bridgy]])
-* Check-in support
-** Kittybox's Micropub component stores arbitrary MF2-JSON blobs
-** Renderer component takes posts and renders every property it knows about
-** currently it renders check-ins too
-** Form-encoded posts may be a problem; they need to be special-cased sometimes
-* the name "pyindieblog" is too technical and isn't cute enough - so it's Kittybox
-
-=== Plans and possibilities ===
+=== Concepts and ideas ===
 * Make a calendar from an h-feed of h-events (posted directly or reposted on a reply with RSVP)
-* Make a private gallery from a media endpoint
+* Media endpoint that doubles as a private gallery
+** Media endpoint should keep track of uploaded blobs
+** Blobs should be presented in the UI in reverse-chronological order
+** Danbooru-like tagging of media blobs for quick filtering and retrieval
+*** Geographic tagging (extracted from EXIF data or added manually)
+*** Categories (manually assigned - don't have resources for using ML nor am excited about ML in general)
+*** alt-text management (post creation could automatically suggest inserting pre-configured alt-text into <code>u-photo</code>)
+** Auto-upload photos from phone's Camera Roll via companion app
+* Food and recipe collection
+** Kittybox's backend doesn't really care what gets stuffed inside it, as long as it's proper MF2-JSON
+** The frontend needs to be updated to gain support for rendering recipes
+** <code>?q=food</code> support in Micropub to quickly reference food items when creating posts
+** A recipe book on the website
+** Interactive measurement adjustments (double all measures, convert metric to <s>inferior</s> Imperial units)
