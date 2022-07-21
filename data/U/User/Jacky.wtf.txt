@@ -294,8 +294,22 @@ WIP
 I enjoy [[live_streaming|live streaming]], but have been stalling on doing so because I'd like to incorporate my site more into the process of it. I'd like to do the following things:
 
 * When I'm live for about 3 minutes, I'd like to post to my site that I am with some notes about what the stream would be about. I'd like to reference this post as the “live announcement” post.
-* As I continue to stream, I'd want to have a tool that allows me to post notes about what I'm doing (like a live-streaming journal; links I've come across and deemed as relevant and capturing notes about commits I've made during the stream)
-* When the stream ends, I'd like to make an update saying how long it was for, how many updates I made and link to a recap post about the stream.
+* As I continue to stream, I'd want to have a tool that allows me to post notes about what I'm doing (like a live-streaming journal; links I've come across and deemed as relevant and capturing notes about commits I've made during the stream). I'll call these “stream update” posts.
+* When the stream ends, I'd like to make an update saying how long it was for, how many updates I made and link to a recap post about the stream. This would be the “stream recap” post.
+
+To keep my main feed uncluttered, I'm going to work on the following:
+
+* Set up a webhook with [[Owncast]] that talks to a private API that'll
+** (when going live)
+*** send a Micropub request to my site for at least two minutes after I've begun streaming to create the live announcement post - creating it as a event with no end time with unlisted visibility
+*** update my live page with a link to the going live post highlighting that I'm going live (this will toggle the preview of the livestream on that page) using Micropub
+** (when ending the stream)
+*** send a Micropub request to my site whenever I end streaming to set the end time
+*** mark the post as 'public' to allow other feeds to see it
+* (With a custom tool - GUI? TUI?)
+** provide an interface to add a type of update
+*** [[bookmark]]: with the provided URL, optional tag and optional "referred by"
+*** [[note]]: any kind of quick content can be captured, GUI would support markdown
 
 = Backlinks =
 h/t to {{chrisaldrich}}; these are pages I contribute
