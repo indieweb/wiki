@@ -4,7 +4,45 @@ https://indieweb.org/VR
 
     '''<dfn>VR</dfn>''' is Virtual Reality, usually this means blocking your sight for true reality and showing something different..
 
+Currently there are many silo providers, such as [[VRChat]], [[AltspaceVR]], [[ChilloutVR]], [[NeosVR]], and so on. There is great opportunity for an IndieWeb-based effort as well.
+
+== Brainstorming ==
+
+=== Client ===
+
+There could be a browser-like client, which can be implemented natively, or can be built using [three.js|https://threejs.org] and [WebXR|https://www.w3.org/TR/webxr/] or the like. The client would be able to visit an instance and provide identity information, and then relay whatever realtime interaction is supported by the instance.
+
+=== Avatars ===
+
+Add an <code>h-card</code> field, <code>u-vr-avatar</code>, which links to an avatar descriptor. [VRM|https://vrm.dev/en/gltf/index.html] would be a very good starting point.
+
+=== Rooms ===
+
+A room is simply a collection of geometry and scripts. It can likely be provided as a common interchange format such as [glTF|https://www.khronos.org/gltf/] or something else that's easily parsed by renderers. There would also be script attachments that attach to objects in the room and the room itself; these would likely be implemented in Javascript using DOM-type access methods. There would need to be descriptors for things like physics, users/avatars, and so on.
+
+The room itself could simply be statically hosted, or its descriptor could be "rendered" by an active script that provides world persistence, and so on.
+
+=== Instance/session ===
+
+An "instance" (to use the VRChat terminology) would be a session that sits on top of a room. When an instance is created, it pulls the data from the room as a starting point, and maintains the current DOM based on whatever interactions have taken place during the lifetime of the instance (so that when new users join the instance, they see the current state of things).
+
+The instance would be where IndieAuth is consumed for the sake of adding users/avatars into the session, and would provide access control as appropriate for user scripts to modify the DOM. This would also be what coordinates the [[WebRTC]] sessions for player-to-player interactions (voice and text chat, positional/interaction data, and so forth).
+
+One common protocol feature of an instance would be the ability for users to drop an instance portal (basically a temporary hyperlink to another instance); this would facilitate exploration between instances. It would be up to the individual users' browsers to manage their instance links, as essentially "bookmarks" or with a [[MicroPub]]-like protocol to speak to their personal instance server to instantiate a new instance.
+
+=== Access control ===
+
+There are a few access control issues which need to be considered.
+
+* Instance servers need to be able to block/allow identities; it would be up to the instance server to manage this mechanism
+* It should be possible to somehow restrict a room from having instances made by unauthorized people; this could be managed by an IndieAuth flow where an authorized IndieAuth token is required to retrieve the initial resources for downloading into the instance
+* Avatars can also be extremely personal (almost by definition) and there should be a means of restricting avatars to be only usable by authorized identity URLs; this would essentially require some sort of DRM scheme (or at least a widely agreed-to standard). While it wouldn't be vital to the creation of this platform it would definitely be a barrier for acceptance among a large segment of the VR-using population. However, as an analog, anyone can use whatever <code>u-photo</code> they like on their <code>h-card</code>.
+
 == See Also ==
 
 * [[Oculus Rift]]
 * [[HTC Vive]]
+* [[VRChat]]
+* [[NeosVR]]
+* [[ChilloutVR]]
+* [[AltspaceVR]]
