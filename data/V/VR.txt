@@ -24,23 +24,27 @@ Add an <code>h-card</code> field, <code>u-vr-avatar</code>, which links to an av
 
 Ideally, avatars will provide animation data that allows the clients to map the users' positional tracking data into IK-based animations to provide full-body animation with whatever degree of fidelity is available. This will also be by far the most difficult part of avatar rendering.
 
+Avatar-to-avatar interactions can also be facilitated by extending VRM with information about physics colliders and attached scripts which are triggered by them.
+
 === Rooms ===
 
 A room is simply a collection of geometry and scripts. It can likely be provided as a common interchange format such as [https://www.khronos.org/gltf/ glTF] or something else that's easily parsed by renderers. There would also be script attachments that attach to objects in the room and the room itself; these would likely be implemented in Javascript using DOM-type access methods. There would need to be descriptors for things like physics, users/avatars, and so on.
 
-The room itself could simply be statically hosted, or its descriptor could be "rendered" by an active script that provides world persistence, and so on.
-
 === Instance/session ===
 
-An "instance" (to use the VRChat terminology) would be a session that sits on top of a room. When an instance is created, it pulls the data from the room as a starting point, and maintains the current DOM based on whatever interactions have taken place during the lifetime of the instance (so that when new users join the instance, they see the current state of things).
+An "instance" (to use the VRChat terminology) would be a session that provides a room and an interactive session. When an instance is created, it would typically start out by copying some statically-hosted room data, and then would maintain the current DOM based on whatever interactions have taken place during the lifetime of the instance (so that when new users join the instance, they see the current state of things).
 
 The instance would be where IndieAuth is consumed for the sake of adding users/avatars into the session, and would provide access control as appropriate for user scripts to modify the DOM. This would also be what coordinates the [[WebRTC]] sessions for player-to-player interactions (voice and text chat, positional/interaction data, and so forth).
 
 One common protocol feature of an instance would be the ability for users to drop an instance portal (basically a temporary hyperlink to another instance); this would facilitate exploration between instances. It would be up to the individual users' browsers to manage their instance links, as essentially "bookmarks" or with a [[micropub]]-like protocol to speak to their personal instance server to instantiate a new instance.
 
-There should also be a micropub-like mechanism for instances to feed changes back into the base room data, for games to support large-scale persistence or in-engine room editing or the like. For these use cases it may make more sense for instances to be the rooms themselves.
+Public spaces could be provided as room data that is statically-hosted, which an instance server would be able to copy when creating an instance of that room. This would allow arbitrarily many private instances of public rooms to exist without requiring any central hosting of the instance servers themselves, and would also facilitate access control for public vs. private spaces.
 
-For that matter, there is no reason for a "room" to be anything other than a concept of a starting point for an instance, and it can be a purely implementation-specific detail.
+=== Objects ===
+
+The ability for an instance to carry objects around between instances would be quite intriguing, and would likely require the ability to do (access-controlled) object instantiation from some sort of template kept online, such as an object descriptor that includes a glTF bundle for the visual representation and an agreed-to standard for physics interactions.
+
+Part of the interaction model for objects should also be the ability for an avatar to attach an object to one of its animation bones (for example, attaching a coffee cup to one's hand).
 
 === Access control ===
 
