@@ -6,19 +6,25 @@ https://indieweb.org/VR
 
 Currently there are many silo providers, such as [[VRChat]], [[AltspaceVR]], [[ChilloutVR]], [[NeosVR]], and so on. There is great opportunity for an IndieWeb-based effort as well.
 
+== Open Source ==
+There is at least one open source VR chat effort:
+* [[Mozilla Hubs]]
+** instance: https://hubs.mozilla.com/ (requires [[JS]])
+** source: https://github.com/mozilla/hubs
+
 == Brainstorming ==
 
 === Client ===
 
-There could be a browser-like client, which can be implemented natively, or can be built using [three.js|https://threejs.org] and [WebXR|https://www.w3.org/TR/webxr/] or the like. The client would be able to visit an instance and provide identity information, and then relay whatever realtime interaction is supported by the instance.
+There could be a browser-like client, which can be implemented natively, or can be built using [https://threejs.org three.js] and [https://www.w3.org/TR/webxr/ WebXR] or the like. The client would be able to visit an instance and provide identity information, and then relay whatever realtime interaction is supported by the instance.
 
 === Avatars ===
 
-Add an <code>h-card</code> field, <code>u-vr-avatar</code>, which links to an avatar descriptor. [VRM|https://vrm.dev/en/gltf/index.html] would be a very good starting point.
+Add an <code>h-card</code> field, <code>u-vr-avatar</code>, which links to an avatar descriptor. [https://vrm.dev/en/gltf/index.html VRM] would be a very good starting point.
 
 === Rooms ===
 
-A room is simply a collection of geometry and scripts. It can likely be provided as a common interchange format such as [glTF|https://www.khronos.org/gltf/] or something else that's easily parsed by renderers. There would also be script attachments that attach to objects in the room and the room itself; these would likely be implemented in Javascript using DOM-type access methods. There would need to be descriptors for things like physics, users/avatars, and so on.
+A room is simply a collection of geometry and scripts. It can likely be provided as a common interchange format such as [https://www.khronos.org/gltf/ glTF] or something else that's easily parsed by renderers. There would also be script attachments that attach to objects in the room and the room itself; these would likely be implemented in Javascript using DOM-type access methods. There would need to be descriptors for things like physics, users/avatars, and so on.
 
 The room itself could simply be statically hosted, or its descriptor could be "rendered" by an active script that provides world persistence, and so on.
 
@@ -28,7 +34,11 @@ An "instance" (to use the VRChat terminology) would be a session that sits on to
 
 The instance would be where IndieAuth is consumed for the sake of adding users/avatars into the session, and would provide access control as appropriate for user scripts to modify the DOM. This would also be what coordinates the [[WebRTC]] sessions for player-to-player interactions (voice and text chat, positional/interaction data, and so forth).
 
-One common protocol feature of an instance would be the ability for users to drop an instance portal (basically a temporary hyperlink to another instance); this would facilitate exploration between instances. It would be up to the individual users' browsers to manage their instance links, as essentially "bookmarks" or with a [[MicroPub]]-like protocol to speak to their personal instance server to instantiate a new instance.
+One common protocol feature of an instance would be the ability for users to drop an instance portal (basically a temporary hyperlink to another instance); this would facilitate exploration between instances. It would be up to the individual users' browsers to manage their instance links, as essentially "bookmarks" or with a [[micropub]]-like protocol to speak to their personal instance server to instantiate a new instance.
+
+There should also be a micropub-like mechanism for instances to feed changes back into the base room data, for games to support large-scale persistence or in-engine room editing or the like. For these use cases it may make more sense for instances to be the rooms themselves.
+
+For that matter, there is no reason for a "room" to be anything other than a concept of a starting point for an instance, and it can be a purely implementation-specific detail.
 
 === Access control ===
 
