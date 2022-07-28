@@ -55,6 +55,16 @@ There are a few access control issues which need to be considered.
 * It should be possible to somehow restrict a room from having instances made by unauthorized people; this could be managed by an IndieAuth flow where an authorized IndieAuth token is required to retrieve the initial resources for downloading into the instance
 * Avatars can also be extremely personal (almost by definition) and there should be a means of restricting avatars to be only usable by authorized identity URLs; this would essentially require some sort of DRM scheme (or at least a widely agreed-to standard). While it wouldn't be vital to the creation of this platform it would definitely be a barrier for acceptance among a large segment of the VR-using population. However, as an analog, anyone can use whatever <code>u-photo</code> they like on their <code>h-card</code>.
 
+=== Minimal path forward ===
+
+A proof of concept could be initiated thusly:
+
+1. Create a self-contained web-based VR experience using WebXR and some common renderer library (e.g. three.js)
+2. Add WebRTC functionality to allow multiple users to share the same "room," and use it to stream their voices and positional data to the other participants
+3. Allow users to specify an avatar for how they are displayed to the others in the room; ideally this would be provided via IndieAuth and an avatar URL stored in the <code>h-card</code>
+
+From here it becomes much more feasible to start considering things like having an online editor for spaces and avatars (which could then be uploaded to spaces via micropub), and breaking these elements out into reusable libraries that can be used as reference implementations or to simplify the development of the self-contained experiences.
+
 == See Also ==
 
 * [[Oculus Rift]]
