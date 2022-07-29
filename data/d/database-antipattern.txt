@@ -75,9 +75,35 @@ In contrast, every language / OS has flat file APIs. Nearly all have DOM Documen
 
 [https://xkcd.com/1909/ https://imgs.xkcd.com/comics/digital_resource_lifespan.png]
 
-Databases are known to be fragile in exceptional situations, e.g. high traffic load, server hard restart. Real world example: [[MySQL]] and [[Rackspace]]:
+==== Corrupt Content ====
+https://coronavirustechhandbook.com/
+
+<blockquote>Unfortunately, '''due to a database issue back in June, some of the handbook content was corrupted.''' It can be restored through a manual process, and volunteers are working to bring the Handbook back online page-by-page. If the link to a page you would like to access is not live, and you have some time to help bring it back online, please fill out this form to request edit access. Your contribution of time--from one hour to a couple of days to an ongoing commitment to the project--would be much appreciated. Otherwise, please check back and we hope to have the rest of the handbook back online soon.</blockquote> '''Emphasis''' added.
+
+==== Breaks UTF-8 by default ====
+[[MySQL]] in particular has so many ways of breaking UTF-8 content that even developers who have used it for years (decades?) still struggle with UTF-8 corruption problems either in a database, or when importing/exporting to/from a database.
+
+Examples:
+* https://twitter.com/kartik_prabhu/status/417178161978167296
+
+* MySQL upgrades can silently corrupt content, e.g. when "porting" - e.g. UTF8/encoding problems. Just search for MySQL UTF8. Eric Meyer has written a few blog posts about it (e.g. 2009-11-19 [http://meyerweb.com/eric/thoughts/2009/11/19/correcting-corrupted-characters/ Correcting Corrupted Characters], and he was just doing WordPress to WordPress migrations, and worse yet - he got LOTS of *wrong* advice from those in the "MySQL community"). And the corruption is often invisible, especially if most of your content is just ASCII7. You don't notice it until long after the original where you ported from is gone and you can't do any attempt at reporting.
+** I find this example misleading/disingenuous. MySQL itself does not "corrupt content all the time when porting." The common scenario I have come across is the default character encoding of a mysql database is latin1 at the time it was set up, then UTF-8 data was inserted at a later time. When the data is queried later, and latin1 encoding is still specified (e.g. the default), then the UTF-8 data will be displayed in latin1 encoding. And obviously most UTF-8 characters do not map to latin1, so "garbage" characters are displayed. This is not a unique situation to MySQL, though, or really an example of it doing anything improperly. If you save UTF-8 characters in a latin1-encoded text file, you would experience the same garbage character problem. I believe the moral of the story with this example is to always use UTF-8 from the start. — [[User:Gregorlove.com|gRegor]] ([[User talk:Gregorlove.com|talk]]) 11:58, 21 April 2014 (PDT)
+*** gRegor - Eric Meyer is a very intelligent person and has still had numerous problems over the years with MySQL upgrades and migrations. I've made the language more specific than "all the time" and added citations if you want to learn more about the details. [[User:Tantek.com|Tantek]] 12:07, 21 April 2014 (PDT)
+* 2016-07-04 as part of [[rename to IndieWeb]], it was discovered that UTF8 in the IRC logs was [https://indiewebcamp.com/irc/2016-07-04#t1467666592608 being mistreated by MySQL]
+* Doesn't handle emojis by default. Emojis take 4 bytes in UTF-8 encoding and the default "utf8" data type handles up to 3 byte characters. You need to update your columns and tables to "utf8mb4", which creates a whole new set of interesting problems.
+
+Follow-up:
+Q: Isn't MySQL trivial to port via: mysqldump ... | scp | mysql ?
+* A: No, not trivial. Although this is often the most reliable way to migrate data between different MySQL versions, it is still easy to encounter UTF8 corruptions unless you are extremely careful about UTF8 settings on both ends. Don't forget the --skip-extended-insert flag otherwise if you have really large tables they will break when the target DB has a smaller max query size!
+
+==== Corrupt Tables ====
+<blockquote>I was getting 'mysql crashed' so I did 'repair' on the tables, and then the homepage and /travel were blank. I imported a backup from 25th but it wouldn't import, said there was a primary key collision. ... when I did the mysql repair it screwed up some keys in the database to point the object of the published triple to the id of another post, because ARC2 has this complicated database structure to turn relational into a graph that I haven't bothered to understand properly</blockquote>
+
+http://rhiaro.co.uk/2016/04/fixed-websitelast
 
 ==== MySQL hard reset ====
+Databases are known to be fragile in exceptional situations, e.g. high traffic load, server hard restart. Real world example: [[MySQL]] and [[Rackspace]]:
+
 <blockquote>... Bad news: MySQL barfed all over the table holding my posts. ... [https://twitter.com/christi3k/status/448270028484263936]</blockquote>
 <blockquote>And I'm pretty sure that happened when Rackspace hard reset my machine due to swapping.[https://twitter.com/christi3k/status/448270919341858816]</blockquote>
 
@@ -112,27 +138,6 @@ Sometimes the reason some code "failed to open the DB connection" is "Too many c
 For example here is a PHP CDbException found in the wild for "Too many connections"
 
 [https://twitter.com/brianloveswords/status/922614497143123969 <img src="https://pbs.twimg.com/media/DM3I-YnUMAAiEGF.jpg" alt="MTA kiosk database error" style="max-width:100%" />]
-
-==== Corrupt Tables ====
-<blockquote>I was getting 'mysql crashed' so I did 'repair' on the tables, and then the homepage and /travel were blank. I imported a backup from 25th but it wouldn't import, said there was a primary key collision. ... when I did the mysql repair it screwed up some keys in the database to point the object of the published triple to the id of another post, because ARC2 has this complicated database structure to turn relational into a graph that I haven't bothered to understand properly</blockquote>
-
-http://rhiaro.co.uk/2016/04/fixed-websitelast
-
-==== Breaks UTF-8 by default ====
-[[MySQL]] in particular has so many ways of breaking UTF-8 content that even developers who have used it for years (decades?) still struggle with UTF-8 corruption problems either in a database, or when importing/exporting to/from a database.
-
-Examples:
-* https://twitter.com/kartik_prabhu/status/417178161978167296
-
-* MySQL upgrades can silently corrupt content, e.g. when "porting" - e.g. UTF8/encoding problems. Just search for MySQL UTF8. Eric Meyer has written a few blog posts about it (e.g. 2009-11-19 [http://meyerweb.com/eric/thoughts/2009/11/19/correcting-corrupted-characters/ Correcting Corrupted Characters], and he was just doing WordPress to WordPress migrations, and worse yet - he got LOTS of *wrong* advice from those in the "MySQL community"). And the corruption is often invisible, especially if most of your content is just ASCII7. You don't notice it until long after the original where you ported from is gone and you can't do any attempt at reporting.
-** I find this example misleading/disingenuous. MySQL itself does not "corrupt content all the time when porting." The common scenario I have come across is the default character encoding of a mysql database is latin1 at the time it was set up, then UTF-8 data was inserted at a later time. When the data is queried later, and latin1 encoding is still specified (e.g. the default), then the UTF-8 data will be displayed in latin1 encoding. And obviously most UTF-8 characters do not map to latin1, so "garbage" characters are displayed. This is not a unique situation to MySQL, though, or really an example of it doing anything improperly. If you save UTF-8 characters in a latin1-encoded text file, you would experience the same garbage character problem. I believe the moral of the story with this example is to always use UTF-8 from the start. — [[User:Gregorlove.com|gRegor]] ([[User talk:Gregorlove.com|talk]]) 11:58, 21 April 2014 (PDT)
-*** gRegor - Eric Meyer is a very intelligent person and has still had numerous problems over the years with MySQL upgrades and migrations. I've made the language more specific than "all the time" and added citations if you want to learn more about the details. [[User:Tantek.com|Tantek]] 12:07, 21 April 2014 (PDT)
-* 2016-07-04 as part of [[rename to IndieWeb]], it was discovered that UTF8 in the IRC logs was [https://indiewebcamp.com/irc/2016-07-04#t1467666592608 being mistreated by MySQL]
-* Doesn't handle emojis by default. Emojis take 4 bytes in UTF-8 encoding and the default "utf8" data type handles up to 3 byte characters. You need to update your columns and tables to "utf8mb4", which creates a whole new set of interesting problems.
-
-Follow-up:
-Q: Isn't MySQL trivial to port via: mysqldump ... | scp | mysql ?
-* A: No, not trivial. Although this is often the most reliable way to migrate data between different MySQL versions, it is still easy to encounter UTF8 corruptions unless you are extremely careful about UTF8 settings on both ends. Don't forget the --skip-extended-insert flag otherwise if you have really large tables they will break when the target DB has a smaller max query size!
 
 === Caching ok ===
 {{main|database-cache}}
