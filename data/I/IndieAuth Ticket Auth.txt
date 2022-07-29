@@ -75,9 +75,7 @@ Alice generates a short-lived ticket which will last approximately a minute at m
 * Ticket = 32985723984723985792834
 * Deliver to ticket endpoint of the subject: https://bob.example.org/
 
-Alice makes a GET or HEAD request to discover the indieauth metadata endpoint of the subject, https://bob.example.org/. The metadata endpoint would contain a parameter, ticket_endpoint, to allow Alice to discover the ticket endpoint.
-
-* Note: In the original proposal, Alice would search for an HTTP Link element or a HTML <link> element with the appropriate rel value, <code>ticket_endpoint</code>, but this method should be discontinued when servers update to the version of the spec that discontinues individual link header endpoints.
+Alice discovers the ticket endpoint of the subject. See [[#Discovery]]
 
 
 
@@ -141,6 +139,14 @@ Advantages:
 * The thing that gets tokens only needs one new public endpoint, the endpoint that receives tickets
 ** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
 * Issuing tickets is completely voluntary, and does not have to be prompted by an action by the eventual receiver of the token
+
+== Discovery ==
+
+A ticket endpoint can be discovered by fetching the URL of the subject and looking for the indieauth-metadata rel values as described in the [https://indieauth.spec.indieweb.org/#discovery-0 IndieAuth Discovery]. 
+
+The client fetches the metadata document and finds the ticket_endpoint property in the JSON body.
+
+Some ticket endpoints may be advertised by a separate link header for those implemented prior to the addition of the indieauth-metadata endpoint, however, any IndieAuth implementation that supports a metadata endpoint SHOULD NOT advertise the ticket endpoint separately.
 
 == Token Issuing ==
 How a website decides to issue tokens does not need to be defined by this spec.
