@@ -4,21 +4,31 @@ https://indieweb.org/redirect
 
 A '''<dfn>redirect</dfn>''' is a way to send both users and search engines to a different [[URL]] from the one they originally requested. The three most commonly used redirects are [[301]], [[302]], and Meta Refresh. These are frequently used/needed when changing [[CMS]]es and potentially the structure of one's [[permalinks]] to get the old URLs to redirect to the new ones.
 
-== MediaWiki ==
+== Why ==
+You should use redirects to make sure that whatever URLs you publish keep working, even when you change your [[URL design]]. In addition to other people’s blog posts, those older URLs are often shared in [[social media]] or email where you have no opportunity to "fix" them. 
+
+== How to ==
+In general if the CMS you are using provides a mechanism for creating and storing redirect instructions, you should use it, as that is likely the most portable way to maintain them across different web servers (though with the same CMS).
+
+Web server configuration redirects are the next best method that is still highly reliable though may take rewriting if you switch from one web server to another.
+
+Lastly there is the '''HTML meta http-equiv refresh''' fallback which can work for [[SSG]] use-cases, however has the drawback of dropping (and thus not supporting) any fragments on the from URL.
+
+=== MediaWiki ===
 
 In MediaWiki, a '''<dfn>[http://www.mediawiki.org/wiki/Help:Redirects redirect]</dfn>''' is a way to automatically make one page load another page. You can edit a page and turn it into a redirect by using code like:
 
 <code><nowiki>#REDIRECT:[[destination-page-name]]</nowiki></code>
 
-== WordPress ==
+=== WordPress ===
 
 The WordPress [https://wordpress.org/plugins/redirection/ Redirection] plugin is a useful way to redirect URLs. It also allows monitoring [[404]] errors and quickly creating redirects for them.
 
-== Apache ==
+=== Apache ===
 
 Here's a useful gist for creating 301 redirects within an .[[htaccess]] file for sites using [[Apache]] : https://gist.github.com/ScottPhillips/1721489
 
-== Meta Refresh ==
+=== Meta Refresh ===
 
 A static HTML page can indicate with a <code><meta></code> element in the document's <code><head></code> that the browser should redirect to a new location:
 
