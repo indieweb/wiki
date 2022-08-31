@@ -118,13 +118,18 @@ Also, many silos support private and semi-private posts: [[Twitter]] protected a
 
 These (semi-)private replies could be backfed to a [[private_posts|private post]] that's only visible to the same audience. Private posts aren't very widespread yet, though, especially not POSSEd to the same private audience, so we haven't really seen that in practice yet.
 
-=== Spam ===
-If the syndicated copy of POSSE'd content receives spam interactions (e.g. Twitter likes from fake bot accounts), this spam is carried over to the original page. Being undesirable, this might require manual action by the site owner, as backfeed implementations commonly don't have spam detection built in (e.g. incoming Bridgy backfeed replies cannot be processed by common content-based spam filters as the spam is the reply itself, not its content).
+=== Moderation and spam ===
+If the syndicated copy of POSSE'd content receives spam interactions (e.g. Twitter likes from fake bot accounts), this spam is carried over to the original page. Being undesirable, this might require manual action by the site owner, as backfeed implementations commonly don't have spam detection built in (e.g. incoming [[Bridgy]] backfeed replies cannot be processed by common content-based spam filters as the spam is the reply itself, not its content).
 
 Possible approaches to dealing with this issue are:
+* manual moderation
 * not displaying backfeed from spam-prone sources at all
 * verifying incoming replies by computing whether the Twitter user is e.g. max. 1-2 degrees away on the social graph
 * queueing incoming backfeed replies in an approval queue
+
+[[Vouch]] is promising for native indieweb moderation, but doesn't work for silos. It expects each user has their own domain, which generally isn't true on silos. Also, quality and behavior of users, posts, comments, moderation, etc on silos varies significantly from IndieWeb sites, and even across different silos. If you want to programmatically filter backfeed webmentions, we recommend special casing backfeed senders like Bridgy based on source URL domain, or individual silos or even individual silo users based on <code>u-url</code> domain and path.
+
+Also see [[Vouch#Backfeed]]
 
 == Brainstorming ==
 
