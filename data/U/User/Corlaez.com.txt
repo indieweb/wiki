@@ -13,7 +13,26 @@ https://indieweb.org/User%3ACorlaez.com
 
 I learnt recently about this community and I am on board with what is going on in this space. After reading for a few days I am happy to announce that corlaez.com implements a representative h-card footer, joined the indieweb webring and added support for receiving webmentions (webmentions publication is still manual for now).
 
+== Website ==
+
 My website is written in a Kotlin static site generator I wrote myself. Posts are written in markdown (with the first lines of the markdown files reserved for metadata) and templates use an HTML DSL library. My site is fully internationalized to English and Spanish. I would like to push the limitations of static sites and incorporate indieweb tech into my blog.
+
+
+One of the features of my website is a plugin system that I can use to modularize features. Each plugin can add HTML scripts links or visual markup in designated places such as head nav or my footer. In addition to that each plugin can add code to the static generation adding their own files.
+
+    val webPlugins = listOf(
+        BlogPlugin(),
+        NotesPlugin(),
+        BoardPlugin(),
+        LegalPlugin(),
+        DevPlugin(DevCss.BORDER),
+        MermaidPlugin(false),
+        WebMentionPlugin(false),
+        IndieWebRingPlugin(),
+        IndieAuthPlugin(),
+    ).filter { it.enabled }
+
+My website also makes heavy use of experimental Kotlin features, especially context receivers that is seen  in all parts of the code including the plugin system
 
 == Itches/Working on ==
 * Working on Legal and Privacy policy terms. I wish there was a dead simple way to declare my site is read only, I won't collect or store an of your personal info. However, I need to understand how does my hosting provider relate to all that...
