@@ -243,6 +243,27 @@ The CSS Filter feature allows you to do all sorts of image manipulation effects 
 === Thoughts about Tumblr editor ===
 * Brainstorming: see both the questions (methodology, ways of thinking) and some of the strong desires in a post creation/editing UI here: 2021-12-09: https://bobaboard.tumblr.com/post/670144951687987200/ooh-i-like-cyle-now-i-want-to-hit-them-up-here-to
 
+=== Offline create edit queue posts ===
+Use-case: offline blog post writing site/app on an iPad
+
+Native app equivalent: the built-in iOS Notes app can be used to write, save, expand drafts until they have enough content/structure to start marking them up, adding relevant images etc
+
+Related:
+* [[Notion]]
+** Criticism: requires you to login (requires network access) every 90 days. [https://twitter.com/NotionHQ/status/1229948659455803394 problem acknowledged.]
+* [[local first]]
+* [[offline first]]
+
+Brainstorm design:
+* with a Service Worker, it should be possible to create a Notes-app like UI with a website where you could 100% edit/save offline and when you happened to reconnect to a network, "sync" with your own server
+* that alone would be so useful that it must already exist, like with as clean a UX as Notes app (CSS to imitate that really shouldn't be that difficult). and I mean "simple" text notes, not all the fancy objects and crap they've added the past few years
+** Previous thinking from {{snarfed}}: https://snarfed.org/posting-to-the-indieweb-from-your-phone
+** YouTube tutorial to build a JS/Localstorage "Notes" app: https://www.youtube.com/watch?v=01YKQmia2Jw
+*** Minimal HTML+CSS+JS for a JS/Localstorage "Notes" app: https://github.com/dcode-youtube/notes-app-javascript-localstorage/tree/main
+* having "Publish" be a distinct separate action which then "froze" the note and queued for publishing would be great. of course with the whole life cycle of letting you auto-unfreeze the note to keep editing it (obviously pulled off the publishing queue as well)
+* when you happen to connect to the network again, it could auto-micropub publish the queued notes
+* enhancement to set a publishing "time window" say if you only wanted the notes auto-published during your personal daylight hours. and enhance that with Buffer-like specific publication time queuing (AKA [[scheduled post]])
+
 == See Also ==
 * [[posting interface]]
 * [[UI]]
