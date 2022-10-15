@@ -1,0 +1,87 @@
+https://indieweb.org/events/2021-12-22-hwc-americas
+
+
+'''<dfn>Homebrew Website Club - The Americas</dfn>''' was an IndieWeb meetup on Zoom held on 2021-12-22.
+
+* https://events.indieweb.org/2021/12/homebrew-website-club-the-americas-947hzBq9MKbj
+* When: 2021-12-22
+* Archived from: https://etherpad.indieweb.org/hwc-2021-12-22
+
+
+    HWC Americas 2021-12-22
+
+== Participants ==
+* {{gwg}}
+* {{tracydurnell}}
+
+== Notes ==
+* [[giving-credit#Crediting_Applications]] - Giving Credit
+
+https://events.indieweb.org/2021/10/indieweb-friday-funday-halloween-edition-jlycDSXyQ8UL 
+https://pin13.net/mf2/?url=https%3A%2F%2Ftracydurnell.com%2F2021%2F10%2F25%2Findieweb-friday-funday%2F
+https://wpdev.gwg.us/2019/05/19/2866/
+
+Then and Now - 
+https://david.shanske.com/2016/01/01/israel-part-10/
+https://david.shanske.com/2015/07/21/israel-part-7-jerusalem-the-western-wall/ - Western Wall through the years
+
+
+== Fixing the TwentyTwenty Theme ==
+
+Add this to the bottom of inc/template-tags.php
+
+/*
+ * Adds custom classes to the array of body classes.
+ *
+ * @param array $classes Classes for the body element.
+ * @return array
+ */
+function mf2_body_classes( $classes ) {
+        
+        // Adds a class of hfeed to non-singular pages.
+        if ( ! is_singular() ) {
+                $classes[] = 'hfeed';
+                $classes[] = 'h-feed';
+        } else {
+                if ( 'page' !== get_post_type() ) {
+                        $classes[] = 'hentry';
+                        $classes[] = 'h-entry';
+                } 
+        }
+        return $classes;
+}
+add_filter( 'body_class', 'mf2_body_classes' );
+
+/**
+ * Adds custom classes to the array of post classes.
+ *
+ * @param array $classes Classes for the body element.
+ * @return array
+ */
+function mf2_post_classes( $classes ) {
+        $classes = array_diff( $classes, array( 'hentry' ) );
+        if ( ! is_singular() ) {
+                if ( 'page' !== get_post_type() ) {
+                        // Adds a class for microformats v2
+                        $classes[] = 'h-entry';
+                        // add hentry to the same tag as h-entry
+                        $classes[] = 'hentry';
+                }
+        }
+        return $classes;
+}
+
+add_filter( 'post_class', 'mf2_post_classes' );
+
+
+
+
+----
+
+Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
+
+
+
+{{Homebrew Website Club}}
+
+[[Category:Events]]
