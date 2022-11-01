@@ -32,7 +32,6 @@ In addition to the indiewebcamp [[principles]], these are some principles I have
 
 * '''Build software which feels safe, all other concerns''' (privacy, security, technically exciting) are secondary [http://waterpigs.co.uk/notes/1181/] — this is based on personal experience through [[selfdogfood]]ing taproot
 * '''Easy things should be easy, remove friction so hard things are only has hard as they need to be''' [http://waterpigs.co.uk/notes/1168/]
-* '''Use event listener patterns to build upon the same data in intelligent ways''' [http://waterpigs.co.uk/notes/1100/]
 * '''Build reusable, framework-agnostic components''' and release ''them'' to the public, not monolithic products.
 
 Taproot was named on <time class="dt-published">2014-03-24</time>.
@@ -54,68 +53,20 @@ Taproot supports the following:
 == Itches and Roadmap ==
 
 Currently working on:
-* Using Taproot every day to post content
-* Getting up to speed with all the new stuff from the several years I’ve been idle, implementing it in Taproot
-* Adding better [[micropub]] support via [https://github.com/Taproot/micropub-adapter taproot/micropub-adapter]
-* Moving webhost, upgrading to latest PHP
-
-Next up, in approximate order of priority:
 * Refactor app, replace silex with a modern mini web framework based on PSR-7, e.g. Slim
 * Replace DIY CSV indexes with sqlite indexing
 * Re-organise content storage and presentation to make it easier to create feeds with multiple content types in (e.g. homepage feed, tag page feeds)
 * Make it possible to post a wider variety of responses to content, hidden from the homepage feed by default
+* …
+
+Next up, in approximate order of priority:
+* …
+
+Future ideas and to-do list:
+* Automatically generate homepage banner from photos tagged #banner
+* …
 
 == WIP Design notes for future development ==
-=== Content Storage and Versioning ===
-Store multiple versions of post content and drafts e.g.
-
-<pre>
-/data/articles/article-slug/…
-current-content.html		<- The latest published content, lives at permalink
-current-draft.html		<- The latest unpublished draft
-2021-05-12T100000-content.html	<- An update made without publishing
-2021-05-10T123000-content.html	<- An updated draft which was published
-2021-05-10T120000-draft.html	<- An unpublished draft version
-2021-05-08T110000-content.html	<- The original article, published as-is
-</pre>
-
-==== Content Model ====
-Store both the user-entered text (typically HTML + enhancement e.g. markdown, auto-linking, auto-embedding etc.) and the rendered HTML for speed. Potentially allow the user to “freeze” the rendered HTML into the user-editable field — which means that enhancement must be idempotent! Alternatively, allow the user to freeze the rendered HTML and turn off enhancements. Sounds complicated but it should be easy enough with revisions and live preview.
-
-==== Versions and Drafts ====
-(To consider: do we index each revision in the main database? probably not)
-(To consider: do we have a “current” file, or just name everything by the datetime and choose the latest one? Do we include draft/published information in the filename, or only in the files themselves?)
-
-Each one contains something like an _update dict which lists the datetime updated, client ID of the app making the update, optional edit notes.
-
-Logged-in user navigating to /articles/article-slug/ sees the current published by default. As there’s an unpublished draft which is more recent than the published version, they get a banner indicating that there’s an outstanding draft. Entering the editing UI shows the most current draft by default, and a “previous versions” list. The user can navigate easily between versions, and a live preview updates as they do, showing how each one looks. 
-
-User can delete previous revisions. Drafts are always private, previous versions of the article are either private or public depending on user setting, optionally overridden on a case-by-case basis. Revision URLs look like /articles/article-slug/versions/YYYY-MM-DDTHHMMSS
-
-==== Moving Content ====
-When content moves, its revision history is moved to the new ID location, and the old ID looks like this:
-
-<pre>
-/data/articles/old-article-slug/…
-current-content.html or redirect.txt	<- Contains a redirect directive to /article-slug/
-</pre>
-
-Current /article-slug contains a list of all resolved URL paths (e.g. '/articles/article-slug/', '/articles/old-article-slug/'), all of which are queried against when searching for mentions of the current article, so as not to lose connections to old responses when moving content.
-
-(Another approach would be to make an internal GUID which moves with the content when its URL changes. Consider pros/cons of this approach.)
-
-=== Collections, Feeds and Storage ===
-Every piece of content belongs to a collection, which determines the structure of its permalink (e.g. /articles/ vs /notes/), where it’s stored on disk, how it’s retrieved and stored, and the default templates used to display, create and edit it.
-
-All timestamped content is indexed in the same main index, and can have the same queries run over it (see Indexing).
-
-Additionally, it’s possible to create feed views over a query, which will be available at a URL (e.g. homepage feed at /, tag feeds at /tags/indieweb) and which display multiple content types.
-
-To consider: Possibly also possible to create standalone pages?
-
-==== Indexing ====
-All timestamped content is indexed together in a table, SQLite by default. This index is always disposable and can easily (and relatively quickly) be regenerated from the data on disk. It should have as many columns with as much potentially useful and queryable information in as possible, to make interesting queries possible.
-
 === Personal Data Management ===
 Have a console command and/or web UI for easy GDPR compliance. Allows the site owner to easily search their site for personal information, showing where it’s located and giving shortcuts to edit it out/delete it.
 
@@ -125,8 +76,6 @@ As well as general update, delete and read scopes, offer corresponding scopes wh
 Maybe also have a create_draft scope, which treats a “create” action as creating a new draft, which the user then has to review in Taproot’s UI to publish.
 
 Update actions create new revisions, so everything is reversible.
-
-Update actions which would change the ID/URL of the post move it as detailed above.
 
 Delete actions create a new revision with a deleted flag set. Undelete actions probably just delete the latest revision file, causing the previous non-deleted one to become active again. Undeletes should never cause the URL to change (too complicated and annoying).
 
