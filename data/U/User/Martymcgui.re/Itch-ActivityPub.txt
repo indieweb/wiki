@@ -1,0 +1,137 @@
+https://indieweb.org/User%3AMartymcgui.re/Itch-ActivityPub
+
+I stopped looking at Twitter some time ago. I miss being able to follow some folks there, but it is also toxic hellsite and getting worse and etc.
+
+Mastodon / ActivityPub are kind of like Twitter-but-federated. Lots of folks are once again jumping ship. More importantly, I know some people in real life who post there and I follow them via their Atom feed and I would actually like to reply.
+
+There are lots of ways I could do this but none that I can find today quite line up with how my site works! Research below. But first, let's dare to dreeeaaaammm.
+
+== What I think I want ==
+
+My existing setup does a lot for me! Here's what I think is missing.
+
+=== Let fediverse folks follow me ===
+
+I need a (mastodon-compatible) activitypub profile. This can be a mix of static hacking but also kind of needs an inbox implementation so folks can send follow requests and I can agree.
+
+When I make a new post, send that to followers.
+
+* i have websub so this theoretical service could get notified right away when my posts update
+* my posts microformats2 feed has a lot of good stuff. translating mf2 -> activitystreams could be a lot of work _or_ i could knock off great work like granary. (or both could be true)
+
+My inbox also needs to accept unfollows and account deletions and whatever. And handle instances that disappear, and etc.
+
+=== Let me reply to fediverse posts ===
+
+My main posts feed includes replies as mf2 in-reply-to. If there is some way to "detect" that a given in-reply-to (or, heck, just a mention in a comment) is to a mastodon instance or some other fediverse instance (there must be, right?), then we can trigger sending here.
+
+=== Let fediverse folks respond to me! ===
+
+Inbox should take incoming activitypub stuff and bridge it to webmention. A shame to implement this for myself because this is what brid.gy does! I mean... maybe I can crib from it...
+
+(Also: deletes if people delete a response!)
+
+=== Let me follow fediverse folks ===
+
+This is where I think the fun kicks in?? I need to be able to do the fediverse/activitypub/mastodon follow/approval dance so that their instances will send me new posts.
+
+Then! I need to be able to map those subscriptions onto one (or more??) microsub channels in Aperture. That will push them to my reader.
+
+If ''all of the above'' is working (and I haven't missed anything), then:
+
+* i can follow someone on fediverse, even if their profile is private
+* i can see their posts in my indie reader right away in the channel(s) of my choosing
+* i can like / reshare / reply right in my indie reader and (as soon as my site rebuilds and sends websub ping) they'll get notified right away.
+
+Anyway. That's a dream. Let's document what I've been looking at.
+
+== Research into existing stuff ==
+
+=== micro.blog ===
+
+I have schmarty.micro.blog as a free account that uses my posts JSON Feed (https://martymcgui.re/posts/feed.json ... and i don't seem to advertise this via a <code>rel</code>).
+
+I set up schmarty@micro.blog, hooray!
+
+But JSON Feed doesn't have any support for in-reply-to, and it doesn't seem like micro.blog supports that for any incoming format. So, unless I am posting directly to micro.blog I can't actually use this to create replies. Instead: replies are weird posts aimed at no one, haha.
+
+I guess this is live so I hope no one follows it ...
+
+=== fed.brid.gy ===
+
+This is the most plausible, but there are several things that give me pause (pausible).
+
+Works and is great:
+
+* i already use granary to make an Atom feed from mf2 that should work well
+* i have a feed of all my posts and replies that should work
+* i can pretty easily [http://tantek.com/2022/301/t1/twittermigration-bridgyfed-mastodon-indieweb set up the necessary redirects]
+* fed.brid.gy supports several post types, i believe!
+* it also converts back AP replies etc to webmentions back to my site
+* it sends when you trigger a webmention to fed.brid.gy. might site already sends webmentions on all new and updated posts, so I could do this in a few ways:
+** just always do it. put an empty link in the post template.
+** do it a bit more thoughtfully by setting up a real syndication target.
+*** i'd need to remember to actually _do_ this on micropub clients that support them
+*** and update things like my Shortcuts (<code>mp-syndicate-to</code> works for form-encoded micropub thankfully)
+
+Pauses:
+
+* hardcoded username '''@martymcgui.re@martymcgui.re'''
+* fed.brid.gy owns the signing keys, so if i wanted to switch to my own software i think... i cannot?
+** ah, [https://github.com/snarfed/bridgy-fed/issues/62 snarfed will send them to you if you ask], haha!
+* doesn't let me follow people. for folks with public profiles i can sub to their Atom feed. can't follow people who don't have public feeds.
+
+=== microblog.pub ===
+
+Honestly this is a really cool piece of software. A single-user AP instance that is also super IndieWeb-compatible. Sends and receives webmentions. You can use it as an IndieAuth provider. It does it all*! (* well there are some things unimplemented, like it has Micropub support (!) but only for making new Notes, no replies or media or etc).
+
+But I don't need it to do it all! I just want it to do the ActivityPub parts.
+
+Anyway, it's rad and probably I could learn a lot studying it.
+
+* https://microblog.pub/
+* source: https://sr.ht/~tsileo/microblog.pub/
+* (an older activitypub integration from the same author tsileo https://github.com/tsileo/little-boxes)
+
+=== run my own mastodon ===
+
+Seems to be a wave of folks doing this for example paying for masto.host ($6/mo) to have a single-user instance.
+
+Bonus you can do some forwarding and config similar to fed.brid.gy and have '''@yourname@yourcustom.domain'''.
+
+Some links
+
+* Simon Willison did some great writeups.
+** https://simonwillison.net/2022/Nov/5/mastodon/
+*** https://til.simonwillison.net/mastodon/custom-domain-mastodon
+*** https://github.com/simonw/simonwillisonblog/issues/290
+** refs from that piece:
+*** https://aeracode.org/2022/11/01/fediverse-custom-domains/
+*** https://jacobian.org/til/my-mastodon-instance/
+*** https://masto.host/mastodon-usernames-different-from-the-domain-used-for-installation/
+
+pros: this is a whole-ass mastodon and all the mastodon works.
+
+* i can follow people! (as long as I am willing to log into my mastodon instance)
+* i can reply just on the fediverse w/o needing to post it to my own site!
+
+cons:
+
+* this is a whole-ass mastodon and requires the admintax works. (i'm sure masto.host takes care of a lot of this)
+* getting content ''in'' is a whole thing. it has APIs and folks have tools that post from feeds or whatever. maybe even regular brid.gy can do it?
+* getting content ''out''. like backfeeding comments to my posts which is a major part of the point. another job for brid.gy!
+* can't really follow in my own reader.
+
+I'm not sure I want to run a ''whole'' Mastodon at all, though. I have screwed it up twice before on a just-for-me instance that was a whole other identity.
+
+=== Roll my own integrations ===
+
+* [https://blog.joinmastodon.org/2018/06/how-to-implement-a-basic-activitypub-server/ Gargron post on getting started w/ basic profile info and sending a reply]. Definitely then throws you off into "read the spec" land. This is also 4 years old.
+
+* [https://github.com/aaronpk/Nautilus aaronpk's Nautilus] starts kind of where I want: reads your website and handles the AP-related stuff. It's currently missing a lot of functionality, though, and I don't know what the roadmap really looks like. Some ideas I agree with in there like handling following and being able to push received posts into Microsub channels.
+
+== Other Links ==
+
+Close the tabs to exorcise the brain worm.
+
+* [https://docs.google.com/document/d/1D9gfeKg_-hlsU66R-dLEvUeyMsqEfyIx2pnfUeX0t_E/edit Nikodemus' Guide to Mastodon]
