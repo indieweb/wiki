@@ -13,7 +13,7 @@ From a client app’s point of view (and as required by the indieauth spec), an 
 * A '''GET''' request (sent from the user’s browser via a redirect) with a query string containing authorization code request parameters. The response to this request is shown to the user, and is out of scope of the spec, but if successful it should result in the user being redirected to the <code>redirect_uri</code> parameter with <code>code</code> and <code>state</code> query string parameters.
 * A '''POST''' request to exchange an authorization code for profile information. Should return a JSON response body with either an error or a <code>me</code> response, optionally with profile information.
 
-In practise, the authorization endpoint typically has to handle authenticating the user, presenting a [[consent screen]], and handling the consent screen form submission, before redirecting to the client app’s <code>redirect_uri</code>. A common way to handle this is as follows:
+In practice, the authorization endpoint typically has to handle authenticating the user, presenting a [[consent screen]], and handling the consent screen form submission, before redirecting to the client app’s <code>redirect_uri</code>. A common way to handle this is as follows:
 
 * '''authorization request''': a GET request which the user was redirected to from their client app,  with code request parameters in the query string.
 ** If the request is not authenticated (i.e. the user is currently logged out): perform authentication (usually by redirecting to a login page) and restart the flow.
@@ -25,141 +25,13 @@ In practise, the authorization endpoint typically has to handle authenticating t
 ** If the provided code, verifier and client ID are valid, return a JSON response containing <code><nowiki>{"me": "https://me.example.com"}</nowiki></code> and optionally profile information.
 ** If the request was invalid, return a JSON OAuth2 error response
 
-== Creating an Authorization Endpoint ==
-
-<div style="margin:1em;padding:1em;background:#FFDC00"><p>⚠️ This section on the wiki might be outdated.</p><p>For the most up-to-date information on [[IndieAuth]] authorization endpoints, see the [https://indieauth.spec.indieweb.org/ IndieAuth Living Standard]. One [[post]] of particular interest: [https://aaronparecki.com/2020/12/03/1/indieauth-2020 IndieAuth Spec Updates 2020].</p></div>
-
-An authorization endpoint must be able to both generate authorization codes as well as verify the authorization codes it issues.
-
-=== Web Sign-In Form ===
-The site contains a web sign-in form prompting the user to enter their personal web address to sign in.
-Upon submitting the form, the site begins the auth process by discovering the user's auth endpoint, e.g.:
-
-[[File:indieauth-web-sign-in.png]]
-
-See http://microformats.org/wiki/web-sign-in for more UI details / possibilities.
-
-=== Discovery ===
-The web application checks the user's website for a link with a rel-value of "<tt>authorization_endpoint</tt>":
-
-<pre>&lt;link rel="authorization_endpoint" href="https://indieauth.example.org/"&gt;</pre>
-
-Use this URL as endpoint for processing.
-
-=== Authorization Endpoint ===
-To start the sign-in flow, the user's browser will be redirected to their authorization endpoint, with additional parameters in the query string.
-
-Directing the user's browser to the auth endpoint is usually done via a HTTP <code>Location</code> header, but can optionally be an <code>&lt;a&gt;</code> tag with an href set to the authorization URL.
-
-==== Request ====
-
-Note: Values are shown with extra linebreaks and without URL encoding for readability.
-<pre>
-https://auth.example.org/auth
-    ?me=https://aaronparecki.com/
-    &client_id=https://webapp.example.org/
-    &redirect_uri=https://webapp.example.org/auth/callback
-    &state=1234567890
-    &response_type=id
-</pre>
-
-Parameters:
-;<tt>me</tt>
-: Full URI of the user's homepage (not required, as it's not needed for one-user sites [https://aaronparecki.com/2020/12/03/1/indieauth-2020#the-me-parameter])
-;<tt>client_id</tt>
-: Full URI of the application's/website's home page. Used to identify the application. An authorization endpoint may show the application's icon and title to the user during the auth process.
-;<tt>redirect_uri</tt>
-: Full URI to redirect back to when the login process is finished
-: Needs to be registered with a <link> tag on the <tt>client_id</tt> [https://indieweb.org/authorization-endpoint#Redirect_URI_verification]
-;<tt>state</tt>
-: A random value the app makes up, unique per request. The authorization server just passes it back to the app.
-: Optional. Auth endpoints MUST support them, though.
-;<tt>response_type</tt>
-: <s><tt>id</tt> (identification only) or <tt>code</tt> (identification + authorization)
-: Optional. Defaults to <tt>id</tt>.</s> Always <tt>code</tt>, but servers should treat <tt>id</tt> as <tt>code</tt> for backwards compatibility.
-;<tt>scope</tt>
-: For authorization, the scope contains a space-separated list of scopes that the web application requests permission for, e.g. "create". Multiple values are supported, e.g. <tt>create delete</tt>
-
-==== Redirect URI verification ====
-;why is <tt>redirect_uri</tt> separate from <tt>state</tt>?
-: the callback URL shouldn't be dynamic per request so that callback URLs can be registered. "state" is allowed to vary per request
-;why should callback urls be registered?
-: without registration it's easier to perform a redirect attack. more background here: http://tools.ietf.org/html/rfc6749#section-3.1.2.2
-; how does the client website register the callback at the server?
-: the client publishes its registered redirect URLs on its web page with a <link> tag
-: since client IDs are always URLs, it's all discoverable that way
-: for client_id https://example.com/ a server can find its valid redirect URIs by looking for
-:: <tt><link rel="redirect_uri" href="https://example.com/callback"></tt>
-: at example.com
-: described in more detail at https://indieauth.spec.indieweb.org/#redirect-url
-
-==== Verify the user ====
-The authorization server should present an interface describing the request being made. It must indicate:
-
-: The <tt>client_id</tt> making the request
-:: Optionally the server can include the name and logo if an [[h-card]] is found on the <tt>client_id</tt> URL.
-: The <tt>scope</tt> if authorization is requested.
-
-See [[consent_screen|Consent Screen]] for more UI examples.
+The consent screen is specific to the authorization server, and can vary widely in design and capabilities from server to server. See [[consent_screen|Consent Screen]] for more UI examples.
 
 [[File:p3k-auth-prompt.png|500px]]
 
-''TODO: Example. See [[h-app]].''
+== Creating an Authorization Endpoint ==
 
-=== Redirect to web application ===
-The authorization server presents the request information to the user, and if they approve, generates an authorization code and redirects the user to the redirect URI specified.
-
-<pre>
-HTTP/1.1 302 Found
-Location: https://webapp.example.org/auth/callback
-    ?code=xxxxxxxx
-    &state=1234567890
-</pre>
-
-Parameters:
-;<tt>code</tt>
-: Authorization code
-;<tt>state</tt>
-: State variable sent by the web application
-
-=== Auth code verification ===
-For the sign-in flow, the web application will query the authorization endpoint to verify the auth code it received. The client makes a POST request to the authorization server with the following values:
-
-<pre>
-POST https://auth.example.org/auth
-Content-type: application/x-www-form-urlencoded
-
-code=xxxxxxxx
-&redirect_uri=https://webapp.example.org/auth/callback
-&client_id=https://webapp.example.org/
-</pre>
-
-After the authorization server verifies that <tt>redirect_uri</tt>, <tt>client_id</tt> match the code given, the response will include the "<tt>me</tt>" value indicating the URL of the user who signed in. The response content-type must be <code>application/json</code>.
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "me": "https://aaronparecki.com/"
-  "profile": {
-    "name": "Aaron Parecki",
-    "url": "https://aaronparecki.com/",
-    "photo": "https://aaronparecki.com/images/profile.jpg",
-    "email": "aaron@parecki.com"
-  }
-}
-</pre>
-
-Parameters:
-;<tt>me</tt>
-: Full URI of the user's homepage
-: This may be different from the <tt>me</tt> parameter that the user originally entered, but MUST be on the same domain.
-;<tt>profile</tt>
-: profile information, included if scope "profile" or "email" was requested. [https://indieauth.spec.indieweb.org/#x5-3-4-profile-information]
-
-==== Use by Token Endpoints ====
-When used in the flow for [[obtaining an access token]] that can create posts using [[Micropub]], the [[token endpoint]] will be making the request to verify the authorization code, rather than the client. In this case, the client will make the request described above to the token endpoint instead. If the token endpoint and authorization endpoint are part of the same software, then of course the token endpoint can verify the authorization code using a proprietary method, such as looking up the code from the same database that the authorization endpoint stored it in.
+For the most up-to-date information on [[IndieAuth]] authorization endpoints, see the [https://indieauth.spec.indieweb.org/ IndieAuth Living Standard]. For updates on recent changes to the spec, see: [https://aaronparecki.com/2020/12/03/1/indieauth-2020 IndieAuth Spec Updates 2020].
 
 == IndieWeb examples ==
 The following people have an authorization endpoint on their own domain:
