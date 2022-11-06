@@ -14,74 +14,7 @@ Requests will be made to the token endpoint after the client finishes communicat
 
 A token endpoint must be able to both grant an access token as well as verify an access token.
 
-=== Granting an Access Token ===
-
-==== Access Token Request ====
-
-Requests to the token endpoint will use the method POST and contain the following parameters:
-
-* <code>code</code> - The authorization code previously obtained.
-* <code>me</code> - The user's domain name (e.g. http://example.com)
-* <code>redirect_uri</code> - the redirect URI used in the request to obtain the authorization code.
-* <code>client_id</code> - The client ID used in the authorization request.
-
-The token endpoint needs to verify these values and then issue an access token in response. If the token endpoint and authorization endpoint are part of the same system, they can use any proprietary method to communicate.
-
-if the token endpoint and authorization endpoint are different systems, the following method can be used to verify the values. However you will first need 
-to [[authorization-endpoint#Discovery|determine which authorization server this user delegates to]]. 
-
-Once you know the authorization endpoint, you can make a <code>x-www-form-encoded</code> POST request with the parameters
-of this request:
-
-* <code>code</code>
-* <code>me</code>
-* <code>redirect_uri</code>
-* <code>client_id</code>
-
-If the request is valid (the client_id, redirect_uri and code all correspond to the 
-authorization made by the user), the authorization endpoint will return a successful reply in form-encoded or JSON format depending on the HTTP Accept header:
-
-<pre>me=https%3A%2F%2Faaronparecki.com&amp;scope=post</pre>
-
-<pre>{"me": "https://aaronparecki.com", "scope": "post"}</pre>
-
-This is how the token endpoint knows which scopes the user authorized
-
-See [[#Generating an Access Token]] for implementation notes.
-
-==== Access Token Response ====
-
-However you generate an access token, you now have a string ready to reply to the client.
-
-The token response must include three parameters:
-
-* <code>access_token</code> - The actual access token string.
-* <code>me</code> - The URL of the user.
-* <code>scope</code> - The list of scopes that the token represents.
-
-These should be returned as a www-form-encoded or JSON string in the response body, depending on the HTTP Accept header.
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-
-access_token=XXXXXX&amp;scope=post&amp;me=https%3A%2F%2Faaronparecki.com%2F
-</pre>
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "access_token": "XXXXXX",
-  "scope": "post",
-  "me": https://aaronparecki.com/
-}
-</pre>
-
-The reason for returning the "me" value is that the app does not yet know which user
-the authorization is for, and will use this value to discover the Micropub endpoint
-to make a request with the access token.
+For the most up-to-date information on [[IndieAuth]] token endpoints, see the [https://indieauth.spec.indieweb.org/ IndieAuth Living Standard]. 
 
 === Verifying an Access Token ===
 
