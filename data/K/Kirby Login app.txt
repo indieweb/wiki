@@ -1,0 +1,128 @@
+https://indieweb.org/Kirby_Login_app
+
+= What is Kirby =
+
+Kirby is a mockup of a mobile app that can be used to sign GPG challenges. It is meant as a reference implementation of this type of app.
+
+The end result is that you can sign in to any site that supports IndieAuth verification via GPG, without a pre-existing relationship with the site you're signing in to. 
+
+The end user experience after setup is as follows:
+* Enter your domain in an IndieAuth login prompt
+* A challenge code is presented on screen
+* Scan the code with your mobile app
+* You are signed in to the site
+
+Ideally the user should not even have to know they are using GPG under the hood, it should Just Work™
+
+= Setup =
+
+== Download the Kirby App ==
+
+[[File:kirby-1-download-app.png|240px]]
+
+== Generate a public/private key pair ==
+
+Upon first launch of the app, it will prompt you to generate a public/private key pair within the app.
+
+[[File:kirby-2-generate-key.png|240px]]
+[[File:kirby-3-key-saved.png|240px]]
+
+The app should store this securely on the device, such as in the Keychain in iOS. (Bonus points that in iOS 8, it will be possible to unlock keychain items with your thumbprint![http://www.techrepublic.com/article/touch-id-for-apps-could-be-wwdcs-biggest-little-update/])
+
+== Export your public key ==
+
+[[File:kirby-4-export-key.png|240px]]
+[[File:kirby-5-email-export.png|240px]]
+
+From within the app, you can export your public key by emailing it to yourself or copying it to the clipboard. 
+
+== Link to your public key from your website ==
+
+On your website, add a <code>rel="pgpkey"</code> tag pointing to the public key.
+
+<pre>
+&lt;link rel="pgpkey" href="/key.asc"&gt;
+</pre>
+
+[[File:kirby-6-link-to-key.png|500px]]
+
+= Signing In =
+
+== Login prompt ==
+
+When signing in to a site that supports GPG auth, you'll enter your domain name like you would as normal. The site will find your GPG public key you linked to. 
+
+[[File:kirby-7-indieauth-login.png|500px]]
+
+Clicking the Kirby GPG button will present a Kirby Code challenge.
+
+[[File:kirby-8-kirby-code-prompt.png|500px]]
+
+== Scan the Kirby Code ==
+
+Launching the Kirby app on your mobile device will open it directly to a camera interface. Point it at the code on your computer screen and it will scan the code.
+
+[[File:kirby-9-scan-kirby-code.png|240px]]
+
+The code is actually a JSON encoding of a challenge and a URL to submit the signature to.
+
+<pre>
+{
+  "u":"https://indieauth.com/verify",
+  "c":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1Ni
+       J9.eyJtZSI6Imh0dHA6Ly9hYXJvbnBhcmV
+       kuY29tIiwidXNlcl9pZCI6MSwicHJvZmls
+       pZCI6MzAzNCwicmVkaXJlY3RfdXJpIjoia"
+}
+</pre>
+
+The mobile app will sign the challenge with the private key, and submits the signed text to the URL indicated.
+
+<pre>
+POST /verify HTTP/1.1
+Host: indieauth.com
+Content-type: x-www-form-encoded
+
+signature=-----BEGIN+PGP+MESSAGE-----%0AVersion%3A
++GnuPG+v1%0A%0AowGbwMvMwMRo7vqUYcv%2Fmo2Mpw9EJTEEL
+%2F0ekVrpZZAa4Zjpn%2BnlHWYYmOnj7JWR%0A5J4M4nuGVnka
+%2BmV6WeoB60Qi21Y9pAr4r%2BX7sc3AtMeBaSkRXgWeWfzLKs
+FJKcs0mjHvIA%0A%3DXq5z%0A-----END+PGP+MESSAGE-----
+</pre>
+
+== Signature is Verified ==
+
+After the server verifies the signature matches what it was expecting, it generates an [[authorization-endpoint#Generating_Authorization_Codes|authorization code]] and completes the signin.
+
+[[File:kirby-10-code-verified.png|500px]]
+
+<!--
+= Alternate Setup =
+
+Assuming you're ok with establishing a relationship with an [[authorization-endpoint|authorization server]], the setup flow could be streamlined to not require linking to your public key from your website.
+
+== Delegate to an authorization server ==
+
+First you'll need to choose an authorization server and point to it from your website. For example, to delegate to indieauth.com, add a <code>link</code> tag like the following:
+
+<pre>
+&lt;link rel="authorization_endpoint" href="https://indieauth.com/auth"&gt;
+</pre>
+
+This tells clients trying to sign you in that they should direct your browser to indieauth.com to complete the sign-in process. See [[distributed-indieauth#Level_2:_Choose_your_own_authorization_server|Choose your own authorization server]] for more details.
+
+== Sign in to your authorization server ==
+
+Sign in to your authorization server using some existing mechanism. In the case of indieauth.com, you might sign in by using Github or SMS auth.
+
+== Scan the code to upload your public key ==
+
+Click the "Connect Kirby App" button and the authorization server generates a barcode that you can scan from the app. The barcode encodes a secret one-time URL that the app can use to upload the public key.
+
+From this point on, your authorization server holds on to the public key, and can use it to verify a challenge it generates when you want to sign in to a website.
+-->
+
+= See Also =
+* [[IndieAuth]]
+* [[:Category:IndieAuth]]
+* [[indieauth.com]]
