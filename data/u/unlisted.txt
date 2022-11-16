@@ -20,34 +20,47 @@ A few additional layers of security you can consider:
 * Put all unlisted posts under a common URL path prefix that's blocked from search engines in [[robots_txt|robots.txt]].
 
 == IndieWeb Examples ==
+===  Tantek Çelik ===
+{{t}}'s original blog was unlisted (no posts shown on home page, no feed) for a couple years (2002-2003) with explicit blocking of search engines in the site's robots.txt. This helped make it feel "easier" to write more quickly, and about more topics than if everything was being indexed for searching. His thinking was that you would read these posts only in the larger context of that month's stream and thus have better understanding than just finding them directly via a search engine.
+* Subsequently (2004+), he occasionally wrote an unlisted post which had a public permalink summary in the archive of posts for that month, while still linking to the full post on a separate page.
+* -- some of the below may be worth moving to [[homepage#Tantek]] and summarizing here --
+* Mid 2006 he started showing his most recent post and other posts made in that same month on his home page tantek.com
+* In March of 2009 he stopped showing posts on his home page and replaced it with a temporary splash screen with just the text "As simple as possible." which redirected after 4 seconds to a hexagon design site map.
+* By July of 2009 he had incorporated the hexagon site map into his home page, no redirection, and soon after added a recommended events feed marked up in [[hCalendar]] with a button to subscribe to it.
+* 2010 he relaunched his blog, in January without a stream, in February with a home page stream of posts, which has continued to the present day (2019) without any unlisted posts since
 
-* {{t}}'s original blog was unlisted (no posts shown on home page, no feed) for a couple years (2002-2003) with explicit blocking of search engines in the site's robots.txt. This helped make it feel "easier" to write more quickly, and about more topics than if everything was being indexed for searching. His thinking was that you would read these posts only in the larger context of that month's stream and thus have better understanding than just finding them directly via a search engine.
-** Subsequently (2004+), he occasionally wrote an unlisted post which had a public permalink summary in the archive of posts for that month, while still linking to the full post on a separate page.
-** -- some of the below may be worth moving to [[homepage#Tantek]] and summarizing here --
-** Mid 2006 he started showing his most recent post and other posts made in that same month on his home page tantek.com
-** In March of 2009 he stopped showing posts on his home page and replaced it with a temporary splash screen with just the text "As simple as possible." which redirected after 4 seconds to a hexagon design site map.
-** By July of 2009 he had incorporated the hexagon site map into his home page, no redirection, and soon after added a recommended events feed marked up in [[hCalendar]] with a button to subscribe to it.
-** 2010 he relaunched his blog, in January without a stream, in February with a home page stream of posts, which has continued to the present day (2019) without any unlisted posts since
-* {{aaronpk}} has some unlisted posts that do not appear in any normal feeds
-** Unlisted posts do not appear on the home page or feeds, but do appear on the page for the date the post was created, and also appear when searching
-** The URLs are still date-based and sequential, so are easily found by iterating, so this not considered a privacy measure
-* {{martijnvdven}} has several unlisted posts that can only ever be accessed by people that received their URL
-** All [[permalinks]] on his website are [[Capability URLs]] so no patterns can be exploited to gain access to unlisted posts
-* {{eddiehinkle}} has some unlisted posts.
-**Unlisted posts do not appear in the following areas:
-*** homepage, feeds, local search, or archives.
-**** They should logically not appear in search engines either, but he has not added any technical aspects to make that happen.
-** Unlisted posts on his site are not linked to anywhere else and require the user to know the URL in order to access it.
-* {{snarfed}} uses unlisted posts for some photo albums. He prefers unlisted to [[private posts]] for accessibility: none of the people he shares pictures with have [[IndieAuth]] logins, nor would they set them up just to see pictures. He also has a couple experimental unlisted posts for the IndieWeb community to poke at:
-** [https://snarfed.org/2019-07-11_something-quiet something quiet]: hidden from [https://snarfed.org/ home page], [https://snarfed.org/archive archives], [https://snarfed.org/feed RSS feed], [https://snarfed.org/category/unlisted "unlisted" category], and [https://snarfed.org/?s=something+quiet search]. Blocked in search engines via meta noindex. Permalink is guessable though.
-** [https://snarfed.org/unlisted-something-quieter-eelea9aingai5eih something quieter]: same, but with an unguessable permalink and a prefix that's [https://snarfed.org/robots.txt robots.txt-blocked in search engines].
-** [https://snarfed.org/2019-07-12_something-quietest something quietest]: password protected. the password is ''indieweb''. doesn’t require full login/auth, but only people with the password can see it. crawlers and bots can’t fetch it at all.
-* {{beesbuzz.biz}} uses [[Publ CMS|Publ]]'s 'HIDDEN' entry types for soft privacy on some posts, notably things that need to be linked to easily but shouldn't end up in an index based on a site crawl.
-** [http://beesbuzz.biz/blog/7821-Sorry-that-content-is-gone this post] is a placeholder that missing legacy blog entries get redirected to
-** Has used unlisted posts for personal/private blog posts as well, shared via side channels to trusted people via e.g. Mastodon or Facebook
-** A word of caution, though: sharing a URL on many platforms still causes the URL to be retrieved by automated mechanisms such as page unfurlers and "helpful" caching systems. For anything that requires absolute privacy, this is not a very good approach, especially if one is a target of harassment/doxing as these unfurl mechanisms can end up leaking the information to all manners of places, or even submitting pages to archive.org for "safe keeping." There is also accidental leakage from people accidentally pasting the URL into a search box instead of an address field, for example, which can end up submitting these pages to search engine indexers. Because of this, Publ's HIDDEN post type sets the [https://developers.google.com/search/reference/robots_meta_tag X-Robots-Tag] header as another level of safety net.
-*** Concrete example: I wrote an invitation to my birthday party and posted it as an unlisted post, and shared it to select people on Mastodon and Facebook. Before long, my access_log showed the URL being accessed by all sorts of third parties, many of which appeared to be automated link unfurlers but many others which seemed to be "curious" instance admins or people who stumbled across the post somehow (possibly due to how privacy is implemented on Mastodon).
-** Also worth noting that if any information about hidden entries is placed in robots.txt, that can alert certain bad actors about the presence of said entries, even if the entry itself isn't listed; if a website's CMS has a mechanism for automatically finding a private post via post ID, keep in mind that bored teenagers who love drama/"lulz" have no compunctions about brute-forcing post IDs trying to find something they see as scandalous.
+=== Aaron Parecki ===
+{{aaronpk}} has some unlisted posts that do not appear in any normal feeds
+* Unlisted posts do not appear on the home page or feeds, but do appear on the page for the date the post was created, and also appear when searching
+* The URLs are still date-based and sequential, so are easily found by iterating, so this not considered a privacy measure
+
+=== Martijn van der Ven ===
+{{martijnvdven}} has several unlisted posts that can only ever be accessed by people that received their URL
+* All [[permalinks]] on his website are [[Capability URLs]] so no patterns can be exploited to gain access to unlisted posts
+
+=== Eddie Hinkle ===
+{{eddiehinkle}} has some unlisted posts.
+*Unlisted posts do not appear in the following areas:
+** homepage, feeds, local search, or archives.
+*** They should logically not appear in search engines either, but he has not added any technical aspects to make that happen.
+* Unlisted posts on his site are not linked to anywhere else and require the user to know the URL in order to access it.
+
+=== Ryan Barrett ===
+{{snarfed}} uses unlisted posts for some photo albums. He prefers unlisted to [[private posts]] for accessibility: none of the people he shares pictures with have [[IndieAuth]] logins, nor would they set them up just to see pictures. He also has a couple experimental unlisted posts for the IndieWeb community to poke at:
+* [https://snarfed.org/2019-07-11_something-quiet something quiet]: hidden from [https://snarfed.org/ home page], [https://snarfed.org/archive archives], [https://snarfed.org/feed RSS feed], [https://snarfed.org/category/unlisted "unlisted" category], and [https://snarfed.org/?s=something+quiet search]. Blocked in search engines via meta noindex. Permalink is guessable though.
+* [https://snarfed.org/unlisted-something-quieter-eelea9aingai5eih something quieter]: same, but with an unguessable permalink and a prefix that's [https://snarfed.org/robots.txt robots.txt-blocked in search engines].
+* [https://snarfed.org/2019-07-12_something-quietest something quietest]: password protected. the password is ''indieweb''. doesn’t require full login/auth, but only people with the password can see it. crawlers and bots can’t fetch it at all.
+
+=== Fluffy ===
+{{beesbuzz.biz}} uses [[Publ CMS|Publ]]'s 'HIDDEN' entry types for soft privacy on some posts, notably things that need to be linked to easily but shouldn't end up in an index based on a site crawl.
+* [http://beesbuzz.biz/blog/7821-Sorry-that-content-is-gone this post] is a placeholder that missing legacy blog entries get redirected to
+* Has used unlisted posts for personal/private blog posts as well, shared via side channels to trusted people via e.g. Mastodon or Facebook
+* A word of caution, though: sharing a URL on many platforms still causes the URL to be retrieved by automated mechanisms such as page unfurlers and "helpful" caching systems. For anything that requires absolute privacy, this is not a very good approach, especially if one is a target of harassment/doxing as these unfurl mechanisms can end up leaking the information to all manners of places, or even submitting pages to archive.org for "safe keeping." There is also accidental leakage from people accidentally pasting the URL into a search box instead of an address field, for example, which can end up submitting these pages to search engine indexers. Because of this, Publ's HIDDEN post type sets the [https://developers.google.com/search/reference/robots_meta_tag X-Robots-Tag] header as another level of safety net.
+** Concrete example: I wrote an invitation to my birthday party and posted it as an unlisted post, and shared it to select people on Mastodon and Facebook. Before long, my access_log showed the URL being accessed by all sorts of third parties, many of which appeared to be automated link unfurlers but many others which seemed to be "curious" instance admins or people who stumbled across the post somehow (possibly due to how privacy is implemented on Mastodon).
+* Also worth noting that if any information about hidden entries is placed in robots.txt, that can alert certain bad actors about the presence of said entries, even if the entry itself isn't listed; if a website's CMS has a mechanism for automatically finding a private post via post ID, keep in mind that bored teenagers who love drama/"lulz" have no compunctions about brute-forcing post IDs trying to find something they see as scandalous.
+
+=== Add yourself! ===
+{{addyourself}}
 
 == Silo Examples ==
 === Facebook ===
@@ -108,4 +121,3 @@ robots.txt is not respected by all the things, but making a URL password protect
 == See Also ==
 * [[NIPSA]]
 * [[publics]]
-* to-do: create subheads for individuals listed in [[unlisted#IndieWeb_Examples]]
