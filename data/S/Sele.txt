@@ -2,6 +2,42 @@ https://indieweb.org/Sele
 
 '''<dfn><a href="https://git.jacky.wtf/indieweb/sele">Sele</a></dfn>''' is a [[IndieAuth]] provider (client and server) by {{jacky}}. It's meant to be friendly to [[selfhosting]]. Progress is publicly tracked on the [https://git.jacky.wtf/indieweb/sele/milestone/57 alpha] and the [https://git.jacky.wtf/indieweb/sele/milestone/27 final] releases, as well as the [https://git.jacky.wtf/indieweb/sele/milestone/58 backlog].
 
+== TicketAuth ==
+Sele aims to provide a working implementation of [[TicketAuth]]. In order to do this, it aims to answer a few questions intentionally left open by the specification:
+
+* <strong>How does one send a ticket?</strong> Sele will do this in a few different ways:
+** It'll subscribe to your identity's URL (site) and listen for any new [[follow]] posts.
+** It'll poll your [[contacts]] from Micropub and send tickets
+* <strong>How does one request a ticket?</strong> Sele provides a few moments:
+** Sele provides endpoints to generate a ticket for a fixed identity.
+** Sele can automatically approve ticket redemption from identities in one's [[contacts]]
+
+=== Protecting Feeds ===
+For this example with Alice (she/her) and Janet (they/them), we assume that Alice is using a [[reader]] that understands [[TicketAuth]] and Sele as her [[IndieAuth]] provider. We can also assume that Alice's reader is built to conform to ethical engagement. Janet is also using Sele in this example.
+
+* Alice visits Janet's feed at https://janet.example/all.
+* Alice's informed by Janet's website that this page requires authentication.
+* Alice's reader notices TicketAuth support by this site
+** This could have been detected before by checking the author's own [[representative h-card]] and looking for TicketAuth support there
+** This would be done by looking for a IAM endpoint on the page itself
+* Alice's reader then [[IndieAuth_Ticket_Auth#Proposed_mechanism_for_requesting_a_ticket|attempts to request a token]] and informs Alice of the lack of access and that it's waiting for a response.
+* Janet's IndieAuth provider can inform Alice of this in a number of ways.
+** Sele sends a periodic e-mail of a list of those requesting access.
+** Sele's mobile app equivalent can poll for new ticket requests and show them.
+** Sele supports sending notifications using https://ntfy.sh/, [[Pushover]], [[XMPP]] or private [[IRC]] messages.
+** Sele shows a list of requests sorted by the resource (<code>realm</code>) or the requester on the dashboard.
+* When Janet's provider approves this request,
+** Alice's reader will continue the flow to obtain an access token for this resource.
+** Alice's reader will fetch the resource using this token.
+** Because Alice's reader is also built with ethical engagement, it restricts the adjustment of the replies to this feed's post by keeping the same [[audience]] of the post, carries the same [[content warning|content warnings]] and [[visibility]], if shown on the top level. It will defer to what each individual post uses (and give the user an option between them).
+** Alice's reader will use that token to fetch the posts in the feed over time as well as it's implied that it's required to read those posts.
+* When Janet's provider rejects the request,
+** Any sort of messaging that can shown to the user is presented when this feed is attempted to be presented in the reader
+** Sele will only retry this with user consent and will respect any headers around retrying.
+
+=== Protecting Posts ===
+The flow for protecting posts is similar to [[#Protecting_Feeds|protecting feeds]].
+
 == Planned Features ==
 * Authentication using multiple providers
 ** [[WebAuthn]]
@@ -23,6 +59,7 @@ https://indieweb.org/Sele
 * Per-site app usage reporting
 ** Reviewing apps used
 ** Shareable as a <code>h-feed</code> to help promote apps
+** [[Sele#TicketAuth|TicketAuth]]
 
 === DID Provider ===
 * Provide DID URNs that one can apply to a URL as a <code>alsoKnownAs</code> value.
