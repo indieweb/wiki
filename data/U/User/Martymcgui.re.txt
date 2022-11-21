@@ -86,7 +86,7 @@ Likes (and other reactions), reposts, replies, and mentions from the IndieWeb as
 While I try to treat [[silos]] as purely places where I publish syndication, there are still some things I will post only to silos.
 
 * Twitter
-** Some likes, retweets, and even quick replies that I don't consider "long-term relevant" enough to keep on my site.
+** <s>Some likes, retweets, and even quick replies that I don't consider "long-term relevant" enough to keep on my site.</s> As of 2022 I only share stream announcements on Twitter. As of 2022-11, not even those.
 * Facebook
 ** I typically do not post FB reactions such as likes, loves, "haha", etc. to my site. In general I am trying to stop using Facebook reactions (because [https://motherboard.vice.com/en_us/article/how-our-likes-helped-trump-win dang] and [http://brucesterling.tumblr.com/post/159412046858/targeting-options-for-facebook-advertisers gosh]).
 ** Responses to prompts from FB like encouragement to send birthday posts. I am also using these less and less.
@@ -153,15 +153,22 @@ While I try to treat [[silos]] as purely places where I publish syndication, the
 
 == Itches ==
 
+=== more coherent design ===
+
+* better accessibility for photos and videos
+* typography! colors! process-driven thought into what goes on what pages! better accessibility!
+* move /posts to front page? maybe latest 30, link back to monthly archive?
+* move responses (likes, reposts,  [[reacji]]) to a "posts and replies" page?
+
 === Clean Up Webmentions ===
 
 ==== Outgoing ====
 
 * reduce noise
-** my webmention sender gets triggered by any changes to a published permalink'd post, including when the post template changes. this results in resending every webmention 😱.
+** my webmention sender gets triggered by any changes to a published permalink'd post, including when the post template changes. this could result in resending every webmention 😱.
 *** could keep track of sent mentions and not resend when "content is unchanged". requires some template-independent diff engine. maybe hashed mf2+json.
 ** could disable the webmention sender under certain conditions:
-*** if some threshold of changed posts?
+*** ✅ if some threshold of changed posts? (stops WM sending if there are more than 50 posts to send mentions for)
 *** if the list of recently changed source files doesn't include any content files?
 *** if the list of changed source files includes any template files?
 ** (is this still a problem?) don't send WMs to authors' homepage when a post links to their post.
@@ -169,57 +176,21 @@ While I try to treat [[silos]] as purely places where I publish syndication, the
 
 ==== Incoming ([[Morris]]) ====
 
-* display homepage mentions (this is a whooooole thing)
 * handle deletes!
 * keep changes over time?
 * re-build on new mentions so they show up right away
+* <s>display homepage mentions (this is a whooooole thing)</s>
+** I subscribe to webmention.io's feed for my homepage in my feed reader and they go to my "Notifications" channel. This is plenty good for me!
 
-==== Notifications ====
+=== private posts ===
 
-Want a better way of interpreting incoming WMs in a notifications-friendly way.
+* [https://stackoverflow.com/questions/22065003/in-jekyll-wants-to-skip-private-posts-to-be-rendered-while-listing-all-posts published: false] will prevent the page from being rendered at all. maybe good if I want to host those behind another domain or path w/ an access controller in front.
 
-* de-dupe! i shouldn't get multiple notifications for a given post just because the mention is sent again
-* mf2-awareness!
-** i shouldn't get a notification if there's a new comment on a post i'm mentioned in
-*** maybe my notifier could let me opt-in to follow replies? maybe i already could with Aperture??
-** i should (maybe) get a notification if a post i'm mentioned in is updated, content-wise
-** be aware of like, repost, bookmark, listen, and other verbs. ("so-and-so liked ...")
-** be aware of [[person-tag]]s (e.g. "so-and-so tagged you in...")
-** be aware of other attributes like [[post-type-discovery]] (e.g. "... posted a photo of you", "mentioned you in a checkin", ...)
-* probably lots more!
+* also: "not in main stream posts" that maybe get their own types.
 
-==== Micropub De-Duping ====
-
-I'd like to catch and reject posts that might be considered "dupes". e.g. don't let me like or bookmark posts more than once.
-
-* <code>like-of</code>
-* <code>repost-of</code>
-* <code>bookmark-of</code>
-* <code>read-of</code>
-** difficulty: only if <code>read-status</code> is the same as latest read-of post for the same read.
-** more difficulty: read-of is often some title + author string (+ optional ISBN), so dupe detection is weird
-* others?
-
-=== Lazy Load YouTube Embeds ===
+=== Lazy Load Embeds ===
 
 * https://dev.to/haggen/lazy-load-embedded-youtube-videos-520g
-
-=== Automating POSSE ===
-
-w/ bridgy publish and/or silo.pub?
-
-* ✅ <s>micropub syndication query for Quill's syndicate-to feature</s>
-* ✅ <s>embed syndication links for POSSE via webmention</s>
-* send webmentions and save response to post's syndication section
-** currently this is through Telegraph and is as many or more steps as manual POSSE and using micropublish.net to add the syndication links back
-** want to automate this at some point
-*** a micropub client that supports the SE in POSSE with my workflow?
-**** queries for mp-syndicate-to URLs for a given post
-**** some support publishing via webmention and the wm request returns a reply w/ a permalink that could be sent back w/ a micropub update
-***** news.indieweb.org/en
-***** brid.gy also works for this
-**** harder: recognize other kinds of posts and do them.
-***** e.g. silo.pub requires micropubs, probably parsed from the h-entry on the post.
 
 === Privacy Policy and Privacy Improvements ===
 
@@ -229,37 +200,16 @@ Like [https://ascraeus.org/page/privacy/ this one] by {{dgold}}
 * photo
 * some metadata that indicates it's a pano
 
-=== more coherent design ===
-
-* typography! colors! process-driven thought into what goes on what pages!
-* move /posts to front page? maybe latest 30, link back to monthly archive?
-* more compact display of my own likes, reposts
-** support [[reacji]]! (e.g. "Marty reacted 👻 to AUTHOR'S POST")
-
-=== private posts ===
-
-* [https://stackoverflow.com/questions/22065003/in-jekyll-wants-to-skip-private-posts-to-be-rendered-while-listing-all-posts published: false] will prevent the page from being rendered at all. maybe good if I want to host those behind another domain or path w/ an access controller in front.
-
-* also: "not in main stream posts" that maybe get their own types.
-
-=== pinned posts for tag pages? ===
-
-*<s>first use-case - i want to be able to describe an h-feed on, e.g. the This Week in the IndieWeb podcast page as a stepping stone to mf2-to-RSS (or Atom) with enclosures and all that good stuff.</s>
-** implemented this with a separate "podcast" kind of jekyll. it's configured w/ all the podcast metadata as well as a tag to pull posts from.
-
-* need another use-case for this
-
 === backfill old posts ===
 
-* [https://plus.google.com/+MartyMcGuire old G+ posts]
-* [https://www.goodreads.com/review/import goodreads data]
-* tweets!
-* [https://www.thingiverse.com/schmarty/designs Thingiverse things], [https://www.thingiverse.com/schmarty/makes makes], and [https://www.thingiverse.com/schmarty/likes likes].
-** difficulty: comments, likes, and makes <i>of my things</i>.
+* tweets??
+* thingiverse bonus: comments, likes, and makes <i>of my things</i>.
 
 === post my own videos ===
 
-This is an itch that has returned! Most notably, I post short [[audiogram]]s containing audio from my IWC interviews for [[TWITIWAE]] along with subtitles. [[Screech]] can already post these files successfully, but needs to be able to switch from sending a "photo" prop to sending "video".
+This is mostly an improvement for [[Screech]], which could post these files successfully as "video" like it already does for "audio", "photo". ''Or: it's a new single-purpose Micropub client?''
+
+(I use Shortcuts on my phone to post videos from there via Micropub ''just fine''. [https://martymcgui.re/tag/data-privacy/ Video examples])
 
 === event posting improvements ===
 
@@ -269,9 +219,9 @@ These are mostly improvements to [[Slater]], since my site (should) support them
 ** this sends an h-card w/ name, lat, lon, and other fields pulled from the Google Places API
 ** could also set TZ automatically based on location / date.
 ** i'm also interested in foursquare's venue API for this. dunno if they have typeahead support.
-* "duplicate this event" like Facebook allows
-* faster date/time entry. i really like how upcoming.org's works in terms of keyboard nav.
-** smart autocomplete. e.g. typing "6" into the hours field sets the hours to 06 and jumps to minutes. "6:30PM" can be set by typing "630p"
+* ✅ "duplicate this event" like Facebook allows
+* ✅ faster date/time entry. i really like how upcoming.org's works in terms of keyboard nav.
+** <s>smart autocomplete. e.g. typing "6" into the hours field sets the hours to 06 and jumps to minutes. "6:30PM" can be set by typing "630p"</s> I'm satisfied with how native HTML "date" and "time" inputs do this!
 
 == No Longer Itches ==
 
@@ -312,23 +262,31 @@ These are mostly improvements to [[Slater]], since my site (should) support them
 *** that microdata was embedded in a JSONP-like call, yuck. instead, made a custom parser for Soundcloud that extracts the "sound ID" and creates an embed. not great but provides a reasonable reading experience at the moment.
 ** <s>would like to support posts with mf1 markup [https://martymcgui.re/2016/11/21/104043/ example]) (XRay does it well)</s>
 ** <s>would like to support posts with json-ld markup [https://martymcgui.re/2016/11/11/141225/ example]) (the referred post 410s now)</s>
+
 * <s>use AntennaPod history for creating listen posts</s>
 ** i no longer use an android device, so no antennapod.
 ** it seems to [https://github.com/AntennaPod/AntennaPod/issues/542 integrate with gpodder]. Possibly only syncing subscription list (OPML?) But possibly also supporting [https://gpoddernet.readthedocs.io/en/latest/api/reference/events.html per-episode events].
 ** can self-host the [https://github.com/gpodder/mygpo gpodder server]
 ** those events could become listen posts on my site
+** see above about tracking listens with Overcast!
+
 * <s>websub notifications for tag pages (already work for my /posts/ page)</s>
 ** cleaned up my websub handling when i rewrite my hook-publish compile handler in PHP.
 ** uses rsync results to see what files actually changed. filters out pagination but includes tag pages and individual pages.
+
 * <s>Better handling of incoming webmentions</s>
 ** tool to slurp webmention.io data into static files suitable as Jekyll or Hugo data files
 ** web hook to accept notifications from wmio and, add the new mention to the data store, and rebuild the site
 ** this is now handled by [https://github.com/martymcguire/morris morris]
+
 * <s>an [https://unhosted.org/ unhosted] evernote knockoff using [https://remotestorage.io/ remotestorage.io] as my backend</s>
-** I'm happy enough with [https://laverna.cc laverna] at the moment, though I haven't yet migrated any old notes in and support for files/images is limited/broken.
+** <s>I'm happy enough with [https://laverna.cc laverna] at the moment, though I haven't yet migrated any old notes in and support for files/images is limited/broken.</s>
+** after some syncing issues with laverna i gave up on this and exported to my own personal notes site system. it's an indieauth protected private site built on hugo. fun!
+
 * <s>an internet archive style backup that snarfs pages that i want to bookmark into my notes</s>
 ** I'm happy enough with [https://pinboard.in pinboard] at the moment. ¯\_(ツ)_/¯
-* <s>posting my own video without relying on silos</s>. I post these very rarely. Currently happy w/ an Automator action that sends files from my laptop to my media endpoint and making a new post with a video property that gets embedded.
+
+* <s>posting my own video without relying on silos</s>. I post these very rarely. Currently happy w/ <s>an Automator action</a> a shell script that posts files from my laptop to my media endpoint and making a new post with a video property that gets embedded.
 ** micropub client for video!
 *** want to select a poster image, if possible
 *** and what else?
@@ -336,11 +294,58 @@ These are mostly improvements to [[Slater]], since my site (should) support them
 *** <s>S3 as a CDN?</s>
 *** <s>[https://webtorrent.io/ WebTorrent]?</s>
 
+* <s>Want a better way of interpreting incoming WMs in a notifications-friendly way.</s>
+** i use my reader to subscribe to the webmention.io feed for my domain in a "Notifications" channel. this has been plenty fine for me, and I haven't been craving anything real-time.
+** de-dupe! i shouldn't get multiple notifications for a given post just because the mention is sent again
+** mf2-awareness!
+*** i shouldn't get a notification if there's a new comment on a post i'm mentioned in
+**** maybe my notifier could let me opt-in to follow replies? maybe i already could with Aperture??
+*** i should (maybe) get a notification if a post i'm mentioned in is updated, content-wise
+*** be aware of like, repost, bookmark, listen, and other verbs. ("so-and-so liked ...")
+*** be aware of [[person-tag]]s (e.g. "so-and-so tagged you in...")
+*** be aware of other attributes like [[post-type-discovery]] (e.g. "... posted a photo of you", "mentioned you in a checkin", ...)
+
+* <s>pinned posts for tag pages?</s>
+**<s>first use-case - i want to be able to describe an h-feed on, e.g. the This Week in the IndieWeb podcast page as a stepping stone to mf2-to-RSS (or Atom) with enclosures and all that good stuff.</s>
+*** <s>implemented this with a separate "podcast" kind of jekyll. it's configured w/ all the podcast metadata as well as a tag to pull posts from.</s>
+*** In the move to Hugo I made a "podcast" "type", similar to jekyll.
+** need another use-case for this before it becomes an itch again.
+
+* <s>Micropub De-Duping</s>
+** I thought I'd like to catch and reject posts that might be considered "dupes". e.g. don't let me like or bookmark posts more than once.
+** <code>read-of</code>: might audit these someday. Duplicates here feel fine to me, honestly. I have read some books multiple times, and multiple "want-to-reads" remind me that some books come to my attention more than once!
+*** difficulty: only if <code>read-status</code> is the same as latest read-of post for the same read.
+*** more difficulty: read-of is often some title + author string (+ optional ISBN), so dupe detection is weird
+** <s><code>like-of</code></s> upon review 2022-11 i had only made ~11 dupe likes out of > 1250 like posts over 6 years. doesn't feel worth it to build a whole thing for this.
+** <s><code>repost-of</code></s> upon review 2022-11 i had only made 1 dupe out of 47 reposts in 6 years.
+** <s><code>bookmark-of</code></s> 2022-11 review: 0 dupes out of 46 bookmarks in 6 years
+** others?
+
+* <s>Automating POSSE</s> (w/ bridgy publish and/or silo.pub?)
+** i have stopped syndicating stuff to FB and Twitter as I have pretty much stopped using them. i might end up wanting to do something for activitypub and revisit this, but ... maybe not! for now i am OK with my website being what it is.
+** ✅ <s>micropub syndication query for Quill's syndicate-to feature</s>
+** ✅ <s>embed syndication links for POSSE via webmention</s>
+** send webmentions and save response to post's syndication section
+*** currently this is through Telegraph and is as many or more steps as manual POSSE and using micropublish.net to add the syndication links back
+*** want to automate this at some point
+**** a micropub client that supports the SE in POSSE with my workflow?
+***** queries for mp-syndicate-to URLs for a given post
+***** some support publishing via webmention and the wm request returns a reply w/ a permalink that could be sent back w/ a micropub update
+****** news.indieweb.org/en
+****** brid.gy also works for this
+***** harder: recognize other kinds of posts and do them.
+****** e.g. silo.pub requires micropubs, probably parsed from the h-entry on the post.
+
+* <s>backfill</s> (these are done)
+** ✅ [https://plus.google.com/+MartyMcGuire old G+ posts]
+** ✅ [https://www.goodreads.com/review/import goodreads data]
+** ✅ [https://www.thingiverse.com/schmarty/designs Thingiverse things], [https://www.thingiverse.com/schmarty/makes makes], and [https://www.thingiverse.com/schmarty/likes likes].
+
 == Notes on Domains ==
 
 The [https://en.wikipedia.org/wiki/.re .re TLD] is a geographic top-level domain for the island of Réunion. I used [https://www.101domain.com/ 101Domain] as my registrar because they support setting up a business entity in the country (for a fee), a requirement for domain registration there.
 
-I also have a mirror of my site running as a [[Tor]] Onion Service at http://schmartyp7qtjzn7.onion/.
+I also have a mirror of my site running as a [[Tor]] Onion Service at http://martymcgfuraocsgy2a25btl5srhifcdud6m4eiphz2mq6fafttwh7qd.onion/. Advertised via the [https://blog.torproject.org/more-onions-porfavor/ Onion-Location] HTTP header.
 
 = Podcast Site - wehavetoask.com =
 
