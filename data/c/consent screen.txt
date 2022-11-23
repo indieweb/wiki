@@ -109,6 +109,25 @@ When signing in and authorizing access to your site, it will prompt "[client] is
 
 For both flows, if the client advertises its name/logo with [[h-app]], the consent screens will display those (the [[indiebookclub]] example). Otherwise it falls back to using the client_id (the [[IndieLogin]] example).
 
+=== Indiekit ===
+
+[[Indiekit]] displays a sign in screen if the authorisation request is requesting no scopes. It says ‘Sign in to [client] as [domain]’, and the submit button says ‘Sign in’:
+
+[[File:indiekit-consent-screen-sign-in.png|480px|thumb|alt=Screenshot of Indiekit’s sign in form.]]
+
+If the authorisation is requesting scope(s), Indiekit displays a consent form. It says ‘[client] is requesting permission to access [domain]’, and the submit button says ‘Allow’:
+
+[[File:indiekit-consent-screen-with-client-info.png|480px|thumb|alt=Screenshot of Indiekit’s sign in form.]]
+
+If a client doesn’t not support PKCE, a warning is shown. It says ‘[client] is not using PKCE (Proof Key Code Exchange), which is more secure):
+
+[[File:indiekit-consent-screen-no-pkce.png|480px|thumb|alt=Screenshot of Indiekit’s consent screen with a warning about PKCE not being used.]]
+
+Other features:
+
+* Client logo is shown if provided. A light grey background is added as some clients provide a white logo on a transparent background, which would otherwise be invisible. Padding is also added around the image incase the logo goes edge-to-edge.
+* The word ‘scope’ is not used on the consent page. Indiekit aims to be user friendly, and try to avoid technical terms where they are not useful or meaningful.
+
 == Ideas ==
 
 * A consent screen could search your site for history of having authorized the client_id before, and if so, find some stats e.g. how many posts were made with it, when the last post was made, etc. and show that to the user. When authorizing a new client, the consent screen could note that this client hasn’t been seen before. Both pieces of information could be helpful in avoiding phishing attacks, e.g. if a malicious app tries to imitate an existing app, the user will see that their server doesn’t recognise it, prompting closer examination and caution
