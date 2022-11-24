@@ -174,6 +174,8 @@ There are a growing number of web sites that you can log in to using IndieAuth a
 
 == IndieAuth Protocol ==
 
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">This section is a high-level overview of the protocol. See '''[https://indieauth.spec.indieweb.org/ The IndieAuth Specification]''' for in-depth technical information</p>
+
 A user should only have to communicate their own homepage URL to the website they are trying to log in to. This is the core idea of [[Web sign-in]]. This means a developer should in their turn be able to find everything they need on that one user supplied URL.
 
 === Discovery from the User's Homepage ===
@@ -203,36 +205,11 @@ An application can also ask the user to grant it certain rights by requesting th
 
 For developers, the authorization endpoint also functions as a verification service. If they get a code from a user they can check its validity with the endpoint to make sure it was truly issued by the user.
 
-==== Third Party Services ====
-
-* [[IndieAuth.com]] has an authorization endpoint that lets you use [[silo]] accounts like [[GitHub]] or simple alternatives like [[email]] as authentication options. Use the URL <code>https://indieauth.com/auth</code> as your value for <code>authorization_endpoint</code>.
-* [[commentpara.de]] allows anyone to (anonymously or pseudonymously) log in to websites supporting IndieAuth by using <code>https://commentpara.de/</code> as their homepage.
-* See [[#Implementations|Implementations]] above for more details, or to find if your platform already has a built-in option.
-
-==== Self-Hostable Implementations ====
-
-* [[selfauth]] is an authorization endpoint in [[PHP]] made to be easy to deploy.
-* [https://github.com/barryf/acquiescence Acquiescence] is an authorization endpoint in [[Ruby]] developed and used by {{barryf}}.
-* [[Known]] enables an authorization endpoint when the [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub IndiePub plugin] is turned on.
-* [[Wordpress IndieAuth Plugin]] provides an authorization endpoint to WordPress sites.
-* [[dobrado]] provides an authorization endpoint
-
 === The Token Endpoint ===
 
 <p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[token-endpoint]]''' and '''[https://indieauth.spec.indieweb.org/#redeeming-the-authorization-code IndieAuth Spec: Redeeming the Authorization Code]''' for implementation details.</p>
 
 The token endpoint is a service that creates access tokens for applications to store and use in [[Micropub]] requests. After authorizing the application, the token endpoint creates a token that the application stores. The application will send it in a header when making a Micropub request, and the Micropub endpoint is expected to be able to validate the token while processing the request.
-
-==== Third Party Services ====
-
-* [[IndieAuth.com]] has a token endpoint. Use the URL <code>https://tokens.indieauth.com/token</code> as your value for <code>token_endpoint</code>.
-
-==== Self-Hostable Implementations ====
-
-* [https://github.com/barryf/acquiescence Acquiescence] is a token endpoint in [[Ruby]] developed and used by {{barryf}}.
-* [[Known]] enables a token endpoint when the [https://github.com/idno/Known/tree/master/IdnoPlugins/IndiePub IndiePub plugin] is turned on.
-* [[Wordpress IndieAuth Plugin]] provides a token endpoint to WordPress sites.
-* [[dobrado]] provides a token endpoint
 
 == FAQ ==
 The IndieAuth.com FAQ is here:
