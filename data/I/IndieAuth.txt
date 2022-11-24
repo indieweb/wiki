@@ -265,18 +265,24 @@ A user should only have to communicate their own homepage URL to the website the
 
 === Discovery from the User's Homepage ===
 
-IndieAuth defines two new [[rel-values|<code>rel</code> values]] for this. A user can simply link to the endpoints they want to use from their homepage, add the correct <code>rel</code> value and be done.
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[https://indieauth.spec.indieweb.org/#discovery IndieAuth Spec: Discovery]'''</p>
 
-An example would be to link to them in the <code><head></code> section of their HTML, like so:
+IndieAuth uses the <code>indieauth-metadata</code> link <code>rel</code> value to allow clients to discover the location of an IndieAuth Server Metadata endpoint from a user’s homepage, which they can then fetch to discover all information necessary for the rest of the IndieAuth flow.
+
+A user can link to their metadata endpoint from the <code><head></code> of their homepage, add the correct <code>rel</code> value and be done.
+
+    <link rel="indieauth-metadata" href="https://example.com/indieauth/metadata">
+
+Previous versions of IndieAuth defined two separate [[rel-values|<code>rel</code> values]] for discovery of the authorization and token endpoints, which can be used for back-compat with older clients in addition to <code>indieauth-metadata</code>.
 
     <link rel="authorization_endpoint" href="https://example.com/auth">
     <link rel="token_endpoint" href="https://example.com/token">
 
-Developers can discover these endpoints using traditional HTML or Microformats parsing.
-
 === The Authorization Endpoint ===
 
-<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[authorization-endpoint]]''' for implementation details.</p>
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[authorization-endpoint]]''' and '''[https://indieauth.spec.indieweb.org/#authorization-request IndieAuth Spec: Authorization Request]''' for implementation details.</p>
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See also: '''[[consent screen]]'''</p>
 
 The authorization endpoint is a page where applications can send users to and asking them to identify themselves. Because the user defines their own endpoint on their homepage, this can be part of their own website or a completely separate service. This is how the user provides proof they really operate the homepage URL they provided.
 
@@ -300,7 +306,7 @@ For developers, the authorization endpoint also functions as a verification serv
 
 === The Token Endpoint ===
 
-<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[token-endpoint]]''' for implementation details.</p>
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">See '''[[token-endpoint]]''' and '''[https://indieauth.spec.indieweb.org/#redeeming-the-authorization-code IndieAuth Spec: Redeeming the Authorization Code]''' for implementation details.</p>
 
 The token endpoint is a service that creates access tokens for applications to store and use in [[Micropub]] requests. After authorizing the application, the token endpoint creates a token that the application stores. The application will send it in a header when making a Micropub request, and the Micropub endpoint is expected to be able to validate the token while processing the request.
 
