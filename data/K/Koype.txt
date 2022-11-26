@@ -50,6 +50,13 @@ Koype ''should'' be used with a [[Webmention#Publisher_Services|Webmention servi
 * Implementing [[microsyntax]] for plain-text regions (tracked at https://git.jacky.wtf/indieweb/koype-next/issues/46)
 * Query a resource's changes (tracked at https://git.jacky.wtf/indieweb/koype-next/issues/61)
 
+=== Shared Access ===
+With specific [[scopes]] to Koype, one can use a token to edit resources on it. This would allow for automatic editing of posts using Micropub from remote services. This would be done by adding a parameter to the Micropub endpoint URL that'll tell it to validate the token using a different endpoint, one to be determined by Koype. The Micropub endpoint would be provided when one fetches the specific page and will be available for a period of time for use in the browser, none is available via <code>q=source</code>.
+
+The custom endpoint will check if the provided token is valid from its issuer, matching the place we've issued a token for specific people outside the content's owner. If they're a known member of the URL's audience, then other operations will be available to them. Koype will also apply per-identity rules on content availability, with overriding support. This can allow for a stricter ACL on who can see what on a local level and making URLs themselves transparent in what information they share (in terms of [[url design]]).
+
+This is being tracked at https://git.jacky.wtf/indieweb/koype-next/issues/62
+
 === Address Book ===
 Koype builds a [[nickname cache]] that's usable for quickly mentioning people in the system. It's available with authentication using the Micropub query <code>?q=contact</code>. There's also going to be logic to [https://git.jacky.wtf/indieweb/koype-next/issues/55 automatically hydrate and update contacts using WebSub]
 
