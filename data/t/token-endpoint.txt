@@ -1,23 +1,31 @@
 https://indieweb.org/token-endpoint
 
-A '''<dfn>token endpoint</dfn>''' is an HTTP endpoint that [[micropub]] clients can use to obtain an access token given an authorization code.
+A '''<dfn>token endpoint</dfn>''' is an HTTP endpoint that [[Micropub]] clients can use to obtain an access token given an authorization code. For the most up-to-date information on [[IndieAuth]] token endpoints, see the [https://indieauth.spec.indieweb.org/ IndieAuth Living Standard]. 
 
-== Using a token endpoint service ==
+== IndieWeb Examples ==
+{{warning|TODO: update with current examples, move some to Past Examples subsction}}
 
+* https://tokens.indieauth.com provides tokens as a service, to help implementers bootstrap their micropub support.
+* [[commentpara.de]] implements its own token endpoint
+* [[Red Wind]] has its own token endpoint that issues JWT encoded tokens[https://github.com/kylewm/redwind/blob/a4ac9d6d14468e3e4b3ce433b8421d97eef861f6/redwind/micropub.py#L21]
+* [[Neonblog]] provides a token endpoint that uses [[indieauth.com]] as an auth server. [https://github.com/notenoughneon/neonblog/blob/master/token.php]
+* [[Skein]] provides a token endpoint that issues JWT tokens. [https://github.com/notenoughneon/skein/blob/master/api.ts]
+* [[silo.pub]] creates JWT encoded tokens based on authorization from its own auth service.
+
+== Implementation Notes ==
+{{warning|These are older implementation notes. If you are implementing a token endpoint, we recommend the  [https://indieauth.spec.indieweb.org/ IndieAuth Living Standard] instead}}
+
+=== Using a token endpoint service ===
 [https://tokens.indieauth.com/ tokens.indieauth.com] is a service you can use if you don't want to immediately build your own token endpoint. You can use this token endpoint in production in order to jump-start the development of your own [[micropub]] endpoint. 
 
 If you later want to switch to hosting your own token endpoint, you can do so without needing to make any changes to micropub clients since they will re-discover your token endpoint each time you sign in.
 
-== Creating a token endpoint ==
-
+=== Creating a token endpoint ===
 Requests will be made to the token endpoint after the client finishes communicating with the [[authorization-endpoint|authorization server]] and obtains an [[authorization-endpoint#Auth_code_verification|auth code]].
 
 A token endpoint must be able to both grant an access token as well as verify an access token.
 
-For the most up-to-date information on [[IndieAuth]] token endpoints, see the [https://indieauth.spec.indieweb.org/ IndieAuth Living Standard]. 
-
-=== Verifying an Access Token ===
-
+==== Verifying an Access Token ====
 A [[micropub-endpoint|micropub endpoint]] will make a request to the token endpoint to verify that an incoming access token is valid.
 
 : The URL of the token server must be known to the micropub endpoint in advance. The bearer token does not contain any information about the server address.
@@ -56,7 +64,6 @@ The micropub endpoint will then inspect these values and determine whether to pr
 
 {{note|Token-endpoints like https://tokens.indieauth.com that aim to interoperate with different micropub endpoint implementations MUST support this standard mechanism for verifying the token. However, if the token and micropub endpoints are tightly coupled (i.e. you control both implementations and expect them only to talk to each other), this verification can be done internally.}}
 
-== Implementation notes ==
 === Generating an Access Token ===
 
 At this point, your token endpoint is ready to issue an access token to the app.
@@ -121,21 +128,7 @@ results in a string that is the access token.
 
 <pre>$token = JWT::encode($token_data, $encryption_key);</pre>
 
-
-== IndieWeb Examples ==
-
-* https://tokens.indieauth.com provides tokens as a service, to help implementers bootstrap their micropub support.
-* [[commentpara.de]] implements its own token endpoint
-* [[Red Wind]] has its own token endpoint that issues JWT encoded tokens[https://github.com/kylewm/redwind/blob/a4ac9d6d14468e3e4b3ce433b8421d97eef861f6/redwind/micropub.py#L21]
-
-* [[Neonblog]] provides a token endpoint that uses [[indieauth.com]] as an auth server. [https://github.com/notenoughneon/neonblog/blob/master/token.php]
-
-* [[Skein]] provides a token endpoint that issues JWT tokens. [https://github.com/notenoughneon/skein/blob/master/api.ts]
-
-* [[silo.pub]] creates JWT encoded tokens based on authorization from its own auth service.
-
 == Discussion ==
-
 === Asking the token endpoint to invalidate a token ===
 
 Should there be a way to ask the endpoint to invalidate/cancel a previously requested token? E.g. a user could select a log-out button in their [[Micropub]] client and the client would then ask the token endpoint to invalidate its specific token.
