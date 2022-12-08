@@ -134,7 +134,7 @@ There are particularly good ways to POSSE [[notes]] and [[articles]] to Twitter 
 
 Given Twitter's limitations:
 * 280 characters of content
-* links are t.co'd into 23 characters for http or https links
+* links are t.co'd into {{twitter-link-char-count}} characters for http or https links
 * local user (@-name) references only
 * local tag (#hashtag) references only
 
@@ -179,9 +179,9 @@ The whole point of POSSE is that you still care about your friends on Twitter (o
 Only provide permashortlinks as part of your POSSE tweets when they link to an the original post <em>with more content</em> than in the POSSE tweet copy. Otherwise use permashortcitations so that your original posts are still automatically discoverable using the [[original-post-discovery]] algorithm.
 
 ==== POSSE abbr note to twitter ====
-If your note (with permashortid) exceeds 280 characters, you should abbreviate your note to 256 characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 256 characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into 23 characters. 
+If your note (with permashortid) exceeds 280 characters, you should abbreviate your note to 256 characters (e.g. using the [[CASSIS]] <code>ellipsize_to_word</code> function), and then put a post perma(short)link URL at the end. Shorten to 256 characters (or shorter) because it takes 1 character for the space before the URL, and then Twitter t.co's all URLs (including yours) into {{twitter-link-char-count}} characters. 
 
-When shortening to 256 (280-23-1) characters, you must count <em>other</em> http (https) URLs within that as 23 characters. You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace URLs in a string with 23 character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
+When shortening to 256 (280-{{twitter-link-char-count}}-1) characters, you must count <em>other</em> http (https) URLs within that as {{twitter-link-char-count}} characters. You can use the [[CASSIS]] <code>tw_text_proxy</code> function to automatically replace URLs in a string with {{twitter-link-char-count}} character proxy URLs. The return result can be used for counting how many characters the string will use as a "tweet". This is useful for e.g. evaluating <code>ellipsize_to_word</code> on the result, to get a length of characters that you can POSSE, and then using that to help determine how much of the original (non-proxy) string can be POSSEd.
 
 You may want to put an ellipsis character at the end of your POSSEd note to Twitter before your perma(short)link. Be sure to leave room for the ellipsis too: instead of just 1 character for a space before your permashortlink, save 4 characters for "... ", or 2 characters for "… " (ellipsis entity character). Note Twitter now counts characters in a sensible fashion, they count codepoints in Unicode NFC: https://dev.twitter.com/docs/counting-characters. Ideally elide at a punctuation boundary (like sentence terminator or a comma - the above-mentioned CASSIS function does this too).
 Examples (which link to original posts after eliding with "... ")
@@ -216,7 +216,7 @@ This is pseudocode based on [http://waterpigs.co.uk Barnaby Walters]’ [https:/
 Assume that to start with you have some HTML markup representing the content of the note ($text), the canonical URI to link back to from the syndicated tweet ($url) and an optional in-reply-to url associated with the note ($inReplyTo).
 
 # Convert any HTML in $text to twitter-like plaintext syntax, or strip it
-# Truncate $text such that, once all URLs contained within it are replaced with URLs of the current t.co length (21 ATOW) there are enough characters left to contain the canonical URI with brackets around, or preceded by and ellipsis if any truncation has occurred
+# Truncate $text such that, once all URLs contained within it are replaced with URLs of the current t.co length ({{twitter-link-char-count}}) there are enough characters left to contain the canonical URI with brackets around, or preceded by and ellipsis if any truncation has occurred
 # Trim $text
 # Append a space and $url, surrounded with brackets if no truncation has occurred or preceded by an ellipsis if truncation has occurred
 # Create a hashtable representing the body of the POST request to send ($tweet)
