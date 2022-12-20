@@ -10,15 +10,23 @@ https://indieweb.org/follow_your_nose
 ”Follow your nose” creates more predictable portability. 
 
 When you move a document that is on one site to another, everything ”about” that document moves with it or is inside it where you can easily check, there’s no need to additionally check random ”other places” (whether at the root of the domain or somewhere else) for ”other things that need to move with it”.
+__TOC__
+=== more robust portability ===
+”Follow your nose” creates anti-fragile portability, that is, when a document only depends on follow your nose discovery methods, you can fully inspect it for any and all dependencies and be sure of having taken care of all such dependencies. 
 
-=== values can be document scoped rather than domain-scoped ===
+In contrast, for anything that depends on any hardcoded domain-based paths (like .well-known), you have no idea when you are ”done” moving something or what new dependencies may have accrued by new hardcoded paths.
+
+=== less dependent on document context ===
+”Follow your nose” can work even when documents are places without domains or root paths that the document owner can control, like local multi-user file systems, or alternative non-DNS systems like [[IPFS]], in contrast to [[well-known]] which makes assumptions about domains and root control.
+
+=== document rather than domain scoped discovery ===
 “follow your nose” allows for each page to define their own rel links, whereas all links are domain-scoped with .well-known discovery.
 
 == Disadvantages ==
-=== Requires fetching each page separately ===
+=== fetching each page separately ===
 In cases where rel values could or should be domain-scoped rather than page-scoped (e.g. [[webmention]] endpoint links), a follow-your-nose approach will require far more network traffic to send webmentions to multiple pages on the same domain than a domain-scoped link discovery method such as .well-known, which would require a maximum of one page fetch per domain.
 
-==== Potential mitigation ====
+==== potential mitigation ====
 In practice, most usage of the webmention link rel is domain-scoped rather than page-scoped (i.e. a webmention endpoint fetched from https://example.com/posts/1 can be used to send webmentions for any page on https://example.com). In cases like this, consumers could reduce network traffic while retaining the advantages of page-scoped rel discovery by using the following fetch-on-error algorithm when sending webmentions for multiple pages on a domain:
 
 * Trying to send a webmention for https://example.com/posts/1
@@ -34,6 +42,5 @@ This approach could be generalised to a variety of domain-scoped endpoints.
 * [[discovery-algorithms]]
 * [[rel]]
 * https://www.w3.org/wiki/FollowYourNose
-* 2002 possible first use of concept/phrase: https://lists.w3.org/Archives/Public/www-webont-wg/2002Oct/0162.html (CW: [[Semantic Web]])
-* Advantage: is anti-fragile, that is, when a document only depends on follow your nose discovery methods, you can fully inspect it for any and all dependencies, whereas in contrast, for anything that depends on any hardcoded domain-based paths (like well-known), you have no idea when you are ”done” moving something or what new dependencies may have accrued by new hardcoded paths.
-* Advantage: can work even when documents are places without domains or root paths that the document owner can control, like local multi-user file systems, or alternative non-DNS systems like [[IPFS]], in contrast to [[well-known]] which makes assumptions about domains and root control.
+* 2002 possible first use of concept/phrase: 
+** CW: [[Semantic Web]]: https://lists.w3.org/Archives/Public/www-webont-wg/2002Oct/0162.html
