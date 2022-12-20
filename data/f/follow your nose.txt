@@ -11,6 +11,25 @@ https://indieweb.org/follow_your_nose
 
 When you move a document that is on one site to another, everything ”about” that document moves with it or is inside it where you can easily check, there’s no need to additionally check random ”other places” (whether at the root of the domain or somewhere else) for ”other things that need to move with it”.
 
+=== values can be document scoped rather than domain-scoped ===
+“follow your nose” allows for each page to define their own rel links, whereas all links are domain-scoped with .well-known discovery.
+
+== Disadvantages ==
+=== Requires fetching each page separately ===
+In cases where rel values could or should be domain-scoped rather than page-scoped (e.g. [[webmention]] endpoint links), a follow-your-nose approach will require far more network traffic to send webmentions to multiple pages on the same domain than a domain-scoped link discovery method such as .well-known, which would require a maximum of one page fetch per domain.
+
+==== Potential mitigation ====
+In practice, most usage of the webmention link rel is domain-scoped rather than page-scoped (i.e. a webmention endpoint fetched from https://example.com/posts/1 can be used to send webmentions for any page on https://example.com). In cases like this, consumers could reduce network traffic while retaining the advantages of page-scoped rel discovery by using the following fetch-on-error algorithm when sending webmentions for multiple pages on a domain:
+
+* Trying to send a webmention for https://example.com/posts/1
+* Look for a cached webmention endpoint for that domain?
+** If no cached webmention endpoint found for this domain, fetch the resource and parse for rel-webmention, store in cache.
+* Attempt sending a webmention
+* If the webmention endpoint returned an error, fetch https://example.com/posts/1 and look for a new webmention endpoint
+* Potentially update the cached endpoint for the domain
+
+This approach could be generalised to a variety of domain-scoped endpoints.
+
 == See Also ==
 * [[discovery-algorithms]]
 * [[rel]]
