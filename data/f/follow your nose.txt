@@ -36,6 +36,12 @@ In practice, most usage of the webmention link rel is domain-scoped rather than 
 * If the webmention endpoint returned an error, fetch https://example.com/posts/1 and look for a new webmention endpoint
 * Potentially update the cached endpoint for the domain
 
+If no webmention endpoint was found on the first fetch, caching the negative result could lead to missed webmentions in the future. Some potential solutions could involve
+
+* simply not caching negative results
+* caching negative results for a much shorter time than positive results
+* only cache negative results if they’re from pages with mf2 markup on, so that no webmention endpoint being found on a “plain” page with no mf2 wouldn’t prevent checking for webmention endpoints in future pages from the same URL
+
 This approach could be generalised to a variety of domain-scoped endpoints.
 
 == See Also ==
