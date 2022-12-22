@@ -32,8 +32,10 @@ Common [[POSSE]] practice is to link from POSSE copies to your original, using a
 * '''Subvert spammers who copy your posts.''' When spammers (e.g. @sin3rss) mindlessly copy from your POSSE copies and repost, they also copy the link back to the original, and thus provide more distribution for people to find and view your original post. "[http://tantek.com/2011/009/t3/value-searching-finding-past-tweets-self-hosting 2011-01-09 internet aikido]" of a sort.
 * '''Better ranking for your original posts.''' If/when your POSSE copies are themselves copied by others and (re)posted elsewhere (e.g. manual retweets, RSS bots etc.), when the copies link to your original posts, search engines figure that out by following those links back to the original and ranking it higher.
 
-== How To Implement ==
-=== In General ===
+== How to ==
+=== How to implement ===
+This section is for web developers implementing POSSE.
+==== In General ====
 In general, when your content posting software posts something, it should also post a copy to the [[silo]] destinations of your choice, with an [[original post link]] (e.g. [[permashortlink]] or [[permashortcitation]]) back to your original.
 
 The details of how to do so vary per destination. See the silo-specific sections below.
@@ -41,15 +43,15 @@ The details of how to do so vary per destination. See the silo-specific sections
 Once you have posted the copy to the silo, you should:
 * link to the syndicated copy from the original in a '''[[posts-elsewhere]]''' section on your post.
 
-=== User Interface ===
+==== User Interface ====
 The best user interface (UI) is automatic, dependable, and invisible. If you can implement POSSEing in a way that always does exactly what you want, predictably, then no explicit UI is needed.
 
-==== Preview ====
+===== Preview =====
 One way to provide more predictability and inspire confidence is to show what will be POSSEd (within the limitations of the destination) as a preview before publishing
 
 (needs screenshot)
 
-=== Twitter ===
+==== Twitter ====
 {{main|Twitter#POSSE_to_Twitter}}
 [[Twitter]] is perhaps the most popular POSSE destination and a good place to start.
 
@@ -63,14 +65,13 @@ Details:
 
 See [[Twitter#POSSE_to_Twitter|POSSE to Twitter]] for details on how to POSSE both notes and articles (blog posts) to Twitter.
 
-=== Facebook ===
+==== Facebook ====
 {{main|POSSE to Facebook}}
+There are two options for POSSEing to Facebook currently:
+* Manually crosspost
+* Semi-automatically with the [https://snarfed.org/2021-02-18_bridgy-browser-extension-for-facebook Bridgy browser extension for Facebook]
 
-* API Access - New posts can be created through the API using the [https://developers.facebook.com/docs/reference/api/publishing/ Publishing API]
-* <s>A web action endpoint (<code>https://www.facebook.com/dialog/feed</code>) is supplied by the Feed social plugin for semi-manual posting. Requires a facebook app id, but no authentication. It accepts a callback URL, to which it redirects with ?post_id GET param set, from which a URL can be constructed.</s>
-** Appears to no longer be functioning as of 2016-03-13 --[[User:Waterpigs.co.uk|Barnaby Walters]] 04:38, 13 March 2016 (PDT)
-
-=== Medium ===
+==== Medium ====
 {{main|Medium}}
 * You can create posts via [https://github.com/Medium/medium-api-docs the posts API]
 * Medium also supports manual POSSE via [https://medium.com/@Medium/import-all-the-things-578c8f9016f6#.e8mh2dyws the Import Post function], which preserves [[rel-canonical]] links to the original URL
@@ -78,16 +79,16 @@ See [[Twitter#POSSE_to_Twitter|POSSE to Twitter]] for details on how to POSSE bo
 * {{chrisaldrich}} uses the WordPress [https://wordpress.org/plugins/medium/ Medium Plugin] to POSSE to Medium. They also [https://help.medium.com/hc/en-us/articles/218572107-How-to-move-to-Medium support bulk migration] (aka mass POSSE) for porting across lots of posts after which posts can be POSSEd by means of their plugin.
 * {{aaron gustafson}} Wrote a [https://github.com/aarongustafson/jekyll-crosspost-to-medium Jekyll plugin] to POSSE to Medium.
 
-=== WordPress ===
+==== WordPress ====
 {{main|WordPress}}
 * How does veganstraightedge.com do it? (all his articles are manually POSSEd to WordPress.com)
 * {{chrisaldrich}} uses a WordPress plugin [https://wordpress.org/plugins/wp-crosspost/ WordPress Crosspost] to POSSE from a self-hosted WordPress install to WordPress.com.
 
-=== Plain Text Notes ===
+==== Plain Text Notes ====
 Some destinations (e.g. [[SMS]] or [[push notification|push notifications]]) may require a pure plain text representation.
 * [[h-entry_to_text]] is a method of generating a plain text representation from an arbitrary [[h-entry]]
 
-=== Software ===
+==== Software ====
 Software and libraries to implement POSSE:
 * PHP
 ** The POSSE namespace in [https://github.com/barnabywalters/php-helpers php-helpers] (might be moved to a separate package) contains various truncation, preparation and syndication functions including HTML => plaintext µblog syntax converter
@@ -95,15 +96,15 @@ Software and libraries to implement POSSE:
 ** [https://bolt80.com/silorider/ SiloRider] is a command-line tool, implemented in Python, that lets you implement POSSE to various services (Twitter and Mastodon as of 2018-08-01).
 **[https://gitlab.com/chaica/feed2toot Feed2Toot] is another command-line python tool that parses any number of RSS feeds and posts their content on ActivityPub based services (tested with: Mastodon, Pleroma). Contains some neat bells and whistles like advanced post filtering, numerous options for feed parsing and toot formatting.
 
-=== Services ===
+==== Services ====
 * [[Bridgy]] [https://www.brid.gy/about#publish Publish] is POSSE-as-a-service. It supports [[Twitter]], [[Flickr]], [[GitHub]] and [[Mastodon]]. You can use it interactively or programmatically via [[webmention]].
 * [https://muggedtweets.com/ Mugged Tweets] - will POSSE a note to a mug (may require first POSSEing to Twitter)
 * [https://ifttt.com/ IFTTT] allows automatically reposting content with an RSS or Atom feed to a number of silos incuding Twitter, Tumblr, and Facebook
 
-=== Publishing Flows ===
+==== Publishing Flows ====
 There's at least two ways to implement a POSSE content posting flow:
 
-==== Client to site to silo ====
+===== Client to site to silo =====
 * The user writes a piece of content using a publishing client
 ** Optional: client provides UI for selecting which 3rd party services to push to if it knows about them, with optional customizations for per service
 * Having finished the content, the user publishes content to their server (optionally: with metadata of which 3rd party services and any customizations thereof)
@@ -117,7 +118,7 @@ Advantages:
 Disadvantages:
 * any?
 
-==== Client to site and silo ====
+===== Client to site and silo =====
 * The user writes a piece of content using a publishing client
 * Having finished the content, the user publishes it to their server
 * The client queries the server for the URL of the content it just pushed
