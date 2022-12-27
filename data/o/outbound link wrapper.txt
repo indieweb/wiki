@@ -6,6 +6,40 @@ https://indieweb.org/outbound_link_wrapper
 
 Some outbound link wrapper are also link shorteners.
 
+== Purpose ==
+
+Link wrappers are used for the following ostensible purposes by the sites that operate them:
+
+* Analytics on outgoing link clicks
+* Removing HTTP referrers to prevent receiving websites from knowing the origin of the incoming visit
+* Quickly preventing users from following links that go to harmful/malicious webpages
+
+== Criticism ==
+
+=== Adds an additional point of failure to the web ===
+
+Some of the link shorteners, such as href.li, tend to go down fairly often, or are blocked by privacy-preserving browser extensions, causing people to be unable to easily follow those links.
+
+=== Not actually necessary for analytics ===
+
+Outgoing link tracking would be better-served with a simple JavaScript library that tracks link-clicking behavior; this would prevent spurious clicks from being detected by search agents (e.g. web crawlers), and would also make it much easier for users to disable these unwanted intrusions into their privacy.
+
+=== Not necessary for referrer removal ===
+
+Standard HTML provides <code>[https://caniuse.com/rel-noreferrer rel="noreferrer"]</code> for this purpose, as a standards-based mechanism which the vast majority of browsers support at this time.
+
+=== Makes link-sharing much more difficult ===
+
+Adding a wrapper to an outgoing link means that a user trying to copy a destination URL will end up needing to clean up the link in order for it to actually be readable, and if the link isn't cleaned up, then it ends up affecting the analytics anyway.
+
+=== Not necessary for threat mitigation ===
+
+A JavaScript library could be used to change the browser behavior to consult a link for safety before trying to visit it, and this isn't even strictly necessary as every major browser has built-in link threat protection at this point anyway.
+
+=== Breaks [[Webmention]] and [[RelMe]] ===
+
+Webmention and RelMe both require that the link from the source page be exact, to simplify the validation of the link. It would be a major burden to require the validating endpoint to query every link on the source page to verify that it redirects properly.
+
 == Examples ==
 * [[href.li]] used by [[Tumblr]] and [[WordPress.com]]
 * l.facebook.com/l.php used by [[Facebook]]
