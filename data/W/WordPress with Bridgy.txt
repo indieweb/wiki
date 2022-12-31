@@ -26,7 +26,7 @@ By itself, Bridgy doesn't do much--one might consider it a "translation tool" in
 Prior to beginning to set up Bridgy, know that it relies on some prior set up or installed plugins to allow you to easily interact with it. For the sake of the details below, we'll presume you've got the [https://wordpress.org/plugins/indieweb/ IndieWeb WordPress plugin] installed with the following minimal set of sub-plugins installed:
 * [https://wordpress.org/plugins/webmention/ Webmention plugin] - Bridgy will send your site comments/likes/interactions as comments using webmention; your site can also send webmentions to Bridgy's endpoint to allow you to use Bridgy Publish to publish on your behalf. (no configuration required beyond installing and activation)
 * [https://wordpress.org/plugins/semantic-linkbacks/ Semantic Linkbacks] - Generates richer WordPress comments (no configuration required beyond installing and activation)
-* [https://wordpress.org/plugins/syndication-links/ Syndication Links] - Allows you to link to copies of your posts elsewhere; Bridgy uses the URLs input into this field to properly parse your webpages to ensure the comments/likes are being sent to the correct page. Minimal configuraton beyond installation/activation; most additional options dictate options for how the URLs are displayed on your page.
+* [https://wordpress.org/plugins/syndication-links/ Syndication Links] - Allows you to link to copies of your posts elsewhere; Bridgy uses the URLs input into this field to properly parse your webpages to ensure the comments/likes are being sent to the correct page. Minimal configuraton beyond installation/activation; most additional options dictate options for how the URLs are displayed on your page. It also can trigger Bridgy to publish posts to silos.
 ** Technically one can get away without this plugin, but it would require additional knowledge and some onerous (annoying?) handcoded HTML which isn't recommended
 * [https://github.com/pfefferle/wordpress-webmention-for-comments WebMention support for (threaded) comments] (technically not required, but recommended; requires no configuration) '''NOTE: This plugin was merged into the WebMention plugin in April, 2018.'''
 
@@ -120,7 +120,9 @@ While it can be instructive to hand code HTML to publish through [[Bridgy]], it 
 
 In addition to displaying links to syndicated copies of content (see backfeed section above), the plugin also adds a meta-box with  a simple checkbox interface in the sidebar of the WordPress post editor for indicating where to send POSSE copies of one's post. To configure available syndication endpoints, go to the Syndication Links settings in your WordPress admin (at <code>/wp-admin/admin.php?page=syndication_links</code>) to configure them.
 
-After sending a webmention to Bridgy to publish your post on your behalf, the Syndication Links plugin will automatically discover and save the URL of the POSSEd copy.
+The plugin supports Bridgy Publish via Webmention. After sending a webmention to Bridgy to publish your post on your behalf, the Syndication Links plugin will automatically discover and save the URL of the POSSEd copy.
+
+It also supports the newer Bridgy Publish via Micropub, which requires a token to be saved in settings that can be retrieved from your Bridgy user page. If publishing using Micropub, then the plugin will convert WordPress properties to send to Bridgy, whereas with Webmention, Bridgy will try to parse them out of the page. If you have issues with your theme being microformats compliant, Micropub would be the preferable option.
 
 === POSSE to Bridgy using Bridgy Publish Plugin ===
 '''Nota Bene''': While you may find it in the repository and it may still work, the [https://wordpress.org/plugins/bridgy-publish/ Bridgy for WordPress plugin] has been deprecated in favor of the [[Syndication Links]] plugin which is now recommended (see just above).
