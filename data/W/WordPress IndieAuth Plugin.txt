@@ -1,0 +1,167 @@
+https://indieweb.org/WordPress_IndieAuth_Plugin
+
+{{stub}}
+
+The '''<dfn>[https://wordpress.org/plugins/indieauth/ WordPress IndieAuth Plugin]</dfn>''' is a [[WordPress]] plugin that adds [[IndieAuth]] support to WordPress.
+
+* WordPress official repository: https://wordpress.org/plugins/indieauth/
+* GitHub development version: https://github.com/indieweb/wordpress-indieauth/
+
+The original release, written in 2013 by {{pfefferle}}, added support for logging into a WordPress site using Indieauth.com. The intention from the beginning was to eventually make WordPress an IndieAuth server as well.
+
+In 2017, the plugin was transferred to the Indieweb repository as it had not seen a major update in several years. {{gwg}} rewrote the existing functionality as it used unsupported/undocumented features of Indieauth.com and made the plugin usable with any IndieAuth server, not just Indieauth.com. 
+
+Version 2.0, also implements an IndieAuth endpoint inside the plugin and no longer supports Indieauth.com built-in, as that service is not actively maintained.
+
+Version 3.0: refactored and improved the code for tokens, improving token generation, adding a token management UI, a last used parameter, client information discovery, profile returns as part of the verification process, and as of 3.3, PKCE support. 
+
+Version 4.0 and its subversions brought the endpoint inside the plugin to be compliant with changes made to the IndieAuth spec in 2020-2021.
+
+== Terminology ==
+
+* '''web sign-in''' - logging in to WordPress
+* '''IndieAuth''' - using wordpress to log in to other places such as Micropub apps
+
+== Use Cases ==
+The below is brainstorming the use cases that this plugin solves or will solve in the future. These should include enough information and steps to be able to test the plugin when making changes.
+
+=== Web Sign-In ===
+==== Logging in to a multi-user WordPress site via IndieAuth ====
+<span id="Logging_in_to_a_multi-user_Wordpress_via_IndieAuth"></span>
+
+Assumptions:
+* A group WordPress blog with this plugin, e.g. https://notiz.blog/
+* An individual with a personal WordPress blog with this plugin, e.g. https://pfefferle.org/
+** Note: this works just as well with a personal site that supports IndieAuth that does not run WordPress
+* There is a user record in notiz.blog with the user's profile URL of https://pfefferle.org/
+
+Plugin Configuration:
+* notiz.blog
+** The IndieWeb plugin is set to a multi-author site
+** The IndieAuth plugin has the "Use IndieAuth login" setting checked
+** The IndieAuth plugin is set to use the built-in IndieAuth endpoint
+* pfefferle.org
+** The IndieWeb plugin is set to a single-author site
+** The IndieAuth plugin is set to use the built-in IndieAuth endpoint
+
+How it Works:
+* When the user views the Wordpress login screen of the group blog, there is an additional [[web sign-in]] prompt under the username/password
+* The user enters the URL that is in their profile (their personal site), and the plugin redirects to their personal wordpress site
+* The user sees the login request prompt and clicks "Approve"
+* The user is redirected back to the group blog with an authorization code in the query string
+* The group blog verifies the authorization code with the user's WordPress site, and then starts a session for the user
+
+==== Logging in to a multi-user WordPress site via RelMeAuth ====
+🚫 This is not currently supported
+
+Assumptions:
+* A group WordPress blog with this plugin, e.g. https://notiz.blog/
+* An individual with a personal WordPress blog, e.g. https://pfefferle.org/
+** The personal blog does not have the IndieAuth plugin installed
+** The personal blog has a rel=me link to Twitter and GitHub on the home page
+* There is a user record in notiz.blog with the user's profile URL of https://pfefferle.org/
+
+Plugin Configuration:
+* notiz.blog
+** The IndieWeb plugin is set to a multi-author site
+** The IndieAuth plugin has the "Use IndieAuth login" setting checked
+** The IndieAuth plugin is set to use the built-in IndieAuth endpoint
+* pfefferle.org
+** No IndieAuth plugin is installed
+** A GitHub and Twitter username are entered in the user's profile
+** The IndieWeb Plugin is installed, which adds rel=me links to the user's GitHub and Twitter profile
+
+How it Works:
+* When the user views the Wordpress login screen of the group blog, there is an additional [[web sign-in]] prompt under the username/password
+* The user enters the URL that is in their profile (their personal site)
+* The group blog does not find an IndieAuth server at that URL, but notices the rel=me links
+* The group blog sends the user to indielogin.com to complete the [[RelMeAuth]] authentication
+* Upon a successful authentication (via Twitter or GitHub, etc) at indielogin.com, the user is redirected back to the group blog with an authorization code from indielogin.com
+* The group blog verifies the authorization code with indielogin.com and starts a session for the user
+
+=== IndieAuth ===
+
+==== Logging in to the IndieWeb Wiki using your WordPress Site via IndieAuth ====
+('''Authentication''')
+
+
+
+==== Authorizing a Micropub app to Post to your WordPress ====
+('''Authorization''')
+
+==== Mixed site: WordPress blog as a component of a larger, non-WordPress site ====
+Most often WordPress is employed to manage an entire site, in which case the WordPress IndieAuth plugin can handle all authentication and authorization services at the domain level.  An alternative though less common use case is where WordPress only handles part of a site -- blog, syndicated IndieWeb content, etc. -- and so is installed in a subdirectory of the overall domain. For example:
+* Overall domain is <code>example.com</code>
+* WordPress is installed at <code>example.com/blog</code>, where the user's blog, timeline posts, Indie RSVPs, etc. appear.
+* Other (non-WordPress) content is at the domain root (<code>example.com/</code>) plus elsewhere (e.g., <code>example.com/articles</code>, <code>example.com/services</code>)
+* User would like their IndieAuth identity to be based on <code>example.com</code>, and would include identify information such as their h-card at <code>example.com</code> (i.e., <code>example.com/index.html</code>)
+
+== Testing ==
+
+Due to the variety of ways and environments in which WordPress can be installed, it is useful to have a list of all combinations and use this list when testing changes before releasing a new version.
+
+* Installation location
+** <code>/</code> - WordPress installed in the web server root 
+*** (e.g. <nowiki><code>https://example.com/</code></nowiki>)
+** <code>/wp/</code> - WordPress installed in a subfolder 
+*** (e.g. <nowiki><code>https://example.com/wp/</code></nowiki>)
+** hybrid - WordPress installed in a subfolder, configured to serve URLs from the root 
+*** (e.g. <nowiki><code>https://example.com/</code></nowiki>)
+* Number of users
+** Single-user installation (user URL is the blog root)
+** Multi-user installation (user URLs include a path)
+* Subdomains
+** www.example.com redirects to example.com
+** example.com redirects to www.example.com
+** www.example.com and example.com both serve the website (this should cause client errors with IndieAuth)
+* ... TODO
+
+== Troubleshooting ==
+
+The IndieAuth plugin has a test built into the setup page to check to see if the Authorization header is being passed or blocked by your hosting provider. If it is blocked, it suggests possible mitigations. If they do not work, you may need to contact your provider.
+
+You may want to disable some plugins during troubleshooting to see if they are interfering with IndieAuth. Likely possibilities are plugins related to login, such as those that enable login with a third-party provider or two-factor authentication. Any plugin that disables or alters the WordPress REST API may also interfere as this is used to enable IndieAuth functionality. You can report any conflict for troubleshooting. 
+
+
+=== Apache htaccess solutions ===
+
+For servers where the test built into the app fails, you can try adding one of the following lines to your .htaccess
+<pre>SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1</pre>
+If that doesn't work: 
+<pre>RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]</pre>
+
+The HTTP_AUTHORIZATION rule should come before the other RewriteRule entries.
+
+Please note that WordPress may overwrite 
+
+=== ModSecurity Firewall blocking requests ===
+
+On servers using the [https://modsecurity.org/ ModSecurity Web Application Firewall], with [https://wiki.atomicorp.com/wiki/index.php/Atomic_ModSecurity_Rules Atomicorp.com WAF Rules] requests may be blocked because of [https://wiki.atomicorp.com/wiki/index.php/WAF_340162 WAF 340162]. This rule blocks requests that use external URLs in the URL, to protect against Remote File Injection.
+
+''' Temporary solutions: '''
+
+* ask the hosting in charge of the firewall to disable this rule,
+* or disable it yourself if you have access to server configuration files (this may also work in [[.htaccess]] files) [https://support.plesk.com/hc/en-us/articles/115002531753-How-to-disable-a-single-ModSecurity-rule-for-a-website-]:
+<pre><IfModule mod_security2.c>
+SecRuleRemoveById 340162
+</IfModule></pre>
+
+''' Real solution: '''
+
+From the WAF Rule description:
+
+<blockquote>It is not recommended that you disable this rule if you have a false positive. If you believe this is a false positive, please report this to our security team to determine if this is a legitimate case, or if its clever attack on your system. Instructions to report false positives are detailed on the [https://wiki.atomicorp.com/wiki/index.php/Reporting_False_Positives Reporting False Positives] wiki page. If it is a false positive, we will fix the issue in the rules and get a release out to you promptly.</blockquote>
+
+This may only be available to Atomicorp customers?
+
+== See also ==
+* [[IndieAuth]]
+* [[RelMeAuth]]
+* [[OAuth]]
+
+
+{{WordPress}}
+
+
+[[Category:WordPress plugins]]
+[[Category:IndieAuth]]
