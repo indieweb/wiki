@@ -16,41 +16,24 @@ To "hotlink" to the files, to embed a podcast for example, you need to use the f
 
 To upload files to an existing page you need to edit the item. [https://help.archive.org/hc/en-us/articles/360018139431-How-to-delete-or-add-files-to-an-existing-item- Directions for editing items]
 === Trigger an Archive ===
-NOTE: As of some time around 2020-08 this (the /save path) stopped working, with archive.org returning an error that says "You need to be logged in to use Save Page Now." and then sometime in 2022 (maybe 2021?) it started working again (verified 2023-005 with a manual load), however is somewhat rate-limited (experimental results vary), so you may want to prioritize using it for new links first, and have an async delayed process for archiving the rest.
 
-==== Updated API ====
-There is a new API documented in [https://docs.google.com/document/d/1Nsv52MvSjbLb2PCpHlat0gkzw0EvtSgpKHu4mk0MnrA/edit?usp=sharing a Google Doc]
-
-<blockquote>Capture request
-SPN2 runs on https://web.archive.org/save which requires authentication using two alternative methods:
-S3 API Keys (highly preferable). Get your account’s keys at https://archive.org/account/s3.php Use HTTP Header "authorization: LOW $accesskey:$secret" in your requests.
-Cookies: Get logged-in-sig and logged-in-user from your browser when you log in to https://archive.org and add them to your SPN2 HTTP requests. Cookies are not desirable because they tend to expire after a few days so you would need to login again to archive.org to get new cookies.
-
-There is a limit of 7 concurrent save sessions per user.
-
-To capture a web page via the API, you can use an HTTP POST or GET request as follows:
-<pre><nowiki>curl -X POST -H "Accept: application/json"  -H “Authorization: LOW myaccesskey:mysecret” -d'url=http://brewster.kahle.org/' https://web.archive.org/save
-or
-curl -X GET -H "Accept: application/json" --cookie "logged-in-sig=AAAAAAAAAA;logged-in-user=user1%40archive.org;" https://web.archive.org/save/http://brewster.kahle.org/
-</nowiki></pre>
-</blockquote>
-The method described below is supposed to call through to the new API and enqueue it, but it may be slower - the current quoted backlog is 671 minutes
-
-==== Previous API ====
+==== Simple API ====
 
 You can tell archive.org to crawl and archive a specific URL immediately.
 
-<code style="display:block;padding:1em"><nowiki>$ curl -I -H "Accept: application/json" https://web.archive.org/save/{url to archive} | grep Content-Location</nowiki></code>
+<code style="display:block;padding:1em"><nowiki>$ curl -I https://web.archive.org/save/{url to archive} | grep Content-Location</nowiki></code>
 
 and you'll get a response like:
 
 <samp><nowiki>Content-Location: /web/20160715203015/http://indieweb.org</nowiki></samp>
 
-(We have wiki entries for [[curl -I|the <code>-I</code> option]] and [[curl -H|the <code>-H</code> option]] to <code>curl</code>.)
+(We have a wiki entry for [[curl -I|the <code>-I</code> option]] for <code>curl</code>.)
 
 The response includes the path to the archived page on web.archive.org. Append this path to <kbd><nowiki>https://web.archive.org</nowiki></kbd> to build the final URL for the archived page.
 
-==== Trigger Archive in PHP ====
+NOTE: As of some time around 2020-08 this (the /save path) stopped working, with archive.org returning an error that says "You need to be logged in to use Save Page Now." and then sometime in 2022 (maybe 2021?) it started working again (verified 2023-005 with a manual load), however is somewhat rate-limited (experimental results vary), so you may want to prioritize using it for new links first, and have an async delayed process for archiving the rest.
+
+===== Trigger Archive in PHP =====
 PHP snippet to call the <code>curl_exec()</code> function with appropriate options/params to trigger an archive:
 
 <pre>
@@ -58,7 +41,6 @@ $options =
 array(CURLOPT_URL => ('https://web.archive.org/save/' . $url_to_save),
       CURLOPT_HEADER => true,
       CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_HTTPHEADER => array('Accept: application/json'),
       CURLOPT_USERAGENT => "YOUR_CMS_NAME_HERE");
 $ch = curl_init();
 curl_setopt_array($ch, $options);
@@ -69,7 +51,7 @@ curl_close($ch);
 
 You can then check <code>$info['http_code']</code> for a numeric [[HTTP]] return code to see if there was an error (e.g. >= 400) and take action accordingly.
 
-==== Trigger Archive in Python (with requests) ====
+===== Trigger Archive in Python (with requests) =====
 
 This method requires the 'requests' Python library.
 <pre>
@@ -90,9 +72,7 @@ except:
     pass
 </pre>
 
-
-
-==== Trigger Archive in Ruby ====
+===== Trigger Archive in Ruby =====
 
 This is a Ruby method that triggers archiving by the Internet Archive for a given URL. It returns the URL that you can visit to see the archived page. It uses the <a href="https://github.com/rest-client/rest-client" title="Homepage of the REST Client Ruby gem">rest-client Ruby gem</a> to make a GET request.
 
@@ -105,10 +85,30 @@ def web_archive(url)
 end
 </pre>
 
-==== Trigger Archive in Browser ====
+===== Trigger Archive in Browser =====
 You can manually prepend <code><nowiki>https://web.archive.org/save/</nowiki></code> to a URL to save it on-demand. You can also set up a bookmarklet to archive the current page: [https://gregorlove.com/2019/04/here-is-a-javascript-bookmarklet/]
 
 <pre>javascript:var w=window.open('https://web.archive.org/save/'+location.href,'', 'scrollbars=1,status=0,resizable=1,location=0,toolbar=0');</pre>
+
+==== Alternate API ====
+There is a new API documented in [https://docs.google.com/document/d/1Nsv52MvSjbLb2PCpHlat0gkzw0EvtSgpKHu4mk0MnrA/edit?usp=sharing a Google Doc]
+
+* As of 2023-01-06, the simpler API above appears to work fine. Leaving this more complex alternative here in case someone can verify that it’s more reliable, to justify the effort. Any takers? — {{barnabywalters}}
+
+<blockquote>Capture request
+SPN2 runs on https://web.archive.org/save which requires authentication using two alternative methods:
+S3 API Keys (highly preferable). Get your account’s keys at https://archive.org/account/s3.php Use HTTP Header "authorization: LOW $accesskey:$secret" in your requests.
+Cookies: Get logged-in-sig and logged-in-user from your browser when you log in to https://archive.org and add them to your SPN2 HTTP requests. Cookies are not desirable because they tend to expire after a few days so you would need to login again to archive.org to get new cookies.
+
+There is a limit of 7 concurrent save sessions per user.
+
+To capture a web page via the API, you can use an HTTP POST or GET request as follows:
+<pre><nowiki>curl -X POST -H "Accept: application/json"  -H “Authorization: LOW myaccesskey:mysecret” -d'url=http://brewster.kahle.org/' https://web.archive.org/save
+or
+curl -X GET -H "Accept: application/json" --cookie "logged-in-sig=AAAAAAAAAA;logged-in-user=user1%40archive.org;" https://web.archive.org/save/http://brewster.kahle.org/
+</nowiki></pre>
+</blockquote>
+The method described below is supposed to call through to the new API and enqueue it, but it may be slower - the current quoted backlog is 671 minutes
 
 === Known ===
 {{new}} There is a [[Known]] plugin to auto-archive your posts and edits to your posts, as well as pages that you bookmark:
