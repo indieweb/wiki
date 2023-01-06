@@ -110,6 +110,10 @@ curl -X GET -H "Accept: application/json" --cookie "logged-in-sig=AAAAAAAAAA;log
 </blockquote>
 The method described below is supposed to call through to the new API and enqueue it, but it may be slower - the current quoted backlog is 671 minutes
 
+=== Retrieve the oldest available version of a URL ===
+<pre>URL="http://example.com"
+wget -O- -q "http://web.archive.org/web/timemap/link/${URL}" | grep "first memento" | sed -r "s/^<([^>]+)>;.*$/\1/"</pre>
+
 === Known ===
 {{new}} There is a [[Known]] plugin to auto-archive your posts and edits to your posts, as well as pages that you bookmark:
 * https://www.marcus-povey.co.uk/2017/02/02/archive-org-wayback-machine-support-for-known/
