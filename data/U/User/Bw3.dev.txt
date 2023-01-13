@@ -4,16 +4,26 @@ https://indieweb.org/User%3ABw3.dev
 |name = Bob W
 |url = https://bw3.dev
 |pronouns = he/him
-|summary = Bob W. (AKA 3b0b or 0x3b0b) is a software developer living in the southeast United States.
-|elsewhere = {{twitter-link| username = 0x3b0b }}; [https://keybase.io/3b0b 3b0b on Keybase]; [https://bw3.dev @0x3b0b@bw3.dev]; {{mastodon-link | instance = fe.disroot.org | username = 0x3b0b}}
+|summary = Bob W. (AKA 3b0b or {{0x3b0b}}, pronounced Bob or Three-Bob) is a software developer living in the southeast United States.
+|elsewhere = {{twitter-link| username = 0x3b0b }}
 |chatname = 0x3b0b
 }}</div>
 
 == My Setup ==
-My website is running [[microblog.pub]], so it functions natively as a single-user ActivityPub instance, uses [[microformats]], and sends and receives [[webmentions]]. It sits behind the same reverse proxy as my personal [[Matrix]] [https://github.com/spantaleev/matrix-docker-ansible-deploy instance], which has the side effect that my site drops offline when I'm updating Matrix.
+My website is running [[microblog.pub]] (with some custom modifications), which is, as its documentation describes, "a self-hosted, single-user, ActivityPub powered microblog" with IndieWeb features. In other words, it is sort of like running a personal Fediverse instance and using it as a blog. So:
+
+* My website directly functions as my ActivityPub profile (as can be seen on [https://indieweb.social/@0x3b0b@bw3.dev other] instances). Unlike some techniques I've seen for layering an ActivityPub profile on top of a personal blog (microblog.pub works sort of the other way around), my username isn't also my domain name (@bw3.dev@bw3.dev), but is separate ({{mastodon-link | instance = bw3.dev | username = 0x3b0b}}).
+* The documentation describes it as the ''profile'' being exposed as a microblog, but it's really more like the local timeline in some ways, since unlisted posts don't appear there.
+* It uses [[microformats]], and sends and receives [[webmentions]].
+* It shares some infrastructure with my personal [[Matrix]] [https://github.com/spantaleev/matrix-docker-ansible-deploy instance], which has the side effect that my site drops offline when I'm updating Matrix.
+* I use [[Bridgy]] for syndicating to Twitter when I feel like it, and theoretically also for backfeeding responses, except I don't think I've had any. However, I don't have [[u-syndication]] links (see Itches).
+* I use [[webmention.io]] for pingback support, just in case.
+* I have modified the software so that I can use permalinks derived from [[newbase60]]-encoded Unix timestamps (currently with precision to the minute, although that prevents me from posting twice in the same minute), which is shorter than the default of using UUIDs, and lets me determine a permalink in advance if I really want to.
 
 == Itches ==
-* I'm currently trying to wrap my head around what I ''can'' do and what I ''want'' to do as far as syndication and backfeed. I'm on the fence about whether I want to syndicate to Twitter, but I think I might like to get backfeed, and I'm not entirely sure how well the latter can work without the former. The lack of editing support on both ends means I can't include a [[u-syndication]] link in the original, either (without Twitter Blue, which ain't happening).
-* [[microblog.pub]], as of this writing, [https://todo.sr.ht/~tsileo/microblog.pub/56 plans] to add support for editing notes, but doesn't have it yet. (Draft support is under consideration, but not planned.) I might try to figure out if I can help contribute to that.
-* Permalinks are based on a UUID (truncated and with a slug appended for articles). I've got a nice short domain, and I'd kind of like to support shorter links, either by adding some kind of permashortlink support of my own or possibly by modifying the base software to use something else instead of the UUID, which - unlike the edit support - I feel like I might be able to accomplish without much research.
-* I also think I want to set up somewhere to put things that I don't consider notes or articles, and things that I may want to edit regularly, such as perhaps a more detailed About Me page. I'd kind of like it to be something I don't have to ssh into my server to do. I have a few ideas for how I might accomplish this, but nothing very concrete yet.
+* As mentioned above, I'm using Bridgy for syndication and backfeed when I want it (to Twitter, so far). The lack of editing support on both ends means the only way I can include a [[u-syndication]] link in the original post is to plan the exact minute I will publish the post, tweet a link to it ''first'' (which will be broken until I finish the process), add the twitter link to the original, and then post it during the correct minute. That is more hassle than I've been willing to put up with so far. It would be nice either to improve on that flow or to try to help contribute to adding edit support.
+* I would like to establish a place to put things that I don't consider to be notes or articles, and things that I may want to edit regularly, such as perhaps a more detailed About Me page. I have a few ideas for how I might accomplish this, but haven't decided which I like best yet.
+* I also might want a way to publish something that ''is'' handled like a normal post, that will be accessible to anyone who has the permalink, but that does not clutter my followers' feeds. I think official support for this is planned (in conjunction with more convenient support for posting an IndieWeb [[reply]] to something that isn't an ActivityPub object), but I may try my own riff on it first.
+* The home page, articles page, and tag pages are marked up as h-feeds, but the RSS and Atom feeds include everything I post as Public (notes and articles both) with no ability to subscribe separately to a post type or tag.
+* I am thinking of trying to make it more clear how people can interact with my posts. Currently it works fine for Fediverse natives encountering me from their instances, and there's guidance on my individual post pages for doing that if such people are looking at my site instead, but my Webmention compatibility isn't readily evident.
+* Replies via [[commentpara.de]] are displayed as webmentions but not threaded as comments, and I'm not sure why yet, since a reply from https://webmention.rocks did get threaded.
