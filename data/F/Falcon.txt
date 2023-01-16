@@ -232,6 +232,104 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== Display Likes Reposts ===
+Implement a minimal display of [[responses]], e.g. [[likes]] &amp; [[reposts]] on posts.
+* {{snarfed}} wants (me to do) this
+
+Use-cases: (mostly backfeed from Mastodon, Twitter, and GitHub)
+* '''show counts of responses on posts in-stream and on permalinks''': replies, reposts, likes counts, similar to [[Mastodon]]/Twitter post display of such counts
+** See instructions: https://webmention.io/#display-mention-counter for how to do so client-side
+** e.g. https://webmention.io/api/count?target=https://tantek.com/2023/001/t1/own-your-notes
+** (re)create visual design (dig up my old sketches, perhaps photograph & upload)
+*** text: n replies, n reposts, n bookmarks, n likes, n mentions (Mastodon shows these to the right of the published date)
+**** each count to be linked to a display of them in a list eventually (with permalinks for each? allow list of sites / tools? Mastodon, GitHub, not-Twitter except allowlist of accounts?)
+*** [[webactions]]:  ♡ Like | ♺ Repost | ↵ Reply | 🔖 Bookmark | 📤 Share 
+**** Have share button reveal the: "URL: [_________]" field and select its contents
+
+(re-evaluate priority at this point)
+ 
+* '''show summary of responses on post permalinks'''
+** likes on event posts (not posting a lot of events these days, was more relevant when I posted HWC events)
+** reposts on RSVP posts (also not posting a lot of these; interesting indication of other folks also participating)
+** [[reacji]] on GitHub issues & comments (e.g. https://github.com/mozilla/standards-positions/issues/453#issuecomment-888225596)
+*** needs Bridgy support (still?)
+
+Perhaps:
+* filter with [[allowlist]]s of folks I trust to have:
+** an inoffensive alias/profile URL
+** an inoffensive icon
+** an informative display name
+*** perhaps strip additions like .eth suffix, curly braces, [[holiday]] decorations / spooky variants
+*** perhaps use an addressbook display name & icon (or [[nicknames-cache]] entry from the domain for that person, since those are less likely to be "goofy")
+** custom per post icons (like [[aaronpk]] does based on emojis in his posts) 
+* only a count (per silo for backfeed?) of others reacting
+* maybe [[facepile]]s linked to URLs with names as alt text
+* maybe counts of both and a list?
+** Is it good or distracting / emphasizing the wrong thing to show counts (like every [[silo]] does)?
+
+* Perhaps query webmention.io for likes and reposts separately, then pipe through stream.thatmustbe.us, and display as inline list of author names linked to their URLs
+* Perhaps process queue of [[webmentions]] at webmention.io
+
+==== Display likes facepile on events ====
+As a small incremental step, display just a likes facepile, just on event posts.
+
+This will be a good way to experiment with presentational issues without impacting all posts.
+
+Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
+
+==== Display reposts facepile on events ====
+Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
+
+This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
+
+==== Display likes reposts all posts ====
+These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
+* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
+* <s>Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]</s> done!
+
+This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
+* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
+
+Scaling display: How to handle a facepile with 100s of items?
+
+E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
+* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
+** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
+** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
+<pre>
+{
+  "count": 312,
+  "type": {
+    "like": 110,
+    "mention": 33,
+    "post": 2,
+    "reply": 36,
+    "repost": 128
+  }
+}
+</pre>
+
+Real world example:
+* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
+
+----
+'''Homepage mentions'''
+
+Showing [[homepage]] mentions is an entirely different scale of design problem:
+* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
+<pre>
+{
+  "count": 101737,
+  "type": {
+    "like": 30,
+    "mention": 99995,
+    "post": 5,
+    "reply": 1660,
+    "repost": 4
+  }
+}
+</pre>
+
 === Design POSSE truncations display ===
 Figure out a way to display the different cut-offs of content for different POSSE destination length limitations, and whether they are hard (cut-off), or soft (remainder hidden behind a "more" disclosure link or triangle).
 * 256 hard: Twitter
@@ -330,9 +428,6 @@ There are several key improvements (beyond the default mobile presentation - see
 
 ==== mobile friendly recent photos box ====
 As of [https://tantek.com/2020/054/t2/added-recent-photos-embed2020-02-23 IWC Austin Project Day], I have a [[recent photos]] embed on my home page!
-
-Urgent:
-* bugfix: where did my recent photos box go? appears to have disappeared!
 
 Possible (unordered) improvements to consider:
 * show overlaid "stack" icon/emoji like IG does on thumbnail of first photo of [[multiphoto]] posts
@@ -925,102 +1020,6 @@ For Falcon, I'd likely evolve the abovementioned Post Creation UI to something w
 * hashtag buttons by frequency, clicking each filters on that one hashtag (like radio buttons)
 * clicking hashtags highlights them and adds/removes them from filtering (like checkboxes)
 * search box for filtering as well
-
-=== Display Likes Reposts ===
-Implement a minimal display of [[reactions]], e.g. [[likes]] &amp; [[reposts]] on posts.
-* {{snarfed}} wants (me to do) this
-
-Use-cases: (mostly backfeed from Mastodon, Twitter, and GitHub)
-* '''show counts of responses on posts in-stream and on permalinks''': replies, reposts, likes counts, similar to [[Mastodon]]/Twitter post display of such counts
-** See instructions: https://webmention.io/#display-mention-counter for how to do so client-side
-** e.g. https://webmention.io/api/count?target=https://tantek.com/2023/001/t1/own-your-notes
-** (re)create visual design (dig up my old sketches, perhaps photograph & upload)
-*** text: n replies, n reposts, n bookmarks, n likes, n mentions (Mastodon shows these to the right of the published date)
-**** each count to be linked to a display of them in a list eventually (with permalinks for each? allow list of sites / tools? Mastodon, GitHub, not-Twitter except allowlist of accounts?)
-*** [[webactions]]:  ♡ Like | ♺ Repost | ↵ Reply | 🔖 Bookmark | 📤 Share 
-**** Have share button reveal the: "URL: [_________]" field and select its contents
-
-* '''show summary of responses on post permalinks'''
-** likes on event posts (not posting a lot of events these days, was more relevant when I posted HWC events)
-** reposts on RSVP posts (also not posting a lot of these; interesting indication of other folks also participating)
-** [[reacji]] on GitHub issues & comments (e.g. https://github.com/mozilla/standards-positions/issues/453#issuecomment-888225596)
-*** needs Bridgy support (still?)
-
-Perhaps:
-* filter with [[allowlist]]s of folks I trust to have:
-** an inoffensive alias/profile URL
-** an inoffensive icon
-** an informative display name
-*** perhaps strip additions like .eth suffix, curly braces, [[holiday]] decorations / spooky variants
-*** perhaps use an addressbook display name & icon (or [[nicknames-cache]] entry from the domain for that person, since those are less likely to be "goofy")
-** custom per post icons (like [[aaronpk]] does based on emojis in his posts) 
-* only a count (per silo for backfeed?) of others reacting
-* maybe [[facepile]]s linked to URLs with names as alt text
-* maybe counts of both and a list?
-** Is it good or distracting / emphasizing the wrong thing to show counts (like every [[silo]] does)?
-
-* Perhaps query webmention.io for likes and reposts separately, then pipe through stream.thatmustbe.us, and display as inline list of author names linked to their URLs
-* Perhaps process queue of [[webmentions]] at webmention.io
-
-==== Display likes facepile on events ====
-As a small incremental step, display just a likes facepile, just on event posts.
-
-This will be a good way to experiment with presentational issues without impacting all posts.
-
-Also I can more easily check (by hand) every event post I've posted since launching them at [[2017|IndieWebSummit 2017]] to see what the likes facepiles look like and if there are any that need selective blocking/deleting using the webmention.io dashboard.
-
-==== Display reposts facepile on events ====
-Once like facepiles seem to work ok on events, then see if any POSSE copies got reposted (I think a few HWC SF past events did) and implement a reposts facepile just for events accordingly.
-
-This will also be a good way to experiment with likes+reposts facepiles presentational issues on a smaller, constrained, set of posts.
-
-==== Display likes reposts all posts ====
-These are dependent on being able to block sources and perma-delete specific (abusive) webmentions:
-* Webmention.io: use [https://github.com/aaronpk/webmention.io/issues/86#issuecomment-316584359 Feature: persistent webmention delete #86] (related: [https://github.com/voxpelli/webpage-webmentions/issues/40 webpage-webmentions feature request issue 40)]
-* <s>Bridgy backfeed returning 410 for blocked users per silo: [https://github.com/snarfed/bridgy/issues/473 Twitter: do not backfeed from blocked accounts #473]</s> done!
-
-This is required to solve the following problem(s) which are bad enough to block deployment of displaying received webmentions:
-* a family member is reading my public post, sees a facepile of people liking my post, sees an "interesting" avatar/icon in the facepile, clicks it, and sees a bunch of ugly things. I'd really like to avoid that
-
-Scaling display: How to handle a facepile with 100s of items?
-
-E.g. test case, showing a facepile of the links and/or reposts on this post (100s of each)
-* http://tantek.com/2015/069/t1/js-dr-javascript-required-dead
-** mostly via Bridgy backfeed from this [https://twitter.com/t/status/575434935554584576 POSSE tweet]
-** [https://webmention.io/api/count?target=http://tantek.com/2015/069/t1/js-dr-javascript-required-dead counts from webmention.io] as of 2017-08-16:
-<pre>
-{
-  "count": 312,
-  "type": {
-    "like": 110,
-    "mention": 33,
-    "post": 2,
-    "reply": 36,
-    "repost": 128
-  }
-}
-</pre>
-
-Real world example:
-* {{aaronpk}}'s post with 100+ item facepile: https://aaronparecki.com/2017/03/02/9/midi-poop-emoji
-
-----
-'''Homepage mentions'''
-
-Showing [[homepage]] mentions is an entirely different scale of design problem:
-* https://webmention.io/api/count?target=http://tantek.com/ as of 2017-08-16:
-<pre>
-{
-  "count": 101737,
-  "type": {
-    "like": 30,
-    "mention": 99995,
-    "post": 5,
-    "reply": 1660,
-    "repost": 4
-  }
-}
-</pre>
 
 === Own my public list emails and replies ===
 Goal: start posting [[email]]s & email replies to public lists on my own site first, and POSSEing them (perhaps manually at first) to their public email list destination(s).
