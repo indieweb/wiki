@@ -7,15 +7,24 @@ https://indieweb.org/sanitize
 [[Comments]] (and thus [[comments-presentation]]) is one particularly obvious area where sanitizing of some degree is essential.
 
 == IndieWeb Examples ==
+(this section is a stub)
 * ... who does what when they receive comments via [[webmention]] or [[Bridgy]] ?
-* [[Idno]] currently aggressively strips tags.
-* [[WordPress]] only allows a [http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ small whitelist of tags]: <code>a, abbr, acronym, b, blockquote, cite, code, pre, del, em, i, q, strike, strong</code>. It also whitelists attributes within those tags.
+
+== Software Examples ==
+* [[Idno]]/[[Known]] currently aggressively strips tags.
+** Details? All HTML tags?
+* [[Mastodon]] performs very specific [https://docs.joinmastodon.org/spec/activitypub/#sanitization HTML sanitization], with very minimal HTML allowlists of:
+** elements: <code>a, br, p, span</code>
+** class names ([[mf2]] or other semantics): <code>h-*, p-*, u-*, dt-*, e-*, mention, hashtag, ellipsis, invisible</code>
+* [[WordPress]] has a [http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ small allowlist of tags]: 
+** <code>a, abbr, acronym, b, blockquote, cite, code, pre, del, em, i, q, strike, strong</code>. 
+** It also has allowlists of attributes within those tags.
 
 == Approaches ==
 There are numerous approaches to sanitizing / filtering for HTML.
 E.g.
 * only allow [[plaintext]]
-* allow only whitelisted HTML tags
+* allow only allowlisted HTML tags
 * allow all HTML but strip &lt;script&gt; etc.
 * ...
 
@@ -24,7 +33,7 @@ Here are some additional resources:
 * http://pythonhosted.org/feedparser/html-sanitization.html
 * https://web.archive.org/web/20080826033749/http://diveintomark.org/archives/2003/06/12/how_to_consume_rss_safely
 * https://developers.google.com/caja/ (also https://code.google.com/p/google-caja/ ? ) - "the most insanely thorough sanitizer" - Kevin Marks
-* http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ - WordPress's minimal HTML tag whitelist. notably, it allows links, but not images.
+* http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ - WordPress's minimal HTML tag allowlist. notably, it allows links, but not images.
 * https://www.npmjs.org/package/sanitize-html
 
 == User Experience ==
