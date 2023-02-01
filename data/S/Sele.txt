@@ -2,6 +2,14 @@ https://indieweb.org/Sele
 
 '''<dfn><a href="https://git.jacky.wtf/indieweb/sele">Sele</a></dfn>''' is a [[IndieAuth]] provider (client and server) by {{jacky}}. It's meant to be friendly to [[selfhosting]]. Progress is publicly tracked on the [https://git.jacky.wtf/indieweb/sele/milestone/57 alpha] and the [https://git.jacky.wtf/indieweb/sele/milestone/27 final] releases, as well as the [https://git.jacky.wtf/indieweb/sele/milestone/58 backlog].
 
+== Authorization ==
+Due to Sele's projected nature of allowing people to register other methods of authentication (be it via [[WebAuthn]], using a passphrase, or what have you), the flow is a bit different from the conventional session-based flow. It, generically, is as follows:
+
+* An agent on behalf of a user/identity/site (a Web browser or another app) requests to obtain a challenge.
+* The agent passes information of that challenge over to the user to attest their ability to complete it.
+* Once completed and verified (which usually means the challenge response was acceptable), Sele generates a short-lived token (in this case, one generated using the [https://paseto.io/ Paseto] algorithm) and returns it to the agent.
+* At this point, it's up to the agent to redeem this token. Sele itself will attempt to redeem such a token by calling the API endpoint for doing so. I'm not currently sure how to handle other clients that'd like to use that token (pending security concerns).
+
 == TicketAuth ==
 Sele aims to provide a working implementation of [[TicketAuth]]. In order to do this, it aims to answer a few questions intentionally left open by the specification:
 
