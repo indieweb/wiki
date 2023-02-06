@@ -15,12 +15,31 @@ https://indieweb.org/footnote
 * ¹ 2018 example: http://tantek.com/2018/296/t1/cindyli
 
 == Brainstorming ==
-* Brainstorming: if you use ASCII footnotes like [1] or ^2 when authoring your personal posts, consider auto-Unicoding them to ¹ or ² respectively.
-* ^ reference for Unicode superscripted numbers for that: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts#Superscripts_and_subscripts_block
-* ^ when POSSEing to a plain (non-HTML) text silo (like Twitter, or email maybe), use the original ASCII style ^1 or [1] because it’s ok for the POSSE version to not look as nice, and you have no idea if the POSSE destination will use actual superscripts to mean something.
-* brainstorm: auto-unicoding of ASCII style footnotes could be done with a well written regex (TBI), and with an optional “fragment_prefix” param, fragment hyperlink inline instances of footnotes (gen frag ID by strcat prefix+fnum) to their footer expansions (detect as linebreak before footnote ref)
+=== Convert ASCII to Unicode superscripts ===
+Summary: if you use ASCII footnotes like [1] or ^2 when authoring your personal posts, consider auto-Unicoding them to ¹ or ² respectively.
+
+ASCII footnotes like ^1 or [1] are easier to type, yet when inline in prose, can be distracting to readers.
+
+Small superscript numbers like those in print footnotes would be less distracting. 
+
+From an authoring perspective, it’s easier to type ^1 or [1], and they can (should) be converted into either HTML or Unicode superscript numbers.
+
+Since many (most?) syndication destinations do not accept <code><sub></code> or <code><sup></code> elements, Unicode superscript numbers would syndicate better.
+
+Reference: for Unicode superscript numbers for that: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts#Superscripts_and_subscripts_block
+* ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹
+
+When POSSEing to a plain (non-HTML) text silo (like [[Twitter]], or perhaps [[email]]), use the original ASCII style ^1 or [1] because it’s ok for the POSSE version to not look as nice, and you have no idea if the POSSE destination will use actual superscripts to mean something.
+
+Implementation brainstorms: 
+* auto-Unicoding of ASCII style footnotes could be done with a well written regex (TBI), and footnote expansions could be detected with a linebreak before footnote. 
+* with an optional “fragment_prefix” param to an existing [[autolink]] function, both inline and expansion footnotes could be marked up with unique fragments, and hyperlink to each other
+** generate ref frag ID by concatenating prefix param and '_ref-' and number, hyperlink it to its footer expansion
+** generate note frag ID by concatenating prefix param and '_note-' and number, add a "⮐" symbol after the note which hyperlinks to its footnote ref
+
+=== Sidenotes ===
 * notes/expansions could also be presented as a sidenote in a margin adjacent to the respective in-line reference. see also [[marginalia]]
+* [[Tufte_CSS]] has well designed distinctions between side notes and end notes
 
 == See Also ==
-* Various styles on the web: ASCII (^1 or [1]), Unicode (¹), either of which could themselves be hyperlinked with a fragment to the display of the footnote in the footer.
-* [[Tufte_CSS]] has well designed distinctions between side notes and end notes
+* [[marginalia]]
