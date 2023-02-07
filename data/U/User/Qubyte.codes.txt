@@ -1,3 +1,32 @@
 https://indieweb.org/User%3AQubyte.codes
 
 I'm Mark S. Everitt, the author of <span class="h-card">https://qubyte.codes</span>
+
+My personal site uses a [https://github.com/qubyte/qubyte-codes/ static site generator of my own design]. It's written in node and uses a promise based directed-graph based build system with hot reloading.
+
+My needs are fairly specific, and have led me to develop a [https://qubyte.codes/blog/marqdown dialect of markdown] with special handling of language attributes and ruby annotations (amongst other things).
+
+Static site generators aren't always a good match for IndieWeb associated technologies like Webmention and Micropub since builds are isolated (setups served from databases are easier to work with in this respect), but I've had a lot of fun engineering what I want within these constraints.
+
+== IndieWeb things I've implemented so far ==
+
+* Micropub (including a media endpoint) using Netlify functions. Post content is essentially proxied to GitHub using the content API, so I don't need to work with the git tree API. The media endpoint function strips metadata from photos, but further processing into more formats and sizes is done with a GitHub Actions workflow.
+* I use [https://support.apple.com/en-gb/guide/shortcuts/welcome/ios iOS/MacOS shortcuts] to post links and notes with photos to my site. I also use [https://microformats.org/wiki/h-event h-event] posts to send details/duration of [https://qubyte.codes/blog/my-2022-japanese-language-study-habits study sessions] quickly from my phone or Mac menubar. I slightly broke with the spec by allowing shared secret support in addition to IndieAuth for these. I use Omnibear compiled into a Mac app to get it working with Safari for posting from my laptop.
+* Webmention receipt using a Netlify function. I don't have a good solution for dealing with these right now, so for the time being mentions are validated, and then each is turned into an issue in GitHub.
+* Webmention dispatch using a Netlify build plugin. I compare the atom feed before and after each build to determine new/updated/deleted posts and scan the relevant posts (both before and after in the event of an update) for mentioned URLs to send mentions to.
+* Note (including an optional photo) and bookmark syndication to Mastodon with GitHub Actions.
+
+== Good citizen of the web things ==
+
+* Most pages don't require JS. There is a service worker as a progressive enhancement for caching.
+* Where JS *is* required (experiments, art, etc.) I use unbundled, immutably cached JS modules with import maps and preloading as progressive enhancements: https://qubyte.codes/blog/progressively-enhanced-caching-of-javascript-modules-without-bundling-using-import-maps
+* HTML pages have various security headers added.
+* No cookies or tracking. My site is for me so I don't really care about visitor numbers, referrers, etc.
+* Native font stacks (no need to download and cache a font).
+* Immutably cached CSS. I use mostly classless CSS so some HTML bloat is avoided. (I have no sense of style though, so it might hurt your eyes.)
+* Images processed into various sizes and available in AVIF and WebP as well as JPEG as a fallback.
+* [https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading Lazy loaded images].
+
+== Other Indieweb related things ==
+
+* A Node.js library for discovering rel-payment links: https://www.npmjs.com/package/rel-payment
