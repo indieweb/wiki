@@ -47,16 +47,18 @@ When POSSEing to a plain (non-HTML) text silo (like [[Twitter]], or perhaps [[em
 Implementation brainstorms: 
 * auto-Unicoding of ASCII style footnotes could be done with a well written regex (TBI), and footnote expansions could be detected with a linebreak before footnote. 
 ** regex to detect both/either ref & note, then distinguish in code afterwards
-** regex: start with '^', 'n', space-or-separation-punctuation (like , : ; ! ?)
-*** "^1" should not match
-*** "^1, should match
+** regex: start with '^', 'n', space-or-separation-punctuation (like , : ; ! ?), similar to a regex looking for @-names or #hashtags, except only including numbers (0-9) after the '^' character.
+*** "^1" should be treated as literal text (pass through)
+*** "^1, should be treated as a footnote ref
 ** non-space before '^' -> ref
 *** possibly also: non-linebreak-space before '^' -> ref
-** linebreak before '^', after 'n': optional-colon space -> note
+** linebreak before '^' (maybe also check for: after 'n': optional-colon space) -> note
 ** else treat as literal text, pass through
-* with an optional “fragment_prefix” param to an existing [[autolink]] function, both inline and expansion footnotes could be marked up with unique fragments, and hyperlink to each other
-** generate ref frag ID by concatenating prefix param and '_ref-' and number, hyperlink it to its footer expansion
-** generate note frag ID by concatenating prefix param and '_note-' and number, add a "⮐" symbol after the note which hyperlinks to its footnote ref
+* with an optional “fragment_prefix” parameter to an existing [[autolink]] function, both inline and expansion footnotes could be marked up with unique fragments, and hyperlink to each other
+** generate ref frag ID by concatenating fragment_prefix and '_ref-' and number, hyperlink it to its footer expansion
+** generate note frag ID by concatenating fragment_prefix and '_note-' and number, hyperlink it to its inline ref
+*** possibly also (in post-processing outside of autolinking), detect note expansion elements, and  add a "⮐" symbol after the note which hyperlinks to its footnote ref
+*** building on that, detect a block of footnote expansions and markup the whole thing as a list
 
 === Sidenotes ===
 * notes/expansions could also be presented as a sidenote in a margin adjacent to the respective in-line reference. see also [[marginalia]]
