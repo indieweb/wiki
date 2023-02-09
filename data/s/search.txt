@@ -76,6 +76,8 @@ How to TBD.
 * [http://dataparksearch.org/ DataparkSearch Engine]
 * [https://github.com/teamtnt/tntsearch TNTSearch] - full-text search engine written in PHP
 * [https://indieweb.org/SQLite SQLite] with [https://sqlite.org/fts3.html FTS4] or [https://www.sqlite.org/fts5.html FTS5] engine, queried with PHP, Python, etc.
+* [https://whoosh.readthedocs.io/en/latest/intro.html Whoosh], Python
+* [https://typesense.org/ Typesense] open-source search service (hosted version available) - [https://typesense.org/typesense-vs-algolia-vs-elasticsearch-vs-meilisearch/ comparison]
 
 ==== self-hacked engines ====
 * [http://wiki.sgripon.net/doku.php/self_hosted_search_engine Self hosted search engine] with elasticsearch, [https://github.com/romansanchez/Calaca Calaca] as frontend and [http://nutch.apache.org/ apache nutch] as crawler
@@ -296,6 +298,12 @@ Advanced search:
 
 https://i2.wp.com/maximizesocialbusiness.com/wp-content/uploads/2013/12/Twitter-Advanced-Search-Options.png
 
+== Criticism of Existing Search ==
+
+* Criticism: Google Search sucks for personal site search, especially older posts: 2018-01-15 (updated 2022-02) Tim Bray: [https://www.tbray.org/ongoing/When/201x/2018/01/15/Google-is-losing-its-memory Google Memory Loss]
+* https://twitter.com/max_oats/status/1521801590432497664?s=21&t=IsZYNl69qAub0WWa-7qsIA
+** "google in 2022 is dogshit bc if i want to search "check mouse dpi" it comes up with 10000000 AI-driven tech blogs of which the content is eighteen paragraphs of:<br><br>What is the DPI Mouse?<br>Many people would like to check their DPI of mouse. The DPI of a mouse is the dots-per-second" [http://twitch.tv/max_oats @max_oats] May 4, 2022
+* Google's "helpful content update" that uses a machine learning model to classify content that is written more for people vs. search engines: https://developers.google.com/search/blog/2022/08/helpful-content-update
 
 == Brainstorming ==
 
@@ -303,6 +311,7 @@ https://i2.wp.com/maximizesocialbusiness.com/wp-content/uploads/2013/12/Twitter-
 Search related sessions at past IndieWebCamps:
 * [[2012/Open Real Time Search Engine]]
 * [[2018/Nuremberg/search]]
+* [[2019/Utrecht/fedsearch]]
 
 === Faceted scoped search ===
 Beyond raw searching of the contents of your site, it may also be useful to index and be able to search within:
@@ -320,6 +329,9 @@ Beyond searching just the contents of what you publish on your own indieweb site
 * every '''site''' of pages that you link to in your posts, perhaps using [[PuSH]] discovery for those sites.
 And then provide results from those as well as your own site.
 
+* Use-case: searching your posts and the webmentions they have received using web search tools, good reason to store received webmentions and render them server-side: https://twitter.com/megarush1024/status/1034332413911023616
+** "That time you search through all the posts on your site because you know you complained about Spotify’s suggestion algo when you have a playlist on shuffle and it something lame, and you know @jage9 told you how to fix it in a Twitter reply that came back as a webmention." [http://www.arush.io @megarush1024] August 28, 2018
+
 === Social search ===
 Beyond searching just the contents of what you publish on your own indieweb site, it may be useful to *also* index:
 * every '''indieweb site''' of any person you mention 
@@ -329,6 +341,11 @@ Beyond searching just the contents of what you publish on your own indieweb site
 ** etc. anywhere on your site.
 * every site you follow in your indie [[reader]]
 And then provide results from their sites as well as your own site.
+
+
+* Others have expressed desire for a modern Technorati based on the IndieWeb https://social.coop/@jsit/109744623736322473
+** "@axbom @eric I wish we had an #indieweb Technorati. I want to browse and subscribe to people blogging around certain tags again." [https://social.coop/@jsit @jsit] January 24, 2023
+
 
 ==== Drawbacks ====
 
@@ -342,46 +359,31 @@ Indexing all of this content by one's self would be difficult to maintain as you
 
 === More brainstorms ===
 See additional brainstorms at:
-* http://cweiske.de/tagebuch/phinde.htm#features
+* [http://cweiske.de/tagebuch/phinde.htm#features phinde, my self-hosted search engine]
+* [https://snarfed.org/2018-11-30_indieweb-google-custom-search-engine IndieWeb Google Custom Search Engine]
+* [https://context.center/topics/indie-search/ Indie Search resource list] maintained by [http://aramzuckerscharff.com/ Aram Zucker-Scharff] aka Aram Z-S
+* [https://lobste.rs/s/n8g3sj/how_would_one_build_search_engine_today How would one build a search engine today? - lobste.rs]
+* https://wiki.nikitavoloboev.xyz/web/search-engines ([https://web.archive.org/web/20220618005934/http://wiki.nikiv.dev/web/search-engines archive])
+* http://www.norvig.com/spell-correct.html
+* https://cloud.google.com/blog/topics/developers-practitioners/find-anything-blazingly-fast-googles-vector-search-technology
+* A demo video showing a "personal" search index: https://twitter.com/morgallant/status/1511792083534704643
+** "What doing research should look like in 2022. In this case, asking the @Cloudflare blog about the effect of earthquakes on internet traffic patterns." [https://morgangallant.com @morgallant] April 6, 2022
+* [https://jamesg.blog/2021/07/22/search-engine-textrank Implementing TextRank on my blog search engine]
+
+== Alternate Search Engines ==
+* A text-focused search engine: https://search.marginalia.nu/
+* A different way to think about search: https://you.com/
+* https://wiki.nikiv.dev/web/search-engines large list of search engines and search related resources here.
+* https://search.marginalia.nu/
+* There are many people and businesses working on new takes on search that contain new ideas: https://dkb.io/post/the-next-google
+* A small search tool for searching across related "sister sites" or other [[digital garden]]s : http://www.wikigraph.net/gardensearch; see https://twitter.com/BillSeitz/status/1510770230469050368
+* [https://wiby.me/ Wiby - Search Engine for the Classic Web], which indexes pages that are manually submitted
 
 == See Also ==
 * [[Getting Started]]
 * [[IndieMark]]
 * [[reader]]
 * [[OpenSearch]]
-* Use-case: searching your posts and the webmentions they have received using web search tools, good reason to store received webmentions and render them server-side: https://twitter.com/megarush1024/status/1034332413911023616
-** "That time you search through all the posts on your site because you know you complained about Spotify’s suggestion algo when you have a playlist on shuffle and it something lame, and you know @jage9 told you how to fix it in a Twitter reply that came back as a webmention." [http://www.arush.io @megarush1024] August 28, 2018
-* Brainstorming: text search of [[photo]] posts, or any posts with images in them, should include the alt text of all such images.
-* [https://snarfed.org/2018-11-30_indieweb-google-custom-search-engine IndieWeb Google Custom Search Engine]
-* Criticism of BigSearch: https://twitter.com/wblut/status/1307355448178356230
-** "I'm painfully experiencing (again) how it is becoming increasingly harder to find up-to-date information. Most search results are either auto generated spam pages, aggregator junk, or stack overflow answers* from 2016.  <br><br>* "This is not a valid question and you are dumb."" [http://wblut.com @wblut] September 19, 2020
-* https://boffosocko.com/2020/09/29/55777872/
-** "Keeping my follows on my site as an OPML file allows me to use Inoreader for OPML subscribe. Then I can use their built-in search (and saved searches) to get information from personal websites I’m following." [https://boffosocko.com/ @Chris Aldrich] September 29, 2020
-* [https://wiby.me/ Wiby - Search Engine for the Classic Web], which indexes pages that are manually submitted
-* https://superuser.com/questions/7327/how-to-add-a-custom-search-engine-to-firefox
-* https://whoosh.readthedocs.io/en/latest/intro.html
-* http://www.norvig.com/spell-correct.html
-* [https://jamesg.blog/2021/07/22/search-engine-textrank Implementing TextRank on my blog search engine]
-* A text-focused search engine: https://search.marginalia.nu/
-* https://wiki.nikitavoloboev.xyz/web/search-engines
-* https://lobste.rs/s/n8g3sj/how_would_one_build_search_engine_today
-** "" [https://lobste.rs/u/netopwibby @netopwibby]
-* A different way to think about search: https://you.com/
-* https://cloud.google.com/blog/topics/developers-practitioners/find-anything-blazingly-fast-googles-vector-search-technology
-* Criticism: Google Search sucks for personal site search, especially older posts: 2018-01-15 (updated 2022-02) Tim Bray: [https://www.tbray.org/ongoing/When/201x/2018/01/15/Google-is-losing-its-memory Google Memory Loss]
-* https://typesense.org/ open-source search service (hosted version available) - https://typesense.org/typesense-vs-algolia-vs-elasticsearch-vs-meilisearch/
-* A small search tool for searching across related "sister sites" or other [[digital garden]]s : http://www.wikigraph.net/gardensearch; see https://twitter.com/BillSeitz/status/1510770230469050368
-* There are many people and businesses working on new takes on search that contain new ideas: https://dkb.io/post/the-next-google
-* https://twitter.com/max_oats/status/1521801590432497664?s=21&t=IsZYNl69qAub0WWa-7qsIA
-** "google in 2022 is dogshit bc if i want to search "check mouse dpi" it comes up with 10000000 AI-driven tech blogs of which the content is eighteen paragraphs of:<br><br>What is the DPI Mouse?<br>Many people would like to check their DPI of mouse. The DPI of a mouse is the dots-per-second" [http://twitch.tv/max_oats @max_oats] May 4, 2022
-* A demo video showing a "personal" search index: https://twitter.com/morgallant/status/1511792083534704643
-** "What doing research should look like in 2022. In this case, asking the @Cloudflare blog about the effect of earthquakes on internet traffic patterns." [https://morgangallant.com @morgallant] April 6, 2022
-* Index of Indie Search related posts/services: https://context.center/topics/indie-search/
-* Related IWC Session: [[2019/Utrecht/fedsearch]]
-* https://search.marginalia.nu/
-* https://wiki.nikiv.dev/web/search-engines large list of search engines and search related resources here.
 * [[IndieWeb Search]]
-* https://context.center/topics/indie-search/ a resource maintained by [http://aramzuckerscharff.com/ Aram Zucker-Scharff] aka Aram Z-S
-* Google's "helpful content update" that uses a machine learning model to classify content that is written more for people vs. search engines: https://developers.google.com/search/blog/2022/08/helpful-content-update
-* Brainstorming: request / desire for a modern Technorati based on the IndieWeb https://social.coop/@jsit/109744623736322473
-** "@axbom @eric I wish we had an #indieweb Technorati. I want to browse and subscribe to people blogging around certain tags again." [https://social.coop/@jsit @jsit] January 24, 2023
+** "Keeping my follows on my site as an OPML file allows me to use Inoreader for OPML subscribe. Then I can use their built-in search (and saved searches) to get information from personal websites I’m following." [https://boffosocko.com/ @Chris Aldrich] [https://boffosocko.com/2020/09/29/55777872/ September 29, 2020]
+* [https://superuser.com/questions/7327/how-to-add-a-custom-search-engine-to-firefox How to add a custom search engine to Firefox]
