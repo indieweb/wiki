@@ -10,6 +10,21 @@ Why use footnotes (rather than or in addition to inline hyperlinks) in posts:
 <blockquote>… in-line hyperlink citations[number] are listed in the References footer of this post. You may procrastinate clicking them until the end for a more in-flow reading experience.</blockquote>
 * '''Save space in POSSE copies''': Footnotes help save space when [[POSSE]]ing to text-only (non-HTML) destinations like [[Twitter]]
 
+== How to ==
+=== How to markup ===
+You should markup your footnotes with hyperlinks from each inline reference to the expansion in the footer, and in reverse.
+
+One way to do this is to use fragment IDs and fragment hyperlinks in both directions, made unique by use of a prefix unique to the context of the footnotes (e.g. a <code>shortpath</code> unique to a specific post) and then a string like <code>_ref-</code> or <code>_note-</code> respectively, followed by the number of the footnote.
+
+=== How to style ===
+Since typical fonts and even the generic font families of <code>serif</code> and <code>sans-serif</code> fail to display all 10 Unicode superscripts consistently, e.g.:
+* ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ — How do these look in your browser? Do the 123 look different from 0,4-9?
+You must explicitly style the font of footnote references and expansions to use a font-family (and fallback generic) that supports the entire set. If you’ve followed the markup guidance above, you can use a style rule like this:
+<blockquote><code>a[id*='_ref-'],a[id*='_note-'] { font-family:"Arial Unicode MS",system-ui; }</code></blockquote>
+Here is an inline example of the same series of Unicode numbers as above, styled with that <code>font-family</code>:
+* <span style="font-family:'Arial Unicode MS',system-ui;">⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹</span>
+The numbers 0-9 above should be the same size & weight, and all be baseline aligned.
+
 == IndieWeb Examples ==
 === Tantek ===
 {{t}} has used "[1]" style footnotes [http://tantek.com/2013/338/b1/people-focused-mobile-communication-experience since at least 2013] in [[article]]s.
