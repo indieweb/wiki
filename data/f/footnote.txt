@@ -10,17 +10,22 @@ Why use footnotes (rather than or in addition to inline hyperlinks) in posts:
 <blockquote>… in-line hyperlink citations[number] are listed in the References footer of this post. You may procrastinate clicking them until the end for a more in-flow reading experience.</blockquote>
 * '''Save space in POSSE copies''': Footnotes help save space when [[POSSE]]ing to text-only (non-HTML) destinations like [[Twitter]]
 
+=== Why Unicode instead of ASCII ===
+ASCII footnotes like "^1" or "[1]" can cause readers to take longer and require more effort to read sentence, when they have such punctuation every few words. Two or three ASCII characters like that makes it harder to scan the text in contrast to if it were just prose.
+
+Unicode superscripts like '¹' both use less width and less ink and are thus far less distracting, and easier to skim over when scanning text.
+
 == How to ==
 === Convert ASCII to Unicode superscripts ===
-Summary: allow use of ASCII footnotes like [1] or ^2 when authoring your personal posts because they are easier to type, and auto-convert them to Unicode superscripts like ¹ or ² respectively.
+Summary: allow use of ASCII footnotes <kbd>^2</kbd> when authoring your personal posts because they are easier to type, and auto-convert them to Unicode superscripts like <samp>²</samp>.
 
-ASCII footnotes like ^1 or [1] are easier to type, yet when inline in prose, can be distracting to readers.
+ASCII footnotes like <kbd>^3</kbd> are easier to type, yet when inline in prose, can be distracting to readers (see Why Unicode instead of ASCII above).
 
 Small superscript numbers like those in print footnotes are less distracting. 
 
-From an authoring perspective, it’s easier to type ^1 or [1], and they can (should) be converted into either HTML or Unicode superscript numbers.
+From an authoring perspective, it’s easier to type <kbd>^4</kbd>, and they can (should) be converted into either HTML or Unicode superscript numbers.
 
-Since most syndication destinations do not accept <code><nowiki><sub></nowiki></code> or <code><nowiki><sup></nowiki></code> elements, Unicode superscript numbers are better.
+However, since most syndication destinations do not accept <code><nowiki><sub></nowiki></code> or <code><nowiki><sup></nowiki></code> elements, Unicode superscript numbers are better.
 
 Reference: for Unicode superscript numbers for that: https://en.wikipedia.org/wiki/Unicode_subscripts_and_superscripts#Superscripts_and_subscripts_block
 * ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹
@@ -59,6 +64,18 @@ When POSSEing to a plain (non-HTML) text silo (like [[Twitter]], or perhaps [[em
 * 1995: https://lists.w3.org/Archives/Public/www-talk/1995MarApr/0054.html
 
 == Brainstorming ==
+=== ASCII brackets footnotes ===
+Though used in email, there are no known examples of auto-converting ASCII brackets footnotes like "[1]" to Unicode superscripts.
+
+Summary: allow use of ASCII footnotes like <kbd>[1]</kbd> when authoring your personal posts because they are easier to type, and auto-convert them to Unicode superscripts like <samp>¹</samp>.
+
+ASCII footnotes like [1] are easier to type, yet when inline in prose, can be distracting to readers.
+
+Small superscript numbers like those in print footnotes are less distracting. 
+
+From an authoring perspective, it’s easier to type <kbd>[1]</kbd>, and it can (should) be converted into Unicode superscript numbers.
+
+=== Regex to find ASCII footnotes ===
 Implementation brainstorms: 
 * auto-Unicoding of ASCII style footnotes could be done with a well written regex, and footnote expansions could be detected with a linebreak before footnote. 
 ** regex to detect both/either ref & note, then distinguish in code afterwards
