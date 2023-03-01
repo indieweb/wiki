@@ -103,9 +103,23 @@ Implementation brainstorms:
 * notes/expansions could also be presented as a sidenote in a margin adjacent to the respective in-line reference. see also [[marginalia]]
 * [[Tufte_CSS]] has well designed distinctions between side notes and end notes
 
+=== How to markup semantics ===
+There are no HTML elements currently for explicitly conveying footnote and reference semantics, however there is some related prior art that could be used for class names to start with:
+
+==== EPUB type attribute ====
+Prior format example:
+
+EPUB3 https://www.heliconbooks.com/?id=blog&postid=EPUB3Footnotes ([[js;dr]]) <blockquote>For the link… <br/><code>&lt;a href="#n1" epub:type="noteref" &gt;1&lt;/a&gt;</code><br/>…<p>Note the use of <code>epub:type="noteref"</code> this tells the reader that this link is not a standard link but a link to a note.</p><p>The note itself should be inside a new HTML5 semantic tag</p>…<br/><code>&lt;aside id="n1" epub:type="footnote" &gt;This is a note&lt;aside&gt;</code></blockquote>
+
+<img style="float:right;max-width:25%" src="https://help.apple.com/itc/booksassetguide/en.lproj/GlobalArt/flowing_footnote.png" alt="Example of a pop-up footnote displayed on an Apple Books document" />
+Docs with consuming code example: https://help.apple.com/itc/booksassetguide/en.lproj/itccf8ecf5c8.html <blockquote>You use two elements to create a pop-up footnote: an anchor (<code>&lt;a&gt;</code>) element that triggers the popup and the <code>&lt;aside&gt;</code> element that contains the footnote text. Both elements have an <code>epub:type</code> attribute to identify their purpose: <code>epub:type="noteref"</code> to trigger the popup and <code>epub:type="footnote"</code> to indicate the footnote’s text.</blockquote>
+
+==== microformats2 property ====
+Potential opportunity here to:
+* propose an HTML markup pattern (e.g. a [[microformats2]] property for a footnote and footnote-ref, inside an [[h-entry]])
+* write a [[progressive enhancement]] polyfill [[JS]] that mimics the Apple Books EPUB popup UI for footnotes, using that markup on a page
+
 == See Also ==
 * [[post footer]]
 * [[marginalia]]
 * FYI: apparently due to inconsistent font support, some combinations of superscript numbers may be misaligned: [https://github.com/manubot/rootstock/issues/190 #190 Possibly incorrect rendering of unicode superscripts in 02.delete-me.md]
-* Brainstorming: how to mark-up, prior example, EPUB3 https://www.heliconbooks.com/?id=blog&postid=EPUB3Footnotes ([[js;dr]]) <blockquote>For the link… <br/><code>&lt;a href="#n1" epub:type="noteref" &gt;1&lt;/a&gt;</code><br/>…<p>Note the use of <code>epub:type="noteref"</code> this tells the reader that this link is not a standard link but a link to a note.</p><p>The note itself should be inside a new HTML5 semantic tag</p>…<br/><code>&lt;aside id="n1" epub:type="footnote" &gt;This is a note&lt;aside&gt;</code></blockquote>
-* ^ docs with consuming code example: https://help.apple.com/itc/booksassetguide/en.lproj/itccf8ecf5c8.html <blockquote>You use two elements to create a pop-up footnote: an anchor (<code><a></code>) element that triggers the popup and the <code><aside></code> element that contains the footnote text. Both elements have an <code>epub:type</code> attribute to identify their purpose: <code>epub:type="noteref"</code> to trigger
