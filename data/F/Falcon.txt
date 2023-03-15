@@ -233,6 +233,27 @@ If you see something broken, add a note here and I'll look into it. thanks! - {{
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== linked hashtags ===
+[[hashtags]] in my [[notes]] are currently unlinked because:
+* I don't know where to link them to (no good indieweb tag [[aggregators]] yet), and 
+* I don't have a tag based destination on my own site
+
+Thus:
+* figure out a local destination for hashtags, e.g. tag search (AKA "tag results", "tag feeds"), paginated by date
+** E.g. [[Known]] does this nicely: http://www.rmendes.net/tag/indieweb
+* update Falcon <code>auto_tag</code> function to link to that destination automatically
+** use-case: help make posts federated to Mastodon show hashtag links local to the instance displaying my post
+** add param of "tagspace" URL prefix to use
+
+Consider implementing:
+* a [[tags page]] to see what tags I’ve used as a way to help pick a good default tag link destination, e.g. to check to see if link like this for "hashtag" would work:
+** https://en.wikipedia.org/wiki/hashtag
+
+Consider additional default tag link destinations:
+* https://indieweb.social/tags/hashtag
+** users at that instance already follow my posts, my posts will show up in those [[tag page]]s when I have that working with Bridgy Fed, and it is likely that indieweb.social posts with the same hashtag will be related to what I’m posting about, so it should provide a reasonable experience for folks clicking through from my site.
+** maybe only auto-link auto-tags in 2023 posts onward, since all of those have been federated (and federated updates can be sent to have those posts show up on those indieweb.social tag pages)
+
 === Display Likes Reposts ===
 Implement a minimal display of [[responses]], e.g. [[likes]] &amp; [[reposts]] on posts.
 * {{snarfed}} wants (me to do) this
@@ -1617,7 +1638,9 @@ Beyond that, I find my prioritization changes often enough that I just keep a lo
 <span id="Itching">Brainstorms</span> (formerly "<span id="Itches">Itches</span>") are other things I want on my site but haven't started implementing yet. They are a collection of somewhere between yearnings for cool things to dealing with annoyances that have respective features / improvements. When they come to mind more frequently, they're likely to become concrete "[[#Working_On|Working On]]" tasks.
 
 === Delegation ===
-I need [[delegation]] on my site, so I can let a few trusted folks post on my behalf while I’m on vacation, e.g. indie events for [[Homebrew Website Club]] meetups. per http://tantek.com/2018/019/t2/need-implement-delegation
+I need [[delegation]] on my site, so I can let a few trusted folks post on my behalf while I’m on vacation, e.g. 
+* indie events for [[Homebrew Website Club]] meetups. per http://tantek.com/2018/019/t2/need-implement-delegation
+** no longer needed since https://events.indieweb.org/ are the primary h-event posts for HWC meetups
 
 === Geo-tagged Notes ===
 I want my [[notes]] to optionally (opt-out?) have [[geo-tagging]] added to them in my (POSSE) posting UI.
@@ -1739,27 +1762,6 @@ See: '''[[search#client_side_search]]''' for details, but in short:
 *** navigation to next/previous results
 ** Upon navigation to previous results, XHR/parse/index previous bim as needed just in time
 ** Keep all indexes in local client so paging back/forth in results is fast (no IO requirement)
-
-=== linked hashtags ===
-[[hashtags]] in my [[notes]] are currently unlinked because:
-* I don't know where to link them to (no good indieweb tag [[aggregators]] yet), and 
-* I don't have a tag based destination on my own site
-
-Thus:
-* figure out a local destination for hashtags, e.g. tag search (AKA "tag results", "tag feeds"), paginated by date
-** E.g. [[Known]] does this nicely: http://www.rmendes.net/tag/indieweb
-* update Falcon <code>auto_tag</code> function to link to that destination automatically
-** use-case: help make posts federated to Mastodon show hashtag links local to the instance displaying my post
-** add param of "tagspace" URL prefix to use
-
-Consider implementing:
-* a [[tags page]] to see what tags I’ve used as a way to help pick a good default tag link destination, e.g. to check to see if link like this for "hashtag" would work:
-** https://en.wikipedia.org/wiki/hashtag
-
-Consider additional default tag link destinations:
-* https://indieweb.social/tags/hashtag
-** users at that instance already follow my posts, my posts will show up in those [[tag page]]s when I have that working with Bridgy Fed, and it is likely that indieweb.social posts with the same hashtag will be related to what I’m posting about, so it should provide a reasonable experience for folks clicking through from my site.
-** maybe only auto-link auto-tags in 2023 posts onward, since all of those have been federated (and federated updates can be sent to have those posts show up on those indieweb.social tag pages)
 
 === POSSE CRUD ===
 Having updated and/or deleted a few notes and had to go do so manually on Twitter, I'd really rather have it be more automatic from my site and thus I'd like to implement:
