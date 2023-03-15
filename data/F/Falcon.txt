@@ -53,6 +53,7 @@ Falcon supports the following specific kinds of [[posts]].
 * [[auto-embed]]ding of JPG/PNG/GIF/MP4/MOV/OGV and [[YouTube]]/[[Vimeo]] URLs
 * [[POSSE]] to [[Twitter]] of notes up to 256 chars or first ~253 chars of longer notes auto-elided, and [[permashortlink]] to original post.
 * [[webactions]]: like, repost, reply with Twitter fallbacks
+* [[auto-tag]]ging of [[hashtags]] with <code>&lt;span class="p-category auto-tag"&gt;</code> since 2016-01-26 (e.g. for propagating [[tags]] via Bridgy Publish to Flickr etc.)
 
 === Article ===
 '''[[articles]]''' as blog posts are supported with:
@@ -1740,13 +1741,11 @@ See: '''[[search#client_side_search]]''' for details, but in short:
 ** Keep all indexes in local client so paging back/forth in results is fast (no IO requirement)
 
 === linked hashtags ===
-[[hashtags]] in my [[notes]] are currently unlinked because 
-* <s>I don't have a good/simple hashtag detector (see [[hashtags#Regex]] for current thinking)</s>
+[[hashtags]] in my [[notes]] are currently unlinked because:
 * I don't know where to link them to (no good indieweb tag [[aggregators]] yet), and 
 * I don't have a tag based destination on my own site
 
 Thus:
-* <s>implement [[hashtags#Regex]] for at least <code>#&lt;span class="p-category"&gt;hashtag&lt;/span&gt;</code> auto-markup (e.g. for propagating [[tags]] via Bridgy Publish to Flickr etc.)</s>
 * figure out a local destination for hashtags, e.g. tag search (AKA "tag results", "tag feeds"), paginated by date
 ** E.g. [[Known]] does this nicely: http://www.rmendes.net/tag/indieweb
 * update [[CASSIS]] auto_link function to link to those destinations automatically
@@ -1757,6 +1756,7 @@ Possibly:
 
 Consider additional default tag link destinations:
 * https://indieweb.social/tags/hashtag
+** users at that instance already follow my posts, my posts will show up in those [[tag page]]s when I have that working with Bridgy Fed, and it is likely that indieweb.social posts with the same hashtag will be related to what I’m posting about, so it should provide a reasonable experience for folks clicking through from my site.
 
 === POSSE CRUD ===
 Having updated and/or deleted a few notes and had to go do so manually on Twitter, I'd really rather have it be more automatic from my site and thus I'd like to implement:
