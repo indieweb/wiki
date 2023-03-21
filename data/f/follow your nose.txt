@@ -1,57 +1,10 @@
 https://indieweb.org/follow_your_nose
 
-{{emojicon|👃}}
-{{stub}}
+<html>
+<head><title>500 Internal Server Error</title></head>
+<body bgcolor="white">
+<center><h1>500 Internal Server Error</h1></center>
+<hr><center>nginx/1.14.0</center>
+</body>
+</html>
 
-'''<dfn>follow your nose</dfn>''' is an intentional principle for designing [[discovery algorithms]] that start with the specific URL you want to discover things about, retrieving headers or contents, parsing for particular link [[rel]] values to URLs to the desired information, in contrast to the “[[well-known]]” approach of looking outside the specific URL, like using only its domain and a hardcoded path.
-
-== Advantages ==
-=== web-centric ===
-“Follow your nose” re-uses the existing interconnection structure of the web (links from URLs on the web to URLs on the web) for discovery, and thus both fits in better with existing web publishing and interaction methods, and helps to reinforce the web’s interconnected nature and expectations.
-
-This is in contrast to  “[[well-known]]” approaches which use a hardcoded path which is much more of a legacy (pre-web) operating system specific way of thinking where key resources were located at the same hardcoded path inside their top level root directory or system drive.
-
-=== predictable portability ===
-“Follow your nose” creates more predictable portability. 
-
-When you move a document that is on one site to another, everything “about” that document moves with it or is inside it where you can easily check, there’s no need to additionally check random “other places” (whether at the root of the domain or somewhere else) for “other things that need to move with it”.
-__TOC__
-=== more robust portability ===
-“Follow your nose” creates anti-fragile portability, that is, when a document only depends on follow your nose discovery methods, you can fully inspect it for any and all dependencies and be sure of having taken care of all such dependencies. 
-
-In contrast, for anything that depends on any hardcoded domain-based paths (like .well-known), you have no idea when you are ”done” moving something or what new dependencies may have accrued by new hardcoded paths.
-
-=== less dependent on document context ===
-“Follow your nose” can work even when documents are places without domains or root paths that the document owner can control, like local multi-user file systems, or alternative non-DNS systems like [[IPFS]], in contrast to [[well-known]] which makes assumptions about domains and root control.
-
-=== document rather than domain scoped discovery ===
-“follow your nose” allows for each page to define their own rel links, whereas all links are domain-scoped with .well-known discovery.
-
-== Disadvantages ==
-=== fetching each page separately ===
-In cases where rel values could or should be domain-scoped rather than page-scoped (e.g. [[webmention]] endpoint links), a follow-your-nose approach will require far more network traffic to send webmentions to multiple pages on the same domain than a domain-scoped link discovery method such as .well-known, which would require a maximum of one page fetch per domain.
-
-==== potential mitigation ====
-In practice, most usage of the webmention link rel is domain-scoped rather than page-scoped (i.e. a webmention endpoint fetched from https://example.com/posts/1 can be used to send webmentions for any page on https://example.com). In cases like this, consumers could reduce network traffic while retaining the advantages of page-scoped rel discovery by using the following fetch-on-error algorithm when sending webmentions for multiple pages on a domain:
-
-* Trying to send a webmention for https://example.com/posts/1
-* Look for a cached webmention endpoint for that domain?
-** If no cached webmention endpoint found for this domain, fetch the resource and parse for rel-webmention, store in cache.
-* Attempt sending a webmention
-* If the webmention endpoint returned an error, and a cached endpoint was used, fetch https://example.com/posts/1 and look for a new webmention endpoint
-* Potentially update the cached endpoint for the domain
-
-If no webmention endpoint was found on the first fetch, caching the negative result could lead to missed webmentions in the future. Some potential solutions could involve
-
-* simply not caching negative results
-* caching negative results for a much shorter time than positive results
-* only cache negative results if they’re from pages with mf2 markup on, so that no webmention endpoint being found on a “plain” page with no mf2 wouldn’t prevent checking for webmention endpoints in future pages from the same URL
-
-This approach could be generalised to a variety of domain-scoped endpoints.
-
-== See Also ==
-* [[discovery-algorithms]]
-* [[rel]]
-* https://www.w3.org/wiki/FollowYourNose
-* 2002 possible first use of concept/phrase: 
-** CW: [[Semantic Web]]: https://lists.w3.org/Archives/Public/www-webont-wg/2002Oct/0162.html
