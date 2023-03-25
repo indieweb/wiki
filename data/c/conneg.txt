@@ -4,11 +4,24 @@ https://indieweb.org/conneg
 
 '''<dfn>conneg</dfn>''' is short for HTTP Content Negotiation, a method by which a browser or other web client can request content of various types from a web server, and depending on what is requested, and what the server supports, it tries to provide the best it can.
 
+== IndieWeb Examples ==
+
+* {{aaronpk}} supports content negotiation for post permalinks to switch between returning HTML, Microformats JSON and ActivityPub JSON.
+** Example: <code><nowiki>curl -H "Accept: application/activity+json" https://aaronparecki.com/2023/03/25/2/planner</nowiki></code>
+
 == Caching ==
 Content negotiation can pose additional challenges when trying to add caching layers, such as [[nginx]]'s fastcgi or proxy cache. Unless the cache key takes into account the requested content type of the content, the wrong representation may be returned by the cache.
 
 == Tools ==
 * [[Go]] library: https://gitlab.com/jamietanna/content-negotiation-go
+
+== Criticism ==
+* https://wiki.whatwg.org/wiki/Why_not_conneg
+* https://snarfed.org/2023-03-24_49619-2
+** "Content negotiation is the classic example of an idea that sounds good in theory, but for the vast majority of web developers, turns out to be net harmful in practice. A few reasons:<br>Most web developers are not aware that conneg exists. This is usually fine, since it’s uncommon, but can be an unpleasant surprise when they first hit it and don’t understand it.<br>The Accept header is notoriously complicated to parse, generate, and fully comply with. Imo much of that complexity is unneeded in practice.<br>It often breaks caching when it’s first introduced. Internal and external caches generally ignore Content-Type and Accept (etc) by default, so when conneg is first introduced, clients often get the wrong response type. Developers learn the hard way that they need to add Accept to Vary and to their framework’s cache.<br>URLs leak across contexts. They may start out within a single service or API, but they gradually proliferate into user-visible links, object identifiers in other systems, add-on services, third party tools, etc. These generally don’t know the original conneg requirements, which causes unpleasant surprises.<br>I think most of this boils down to: modality generally considered harmful. When something always behaves the same way, it’s reliable and easy to use. When it behaves differently based on something far away that you may not know exists, it’s unreliable and surprising. Add in a very large ecosystem of independent tools that all need to interoperate, often in fine-grained ways, and you have a recipe for failure." [https://snarfed.org/ @Ryan Barrett] March 24, 2023
+* https://lists.w3.org/Archives/Public/public-swicg/2023Mar/0166.html
+** "We used 'content negotiation' in Solid, and unfortunately, it has been a source of bugs for me. In my opinion, it was a non optimal design decision that added a lot of complexity." [https://lists.w3.org/Archives/Public/public-swicg/2023Mar/0166.html Melvin Carvalho] March 24, 2023
+
 
 == See Also ==
 * https://en.wikipedia.org/wiki/Content_negotiation
@@ -16,6 +29,3 @@ Content negotiation can pose additional challenges when trying to add caching la
 * https://tools.ietf.org/html/rfc6906
 * https://tools.ietf.org/html/rfc7284
 * https://github.com/indieweb/micropub-extensions/issues/28
-* https://wiki.whatwg.org/wiki/Why_not_conneg
-* https://snarfed.org/2023-03-24_49619-2
-** "Content negotiation is the classic example of an idea that sounds good in theory, but for the vast majority of web developers, turns out to be net harmful in practice. A few reasons:<br>Most web developers are not aware that conneg exists. This is usually fine, since it’s uncommon, but can be an unpleasant surprise when they first hit it and don’t understand it.<br>The Accept header is notoriously complicated to parse, generate, and fully comply with. Imo much of that complexity is unneeded in practice.<br>It often breaks caching when it’s first introduced. Internal and external caches generally ignore Content-Type and Accept (etc) by default, so when conneg is first introduced, clients often get the wrong response type. Developers learn the hard way that they need to add Accept to Vary and to their framework’s cache.<br>URLs leak across contexts. They may start out within a single service or API, but they gradually proliferate into user-visible links, object identifiers in other systems, add-on services, third party tools, etc. These generally don’t know the original conneg requirements, which causes unpleasant surprises.<br>I think most of this boils down to: modality generally considered harmful. When something always behaves the same way, it’s reliable and easy to use. When it behaves differently based on something far away that you may not know exists, it’s unreliable and surprising. Add in a very large ecosystem of independent tools that all need to interoperate, often in fine-grained ways, and you have a recipe for failure." [https://snarfed.org/ @Ryan Barrett] March 24, 2023
