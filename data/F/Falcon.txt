@@ -188,10 +188,13 @@ Falcon publishing UI currently consists of the following:
 #* Uses [[RelMeAuth]] for sign-in
 #* provides a text input field for a tweet URL that the next post is in-reply-to
 #* shows a preview of the next post (notes shown enough to fit in a tweet, auto-linked; only articles' names are shown. Both represent what will be tweeted in the POSSE step).
-#* provides a button '''(Tweet it)''' which when pressed, submits the form and does all the
-#** [[PuSH]] sending, 
-#** [[POSSE]]ing to [[Twitter]], and 
-#** saving resultant Twitter syndicated copy URL to storage.
+#* provides a button '''(Tweet it)''' which when pressed, submits the form and does:
+#** [[PuSH]] send 
+#** [[POSSE]] to [[Twitter]] if appropriate (original note/article or reply to a tweet)
+#** save current published date and resultant Twitter syndicated copy URL (if any) to storage
+#** send Webmentions for all links in-reply-to and in contents
+#** ping [[Internet Archive]] to snapshot all links in-reply-to and in contents
+#** ping [[Bridgy Fed]] to federate post
 
 === Sample Post Creation Flow ===
 2015-181 sample post (e.g. [http://tantek.com/2015/181/t1/track-yasso-800s-fastest-lap]) creation flow:
