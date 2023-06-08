@@ -2,4 +2,27 @@ https://indieweb.org/http3
 
 {{stub}}
 
-'''<dfn>http3</dfn>''' is Microsoft and Google's corporate use-case protocol open-washed through the IETF based on their QUIC on top of UDP. It does not allow for connecting to non CA TLS web servers.
+'''<dfn>http3</dfn>''' is the third version of [[HTTP]]. Unlike previous versions, it uses QUIC to multiplex connections over a UDP connection with the goal of reducing latency and avoiding congestion.
+
+More information is available at [https://quicwg.org/ QUICWG] and the following standards:
+
+* [https://datatracker.ietf.org/doc/html/rfc8999 RFC 8999 - Version-Independent Properties of QUIC]
+* [https://datatracker.ietf.org/doc/html/rfc9000 RFC 9000 - QUIC: A UDP-Based Multiplexed and Secure Transport]
+* [https://datatracker.ietf.org/doc/html/rfc9001 RFC 9001 - Using TLS to Secure QUIC]
+* [https://datatracker.ietf.org/doc/html/rfc9002 RFC 9002 - QUIC Loss Detection and Congestion Control]
+
+http3 [https://caniuse.com/http3 can be used] (but is not necessary enabled by default) by most modern browsers and some command line tools (e.g. [https://everything.curl.dev/http/http3 CURL])
+
+http3 is used within and supported by networking infrastructure including iCloud Private Relay, Cloudflare, and Google.
+
+Some notes:
+
+* Libraries are available for both client and server support.
+
+* On the client side, when a connection is established over https an `alt-svc` header (per [https://datatracker.ietf.org/doc/html/rfc 7838 RFC 7838]; see also [https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Alt-Svc mdn web docs]) can signal support for http3 (protocol "h3"), and the next connection can attempt to use http3.
+
+* There are extensions which provide browsers with an indicator of the http transport in use:
+
+** for Firefox: "HTTP Version Indicator"
+
+** for Chrome: "HTTP Indicator"
