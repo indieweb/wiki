@@ -1,9 +1,8 @@
 https://indieweb.org/2021/Pop-ups/Very_Sensitive_Data_on_Your_Personal_Website
 
 {{emojicon|🗣☺️}}
-[[Category: 2021 sessions]]
-[[Category: IWC Pop-ups 2021 Sessions]]
-'''<dfn>Very Sensitive Data on Your Personal Website 2021</dfn>''' is an [[2021/Pop-ups|IndieWebCamp Pop-ups 2021]] session.
+
+'''<dfn>Very Sensitive Data on Your Personal Website 2021</dfn>''' was an [[2021/Pop-ups|IndieWebCamp Pop-ups 2021]] session.
 
 == Summary ==
 
@@ -97,11 +96,152 @@ The idea was to treat the identity of the visitor (i.e. their URL) similar to th
 * Who gets to decide what that limited audience is?
 * Who gets to republish?
 
-=== Session Post-Mortem ===
+== Notes ==
+Archived from https://etherpad.indieweb.org/sensitivedata-popup
 
-== IndieWebCamps ==
+=== Participants ===
+* {{maxwelljoslyn}} (facilitator)
+* {{gwg}} (Zoom Runner and A/V Squad)
+* {{fluffy}}
+* {{chrisaldrich}}
+* {{aaronpk}}
+* {{martijnvdven}}
+* {{tracydurnell}}
+* {{omz13}}
+* {{bneil}}
+* {{angelo}}
+* {{kevinmarks}}
+* {{j12t}}
+* {{jeremyfelt}}
+* {{addyourself}}
+
+=== Topic Voting ===
+To vote:
+# (Optional) Read this event's wiki page for more context on each topic. [[2021/Pop-ups/Very_Sensitive_Data_on_Your_Personal_Website]]
+# Add a +1 below each topic that especially interests you.
+# If a topic you want isn't here, add it! Then add your +1.
+
+==== Making Use of Visibility and Audience Properties ====
++7
+
+* limited-audience posts
+** prior art: circles in Google+, groups on FB
+** {{chrisaldrich}} - lots of manual work categorizing ppl into circles (or groups on FB
+** aliases e.g. {{fluffy}} friends vs. followers in Publ
+*** note that the Publ ACLs are just whatever friendly name you want and there can be arbitrarily many nested arbitrarily-deep. 
+*** See [http://publ.plaidweb.site/manual/formats/322-Entry-files#auth entry auth list] and [http://publ.plaidweb.site/manual/formats/1341-User-configuration-file ACL config file] for more information on how that works/looks from the author's perspective
+** {{aaronpk}} follows people in different communities using separate channels in [[Aperture]]
+* #conclusion Consensus seems to be that there isn't a user experience for this that works well right now in any platform.
+* #conclusion solve UI/UX for interests/hobbies/groups-related data storage, editing, access control and user viewability of same
+* this topic can be approached from reader view (what stuff do I want to see) and publishe view (what do I want to protect)
+
+==== Preserving Others' Privacy on Your Site ====
++7
+ 
+* don't leak reply URLs
+* UI showing "this is a private post!" 
+** {{fluffy}}: if other people in audience of protected post leave (private) comments on it, that shows (logged-in) reader who else is in audience
+** {{fluffy}}: use of short-URL w/ no content-based slug when "teasing" a private post (exposing existence but not content)
+* {{chrisaldrich}}: one bonus of "teasing" 
+
+==== Journals and Drafts ====
++7
+
+* working on a tech book, want to share some chapters with friends while hiding others (feels like a rbac issue)
+** RBAC = Role-based access control
+* I have the exact same problem for a non-tech book lol
+
+==== Files and Media ====
++6
+
+==== Quantified Self ==== 
++5
+
+* posting location/gps data with a ''lag'' {{martijn}}
+
+==== Medical Information ====
++4
+
+* to inform friends of current health
+* to share specific info (e.g. recent MRIs) with a medial professional
+* there are risks because insurance companies and other organizations may use this to your detriment Of course, the same thing comes up with any data about you. Not exercising enough....looking for a new refinance...etc
+* "Sensitive Topics" like aspects of your identity that you might want to keep private, e.g. sexual orientation
+
+==== Financial Records and Business Plans ====
++3
+
+* tax records (Martijn, Johannes) for self, sharing with family, etc
+* expenses/purchases
+** http://rhiaro.co.uk/stuff - lists (everything?) bought by Amy, with amounts
+** see venmo for [https://www.republicworld.com/technology-news/apps/venmon-to-add-friend-list-privacy-control-after-us-president-joe-bidens-list-was-leaked.html downsides]
+*  {{martijnvdven}} shares for [[fun]] as a motivation.
+** In Sweden, anyone can request tax returns of others, so why not cut out the middle person?
+** One could also post a modified (possibly untrue) version on their site
+** {{gwg}} wishes they had that in the US...it would cut out a lot of political fighting.
+* post business plans on site to get early feedback from some friends, before you have a "company"
+
+==== URL Designs ====
++2
+
+==== How/whether to handle Webmention validation ====
++2
+
+* what is this specifically?
+
+=== Discussion ===
+[[Google+]] Circles explanation: https://www.slideshare.net/padday/the-real-life-social-network-v2    (this is well worth reviewing for describing the problem in user terms)   
+
+{{martijnvdven}} mentioned using audiences tied to languages various people may speak/understand
+
+==== Separating concerns (strawman) ====
+* Identifying the visitor to the website (authentication)
+* How to map the visitor identity to a set of privileges (authorization via access control lists)
+* Managing/editing the access control lists including group membership
+* Returning the correct content based on the visitor's privileges
+* Creating the content and identifying who gets to see it
+* Indicating to the audience that the content is limited as a means of requesting it not be spread/shared
+** Are individual audience members aware of others in the audience for context?
+
+{fluffy} mentioned that [[Publ_CMS]] can tell who has logged in to read a post, which is a way of discovering [[publics]] for the posts and constructing an [[audience]] implicitly. Also a bearer token can be generated so that users can retrieve authenticated feeds; see e.g. [https://beesbuzz.biz/blog/profile user profile]
+* Note that login tracking only happens on posts which are set login-required
+
+private always relies on the audience members not breaching the privacy. eg Cummings posting whatsapp screen photos of the Prime Minister dissing the Health Minister https://dominiccummings.substack.com/p/the-pm-on-hancock-totally-fucking
+
+German law on photography is very different from the US https://allaboutberlin.com/guides/photography-laws-germany
+
+on the other hand https://www.vox.com/recode/22539126/google-street-view-maps-dead-relatives
+tweet that spawned it https://twitter.com/STurner4077/status/1405152351112077317?s=20
+
+Thought: posting sensitive data on a lag, making it public a certain amount of time after storing it, when it has become less of a possible attack vector. Or how about making everything public upon death, when it is no longer sensitive for me as the originator.
+
+== IndieWebCamp Sessions ==
+* [[2018/Nuremberg/autoauth]]
+* [[2019/Online/autoauth]]
+* [[2020/West/AutoAuth]]
+* [[2019/Online/groups]]
+* [[2019/alltheauth]]
+* [[2021/Pop-ups/Very_Sensitive_Data_on_Your_Personal_Website]]
+
+
+----
+
+
 {{IndieWebCamp}}
+
+[[Category: 2021 sessions]]
+[[Category: IWC Pop-ups 2021 Sessions]]
+[[Category:IndieAuth]]
 [[Category: Pop-ups]]
 == See Also ==
 * [[2021/Pop-ups]]
 * [[Code of Conduct]]
+* [[publics]]
+* [[audience]]
+* [[private posts]]
+* [https://daverupert.com/2018/01/welcome-to-rss-club/ RSS Club] a distribution method keyed to the distribution method, uses a privacy by obscurity model
+* [[:Category:IndieAuth]]
+* [[IndieAuth]]
+** [[IndieAuth Ticket Auth]]
+** [[AutoAuth]]
+* [[Private-Webmention]]
+* [[context collapse]]
