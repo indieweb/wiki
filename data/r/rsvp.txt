@@ -53,28 +53,29 @@ Once enabled, the action bar at top of the content area of your Known website sh
 ==== How to RSVP with HTML ====
 Or if you're using another tool (like your own [[CMS]]) then: 
 
-'''1.''' Create a [[reply]] post and use the [http://microformats.org/wiki/h-entry#p-rsvp h-entry <code>p-rsvp</code> property] to specify your RSVP status. Here's a minimal RSVP post example:
+'''1.''' Create a [[reply]] post and use the [https://microformats.org/wiki/h-entry#p-rsvp h-entry p-rsvp property] to specify your RSVP status. 
+
+Here's a minimal RSVP post example:
+
 <pre>
-&lt;div class="h-entry"&gt;
-  &lt;span class="p-author h-card"&gt;
-    &lt;a class="u-url" href="HTTP://YOURSITE.EXAMPLE.ORG/"&gt;
-      &lt;img class="u-photo" src="HTTP://EXAMPLE.ORG/YOURPHOTO.JPG" alt="YOUR FULL NAME HERE's photo"/&gt;
-      &lt;span class="p-name"&gt;YOUR FULL NAME HERE&lt;/span&gt;
-    &lt;/a&gt;
-  &lt;/span&gt;:
-  RSVP &lt;span class="p-rsvp"&gt;yes&lt;/span&gt; 
-  to &lt;a href="HTTP://EXAMPLE.ORG/EVENTURL" class="u-in-reply-to"&gt;INDIEWEB EVENT&lt;/a&gt;
-&lt;/div&gt;
+<div class="h-entry">
+  <p class="p-summary">
+    <a href="https://example.com" class="p-author h-card">Your Name</a>
+    RSVPs <span class="p-rsvp">yes</span> 
+    to <a href="https://events.indieweb.org/example" class="u-in-reply-to">Event Name</a>
+  </p>
+</div>
 </pre>
-Replace the ALLCAPS URLs and LINK TEXT with info for you (your site, photo, name), and the event (event link, name).
 
-Note: If your theme already adds the <code>h-entry</code> class, then you will need to leave out the wrapper <code>&lt;div class="h-entry"&gt;</code> tag, and the <code>"p-author h-card"</code> if your theme already includes authorship information.
+Replace example.com with your site, your name, the event URL, and the event name.
 
-See example as a whole page: http://codepen.io/iamjessklein/pen/rLXwOw
+Notes: 
+* Possible RSVP values for the <code>p-rsvp:</code> yes, no, maybe, interested
+* If your site already adds the <code>h-entry</code> class, then you will need to leave out the wrapping <code>&lt;div class="h-entry"></code>
+* If your site already adds your author information, then you will need to leave out the link wrapping your name with <code>class="p-author h-card"</code>
+* See '''[[authorship]]''' for more options to indicate your author information, including your photo
 
-Possible RSVP values: 
-<blockquote style="background:silver"><samp>yes</samp>, <samp>no</samp>,  <samp>maybe</samp>, <samp>interested</samp></blockquote>
-* See: http://microformats.org/wiki/h-entry#p-rsvp for specification details
+<!-- See example as a whole page: http://codepen.io/iamjessklein/pen/rLXwOw preview of older example markup -->
 
 '''2.''' Send a [[Webmention]] to the event post as you would for a reply to any post. ([https://aaronparecki.com/2018/06/30/11/your-first-webmention Sending your First Webmention from Scratch] by {{aaronpk}} is a good tutorial for those doing this for the first time without using other software.)
 
