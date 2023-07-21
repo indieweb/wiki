@@ -75,4 +75,14 @@ The flow for protecting posts is similar to [[#Protecting_Feeds|protecting feeds
 === DID Provider ===
 * Provide DID URNs that one can apply to a URL as a <code>alsoKnownAs</code> value.
 
+=== Enabling a Protected IndieWeb ===
+For a [[Micropub]] server that sets the visibility of posts to be either [[unlisted]] or for those whose [[audience]] is set to be non-public, Sele should provide a means of leveraging either its form of [[Sele#TicketAuth|TicketAuth]] across each of the services one uses. This could look like:
+
+* allowing issuing of tickets for [[Sele#TicketAuth|TicketAuth]] if you set a [[contact]] into a particular group in your [[Micropub]] server automatically by listening for changes in the group (perhaps over [[WebSub]])
+* generating dynamic [[Vouch]] URLs for [[Webmention]] servers that work with a [[Micropub]] server to determine an aggregate of posts that match particular criteria:
+** the last <em>n</em> engagements (over a window of time?) between the parties that satisfy a sense of access
+** a URL to their [[follow]] post to you that they sent
+** a page that has some sort form of [[Web_of_trust|Web of Trust]] backing (like KeyOxide, a signed PGP message to a known key)
+** contextually relevant URLs (like if liking a book review, a link to themselves pointing to the same book)
+
 [[Category:Software]][[Category:IndieAuth]]
