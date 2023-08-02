@@ -1,6 +1,6 @@
 https://indieweb.org/Kapowski
 
-'''<dfn>[https://kapowski.schmarty.net/ Kapowski]</dfn>''' is a [[Micropub]] client for posting animated GIF [[photo]]s to your website using [[Micropub]], powered by [[Gfycat]] search.
+'''<dfn>[https://kapowski.schmarty.net/ Kapowski]</dfn>''' is a [[Micropub]] client for posting animated [[gif|GIF]]s to your website using [[Micropub]], powered by [[Gfycat]] search.
 
 Kapowski is written in [[PHP]] and hosted at https://kapowski.bayside.pub/
 
@@ -11,7 +11,7 @@ __TOC__
 
 Kapowski supports:
 
-* searching [[Gfycat]] for GIFs
+* searching [[Gfycat]] for GIFs (until September 1, 2023)
 * creating [[photo]] posts via Micropub
 ** a post can be a [[photo reply]] using [[u-in-reply-to]]
 * without signing in, users are shown an HTML snippet they can copy/paste to their site.
@@ -20,8 +20,54 @@ Kapowski supports:
 People using Kapowski to post to their website:
 
 * {{martymcguire}} since [https://martymcgui.re/2018/04/14/145815/ 2018-04-18]
+* {{addyourself}}
 
 [[Category:Micropub Clients]]
+
+== Brainstorming ==
+
+=== Alternate source(s) needed for GIFs ===
+
+With Gfycat shutting down ([https://techcrunch.com/2023/07/05/gfycat-shuts-down-on-september-1/ Techcrunch coverage]) it's time for another source for GIFs. Options include:
+* [[Giphy]] - in the process of being sold by Facebook to Shutterstock. Facebook's ownership and implied surveillance was the reason Giphy was dropped in the first place. Unclear what data Shutterstock plans to collect about users.
+* [https://tenor.com/ Tenor GIFs] - Owned by Google and presumably surveilling use, as well. Tenor API docs recommend [https://tenor.com/gifapi/documentation#endpoints-registershare explicitly reporting to Tenor when a user shares a particular image] (anonymously).
+
+=== Improve performance with video instead of image ===
+
+The GIF format is bandwidth-intensive and low on features such as controls to pause playback. Most "GIF" implementations actually use video formats to deliver smaller files, often with the HTML <code><video></code> element. For best browser support, this might actually look like:
+
+<pre><video controls autoplay loop muted playsinline
+  aria-labelledby="video-label">
+  <source src="my-animation.webm" type="video/webm">
+  <source src="my-animation.mp4" type="video/mp4">
+  <img src="my-animation-fallback.gif" />
+</video>
+<div id="video-label" aria-hidden="true">
+  text alternative goes here
+</div></pre>
+
+==== Cross-site plumbing challenge ====
+
+Kapowski is designed for posting ''reaction'' GIFs - [[responses]] that might show up in the [[comments]] section of a post on someone else's site.
+
+Currently Kapowski creates [[photo reply]] posts by using the fact that GIF is an image format, so sites that support photo replies should show them as normal. [[video reply|Video replies]] don't seem to have any consensus support.
+
+Can we design a markup format that is likely to survive being processed as a [[Webmention]] and sanitized for display? There is certainly no [[microformats]] convention for describing the various combinations of available video and image formats as well as descriptive alternate text. In theory this kind of HTML would pass fine as an <code>e-content</code>, but it's likely that receiving sites would see these posts as comments and display an plain text comment, the result of stripping HTML.
+
+==== Resources for deploying GIFs as video ====
+
+* Cloudfour: [https://cloudfour.com/thinks/animated-gif-alternative/ Is there a viable animated GIF alternative yet or what?]
+* Cloudfour: [https://cloudfour.com/thinks/accessible-animated-gif-alternatives/ Accessible Animated GIF Alternatives]
+* web.dev: [https://web.dev/replace-gifs-with-videos/ Replace animated GIFs with video for faster page loads]
+* web.dev [https://web.dev/avif-updates-2023/ Deploying AVIF for more responsive websites]
+
+=== Interest? ===
+
+2022-09-16 The Guardian: [https://www.theguardian.com/technology/2022/sep/16/gifs-are-cringe-and-for-boomers-giphy-claims-in-meta-takeover-filing ‘Gifs are cringe’: how Giphy’s multimillion-dollar business fell out of fashion].
+
+Beyond initial experimentation, Kapowski does not appear to have wide adoption or a vocal user base. It's possible that the IndieWeb community is not interested in the kinds of interaction implied by "reaction GIFs".
+
+Want to support sending and receiving GIFs on your site? Let {{martymcguire}} know in the [[chat]]!
 
 == See Also ==
 
