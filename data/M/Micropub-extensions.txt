@@ -123,7 +123,7 @@ One thing to note is that this property, like all Micropub properties, work for 
 ===== Implementations =====
 * Clients
 ** [[Quill]]
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 ** [[Micro.blog]]
 ** [[iA Writer]]
 ** [[Together]]
@@ -167,7 +167,7 @@ This extension does not address how a user authenticates for a private post, and
 
 === Query for Supported Vocabulary ===
 
-This extension returns what properties a Micropub server supports, so that a client like [[Quill]] or [[Indigenous]] can chose to hide or rename the common choices in the UI. This is essentially using reverse [[Post Type Discovery]].
+This extension returns what properties a Micropub server supports, so that a client like [[Quill]] or [[IndiePass]] can chose to hide or rename the common choices in the UI. This is essentially using reverse [[Post Type Discovery]].
 
 Additional data is added to the [https://www.w3.org/TR/micropub/#configuration Micropub Configuration query] that allows the server to tell the client what types of posts it can receive as well as what those post types should be called in the UI.
 
@@ -208,7 +208,7 @@ If a Micropub client checks the Micropub Configuration query for a <code>post-ty
 ==== Implementations ====
 * Clients
 ** [[Quill]]
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 ** [[Monocle]]
 ** [[Celestial]]
 * Servers
@@ -281,7 +281,7 @@ GET ?q=source
 
 ===== Implementations =====
 * Clients
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 ** [[Micro.blog]]
 ** [[Together]]
 * Servers
@@ -297,7 +297,7 @@ GET ?q=source
 ; '''Issues and discussion:''' 
 : https://github.com/indieweb/micropub-extensions/issues/5
 
-This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[Indigenous]] could present a list of existing categories to choose from when creating a new post. This usage is stable, though there are proposed modifiers to limit returns.
+This is an extension for returning categories that a Micropub server has received in the past, so that a client like [[Quill]] or [[IndiePass]] could present a list of existing categories to choose from when creating a new post. This usage is stable, though there are proposed modifiers to limit returns.
 
 The following example would be returned as part of the <code>?q=category</code> query.
 <pre>
@@ -314,7 +314,7 @@ The following example would be returned as part of the <code>?q=category</code> 
 
 ===== Implementations =====
 * Clients
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 ** [[Koype/Publish|Koype Publish]]
 ** [[Celestial]] (if not found in <code>?q=config</code>)
 * Servers
@@ -347,7 +347,7 @@ The following example would be returned as part of the <code>?q=category&limit=1
 
 * Clients
 ** [[Quill]] - uses limit=1 to retrieve the last item from the media endpoint
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 ** [[Shock]]
 * Servers
 ** [[Micropub for WordPress]]
@@ -391,7 +391,7 @@ This is based on {{gwg}}'s implementation in Simple Location, an Indieweb friend
 
 ===== Implementations =====
 * Clients
-** Indigenous for Android
+** IndiePass for Android
 * Servers
 ** [[Micropub for WordPress]]
 
@@ -474,7 +474,7 @@ This is an extension to extend any query that returns a list of items to be limi
 
 For the source query:
 * Clients
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 * Servers
 ** [[IndieWeb for Drupal]]
 
@@ -496,7 +496,7 @@ For the source query:
 : Supported Properties - https://github.com/indieweb/micropub-extensions/issues/8
 : Unsupported Properties - https://github.com/indieweb/micropub-extensions/issues/21
 
-These are two extensions for returning queries that a Micropub server will respond to and properties that a server knows about, so that a client like [[Quill]] or [[Indigenous]] could present only options appropriate to that server. It is similar to the idea about querying for supported vocabulary, except that proposal only covers properties that are part of post-type discovery. Like with the stable supported vocabulary extension, the absence of this instruction would show everything.
+These are two extensions for returning queries that a Micropub server will respond to and properties that a server knows about, so that a client like [[Quill]] or [[IndiePass]] could present only options appropriate to that server. It is similar to the idea about querying for supported vocabulary, except that proposal only covers properties that are part of post-type discovery. Like with the stable supported vocabulary extension, the absence of this instruction would show everything.
 
 
 ===== Implementations =====
@@ -519,7 +519,7 @@ It further proposes, to allow for customized responses, to allow post-type to be
 
 Implements the checked property
 * Clients
-** [[Indigenous_for_Android]]
+** [[IndiePass for Android]]
 * Servers
 ** [[IndieWeb for Drupal]]
 
@@ -565,7 +565,7 @@ All geo returns would follow the common properties of an h-adr object with only 
 
 ===== Implementations =====
 * Clients
-** [[Indigenous for Android]] - uses the geo property, places as suggestions
+** [[IndiePass for Android]] - uses the geo property, places as suggestions
 * Servers
 ** [[Micropub for WordPress]] - uses the geo property only
 ** [[IndieWeb for Drupal]] - uses the geo property, can return places
@@ -578,7 +578,7 @@ For apps to be able to autocomplete by known contacts we need some way to query 
 
 * Discovery of the endpoint (as in, it exists), happens through the query for supported queries, see https://github.com/indieweb/micropub-extensions/issues/7
 * <code>q=contact&filter=aaron</code> would do a search for any field which matches .<code>*aaron.*</code> thereby allowing the client application to [[autosuggest]] and insert links.
-* <code>q=contact</code> would return the complete list, which should only be so that clients (e.g. [[Indigenous]]) can cache all contacts locally.
+* <code>q=contact</code> would return the complete list, which should only be so that clients (e.g. [[IndiePass]]) can cache all contacts locally.
 
 * The response in JSON is a list of [[h-card]]s using the h-card vocabulary.
 
@@ -602,12 +602,12 @@ For apps to be able to autocomplete by known contacts we need some way to query 
   ]
 </pre>
 
-Note: The Indigenous for Android/IndieWeb for Drupal implementation add a property to the h-card called _internal_url which can be used for updating the contacts via micropub. This is included as a note as there is wider consensus on the h-card vocabulary.
+Note: The IndiePass for Android/IndieWeb for Drupal implementation add a property to the h-card called _internal_url which can be used for updating the contacts via micropub. This is included as a note as there is wider consensus on the h-card vocabulary.
 
 ===== Implementations =====
 
 * Clients
-** [[Indigenous for Android]] - see https://realize.be/notes/1970 - it fetches the full list, filtering happens in the client. Create, update and delete are also possible using micropub so you can manage your contacts using the _internal_url property. Supports using `search` as opposed to filter.
+** [[IndiePass for Android]] - see https://realize.be/notes/1970 - it fetches the full list, filtering happens in the client. Create, update and delete are also possible using micropub so you can manage your contacts using the _internal_url property. Supports using `search` as opposed to filter.
 * Servers
 ** [[IndieWeb for Drupal]] - Supports using `search` as opposed to filter.
 ** {{aaronpk}}'s Micropub endpoint supports querying and filtering contacts, intended to be used for typeahead nickname suggestions in micropub clients
@@ -700,7 +700,7 @@ There are instances where the configuration of a Micropub endpoint can change. C
 
 https://github.com/indieweb/micropub-extensions/issues/32
 
-Indigenous for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI in order to allow more parameters in a form-encoded request. The payload property is 'geo'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post geocache logs, see https://indieweb.org/geocaching
+IndiePass for Android has a checkin post type which passes the checkin information as additional parameters in the Geo URI in order to allow more parameters in a form-encoded request. The payload property is 'geo'. It's not doing a JSON post, so you can also immediately upload pictures as well. Additional properties for the venue/location can be added later. The same technique is used to post geocache logs, see https://indieweb.org/geocaching
 
 <pre>
 geo:51.5258325,-0.1359825,0.0;name=london;url=https://hwclondon.co.uk
@@ -709,7 +709,7 @@ geo:51.5258325,-0.1359825,0.0;name=london;url=https://hwclondon.co.uk
 Implementations:
 
 * Clients
-** [[Indigenous for Android]]
+** [[IndiePass for Android]]
 * Servers
 ** [[IndieWeb for Drupal]]. An example can be found here: https://realize.be/checkin/1762
 ** [[WordPress Micropub Plugin]]
@@ -725,7 +725,7 @@ Properties: h=card&name=Contact name&nickname=Nick&photo=photo&url=url
 ===== Implementations =====
 
 * Clients
-** [[Indigenous for Android]] - can create, update and delete
+** [[IndiePass for Android]] - can create, update and delete
 * Servers
 ** [[IndieWeb for Drupal]]
 
