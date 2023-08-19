@@ -260,6 +260,19 @@ As an improvement on my linked hashtags implementation:
 Consider implementing:
 * a [[tags page]] to see what tags I’ve used as a way to help pick a better default tag link destination.
 
+=== linked hashtags ===
+[[hashtags]] in my [[notes]] are currently linked to https://indieweb.social/tags/hashtag because:
+* I don't have a tag based destination on my own site
+With the additional linked hashtags limitation of:
+* only auto-link auto-tags in 2023 posts onward, since all of those have been federated (and federated updates can be sent to have those posts show up on those indieweb.social tag pages)
+
+Thus:
+* figure out a local destination for hashtags, e.g. tag search (AKA "tag results", "tag feeds"), paginated by date
+** E.g. [[Known]] does this nicely: http://www.rmendes.net/tag/indieweb
+* update calls to Falcon[[auto_tag]] function accordingly
+* update implementation of [[auto_tag]] function if necessary
+* remove "2023 posts onward" limitation
+
 === Display Likes Reposts ===
 Implement a minimal display of [[responses]], e.g. [[likes]] &amp; [[reposts]] on posts.
 * {{snarfed}} wants (me to do) this
@@ -2000,19 +2013,6 @@ I need to [[migrate]] to a new [[webhost]] by 2019-03-06. Existing host is liter
 ** first test it at a subdomain of another domain - worked in general
 ** fixed a bunch of protocol-specific links (http:) to be protocol relative, start with "//"
 ** flip DNS for tantek.com.
-
-=== linked hashtags ===
-[[hashtags]] in my [[notes]] are currently linked to https://indieweb.social/tags/hashtag because:
-* I don't have a tag based destination on my own site
-With the additional linked hashtags limitation of:
-* only auto-link auto-tags in 2023 posts onward, since all of those have been federated (and federated updates can be sent to have those posts show up on those indieweb.social tag pages)
-
-Thus:
-* figure out a local destination for hashtags, e.g. tag search (AKA "tag results", "tag feeds"), paginated by date
-** E.g. [[Known]] does this nicely: http://www.rmendes.net/tag/indieweb
-* update calls to Falcon[[auto_tag]] function accordingly
-* update implementation of [[auto_tag]] function if necessary
-* remove "2023 posts onward" limitation
 
 == Dropped Features ==
 === POSSE RSVP video photo to FB ===
