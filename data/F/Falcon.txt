@@ -2002,21 +2002,17 @@ I need to [[migrate]] to a new [[webhost]] by 2019-03-06. Existing host is liter
 ** flip DNS for tantek.com.
 
 === linked hashtags ===
-[[hashtags]] in my [[notes]] are currently unlinked because:
-* I don't know where to link them to (no good indieweb tag [[aggregators]] yet), and 
+[[hashtags]] in my [[notes]] are currently linked to https://indieweb.social/tags/hashtag because:
 * I don't have a tag based destination on my own site
+With the additional linked hashtags limitation of:
+* only auto-link auto-tags in 2023 posts onward, since all of those have been federated (and federated updates can be sent to have those posts show up on those indieweb.social tag pages)
 
 Thus:
 * figure out a local destination for hashtags, e.g. tag search (AKA "tag results", "tag feeds"), paginated by date
 ** E.g. [[Known]] does this nicely: http://www.rmendes.net/tag/indieweb
-* update Falcon <code>auto_tag</code> function to link to that destination automatically
-** use-case: help make posts federated to Mastodon show hashtag links local to the instance displaying my post
-** add param of "tagspace" URL prefix to use
-
-Consider additional default tag link destinations:
-* https://indieweb.social/tags/hashtag
-** users at that instance already follow my posts, my posts will show up in those [[tag page]]s when I have that working with Bridgy Fed, and it is likely that indieweb.social posts with the same hashtag will be related to what I’m posting about, so it should provide a reasonable experience for folks clicking through from my site.
-** maybe only auto-link auto-tags in 2023 posts onward, since all of those have been federated (and federated updates can be sent to have those posts show up on those indieweb.social tag pages)
+* update calls to Falcon[[auto_tag]] function accordingly
+* update implementation of [[auto_tag]] function if necessary
+* remove "2023 posts onward" limitation
 
 == Dropped Features ==
 === POSSE RSVP video photo to FB ===
