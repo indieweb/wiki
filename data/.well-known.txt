@@ -16,12 +16,25 @@ It has been codified by the IETF and IANA in [https://datatracker.ietf.org/doc/h
 * [https://w3c.github.io/webappsec-change-password-url/ W3C Editor's Draft: A Well-Known URL for Changing Passwords]
 
 == Issues ==
-* Some web hosts restrict customer access to .well-known in shared plans, rendering it unusable for vast amounts of websites [https://stackoverflow.com/questions/71442532/how-can-i-get-my-hostinger-shared-hosting-server-to-execute-htaccess-file-in-hi e.g. hostinger]
+* Some web hosts restrict customer access to .well-known in shared plans, rendering it unusable for vast amounts of websites. Hosts known to not support full customer access to .well-known:
+** [https://stackoverflow.com/questions/71442532/how-can-i-get-my-hostinger-shared-hosting-server-to-execute-htaccess-file-in-hi hostinger]
 * Problem: community sites that are user-editable (e.g. via MediaWiki) could allow anyone to create a .well-known resource (like this wiki page!) or a subresource like [[.well-known/security.txt]]
 * Criticism: bad approach that is counter to the read-write web and adds extra [[admintax]] to all server maintainers: https://chat.indieweb.org/meta/2022-05-13/1652432145141300
 ** "the point is .well-known is not the only way to do well-known URLs, so just blocking .well-known from being user-editable isn't enough, you have to go list out every possible well-known URL that might cause a problem if it's user-editable and block that too" [http://aaronparecki.com @aaronpk] May 13, 2022
 * Criticism: unnecessary domain-level assumption for use-cases that can by handled by resource-level discovery: it's almost always a web architecture error to design something for a domain (also includes root /noun.txt approaches) instead of designing for an arbitrary URL (HTML at some page).
 * Criticism: everyone's supposed to register their .well-known URIs with IANA but pretty much nobody does
+
+=== How to test Apache/PHP web host support ===
+
+Pieces of software like [[Bridgy Fed]] or [[Nextcloud]] usually either make use of Apache RewriteRules to serve content from .well-known. To check that this is possible on your web host, add the following to your root .htaccess file:
+
+<pre><IfModule mod_rewrite.c>
+  RewriteRule
+  RewriteRule ^\.well-known/test /well-known-test-succeeded [R=302,L]
+</IfModule>
+</pre>
+
+Then, visit <code>yourdomain.com/.well-known/test</code>. If you were redirected to <code>yourdomain.com/well-known-test-succeeded</code>, then your host supports .well-known rewrites. If not, it likely doesn’t — please add your host to the list above!
 
 == See Also ==
 
