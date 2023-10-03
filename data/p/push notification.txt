@@ -6,7 +6,7 @@ For the problem of being overwhelmed with push notifications, see:
 * [[notification fatigue]]
 
 == Why ==
-Push notifications can be useful for notifications that have a timely aspect to them, such as [[phone]] calls, [[direct message]]s, [[event]]s about to start, or changes to [[RSVP]]s. You should implement push notifications for your site so you don't have to poll your [[notifications]] page for such timely items.
+Push notifications can be useful for notifications that have a timely aspect to them, such as alarms, [[countdown]] timers, [[phone]] calls, [[direct message]]s, [[event]]s about to start, or changes to [[RSVP]]s. You should implement push notifications for your site so you don't have to poll your [[notifications]] page for such timely items.
 
 * 2015-04-06 {{adactio}} [https://adactio.com/journal/8658 100 words 015] <blockquote>The only time my phone is allowed to ask for my attention is for <strong>phone calls, SMS, or FaceTime</strong> (all rare occurrences). I initiate every other interaction—Twitter, Instagram, Foursquare, the web. My phone is a tool that I control, not the other way around.</blockquote> <strong>Emphasis</strong> added.
 
@@ -59,9 +59,30 @@ Out of the box [[Known]] supports browser push notifications (on Chrome, and pos
 == Platform Examples ==
 Examples of notification user interface presentation from [[platforms]] (e.g. operating systems)
 
-=== iOS 7 ===
+=== Android ===
+[[ File:Twitter_Android_notification.png|300px]]
+
+
+Note clustering is limited to grouping and showing a count, actual text of notifications is not intelligently collapsed at all, e.g. notification text repeats the account that "Favourited":
+
+[http://known.kevinmarks.com/2015/twitter-is-worse-at-notification-collapsing-than-aaronpk https://d167tapqdyj68f.cloudfront.net/known.kevinmarks.com/8/9/5/3/895343de1edfff8ebf94127fef38de20.file?ext=.png]
+
+=== Apple ===
+==== iOS ====
 This iOS 7 "recent items" notifications example shows 2-3 different kinds of notifications from two apps, a [[favorite]], several [[likes]], and a [[reply]].
 <span style="float:right">[[File:2014-361-ios-recent-notifications.jpg|320px]]</span>
+
+(newer screenshots needed)
+
+==== MacOS ====
+{{section-stub}}
+'''<span id="Growl">Growl</span>''' was a Mac OS X-based notification service. It has mostly been supplanted by Notification Center, which has been built into OS X since Mountain Lion's release in 2012.
+
+(screenshots needed)
+==== Apple criticisms ====
+* 2018-06-04 [https://theoutline.com/post/4810/apples-new-product-features-are-an-admission-of-guilt Apple’s new product features are an admission of guilt]
+* 2015-08-18 {{iambismark}}: [https://iambismark.net/post/1439931152/ APNS Authentication] <blockquote>Apple’s push notification service got authentication all wrong (I’m assuming Google’s service is similarly broken but I’m less familiar with it).</blockquote>
+
 
 === Twitter iOS app ===
 <img src="https://twitter.com/twitter/profile_image" style="max-height:1.5em"/> [[Twitter]] iOS App:
@@ -72,20 +93,6 @@ This iOS 7 "recent items" notifications example shows 2-3 different kinds of not
 
 <br style="clear:both"/>
 ----
-
-=== Android ===
-[[ File:Twitter_Android_notification.png|300px]]
-
-
-Note clustering is limited to grouping and showing a count, actual text of notifications is not intelligently collapsed at all, e.g. notification text repeats the account that "Favourited":
-
-[http://known.kevinmarks.com/2015/twitter-is-worse-at-notification-collapsing-than-aaronpk https://d167tapqdyj68f.cloudfront.net/known.kevinmarks.com/8/9/5/3/895343de1edfff8ebf94127fef38de20.file?ext=.png]
-
-=== MacOS ===
-{{section-stub}}
-'''<span id="Growl">Growl</span>''' was a Mac OS X-based notification service. It has mostly been supplanted by Notification Center, which has been built into OS X since Mountain Lion's release in 2012.
-
-(screenshots needed)
 
 === Analysis of design differences ===
 Note the differences:
@@ -101,7 +108,12 @@ Some presentations of some notifications like these "recent items" begin to look
 * {{aaronpk}} brainstormed an iOS app (for now called just [[mention-app]]) to send him push notifications from an [[h-feed]]. Thus, if a server publishes received [[webmentions]] into an h-feed page, the app will get those (hopefully via [[PuSH]], last resort via polling), and propagate them to the user's iOS device.
 
 == Brainstorming ==
-For notifications from an indieweb site to a web browser on a device, you may be able to use one or more of the following:
+For notifications from an indieweb site to a web browser on a device, you may be able to use one or more of the following. 
+
+If you are actually using one of these on or with their personal site, add yourself to the [[#IndieWeb_Examples]] section above explaining how & why (what problem did it solve for you), and if you like, write-up a more general "[[#How_to]]" subsection for solving that problem using that technology or tool.
+
+If any of these are obsolete or no longer work, please move them to a "Past Efforts" section or something like that so folks know to avoid them.
+
 * http://www.w3.org/TR/notifications/
 * https://wiki.mozilla.org/WebAPI/SimplePush
 ** Works on FirefoxOS devices and (presumably) the [https://developer.mozilla.org/en-US/Firefox_OS/Using_the_B2G_desktop_client desktop simulator]
@@ -115,6 +127,8 @@ For notifications from an indieweb site to a web browser on a device, you may be
 * [[Pushover]]
 * [[Pushbullet]]
 * [[Pushpad]]
+
+* https://ntfy.sh/ provides an implementation of https://unifiedpush.org/ that website developers can use to own their push notifications
 
 == Criticism ==
 Somewhat in order from initial harms to subsequent harms, push notifications have been well documented to cause:
@@ -166,7 +180,3 @@ Commentary on [[Hacker News]] and it’s decision not to support real time notif
 == See Also ==
 * [[notification fatigue]]
 * [[notification]]
-* 2018-06-04 [https://theoutline.com/post/4810/apples-new-product-features-are-an-admission-of-guilt Apple’s new product features are an admission of guilt]
-* 2015-08-18 {{iambismark}}: [https://iambismark.net/post/1439931152/ APNS Authentication] <blockquote>Apple’s push notification service got authentication all wrong (I’m assuming Google’s service is similarly broken but I’m less familiar with it).</blockquote>
-* https://ntfy.sh/ provides an implementation of https://unifiedpush.org/ that website developers can use to own their push notifications
-* Use-case: [[countdown]]
