@@ -33,7 +33,7 @@ The advantage of this approach is it allows for unique implementations as the me
 Ticket Auth builds on [https://indieauth.spec.indieweb.org/ IndieAuth] by adding:
 
 * An extension grant type that allows the resource owner's ticket to be exchanged by the subject for a token.
-* A ticket endpoint that is called by the protected resource to provide the token to the subject.
+* A ticket endpoint that is called by the protected resource to provide the ticket to the subject which will be redeemed at the resource owner's token endpoint.
 
 == Summary ==
 
@@ -192,9 +192,6 @@ In responding to a request, the endpoint would take the same approach as the web
 
 *Would a token grant access to anything more specific than the provided resource, or would it be only for that specific resource? (e.g. should a token for <code>https://example.com/alice/</code> also work on <code>https://example.com/alice/feed</code>)
 ** Moved discussion to https://github.com/indieweb/indieauth/issues/83
-
-*Any provision for providing an expiry time as part of the granted ticket?
-** Moved discussion to https://github.com/indieweb/indieauth/issues/84
 
 * Should it be assumed that the ticket endpoint will automatically redeem all tokens? It's technically an implementation detail, not a requirement of the spec, but witht he amount of time the ticket is valid, this seems a good move. Assuming the token endpoint supports revocation.
 
