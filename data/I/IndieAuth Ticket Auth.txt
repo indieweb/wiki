@@ -57,35 +57,28 @@ Note: The most common use case thought of involves a private feed, but it does n
 In brainstorming some use cases, the following scenarios came up for possible use cases building on integrating multiple existing pieces.
 
 * Alice has a feed containing both public and private posts. By default, fetching it returns only the public posts. Alice decides she wants Bob to get the entire feed. Her site sends a ticket to Bob's ticket endpoint, which redeems it for a token that can access the feed. 
-** '''How does Alice decide to send Bob a ticket?''' Not really important. It could be she monitors who is subscribed to her feed somehow, and wants to offer the full version. It could be Bob and Alice are friends and she invites him unsolicited.
+
 ** '''What does Bob do with the token?''' Assuming that Bob's ticket endpoint is coupled together with his Microsub endpoint, and he's already subscribed to her feed, it should automatically start fetching the feed with the token to get the enhanced version with the private posts. If Bob wasn't already following, it would still get the token, but it would send the feed to a moderation queue or a dedicated Microsub channel for Bob to decide how to handle it.
 * If Alice has a single piece of restricted content she wants to share with Bob, it would work similarly to above, without the consideration of whether Bob was already privy to a different version of the content.
 * In another scenario, Carol wants to share private posts, but not a specific private post. She can opt to create a form on her site that send tickets to anyone who authenticates to it using IndieAuth, and then subsequently decide internally what content each user represented by the token gets. This is effectively '''giving everyone a login into your site'''.
 
-== Protocol ==
+== Deciding to Issue an Access Token ==
 
-=== Step 1: Decide to issue an access token ===
-
-Alice has choosen to share private things with Bob. 
+Alice has chosen to share private things with Bob. To do this, Alice needs to provide Bob with an access token. 
 
 This is in contrast to a mechanism of advertising the fact that there may be private/protected content at a URL by using something like a WWW-Authenticate header. By indicating there may be more to see at a URL, that itself is leaking information.
 
-The decision to share could be triggered by Bob notifying Alice that he is following Alice, or it could be without any affirmative action on Bob's part. This isn't strictly necessary but may provide a better user experience for granting these tokens.
+Why Alice chose to share could be because she decided to out of the blue, Bob notifying Alice that he is following her, or out of the blue without any affirmative action on Bob's part. 
 
+=== Brainstorming ===
+
+* '''How does Alice decide to send Bob a ticket?''' Not really important. It could be she monitors who is subscribed to her feed somehow, and wants to offer the full version. It could be Bob and Alice are friends and she invites him unsolicited.
 * TODO: Expand on methods of Bob notifying Alice could be a [[follow]] post, or some other protocol, but is not related to authentication or required.
 
 
-==== Why not send the access token directly? ====
+== Protocol ==
 
-When you send a ticket, you are sending an unsolicited payload to the receiver. The ticket is not requested by the receiver, so you cannot guarantee they will be protecting it if they aren't expecting it. (It may be logged in intermediate proxy servers, written to log files on the server, etc.) If the receiver supports receiving tickets, then they will be explicitly requesting an access token by exchanging the ticket, so you can be more confident they will take measures to protect the access token. This way the access token is only delivered via an explicitly requested HTTPS connection to your server.
-
-Additionally, given some IndieAuth servers don't support expiration of tokens(despite it being a recommendation), this could allow permanent access to protected data, which is not ideal.
-
-=== Step 2: Issue an access token ===
-
-Alice has decided to send an access token to Bob. (The reason could be because Alice decided to out of the blue, or because Alice noticed Bob's follow notification, or something else entirely.)
-
-==== Create the IndieAuth ticket ====
+=== Step 1: Generate the IndieAuth ticket ===
 
 Alice generates a short-lived ticket. The ticket MUST expire shortly after it is issued to mitigate the risk of leaks, and MUST be valid for only one use. A maximum lifetime of 10 minutes is recommended. 
 
@@ -117,7 +110,13 @@ ticket=32985723984723985792834
 
 When a ticket is sent, if there is no problem with the request, the ticket endpoint MUST return an HTTP 200 OK code or HTTP 202 Accepted if it is going to asynchronously make the token request.
 
-==== Redeem the ticket for an access token ====
+==== Why not send the access token directly? ====
+
+When you send a ticket, you are sending an unsolicited payload to the receiver. The ticket is not requested by the receiver, so you cannot guarantee they will be protecting it if they aren't expecting it. (It may be logged in intermediate proxy servers, written to log files on the server, etc.) If the receiver supports receiving tickets, then they will be explicitly requesting an access token by exchanging the ticket, so you can be more confident they will take measures to protect the access token. This way the access token is only delivered via an explicitly requested HTTPS connection to your server.
+
+Additionally, given some IndieAuth servers don't support expiration of tokens(despite it being a recommendation), this could allow permanent access to protected data, which is not ideal.
+
+=== Step 2: Redeem the ticket for an access token ===
 
 Bob's ticket endpoint redeems the ticket for an access token.
 
@@ -148,7 +147,7 @@ Response is an access token as specified in the <a href="https://indieauth.spec.
 
 Now Bob's authorization endpoint has the remote access token that could be used to fetch Alice's feed.
 
-How to get it to the reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
+How to get it to a client, such as a reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
 
 === Notes ===
 
