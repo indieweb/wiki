@@ -36,6 +36,10 @@ Ticket Auth builds on [https://indieauth.spec.indieweb.org/ IndieAuth] by adding
 * A 'ticket' grant type for the token endpoint that allows the resource owner's ticket to be exchanged by the subject for a token.
 * A ticket endpoint that is called by the protected resource to provide the ticket to the subject which will be redeemed at the resource owner's token endpoint.
 
+Advantages:
+* The thing that gets tokens only needs one new public endpoint, the endpoint that receives tickets
+** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
+
 == Summary ==
 
 * Alice has choosen to share a protected resource, for example, a private post on her website, with Bob,
@@ -149,16 +153,9 @@ Now Bob's authorization endpoint has the remote access token that could be used 
 
 How to get it to a client, such as a reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
 
-=== Notes ===
+== Discovery ==
 
 The current implementation expects that all pages that could be deemed as a <code>resource</code> would have either the newer <code>rel=indieauth-metadata</code> or the older but still in use  <code>rel=token_endpoint</code>
-
-Advantages:
-* The thing that gets tokens only needs one new public endpoint, the endpoint that receives tickets
-** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
-* Issuing tickets is completely voluntary, and does not have to be prompted by an action by the eventual receiver of the token
-
-== Discovery ==
 
 A ticket endpoint can be discovered by fetching the URL of the subject and looking for the indieauth-metadata rel values as described in the [https://indieauth.spec.indieweb.org/#discovery-0 IndieAuth Discovery]. 
 
