@@ -16,15 +16,30 @@ __TOC__
 
 == Introduction ==
 
-Ticket Auth is an extension to [https://indieauth.spec.indieweb.org/ IndieAuth] that enables the granting of access to a protected resource (a.k.a. resource server, application, API, etc.). Ticket Auth differs from other proposed extensions in that the extension does not require the client accessing the protected resource to expressly request access, but is instead offered it.
+This [https://indieauth.spec.indieweb.org/ IndieAuth] extension enables a resource owner to offer access to a resource. Protected resources may include a resource server, application, API, etc.  
+
+Ticket Auth does not require the subject accessing the protected resource to expressly request access, but is instead offered it by the resource owner. It does this by allowing the resource owner to send a 'ticket' which can be redeemed by the subject for a token to access the protected resource.
+
+=== Terminology ===
+
+* <code>Resource Owner</code> - per OAuth 2.0 defined as an entity capable of granting access to a resource.
+* <code>Resource</code> - defined similarly to [https://datatracker.ietf.org/doc/html/rfc8707 Resource Indicators for OAuth 2.0(RFC8707)], but MUST be an https URL. Unlike RFC8707, in Ticket Auth, the target or resource is not being requested, it is being offered by the Resource Owner. 
+* <code>Subject</code> - the IndieAuth [https://indieauth.spec.indieweb.org/#user-profile-url User Profile URL] that represents the user being offered access to the resource. 
+
+=== IndieAuth Extension ===
+
+Ticket Auth builds on [https://indieauth.spec.indieweb.org/ IndieAuth] by adding:
+
+* An extension grant type that allows the resource owner's ticket to be exchanged by the subject for a token.
+* A ticket endpoint that is called by the protected resource to provide the token to the subject. 
 
 == Summary ==
 
-* Alice has choosen to share private things with Bob. 
+* Alice has choosen to share a protected resource, for example, a private post on her website, with Bob,
 * Bob advertises a ticket endpoint on his website.
-* Alice sends a ticket to Bob's ticket endpoint, which he can redeem for a token to access Alice's private things.
+* Alice sends a ticket to Bob's ticket endpoint, which he can redeem for a token to access Alice's private post.
 * Bob's ticket endpoint receives a ticket, which he exchanges for a token at Alice's token endpoint.
-* Bob can now access Alice's private things.
+* Bob can now access Alice's private post.
 
 == Use-cases ==
 Use-cases that inspired the development of this protocol:
