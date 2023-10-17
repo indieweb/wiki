@@ -52,16 +52,18 @@ Falcon supports the following specific kinds of [[posts]].
 * white-space (serial space characters, line-breaks, blank lines)
 * [[auto-link]]ing of URLs, @-names to [[Twitter]]
 * [[auto-embed]]ding of JPG/PNG/GIF/MP4/MOV/OGV and [[YouTube]]/[[Vimeo]] URLs
-* [[POSSE]] to [[Twitter]] of notes up to 256 chars or first ~253 chars of longer notes auto-elided, and [[permashortlink]] to original post.
+* <s>[[POSSE]] to [[Twitter]] of notes up to 256 chars or first ~253 chars of longer notes auto-elided, and [[permashortlink]] to original post.</s>
 * [[webactions]]: like, repost, reply with Twitter fallbacks
 * [[auto-tag]]ging of [[hashtags]] with <code>&lt;span class="p-category auto-tag"&gt;</code> since 2016-01-26 (e.g. for propagating [[tags]] via Bridgy Publish to Flickr etc.)
+* semi-automatic sending to [[Mastodon]] followers via [[Bridgy Fed]]
 * auto-linking of [[hashtags]] since 2023-080 (e.g. for propagating them via [[Bridgy Fed]] to Mastodon)
 
 === Article ===
 '''[[articles]]''' as blog posts are supported with:
-* [[POSSE]] to [[Twitter]] of article names up to 255 chars or first ~253 chars of longer article name auto-elided, and [[permashortlink]] to original post.
+* <s>[[POSSE]] to [[Twitter]] of article names up to 255 chars or first ~253 chars of longer article name auto-elided, and [[permashortlink]] to original post.</s>
 * [[webactions]]: Post with Twitter Tweet fallback.
 * [[citation]] UI for copy pasting URL or HTML embed with [[h-cite]] markup.
+* semi-automatic sending to [[Mastodon]] followers via [[Bridgy Fed]] of article name, hashtags for categories, and permalink to original post.
 
 === Reply ===
 '''[[reply]]''' notes are supported for replying to tweets, commenting (or reacting with [[reacji]]) on other posts, with:
@@ -69,34 +71,36 @@ Falcon supports the following specific kinds of [[posts]].
 ** [[multi-reply]] reply-context presentation support, with stacked minimal reply-contexts
 * webmention sending (fallback to pingback sending) to original post ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
 * peer-to-peer IndieWeb reply posts, without POSSEing to Twitter when there’s no @-mentions (nor reply-to tweet or GitHub link), [https://tantek.com/2022/121/t3/indiewebcamp-wrap-send-webmention since 2022-121].
-* POSSE to Twitter all replies with any @-mentions (or other Twitter links)
-** POSSE tweet threading for a reply to a tweet permalink; requires reply has @-mention of author of tweet. This enables POSSEing @-replies to Twitter and have them thread properly under the original tweet, which helps interact with friends who use Twitter instead of their own site (most people).
+* <s>POSSE to Twitter all replies with any @-mentions (or other Twitter links)</s>
+** <s>POSSE tweet threading for a reply to a tweet permalink; requires reply has @-mention of author of tweet. This enables POSSEing @-replies to Twitter and have them thread properly under the original tweet, which helps interact with friends who use Twitter instead of their own site (most people).</s>
 * POSSE to GitHub all replies in reply to a Github issue or comment ([http://tantek.com/2018/050/t1/authorize-bridgy-prompt since 2018-050])
 ** replies to GitHub issues & comments are deliberately not POSSEd to Twitter
 * current limitations: 
-** manual original POSSE tweet permalink entry to thread a POSSE tweet a reply to an original post. Replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies. multi-reply support provides a manual work-around for replying to an indieweb post permalink and also POSSE replying to the POSSE copy of that permalink (thus threading that POSSE copy e.g. on Twitter).
-** Pending: There's two itches below for supporting replies either to POSSE tweets or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
+** manual original POSSE post permalink entry to thread a POSSE post a reply to an original post. Replies to indieweb URLs are supported for posting / storing / presenting, but won't auto-thread to their POSSE copies. multi-reply support provides a manual work-around for replying to an indieweb post permalink and also POSSE replying to the POSSE copy of that permalink (thus threading that POSSE copy e.g. on GitHub).
+** Pending: There's two to-do items below for supporting replies either to POSSE posts or original posts, automatically discovering the other if present, preferring the original post in reply-context presentation, and threading with the POSSE tweet if any.
 
 Use-cases for not POSSEing a reply to Twitter:
 * posting a reply to an IndieWeb post which lacks its own tweet POSSE copy, and/or I have no desire to broadcast that reply to Twitter
 * posting a [[reacji]] — which makes no sense to POSSE to Twitter on its own
 
 === Like ===
-'''[[like]]s''' are supported, and sequential likes are collapsed for presentational purposes on the main home stream.
-* automatic [[POSSE]] to [[Twitter]] of likes of tweets, using [[Bridgy]] Publish
+'''[[like]]s''' are supported, and sequential likes are collapsed for a simpler presentation on the main home stream.
+* <s>automatic [[POSSE]] to [[Twitter]] of likes of tweets, using [[Bridgy]] Publish</s>
+* semi-automatic [[POSSE]] to [[GitHub]] of likes of PRs, issues, comments, projects, using [[Bridgy]] Publish
+* semi-automatic likes of [[Mastodon]] posts or other [[ActivityPub]] supporting server, using [[Bridgy Fed]], for posts with permalinks of the forms <code>domain/@user/number</code> or <code>domain/@user@domain/number</code>
 
 === RSVP ===
 '''[[rsvp]]''' notes are supported. RSVP posts are similar to reply notes, but for RSVPing to indieweb [[event]] posts. (since 2013-264, full RSVP values support since 2017-016!)
 * <code>p-rsvp</code> marked up with a <code>&lt;data&gt;</code> element in its [[reply-context]] where it says e.g. "RSVP something to", where something is yes, no, maybe, or interested. E.g. [http://tantek.com/2013/264/t1/indiewebcamp-breakfast-rsvp 2013-264 RSVP].
-* only works for indieweb [[event]] posts. no explicit POSSE reply threading support (besides tweets), though [[multireply]] RSVP posts are supported for combined RSVPing to an indie event and silo POSSE copy.
+* only works for indieweb [[event]] posts. no explicit POSSE reply threading support <s>(besides tweets)</s>, though [[multireply]] RSVP posts are supported for combined RSVPing to an indie event and silo POSSE copy.
 * Supports all RSVP values! yes, maybe, no, interested
 ** "yes" via text starting with: "going to " (since first implementation) or "[[went]] to " ([http://tantek.com/2016/336/t3/went-trails-motion-film-festival since 2016-336])
 ** "maybe" via text starting with: "might go to " (since 2017-016) or "might remotely attend " ([http://tantek.com/2015/042/t1/homebrew-website-club since 2015-042])
 ** "no" via text starting with: "not going to " ([http://tantek.com/2015/043/t1/sunrise6k-free-race-great-people since 2015-043]) or "missing "
 ** "interested" via text starting with: "considering today", "considering tonight", "considering going to "
-* [[webmention]](s) sent automatically (or pingbacks if no webmention endpoint) to the indie events being responded to (multi-rsvp supported). ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
-* POSSE automatically to Twitter if any mention of @-names (e.g. in event name, location, organizers, other attendees), as a way to promote the event
-** POSSE tweet threading if a reply-to tweet link is provided
+* [[webmention]](s) sent automatically (or pingbacks if no webmention endpoint) to the indie event posts being responded to (multi-rsvp supported). ([http://tantek.com/2015/163/t2/webmention-sending-pingbacks-federated-indieweb since 2015-163])
+* <s>POSSE automatically to Twitter if any mention of @-names (e.g. in event name, location, organizers, other attendees), as a way to promote the event</s>
+** <s>POSSE tweet threading if a reply-to tweet link is provided</s>
 
 === Comics ===
 '''[[comics]]''' - similar to articles, except the post name is incorporated into the image and not displayed separately. The image is served wider than images in articles, and is marked up with: <blockquote><nowiki><div class="comic"><object type="image/jpeg" ...> fallback markup </object></div></nowiki></blockquote> In addition to the image, there's a further visible description, hyperlinked, semi-structured.
@@ -106,22 +110,22 @@ Use-cases for not POSSEing a reply to Twitter:
 === Photo ===
 '''[[photo]]''' posts are similar to notes, but start with a photo image URL which is then automatically marked up with <code>u-photo</code>. Supported [http://tantek.com/2015/244/t1/did-entire-npsf-trackattack since 2015-244] (though older notes starting with images may have been upgraded to photo posts). Full bleed photo styling on home page recent posts stream since 2015-346.
 
-* automatic [[POSSE]] to [[Flickr]] & [[Twitter]] directly using [[Bridgy]] Publish (automatic since 2015-312; [[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
+* semi-automatic [[POSSE]] to [[Flickr]] <s>& [[Twitter]]</s> directly using [[Bridgy]] Publish (automatic since 2015-312; [[Flickr#Tantek|Flickr added 2016-032]]); was manual POSSEing with Bridgy Publish before that since 2015-244[https://www.facebook.com/photo.php?fbid=10101862796233213](manually before to Flickr since 2016-001).
 
-* <span id="alt_text_on_photos">[[alt]] text on photos</span> supported [https://tantek.com/2019/078/t1/last-saturday-sfrc-clear-skies since 2019-078] via [http://tantek.com/w//Markdown#Alttextforimages alt text support in CASSIS auto_link], including automatic POSSEing of alt text to Twitter since [[Bridgy]] Publish to Twitter [https://github.com/snarfed/bridgy/issues/756 supports alt text].
+* <span id="alt_text_on_photos">[[alt]] text on photos</span> supported [https://tantek.com/2019/078/t1/last-saturday-sfrc-clear-skies since 2019-078] via [http://tantek.com/w//Markdown#Alttextforimages alt text support in CASSIS auto_link]<s>, including automatic POSSEing of alt text to Twitter since [[Bridgy]] Publish to Twitter [https://github.com/snarfed/bridgy/issues/756 supports alt text].</s>
 
 === Video ===
 '''[[video]]''' posts are similar to photo posts, but start with a video URL which is then automatically marked up with <code>u-video</code>. Supported [http://tantek.com/2015/346/t3/world-of-laughter-tears-hopes-fears since 2015-346] (though older notes starting with videos (if any) may have been upgraded to video posts).
 * 2015-360 [[poster frame]] support added[http://tantek.com/2015/360/t2/best-starwars-speak-droid]. When the video URL is followed by an image URL, that image URL is used for the <code>poster</code> attribute of the <code>&lt;video&gt;</code> tag, per http://tantek.com/w/Markdown#Videowithposter
 
-* automatic POSSE to [[Flickr]] & [[Twitter]] directly using [[Bridgy]] Publish (automatic since [http://tantek.com/2016/055/t12/fast-walk-hike-beach-video 2016-055])
+* semi-automatic POSSE to [[Flickr]] <s>& [[Twitter]]</s> directly using [[Bridgy]] Publish (was automatic since [http://tantek.com/2016/055/t12/fast-walk-hike-beach-video 2016-055] until Twitter API keys revoked)
 ; manually POSSEing via silo UIs before that: since [[video#Tantek|2015-12-14 to Twitter]] and [https://www.flickr.com/photos/tantek/24235088549/in/datetaken/ 2016-025 to Flickr].
 
 === Event ===
 '''[[event]]''' posts are similar to article posts, but with explicit datetime start and optional datetime end, location (venue), and host. Supported [http://tantek.com/2017/179/e1/homebrew-website-club since 2017-06-25].
-* Automatic POSSE to [[Twitter]] with:
-** automatic mapping of known venue URLs to their equivalent Twitter @-name
-** direct ➕ Add to Calendar link
+* <s>Automatic POSSE to [[Twitter]] with:</s>
+** <s>automatic mapping of known venue URLs to their equivalent Twitter @-name</s>
+** <s>direct ➕ Add to Calendar link</s>
 * Displaying [[RSVPs]] supported [http://tantek.com/2017/189/t1/rsvps-display-on-indie-events since 2017-07-06]
 ** <del datetime="2018-08-01">Optional manual POSSE to a Facebook event</del> — since API removal, backfeed doesn’t work so no longer doing this in practice.
 * Auto-generated form to submit an RSVP manually! (since 2019-279)
@@ -158,39 +162,41 @@ Standard protocol support:
 Falcon automatically pings the [[Internet Archive]] to save a copy of any links in notes & responses (see: [[Internet_Archive#Trigger_Archive_in_PHP|Trigger Archive in PHP]] for details).
 
 === POSSE ===
-Falcon currently supports automatically [[POSSE]]ing to:
-* '''[[Twitter]]: [[note]], [[reply]], [[RSVP]], [[like]], [[photo]] posts''' - first 256 characters (if applicable, depending on content), white-space preserved. *likes of tweets and posts with POSSE tweet copies are POSSEd as Twitter favorites.
-** '''[[Twitter#POSSE_Notes_to_Twitter|POSSE Notes to Twitter]]''' - complete direct implementation ([https://twitter.com/t/status/8228455558 since 2010-026]) except "note with photos".
-** '''[[Twitter#original_has_POSSE_tweet|reply threading on Twitter]]''' - reply notes are [[Twitter#POSSE_Replies_to_Tweets|POSSE'd as @-replies]] with proper threading (currently requires user input of original tweet permalink URL that is being replied to) - complete direct implementation.
-** '''[[Twitter#POSSE_Favorites_of_Tweets|POSSE Favorites of Tweets]]''' via [[Bridgy]] Publish (since 2015-092)
-** '''[[Twitter#POSSE_Favorites_to_Twitter|POSSE Favorites of indie posts]]''' by favoriting their POSSE tweet copies (if any), again via [[Bridgy]] Publish (since 2015-092)
+Falcon currently supports semi-automatically [[POSSE]]ing via [[Bridgy]] Publish to:
+* [[Flickr]]
+* [[GitHub]]
+* <s>'''[[Twitter]]: [[note]], [[reply]], [[RSVP]], [[like]], [[photo]] posts''' - first 256 characters (if applicable, depending on content), white-space preserved. *likes of tweets and posts with POSSE tweet copies are POSSEd as Twitter favorites.</s>
+** <s>'''[[Twitter#POSSE_Notes_to_Twitter|POSSE Notes to Twitter]]''' - complete direct implementation ([https://twitter.com/t/status/8228455558 since 2010-026]) except "note with photos".</s>
+** <s>'''[[Twitter#original_has_POSSE_tweet|reply threading on Twitter]]''' - reply notes are [[Twitter#POSSE_Replies_to_Tweets|POSSE'd as @-replies]] with proper threading (currently requires user input of original tweet permalink URL that is being replied to) - complete direct implementation.</s>
+** <s>'''[[Twitter#POSSE_Favorites_of_Tweets|POSSE Favorites of Tweets]]''' via [[Bridgy]] Publish (since 2015-092)</s>
+** <s>'''[[Twitter#POSSE_Favorites_to_Twitter|POSSE Favorites of indie posts]]''' by favoriting their POSSE tweet copies (if any), again via [[Bridgy]] Publish (since 2015-092)</s>
 
 == FAQ ==
 === Open Source ===
 Q: Is Falcon open source?
 
-A: Falcon is a mix of open source and closed source. The open source portions are currently published in the [[CASSIS]] JS/PHP library, in particular as building block functions which may be useful to other indieweb projects. 
+A: Falcon is a mix of open source and closed source. The open source portions are currently published in the [[CASSIS]] JS/PHP library, in particular as building block functions which may be useful to other IndieWeb projects. 
 
-As work on Falcon develops, more and more of it is made open source.
+As work on Falcon develops, more and more of it is moved to open source projects.
 
 === Installable by others ===
 Q: Is Falcon installable by others?
 
-A: Currently no, Falcon as a whole is not installable by others, and that's not a primary goal currently.  See [[#Working On]] to see next goals for Falcon.
+A: Currently no, Falcon as a whole is not installable by others, and that's not a primary goal.  See [[#Working On]] to see next goals for Falcon.
 
 == Publishing UI ==
 Falcon publishing UI currently consists of the following:
 # '''BBEdit''' (your choice of text editor) write new post in the storage file directly (see below for storage file format)
 # '''Terminal scp''' (securely update storage file on server)
 #* at this point the post is live on the site, including permalink, home page (if among recent posts), Atom feed
-# minimal '''verify, PuSH, POSSE web UI'''  that:
+# minimal '''verify, PuSH, POSSE web UI'''  ('''current disabled until auth code is updated'''):
 #* Requires and redirects to HTTPS access and uses a secure cookie (just for the admin UI) per [[https#Level_2_security]]
 #* Uses [[RelMeAuth]] for sign-in
 #* provides a text input field for a tweet URL that the next post is in-reply-to
 #* shows a preview of the next post (notes shown enough to fit in a tweet, auto-linked; only articles' names are shown. Both represent what will be tweeted in the POSSE step).
 #* provides a button '''(Tweet it)''' which when pressed, submits the form and does:
 #** [[PuSH]] send 
-#** [[POSSE]] to [[Twitter]] if appropriate (original note/article or reply to a tweet)
+#** <s>[[POSSE]] to [[Twitter]] if appropriate (original note/article or reply to a tweet)</s>
 #** save current published date and resultant Twitter syndicated copy URL (if any) to storage
 #** send Webmentions for all links in-reply-to and in contents
 #** ping [[Internet Archive]] to snapshot all links in-reply-to and in contents
@@ -233,15 +239,15 @@ Falcon supports:
 *** E.g. [[Quitter.se]] users are able to directly subscribe to this Atom feed, and see posts within seconds since they receive PuSH notifications (verified by {{kylewm}} 2015-04-25[http://indiewebcamp.com/irc/2015-04-25#t1429945711239]).
 
 == Bug Reports ==
-If you see something broken, add a note here and I'll look into it. thanks! - {{t}}
+If you see something broken (e.g. on https://tantek.com/), add a note here and I'll look into it. thanks! - {{t}}
+* ...
+Bugs in [[CASSIS]] should be reported as [https://github.com/tantek/cassis/issues issues on its repo].
 
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
 === improve like posts ===
-While they're still fresh in my mind, improve [[like]] posts:
-* if like of a Mastodon post (domain/@user), add Bridgy Fed link to enable BF to federate the like post to its destination
-** maybe write a [[CASSIS]] function similar to <code>tw_url_to_status_id</code> but maybe <code>is_slash_at_post</code> for e.g. [[Mastodon]] post permalink detection by URL inspection for: domain/@user@domain/number or domain/@user/number
+Improve [[like]] posts in a number of ways:
 * style differently than notes when in-stream, e.g. home stream
 ** add <code>like-post</code> to existing <code>class="h-entry"</code> for each like
 ** style <code>.like-post</code> to a <strong>smaller</strong> font, similar to current small grey text date-time, to clearly distinguish it in a stream from adjacent notes.
@@ -2017,6 +2023,9 @@ I need to [[migrate]] to a new [[webhost]] by 2019-03-06. Existing host is liter
 ** flip DNS for tantek.com.
 
 == Dropped Features ==
+=== POSSE to Twitter ===
+Before 2023-??-?? (when all previous Twitter API keys were revoked)
+* Automatically POSSE most post types to Twitter
 === POSSE RSVP video photo to FB ===
 Before 2018-08-01, Falcon supported some POSSEing to Facebook:
 * [[RSVP]] posts were automatically POSSEd to [[Facebook]] to RSVP to FB events, using [[Bridgy]] Publish (since 2015-145)
