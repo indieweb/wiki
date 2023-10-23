@@ -1,0 +1,265 @@
+https://indieweb.org/Ticketing_for_IndieAuth
+
+'''<dfn>Ticketing for IndieAuth</dfn>''' is an extension to [[IndieAuth]] that enables a publisher to send authorization, known as a ticket, that can be redeemed for an access token. This allows both solicited and unsolicited invitations to fetch restricted resources.
+
+This extension was previously called Ticket Auth, but was renamed as it is an extension, not an Auth methodology in itself.
+
+;Status
+:This specification is still in early development.
+;Latest Published Version
+:https://indieweb.org/Ticketing_for_IndieAuth
+;Participate
+:[[discuss|chat]]
+:[https://github.com/indieweb/indieauth/issues?q=is%3Aissue+is%3Aopen+label%3A%22ticketing+extension%22 discussion on GitHub]
+;Authors
+:Contributors: [https://indieweb.org/wiki/index.php?title=Ticketing_for_IndieAuth&action=history revision history]
+
+__TOC__
+
+== Introduction ==
+
+This [https://indieauth.spec.indieweb.org/ IndieAuth] extension enables a resource owner to offer access to a resource. Protected resources may include a resource server, application, API, etc.  
+
+The ticketing extension does not require the subject accessing the protected resource to expressly request access, but is instead offered it by the resource owner. It does this by allowing the resource owner to send a 'ticket' which can be redeemed by the subject for a token to access the protected resource.
+
+The advantage of this approach is it allows for unique implementations as the method by which the resource determines who to send a ticket to is not defined by the extension, and therefore, the resource owner can, for example, opt to create a method for subjects to request a ticket or opt to send tickets based on other criteria.
+
+=== Terminology ===
+
+* <code>Resource Owner</code> - per OAuth 2.0 defined as an entity capable of granting access to a resource.
+* <code>Resource</code> - defined similarly to [https://datatracker.ietf.org/doc/html/rfc8707 Resource Indicators for OAuth 2.0(RFC8707)], but MUST be an https URL. Unlike RFC8707, in this extension, the target or resource is not being requested, it is being offered by the Resource Owner. 
+* <code>Subject</code> - the IndieAuth [https://indieauth.spec.indieweb.org/#user-profile-url User Profile URL] that represents the user being offered access to the resource.
+* <code>Ticket</code> - a short lived random string that can be redeemed at the resource's token endpoint for a token to access the resource.
+
+=== IndieAuth Extension ===
+
+The Ticketing extension builds on [https://indieauth.spec.indieweb.org/ IndieAuth] by adding:
+
+* A 'ticket' grant type for the token endpoint that allows the resource owner's ticket to be exchanged by the subject for a token.
+* A ticket endpoint that is called by the protected resource to provide the ticket to the subject which will be redeemed at the resource owner's token endpoint.
+
+Advantages:
+* The thing that gets tokens only needs one new public endpoint, the endpoint that receives tickets
+** Sample code: https://gist.github.com/aaronpk/ae61731cc57a707b5076899d5c8371b1
+
+== Summary ==
+
+* Alice has choosen to share a protected resource, for example, a private post on her website, with Bob,
+* Bob advertises a ticket endpoint on his website.
+* Alice sends a ticket to Bob's ticket endpoint, which he can redeem for a token to access Alice's private post.
+* Bob's ticket endpoint receives a ticket, which he exchanges for a token at Alice's token endpoint.
+* Bob can now access Alice's private post.
+
+== Use-cases ==
+Use-cases that inspired the development of this protocol:
+* be able to fetch private posts from someone's feed
+** Note: The most common use case thought of involves a private feed, but it does not inherently have to be a feed.
+* don't rely on a "follow request" in order to do so
+
+=== Scenarios ===
+
+In brainstorming some use cases, the following scenarios came up for possible use cases building on integrating multiple existing pieces.
+
+* Alice has a feed containing both public and private posts. By default, fetching it returns only the public posts. Alice decides she wants Bob to get the entire feed. Her site sends a ticket to Bob's ticket endpoint, which redeems it for a token that can access the feed. 
+** '''What does Bob do with the token?''' Assuming that Bob's ticket endpoint is coupled together with his Microsub endpoint, and he's already subscribed to her feed, it should automatically start fetching the feed with the token to get the enhanced version with the private posts. If Bob wasn't already following, it would still get the token, but it would send the feed to a moderation queue or a dedicated Microsub channel for Bob to decide how to handle it.
+* If Alice has a single piece of restricted content she wants to share with Bob, it would work similarly to above, without the consideration of whether Bob was already privy to a different version of the content.
+* In another scenario, Carol wants to share private posts, but not a specific private post. She can opt to create a form on her site that send tickets to anyone who authenticates to it using IndieAuth, and then subsequently decide internally what content each user represented by the token gets. This is effectively '''giving everyone a login into your site'''.
+
+== Deciding to Issue an Access Token ==
+
+Alice has chosen to share private things with Bob. To do this, Alice needs to provide Bob with an access token. 
+
+This is in contrast to a mechanism of advertising the fact that there may be private/protected content at a URL by using something like a WWW-Authenticate header. By indicating there may be more to see at a URL, that itself is leaking information.
+
+Why Alice chose to share could be because she decided to out of the blue, Bob notifying Alice that he is following her, or out of the blue without any affirmative action on Bob's part. 
+
+=== Brainstorming ===
+
+* '''How does Alice decide to send Bob a ticket?''' Not really important. It could be she monitors who is subscribed to her feed somehow, and wants to offer the full version. It could be Bob and Alice are friends and she invites him unsolicited.
+* TODO: Expand on methods of Bob notifying Alice could be a [[follow]] post, or some other protocol, but is not related to authentication or required.
+
+==== Token Issuing ====
+How a website decides to issue tokens does not need to be defined by this spec.
+
+{{aaronpk}} created an interface to be able to send tickets to arbitrary URLs, and shows the token info after the ticket has been redeemed.
+
+[[File:aaronpk-ticket-admin.png]]
+
+{{martijnvdven}} created a public interface on the [[token_endpoint]] where arbitrary [[homepage]] URLs can be given for anyone to receive a token.
+
+[[File:Screenshot_2021-07-05_at_07.07.16.png|392px]]
+
+==== Proposed mechanism for requesting a ticket ====
+
+https://github.com/indieweb/indieauth/issues/87
+
+In order to request a ticket, a POST request would be made, indicating the subject is interested in accessing private content. How a website decides whether to provide a ticket in this case, and what resources it would unlock does not need to be defined by this spec.
+
+In responding to a request, the endpoint would take the same approach as the webmention spec. Returning a 201, 202, or 400/500 for user and server errors respectively. The endpoint need not reveal whether it has chosen to issue a ticket, as the ticket endpoint would receive or not receive one as appropriate.
+
+== Protocol ==
+
+=== Discovery ===
+
+The current implementation expects that all pages that could be deemed as a <code>resource</code> would have either the newer <code>rel=indieauth-metadata</code> or the older but still in use  <code>rel=token_endpoint</code>
+
+A ticket endpoint can be discovered by fetching the URL of the subject and looking for the indieauth-metadata rel values as described in the [https://indieauth.spec.indieweb.org/#discovery-0 IndieAuth Discovery]. 
+
+The client fetches the metadata document and finds the ticket_endpoint property in the JSON body.
+
+Some ticket endpoints may be advertised by a separate link header for those implemented prior to the addition of the indieauth-metadata endpoint, however, any IndieAuth implementation that supports a metadata endpoint SHOULD NOT advertise the ticket endpoint separately.
+
+=== Step 1: Generate the IndieAuth ticket ===
+
+Alice generates a short-lived ticket. The ticket MUST expire shortly after it is issued to mitigate the risk of leaks, and MUST be valid for only one use. A maximum lifetime of 10 minutes is recommended. 
+
+The reason for short-lived is that you are sending something unsolicited to someone and it is safer to send something short-lived and single use, and require action to retrieve the actual token.
+
+* Resource URL = https://alice.example.com/private/
+* Ticket = 32985723984723985792834
+* Deliver to ticket endpoint of the subject: https://bob.example.org/
+
+Alice discovers the ticket endpoint of the subject. See [[#Discovery]]
+
+* https://auth.example.org/ticket
+
+Alice makes a POST request to the ticket endpoint. This is basically saying "if you wanted to fetch this as this person and access the resource, here's a ticket you can use to get an access token".
+
+* <code>ticket</code> - a random string that can be redeemed for an access token
+* <code>resource</code> - the access token will work at this URL
+* <code>subject</code> - the access token should be used when acting on behalf of this URL
+
+<pre>POST https://auth.example.org/ticket
+     Content-Type: application/x-www-form-urlencoded
+
+ticket=32985723984723985792834
+&resource=https://alice.example.com/private/
+&subject=https://bob.example.org
+</pre>
+
+
+When a ticket is sent, if there is no problem with the request, the ticket endpoint MUST return an HTTP 200 OK code or HTTP 202 Accepted if it is going to asynchronously make the token request.
+
+==== Why not send the access token directly? ====
+
+When you send a ticket, you are sending an unsolicited payload to the receiver. The ticket is not requested by the receiver, so you cannot guarantee they will be protecting it if they aren't expecting it. (It may be logged in intermediate proxy servers, written to log files on the server, etc.) If the receiver supports receiving tickets, then they will be explicitly requesting an access token by exchanging the ticket, so you can be more confident they will take measures to protect the access token. This way the access token is only delivered via an explicitly requested HTTPS connection to your server.
+
+Additionally, given some IndieAuth servers don't support expiration of tokens(despite it being a recommendation), this could allow permanent access to protected data, which is not ideal.
+
+=== Step 2: Redeem the ticket for an access token ===
+
+Bob's ticket endpoint redeems the ticket for an access token. This token can support refresh tokens as per the IndieAuth specification.
+
+The ticket endpoint makes a GET or HEAD request to discover the token endpoint of the resource, <code>https://alice.example.com/private/</code>, searching for an HTTP Link element or a HTML <link> element with the appropriate rel value for the IndieAuth metadata endpoint, <code>indieauth-metadata</code> or fallback to the older <code>token_endpoint</code>. 
+
+The ticket endpoint makes a POST request to the token endpoint to exchange the ticket for an access token. The POST request MUST contain the following parameters:
+
+* <code>grant_type=ticket</code>
+* <code>ticket</code> - The ticket to be redeemed
+
+And SHOULD support any optional parameters specified by the IndieAuth specification, such as client_id and scope, to allow a token to be issued with limitations.
+
+The IndieAuth spec does not currently address the issuance of resource-limited tokens. The discussion for that is at https://github.com/indieweb/indieauth/issues/82. Regardless of this adoption, if a token endpoint wishes to support the ticket grant type, then it MUST either support the issuance of resource-limited tokens or support this by issuing a ticket with a scope reflecting same.
+
+Should this also include client_id? https://github.com/indieweb/indieauth/issues/85
+
+===== Example =====
+
+<pre>POST https://alice.example.com/token
+  Content-type: application/x-www-form-urlencoded
+  Accept: application/json
+
+  grant_type=ticket
+  &ticket=32985723984723985792834
+</pre>
+
+Response is an access token as specified in the <a href="https://indieauth.spec.indieweb.org/#access-token-response">IndieAuth Spec</a>.
+
+=== Step 3: Use the access token ===
+
+Now Bob's authorization endpoint has the remote access token that could be used to fetch Alice's feed.
+
+How to get it to a client, such as a reader or the webmention endpoint verifier is up to those implementations, it may be internal, or may use another spec to coordinate.
+
+
+
+
+
+
+== Open questions ==
+[https://github.com/indieweb/indieauth/labels/ticket-auth See discussion on GitHub]
+
+*Would a token grant access to anything more specific than the provided resource, or would it be only for that specific resource? (e.g. should a token for <code>https://example.com/alice/</code> also work on <code>https://example.com/alice/feed</code>)
+** Moved discussion to https://github.com/indieweb/indieauth/issues/83
+
+* Should it be assumed that the ticket endpoint will automatically redeem all tokens? It's technically an implementation detail, not a requirement of the spec, but witht he amount of time the ticket is valid, this seems a good move. Assuming the token endpoint supports revocation.
+
+* Where does the ticket endpoint go looking for the token endpoint? Currently the only thing it is sent that it can act on is the <code>resource</code> value. If that is also supposed to function as sort of a root URL of resources it gives access to, is it correct to assume the token endpoint can be discovered at that exact URL? (See first open Q.)
+** Moved discussion to https://github.com/indieweb/indieauth/issues/127
+*** The discussion indicates a few different use cases for granting tickets; it seems that some people want to generate tickets for a specific resource (e.g. a private post) sent securely to specific recipients, whereas other people want to generate tickets for being able to subscribe to a feed or otherwise retrieve data in a logged-in state. The original TicketAuth draft was to support the latter; do we also need to support the former? If <code>resource</code> points to specific private blog entries, that implies that it's up to the publisher to specifically send push notifications about all private content to all recipients, which has a lot of far-reaching implications.
+
+* Should we make it clear that multiple <code>resource</code>s could be granted from a single ticket? Following RFC8707 would make it possible to do so
+** {{jamietanna}}'s receiver supports <code>resource</code> and <code>resource[]</code>
+
+* Would it make sense to have <code>resource</code> for specific items, <code>realm</code> for blanket grants for an entire website/URL prefix/etc., and <code>issuer</code> for where to look for the token endpoint as an override if the endpoint can't be determined from <code>resource</code>/<code>realm</code>?
+
+* How to handle non-canonical/redirecting profile URLs? Since the ticket itself never goes through the full IndieAuth flow, the granter can't get the canonical identity URL from the <code>authorization_endpoint</code>.
+** As of [https://github.com/PlaidWeb/Publ/pull/487 this change in Publ], if Publ gets a ticket request for a page with a <code>rel="canonical"</code>, it forwards the request to the canonical page. No trust is assumed based on the original requesting URL, and the ticket only goes to the canonical URL's declared endpoint.
+
+== IndieWeb Examples ==
+
+=== Martijn van der Ven ===
+
+As of 2021-07-04 (at [https://chat.indieweb.org/dev/2021-07-04/1625433752084900 21:22 UTC]), {{martijnvdven}} has a token endpoint with the ability for anyone to request a ticket. It is accessible through https://vanderven.se/martijn/token/.
+
+As of 2021-07-10 ([https://events.indieweb.org/2021/07/indieweb-create-day-B6zvFMa8yjTe Create Day]), the homepage at https://vanderven.se/martijn/ will show a welcome message and an alternative photo when a valid Bearer token is send in the <code>Authorization</code> header.
+
+Please treat the whole thing as experimental, and feel free to test your own endpoints against it!
+
+Tokens created through there are meant for the entire domain (the <code>resource</code> is <code><nowiki>https://vanderven.se/</nowiki></code>) and have no <code>scope</code> set. They are purely to identify someone as their URL. Because of the experimental phase of this spec, tokens are kept to short life times (3 days).
+
+* '''Special:''' while requesting tickets is declared out-of-scope for this extension, the way it is implemented here follows the pattern from [[IndieAuth]]’s [https://indieauth.spec.indieweb.org/#token-revocation Token Revocation]. A <code>POST</code> with <code>action=ticket</code> triggers the sending of a ticket.
+
+As of 2022-09-04 ([[2022/Berlin/Schedule#Sunday|IWC Berlin]]), the source is available as [https://gist.github.com/Zegnat/116b29ed0ef0e3f346583c48388ecc41 a GitHub Gist].
+
+=== David Shanske === 
+
+As of 2021-07-04, {{gwg}} has a proof of concept ticket endpoint on his test site that can receive tickets and redeem the associated token and store it. As of 2021-07-10, it has a management interface but no redemption methodology.
+
+=== Jamie Tanna ===
+
+As of 2021-07-07, {{jamietanna}} has created a POC ticket endpoint which is [https://gitlab.com/jamietanna/ticket-auth-poc Open Source] and [https://indieauth-ticket-auth-poc.herokuapp.com/ deployed to Heroku] for anyone else to use it.
+
+This implementation requires an <code>issuer</code> to reference the profile URL of the user who's <code>token_endpoint</code> is to be used for the ticket exchange.
+
+This returns the token exchange body to the caller, and logs some information, but not the granted access token (currently), nor does it store it.
+
+It does not yet utilize it for anything or have an interface to do so.
+
+Jamie is currently using this on [https://www.staging.jvt.me/ his testing identity].
+
+=== fluffy ===
+
+As of 2021-07-08, {{fluffy}} has added a token granting endpoint to [[Publ CMS|Publ]], which can be tested at [https://dev.beesbuzz.biz a publ test instance]. It supports the following TicketAuth login flows:
+
+* Manually request a ticket by going to <code>https://dev.beesbuzz.biz/_tokens?me=YOUR_URL_HERE</code>
+* Send a POST request to <code>https://dev.beesbuzz.biz/_tokens</code> with parameters <code>subject=YOUR_URL_HERE</code> and, optionally, <code>scope=REQUESTED_SCOPES</code> (per [https://github.com/indieweb/indieauth/issues/87 the proposed mechanism of a ticket request], as of 2022-03-20)
+* Refresh tokens (per standard OAuth2)
+* [https://dev.beesbuzz.biz/_login Log in to the test site] and a ticket will be automatically sent to you
+
+The resulting token can be tested on the [https://dev.beesbuzz.biz/userinfo human-readable profile page] or by sending a [https://indieauth.spec.indieweb.org/#access-token-verification token verification request] to <code>https://dev.beesbuzz.biz/_tokens</code>.
+
+This is also available on [https://beesbuzz.biz/ fluffy's personal site]; see [https://beesbuzz.biz/profile the user profile page] for things to experiment with (including manually-generated tokens).
+
+=== aaronpk ===
+
+As of 2021-07-10, {{aaronpk}} has implemented both sending and receiving tokens on a standalone test website.
+
+
+[[Category:IndieAuth]]
+
+== See Also ==
+* [[IndieAuth]]
+* [[authentication]]
+* https://beesbuzz.biz/blog/12341-Private-friends-only-IndieWeb-stuff
+* https://david.shanske.com/2021/06/27/thinking-about-ticket-auth/
