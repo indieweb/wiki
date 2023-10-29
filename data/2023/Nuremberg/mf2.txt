@@ -1,0 +1,78 @@
+https://indieweb.org/2023/Nuremberg/mf2
+
+'''<dfn>microformats2 parsing</dfn>''' was a session at [[2023/Nuremberg|IndieWebCamp Nuremberg 2023]] aimed at resolving longstanding mf2 issues.
+
+Notes archived from: [https://etherpad.indieweb.org/mf2 mf2]
+
+== Participants ==
+* {{t}}
+* {{gwg}}
+* {{jansauer}}
+* {{barnaby}}
+* {{zegnat}}
+* {{adactio}}
+* {{paulrobertlloyd}}
+
+== Notes ==
+Triaging GitHub Issues from https://github.com/microformats/microformats2-parsing/issues/
+
+tantek: introducing #12
+
+with microformats we believe in putting content first. all a webdeveloper needs to do is add classes, not change where they put things.
+
+If you use the VCP to only markup the time, it canonicalises by looking for another date. The most recent seen date
+
+adactio: an example where we mention dates first, and then times, and now the latest seen date might not match the first seen time.
+
+tantek: is there an example? Or would you wrap only the time with a time element.
+
+The other canonicalisation is timezones. If you put a timezone on one of the times, but not on the other one, the implied timezone applies the previous seen timezone to the other one.
+
+There are cases where you have just a time, another time, and then a date.
+
+zegnat: the problem exists with h-entry and h-event being on the same element. Introducing full timestamps for published and updated times. These could leak in without the author wanting that.
+
+=== issue 4 ===
+Accept tanteks proposal
+
+=== issue 8 ===
+Accept that we want to imply dates on bare times, editor needs to write up the spec
+
+=== issue 12 ===
+Accept to split off the proposal of canonicalizing the Z timezone offset into a separate proposal to pass the existing proposal, as this requires more discussion.
+
+zegnat: do we need to explicitly allow yearless dates?
+
+tantek: we should call it out, and make sure we make yearless dates are preserved
+
+barnaby: what happens with things that are not parsable?
+
+tantek: they should be kept as is
+
+zegnat: does that apply to yearless dates too?
+
+tantek: we want to have it separate to say it is explicitly supported
+
+barnaby: we should keep this issue around so we know to come back here
+
+=== Issue 3 ===
+barnaby: note that it is only for h- and e-. Should it be allowed for other things? Other properties are already have the ability of being turned into objects, e.g. image parsing where alts are added inside an object.
+
+tantek, zegnat, barnaby, gwg: lang should work like id, no need to have it as a h- and e- limited thing.
+
+tantek: would not want to do inheritance
+
+zegnat: the clearest case it when people are already putting it on the html element, where they almost never put microformats (adactio.com as example, mentioned by barnaby)
+
+barnaby: would like to separarely propose that we grab lang attribute globally somewhere, so it will be in the parser output.
+
+Should be added to the spec enabled by default
+
+=== Issue 7 ===
+sknebel: pull request for python needs reviewing, then this issue can be handled asynchronously
+
+[[Category:2023 sessions]]
+[[Category:IndieWebCamp Nuremberg 2023]]
+
+== See Also ==
+* [[2023/Nuremberg/Schedule]]
