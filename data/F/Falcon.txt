@@ -246,6 +246,30 @@ Bugs in [[CASSIS]] should be reported as [https://github.com/tantek/cassis/issue
 == Working On ==
 The next things I'm working on designing and implementing in Falcon. These are all things where I have made some progress with UX, code etc. and thus am "in the middle of" implementing. Roughly ordered by personal priority.
 
+=== redesign post webactions ===
+Need to rethink / redesign the webactions (and tweet action fallbacks) in my [[post footer]]s.
+
+Goals, enable these user flows and UI changes on my site:
+* IndieWeb user clicks '''↵ Reply''' on my site, which navigates them to the reply UI on their own site to write a [[reply]], ideally prefilled with the <code>[[in-reply-to]]</code> URL, and content <kbd>@tantek.com </kbd>
+* Mastodon user clicks '''↵ Reply''' on my site, which navigates them to the reply UI on their Mastodon instance to write a [[reply]] (similar to how Mastodon cross-instance replies work), ideally prefilled with content <kbd>@tantek.com@tantek.com </kbd>
+* Remove Twitter fallbacks, or perhaps move them to a details/summary on the Twitter syndication link if present, with reveal on hover, as an exercise in how to do syndication destination specific webactions
+* Update [[webactions]] page, especially "How to" with how to do this, with Mastodon fallbacks instead of Twitter fallbacks.
+* Similarly for '''♥ Like''' and '''♺ Repost''' buttons/links
+
+Steps:
+* analyze current [[Mastodon]] UI for cross-site reply, like, repost handling
+* implement something similar to Mastodon cross-site "how to" fallback UI for responses
+* drop tweet actions fallbacks since no longer backfeeding from Twitter, so no reason to encourage responding there
+
+==== indie-config loading ====
+I'd like to add indie-config loading support to my existing [[webactions]] so that any registered web+action: URL handler is automatically activated, e.g. for:
+* Seamless "Reply" user interaction, from my posts, to anyone whose website is setup to handle web+action: URLs.
+
+I believe I can do this by following the how to as documented in:
+* [[indie-config#How_to_consume]]
+
+And then should be able to test it with {{aaronpk}}'s implementation of <code>web+action:</code> URL handling, or rather, have him test it by going to one of my posts and clicking "Reply" which should activate their own Reply UI.
+
 === improve like posts ===
 Improve [[like]] posts in a number of ways:
 * style differently than notes when in-stream, e.g. home stream
@@ -261,22 +285,6 @@ Improve [[like]] posts in a number of ways:
 ** [[like#Brainstorming]] - how I went about it, the steps
 ** storage
 ** deployment
-
-=== redesign post webactions ===
-Need to rethink / redesign the webactions (and tweet action fallbacks) in my [[post footer]]s.
-
-* analyze current [[Mastodon]] UI for cross-site reply, like, repost handling
-* implement something similar to Mastodon cross-site "how to" fallback UI for responses
-* drop tweet actions fallbacks since no longer backfeeding from Twitter, so no reason to encourage responding there
-
-==== indie-config loading ====
-I'd like to add indie-config loading support to my existing [[webactions]] so that any registered web+action: URL handler is automatically activated, e.g. for:
-* Seamless "Reply" user interaction, from my posts, to anyone whose website is setup to handle web+action: URLs.
-
-I believe I can do this by following the how to as documented in:
-* [[indie-config#How_to_consume]]
-
-And then should be able to test it with {{aaronpk}} or {{kylewm}}'s implementation of web+action: URL handling, or rather, have them test it by going to one of my posts and clicking "Reply" which should activate their own Reply UI.
 
 === tags page ===
 As an improvement on my linked hashtags implementation:
