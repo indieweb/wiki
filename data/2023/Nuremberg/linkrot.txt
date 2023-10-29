@@ -1,0 +1,108 @@
+https://indieweb.org/2023/Nuremberg/linkrot
+
+'''<dfn>Linkrot</dfn>''' was a session at [[2023/Nuremberg|IndieWebCamp Nuremberg 2023]].
+
+Notes archived from: [https://etherpad.indieweb.org/linkrot linkrot]
+
+== Participants ==
+* Jeremy Keith
+* Paul Lloyd
+* Jeremy Cherfas
+* Tantek Çelik
+* Roma Komarov
+* Tom Arnold
+* Sabastian 
+* Sara Jakša
+* Calum Ryan
+
+== Notes ==
+There are two parts to the link rot - how to make sure, your own links don't rot, and what to do with sites, that dissapred, that one linked to.
+
+The problem: If you click on the link, you get 404 or domain no longer existing.
+
+Remy provided a solution. A progressive enhancment - in starts with the normal link. On client side, JS passes the parameter of the link to the backend. If it resolved in 2xx, do nothing, 4xx redirects to the archive - need to figure out where on the archive.org to link. This allows to at least show the snapshot, unlike the normal action, which shows nothing.
+
+The problem could be the speed - as the check takes time, even with the limit of 2s. 
+
+Is there is better solution? Do we solve this as the service? Is there an option in the redirect on the third party services (like Bridgy). 
+
+In the static pages, the check can happen at the build stage. There are Eleventy plugins for this. In this case, everytime you post, check all the links - but the build process becomes long, but it could run periodically in the background. Or do it in chucks. 
+
+Could we do a plugin for IndieKit. But how to geniralize this, so different people can use it. 
+
+Micro.blog - in the premium version saves the version of the things you link - so you have the copy, even if the content dissapears. Does it link to the archive or not? (Manton’s video about link archiving feature: https://www.youtube.com/watch?v=1uevgQYsR9g)
+
+Pindboard - if you pay, they also save it, but it seems it takes some time, since the most recent ones might not have copy. 
+
+This only solves the problem for the future. How to solve the problem for old content, where the content could already be gone.
+
+Jeremy C. checks the links manually - one day at the time. This is the best option, as it also catches the links, that still exist in the same domain, but under different URL. 
+
+There are sevices, that will check the links on the site, and it will give you the list of broken links. Examples are Integrity, SEM Rushes, Ahfres, ... If the number of links is low enough, it could be done by hand.
+
+Doing one pass now, and having a solution for the future, makes one covered. But when to do this and what is the scope of the problem. 
+
+When to do a snapshat and when to do a link to it only. The first solution protect you from the linkrot and death of websites.
+
+Problem with the archive.org can be, that this page could be change and the most recent version could be a bad page. The best would be to have the version on the date of the post - Remy includes that step. 
+
+Would it make sense to use a different approches on different post types? Jeremy K. wants to use the method on all the posts.
+
+Is there a service worker approch work? Service worker could be the proxy - but the other site would need to have it, not the personal site trying to deal with the link rot. If it is a dead site, it can not have a service worker. 
+
+Check the dead list of domains on the link. Start with the link, check if it is domain on the dead list, and deal with it if it is. This is a subset of a problem, but it not a majority case. This subset can be more dangerous, or the same as the rest. So the way is important - as it could be that a different solution is a better one.
+
+Which one is more dangerous? The 404 or the 200, with the completly different content. The IndieWeb communities tracks it in the [zombie] page. The zombies are more dangerious, but they might be just a small part of these links.
+
+The link checks claims, that it tracks the broken domains. Does it check, if it now links to the porn site? We do not know, what kind of checking do they do.
+
+For the snapshots, there would need to be the way to check the diff of the current and saved shapshot. And have a good way to detect, if the diff is big enough to no longer want to link to it. 
+
+Sometimes the content is removed intentionally. What to do with these cases, as they might not want the internet archive to have a copy either. Who is the responsible for the copies of the content, if the person linking it sends it to the one linking. Not everybody knows about the Internet Archive.
+
+This makes the HTTP code 410 different than HTTP code 404. This could mean, that 410 has intention, so what do do with these links? In come cases (the example of the accessibility and python resources), where the community decided to ignore this and mirror the old site. The licence in this case was some version of the CC. 
+
+This makes the HTTP code 410 different than HTTP code 404. This could mean, that 410 has intention, so what do do with these links? In come cases (the example of the accessibility and python resources), where the community decided to ignore this and mirror the old site. The licence in this case was some version of the CC.  And there is no takes back on the licences. 
+
+The archive saves everything, but it will not display it, until the robot.txt will not allow it. This means, that they can control it. But also, if somebody else gets the domain, they can control the display of entire history. 
+
+The same problem appears also with Webmentions.
+
+Replace all old links (1 years, 2 years, 5 years, 10 years) with the internet archive versions. At one point in the past, it is more likely to be on the internet archive, then on the webpages. The Wikipedia lets the user choose, provide both the link and the archive version. This comes from the references, when you have to note from where and when did you access it.  But how to present it? 
+
+There are already people, that sends people already to the Internet Archives. 
+
+If there was an error, and it got corrected later, then the direrect still happens. For example, the file for the redirects in one own site can disappear - which will cause the problem.
+
+People can change their URL structure (some used pattern, and some used lists of sites pairs, some combination):
+* The old files can be left on the old URLs and not touched
+* The old URLs can redirect to the new URLs 
+** alias in the Hugo, that can generate pages
+** .htaccess redirect - it is not a portable format, so it causes some people shivers
+
+The best option (with one objection) the not changing it and keep the old one for old files/post. Making the dynamic link creation (like with PHP) can be less stable than just the files on the system.
+
+Maybe we instead have to have the whitelist of the domains, where we know the URLs are stable. 
+
+Internet Archive have a rate limit. So it could be done in batches, like doing all the posts posted on this date. It still makes sense to make a snaphost for old content, in case it did not yet change, but will rot in the future. 
+
+The ideal solution would be inventing the time machine. Any takers?
+
+
+https://indieweb.org/deleted
+
+
+consider the case of Mark Pilgrim and how he 410d all his sites
+* his main site now links to a casino (add to zombies!)
+* however his project sites got reconstructed by the community at alternative URLs because the contents were creative commons!
+** http://diveintohtml5.info/
+** https://diveintopython3.net/
+** See the GItHub mirror for more: https://github.com/diveintomark
+
+So if a site you link to returns 410, you could go check the Internet Archive copy, and if it was Creative Commons licensed, you could create a static local copy to link to per the license.
+
+[[Category:2023 sessions]]
+[[Category:IndieWebCamp Nuremberg 2023]]
+
+== See Also ==
+* [[2023/Nuremberg/Schedule]]
