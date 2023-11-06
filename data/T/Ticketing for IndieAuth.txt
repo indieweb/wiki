@@ -101,13 +101,13 @@ In responding to a request, the endpoint would take the same approach as the web
 
 === Discovery ===
 
-The current implementation expects that all pages that could be deemed as a <code>resource</code> would have either the newer <code>rel=indieauth-metadata</code> or the older but still in use  <code>rel=token_endpoint</code>
+The current implementation expects that all pages that could be deemed as a <code>resource</code> would have [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth Server Metadata] (<code>rel=indieauth-metadata</code>) or the older but still in use <code>rel=token_endpoint</code>.
 
-A ticket endpoint can be discovered by fetching the URL of the subject and looking for the indieauth-metadata rel values as described in the [https://indieauth.spec.indieweb.org/#discovery-0 IndieAuth Discovery]. 
+A ticket endpoint can be discovered by fetching the URL of the <code>subject</code> and looking for the <code>rel=indieauth-metadata</code> as described in [https://indieauth.spec.indieweb.org/#discovery-0 IndieAuth Discovery]. 
 
-The client fetches the metadata document and finds the ticket_endpoint property in the JSON body.
+The client fetches the metadata URL and finds the <code>ticket_endpoint</code> property in the JSON body.
 
-Some ticket endpoints may be advertised by a separate link header for those implemented prior to the addition of the indieauth-metadata endpoint, however, any IndieAuth implementation that supports a metadata endpoint SHOULD NOT advertise the ticket endpoint separately.
+An older implementation may not yet support the indieauth-metadata endpoint, in which case the ticket endpoint may be advertised with <code>rel=ticket_endpoint</code>. However, any IndieAuth implementation that supports the indieauth-metadata endpoint SHOULD NOT advertise the ticket endpoint separately.
 
 === Step 1: Generate the IndieAuth ticket ===
 
