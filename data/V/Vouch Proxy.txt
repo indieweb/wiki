@@ -5,6 +5,44 @@ https://indieweb.org/Vouch_Proxy
 '''<dfn>[https://github.com/vouch/vouch-proxy Vouch Proxy]</dfn>''' (formerly <dfn>Lasso</dfn>) is a Single-Sign On OAuth client that works with the [[Nginx]] auth_request module and supports [[IndieAuth]]/[[RelMeAuth]] through [[IndieLogin]], which is used for logging into the IndieWeb wiki.
 * See '''[[Vouch]]''' for the Webmention extension for blocking spam and accepting [[response]]s from specific [[audience]]s.
 
+== IndieWeb Examples ==
+{{lifeofpablo}} uses Vouch Proxy to sign into his RSS reader and protect various sections of his web infrastructure. Vouch Proxy is used for simply putting a wall around resources and using it as reverse proxy authentication. Examples:
+* Grafana
+* Kanboard
+* FreshRSS
+
+== Docker Compose ==
+How to implement using Docker Compose
+
+ services:
+  vouch-proxy:
+    container_name: vouch-proxy
+    image: quay.io/vouch/vouch-proxy
+    ports:
+      - 9090:9090
+    volumes:
+      - ./vouch-proxy-config:/config 
+    restart: always
+
+== config file with Indieauth Protocol == 
+
+ vouch:
+  logLevel: debug
+  listen: 0.0.0.0
+  port: 9090
+  allowAllUsers: true
+  cookie:
+    secure: false
+    domain: yourdomain.com
+  publicAccess: false
+ oauth:
+  # IndieAuth
+  # https://indielogin.com/api
+  provider: indieauth
+  client_id: https://yourdomain.com
+  auth_url: https://indieauth.com/auth # or your authorization endpoint
+  callback_url: https://vouch-subdomain.yourdomain.com/auth
+
 == See Also ==
 * [[mediawiki-customization]] for how this is configured on this wiki
 * [[Vouch]]
