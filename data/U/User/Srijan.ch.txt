@@ -8,9 +8,58 @@ https://indieweb.org/User%3ASrijan.ch
 |photo_url = https://srijan.ch/media/site/737919654b-1698403138/srijan.jpg
 |pronouns = he/him/his
 |summary = 
-|elsewhere =
+|elsewhere = [https://fedi.srijan.dev/srijan @srijan@fedi.srijan.dev] [https://github.com/srijan github]
 |contact =
 |chatname = srijan
 }}
 
 </div>
+
+== ToDo ==
+
+* Migrate blog posts from old domain to new
+* The main h-card on my homepage did not work as expected. I've put a workaround for now, but need to debug further.
+* Figure out about indieauth.com vs indielogin.com. Do I need to switch to indielogin?
+* Should I enable moderation for webmentions and fediverse replies?
+* Use an image proxy for gravatar and fediverse images?
+
+== Implementation Design ==
+
+Using https://getkirby.com/ with some indieweb plugins:
+* https://github.com/mauricerenck/indieConnector
+* https://github.com/mauricerenck/komments
+
+=== IndieWeb Features ===
+
+* Indieauth
+* Receive webmentions (via webmention.io)
+* Send webmentions
+* Display webmentions on posts
+* Integrate with fed.brid.gy to act as a fediverse instance @srijan.ch@srijan.ch
+
+=== URL Design ===
+
+* Top level pages:
+** /
+** /about
+** /notes
+** /blog
+** /feed
+* Note slugs are of the format: Y-m-d-<counter>, e.g: 2023-11-09-001
+** Full notes URL: /notes/2023-11-09-001
+* Blog posts (articles) have a keyword-based slug
+** Full URL for blog posts don't have the /blog prefix.
+* Tag pages are on /tags/<tagname> and list notes+articles filtered by the tag
+
+=== Feeds ===
+
+{| class="wikitable"
+|-
+! h-feed !! RSS feed !! Description
+|-
+| /feed/all || /feed/all.xml || All notes+articles
+|-
+| /feed/notes || /feed/notes.xml || All notes
+|-
+| /feed/blog || /feed/blog.xml || All blog articles
+|}
