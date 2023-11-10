@@ -2,13 +2,41 @@ https://indieweb.org/Sele
 
 '''<dfn><a href="https://git.jacky.wtf/indieweb/sele">Sele</a></dfn>''' is a [[IndieAuth]] provider (client and server) by {{jacky}}. It's meant to be friendly to [[selfhosting]]. Progress is publicly tracked on the [https://git.jacky.wtf/indieweb/sele/milestone/57 alpha] and the [https://git.jacky.wtf/indieweb/sele/milestone/27 final] releases, as well as the [https://git.jacky.wtf/indieweb/sele/milestone/58 backlog].
 
-== Authorization ==
-Due to Sele's projected nature of allowing people to register other methods of authentication (be it via [[WebAuthn]], using a passphrase, or what have you), the flow is a bit different from the conventional session-based flow. It, generically, is as follows:
+== Authentication ==
+In the spirit of [[plurality]], Sele comes with support for some in-built means of authentication and has support for adding more over time on a per-installation basis.
 
-* An agent on behalf of a user/identity/site (a Web browser or another app) requests to obtain a challenge.
-* The agent passes information of that challenge over to the user to attest their ability to complete it.
-* Once completed and verified (which usually means the challenge response was acceptable), Sele generates a short-lived token (in this case, one generated using the [https://paseto.io/ Paseto] algorithm) and returns it to the agent.
-* At this point, it's up to the agent to redeem this token. Sele itself will attempt to redeem such a token by calling the API endpoint for doing so. I'm not currently sure how to handle other clients that'd like to use that token (pending security concerns).
+=== In-progress Methods ===
+A live progress list of these methods can be found at [https://git.jacky.wtf/indieweb/sele/issues?q=&type=all&state=open&labels=209&milestone=0&assignee=0&poster=0 git.jacky.wtf].
+
+* Passkeys via [[WebAuthn]]
+* [[#Authorized_device_confirmation|Authorized device confirmation]]
+* [[#Email_Links|Actionable links via email]]
+* [[#RelMeAuth|RelMeAuth]]
+* [[#OAuth2_Client|OAuth2 client authorization]]
+
+==== Authorized device confirmation ====
+This would allow an application to approve requests on behalf of the Web interface of Sele. In order for this to work, authorized applications (called devices) will be able to subscribe to Sele and respond to attempts for authorization that a user acts upon.
+
+==== Push notifications ====
+In relation to [[#Authorized_device_confirmation|device confirmation]], this provides the generic interface for interfacing with [https://en.wikipedia.org/wiki/Publish%E2%80%93subscribe_pattern pub-sub systems] for handling request confirmation. This will come with support for services like:
+
+* [https://ntfy.sh ntfy.sh], higher priority b/c F/LOSS
+* [[Pushover]], lower priority
+
+==== Email Links ====
+This works a bit similarly to [[#Authorized_device_confirmation|Authorized device confirmation]] but uses SMTP over TLS (encrypted e-mail sending) to send a message to an address in order to get a confirmation or rejection to a request. The e-mail will have expirable signed links for requests that can approve, deny or view for more auditing.
+
+==== RelMeAuth ====
+Defined on the Wiki as [[RelMeAuth]], this is meant to be a shell of a framework to let people authorize using external providers. The intent is to have this plugin support at most looking for a <code>rel=me authn</code> URL that points to a [https://indieauth.spec.indieweb.org/#indieauth-server-metadataIndieAuth metadata endpoint]. Other compatible methods can be found by adding [[#OAuth2_Client|OAuth2 client support]].
+
+==== OAuth2 Client ====
+The shell of running an OAuth2 client to use for the identification of a user based is meant to help extend things like [[#RelMeAuth|RelMeAuth]] (see https://indieweb.org/RelMeAuth#FAQ specifically, as this is why [[silo]] backlinks are only supported when OAuth2 is provided). A bundle of services will be added like:
+
+* Code forges like [[Gitlab]], [[Gitea]] and [[GitHub]]
+* Silos like [[Tumblr]]
+
+== Authorization ==
+In order to confirm if an IndieAuth authorization request can be shown for approval, Sele [[#Authentication|requires authentcation]]. Once that's been confirmed, Sele &mdash; either via the Web or through an authorized application &mdash; will inform the user of what kind of access is being requested, by whom and how to classify this attempt for future reference.
 
 == TicketAuth ==
 Sele aims to provide a working implementation of [[TicketAuth]]. In order to do this, it aims to answer a few questions intentionally left open by the specification:
