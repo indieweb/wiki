@@ -2,50 +2,12 @@ https://indieweb.org/Shock
 
 {{stub}}
 
-'''<dfn>Shock</dfn>''' is what {{jacky}} uses to combine his use of [[Micropub]] and [[Webmention]] services. It uses [https://tera.netlify.app/ Tera], a [https://jinja.palletsprojects.com/en/3.1.x/ Jinja]-like templating language in [[Rust]] for rendering themes. The project is still in an alpha state and is not ready for people not familiar with deploying Rust applications.
-
-= Features =
-* Presents contents using a theme for [[notes]], [[articles]], [[replies]] and [[bookmarks]].
-
-== Planned ==
-* [https://git.jacky.wtf/me/shock/issues/5 Rendering on multiple feed types]
-** [[AS2]]
-** [[Atom]] (and [[RSS]])
-** Generating [[OPML]] [https://git.jacky.wtf/me/shock/issues/31 representing all the site's feeds]
-* Provide better support for presenting [[photos]], [[rsvp]], [[edit]]s, [[events]], [[videos]], [[audio]], [[read]]-of posts, [[listen]]-of posts, [[game play|gameplay]], [[code]] snippets, [[purchase|purchases]] and [[collections]]
-* in-browser editing of themes
-* Swapping themes on-demand
-* Guest sign-in using [[IndieAuth]]
-* Implementing [[private post]]s support
-* [[search|Search]] functionality
-* [https://git.jacky.wtf/me/shock/issues/1 Real-time updates from Micropub servers]
-* [https://git.jacky.wtf/me/shock/issues/20 Freezing posts]
-* Template tag for generating [[The-Open-Graph-protocol|Open Graph Protocol-friendly]] and [[Twitter_Cards|Twitter]] metadata
-* Custom data fetching using Lua scripts to render on the site
-* Based on the <code>Host</code> header, switch the [[destination]] to serve
-* Shows [[Webmention]] and [[WebSub]] endpoint information on [[#Webmention_and_WebSub_Endpoint_Showing|pages that enable it]] [https://git.jacky.wtf/me/shock/issues/33 tracked at git.jacky.wtf]]
-* Add basis of [[groups]] [https://git.jacky.wtf/me/shock/issues/36 tracked at git.jacky.wtf]
-* Expose the [[Tor]] address of a URI using [https://gitweb.torproject.org/tor-browser-spec.git/tree/proposals/100-onion-location-header.txt <code>Onion-Location</code>] in the headers and HTML, when available, [https://git.jacky.wtf/me/shock/issues/37 tracked at git.jacky.wtf]
-
-=== Webmention and WebSub Endpoint Showing ===
-Since Shock is a [[Micropub]] client, it has no insight into the details of one's Micropub design. The heuristic used to determine if a Webmention endpoint will be shown is as follows:
-
-* if the resource does not have the property 'notifications', show the endpoint
-* if it ''does'' have the property…
-** if the value has the value 'webmention', show the WebSub endpoint to let people when it gets updated
-** if the value has the value 'websub', show the WebSub endpoint to allow incoming Webmentions
-
-=== NodeInfo Reporting ===
-I'd like to emit [https://nodeinfo.diaspora.software/protocol.html NodeInfo] information on my site to help non-IndieWeb entities understand what I use in a machine-friendly way. I'll aim to support the 2.1 version first, then work backwards.
-
-=== Content Removal ===
-Shock's built to conform to any Micropub server but it's optimized as a testing client of sorts for [[Koype]]. The UX and logic provided in Shock is modeled around [[Koype#Content_Removal|Koype's approach for allowing people to remove their content]] from one's site.
+'''<dfn>Shock</dfn>''' is the name of the system running sites nominally created by {{jacky}}. The source code is available at [https://git.jacky.wtf/me/shock git.jacky.wtf]. Components of the system are written and shared upstream with the [[Rust#Library|Rust library]].
 
 == See Also ==
 
 * [[Lighthouse]], the preferred [[Webmention]], [[WebSub]] and [[Microsub]] server to use with Shock.
-* [[Koype]] - the [[Micropub]] server Shock optimizes for.
-* [[Lwa]]
-
+* [[Koype]] - the [[Micropub]] implementation used with Shock.
+* [[Sele]] - the [[IndieAuth]] implementation used with Shock
 
 [[Category:Software]]
