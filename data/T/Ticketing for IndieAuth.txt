@@ -5,7 +5,7 @@ https://indieweb.org/Ticketing_for_IndieAuth
 This extension was previously called Ticket Auth, but was renamed as it is an extension, not an Auth methodology in itself.
 
 ;Status
-:This specification is still in early development.
+:This extension is still in early development.
 ;Latest Published Version
 :https://indieweb.org/Ticketing_for_IndieAuth
 ;Participate
@@ -105,11 +105,13 @@ A ticket endpoint can be discovered by fetching the URL of the <code>subject</co
 
 The ticket sending mechanism fetches the metadata URL and finds the <code>ticket_endpoint</code> property in the JSON body.
 
-An older implementation may not yet support the indieauth-metadata endpoint, in which case the ticket endpoint may be advertised with <code>rel=ticket_endpoint</code>. However, any IndieAuth implementation that supports the indieauth-metadata endpoint SHOULD NOT advertise the ticket endpoint separately.
-
 The ticket endpoint will need to discover the token endpoint to redeem the ticket at. The current implementation expects that all pages that could be redeemed as a <code>resource</code> would have [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth Server Metadata] (<code>rel=indieauth-metadata</code>) or the older but still in use <code>rel=token_endpoint</code>. However, this could create a privacy issue in some circumstances by revealing there is private information at that URL.
 
 Discussion for alternatives is at https://github.com/indieweb/indieauth/issues/127
+
+==== Deprecated Compatibility ====
+
+An older IndieAuth implementation may not yet support the indieauth-metadata endpoint, in which case the ticket endpoint might choose to advertise using a <code>rel=ticket_endpoint</code> header. However, being as the current version of IndieAuth requires the metadata endpoint, this is not recommended.
 
 === Step 1: Generate the IndieAuth ticket ===
 
