@@ -105,13 +105,19 @@ A ticket endpoint can be discovered by fetching the URL of the <code>subject</co
 
 The ticket sending mechanism fetches the metadata URL and finds the <code>ticket_endpoint</code> property in the JSON body.
 
-The ticket endpoint will need to discover the token endpoint to redeem the ticket at. The current implementation expects that all pages that could be redeemed as a <code>resource</code> would have [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth Server Metadata] (<code>rel=indieauth-metadata</code>) or the older but still in use <code>rel=token_endpoint</code>. However, this could create a privacy issue in some circumstances by revealing there is private information at that URL.
+The ticket endpoint will need to discover the token endpoint to redeem the ticket at. 
+
+To expect that all pages that could be redeemed as a <code>resource</code> would have [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth Server Metadata] (<code>rel=indieauth-metadata</code>) or the older but still in use <code>rel=token_endpoint</code> might reveal there is private information at that URL.
+
+To address above, the ticket endpoint SHOULD use the provided issuer parameter to find the metadata endpoint.
 
 Discussion for alternatives is at https://github.com/indieweb/indieauth/issues/127
 
 ==== Deprecated Compatibility ====
 
-An older IndieAuth implementation may not yet support the indieauth-metadata endpoint, in which case the ticket endpoint might choose to advertise using a <code>rel=ticket_endpoint</code> header. However, being as the current version of IndieAuth requires the metadata endpoint, this is not recommended.
+An older IndieAuth implementation may not yet support the indieauth-metadata endpoint or the issuer identifier, in which case:
+* The ticket endpoint might choose to advertise using a <code>rel=ticket_endpoint</code> header. However, being as the current version of IndieAuth requires the metadata endpoint, this is not recommended.
+* The ticket sending mechanism may not send the issuer identifier for verification as they do not support the latest IndieAuth specification...in which case a ticket endpoint may choose to look for the token endpoint at the resource, but this is also not recommended.
 
 === Step 1: Generate the IndieAuth ticket ===
 
@@ -155,7 +161,9 @@ Additionally, given some IndieAuth servers don't support expiration of tokens(de
 
 Bob's ticket endpoint redeems the ticket for an access token. This token can support refresh tokens as per the IndieAuth specification.
 
-The ticket endpoint makes a GET or HEAD request to discover the token endpoint,as described in [https://indieauth.spec.indieweb.org/#discovery-by-clients Discovery by Clients], with the difference that instead of discovery at the user provided URL, discovery will use the resource URL provided, <code>https://alice.example.com/private/</code>.
+The ticket endpoint makes a GET or HEAD request to discover the token endpoint,as described in [https://indieauth.spec.indieweb.org/#discovery-by-clients Discovery by Clients], with the difference that instead of discovery at the user provided URL, discovery will use the issuer identifier, <code>https://alice.example.com/.well-known/</code>.
+
+The ticket endpoint SHOULD check the properties provided by the metadata endpoint. If the <code>grant_types_supported</code> property is set, then ticket MUST be expressly noted or the endpoint should not proceed.
 
 The ticket endpoint makes a POST request to the token endpoint to exchange the ticket for an access token. The POST request MUST contain the following parameters:
 
