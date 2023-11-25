@@ -136,7 +136,7 @@ Alice discovers the ticket endpoint of the subject. See [[#Discovery]]
 Alice makes a POST request to the ticket endpoint. This is basically saying "if you wanted to fetch this as this person and access the resource, here's a ticket you can use to get an access token".
 
 * <code>ticket</code> - a random string that can be redeemed for an access token
-* <code>resource</code> - the access token will work at this URL
+* <code>resource</code> - the access token will work at this URL(s). Multiple resources can be provided
 * <code>subject</code> - the access token should be used when acting on behalf of this URL
 * <code>issuer</code> - The server's issuer identifier which is used to locate the metadata endpoint
 
@@ -207,12 +207,7 @@ How to get it to a client, such as a reader or the webmention endpoint verifier 
 
 * Should it be assumed that the ticket endpoint will automatically redeem all tokens? It's technically an implementation detail, not a requirement of the spec, but witht he amount of time the ticket is valid, this seems a good move. Assuming the token endpoint supports revocation.
 
-* Where does the ticket endpoint go looking for the token endpoint? Currently the only thing it is sent that it can act on is the <code>resource</code> value. If that is also supposed to function as sort of a root URL of resources it gives access to, is it correct to assume the token endpoint can be discovered at that exact URL? (See first open Q.)
-** Moved discussion to https://github.com/indieweb/indieauth/issues/127
-*** The discussion indicates a few different use cases for granting tickets; it seems that some people want to generate tickets for a specific resource (e.g. a private post) sent securely to specific recipients, whereas other people want to generate tickets for being able to subscribe to a feed or otherwise retrieve data in a logged-in state. The original TicketAuth draft was to support the latter; do we also need to support the former? If <code>resource</code> points to specific private blog entries, that implies that it's up to the publisher to specifically send push notifications about all private content to all recipients, which has a lot of far-reaching implications.
-
-* Should we make it clear that multiple <code>resource</code>s could be granted from a single ticket? Following RFC8707 would make it possible to do so
-** {{jamietanna}}'s receiver supports <code>resource</code> and <code>resource[]</code>
+* The discussion indicates a few different use cases for granting tickets; it seems that some people want to generate tickets for a specific resource (e.g. a private post) sent securely to specific recipients, whereas other people want to generate tickets for being able to subscribe to a feed or otherwise retrieve data in a logged-in state. The original TicketAuth draft was to support the latter; do we also need to support the former? If <code>resource</code> points to specific private blog entries, that implies that it's up to the publisher to specifically send push notifications about all private content to all recipients, which has a lot of far-reaching implications.
 
 * Would it make sense to have <code>resource</code> for specific items, <code>realm</code> for blanket grants for an entire website/URL prefix/etc., and <code>issuer</code> for where to look for the token endpoint as an override if the endpoint can't be determined from <code>resource</code>/<code>realm</code>?
 
