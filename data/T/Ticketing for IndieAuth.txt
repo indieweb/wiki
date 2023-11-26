@@ -109,7 +109,7 @@ The ticket endpoint will need to discover the token endpoint to redeem the ticke
 
 To expect that all pages that could be redeemed as a <code>resource</code> would have [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth Server Metadata] (<code>rel=indieauth-metadata</code>) or the older but still in use <code>rel=token_endpoint</code> might reveal there is private information at that URL.
 
-To address above, the ticket endpoint SHOULD use the provided issuer parameter to find the metadata endpoint.
+To address above, the ticket endpoint SHOULD use the provided iss parameter to find the metadata endpoint.
 
 Discussion for alternatives is at https://github.com/indieweb/indieauth/issues/127
 
@@ -138,7 +138,7 @@ Alice makes a POST request to the ticket endpoint. This is basically saying "if 
 * <code>ticket</code> - a random string that can be redeemed for an access token
 * <code>resource</code> - the access token will work at this URL(s). Multiple resources can be provided
 * <code>subject</code> - the access token should be used when acting on behalf of this URL
-* <code>issuer</code> - The server's issuer identifier which is used to locate the metadata endpoint
+* <code>iss</code> - The server's issuer identifier which is used to locate the metadata endpoint
 
 <pre>POST https://auth.example.org/ticket
      Content-Type: application/x-www-form-urlencoded
@@ -146,7 +146,7 @@ Alice makes a POST request to the ticket endpoint. This is basically saying "if 
 ticket=32985723984723985792834
 &resource=https://alice.example.com/private/
 &subject=https://bob.example.org
-&issuer=https://https://alice.example.com/.well-known
+&iss=https://https://alice.example.com/.well-known
 </pre>
 
 When a ticket is sent, if there is no problem with the request, the ticket endpoint MUST return an HTTP 200 OK code or HTTP 202 Accepted if it is going to asynchronously make the token request.
