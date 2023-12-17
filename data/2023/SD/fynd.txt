@@ -1,0 +1,186 @@
+https://indieweb.org/2023/SD/fynd
+
+'''<dfn>Follow Your Nose Discovery</dfn>''' was a session at [[2023/SD|IndieWebCamp San Diego 2023]].
+
+* Archived from: https://etherpad.indieweb.org/fynd
+
+== Participants ==
+* {{artlung}}
+* {{angelo}}
+* {{gRegor}}
+* {{gwg}}
+* {{peterkaminski}}
+* {{aciccarello}}
+* {{addyourself}}
+
+== Session Proposal ==
+* Follow Your Nose replace or fallback for the use-cases that people use WebFinger, #FYND, {{t}}
+** Who is interested in this? Joe is interested. Pete likes this. {{gwg}} likes this {{chrisaldrich}}  Isaac is interested
+* Tantek: understand the use cases of webfinger
+** Figure out a "follow your nose"-style replacement
+** https://indieweb.org/follow_your_nose
+
+== Notes ==
+* [[follow_your_nose]]
+* History: focus was "what do you want to do with your website?" in early indie web camps - this ends up concentrating the 
+* solving user problems, rather than technical philosophy
+
+How do we cope with lots of rels?
+
+Feedback on the [[follow your nose]] page itself:
+* MIssing an explanation of what follow your nose is.
+* Definition needs an actual description
+* Would be good to have a small concrete example of follow your nose
+
+Other examples of hardcoded paths:
+* e.g. using rel=icon instead of /favicon.ico
+* e.g. crossdomain.xml https://www.adobe.com/devnet/articles/crossdomain_policy_file_spec.html
+* e.g. /robots.txt - see [[robots_txt]] page
+* e.g. /.well-known/* - see [[well-known]] wiki page
+* e.g. /.well-known/atproto-did is one option for claiming a domain for BlueSky - https://atproto.com/ but they also allow for a more follow your nose mechanism and can add an http header
+* IndieAuth has a recommendation for locating metadata at .well-known as well
+
+Can you cache rel values across pages?
+E.g. domain scope vs page scoped for webmention
+
+How do you cache a rel discovery?
+* Answer: how you cache anything, HTTP caching headers
+
+Principles for follow your nose
+* The owner of a site should have full sovereignty over all the paths at that site. ([[path sovereignty]]) HTTP requests to that site.
+* Consuming code perspective: you should be able to discover everything about a page, from something inside that page.
+
+Some other examples of "self-sufficiency" (similar to path sovereignty, self-documenting, etc.), via question from {{peterkaminski}} to GPT-4: https://chat.openai.com/share/a60e0ced-c72c-4ff4-9e51-14aecdd70443 )
+
+Even redirects still impose on your site. E.g. BridgyFed.
+
+Is anyone consuming hardcoded paths from someone else's website?
+
+/ is a well known path. do we free ourselves from that as well?
+* what's the goal you're trying to accomplish?
+* difference between information about a page and information about a domain
+* prior behavior from browsers is perhaps ok to build on?
+** or is it up to the server?
+
+Web pages should be self-documenting, anything relevant to a certain web page would include in the metadata that's necessary to understand that web page. Privacy policy, other kinds of things.
+
+Should information about a site belong to DNS?
+* There have been DNS text record proposal for information about a domain
+* There's a DNS text record to use your domain name as your Bluesky username - an alternative to /.well-known/atproto-did
+** https://indieweb.org/Bluesky#How_to_use_your_domain
+* From https://indieauth.spec.indieweb.org/#url-canonicalization: "Since IndieAuth uses https/http URLs which fall under what [URL] calls "Special URLs", a string with no path component is not a valid [URL]. As such, if a URL with no path component is ever encountered, it MUST be treated as if it had the path /. For example, if a user provides https://example.com for Discovery, the client MUST transform it to https://example.com/ when using it and comparing it."
+
+Follow your nose applies to http URLs. Thus at least a "/" is required in the path.
+
+E.g. you could 404 "/" but still return something a "/home" for example.
+
+The owner of a site should be able to decide what is the home page of a site, cannot assume "/".
+
+E.g. when spoken, "My URL is tantek.com, the slash is implied".
+
+Use-case: splash page at "/"
+
+"/" is implied by:
+* if you type a domain into a browser, it adds the slash
+* if you type a domain into a social media post, it adds the slash
+* if you type a domain into a txt message, it adds the slash
+
+What are the hard coded paths that folks depend on retrieving information from that we could use FYN instead?
+
+E.g. /favicon.ico, do you have code that depends on that? 
+* [https://www.11ty.dev/docs/services/indieweb-avatar/ 11ty's IndieWeb Avatar] uses it as a fallback after <link rel="icon">
+* rel="icon" instead
+* maybe https://indieweb.org/libravatar  — uses a DNS record instead, with fallback to CDN, see https://wiki.libravatar.org/api/
+
+What properties are anyone's code consuming from Webfinger?
+* What does BridgyFed have to responde to (from Mastodon Webfinger requests) 
+
+Use-cases:
+* If you're trying to look up user x at mastodon y, you go to site y/.well-known/webfinger?resource=acct:x@y
+** it returns a JSON document which is an object with a bunch of properties
+** which of those properties are necessary? 
+** "subject" (returns what you passed in as acct:) 
+** "
+
+https://docs.joinmastodon.org/spec/webfinger/
+* goal is to discover that is actually needed by implementations instead of what is prescribed by docs
+ 
+https://webfinger.net tool
+* Example: https://webfinger.net/lookup/?resource=https%3A%2F%2Fgregorlove.com
+
+What failures occur if you remove something?
+
+If no failures, then that thing wasn't necessary
+
+Aside: brief discussion about partial vs complete h-cards
+* For Angelo: https://indieweb.org/h-card#partial_vs_complete
+
+Angelo's minimum webfinger response: https://ragt.ag/.well-known/webfinger
+* subject
+* aliases — what would break if this was omitted?
+* links — all link rels, which could be embedded on the page instead
+
+Modest proposal: for any link rels in the "links" collection for a user profile URL, instead use HTML link rels on that profile URL directly instead. Thus
+* given a profile URL
+* first get the HTML at that URL
+* do link rel discovery for the rel values you need
+* if you don't find the rel value you are looking for
+** you may fallback to a fixed path
+
+FYN is RESTful in a way an api endpoint is not https://indieweb.org/REST
+
+Which rel values are implementations looking for and for what functionality?
+Using Angelo's as a minimal example:
+* self — what does removing it do?
+* http://webfinger.net/rel/profile-page — 
+* http://ostatus.org/schema/1.0/subscribe
+
+This works for the following use-cases:
+* You can see Angelo on Mastodon, which works via rel="self" to the actor file:
+https://ragt.ag/owner/actor
+
+Follow-up discussion:
+* What properties from actor are necessary?
+
+Connections between FYN and REST/HATEOAS:
+* https://roy.gbiv.com/untangled/2008/rest-apis-must-be-hypertext-driven#comment-753 - “follow your nose”. That is the phrase we usually use to distinguish the process of following information-provided transitions/semantics versus following a set procedure or interface declaration outside of that flow of information. Basically, how far ahead is the client looking?
+* https://ws-dl.blogspot.com/2013/11/2013-11-19-rest-hateoas-and-follow-your.html - REST = "URIs are nouns, not verbs" and HATEOAS = "follow your nose". "Follow your nose" simply means that when a client dereferences a URI, the entity that is returned is responsible for providing a set of links that allows the user agent to transition to the next state.
+- https://www.w3.org/wiki/FollowYourNose
+
+Pete's webfinger response from mastodon.social <https://mastodon.social/.well-known/webfinger?resource=acct:peterkaminski@mastodon.social>
+
+<pre>
+{
+  "subject": "acct:peterkaminski@mastodon.social",
+  "aliases": [
+    "https://mastodon.social/@peterkaminski",
+    "https://mastodon.social/users/peterkaminski"
+  ],
+  "links": [
+    {
+      "rel": "http://webfinger.net/rel/profile-page",
+      "type": "text/html",
+      "href": "https://mastodon.social/@peterkaminski"
+    },
+    {
+      "rel": "self",
+      "type": "application/activity+json",
+      "href": "https://mastodon.social/users/peterkaminski"
+    },
+    {
+      "rel": "http://ostatus.org/schema/1.0/subscribe",
+      "template": "https://mastodon.social/authorize_interaction?uri={uri}"
+    },
+    {
+      "rel": "http://webfinger.net/rel/avatar",
+      "type": "image/png",
+      "href": "https://files.mastodon.social/accounts/avatars/109/258/304/923/927/524/original/91dcfac3050ec880.png"
+    }
+  ]
+}
+</pre>
+
+[[Category: IndieWebCamp San Diego 2023]]
+[[Category: 2023 sessions]]
+== See Also ==
+* [[2023/SD/Schedule]]
