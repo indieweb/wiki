@@ -1,0 +1,30 @@
+https://indieweb.org/new_pages_per_year
+
+New wiki pages created per year, not including redirect pages.
+
+<pre>
+2011	111
+2012	164
+2013	574
+2014	1147
+2015	1043
+2016	1152
+2017	1433
+2018	1229
+2019	1240
+2020	553
+2021	335
+2022	537
+2023	539
+</pre>
+
+
+<!--
+SELECT YEAR(CAST(rev_timestamp AS datetime)) AS year, COUNT(1) AS num
+FROM revision
+JOIN page ON page.page_id = revision.rev_page
+WHERE rev_parent_id = 0
+AND page_is_redirect = 0
+GROUP BY YEAR(CAST(rev_timestamp AS datetime))
+ORDER BY YEAR(CAST(rev_timestamp AS datetime))
+-->
