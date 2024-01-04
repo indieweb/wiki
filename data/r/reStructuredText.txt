@@ -4,13 +4,32 @@ https://indieweb.org/reStructuredText
 
 '''<dfn>reStructuredText</dfn>''' (AKA <dfn><abbr>ReST</abbr></dfn>) is a plaintext-based markup syntax and parser system in use by at least one IndieWeb community member for a personal site or IndieWeb service. It is similar to [[Markdown]], but has a more formal specification. 
 
-* More info: http://docutils.sourceforge.net/docs/ref/rst/introduction.html
-* Syntax reference summary: https://docutils.sourceforge.io/docs/user/rst/quickref.html
+* More info: https://www.docutils.org/docs/ref/rst/introduction.html
+* Syntax reference summary: https://www.docutils.org/docs/user/rst/quickref.html
 
 == IndieWeb Examples ==
 {{section-stub}}
 === Ryan Barrett ===
 {{snarfed}} uses [[Read the Docs]] to auto-generate docs for most of his [https://snarfed.org/software open source projects] like [[granary]], [[Bridgy]], etc. He uses [[pandoc]] to convert the source docs from [[Markdown]] to ReST, which then gets fed into [[Sphinx]] to create the final HTML docs.
+
+== Features ==
+=== Extendable through directives and roles ===
+Unlike most lightweight markup language such as [[Markdown]], ReST has official syntax support for extensions through [https://www.docutils.org/docs/ref/rst/roles.html roles] (inline text) and [https://www.docutils.org/docs/ref/rst/directives.html directives] (blocks). This allows new use-case or product specific transformations to be introduced.
+
+Example use-cases:
+
+* Text marked up with <code>:indieweb:`reStructuredText`</code> might be transformed into a link to this page on the IndieWeb wiki.
+* A line containing only <code><nowiki>.. twitter:: https://twitter.com/indiewebcamp/status/1667294256959225856</nowiki></code> might embed the [[This Week in the IndieWeb]] [[Twitter]] post.
+
+Parsers that do not have these extensions will still be able to gracefully fallback (or report errors) as this is part of the ReST syntax.
+
+How to support extensions in different parsers:
+
+* Python: docutils
+** [https://www.docutils.org/docs/howto/rst-roles.html Creating reStructuredText Interpreted Text Roles]
+** [https://www.docutils.org/docs/howto/rst-directives.html Creating reStructuredText Directives]
+* PHP: Doctrine RST Parser
+** [https://www.doctrine-project.org/projects/doctrine-rst-parser/en/0.5/custom-directives.html Custom Directives]
 
 == Criticisms ==
 === Difficulty Parsing Outside of Python ===
