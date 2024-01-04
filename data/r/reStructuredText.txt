@@ -32,10 +32,12 @@ How to support extensions in different parsers:
 ** [https://www.doctrine-project.org/projects/doctrine-rst-parser/en/0.5/custom-directives.html Custom Directives]
 
 == Criticisms ==
-=== Difficulty Parsing Outside of Python ===
+=== Python Monoculture ===
+Summary: There is difficulty parsing reStructuredText outside of Python or finding any resources to do so.
+
 {{zegnat}} noted in chat https://chat.indieweb.org/dev/2024-01-03/1704267398609300: <blockquote>looked at ReST at different times. I always thought it would be easier to use as a base type than Markdown because its extensibility through tags (.. tag::). But always ran into trouble parsing it with anything other than [[Python]] :(</blockquote>
 * {{zegnat}}:
-** It always felt like there was a [[plurality]] problem with ReST. There is a big ecosystem in Python land where everyone depends on the docutils package.
+** It always felt like there was a [[monoculture]] problem with ReST. There is a big ecosystem in Python land where everyone depends on the docutils package.
 ** Lots of tools will shell out to Python [https://pypi.org/project/docutils/ docutils] to handle the parsing. One of the few WordPress plugins for ReST [https://github.com/xdissent/wordprest#how-do-i-install-docutils required installing docutils on the server first].
 ** It is extremely hard to even discover parsers for other languages. Searching npm ([[JavaScript]] package manager) for “restructuredtext” turns up several plugin-like libraries first such as [https://www.npmjs.com/package/gitbook-restructuredtext gitbook-restructuredtext] and [https://www.npmjs.com/package/hexo-renderer-restructuredtext hexo-renderer-restructuredtext] (both shell out to run Python docutils’ rst2html) before ending up at [https://github.com/seikichi/restructured restructured]. restructured is an actual JavaScript based parser, but not updated in many years with limited support for the ReST syntax.
 ** There does not seem to be a public list of parsers nor any sort of compatibility comparison.
