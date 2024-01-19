@@ -178,12 +178,11 @@ Our default theme (Vector) is unusable on mobile
 ** Now when you are logged into the IndieWeb wiki on your mobile device, any IndieWeb wiki pages will be much more usable.
 * Proposal: switch not-logged-in and default skin to Vector 2022, and fix regressions (perhaps fixing regressions first)
 ** withdrawn by {{t}}, too many regressions to just switch and try to fix while live (which may take months given past experience).
+** [[2024/homepage]] includes proposed home redesign that will make it possible to switch
 * Vector 2022 regressions, compared to Vector 2010 (should fix before changing it to be the default for logged in users, and the skin for not-logged-in readers)
 ** Previous notes<blockquote><p>{{gRegor}}: it looks like we might have `$wgVectorDefaultSkinVersion = '1';` set in LocalSettings. I see that value in some JSON when I view source. However I don't think we can just flip the switch on vector-2022 due to the homepage.  </p><p>For MW 1.36 and 1.37 that was supposed to be set to 2. As of 1.38, which we're on now, it's just `$wgDefaultSkin = 'vector-2022';` https://www.mediawiki.org/wiki/Skin:Vector/2022#Making_Vector_2022_the_default_skin  </p><p>Preview homepage with Vector 2022: https://indieweb.org/?useskin=vector-2022</p><cite>https://chat.indieweb.org/meta/2022-11-16#t1668577560889100</cite></blockquote>
 *** I can't find the chat logs for this, but I noticed the version numbering for Vector 2022 is weird. [https://en.wikipedia.org/wiki/Special:Version Wikipedia's Special:Version] shows a hash and date after the version number, currently "1.0.0 (22b26ef) 20:21, November 6, 2023". Compare our [[Special:Version]] page only shows "1.0.0", so it appears they're not updating the main version number with different releases, only commit hashes? I would recommend we update the installed Vector 2022 skin and make sure the PHP variables quoted above are correct. Fingers crossed that might fix the main issues -- then we can update the custom homepage layout as needed to work with latest Vector 2022. <span class="h-card" style="white-space:nowrap">{{sparkline|https://gregorlove.com/site/assets/files/6268/profile-2021-square.300x0.jpg}}  [[User:Gregorlove.com|gRegor Morrill]]</span> 11:16, 9 November 2023 (PST)
 *** I noticed this weird version numbering too; the later releases of Vector are quite a bit more refined, and used by default for the English language Wikipedia. Might be worth testing with the revised Vector skin to see what issues remain. As to the homepage, is it possible to make it less customised in terms of layout and navigation? Focus on the content, rather than the design? What’s the best way to prevent the homepage from blocking the release of a more usable site overall? {{paulrobertlloyd}} 00:25, 21 November 2023 (GMT)
-** Top left logo is missing
-*** Possible fix: https://www.mediawiki.org/wiki/Topic:Wrztkw86y4j2x2w2
 ** Search box no longer provides drop-down of suggested pages while you type
 *** This is due to the rest-API at /wiki/rest.php not being exposed (cf https://www.mediawiki.org/wiki/API:REST_API), likely a configuration issue with our webserver
 
@@ -199,25 +198,6 @@ Wiki [[Main_Page|homepage]] has overlapping text in the header on mobile (simila
 * the default font stack to use the user’s system font family. This broadly aligns with https://events.indieweb.org, which users a longer list of fonts that approximates using <code>system-ui</code>.
 * the heading font family and weight to again match IndieWeb Events but also moves the appearance of the site away from Wikipedia.
 * the default body font size from 14px to 16px which makes content appear more legible, readable and approachable.
-
-Suggestions:
-
-* incorporate these changes into the Vector 2022 theme for all users, once the default theme has been switched.
-* upgrade the latest iteration of Vector 2022 which has improved visual design around site and content navigation.
-
-==== Outdated sponsor logos ====
-
-The following sponsors logos in the footer are not up-to-date:
-
-* <img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Okta_logo_%282023%29.svg" alt="Okta logo" height="48" style="padding:8px">
-
-* <img src="https://upload.wikimedia.org/wikipedia/commons/1/12/Sipgate.svg" alt="Sipgate logo" height="48" style="padding:8px">
-
-* <img src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg" alt="Google logo" height="48" style="padding:8px">
-
-* <img src="https://asset.brandfetch.io/idOqnvXFFv/idW6EQV0hU.svg" alt="Clearleft logo" height="48" style="padding:8px">
-
-Additionally, the link to idno.co no longer works. Should it (and the logo) be updated to https://withknown.com?
 
 == See Also ==
 * [[wiki/]]
