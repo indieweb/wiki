@@ -21,7 +21,12 @@ Static site generators aren't always a good match for IndieWeb associated techno
 * I use [https://support.apple.com/en-gb/guide/shortcuts/welcome/ios iOS/MacOS shortcuts] to post links and notes with photos to my site. I also use [https://microformats.org/wiki/h-event h-event] posts to send details/duration of [https://qubyte.codes/blog/my-2022-japanese-language-study-habits study sessions] quickly from my phone or Mac menubar. I slightly broke with the spec by allowing shared secret support in addition to IndieAuth for these. I use Omnibear compiled into a Mac app to get it working with Safari for posting from my laptop.
 * Webmention receipt using a Netlify function. I don't have a good solution for dealing with these right now, so for the time being mentions are validated, and then each is turned into an issue in GitHub.
 * Webmention dispatch using a Netlify build plugin. I compare the atom feed before and after each build to determine new/updated/deleted posts and scan the relevant posts (both before and after in the event of an update) for mentioned URLs to send mentions to.
-* Note (including an optional photo) and bookmark syndication to Mastodon with GitHub Actions.
+* Note (including an optional photo) and bookmark syndication to Mastodon with GitHub Actions.\
+* [[POSSE]] to Mastodon. Publication of a note is the addition of a file to a GitHub repository. Then this happens, it triggers a build of my site, but it also triggers the run of [https://github.com/qubyte/qubyte-codes/blob/main/.github/workflows/syndicate-to-mastodon.yml a GitHub action] which formats and creates the post on Mastodon.
+
+== TODO ==
+
+- I'm not happy with how my site interacts with media files. Right now I commit images directly to GitHub, and an action converts these to various sizes and formats. This is good for the end result, but I don't typically like to put non-text things into git repos. I'm not going to use git LFS, so that leaves some other service to host images on. The images would be picked up at build time and continue to be hosted via Netlify. Perhaps I just need to use a bucket service like [https://cloud.google.com/storage Google Cloud Storage], [http://Amazon%20S3 Amazon s3], or [https://www.cloudflare.com/en-gb/developer-platform/r2/ Cloudflare r2].
 
 == Good citizen of the web things ==
 
