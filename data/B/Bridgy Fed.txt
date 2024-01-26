@@ -167,6 +167,58 @@ The permalink for my federated post:
 * Testimonial: https://mastodon.cloud/@torresburriel/109729558877224488
 ** "Leo a @tantek.com comentar un recurso muy útil para conectar un sitio web con el #fediverso. https://tantek.com/2023/020/t2/bridgy-fed-follow-form" [https://mastodon.cloud/@torresburriel @torresburriel] January 21, 2023
 
+== Troubleshooting ==
+These are troubleshooting steps for IndieWeb users of Bridgy Fed, in particular for federating out from a personal site to ActivityPub instances.
+
+You might want to first review the Bridgy Docs about error handling in case something there applies to the problem you are having:
+* https://fed.brid.gy/docs#error-handling
+
+=== Activity not showing up in dashboard ===
+If you publish a new post on your personal site, and send a Webmention to https://fed.brid.gy/ to federate that post out, you should see an entry in your dashboard. You can access your dashboard by entering your domain on the form on the https://fed.brid.gy/. E.g. {{t}}’s domain leads to:
+* https://fed.brid.gy/web/tantek.com (example dashboard)
+
+If you don't see an activity at the top of the list corresponding to your new post, there are several things you should check.
+
+==== Verify link to Bridgy Fed ====
+
+First, verify that your post has a link to Bridgy Fed.
+
+View source on your original post and make sure that it has a valid link to Bridgy Fed, as documented in https://fed.brid.gy/docs#web-how-post, like:
+<pre><a href="https://fed.brid.gy/" hidden="from-humans"></a></pre>
+
+If you can’t find such a link, then Bridgy Fed won’t federate your post.
+* Solution: add such a link to your post, republish, and resend a Webmention to https://fed.brid.gy/
+
+If you have such a link somewhere inside the source of your post permalink, then the next step is to verify that your Webmention is being properly received by https://fed.brid.gy/ and processed.
+
+==== Verify Webmention is received by Bridgy Fed ====
+
+Next, verify that when you send a Webmention from your post to Bridgy Fed, that the server receives it and processes it.
+
+For verifying that your Webmention was received, if you are using a [[Webmention#Publisher_Services|Webmention publishing service] such as: 
+* [[mention.tech]]
+* [[Telegraph]]
+* [[webmention.app]]
+* ...
+to send a webmention from your post to https://fed.brid.gy/, then be sure that:
+* fed.brid.gy is actually listed among the links that will be sent Webmentions
+** e.g. in the https://telegraph.p3k.io/dashboard you have to enter a URL first, and it displays a list of which URLs it will send webmentions to, but sometimes it misses some links, e.g. https://telegraph.p3k.io/dashboard/send?url=https%3A%2F%2Ftantek.com%2F2024%2F023%2Ft1%2Fshould-public-posts-flow-across-sites&account=993 does not list https://fed.brid.gy/ when that post was published and did have a link in its source
+*** Issue to be filed.
+** e.g. https://webmention.app/ when you enter a URL in the input to "Check a URL for webmentions" and click "Start", it only displays 10 links. also it seems to only find links inside post content, rather than all links inside a post (such as links in a [[reply-context]]). so it might also not list https://fed.brid.gy/ depending on where you put the link to it in your post.
+* ...
+
+Then send the Webmention using the tool or service or your choice, and make sure that:
+* There are no error messages, e.g. mention.tech may display a red ❌ indicating that something went wrong
+
+
+If you have confirmed that Bridgy Fed received the webmention, e.g. by a confirmation display or HTTP return code like 200, 201, 202, then reload you Bridgy Fed dashboard. Within seconds you should see your new post as an activity at the top of the list there.
+
+
+If it has been a minute since you confirmed that the webmention was received, and nothing new has shown up at the top of your dashboard activities list, then you may need to troubleshoot further with help from the community:
+* Join the [[discuss#dev|#indieweb dev chat channel]]
+* Ask for help with Bridgy Fed, note the problem you’re having, and what steps you took (e.g. from above) with which tools or services.
+
+
 == History ==
 
 {{snarfed}} had been thinking about the idea for Bridgy Fed for years, and then...
