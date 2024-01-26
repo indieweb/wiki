@@ -1,10 +1,12 @@
 https://indieweb.org/User%3APaulrobertlloyd.com/vector-2022.css
 
 /**
- * Update Vector 2022 styles to use system-ui font and other adjustments.
+ * TYPOGRAPHY
+ * Use system-ui font and apply other typographic adjustments.
  * This brings the design of the site closer inline with events.indieweb.org
  * and makes it look a little less like Wikipedia.
  */
+
 .mw-body h1,
 .mw-body-content h1,
 .mw-body-content h2,
@@ -17,6 +19,12 @@ https://indieweb.org/User%3APaulrobertlloyd.com/vector-2022.css
   font-family: system-ui, sans-serif;
 }
 
+.mw-page-title-namespace,
+.mw-page-title-separator {
+  color: #4a4a4a;
+  font-weight: 400;
+}
+
 .mw-body-content h1,
 .mw-headline,
 .mw-page-title-main {
@@ -27,21 +35,53 @@ https://indieweb.org/User%3APaulrobertlloyd.com/vector-2022.css
   -webkit-font-smoothing: antialiased;
 }
 
-.mw-page-title-namespace,
-.mw-page-title-separator {
-  color: #4a4a4a;
-  font-weight: 400;
+/* Increase body font size to 16px and apply a readable line-length */
+#mw-body-content {
+  font-size: 1rem;
+  max-width: 50rem;
 }
 
-.mw-default-size img {
+
+/**
+ * IMAGES
+ */
+
+/* Prevent images from breaking out of their container */
+.mw-file-description img {
   height: auto;
   max-width: 100%;
 }
 
-/* Increase body font size */
-.vector-body {
-  font-size: 1rem;
+
+/**
+ * EXTERNAL LINKS
+ */
+
+/* Non-secured external pages, show an open lock icon */
+.mw-body-content a.external[href ^="http://"] {
+  background:url(https://indieweb.org/images/4/4c/unlocked.png) center right no-repeat;
+  padding-right: 13px
 }
+
+/* Secured external pages, show standard external link icon */
+.mw-body-content a[href ^="https://"],
+.mw-body-content a[href ^="ircs://"] {
+  background:url(https://indieweb.org/wiki/skins/vector/images/external-link-ltr-icon.png?2014-03-12T05:01:40Z) center right no-repeat;
+  padding-right: 13px
+}
+
+/* Don't show external link icon for indieweb.org domains */
+.mw-body-content a.external[href *=".indieweb.org/"] {
+  background-image: none;
+  padding-right: 0;
+}
+
+
+/**
+ * VECTOR (2022) SKIN
+ * Fixes to version of Vector (2022) installed in 2024-01.
+ * Later updates to this skin may fix these issues.
+ */
 
 /* Fix header width on narrower screens */
 .vector-feature-zebra-design-disabled .vector-header-container,
@@ -51,7 +91,23 @@ https://indieweb.org/User%3APaulrobertlloyd.com/vector-2022.css
 
 
 /**
- * Support for Vector legacy styles
+ * HIDE UNUSED MEDIAWIKI FEATURES
+ */
+
+/* Hide links to Discussion pages */
+#ca-talk {
+  display: none;
+}
+
+/* Hide login link */
+#pt-login-2 {
+  display: none;
+}
+
+
+/**
+ * SUPPORT LEGACY MEDIAWIKI COMPONENT CLASSES
+ * Older versions of MediaWiki used the following classes that have since been deprecated.
  */
 .floatleft {
   float: left;
@@ -61,16 +117,61 @@ https://indieweb.org/User%3APaulrobertlloyd.com/vector-2022.css
   float: right;
 }
 
+.toc {
+  float: right
+}
+
+
 /**
- * Homepage styles (User:Paulrobertlloyd.com/sandbox/vector-2022-homepage)
+ * INVERTED TEXT
+ * Where are these classes used?
+ */
+
+#content .inverted,
+.inverted h1,
+.inverted h2,
+.inverted h3,
+.inverted h4,
+.inverted h5,
+.inverted h6 {
+  color: white;
+}
+
+#content .inverted a,
+#content .inverted a.external {
+  color: #fff3e1;
+  text-decoration: underline;
+}
+
+#content .inverted a:hover,
+#content .inverted a.external:hover {
+  text-decoration: none;
+}
+
+#content .inverted a:visited {
+  color: #feeacc;
+}
+
+#content .inverted ul li {
+  list-style-type: disc;
+  list-style-image: none;
+}
+
+
+/**
+ * HOMEPAGE
  * Adjust the design so that it doesn’t remove theme-dependent UI, and works with
  * both legacy and modern Vector themes.
  *
- * If these changes are accepted, these rules should be moved into Main_Page.css
+ * Preview: User:Paulrobertlloyd.com/sandbox/vector-2022-homepage
+ *
+ * If these changes are accepted:
+ * 
+ * 1. Move these rules into Main_Page.css
+ * 2. Replace .page-User_Paulrobertlloyd_com_sandbox_vector-2022-homepage with .page-Main_Page
  */
 
-/* .page-Main_Page #bodyContent */
-.page-User_Paulrobertlloyd_com_sandbox_vector-2022-homepage #bodyContent {
+.page-User_Paulrobertlloyd_com_sandbox_vector-2022-homepage #mw-body-content {
   max-width: 100%;
 }
 
