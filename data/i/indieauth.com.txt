@@ -28,14 +28,14 @@ To use [[indieauth.com]] as an OpenID provider for the OpenID identifier of your
 == FAQ ==
 See Also: https://indieauth.com/faq
 
-=== Why is Twitter not working ===
+=== Why is Twitter not working? ===
 As of 2018-05-27, indieauth.com no longer supports logging in with Twitter. [https://aaronparecki.com/2018/05/27/10/indieauth-twitter more info]
 
-=== Why is GitHub not working ===
+=== Why is GitHub not working? ===
 * If you get an error “The authentication provider replied with an error: csrf_detected” something went wrong in the cookie exchange.
 ** In Safari go to Preferences → Privacy and chose to “Allow from websites I visit” instead of “Allow from current website only”.[http://indiewebcamp.com/irc/2015-05-31/line/1433111657562] Once you are logged in you can change it back.
 
-=== Why is Google+ not working ===
+=== Why is Google+ not working? ===
 indieauth.com dropped support for Google+ some time in 2016. Google+ will shut down in 2019.
 
 === Why are IndieAuth.com and GitHub Pages not playing nicely? ===
@@ -48,7 +48,7 @@ What is happening is that if your DNS record points to the old github pages IP a
 
 Github also wrote a blog post about this change, which many people missed: https://github.com/blog/1715-faster-more-awesome-github-pages
 
-=== How do I make my site do the authorization itself ===
+=== How do I make my site do the authorization itself? ===
 If your site implements the [[IndieAuth]] protocol itself, then indieauth.com will allow you to use your own server, and many sites will be able to use your server and avoid indieauth.com completely. For more information, see [[:Category:IndieAuth|IndieAuth]].
 
 === Empty Session Errors ===
@@ -62,17 +62,17 @@ A: To log in with indieauth as a domain served over [[HTTPS]], you have to type 
 === Why am I getting "insecure redirect" errors? ===
 * If you get an error about an insecure redirect, check to see whether your silo link is going to https://yoursite which is in turn redirecting to http://yoursite.  (Dreamwidth is an example of a site that does this.)  If so, change the link to go directly to http://yoursite
 
-=== How do I use a specific other site for my IndieAuth ===
+=== How do I use a specific other site for my IndieAuth? ===
 See [[IndieAuth]].
 
-=== Is it good to delegate auth to 3rd parties ===
+=== Is it good to delegate auth to 3rd parties? ===
 ''Is it good to delegate authentication to third parties like Facebook or Twitter for IndieAuth?''[https://chat.indieweb.org/2013-10-30#t1383149585000000]
 
 IndieAuth.com only relies on third parties for ephemeral authentication, once per IndieAuth login attempt. Because the reliance is only ephemeral/transactional, the delegation is ok.  It's not great, but it's ok, and certainly better than directly using (Facebook Connect) or the equivalents for other silos.
 
 IndieAuth.com also provides better UI flow and fallbacks than OpenID, while re-using the OAuth flow that users are familiar with from Twitter, Github etc., so it's an incremental improvement over other open identity solutions.
 
-=== What if I have more than one domain ===
+=== What if I have more than one domain? ===
 IndieAuth.com requires symmetric rel=me links on your page and the OAuth provider profile page, and since most silos (like Github and Twitter) only allow you to put one rel=me link on your profile, you cannot use any one profile for multiple domains. There are a few alternatives:
 
 * use one account for one domain and another account for another domain. 
@@ -80,22 +80,22 @@ IndieAuth.com requires symmetric rel=me links on your page and the OAuth provide
 ** email (via emailed one time short code for the user to enter)
 ** PGP key authorization 
 
-=== Why not use a DNS TXT record ===
+=== Why not use a DNS TXT record? ===
 Q: Why not allow configuring a rel=me link by adding a DNS TXT record to the domain?
 
 A: Two reasons:
 * '''Usability'''.  In order to use a DNS TXT record you would first need to be aware of how to create such an entry for your domain's DNS zone file - something most users have zero interest in or knowledge of, but you would also then need to put something like a PGP Public Key so that anyone trying to auth to your site would then be able to use to sign their request. Again, very few folks would be able to implement that.
 * '''Security'''. The main reason is that the TXT record would be a request to a different server that is not serving your domain and it would not be behind SSL. Whereas rel=me links in the HTML of a home page at least <em>can</em> be protected with [[https]], even if they're not to start with.
 
-=== Why not OpenID Email etc ===
+=== Why not OpenID Email etc? ===
 See: [[Why web sign-in]].
 
-=== Why not WebFinger ===
+=== Why not WebFinger? ===
 ''Why not add [[WebFinger]] support to IndieAuth?''
 
 <blockquote>"The problem is it's too easy to not own your email address (@gmail.com, etc) so it's not really an "indie" identifier. The point of IndieAuth is to encourage people to own their online identity."[https://aaronparecki.com/2013/07/01/7/indieauth][https://twitter.com/aaronpk/status/351893272089735168]</blockquote>
 
-=== Do I need a silo account ===
+=== Do I need a silo account? ===
 Q: Do I need an account on some third party silo to use it? 
 
 Short answer: no. You can use [[PGP]] or a self-hosted [[IndieAuth]] service.
