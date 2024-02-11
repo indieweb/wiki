@@ -49,7 +49,7 @@ We know we're actively building the indie <strong>web</strong> and thus, having 
 
 The assertion about "may not want to … expose their social networks" is generally false. The default behavior of people with their own websites is to openly link to their social network profiles. This is the existing emergent behavior that [[RelMeAuth]], and the [[Web sign-in]] experience, was designed and built-upon.
 
-* True or false, IndieAuth should accommodate those who wish to avoid silos all together, and it does mostly that already!  Right now, if not including this kind of information is a matter of visual preference or aesthetic design, IndieAuth searches for invisible data that has a rel=me, no?  If it is a matter of not wanting to reveal these profiles to a general audience, then are there oAuth providers that are just oAuth providers, not linked to a profile?  Typically in this situation I don't believe it much to ask this individual to use an authentication only profile, as this person is probably making other concessions to keep these things private (this issue does not seem to fit my idea of most people).   If its a matter of not wanting to use any 3rd party silo, then maybe we need to find a way to use google authenticator before using an oAuth provider.  That or have easy to use IndieAuth or persona instances that a shared style host could set up for you. --[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
+* True or false, IndieAuth should accommodate those who wish to avoid silos all together, and it does mostly that already!  Right now, if not including this kind of information is a matter of visual preference or aesthetic design, IndieAuth searches for invisible data that has a rel=me, no?  If it is a matter of not wanting to reveal these profiles to a general audience, then are there oAuth providers that are just oAuth providers, not linked to a profile?  Typically in this situation I don't believe it much to ask this individual to use an authentication only profile, as this person is probably making other concessions to keep these things private (this issue does not seem to fit my idea of most people).   If its a matter of not wanting to use any 3rd party silo, then maybe we need to find a way to use google authenticator before using an oAuth provider.  That or have easy to use IndieAuth <s>or persona</s> instances that a shared style host could set up for you. --[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
 
 == Not exposing email address phone number ==
 <blockquote>Even if the user has their own server, they may not want to add the provided markup to it to expose their ... email address, or phone number.</blockquote>
@@ -78,7 +78,7 @@ Because you are not your email address and you are not your phone number. Alread
 * [[Why_web_sign-in#Why_not_email|Why not email]]
 * [[Why_web_sign-in#Why_Not_Phone_Numbers|Why not phone numbers]]
 
-** Authenticating with email is fine, and we have fantastic tools like [[persona]] that solve that problem.  But that is a mix of Email and The Web.  The purpose of IndieAuth is to solve some of the many problems with email authentication on the web, using The Web to authenticate on the web, where the personal domain is your identity.  I believe The Web to fundamentally more accessible (fundamentally easier to hose your own website than run your own mail servers) and thus has the potential to be a much more independent form of online identity than email ever will (I still, in the meantime, love you mailpile). --[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
+The purpose of IndieAuth is to solve some of the many problems with email authentication on the web, using The Web to authenticate on the web, where the personal domain is your identity.  I believe The Web to fundamentally more accessible (fundamentally easier to hose your own website than run your own mail servers) and thus has the potential to be a much more independent form of online identity than email ever will (I still, in the meantime, love you mailpile). --[[User:Bret.io|Bret.io]] 14:29, 3 September 2013 (PDT)
 
 == Physical Identity Non-goal ==
 <blockquote>Do we have a way of knowing, via IndieAuth, that you are really the walking bag of mostly water that you claim to be? No.</blockquote>
@@ -94,6 +94,7 @@ That's all we ask. That you <em>control</em> the website/domain you are <em>self
 
 == Why not email or phone number again ==
 <blockquote>we can simply authenticate you using your email address or your phone number</blockquote>
+<blockquote>To sign in to a site with your email address</blockquote>
 
 Once again:
 * [[Why_web_sign-in#Why_not_email|Why not email]]
@@ -108,11 +109,6 @@ Your phone number you get from an even smaller number of government monopoly pro
 We can't trust those for <em>persistent identity</em> (the kind you come back to a site with days/weeks/months/years later, like a username).
 
 We <em>can</em> trust them for ephemeral authentication of your web identity (just in the moment, one time, unless they're still on your site). They're good enough for that, because you, the user, can swap them out at any time (burn them), and no website that uses your web identity depends on your email or phone number.
-
-== Use Persona for email sign-in ==
-<blockquote>To sign in to a site with your email address</blockquote>
-
-That's a solved problem. It's called Persona. http://www.mozilla.org/en-US/persona/
 
 == Ironic email identity breaks user flow ==
 <blockquote>Check your email and follow the link in the email</blockquote>
@@ -130,8 +126,6 @@ And if there's anything that breaks your flow, it's checking your email and gett
 More like: Boom, you're now distracted by email hell as you look for an email from a previously unknown sender amongst all the email in your inbox etc.
 
 And you're distracted and no longer signing into a website.
-
-This is precisely why Persona avoids the "Check your email and follow the link in the email" in the normal flow. Only if your email has to use the Persona default provider implementation, and only then on first set-up, do you have to check your email.
 
 "Check your email and follow the link in the email" is to be avoided at all costs.
 
@@ -256,10 +250,20 @@ From Wikipedia, the [https://en.wikipedia.org/wiki/World_Wide_Web World Wide Web
 
 Not interlinked, not hypertext, not navigable in a web browser, not the web.
 
-== Aral’s Response ==
-
+== Aral Responses ==
 * https://twitter.com/aral/status/374843814319775744
 * https://twitter.com/aral/status/374843879406993408
+
+== Out of date or not relevant ==
+The following is out of date or no longer relevant to this discussion
+=== Persona ===
+[[Persona]] has been shut down for some time and lacked sufficient uptake, no one uses it anymore.
+* https://web.archive.org/web/20160123160415/https://www.mozilla.org/en-US/persona/ (original link <nowiki>http://www.mozilla.org/en-US/persona/</nowiki> is 404 as of 2024)
+
+Bret wrote in 2013: <blockquote>Authenticating with email is fine, and we have fantastic tools like [[persona]] that solve that problem.  But that is a mix of Email and The Web.</blockquote>
+
+Advantage that Persona had over "check your email" login links:
+* This is precisely why Persona avoids the "Check your email and follow the link in the email" in the normal flow. Only if your email has to use the Persona default provider implementation, and only then on first set-up, do you have to check your email.
 
 == See Also ==
 * [[IndieAuth]]
