@@ -4,6 +4,25 @@ https://indieweb.org/Shock
 
 '''<dfn>Shock</dfn>''' is the name of the system running sites nominally created by {{jacky}}. The source code is available at [https://git.jacky.wtf/me/shock git.jacky.wtf]. Components of the system are written and shared upstream with the [[Rust#Library|Rust library]].
 
+== Features ==
+=== Transport Agnostic ===
+To make adding new "transports" (or self-run bridges), 
+=== Native Editors ===
+Working on using https://relm4.org/ and https://tauri.app/ as the means of defining a native interface and a system Web engine-dependent editor.
+
+=== Collaborative Editing ===
+Gated behind a scope <code>collaborate</code>, the idea is to provide collaborative editing in the editor if:
+* the remote Micropub server notes that it supports the such via q=config,
+* the peers support the same protocol for collaborative editing.
+
+The current idea as of 2024-02-14 is starting with [https://lib.rs/crates/yrs yrs] from within the native editor and using the Micropub server to provide a Websocket to announce new peers for a particular URL (when requested). An experiment around pushing the changes via yrs back to the Micropub server such that all participating peers can get these new changes ''should'' work across clients (mobile and desktop). The format for changes will be based on [https://quilljs.com/docs/delta/ the delta format] when working with documents.
+
+One requirement is that new clients joining will have to fetch the document with the latest changes applied from the Micropub server. This ''should'' be done upon fetching the document source via <code>q=source</code> to allow clients to work from a "clean" history locally (possiblly with <code>&collab=1</code>).
+
+Getting a list of the active collaborators can be done by inspecting the <code>collaborators</code> key in the aforementioned query. It's up to the client to parse and render that information to the user.
+
+Logic for displaying the peers working and viewing the document will be up to clients to implement (as it'd be parsed from the list of collaborators above). For this implementation, it'd be a URN based on https://quilljs.com/docs/api/#selection-change (like <code>urn:shock:peer-location?index=40&length=3</code>).
+
 == See Also ==
 
 * [[Lighthouse]], the preferred [[Webmention]], [[WebSub]] and [[Microsub]] server to use with Shock.
