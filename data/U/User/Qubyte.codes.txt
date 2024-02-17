@@ -19,10 +19,10 @@ Static site generators aren't always a good match for IndieWeb associated techno
 
 * Micropub (including a media endpoint) using Netlify functions. Post content is essentially proxied to GitHub using the content API, so I don't need to work with the git tree API. The media endpoint function strips metadata from photos, but further processing into more formats and sizes is done with a GitHub Actions workflow.
 * I use [https://support.apple.com/en-gb/guide/shortcuts/welcome/ios iOS/MacOS shortcuts] to post links and notes with photos to my site. I also use [https://microformats.org/wiki/h-event h-event] posts to send details/duration of [https://qubyte.codes/blog/my-2022-japanese-language-study-habits study sessions] quickly from my phone or Mac menubar. I slightly broke with the spec by allowing shared secret support in addition to IndieAuth for these. I use Omnibear compiled into a Mac app to get it working with Safari for posting from my laptop.
-* Webmention receipt using a Netlify function. I don't have a good solution for dealing with these right now, so for the time being mentions are validated, and then each is turned into an issue in GitHub.
-* Webmention dispatch using a Netlify build plugin. I compare the atom feed before and after each build to determine new/updated/deleted posts and scan the relevant posts (both before and after in the event of an update) for mentioned URLs to send mentions to.
-* Note (including an optional photo) and bookmark syndication to Mastodon with GitHub Actions.\
-* [[POSSE]] to Mastodon. Publication of a note is the addition of a file to a GitHub repository. Then this happens, it triggers a build of my site, but it also triggers the run of [https://github.com/qubyte/qubyte-codes/blob/main/.github/workflows/syndicate-to-mastodon.yml a GitHub action] which formats and creates the post on Mastodon.
+* Webmention receipt using a Netlify function. I don't have a good solution for dealing with these right now, so for the time being mentions are validated, and then each is turned into an issue in GitHub. I add mentions manually to the front matter of posts.
+* Webmention dispatch using a Netlify build plugin. I compare the atom feed before and after each build to determine new/updated/deleted posts and scan the relevant posts (both before and after in the event of an update) for mentioned or removed URLs to send mentions to.
+* Note (including an optional photo) and bookmark syndication to Mastodon with GitHub Actions.
+* [[POSSE]] to Mastodon. Publication of a note is the addition of a file to a GitHub repository. When this happens, it triggers a build of my site, but it also triggers the run of [https://github.com/qubyte/qubyte-codes/blob/main/.github/workflows/syndicate-to-mastodon.yml a GitHub action] which formats and creates the post on Mastodon.
 
 == TODO ==
 
