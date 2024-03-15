@@ -2,7 +2,7 @@ https://indieweb.org/relative_dates
 
 {{stub}}
 
-    '''<dfn>relative dates</dfn>''' are a way of converting date-times into a human friendly form like "10 minutes ago" or "4 days ago".
+    '''<dfn>relative dates</dfn>''' are a way of converting absolute date-times like year, month, day, and time into a more human friendly expression of time elapsed like "10 minutes ago" or "4 days ago".
 
 == Indieweb Examples ==
 [[Known]] shows relative dates on postings. [http://indieweb.org/irc/2016-07-07/line/1467918111075 (It uses JS, so the relative dates update while the page is open.)]
@@ -25,7 +25,13 @@ From  IRC:
 ** also solves the plural problem, especially if you use 'now' for <2 seconds
 ** 2-199 years 2-9 centuries 2- millennia
 
-== See Also ==
+== Pitfalls ==
+Pitfalls to avoid when supporting relative dates:
+=== Avoid server side relative dates ===
+Computing and rendering relative dates on the server and thus directly in your content may have unintended negative consequences:
+* '''Misleading archives.''' If you render relative dates server side then you make [[archival_copy|archiving]] worse
+** Archives of your content on the [[Internet Archive]] etc. will display an out of date and thus inaccurate relative date.
+* '''Spurious modification dates and poor caching behavior.''' If you render relative dates server side then anything checking the content of the page to see if anything has changed will see a different relative date every time and generate spurious deltas, which could also generate spurious HTTP etag headers or if modified since responses
 
-* Criticism / warning: if you render relative dates server side then you make [[archival_copy|archiving]] worse and generate spurious deltas for etag /if modified since.
+== See Also ==
 * [[math]]
