@@ -9,7 +9,7 @@ https://indieweb.org/User%3AQubyte.codes
 
 I'm Mark S. Everitt, the author of <span class="h-card">https://qubyte.codes</span>
 
-My personal site uses a [https://github.com/qubyte/qubyte-codes/ static site generator of my own design]. It's written in node and uses a promise based directed-graph based build system with hot reloading.
+My personal site uses a [https://github.com/qubyte/qubyte-codes/ static site generator of my own design]. It's written in node and uses a promise based graph build system with hot reloading.
 
 My needs are fairly specific, and have led me to develop a [https://qubyte.codes/blog/marqdown dialect of markdown] with special handling of language attributes and ruby annotations (amongst other things).
 
@@ -21,8 +21,7 @@ Static site generators aren't always a good match for IndieWeb associated techno
 * I use [https://support.apple.com/en-gb/guide/shortcuts/welcome/ios iOS/MacOS shortcuts] to post links and notes with photos to my site. I also use [https://microformats.org/wiki/h-event h-event] posts to send details/duration of [https://qubyte.codes/blog/my-2022-japanese-language-study-habits study sessions] quickly from my phone or Mac menubar. I slightly broke with the spec by allowing shared secret support in addition to IndieAuth for these. I use Omnibear compiled into a Mac app to get it working with Safari for posting from my laptop.
 * Webmention receipt using a Netlify function. I don't have a good solution for dealing with these right now, so for the time being mentions are validated, and then each is turned into an issue in GitHub. I add mentions manually to the front matter of posts.
 * Webmention dispatch using a Netlify build plugin. I compare the atom feed before and after each build to determine new/updated/deleted posts and scan the relevant posts (both before and after in the event of an update) for mentioned or removed URLs to send mentions to.
-* Note (including an optional photo) and bookmark syndication to Mastodon with GitHub Actions.
-* [[POSSE]] to Mastodon. Publication of a note is the addition of a file to a GitHub repository. When this happens, it triggers a build of my site, but it also triggers the run of [https://github.com/qubyte/qubyte-codes/blob/main/.github/workflows/syndicate-to-mastodon.yml a GitHub action] which formats and creates the post on Mastodon.
+* Note (including an optional photo) and bookmark POSSE to Mastodon with GitHub Actions.
 
 == TODO ==
 
@@ -38,6 +37,7 @@ Static site generators aren't always a good match for IndieWeb associated techno
 * Immutably cached CSS. I use mostly classless CSS so some HTML bloat is avoided. (I have no sense of style though, so it might hurt your eyes.)
 * Images processed into various sizes and available in AVIF and WebP as well as JPEG as a fallback.
 * [https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#loading Lazy loaded images].
+* System font stack (no need to download fonts).
 
 == Other Indieweb related things ==
 
