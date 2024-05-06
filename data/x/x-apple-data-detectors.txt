@@ -2,4 +2,18 @@ https://indieweb.org/x-apple-data-detectors
 
 {{stub}}
 
-'''<dfn>x-apple-data-detectors</dfn>''' is a URL scheme that you might errantly see in an error message due to clicking on a piece of text in an Apple Notes note that the app auto-linked due to overly aggressively matching that text to a “data detector” regex or algorithm, that was then mistakenly copied as a link from one note to a shared note, that when opened in MacOS is unable to resolve since it’s a proprietary scheme dependent on its source cont.
+'''<dfn>x-apple-data-detectors</dfn>''' is an [[Apple]] URL scheme seen in an error message after clicking on a piece of text in an Notes app note that it auto-linked due to overly aggressively “data detector” text matching, which was errantly copied as a link from one note to a shared note, and in MacOS is unable to resolve due to a proprietary scheme and path ID dependent on source context; avoid such [[anti-patterns]] in your own [[auto-link]] function.
+
+== Error ==
+Example error message:
+<blockquote>There is no application set to open the URL x-apple-data-detectors://embedded-result/nnn</blockquote> where "nnn" is a 3 digit number that clearly is an index into a device-local database and is thus useless in another context such as another device.
+
+== Anti-patterns ==
+Anti-patterns from such [[Apple]] auto-linking:
+* proprietary URL scheme (even “x-” at that)
+* URL segment dependent on device-only info: path identifier segment dependent on a device-local database row, unresolvable when such content is shared in another context, e.g. via a shared note, or if copy/pasted into a message
+* mixing code generated content and author content: copying an auto-link URL as if it was part of the source content and then pasting it, instead of preserving author-created text only, and instead designing for lazy auto-linking at the destination
+
+== See Also ==
+* [[Apple]]
+* [[anti-patterns]]
