@@ -1,0 +1,277 @@
+https://indieweb.org/FedCM_for_IndieAuth
+
+'''<dfn>FedCM for IndieAuth</dfn>''' is a guide intended to help IndieAuth developers add support for the [[FedCM]] APIs, including the IdP Registration feature that enables FedCM to be used with IndieAuth.
+
+Note that the language used in FedCM is slightly different from the OAuth/IndieAuth terminology. In particular:
+
+* IdP - short for "Identity Provider", also called "authorization server" or "IndieAuth server"
+* RP - short for "Relying Party", known in OAuth/IndieAuth as the "client"
+
+See [[FedCM]] for a demo video of the resulting flow.
+
+= IndieAuth Servers =
+
+== FedCM Endpoints ==
+
+This guide assumes you are starting with a functional [[IndieAuth]] server, including authorization endpoint and token endpoint.
+
+The first part of this will be setting up the core FedCM endpoints. You can follow the MDN [https://developer.mozilla.org/en-US/docs/Web/API/FedCM_API/IDP_integration IdP Integration] guide for this.
+
+=== well-known ===
+Create a <code>.well-known/web-identity</code> endpoint at your IndieAuth server's domain. This MUST be at the eTLD+1, and cannot be at a subdomain. For example, if your IndieAuth server is <code>login.example.com</code> this file must go at <code>example.com/.well-known/web-identity</code>. (See [https://github.com/fedidcg/FedCM/issues/580 issue 580] for a possible DNS alternative.)
+
+The well-known file must be served with the <code>application/json</code> content type. The content of the file is a JSON object with the full URL to the IdP's configURL.
+
+<code><nowiki>https://example.com/.well-known/web-identity</nowiki></code>
+<pre>
+{
+  "provider_urls": ["https://login.example.com/fedcm/config.json"]
+}
+</pre>
+
+=== IdP config file ===
+
+The IdP config file contains links to other FedCM endpoints. This is a JSON document as well.
+
+<code><nowiki>https://login.example.com/fedcm/config.json</nowiki></code>
+<pre>
+{
+  "accounts_endpoint": "/accounts",
+  "client_metadata_endpoint": "/client_metadata",
+  "id_assertion_endpoint": "/assertion",
+  "login_url": "/login"
+}
+</pre>
+
+The properties are as follows:
+
+* <code>accounts_endpoint</code> - The browser will make a request to this endpoint to determine if the user is logged in and fetch their photo/name to display in the widget
+* <code>client_metadata_endpoint</code> - This doesn't really make sense for the IndieAuth version of FedCM, but this normally would be how the IdP returns the client's terms of service and privacy policy URLs to the browser. See [https://github.com/fedidcg/FedCM/issues/581 issue 581] for an alternative that lets the client provide these URLs instead.
+* <code>id_assertion_endpoint</code> - This is the endpoint the browser gets a credential from after the user clicks log in. For IndieAuth, this will be where the IndieAuth server returns an authorization code to the browser.
+* <code>login_url</code> - If the user is not logged in, the browser will launch a popup window to this URL so the user can log in.
+
+Note that the browser will not follow any redirects, these URLs in the config file must respond with JSON data directly.
+
+=== accounts endpoint ===
+
+The accounts endpoint is expected to return the list of accounts the user is logged in to at the IdP. For an IndieAuth server, this is likely a single account.
+
+The browser will make a GET request to this endpoint along with any cookies for this domain, but does not contain a <code>client_id</code>, Origin or Referer header.
+
+<pre>
+GET /accounts HTTP/1.1
+Host: login.example.com
+Accept: application/json
+Cookie: ebc7940893e0c4035e9179d0b83
+Sec-Fetch-Dest: webidentity
+</pre>
+
+The IdP checks the Sec-Fetch-Dest header and validates the cookie to determine which user is logged in, then returns the account information:
+
+<pre>
+{
+  "accounts": [
+    {
+      "id": "example.com",
+      "given_name": "Example",
+      "name": "Example User",
+      "email": "example.com",
+      "picture": "https://example.com/photo.jpg"
+    }
+  ]
+}
+</pre>
+
+Note: The <code>email</code> value will be displayed in the account chooser in the browser. This does not have to actually be an email address though, so you can return the user's IndieAuth profile URL there instead. See [https://github.com/fedidcg/FedCM/issues/317 issue 317] to track a proposal to change this parameter.
+
+If the user is not signed in, the IdP should return an <code>HTTP 401</code> response.
+
+=== client metadata endpoint ===
+
+The browser will request the client metadata from the IdP at this endpoint. This doesn't make sense for IndieAuth, since clients control their own metadata and the IdP may not even know about the client ahead of time.
+
+See [https://github.com/fedidcg/FedCM/issues/581 issue 581] for an alternative that lets the client provide these URLs instead. I don't think it makes sense to fully specify what this could look like for IndieAuth, since the issue will likely be resolved by allowing the client to provide the URLs.
+
+In the mean time, you'll need to return something here like the below:
+
+<pre>
+{
+  "privacy_policy_url": "https://client.example.com/privacy_policy.html",
+  "terms_of_service_url": "https://client.example.com/terms_of_service.html"
+}
+</pre>
+
+=== ID assertion endpoint ===
+
+This endpoint is what makes it all work. After the user clicks the browser "continue" button, the browser makes a request to this endpoint finally linking the RP and the IdP. The request is <code>application/x-www-form-urlencoded</code>, and includes parameters with details of the attempted sign-in, as well as cookies from the IdP.
+
+* <code>client_id</code> - The identifier of the client, which in the case of IndieAuth, is the [https://indieauth.spec.indieweb.org/#client-identifier client's URL], e.g. <code>https://webmention.io/</code>
+* <code>account_id</code> - The ID of the account the user selected from the accounts endpoint
+
+Note: in the future, the RP will probably be able to pass arbitrary parameters to this endpoint ([https://github.com/fedidcg/FedCM/issues/556 issue 556]). This will allow the RP to use PKCE to better secure the end-to-end flow. In the mean time, the RP can include a PKCE code_challenge in the <code>nonce</code> parameter. 
+
+This request will contain cookies, so the IdP will know if the user is logged in and which user is logged in. Other validation steps the IdP does at this stage include:
+
+* Ensure the <code>Sec-Fetch-Dest: webidentity</code> header is present
+* Ensure the host name of the <code>Origin</code> header matches the <code>client_id</code> host name
+
+At this point, the IdP can return data to the RP. The IdP builds a JSON string containing an IndieAuth authorization code  as well as the [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth server metadata URL]. The client will later exchange this authorization code for user profile information. The response should look like the below, including the CORS headers:
+
+<pre>
+Content-type: application/json
+Access-Control-Allow-Origin: https://client.example.org
+Access-Control-Allow-Credentials: true
+
+{
+  "token": "{\"code\":\"<authorization code>\",\"metadata_endpoint\":\"<indieauth-metadata-endpoint>\"}"
+}
+</pre>
+
+The double JSON encoding is not great, since it also means the RP has to JSON-decode this. See [https://github.com/fedidcg/FedCM/issues/578 issue 578] to track progress on allowing the IdP to return JSON instead of a "token" string.
+
+Note: The <code>Access-Control-Allow-Origin</code> header must not contain a trailing slash. If you don't set the right CORS headers here, the browser will throw an error in the console.
+
+== IdP Implementation Notes ==
+
+=== Sec-Fetch-Dest header ===
+
+For any requests that include cookies, the browser will send a <code>Sec-Fetch-Dest: webidentity</code> header as well. The IdP MUST validate the presence of this header to protect against CSRF attacks. This applies to the Accounts and ID Assertion endpoints.
+
+=== Login Status API ===
+
+The Login Status API allows an IdP to inform the browser of its login status. It is possible for the IdP to set this status either from JavaScript or an HTTP header. The IdP should update the status when the user logs in or logs out.
+
+Setting the login status from an HTTP header:
+
+<pre>
+Set-Login: logged-in
+
+Set-Login: logged-out
+</pre>
+
+Setting the login status from JavaScript:
+
+<pre>
+navigator.login.setStatus("logged-in");
+
+navigator.login.setStatus("logged-out");
+</pre>
+
+If the IdP does not do this, the RP's call to FedCM will fail with the error "Not signed in with the identity provider" before the browser even attempts to fetch the accounts endpoint.
+
+=== Cookies ===
+
+The IdP cookies must be set to <code>SameSite=None</code>, HTTPOnly, and Secure. If these properties are not set, the browser will not send the cookies to the accounts or assertion endpoint, so it will always appear that the user is logged out.
+
+The <code>SameSite=None</code> requirement was added in [https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#samesite Chrome 125]. See [https://github.com/fedidcg/FedCM/issues/587 issue 587] to track a proposal to change this to something else.
+
+=== IdP Registration ===
+
+The magic that makes this work for IndieAuth is the IdP Registration API. This is an experimental API that is only in Chrome Canary as of May 15, 2024, but will likely ship in Chrome behind a feature flag in June. See [https://github.com/fedidcg/FedCM/issues/240 issue 240] for background and the full history of this feature.
+
+At some point, you need to get the user to click a button to register the IdP with the browser. Provide a button, and when clicked, call the <code>register</code> function, providing the full URL of the configURL:
+
+<pre>
+IdentityProvider.register('https://login.example.com/config.json');
+</pre>
+
+This will prompt the user to register this as an IdP in their browser, making it available to RPs.
+
+[[File:fedcm-idp-registration.png|434px]]
+
+Note: User interaction is required in order to call this function, you can't just run this when the page loads.
+
+= IndieAuth Clients =
+
+As an RP (client) using FedCM for IndieAuth, the process is as follows:
+
+* Call <code>navigator.credentials.get</code> with a <code>configURL</code> of "any" to ask for any IdP rather than a specific IdP
+* Upon receiving the authorization code (in the "token" property of the returned IdentityCredential), exchange the authorization code for the user's profile info at the user's token endpoint
+
+A detailed version of these steps is below.
+
+== navigator.credentials.get ==
+
+First, from JavaScript, call <code>navigator.credentials.get</code> with <code>configURL: "any"</code>. If the user is logged in, this will pop up the widget in the corner asking if they want to continue logging in to this site.
+
+Until the RP can include arbitrary data to the assertion endpoint, you can use the <code>nonce</code> parameter to include a PKCE code_challenge. (This code_challenge should be generated by your server and passed to the JS, ensuring that only your server ever has the code_verifier value.)
+
+<pre>
+    const identityCredential = await navigator.credentials.get({
+      identity: {
+        context: "signin",
+        providers: [
+          {
+            configURL: "any",
+            clientId: window.location.origin+"/", // Use the scheme+host+path as the client ID
+            nonce: "<code_challenge>", // this is probably going away https://github.com/fedidcg/FedCM/issues/556
+          },
+        ]
+      },
+    }).catch(e => {
+      console.log("Error", e.message);
+    });
+
+    // If successful, identityCredential.token will be a JSON string with the authorization code and IndieAuth metadata URL
+</pre>
+
+[[File:fedcm-indieauth-prompt.png|436px]]
+
+If the user clicks the "Continue" button, the browser will make a request with the IdP cookies to the ID assertion endpoint and return the response to your JavaScript code.
+
+For IndieAuth, the response returned will be an authorization code. You'll need to exchange the authorization code for the user's profile information at the user's token endpoint.
+
+Typically an RP has a server-side component, so this also means your server can retrieve the information directly from the token endpoint rather than accepting the data from the browser where it wouldn't be trustworthy without further validation.
+
+Your JS will get two values back from the API: <code>identityCredential.token</code> and <code>identityCredential.configURL</code>. This is the first time you will know anything about which IdP the user has selected. The <code>token</code> is actually a JSON-encoded string with the authorization code and the [https://indieauth.spec.indieweb.org/#indieauth-server-metadata IndieAuth server metadata URL].
+
+So at this point, write some JavaScript to send this authorization code and IndieAuth metadata URL up to your server to continue the work.
+
+<pre>
+    if(identityCredential && identityCredential.token) {
+
+      const {code, metadata_endpoint} = JSON.parse(identityCredential.token);
+
+      const response = await fetch("/fedcm-login", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          code: code,
+          metadata_endpoint: metadata_endpoint
+        })
+      });
+      
+      const responseData = await response.json();
+
+      // responseData will contain whatever your server responded with
+    }
+</pre>
+
+== Exchange the authorization code ==
+
+Your server-side code will receive the two values (code and metadata_endpoint) from your JavaScript. It now needs to do some validation and attempt to exchange the code for the user's profile information, then you can start the session on the server and log the user in to the site.
+
+Fetch the metadata_endpoint URL and look for the <code>token_endpoint</code> property.
+
+Make an [https://indieauth.spec.indieweb.org/#redeeming-the-authorization-code OAuth token request] to the token endpoint including the authorization code and PKCE code_verifier. There is no redirect_uri since this is not a redirect-based flow.
+
+<pre>
+POST https://login.example.com/token
+Content-type: application/x-www-form-urlencoded
+Accept: application/json
+
+grant_type=authorization_code
+&code=<authorization code>
+&client_id=https://app.example.net/
+&code_verifier=a6128783714cfda1d388e2e98b6ae8221ac31aca31959e59512c59f5
+</pre>
+
+The response will be the typical IndieAuth response, including the <code>me</code> URL, profile info, and optional access token. https://indieauth.spec.indieweb.org/#profile-information
+
+Last you'll need to verify that this IndieAuth server is authorized to make claims about the user identified by the <code>me</code> URL returned. Since the <code>me</code> URL returned by the server can be any arbitrary URL, not just a URL on the same domain, you need to fetch the URL and look for the matching IndieAuth metadata URL in either the HTTP header or link rel. This way you can be sure that the user has allowed this IndieAuth server to make claims about the user's website.
+
+Once confirmed, your server can log the user in.
+
+[[Category:IndieAuth]]
