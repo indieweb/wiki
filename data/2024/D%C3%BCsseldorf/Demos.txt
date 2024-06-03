@@ -6,12 +6,6 @@ https://indieweb.org/2024/D%C3%BCsseldorf/Demos
 
 See also: '''[[2024/Düsseldorf/Projects|archive of planned Create Day projects]]'''.
 
-== To Do ==
-Please see notes in chat starting at:
-* https://chat.indieweb.org/meta/2024-05-12#t1715521046123600
-
-And copy paste and edit here as subsections for each person that demonstrated in order!
-
 == Dave Letorey ==
 I have loads and loads of posts, but no way of finding those posts without the URL
 
@@ -150,13 +144,50 @@ If you go to a year that doesn't exist, it no longer displays the default 404, i
 
 I also did some other random things, WordPress things, Micropub plugin, finally fixed all the tests. A lot of little things, but this is one of the things I wanted to do for a while.
 
+== Pierre Carrier ==
+{{pcarrier}}: I made new websites zero password and one password. 
 
+https://0pw.me/
 
+The idea behind zero password is that you can store a small bit of data, identified by your signature key, so if you can generate any key or identify it by password you can use that, and then store up to 64kb for that key. I only check the signature, no encryption, so if you want to you should encrypt things yourself. That's the gist of that.
 
+https://1pw.me/
 
-== ... more demos ... ==
+And then I built something that does exactly that. Pick a password like hello, and then I have my note here. I can say Hello Dusseldorf. If you know to type Hello, you can find that again. If you don't know what to type you can try the empty password. I use that to store my secret key for one password because I want it to work even if I don't have any of my devices.
+
+So yeah that's the things I built.
+
+I iterated a bit on the signaling protocol I want to build: https://signali.ng/ to make it easier to establish WebRTC connections without infrastructure of your own. So if anybody has interest in WebRTC, please review this and let me know if I have the right stuff to solve your needs. For now it's only a doc but I've thought a lot about it.
+
+== Aaron Parecki ==
+{{aaronpk}}: My project is all about logging in using IndieAuth, I'm trying to get IndieAuth to be better. One of the things there's a real opportunity for is a new API, experimental API, currently in Chrome Canary and Firefox has some support as well. It's called Federated Credential Manager which is fancy sounding. The relevant part is this part that is very experimental, it's called Allow IDP registration: https://github.com/fedidcg/FedCM/issues/240
+
+It lets any website say that you can use it to sign into things. There is a very long GitHub thread explaining it and instructions for turning it on. You go into Chrome Feature flags and turn on IDP registration, this is for now, once it ships it would happen automatically.
+
+The point is one you are logged into your IdP, in this case I'm using this test domain, this could be my website, or it could be a service that is running this. Kind of like you might setup your website with IndieAuth.com right now. That website can tell the browser that it is a website that can be used to log into other websites.
+
+If I click this button (Register IdP) we should get a prompt from the browser which says this website wants to use account on other website, so I click Allow, and now this website is registered as your identity provider. 
+
+If I go to an application to sign-in and I click login, it could be called "login with your website" or whatever. I'm on this website and I click sign-in. Instead of asking me for my domain name like I normally would do on like [[Quill]], what I'm trying to do is trying to get rid of this step of I don't want people to have to type in their domains. Instead of that, click this button. The browser already knows my website, and it knows my authorization server, so this popped up by the browser since it's already registered. Now I just click (Continue as Aaron) and it's doing stuff behind the scenes to exchange credentials and now the website knows my domain. It knows I'm aaronpk.com. I never had to type anything. All I did was login to my identity provider here to tell the browser it's my identity provider.
+
+That's my little prototype. I'm really excited that this is possible. I'm going to share this feedback back to Google. Their most important question is are there any websites that want to accept this kind of login with arbitrary websites. Now at least I have it working.
+
+Q: {{t}}: How long until IndieWeb.org accepts this kind of login?
+
+A: {{aaronpk}}: IndieWeb.org certainly can, however I might first ship it on [[webmention.io]] because I actually have a couple hundred users a month, which is enough to get their attention.
+
+If I'm on my website and I want to login to my website, it doesn't really make sense to use my website to log into my website, because how do I login? I could use this API to login to my website with a different identity provider, like a Google Account, or a GitHub account, but that's not really the point. 
+
+Q: {{t}}: more like the IndieAuth use-case, where I could use my website to log into your website, and then maybe there's posts that you only want me to see?
+
+A: {{aaronpk}}: right, you could log into my website with this. I just need to be able to log into my website some other way in order to kick off this entire process. 
+
+I should also mention this is live on a lot of websites using Google as an IdP now, they're actively using this now to replace their widget that pops up into the corner.
+
+It's the IdP registration feature that's interesting to me that enables this for IndieAuth.
 
 == See Also ==
+* Live demo notes in chat start at: https://chat.indieweb.org/meta/2024-05-12#t1715521046123600
 * [[2024/Düsseldorf]]
 * [[2024/Düsseldorf/Schedule]]
 * [[2024/Düsseldorf/Projects]]
