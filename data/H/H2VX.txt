@@ -4,14 +4,25 @@ https://indieweb.org/H2VX
 
 '''<dfn>[https://h2vx.com H2VX]</dfn>''' is a service to convert [[hCard]] microformats to [[vCard]], and [[hCalendar]] microformats to [[iCalendar]].
 
+== Open Source ==
+H2VX is 100% open source which is [[microformats]] community maintained at:
+* https://github.com/microformats/h2vx.com/
+You may set up your own instance! If you do, please let us know in the [[discuss#microformats|#microformats chat!]]
+
 == Troubleshooting ==
 === no tidy ===
 If you see an error like "no tidy :(" then it is likely that the PHP version has been automatically upgraded on the server without re-enabling the php-tidy extension. 
 
-The fix is to ping an admin and ask them to check the <kbd>phprc</kbd> file on the H2VX server (likely at the path <kbd>~/.php/N.M/phprc</kbd> where <samp>N.M</samp> is the PHP version like <kbd>7.4</kbd> or <kbd>8.0</kbd>) and see if it has the line: <blockquote><kbd>extension = tidy.so</kbd></blockquote> If not, edit the <kbd>phprc</kbd> file and add it. That should fix it.
+The fix is to ping an h2vx.com admin and ask them to check the <kbd>[[phprc]]</kbd> file on the H2VX server (likely at the path <kbd>~/.php/N.M/phprc</kbd> where <samp>N.M</samp> is the PHP version like <kbd>7.4</kbd> or <kbd>8.0</kbd>) and see if it has the line: 
+<blockquote><kbd>extension = tidy.so</kbd></blockquote> 
+If not, edit the <kbd>phprc</kbd> file and add it to the top. That should fix it.
+
+=== 500 ===
+500 error: if attempting to convert a URL to vcf or ics returns a 500 error, then it is likely that the version of PHP that is running on the server is encountering an error in the H2VX PHP code, or code it depends on like [[CASSIS]]. 
+
+Solution: 
+* Try updating the server install of H2VX to use the latest version of [[CASSIS]] and seeing if that fixes it. If so, please submit a PR updating the static version of cassis.js on the H2VX repo.
 
 == See Also ==
-* https://github.com/microformats/h2vx.com/
 * https://microformats.org/wiki/h2vx
 * https://twitter.com/h2vx
-* 500 error: if attempting to convert a URL to vcf or ics returns a 500 error, then it is likely that the version of PHP that is running on your server is encountering an error in the H2VX code, or code it depends on like [[CASSIS]]. Try updating to the latest version of [[CASSIS]] and seeing if that fixes it.
