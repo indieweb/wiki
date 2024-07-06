@@ -242,11 +242,60 @@ Like [https://ascraeus.org/page/privacy/ this one] by {{dgold}}
 ** [https://gist.github.com/cleverdevil/c857695bb2de1e46686d720cad9d124c cleverdevil's mf2-to-micropub with preview step]
 ** [https://gist.github.com/cleverdevil/d9c08ddc6eb2da0d060a5f6fe87ddf64 same but with albums to micropub media endpoint]
 
-=== post my own videos ===
+=== mobile posting improvements ===
 
-This is mostly an improvement for [[Screech]], which could post these files successfully as "video" like it already does for "audio", "photo". ''Or: it's a new single-purpose Micropub client?''
+==== [[Indigenous]] aka IndiePass for iOS ====
 
-(I use Shortcuts on my phone to post videos from there via Micropub ''just fine''. [https://martymcgui.re/tag/data-privacy/ Video examples])
+IndiePass for iOS has been "coming soon" for a couple of years now. Indigenous is no longer available in the app store, I think.
+
+Still, I use it for mobile posting!
+
+* likes
+* reposts
+
+I almost used it for posting bookmarks, but that feature was never finished. I would use it if it was!
+
+I once used it for photo posts, but stopped once I made an iOS shortcut that does the same.
+
+==== video ====
+
+I use Shortcuts on my phone to post videos from there via Micropub. I say it works ''just fine'' (and have plenty of [https://martymcgui.re/tag/data-privacy/ video examples])), but it's actually kind of fragile, I think.
+
+My "Video Micropub" Shortcut:
+
+* takes a video as input (can be sent from the Photos app, for example).
+* uploads that file to my Micropub Media Endpoint, [https://indieweb.org/Micropub-extensions#Response_from_Media_Endpoint getting the URL from the response].
+* prompts me for a description (the post content)
+* then prompts me for a tag
+* then makes a Micropub post with the video URL, entered content, and tag.
+
+This may be an improvement for [[Screech]], which could post these files successfully as "video" like it already does for "audio", "photo". ''Or: it's a new single-purpose Micropub client?''
+
+==== video special case: Live Photo loops and bounces ====
+
+These work like video above, except ''worse''!
+
+* open Photos, find the "image" to share. Make it a loop or bounce.
+* from Photos, use the Share sheet to share to an app named Metapho, which can see "inside" the live photo to get to the video file, usually named something like "fullSizeRender.mov".
+* Use Metapho's share feature to share "fullSizeRender.mov" to Metapho ''again''.
+* Use Metapho's share feature now to "Share without Metadata" to the "Video Micropub" Shortcut discussed above.
+
+==== reads ====
+
+This is tricky on mobile in a way that basically means I don't do this via mobile. My Safari tabs of goodreads and bookshop dot org pages attest to this.
+
+I have a Shortcut that no longer works which would:
+
+* take a shared goodreads page from Safari
+* run Javascript to find the JSON data island for the book details
+* prompt me for whether this was finished / to-read / reading
+* make a Micropub post
+
+The Shortcut became buggy (would freeze my phone or freeze Shortcuts) and would often just plain fail to extract data, so I have given up.
+
+I've tried posting via the official Micro.blog client, which has book lookups. i don't recall exactly, but for whatever reason this just didn't work for me. i want to say some assumption M.b makes about tags, or it didn't send all the metadata I wanted, etc.
+
+On my computer, I use bookmarklets for this on goodreads and bookshop book pages that open indiebookclub dot biz. These work great! I might try making a little web page that takes a goodreads or bookshop book page and does this for you, then update the Shortcut to use that.
 
 === event posting improvements ===
 
