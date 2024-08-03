@@ -8,7 +8,8 @@ For the broader discussion, examples, how tos etc. for indicating and discoverin
 * [[authorship]]
 
 == How to ==
-You can use <code>rel=author</code> on both <code>&lt;link&gt;</code> and <code>&lt;a&gt;</code> elements on pages written by an author (e.g. post permalinks, feeds like [[h-feed]]).
+=== How to publish ===
+You can publish <code>rel=author</code> on both <code>&lt;link&gt;</code> and <code>&lt;a&gt;</code> elements on pages written by an author (e.g. post permalinks, feeds like [[h-feed]]).
 
 Simple link in <code>&lt;head&gt;</code> like [[OGP]] meta tags, to an author’s site:
 <pre>
@@ -19,10 +20,29 @@ If your site also supports [[WebSub]], you can use the same <code>&lt;link&gt;</
 <link rel="author self" href="https://tantek.com/" />
 </pre>
 
-Or for a link to an author’s profile on a multi-author site:
+=== How to link to ActivityPub followable profile ===
+If your site supports ActivityPub (AP), e.g. via [[Bridgy Fed]], you can also put a rel="author" link so AP implementations can automatically discover your AP followable profile:
 <pre>
-<link rel="author" href="https://fedi.example.com/@username" />
+<link rel="author" type="application/activity+json" href="https://tantek.com/@tantek.com" />
 </pre>
+Where you must replace both instances of <samp>tantek.com</samp> with your own domain name.
+
+Or if you have an AP followable profile on another (presumably) multi-author site:
+<pre>
+<link rel="author" type="application/activity+json" href="https://fedi.example.com/@username" />
+</pre>
+
+== IndieWeb Examples ==
+=== Tantek ===
+{{t}} has rel=author links to both his home page, and his ActivityPub followable profile URL, on his home page, and on post permalinks (since 2024-08-02). E.g. on https://tantek.com/2024/213/b1/choosing-tools:
+<pre>
+<link rel="author" type="application/activity+json" href="https://tantek.com/@tantek.com" />
+...
+<a href="/" rel="author home">tantek.com</a>
+</pre>
+
+=== ... add yourself ... ===
+...
 
 == Questions ==
 === How can I verify the author ===
