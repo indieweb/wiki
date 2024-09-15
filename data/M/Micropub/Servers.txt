@@ -1,67 +1,80 @@
 https://indieweb.org/Micropub/Servers
 
 '''<dfn>Micropub servers</dfn>''' are existing endpoint implementations of [[Micropub]].
-
+<div style="float:right; border:thin 1px gray; background:#EFE; padding:0 2em 2em;"><!-- please update this summary list with Micropub clients that are usable by anyone or are open source -->
+== CMS support summary ==
+* [[#Blot|Blot]]
+* [[#Craft|Craft]]
+* [[#Dobrado|Dobrado]]
+* [[#Drupal|Drupal]]
+* [[#Hugo|Hugo]]
+* [[#Jekyll|Jekyll]]
+* [[#Kirby|Kirby]]
+* [[#Known|Known]]
+* [[#WordPress|WordPress]]
+== Service support summary ==
+* [[#commentpara.de|commentpara.de]]
+* [[#Micro.blog|Micro.blog]]
+</div>
 For more about Micropub overall and Micropub Clients in particular, see:
 * '''[[Micropub]]'''
 * '''[[Micropub/Clients]]'''
-== CMS Software ==
-[[Micropub]] has been added to the following CMS software and blog publishing tools for additional server support.
+
+== CMSs ==
+[[Micropub]] has been added to the following CMS software and blog publishing tools for additional server support, sometimes requiring a plugin or self-hosted service. Listed alphabetically, built-in then plug-in required
+
+=== Dobrado ===
+[[dobrado]] can publish posts received via Micropub since 2017-02-05.
 
 === Known ===
 [[User:werd.io|Ben]] has written a [[Known]] plugin that logs in via [[IndieAuth]] and publishes content via micropub. It's designed to work so that all indieweb post types - notes etc - are passed to the content plugin registered to handle them. [https://github.com/idno/indiepub]
+
+=== Blot ===
+{{amitgawande}} has written a self-hosteable service [https://github.com/am1t/blotpub blotpub] that exposes a Micropub endpoint for [[Blot]]. It accepts Micropub requests, creates simple Blot posts and saves them to a configured Dropbox folder.
+
+=== Craft ===
+[[User:shanehudson.net|Shane]] has written a [[Craft]] plugin for Micropub. It currently only works with notes and requires some configuration to setup. It has also only been tested with Quill so far, as of 2015-07-11. https://github.com/ShaneHudson/Micropub_Craft
+
+=== Drupal ===
+* {{realize.be}} has built a bundled Micropub server into the [https://www.drupal.org/project/indieweb IndieWeb module] for Drupal 8.
+*[http://stefan-auditor.de Stefan Auditor] wrote a Drupal module to add a Micropub endpoint to Drupal installs on 2015-05-10. https://github.com/sanduhrs/micropub
+
+=== Hugo ===
+{{dgold}} wrote [[nanopub]], a Micropub server that stores content in the file format for Hugo.
+
+=== Jekyll ===
+{{voxpelli}} has written a self-hostable service that exposes a Micropub endpoint and then performs the instructions sent to that endpoint by committing [[Jekyll]] formatted data to a [[GitHub]] repository for the Jekyll site. Modular built and would be possible to extend to support other systems like Jekyll as well. https://github.com/voxpelli/webpage-micropub-to-github
+
+=== Kirby ===
+{{Sebsel}} wrote a Micropub plugin for [[Kirby]] 2. As of 2016-12-12 it supports posting with FormEncoded and JSON, and has a branch for update (replace and add) that needs some cleaning and 'delete' support before it can be merged. (I'm selfdogfooding it anyway now) https://github.com/sebsel/kirby-micropub
+
+{{sgreger}} created [https://github.com/sebastiangreger/kirby3-micropublisher kirby3-micropublisher] (Beta), a configurable Micropub endpoint for Kirby 3, designed to be highly adjust- and extendable.
 
 === WordPress ===
 [[WordPress]] supports Micropub via the [[Micropub for WordPress]] plugin, originally created by {{snarfed}}
 
 [https://wordpress.org/plugins/simple-location wordpress simple-location] plugin needed to display location info.
 
-=== Drupal ===
-* {{realize.be}} has built a bundled Micropub server into the [https://www.drupal.org/project/indieweb IndieWeb module] for Drupal 8.
-*[http://stefan-auditor.de Stefan Auditor] wrote a Drupal module to add a Micropub endpoint to Drupal installs on 2015-05-10. https://github.com/sanduhrs/micropub
-
-=== Craft ===
-[[User:shanehudson.net|Shane]] has written a [[Craft]] plugin for Micropub. It currently only works with notes and requires some configuration to setup. It has also only been tested with Quill so far, as of 2015-07-11. https://github.com/ShaneHudson/Micropub_Craft
-
-=== Jekyll ===
-{{voxpelli}} has written a self-hosteable service that exposes a Micropub endpoint and then performs the instructions sent to that endpoint by committing [[Jekyll]] formatted data to a [[GitHub]] repository for the Jekyll site. Modular built and would be possible to extend to support other systems like Jekyll as well. https://github.com/voxpelli/webpage-micropub-to-github
-
-=== Kirby ===
-
-{{Sebsel}} wrote a Micropub plugin for [[Kirby]] 2. As of 2016-12-12 it supports posting with FormEncoded and JSON, and has a branch for update (replace and add) that needs some cleaning and 'delete' support before it can be merged. (I'm selfdogfooding it anyway now) https://github.com/sebsel/kirby-micropub
-
-{{sgreger}} created [https://github.com/sebastiangreger/kirby3-micropublisher kirby3-micropublisher] (Beta), a configurable Micropub endpoint for Kirby 3, designed to be highly adjust- and extendable.
-
-=== Dobrado ===
-
-[[dobrado]] can publish posts received via Micropub since 2017-02-05.
-
-=== Hugo ===
-{{dgold}} wrote [[nanopub]], a Micropub server that stores content in the file format for Hugo.
-
-=== Blot ===
-{{amitgawande}} has written a self-hosteable service [https://github.com/am1t/blotpub blotpub] that exposes a Micropub endpoint for [[Blot]]. It accepts Micropub requests, creates simple Blot posts and saves them to a configured Dropbox folder.
-
-=== indielib ===
-
-[[indielib]] is a Go library that provides tools to create a Micropub server handler quite easily. The user of the library only needs to provide an implementation of how posts are created, updated, etc. The library ensures compliance with the specification and can be easily mounted on any an HTTP route.
-
 == Services ==
+=== commentpara.de ===
+{{cweiske}}'s ''[[anoweco]]'' project powers [[commentpara.de]] and can be filled via Micropub only.
 
 === Micro.blog ===
 [[Micro.blog]] has built-in support for Micropub as its native posting API for hosted blogs.
 
+== Libraries and other open source ==
+Libraries and other open source for creating or setting up your own Micropub server support and services.
+
+=== indielib ===
+[[indielib]] is a Go library that provides tools to create a Micropub server handler quite easily. The user of the library only needs to provide an implementation of how posts are created, updated, etc. The library ensures compliance with the specification and can be easily mounted on any an HTTP route.
+
 === Silo.pub ===
-In April 2015, {{kylewm}} created [https://github.com/kylewm/feverdream Feverdream] aka [https://silo.pub/ silo.pub] to provide a Micropub endpoint to create posts on hosted blogs like [[Tumblr]], [[WordPress.com]], [[Blogger]], [[twitter]], [[Facebook]] and [[Flickr]]
+In April 2015, {{kylewm}} created [https://github.com/kylewm/feverdream Feverdream] aka [[silo.pub]] to provide a Micropub endpoint to create posts on hosted blogs like [[Tumblr]], [[WordPress.com]], [[Blogger]], [[twitter]], [[Facebook]] and [[Flickr]]
 
 === ownyourresponses ===
 {{snarfed}}'s [http://github.com/snarfed/ownyourresponses ownyourresponses] is [[PESOS]] as a service for [[Twitter]] favorites, retweets, and replies and [[Instagram]] likes. It polls your accounts periodically for new activity via the APIs and creates corresponding like, repost, and reply posts on your site via Micropub.
 
 The original motivation is described in [https://snarfed.org/2015-01-22_pesos-for-bridgy-publish PESOS for Bridgy Publish].
-
-=== anoweco ===
-{{cweiske}}'s ''anoweco'' project (that powers [[commentpara.de]]) can be filled via micropub only.
-
 
 == IndieWeb Examples ==
 Examples of IndieWeb sites that support the micropub API (in order of deployment).
