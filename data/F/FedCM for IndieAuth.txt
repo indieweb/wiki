@@ -18,7 +18,7 @@ This guide assumes you are starting with a functional [[IndieAuth]] server, incl
 The first part of this will be setting up the core FedCM endpoints. You can follow the MDN [https://developer.mozilla.org/en-US/docs/Web/API/FedCM_API/IDP_integration IdP Integration] guide for this.
 
 === well-known ===
-Create a <code>.well-known/web-identity</code> endpoint at your IndieAuth server's domain. This MUST be at the eTLD+1, and cannot be at a subdomain. For example, if your IndieAuth server is <code>login.example.com</code> this file must go at <code>example.com/.well-known/web-identity</code>. (See [https://github.com/fedidcg/FedCM/issues/580 issue 580] for a possible DNS alternative.)
+Create a <code>.well-known/web-identity</code> endpoint at your IndieAuth server's domain. This MUST be at the eTLD+1, and cannot be at a subdomain. For example, if your IndieAuth server is <code>login.example.com</code> this file must go at <code>example.com/.well-known/web-identity</code>. (See [https://github.com/w3c-fedid/idp-registration/issues/9 idp-registration issue #9] for a possible DNS alternative.)
 
 The well-known file must be served with the <code>application/json</code> content type. The content of the file is a JSON object with the full URL to the IdP's configURL.
 
@@ -46,7 +46,7 @@ The IdP config file contains links to other FedCM endpoints. This is a JSON docu
 The properties are as follows:
 
 * <code>accounts_endpoint</code> - The browser will make a request to this endpoint to determine if the user is logged in and fetch their photo/name to display in the widget
-* <code>client_metadata_endpoint</code> - This doesn't really make sense for the IndieAuth version of FedCM, but this normally would be how the IdP returns the client's terms of service and privacy policy URLs to the browser. See [https://github.com/fedidcg/FedCM/issues/581 issue 581] for an alternative that lets the client provide these URLs instead.
+* <code>client_metadata_endpoint</code> - This doesn't really make sense for the IndieAuth version of FedCM, but this normally would be how the IdP returns the client's terms of service and privacy policy URLs to the browser. See [https://github.com/w3c-fedid/idp-registration/issues/8 idp-registration issue #8] for an alternative that lets the client provide these URLs instead, as well as [https://datatracker.ietf.org/doc/draft-parecki-oauth-client-id-metadata-document/ OAuth Client Metadata Document] for the format of the client metadata document used in IndieAuth.
 * <code>id_assertion_endpoint</code> - This is the endpoint the browser gets a credential from after the user clicks log in. For IndieAuth, this will be where the IndieAuth server returns an authorization code to the browser.
 * <code>login_url</code> - If the user is not logged in, the browser will launch a popup window to this URL so the user can log in.
 
@@ -82,7 +82,7 @@ The IdP checks the Sec-Fetch-Dest header and validates the cookie to determine w
 }
 </pre>
 
-Note: The <code>email</code> value will be displayed in the account chooser in the browser. This does not have to actually be an email address though, so you can return the user's IndieAuth profile URL there instead. See [https://github.com/fedidcg/FedCM/issues/317 issue 317] to track a proposal to change this parameter.
+Note: The <code>email</code> value will be displayed in the account chooser in the browser. This does not have to actually be an email address though, so you can return the user's IndieAuth profile URL there instead. See [https://github.com/w3c-fedid/FedCM/issues/639 issue 639] for a proposal to use "display name" instead of email.
 
 If the user is not signed in, the IdP should return an <code>HTTP 401</code> response.
 
@@ -90,7 +90,7 @@ If the user is not signed in, the IdP should return an <code>HTTP 401</code> res
 
 The browser will request the client metadata from the IdP at this endpoint. This doesn't make sense for IndieAuth, since clients control their own metadata and the IdP may not even know about the client ahead of time.
 
-See [https://github.com/fedidcg/FedCM/issues/581 issue 581] for an alternative that lets the client provide these URLs instead. I don't think it makes sense to fully specify what this could look like for IndieAuth, since the issue will likely be resolved by allowing the client to provide the URLs.
+See [https://github.com/w3c-fedid/idp-registration/issues/8 idp-registration issue #8] for an alternative that lets the client provide these URLs instead. I don't think it makes sense to fully specify what this could look like for IndieAuth, since the issue will likely be resolved by allowing the client to provide the URLs.
 
 In the mean time, you'll need to return something here like the below:
 
@@ -108,7 +108,7 @@ This endpoint is what makes it all work. After the user clicks the browser "cont
 * <code>client_id</code> - The identifier of the client, which in the case of IndieAuth, is the [https://indieauth.spec.indieweb.org/#client-identifier client's URL], e.g. <code>https://webmention.io/</code>
 * <code>account_id</code> - The ID of the account the user selected from the accounts endpoint
 
-Note: in the future, the RP will probably be able to pass arbitrary parameters to this endpoint ([https://github.com/fedidcg/FedCM/issues/556 issue 556]). This will allow the RP to use PKCE to better secure the end-to-end flow. In the mean time, the RP can include a PKCE code_challenge in the <code>nonce</code> parameter. 
+Note: in the future, the RP will probably be able to pass arbitrary parameters to this endpoint ([https://github.com/w3c-fedid/custom-requests/issues/2 custom-requests issue #2]). This will allow the RP to use PKCE to better secure the end-to-end flow. In the mean time, the RP can include a PKCE code_challenge in the <code>nonce</code> parameter.
 
 This request will contain cookies, so the IdP will know if the user is logged in and which user is logged in. Other validation steps the IdP does at this stage include:
 
@@ -127,7 +127,7 @@ Access-Control-Allow-Credentials: true
 }
 </pre>
 
-The double JSON encoding is not great, since it also means the RP has to JSON-decode this. See [https://github.com/fedidcg/FedCM/issues/578 issue 578] to track progress on allowing the IdP to return JSON instead of a "token" string.
+The double JSON encoding is not great, since it also means the RP has to JSON-decode this. See [https://github.com/w3c-fedid/FedCM/issues/578 FedCM issue 578] to track progress on allowing the IdP to return JSON instead of a "token" string.
 
 Note: The <code>Access-Control-Allow-Origin</code> header must not contain a trailing slash. If you don't set the right CORS headers here, the browser will throw an error in the console.
 
@@ -163,11 +163,11 @@ If the IdP does not do this, the RP's call to FedCM will fail with the error "No
 
 The IdP cookies must be set to <code>SameSite=None</code>, HTTPOnly, and Secure. If these properties are not set, the browser will not send the cookies to the accounts or assertion endpoint, so it will always appear that the user is logged out.
 
-The <code>SameSite=None</code> requirement was added in [https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#samesite Chrome 125]. See [https://github.com/fedidcg/FedCM/issues/587 issue 587] to track a proposal to change this to something else.
+The <code>SameSite=None</code> requirement was added in [https://developers.google.com/privacy-sandbox/blog/fedcm-chrome-125-updates#samesite Chrome 125]. See [https://github.com/w3c-fedid/FedCM/issues/587 FedCM issue 587] to track a proposal to change this to something else.
 
 === IdP Registration ===
 
-The magic that makes this work for IndieAuth is the IdP Registration API. This is an experimental API that is only in Chrome Canary as of May 15, 2024, but will likely ship in Chrome behind a feature flag in June. See [https://github.com/fedidcg/FedCM/issues/240 issue 240] for background and the full history of this feature.
+The magic that makes this work for IndieAuth is the IdP Registration API. This is an experimental API that is in Chrome behind a feature flag. See [https://github.com/w3c-fedid/idp-registration/issues/2 idp-registration issue #2] for background and the full history of this feature.
 
 At some point, you need to get the user to click a button to register the IdP with the browser. Provide a button, and when clicked, call the <code>register</code> function, providing the full URL of the configURL:
 
