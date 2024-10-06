@@ -1,47 +1,43 @@
 https://indieweb.org/.well-known
 
-[[Category:Standard]]
 {{stub}}
 
 '''<dfn>[https://tools.ietf.org/html/rfc5785 .well-known]</dfn>''' is literally the path "/.well-known/" under a domain and used as a standardized (literally a "[[well-known]]") location for discovering domain-wide meta-data, and is generally avoided by IndieWeb-related specs, instead preferring [[follow your nose]] discovery techniques and methods.
 
 It has been codified by the IETF and IANA in [https://datatracker.ietf.org/doc/html/rfc5785 RFC5785] and registry of [https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml Well-Known URIs] respectively.
 
-== Relevant Uses ==
+== Current Uses ==
 * [[Let's Encrypt]] for proof of domain ownership
+* [[Thunderbird]] e-mail client autoconfiguration: [https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration], [https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration/FileFormat/HowTo]
+* [https://www.w3.org/TR/change-password-url/ W3C Working Draft: A Well-Known URL for Changing Passwords]
+=== Questionable Uses ===
+These should really be done via [[rel]] values instead:
+* [[Do Not Track]] policy: https://www.eff.org/de/deeplinks/2017/10/do-not-track-implementation-guide-launched
 * [[WebFinger]] for discovery of user data (e.g. used by [[Mastodon]])
+** there was a session at [[2023/SD|IWC SD 2023]] discussing how to use <code>rel</code> values instead
+
+=== Past Uses ===
+The following methods or utilizing technologies have been deprecated and/or obsoleted. Listed here for historical purposes only.
 * [[Dat]] for linking domains to lookup keys on the dat network
-* to specify a [[Do Not Track]] policy: https://www.eff.org/de/deeplinks/2017/10/do-not-track-implementation-guide-launched
-* Thunderbird e-mail client autoconfiguration: [https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration], [https://developer.mozilla.org/en-US/docs/Mozilla/Thunderbird/Autoconfiguration/FileFormat/HowTo]
-* [https://w3c.github.io/webappsec-change-password-url/ W3C Editor's Draft: A Well-Known URL for Changing Passwords]
 
-== Issues ==
-* Some web hosts restrict customer access to .well-known in shared plans, rendering it unusable for vast amounts of websites. Hosts known to not support full customer access to .well-known:
-** [https://stackoverflow.com/questions/71442532/how-can-i-get-my-hostinger-shared-hosting-server-to-execute-htaccess-file-in-hi hostinger]
-* Problem: community sites that are user-editable (e.g. via MediaWiki) could allow anyone to create a .well-known resource (like this wiki page!) or a subresource like [[.well-known/security.txt]]
-* Criticism: bad approach that is counter to the read-write web and adds extra [[admintax]] to all server maintainers: https://chat.indieweb.org/meta/2022-05-13/1652432145141300
-** "the point is .well-known is not the only way to do well-known URLs, so just blocking .well-known from being user-editable isn't enough, you have to go list out every possible well-known URL that might cause a problem if it's user-editable and block that too" [http://aaronparecki.com @aaronpk] May 13, 2022
-* Criticism: unnecessary domain-level assumption for use-cases that can by handled by resource-level discovery: it's almost always a web architecture error to design something for a domain (also includes root /noun.txt approaches) instead of designing for an arbitrary URL (HTML at some page).
-* Criticism: everyone's supposed to register their .well-known URIs with IANA but pretty much nobody does
-* Some uses of well-known require the file be served with a specific content-type, e.g. application/json, which means that is no longer just a static file, and might require editing the HTTP server config to set the header as well
+== Criticism ==
+A summary of why most uses of <code>/.well-known/</code> are a bad mistake.
+* unnecessary and poor reinvention: many proposed uses of <code>/.well-known/</code> are already handled by [https://microformats.org/wiki/existing-rel-values existing rel values], for far more use-cases and web hosting options
+* more complex to author — typically requires [[sidefile-antipattern|sidefiles]]
+* harder to publish — requires site admin root access
+* likely to become inaccurate — [https://intertwingly.net/slides/2004/devcon/68.html Ruby’s postulate]
+* fragile — site admins frequently break <code>/.well-known/</code> for individual pages/webapps inside.
+* security vulnerability for community sites — community sites that are user-editable (e.g. via MediaWiki) could allow anyone to create a <code>/.well-known/</code> resource
 
-=== How to test Apache/PHP web host support ===
+Most of this summary is from part of a longer post https://tantek.com/2024/105/t1/w3c-advisory-committee-meetings.
 
-Pieces of software like [[Bridgy Fed]] or [[Nextcloud]] usually either make use of Apache RewriteRules to serve content from .well-known. To check that this is possible on your web host, add the following to your root .htaccess file:
+Some of these expanded:
+=== Bad reinvention ===
+* Criticism: unnecessary domain-level assumption for use-cases that can by handled by resource-level discovery: it's almost always a web architecture error to design something for a domain (also includes broader [[well-known]] root file <code>/noun.txt</code> approaches) instead of designing for an arbitrary URL (HTML at some page) and using a <code>rel</code> attribute for discovery
 
-<pre><IfModule mod_rewrite.c>
-  RewriteRule
-  RewriteRule ^\.well-known/test /well-known-test-succeeded [R=302,L]
-</IfModule>
-</pre>
+Instead of forcing/squatting a specific path on web server admins, use link rel for discovery. 
 
-Then, visit <code>yourdomain.com/.well-known/test</code>. If you were redirected to <code>yourdomain.com/well-known-test-succeeded</code>, then your host supports .well-known rewrites. If not, it likely doesn’t — please add your host to the list above!
-
-== See Also ==
-
-* [[well-known]]
-* https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml
-* Alternative: instead of forcing/squatting a specific path on web server admins, use link rel for discovery. The W3C [[Social Web Working Group]] resolved on this methodology (also known as "follow your nose") years ago for all the approaches being considered, and subsequently all of the W3C Recommendations they produce used link rel discovery, without any need for ".well-known"
+The W3C [[Social Web Working Group]] resolved on this methodology (also known as "[[follow your nose]]") years ago for all the approaches being considered, and subsequently all of the W3C Recommendations they produce used link rel discovery, without any need for ".well-known"
 * {{ citation
 | title = .well-known/feeds
 | url = https://danq.me/2023/08/23/well-known-feeds/
@@ -57,4 +53,36 @@ Then, visit <code>yourdomain.com/.well-known/test</code>. If you were redirected
 | published = 2023-08-24
 | archiveurl = https://web.archive.org/web/20230827164716/https://colinwalker.blog/blog/?date=2023-08-24
 }}
+
+=== Harder to publish ===
+* Some web hosts restrict customer access to .well-known in shared plans, rendering it unusable for vast amounts of websites. Hosts known to not support full customer access to .well-known:
+** [https://stackoverflow.com/questions/71442532/how-can-i-get-my-hostinger-shared-hosting-server-to-execute-htaccess-file-in-hi hostinger]
+* Some uses of well-known require the file be served with a specific content-type, e.g. application/json, which means that is no longer just a static file, and might require editing the HTTP server config to set the header as well
+
+=== Unsuitable for community sites ===
+* Problem: community sites that are user-editable (e.g. via MediaWiki) could allow anyone to create a .well-known resource (like this wiki page!) or a subresource like [[.well-known/security.txt]]
+* Due to that vulnerability it’s a bad approach that is counter to the read-write web and adds extra [[admintax]] to all server maintainers: 
+** "the point is .well-known is not the only way to do well-known URLs, so just blocking .well-known from being user-editable isn't enough, you have to go list out every possible well-known URL that might cause a problem if it's user-editable and block that too" [http://aaronparecki.com @aaronpk] on [https://chat.indieweb.org/meta/2022-05-13/1652432145141300 May 13, 2022]
+
+=== In practice unregistered ===
+Everyone's supposed to register their .well-known URIs with IANA but pretty much nobody does
+* https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml
+
+=== Fragile due to corporate realities ===
 * Marketing vs ops: another reason it is bad to depend on .well-known in practice: <blockquote>often times the root domain of a website is run by the marketing team at a company and isn't "owned" by the ops team that is providing whatever service is being discovered</blockquote>
+
+== How to ==
+=== How to test Apache/PHP web host support ===
+Pieces of software like [[Bridgy Fed]] or [[Nextcloud]] usually either make use of Apache RewriteRules to serve content from .well-known. To check that this is possible on your web host, add the following to your root .htaccess file:
+
+<pre><IfModule mod_rewrite.c>
+  RewriteRule
+  RewriteRule ^\.well-known/test /well-known-test-succeeded [R=302,L]
+</IfModule>
+</pre>
+
+Then, visit <code>yourdomain.com/.well-known/test</code>. If you were redirected to <code>yourdomain.com/well-known-test-succeeded</code>, then your host supports .well-known rewrites. If not, it likely doesn’t — please add your host to the list above!
+
+== See Also ==
+* [[well-known]]
+* [[rel]]
