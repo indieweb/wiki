@@ -2,21 +2,25 @@ https://indieweb.org/OpenSearch
 
 {{stub}}
 
-__TOC__
-'''<dfn>[https://web.archive.org/web/20180421215752/http://www.opensearch.org/Home OpenSearch]</dfn>''' is a specification for search engine discovery and syndication of search results. According to [https://web.archive.org/web/20180421215752/http://www.opensearch.org/Home#Introduction OpenSearch's Introduction], "OpenSearch is a collection of simple formats for the sharing of search results."
+'''<dfn>[https://web.archive.org/web/20180421215752/http://www.opensearch.org/Home OpenSearch]</dfn>''' is a specification and web browser feature for publishing, discovering, and adding new search engines to browsers, supported by the IndieWeb community site and a few personal sites. 
 
-OpenSearch descriptions are specifically-formatted XML documents that site authors may link to from within an HTML page. OpenSearch-aware browsers may then allow users to take advantage of the site author's specified search engine.
+According to [https://web.archive.org/web/20180421215752/http://www.opensearch.org/Home#Introduction OpenSearch's Introduction], "OpenSearch is a collection of simple formats for the sharing of search results."
 
 == Why ==
+At a minimum you should add OpenSearch support to your personal site so you can install your personal site’s search feature into your browser's search options, to more quickly search your own site right from the browser’s address bar!
 
-Adding an OpenSearch specification to a search feature you own means people can query your search engine from their browser navigation bar if they would like. This provides a more convenient interface for search, both for yourself as well as visitors who want to find specific posts or explore your site's content on a particular query.
+Adding an OpenSearch specification to a search feature you own (like on your site or service) enables people to query your search engine from their browser address bar. This provides a more convenient interface for search, both for yourself as well as visitors who want to find specific posts or explore your site's content on a particular query.
 
-== How ==
+== How to ==
+OpenSearch descriptions are specifically-formatted XML documents that site authors may link to from within an HTML page. OpenSearch-aware browsers may then allow users to take advantage of the site author's specified search engine.
 
-To add OpenSearch to your site search engine, you must first prepare an OpenSearch manifest, like the one seen in the example below. Next, you must add a tag that makes the search specification discoverable. 
+=== How to add OpenSearch options to a browser ===
+See: https://jamesg.blog/2024/10/13/search-engine-shortcuts-firefox/
 
-=== Manifest Example ===
+=== How to add OpenSearch to your site ===
+To add OpenSearch to your site search engine, you must first prepare an OpenSearch manifest, like the one seen in the example below. Next, you must add a tag to your pages that browsers use to discover your search specification. 
 
+==== Manifest Example ====
 <pre><?xml version="1.0" encoding="utf-8"?>
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
   <ShortName>example.com</ShortName>
@@ -26,22 +30,29 @@ To add OpenSearch to your site search engine, you must first prepare an OpenSear
 
 The [https://web.archive.org/web/20190301114038/https://github.com/dewitt/opensearch/blob/master/opensearch-1-1-draft-6.md OpenSearch 1.1 Draft specification] fully details the required and optional elements that may be included in an OpenSearch description.
 
-=== Meta Tag Example ===
+==== Link Tag Example ====
+Browsers rely on a link tag to discover your OpenSearch manifest.
 
-Browsers rely on a meta tag or link to discover your OpenSearch manifest. Without the meta tag, browsers will not be able to find where you have saved your manifest.
-
-Here is an example of a meta tag that makes your OpenSearch file discoverable to browsers:
+Here is an example of a link tag that makes your OpenSearch file discoverable to browsers:
 
 <link rel="search" type="application/opensearchdescription+xml" title="IndieWeb Search" href="https://indieweb-search.jamesg.blog/search.xml">
 
 This example is taken from [[IndieWeb_Search]].
 
-You can use the title attribute to specify the name of your search. The rel=search attribute tells your browser that the resource to which you are linking relates to search.
+You can use the <code>title</code> attribute to specify the name of your search. The <code>rel=search</code> attribute tells your browser that the resource linked by the <code>href</code> attribute provides a search feature for the current page or site.
 
-== Implementations ==
+== IndieWeb Examples ==
+* {{cweiske}} provides an OpenSearch description on http://cweiske.de/, utilizing site search on his own search engine at http://search.cweiske.de.
+* {{jgarber}} provides an OpenSearch description on [https://sixtwothree.org sixtwothree.org] since 2016-02-15, delegating search to [https://duckduckgo.com DuckDuckGo].
 
-=== Browser UI Examples ===
+=== Previous Examples ===
+* [https://indieweb.org/IndieWeb_Search IndieWeb Search] provides an OpenSearch description on [https://indieweb-search.jamesg.blog its website]. This search description lets anyone browse IndieWeb Search directly from their browser navigation bar in supported browsers.
 
+== Browser Examples ==
+=== Firefox ===
+See: https://jamesg.blog/2024/10/13/search-engine-shortcuts-firefox/
+
+=== Chrome ===
 ==== Chromium 48 ====
 In the following example, a user has previously visited [http://cweiske.de cweiske.de] and Chromium recognizes its OpenSearch description, indicated by the following markup in the page's <code><head></code>:
 
@@ -59,15 +70,10 @@ Pressing return, the user initiates a search and is presented a search results p
 
 [[File:opensearch_chromium_results.png|500px]]
 
-=== IndieWeb Examples ===
-* {{cweiske}} provides an OpenSearch description on http://cweiske.de/, utilizing site search on his own search engine at http://search.cweiske.de.
-* {{jgarber}} provides an OpenSearch description on [https://sixtwothree.org sixtwothree.org] since 2016-02-15, delegating search to [https://duckduckgo.com DuckDuckGo].
-* [https://indieweb.org/IndieWeb_Search IndieWeb Search] provides an OpenSearch description on [https://indieweb-search.jamesg.blog its website]. This search description lets anyone browse IndieWeb Search directly from their browser navigation bar in supported browsers.
-
 == Articles ==
 Blog posts and articles about OpenSearch:
-* 2011-07-11 {{aaronpk}} <cite>[https://aaronparecki.com/2011/07/11/3/how-to-let-google-power-opensearch-on-your-website How to let Google power OpenSearch on your website]</cite>
+* 2024-10-13 {{capjamesg}}: [https://jamesg.blog/2024/10/13/search-engine-shortcuts-firefox/ Search engine shortcuts in Firefox]
+* 2011-07-11 {{aaronpk}}: <cite>[https://aaronparecki.com/2011/07/11/3/how-to-let-google-power-opensearch-on-your-website How to let Google power OpenSearch on your website]</cite>
 
 == See Also ==
 * [[search]]
-* ...
