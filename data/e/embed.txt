@@ -8,9 +8,8 @@ Related spec:
 * [[rel-embed]]
 
 == Why ==
-There are lots of reasons to embed content (transclude if you fancy yourself a fancy hypertexter) from another website into your posts. E.g. some common use-cases:
-
-* Embedding a [[tweet]] as a pull-quote or citation
+There are lots of reasons to embed content (transclude) from another website into your posts. E.g. some common use-cases:
+* Embedding a [[note]] (or a [[tweet]] or [[toot]]) as a pull-quote or citation
 * Add a CC-licensed image from Flickr to your post to illustrate a point
 * ...
 
@@ -30,11 +29,17 @@ WARNING:
 === How to publish embed URLs ===
 Publish URLs to embed versions of your permalinks at similar URLs, e.g. a canonical permalink suffixed with <samp>/embed</samp>.
 	
-On each postpermalink page:
-* provide a [[rel-embed]] link to its embed page.
+To enable <span id="rel_embed_discovery">rel embed discovery</span> on post permalink pages:
+* link from a post permalink to the embed thereof with <code>rel=embed</code> e.g.:
+** <code>&lt;link rel="embed" href="{permalink}/embed" /&gt;</code>
+** where {permalink} is the post permalink URL
 
 On each embed page:
 * put [[rel-canonical]] on the link back to the postpermalink, e.g. the linked published (or updated) datetime.
+
+=== How to discover embed URLs ===
+{{main|rel-embed}}
+Consuming code should look for a <code>rel</code> with <code>embed</code> value and use that to auto-discover the embedding URL to present as a UI to publishers etc.
 
 == IndieWeb Examples ==
 {{section-stub}}
@@ -94,14 +99,6 @@ When you embed a resource from a silo inside a post on your site, your are expos
 As of 2022-??? Twitter tweet embeds show awkward empty blocks when the tweet is deleted.
 
 == Brainstorming ==
-=== rel embed discovery ===
-Modest proposal for publishing:
-* link from a post permalink to the embed thereof with <code>rel=embed</code> e.g.:
-** <code>&lt;link rel="embed" href="{permalink}/embed" /&gt;</code>
-** where {permalink} is the post permalink URL
-
-Consuming code would look for a rel with <code>embed</code> value and use that to auto-discover the embedding URL to present as a UI to publishers etc.
-
 === HTML fragment embed markup ===
 What is the minimum necessary for the HTML at an embed URL?
 
