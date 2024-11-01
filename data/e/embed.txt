@@ -50,8 +50,8 @@ Sorted roughly by date implemented/published (write a blog post about it when yo
 === Benji ===
 {{benji}} -- Support by adding '''/embed''' to any post, since 2024-10-24. See https://www.benji.dog/notes/1729739188/ 
 
-=== Mike Kupietz ===
-{{kupietz}} -- Support by adding '''/embed''' or '''?embed''' to any post or page, since 2024-10-30. Renders content without any Wordpress template features (more accurately, renders it using a template that consists solely of a call to the '''the_content();''' function within the Wordpress loop.) Also implements '''?title''', '''?author''', and '''?tags''' URL parameters to optionally include post title, author, and/or tags in embed content. See https://michaelkupietz.com/?p=10887 (As an example, this page includes "The Infinity Iframe", an iframe embed of its own content. Don't follow it too far down or you may never return. Also: addresses some apache Content Security Header configuration concerns.)
+=== Kupietz ===
+{{kupietz}} -- Support by adding '''/embed''' or '''?embed''' to any post or page, since 2024-10-30. Renders content without any Wordpress template features (more accurately, renders it using a template that consists solely of a call to the '''the_content();''' function within the Wordpress loop.) Also implements '''?title''', '''?author''', and '''?tags''' URL parameters to optionally include post title, author, and/or tags in embed content. See https://michaelkupietz.com/?p=10887 (As an example, this page includes "The Infinity Iframe", an iframe embed of its own content. Don't follow it too far down or you may never return. Also: addresses some apache Content Security Header configuration concerns, also mentioned below in [[#Content_Security_Policy_Rule_Concerns_—_Mike_Kupietz|Brainstorming — Content Security Policy Rule Concerns]].)
 
 === Add yourself! ===
 {{addyourself}}
@@ -150,9 +150,32 @@ So, over lunch I took a few minutes to create a new profile picture and I change
 
 So remember boys and girls, publishing unfiltered user-generated content on your web site is always a dangerous prospect."</blockquote>
 
-==== Standards on including title/tags? by {{kupietz}}  ====
+=== Standards on including title/tags? by {{kupietz}}  ===
 
 Should there be a standard as to whether an embed includes or title (and maybe tags) in the embedded content, or just the content? Obviously, with something like embedding a tweet, title is irrelevant. But embedding a post, title and tags are relevant. Should there be a recommended standard? I'm thinking, for simplicity, we should say embeds are content only, and title and tags are metadata.  Wonder what others think though, whether this is even worth having a recommended standard on or not. UPDATE: Perhaps moot. I've implemented these, and author, as optional URL parameters.
+
+=== Content Security Policy Rule Concerns — {{kupietz}} ===
+
+I had some issues today that I thought were germane enough to the topic to be worth mentioning here. 
+
+After getting the stuff described higher up on the page implemented, I realized my CSP rules were blocking iframe embeds of the content I was specifically advertising as embeddable. I didn't want to open my whole site up to iframing, so I wanted to set up some rules in .htaccess to check the URL and allow '''frame-ancestors *''' ''only'' for urls ending in '''/embed/''' or containing an '''?embed''' parameter, the two ways I'd chosed to make the embed content accessible. Well, long story short: the obvious (simplest) way to do this was to replace my .htaccess file's original <code>Header set Content-Security-Policy "[all my original rules]; frame-ancestors 'self'" </code> line with:
+
+<pre>    
+<If "%{REQUEST_URI} =~ m#embed# || %{QUERY_STRING} =~ m#(?:^|&)embed(?:&|$|=)#">
+Header set Content-Security-Policy "[all my original rules]; frame-ancestors 'self' *"    
+</If>    
+<Else>    
+Header set Content-Security-Policy "[all my original rules]; frame-ancestors 'self'"    
+</Else>    
+</pre>    
+
+(I actually used <code>m#/embed/#</code> for the first regex but I'm trying to show the simplest-case example here.)
+
+Well, as it turns out, this is ''wrong, wrong, wrong'' because of an apparent bug in apache mentioned at https://processwire.com/talk/topic/23000-apache2-blocks-dont-work-with-regex-matches-against-the-request_uri-variable/ which says that <code><If></code> blocks don't work with <code>%{REQUEST_URI}</code> (actually, that page says regex comparisons don't work, but even direct string comparisons didn't work for me). 
+
+The fix was pretty simple: compare against <code>%{THE_REQUEST}</code> instead of <code>%{REQUEST_URI}</code>. The regex had to be slightly different as there's more characters in <code>%{THE_REQUEST}</code> after the URL, but it was trivial, I just used <code><If "%{THE_REQUEST} =~ m|/embed/?(?:[ ?#])| || %{QUERY_STRING} =~ m#(?:^|&)embed(?:&|$|=)#"></code> (Much appreciation to {{gRegor}} for spotting this, as well as {{lazcorp}} for putting some cogitation in as well.)
+
+Hopefully this will save someone in the future the five consarned hours I spent trying to figure out what in sam hill was going on with this thing today.
 
 == See Also ==
 * [[autoembed]]
