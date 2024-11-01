@@ -154,7 +154,7 @@ So remember boys and girls, publishing unfiltered user-generated content on your
 
 Should there be a standard as to whether an embed includes or title (and maybe tags) in the embedded content, or just the content? Obviously, with something like embedding a tweet, title is irrelevant. But embedding a post, title and tags are relevant. Should there be a recommended standard? I'm thinking, for simplicity, we should say embeds are content only, and title and tags are metadata.  Wonder what others think though, whether this is even worth having a recommended standard on or not. UPDATE: Perhaps moot. I've implemented these, and author, as optional URL parameters.
 
-=== Content Security Policy Rule Concerns — {{kupietz}} ===
+=== Content Security Policy Rule Concerns (Embedded Content site) — {{kupietz}} ===
 
 I had some issues today that I thought were germane enough to the topic to be worth mentioning here. 
 
@@ -176,6 +176,14 @@ Well, as it turns out, this is ''wrong, wrong, wrong'' because of an apparent bu
 The fix was pretty simple: compare against <code>%{THE_REQUEST}</code> instead of <code>%{REQUEST_URI}</code>. The regex had to be slightly different as there's more characters in <code>%{THE_REQUEST}</code> after the URL, but it was trivial, I just used <code><If "%{THE_REQUEST} =~ m|/embed/?(?:[ ?#])| || %{QUERY_STRING} =~ m#(?:^|&)embed(?:&|$|=)#"></code> (Much appreciation to {{gRegor}} for spotting this, as well as {{lazcorp}} for putting some cogitation in as well.)
 
 Hopefully this will save someone in the future the five consarned hours I spent trying to figure out what in sam hill was going on with this thing today.
+
+=== Content Security Policy Rule Concerns (Embedding Content site) — {{lazcorp}} ===
+
+After considering the above from {{kupietz}} it should also be noted that it's not just the embedded-content-owner's CSP rules that need opening up, but also those on the site that is embedding the content.
+
+For example, I have the frame-src directive restricted to just a handful of sites that I allow to embed content (archive.org, vimeo, and a few others).
+
+I'd either have to add new domains to the frame-src directive every time I wanted to embed a piece of content from a site I hadn't embedded content from before, or I'd have to drop any frame-src restrictions altogether, with all the security implications that come with that.
 
 == See Also ==
 * [[autoembed]]
