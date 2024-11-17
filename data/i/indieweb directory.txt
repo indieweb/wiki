@@ -2,7 +2,7 @@ https://indieweb.org/indieweb_directory
 
 {{stub}}
 
-An '''<dfn>indieweb directory</dfn>''' is a [[directory]] of indieweb sites.
+An '''<dfn>indieweb directory</dfn>''' is a [[directory]] of indieweb sites; there are a couple of examples, and there is a brainstorm for a simple canonical retro-designed indieweb directory.
 
 == IndieWeb Examples ==
 Examples of indieweb directories:
@@ -12,6 +12,39 @@ Examples of indieweb directories:
 
 === href.cool ===
 * [https://href.cool/ href.cool] is a directory inspired by the old, failed link collections like the original Yahoo! and DMOZ created by [https://kickscondor.com Kicks Condor]
+
+== Brainstorming ==
+=== IndieWeb.us ===
+{{aaronpk}} has IndieWeb.us and asked (2024-11-16) what to do with it.
+
+{{t}} suggested it could be a/the indieweb directory by the implied meaning of the name "IndieWeb dot Us", where "us" can be read as a group pronoun.
+
+Thoughts from {{t}} how it could work:
+* indieweb.us should be the directory. Have to sign-in with IndieAuth to add yourself and it automatically puts you/your site in hashtag pages according to the hashtags/p-category that of all your recent posts on your home page, that are in 2+ posts
+* because you have to sign-in with IndieAuth to add your site, it's 100% opt-in
+* would make a great "simple" demo for IndieAuth where just signing in does something. no complex UI needed, no need to enter an email address or other extra identity workflow nonsense
+* bet it would motivate a bunch of IndieAuth setups
+* just so people show up in the directory
+* a directory of indieweb sites is probably one of the most ask for things by new people in #indieweb chat
+* and something that's 100% automatic after you sign-in would be kinda amazing, and demonstrate what all the building blocks enable
+* so literally it's 1. sign-in == opt-in 2. there is no step 2
+* I wouldn't even call it sign-in. I'd call it "Add your website: [ https:/example.com ]"
+* and the trick is that to "refresh" the information about your domain, you would just "Add your site" again. so if they don't like the title, they can go fix it on their site, and the re-add it
+
+What about name+photo? — {{aaronpk}}
+* {{aaronpk}}:  most people won't have an h-card yet, so they would need to add one
+** {{t}}: right, absent that it would tell you and and prompt to redirect you to IndieWebifyMe to help you with your h-card
+** {{t}}: like it would pre-fill in the 'url' input here with your website: https://indiewebify.me/validate-h-card/
+** {{t}}: so in response to "what about name+photo" I would say unnecessary for v1, except to use the &lt;title&gt; of the page for link text of the domain in the directory
+* also IIRC the original Yahoo interface didn't have "name+photo", just site name, which you can get from the &lt;title&gt; of the home page
+
+In practice the &lt;title&gt; tag is pretty messy, so I would at least want to let people edit what was pulled from there — {{aaronpk}}
+* {{t}}: nah, let their mess be obvious. I bet in practice the typical *indieweb* site does not have a messy &lt;title&gt;
+* {{t}}: I think it's quite indieweb to encourage people to fix their site rather than gathering separate side-data about their site somewhere else (an alternative title)
+* {{t}}: also simplifies the data model of the directory — the only key piece of information it needs to keep is (1) the URL. and maybe (2) the date added (could be useful for other UI things like sorting etc., or "in directory since ..." features in the future. all other data (like the &lt;title&gt; of the home page) is merely "cached" e.g. the hashtags from 2+ posts on the home page h-entry posts etc. IMO that's the proper "indieweb" design — no side data, all "data" is retrieved/generated from the person's site
+
+How do we build this? (time?)
+* {{t}}: if we can break it into pieces, I can help with some front end bits. maybe even some back end functions to do things like: h-feed -> list of hashtags in 2+ posts in the h-feed. would be cool to build it as a set of re-usable components that could be useful for other projects
 
 == See Also ==
 * [[indie map]]
