@@ -5,6 +5,64 @@ https://indieweb.org/Foursquare
 
 '''<dfn>[http://foursquare.com Foursquare]</dfn>''' is a venue reviews, recommendations, and lists [[silo]] based on its previous location-based [[checkin]] support, a feature that was spunout to the separate [[Swarm]] application which still shares some data back & forth with Foursquare.
 
+== Why ==
+The only reason to create an account on Foursquare is to explore their UI and how they are shutting down the service.
+
+== Why not ==
+Foursquare is shutting down imminently (2024-12-15 for the app, early 2025 for the website), so you should not bother creating an account for actual feature usage.
+
+== How To ==
+=== How To Export ===
+Foursquare has feed files (e.g. .ics) and an API that can be used for <span id="Export">export</span>.
+
+==== data from City Guide ====
+The following are instructions [https://foursquare.com/city-guide-sunset/#accordion_v2-0825c858-5e57-4566-8cc9-86dd86731d88 from Foursquare itself] for how to “export your data through your Foursquare account on the web or within the City Guide app”:
+
+<blockquote>
+To export your data on the web: 
+
+1. Login to your Foursquare account at http://foursquare.com/login 
+
+2. Go to Settings by clicking your name in the upper right corner
+
+3. Click Privacy Settings
+
+4. Click Initiate Data Download Request
+
+5. Check for an email from noreply@legal.foursquare.com to verify the request was received
+
+6. Once your data is ready, you will receive another email with a link to download your data
+
+To help protect your privacy and maintain security, you must be able to login to your Foursquare account in order to export your data. If you are unable to login to your account, please follow the steps to reset your password. If you signed up for City Guide using an email address you no longer have access to, please contact your email service provider to recover your email account.
+</blockquote>
+
+After step 4, you should see a small rectangle that says: 
+<blockquote>We’ve received your data request and will send you an email with further information shortly.</blockquote>
+
+==== Feeds ====
+Foursquare used to provide feed files of all your checkins in multiple formats: RSS, KML, and ICS.
+* https://foursquare.com/feeds/ when logged in will show customized feed URLs that use special tokens for access (do not share them)
+* These feed links do not appear to work anymore as of 2022-07-14. They return a "404 not found" error for {{manton}}.
+** Foursquare states: "Please note: The Check-in Feeds functionality has existed for a while now, and we've gone through lots of changes over the years. These unique URLs may or may not still work for you and, unfortunately, we no longer provide support for this feature. YMMV!" {{jacky}} 2022-07-14
+
+==== Data export ====
+Under Settings → Privacy Settings, Foursquare has a button to "Export My Data". This used to send an email when an archive was available for your account that included all of your check-in history as JSON. The email appears to never be sent now, as of 2022-07-14.
+
+==== API ====
+# Set up a Foursquare Developer account at https://developer.foursquare.com/
+# Write your own script or use an existing one to extract all of your Foursquare data to your local file system. 
+#* [https://github.com/mko/mowens.com-public/blob/master/scripts/foursquare-to-file.js foursquare-to-file.js] by {{mko}}
+#** The script works by connecting to Foursquare, counting how many checkins you have to determine the total number of pages of data it needs to download, and then it makes periodic calls to the Foursquare API to download the files to your local machine or server, staying within the Foursquare rate limits. (links to foursquare-to-file.js broken as of 2023-09-10)
+#* [https://github.com/aaronpk/Swarm-Checkins-Import Swarm-Checkins-Import] by {{aaronpk}}
+# Convert your Foursquare API JSON files into h-entry files by writing a second script to construct meaningful HTML representations of the checkins. 
+#* [https://github.com/mko/mowens.com-public/blob/master/scripts/foursquare-file-to-hentry.js The script mko wrote] will handle most of the conversion from a Foursquare JSON object to a h-entry JSON object. Since he uses [[Indie.js]], the script has a decent amount of data relevant only to his purposes at this time, but it would not be difficult to convert the script into a generic converter if needed.
+#* [https://github.com/aaronpk/Swarm-Checkins-Import this script by aaronpk] makes Micropub requests to publish your past checkins to your website
+
+Examples:
+* {{mko}} has exported all his Foursquare checkins, and has also <blockquote> imported all of my posted photos, likes, and comments, though the likes and comments haven't been converted into IndieWeb mentions yet.</blockquote>
+* {{aaronpk}} exported all his checkins from before [[OwnYourSwarm]] had been automatically importing them since 2016
+* {{manton}} has exported most of his checkins using [[OwnYourSwarm]] and [[Micro.blog]]'s import feature to his blog https://manton.coffee/.
+
 == Features ==
 * [[review]] posts (known as "Tips")
 * [[list]]s of venues, either as recommendations or reminders
@@ -37,55 +95,6 @@ With notification text:
 === Limitations ===
 * Checkin notes have a length limitation of 200 characters. 
 * Only up to four photos can be added to a checkin
-
-== How To ==
-=== How To Export ===
-Foursquare has feed files (e.g. .ics) and an API that can be used for <span id="Export">export</span>.
-
-==== data from City Guide ====
-The following are instructions [https://foursquare.com/city-guide-sunset/#accordion_v2-0825c858-5e57-4566-8cc9-86dd86731d88 from Foursquare itself] for how to “export your data through your Foursquare account on the web or within the City Guide app”:
-
-<blockquote>
-To export your data on the web: 
-
-1. Login to your Foursquare account at http://foursquare.com/login 
-
-2. Go to Settings by clicking your name in the upper right corner
-
-3. Click Privacy Settings
-
-4. Click Initiate Data Download Request
-
-5. Check for an email from noreply@legal.foursquare.com to verify the request was received
-
-6. Once your data is ready, you will receive another email with a link to download your data
-
-To help protect your privacy and maintain security, you must be able to login to your Foursquare account in order to export your data. If you are unable to login to your account, please follow the steps to reset your password. If you signed up for City Guide using an email address you no longer have access to, please contact your email service provider to recover your email account.
-</blockquote>
-
-==== Feeds ====
-Foursquare used to provide feed files of all your checkins in multiple formats: RSS, KML, and ICS.
-* https://foursquare.com/feeds/ when logged in will show customized feed URLs that use special tokens for access (do not share them)
-* These feed links do not appear to work anymore as of 2022-07-14. They return a "404 not found" error for {{manton}}.
-** Foursquare states: "Please note: The Check-in Feeds functionality has existed for a while now, and we've gone through lots of changes over the years. These unique URLs may or may not still work for you and, unfortunately, we no longer provide support for this feature. YMMV!" {{jacky}} 2022-07-14
-
-==== Data export ====
-Under Settings → Privacy Settings, Foursquare has a button to "Export My Data". This used to send an email when an archive was available for your account that included all of your check-in history as JSON. The email appears to never be sent now, as of 2022-07-14.
-
-==== API ====
-# Set up a Foursquare Developer account at https://developer.foursquare.com/
-# Write your own script or use an existing one to extract all of your Foursquare data to your local file system. 
-#* [https://github.com/mko/mowens.com-public/blob/master/scripts/foursquare-to-file.js foursquare-to-file.js] by {{mko}}
-#** The script works by connecting to Foursquare, counting how many checkins you have to determine the total number of pages of data it needs to download, and then it makes periodic calls to the Foursquare API to download the files to your local machine or server, staying within the Foursquare rate limits. (links to foursquare-to-file.js broken as of 2023-09-10)
-#* [https://github.com/aaronpk/Swarm-Checkins-Import Swarm-Checkins-Import] by {{aaronpk}}
-# Convert your Foursquare API JSON files into h-entry files by writing a second script to construct meaningful HTML representations of the checkins. 
-#* [https://github.com/mko/mowens.com-public/blob/master/scripts/foursquare-file-to-hentry.js The script mko wrote] will handle most of the conversion from a Foursquare JSON object to a h-entry JSON object. Since he uses [[Indie.js]], the script has a decent amount of data relevant only to his purposes at this time, but it would not be difficult to convert the script into a generic converter if needed.
-#* [https://github.com/aaronpk/Swarm-Checkins-Import this script by aaronpk] makes Micropub requests to publish your past checkins to your website
-
-Examples:
-* {{mko}} has exported all his Foursquare checkins, and has also <blockquote> imported all of my posted photos, likes, and comments, though the likes and comments haven't been converted into IndieWeb mentions yet.</blockquote>
-* {{aaronpk}} exported all his checkins from before [[OwnYourSwarm]] had been automatically importing them since 2016
-* {{manton}} has exported most of his checkins using [[OwnYourSwarm]] and [[Micro.blog]]'s import feature to his blog https://manton.coffee/.
 
 == POSSE ==
 === Ben Werdmuller ===
