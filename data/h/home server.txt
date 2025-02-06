@@ -91,6 +91,37 @@ If you're purchasing a single-board computer, it may be well worth considering f
 
 You can use a [[personal cloud]] to make it easier to administrate your server.
 
+=== Routing ===
+
+Most ISPs block external traffic from entering your home network (for very good security reasons!). You will likely need some kind of configuration to allow the external traffic to reach your home server.
+
+==== Port Forward ====
+
+The cheapest option (though may not be supported by all ISPs) is to configure your router with a [[port forward]]
+
+==== Gateway or Load Balancer ====
+
+An externally hosted [https://en.wikipedia.org/wiki/Gateway_(telecommunications) gateway] or [https://en.wikipedia.org/wiki/Network_load_balancing load balancer] can receive traffic and redirect it to your home server. This can have additional advantages such as firewall, hiding your residential address, and caching content to reduce load. This may still require you to setup [[port forward]]ing so that the gateway or load balancer can reach your home server.
+
+==== Tunnelling ====
+Another possible approach is to use tunnelling, e.g. [https://www.cloudflare.com/products/tunnel/ Cloudflare Tunnel], to expose a self-hosted server to the public web without exposing your residential IP.
+
+(Note: Cloudflare Tunnel apparently doesn't work for wildcard domains, but could be used for individual services, e.g. if you wished to setup a subdomain for locally hosted dynamic content like [[webmention]]s, [[micropub]] etc., while keeping the apex domain hosted on static hosting.)
+
+==== Secondary Server ====
+
+If you have issues with your ISP or security another option is to have a secondary server hosted outside of your home. The way this works is that the secondary server can broadcast the services that it provides, storing any requests for those services, then the home server can reach out to fulfill the requests.
+
+The main advantage of this is that it does not need any router configuration.
+
+For example, self-hosting [https://quickbooks.intuit.com/ca/enterprise/ QuickBooks Enterprise] requires this approach (see their [https://developer.intuit.com/app/developer/qbdesktop/docs/get-started developer API] for more information).
+
+==== VPN ====
+
+If you are only serving yourself, you can also use a VPN for external access to your home server. This may also work for a gateway or secondary server to securely redirect requests into your network.
+
+The main advantage of this is that it does not need any router configuration. The main disadvantage is that it can expose the rest of your network to anyone who is able to log into the VPN.
+
 === Hosting services on a dynamic IP ===
 
 If your ISP does not provide you with static IP addresses (sometimes a paying option), you will need to use a dynamic DNS provider to update in real-time the IP addresses your [[personal-domain|personal domain]] points to.
@@ -128,11 +159,6 @@ To get the domain & dns entry ID and obtain cliend id & keys:
 * generate access key & client ID at [https://cloud.digitalocean.com/api_access]
 * to read the json entry and get the domain id go to [https://api.digitalocean.com/v1/domains?client_id=(client_ID)&api_key=(api_key)]
 * to get the entry id, go to https://api.digitalocean.com/v1/domains/(domain_id)/records?client_id=(client_ID)&api_key=(api_key)]
-
-==== Tunnelling ====
-Another possible approach is to use tunnelling, e.g. [https://www.cloudflare.com/products/tunnel/ Cloudflare Tunnel], to expose a self-hosted server to the public web without exposing your residential IP.
-
-(Note: Cloudflare Tunnel apparently doesn't work for wildcard domains, but could be used for individual services, e.g. if you wished to setup a subdomain for locally hosted dynamic content like [[webmention]]s, [[micropub]] etc., while keeping the apex domain hosted on static hosting.)
 
 == See Also ==
 
