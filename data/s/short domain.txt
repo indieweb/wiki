@@ -1,3 +1,136 @@
 https://indieweb.org/short_domain
 
-#redirect:[[short-domains]]
+'''<dfn>short domains</dfn>''' are commonly used on the IndieWeb for personal short URLs, or clever domain names. 
+
+This page documents the short domains used by IndieWeb community members.
+
+For analysis of particular short domain reliability/dependability, see: [[ccTLD]].
+
+For more information about specific top-level-domains, see [[top-level_domain#Domains]]
+
+== Why personal short URLs ==
+=== Shortlinks on slides ===
+Presentations or slide decks have two big use-cases for short links:
+* citations or credit to text, quotations, or images on slides
+* easy to read link to the slides themselves at end of presentation
+
+Both of these benefit from providing a short link, made shorter with a short domain, that has fewer characters, making it easier to remember and type.
+
+Shorter URLs can be shown in larger type on a slide and are thus easier to see in photos.
+
+=== Backlinks from syndication ===
+A key part of owning your own content that you publish first yourself and syndicate elsewhere ([[POSSE]]) is providing [[backlink]]s ([[permalinks]]) to the originals from syndicated copies on social [[silos]]. 
+
+Some silos have post length limits (e.g. [[Foursquare]] [[checkin]] notes are limited to 200 characters). Better to provide short URLs ([[permashortlinks]]) instead so you can syndicate more of your content.
+
+Just like your content, your short URL shouldn't be sharecropped, thus you need your own personal short URL domain rather than using bitly or some other vulnerable shortlink service.
+
+=== Permashortcitations ===
+[[permashortcitation|Permashortcitations]] are permashortids in the form of a classical parenthetical summary citation.
+
+Short domains enable constructing of permashortcitations of the form:
+* <samp>(example.me t1234)</samp>
+
+This is particularly useful for providing less distracting citations. E.g. [[Twitter]] does not auto-link standalone|ccTLD]] short-domains, thus making it possible to embed unlinked permashortcitations at the end of your [[notes]] which fit completely (including said permashortcitations) within Twitter's character limit.
+
+See also: [[Twitter#POSSE entire note to twitter|POSSE entire note to Twitter]]
+
+=== Original post discovery ===
+Both permashortlinks and permashortcitations themselves enable [[original-post-discovery]], for others to easily automatically find your original posts on your site purely from your syndicated tweet copies. Such automatic discovery in turn enables more indieweb-friendly reply-to behavior, whereby an indieweb user can write a post "[[in-reply-to]]" a tweet for example, and have their blogging system automatically post a [[rel-in-reply-to]] link to the original post instead (while still threading the POSSE'd copies together on Twitter).
+
+=== Entry length limitations ===
+Many systems either place absolute length limits on the text that can be entered into a field such a comment box, or have practical limits, that when exceeded lead to fragility, both of which provide incentive for shorter URLs, to allow more space for readable text.
+
+Absolute length limitations:
+* 200 characters: '''[[Foursquare]] / Swarm''' [[checkin]] "shouts" or "comments"
+* 160 characters: '''<span id="Email IM SMS print">[[SMS]]</span>'''
+* ...
+(Previously: '''[[Twitter]]''' has a 280 character length limit, but URLs posted to Twitter are https t.co'd and thus count for exactly 23 characters for http(s) URLs no matter what the actual number of characters in the URL)
+
+Practical length limitations:
+* 70 characters: '''email''' - some systems wrap at 70 characters, thereby forceably truncating what of a link is auto-linked in a client, thus hyperlinking to a URL other than what the author wrote.
+
+=== Easier to use ===
+Short URLs also enable, and/or better encourage additional URL sharing scenarios where you are unable to either click the URL, or even copy and paste the URL, and instead have to type it in by hand or speak it out loud:
+* '''print''' - see http://tantek.com/w/ShortURLPrintExample
+* '''[[Instagram]]''' - URLs in comments are *unlinked*, and in the "Native" iOS app, unselectable too! Thus if you see a URL in an Instagram comment, you have to explicitly type it into a browser (somewhere).
+* '''other typing use-cases''' and examples
+** 2015-10-25 {{kylewm}} <blockquote>[https://twitter.com/kylewmahan/status/658415734859497472 value of short a URL: I frequently use http://pin13.net  instead of MY OWN https://kylewm.com/services/mf2  bc it's easier to type #indieweb]</blockquote>
+** 2019-07-22 {{tonz}} I use my short URL https://tzyl.eu (and a similar one for my company) to add an easy to remember URL on presentation slides for people to download them. I set it up beforehand, and upload the slide deck after the presentation (it oftenchanges last minute) to the url where it redirects to.
+* '''handwriting''' — making it easier (or even possible) to write down quickly, perhaps even on a transiently-persistent medium like your own hand: https://twitter.com/bengoodger/status/1465727443486994441
+** "There was a little article tucked in the back about JavaScript with a link to a site that would explain this new language. I wrote the URL on my hand and hurried back to the car. /14" [https://twitter.com/bengoodger @bengoodger] November 30, 2021
+* '''QR codes''' — the shorter the link, the fewer dots (lower resolution) necessary to create a QR code for the link, the simpler the QR code. Simpler QR codes (fewer pixels necessary) are easier to process at longer distances, or at smaller sizes.
+* '''Spoken''' - If your name is hard to spell, and you use your name as your domain, it helps to have a short URL that is easier to spell that redirects to your main domain. For example, "aaronpk.com" redirects to "aaronparecki.com" [https://chat.indieweb.org/2024-02-11#t1707617090932400]
+
+=== Additional Why Short URLs ===
+For more on this, see: [http://tantek.com/w/Whistle#whyshortURLs why short URLs and why do you need your own].
+
+== IndieWeb Examples ==
+
+=== aaron.pk ===
+
+Short URLs at aaron.pk send a 302 redirect to a route at aaronparecki.com which expands it to the full post URL. This way there is no server-side code required on aaron.pk other than a web server that can send redirects.
+
+Example:
+
+<pre>http://aaron.pk/4W8a
+-> http://aaronparecki.com/r/4W8a
+-> http://aaronparecki.com/2014/05/18/1/
+-> http://aaronparecki.com/2014/05/18/1/imessage
+</pre>
+
+=== aaronpk.com ===
+
+{{aaronpk}} runs Polr on aaronpk.com since [https://aaronparecki.com/2019/05/13/43/shorturl 2019-05-13], which provides the ability to create custom [[shortlinks]] to any URL. Any link on aaronpk.com that does not exist in that project's database is forwarded to aaronparecki.com.
+
+=== jmb.so ===
+
+The root domain jmb.so simply redirects to jonnybarnes.uk. The only type of short URL set up so far is for notes. The URL scheme for notes used on jonnybarnes.uk is very simple. They take the form jonnybarnes.uk/note/{id} where {id} is a [[NewBase60]] encoding of a decimal number. The associated short URL is jmb.so/t/{id}.
+
+=== cted.us ===
+
+Redirects to colintedford.com, which uses the [https://wordpress.org/plugins/custom-shortlink-structure/ Custom Shortlink Structure plugin] for [[WordPress].
+
+=== di5.us ===
+
+Redirects to david.shanske.com with a shortener.
+
+=== mmg.re ===
+
+{{martymcguire}} redirects requests to the short domain mmg.re to his site at martymcgui.re via an [[algorithmic]] scheme described on the [[permashortlink#Marty_McGuire|permashortlink page]].
+
+=== jvt.me ===
+
+{{jamietanna}} uses jvt.me as his primary domain, rather than jamietanna.co.uk, which he also owns. He's written about it a little more at [https://www.jvt.me/posts/2019/05/26/why-wwwjvtme/ Why www.jvt.me?]
+
+=== c8o.link ===
+
+{{aciccarello}} uses a short domain for short URLs since 2024-02-11. The goal was to make it easier for people to access his main domain, which is hard for many people to spell and to separate short links from his main website.
+
+=== bm.gy ===
+
+{{balintm}} uses their static site generator to output a simple .htaccess file that takes care of short URL redirects.
+
+=== ... ===
+
+add notes on your own implementation here.
+
+== Criticisms ==
+
+* I’m indifferent about short URLs. it’s rare that I’ve felt I really need one, and for me the value doesn’t outweigh the pain of maintaining/paying for another domain, hosting, writing more code --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 14:05, 3 September 2013 (PDT)
+* 2014-11-07 Feedly shuts down its short URL service http://blog.feedly.com/2014/10/28/feedly-url-shortener-retired/
+* if someone have a short domain – why not just use it as a main one, and rewrite url-scheme to always be "short urls"? -- {{dym cx}} 05:15, 26 April 2016 (PDT)
+* 我也不觉的超短域名有什么好，短域名本身的含义就不明显，除了节省几个字符外，我觉得还是不用为好。象我的 eureka.name eeblog.net 和 eeurl.com 这样的域名，难道还要另外准备短域名？我觉得没必要了。
+** English translation: I don’t think there is anything good about ultra-short domain names. The meaning of short domain names is not obvious. Apart from saving a few characters, I think it’s better not to use them. For domain names like my eureka.name eeblog.net and eeurl.com, should I prepare short domain names separately? I don't think it is necessary anymore
+
+== See Also ==
+* [[ccTLD]]
+* [[Getting Started]]
+* [[domain name registrar]]
+* [[personal-domains]]
+* [[top-level-domain]]
+* [[DNS]]
+* [[hosting]]
+* how to get a really short domain: https://twitter.com/edent/status/1294629107188273153
+** "For those who are curious, and don't want to read my whole blog, here's the domain and how it works.<br><br>https://Ⅷ.ﬁ/<br><br>Twitter doesn't make that clickable, but you can copy and paste it into your browser and it take you to my site.<br><br>So, here's the science bit..." [https://shkspr.mobi/blog/ @edent] August 15, 2020
+* ^ blog post about: [https://shkspr.mobi/blog/2020/08/buying-a-single-character-domain-and-3-character-fqdn-for-15/ Buying a single character domain – and 3 character FQDN – for £15]
