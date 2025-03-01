@@ -113,9 +113,13 @@ Redirects to david.shanske.com with a shortener.
 
 {{balintm}} uses their static site generator to output a simple .htaccess file that takes care of short URL redirects.
 
-=== ... ===
+=== qc.wtf ===
 
-add notes on your own implementation here.
+{{qubyte}} uses this short domain for some short links out to profiles on various other sites, and also for short links to each blog post.
+
+The https://qubyte.codes static site generator produces a file full of redirect rules. The path of each blog post is hashed, and the first 8 hex characters used in its short link.
+
+Each time the static site builder runs, it compares the previous short links file with the new one. If they're different, it calls a build hook for the https://qc.wtf builder. That builder [https://github.com/qubyte/shortlinks/blob/main/make-redirects.sh uses curl] to grab the short links file from https://qubyte.codes/shortlinks.txt, and then uses it as redirect rules.
 
 == Criticisms ==
 
