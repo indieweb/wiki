@@ -4,18 +4,37 @@ https://indieweb.org/Spano
 
 '''<dfn>Spano</dfn>''' is a [[micropub media endpoint]] which accepts file uploads via [[Micropub]] and returns a URL for use in a subsequent Micropub post. It is created by [[User:Martymcgui.re|Marty McGuire]].
 
-Spano is built on the Python [[Flask]] framework and makes use of {{ kylewm }}'s [https://github.com/kylewm/flask-micropub flask-micropub] library for handling [[IndieAuth]] and finding Micropub endpoints.
+Spano makes use of [[content addressing]] so that repeated uploads of the same file do not take extra space and always returns the same URL. Additionally, revisions of files with the same name cannot overwrite one another.
 
-Spano makes use of [[content addressing]] via [https://flask-hashfs.readthedocs.io/en/latest/ Flask-HashFS] so that repeated uploads of the same file do not take extra space and always returns the same url. Additionally, revisions of files with the same name cannot overwrite one another.
+== "Editions" ==
+
+There are two editions of Spano.
+
+=== SpanoPHP (2025 PHP edition) ===
+
+An updated PHP version of Spano, named SpanoPHP was released in 2025. [https://git.schmarty.net/schmarty/spano-php SpanoPHP source code].
+
+SpanoPHP uses
+
+* an included [https://git.schmarty.net/schmarty/spano-php/src/branch/main/lib/IndieAuth/RelyingParty/Token <code>IndieAuth/RelyingParty</code>] library for handling [[IndieAuth]]
+* an included (simplified) hashing file store inspired by Python HashFS
+* [https://docs.guzzlephp.org Guzzle] to support both (token verification requests for IndieAuth, uploaded file streaming for the file store)
+
+=== Spano (original Python Flask edition) ===
+
+The original version of Spano (2017) is built on the Python [[Flask]] framework and makes use of {{ kylewm }}'s [https://github.com/kylewm/flask-micropub flask-micropub] library for handling [[IndieAuth]] and finding Micropub endpoints.
+
+Content addressing is handled via [https://flask-hashfs.readthedocs.io/en/latest/ Flask-HashFS].
 
 == IndieWeb Examples ==
 
 People using Spano to post to their website:
 
-* {{ martymcguire }} since 2017-01-26
+* {{ martymcguire }} since 2017-01-26. SpanoPHP since 2025-03-08.
 * ...
 
 == See Also ==
 
-* [https://martymcgui.re/2017/01/26/122700/ Spano public announcement]
+* https://git.schmarty.net/schmarty/spano-php
+* [https://martymcgui.re/2017/01/26/122700/ Original 2017 Spano public announcement]
 * https://github.com/martymcguire/spano
