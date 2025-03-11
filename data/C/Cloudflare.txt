@@ -72,7 +72,17 @@ Example code:
 === Unwanted email protected in content ===
 If you see "(@[email protected])" in your web page content or especially when federated (e.g. via [[BridgyFed]]), this is likely due to Cloudflare's Scrape Shield email address detection and obfuscation feature being overzealous (perhaps too broad of a regex) and seeing the [[@-@]] fedi-address as an email address. 
 
-The solution is to turn off Scrape Shield in your Cloudflare dashboard for your site: https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/
+2025-069 Example:
+
+[[File:2025-007-email-protected-injection.png]]
+
+A [https://tantek.com/2025/069/t1/ten-years-jsdr-javascript-required-didnt-read post] from {{t}} when first federated, and [https://front-end.social/@tantek.com@tantek.com/114142107187050494 displayed on front-end.social].
+
+The "(@[email protected])" should read "(@heydon@front-end.social)"
+
+The solution is:
+# Turn off Scrape Shield in your Cloudflare dashboard for your site: https://developers.cloudflare.com/waf/tools/scrape-shield/email-address-obfuscation/
+# Then refederate (e.g. send another webmention to Bridgy Fed)
 
 == Downtime ==
 === 2022-10-25 ===
