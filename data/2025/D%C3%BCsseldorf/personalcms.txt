@@ -1,0 +1,92 @@
+https://indieweb.org/2025/D%C3%BCsseldorf/personalcms
+
+'''<dfn>Personal website management</dfn> was a discussion session at [[2025/Düsseldorf|IndieWebCamp Düsseldorf 2025]].
+
+Archived from: https://etherpad.indieweb.org/personalcms
+
+== Participants ==
+* {{jakob}}
+* {{jkphl}}
+* {{daniel}}
+* {{t}}
+* {{gwg}}
+* ... add names
+
+== Notes ==
+Joschi: 
+* I like using an ASCIIdoc workflow because Markdown doesn't have the features I want.
+* Biggest challenge: maintaining systems, plugins, libraries
+* really picky about the markup that is created. I want it lean, accessible. I want control of the markup, and I don't trust any system that claims to be accessible.
+* I only work on it at IndieWebCamps, like twice a year
+
+Daniel:
+* can have hosting challenges
+* not a fan of a database
+* like flat files like what Kirby does
+* at one point I decided to not use a database
+
+Challenges with upgrading Kirby to keep up with PHP versions, then can have breaking changes
+
+Tantek:
+* I still have to depend on PHP 7.x, would like to fix problems in my PHP to work on PHP 8.
+
+Christian:
+* For the last upgrade I did to an old PHP code, I was consulting ChatGPT and it worked 
+
+Joschi:
+* lowest level is the content
+* being able to just write the content in a way you can read it
+* started with Markdown but switched to ASCIIdoc
+* first layer on top would be a file system on top to organize your content (text files)
+* next layer is to put a webserver to serve the files
+* next layer is to transform it to HTML, then add CSS to make it pretty, then add interactivity
+* longevity, not relying on databases. databases breaks longevity. introduces technology to your content that makes your content dependent on technology. if the technology becomes outdated, then it breaks your content.
+
+Gunnar showing how he does it by sharing his screen:
+* on gunnarbittersmann.de he writes plain HTML, no CMS at all
+* on bittermann.de/startrek he uses JSON+Ld files as data sources: https://bittersmann.de/startrek/series/snw.jsonld
+* The JSON+Ld files are public so that anyone can do what they wnat with it.
+* The then built a frontend via a PHP layer
+* Schepp rembers a project where JSON was delivered with HTML mime type and had a script tag in the JOSN structure that gets picked up by the browser's parser and makes it transform it into a full HTML page
+* Tantek never had an attempt at storing his content in JSON as he uses to forget the syntax and when he is revisiting JSON he has a hard time decoding it
+* Someone points at the possibility of using XML instead of JSON. Tantek finds this to be even more complicated.
+* Gunnar also leaves the metadata in his rendered output
+* Joschi prefers markdown or Asciidocs more as ** the way you store the data is closer to the way you present the data
+
+Tantek is presenting his way of doing things, sharing the screen:
+* in his old blog he did (static) flat files, one per month, and links would point to those files with anchor links
+* He added a lot of structure to it to be able to very granularly link to content inside it
+* He also played with swapping out the stylesheet for a new one for each one of the flat files (or even new edits of it), while keeping the HTML structure consistent - basically a CSS Zen Garden approach
+* Tantek finds static files to be a good start and also documenting the way one takes over the course of time
+* For his current blog, Tantek stores data in HTML, enriched with microformats, e.g. https://tantek.com/2025/1.html
+* For his notes, though, he just embeds them as a kind of plaint text markdown/YAML-esk snippet inside that HTML. He has a transformation system, that picks them up and converts them based on certain conventions into something richer based on class names.
+* The reason for going for such a mix is that he didn't want to have to write everything down in HTML
+* Gunnar see a lot of resemblance with markdown, to which Tantek agrees, but his "dialect" is without markdown's bad parts (from his personal view)
+* As technology he uses self-rolled PHP but that keeps him from just editing and publishing from his smartphone
+
+Summary of this session is that HTML is a great format for longevity and it's also a very versatile data source format. 
+
+<pre style="white-space:pre-wrap;">
+<pre style="white-space:pre-wrap; font-family:inherit">
+Here is a plain text note.
+
+Here is a really long line.... Here is a really long line....Here is a really long line....Here is a really long line....Here is a really long line....Here is a really long line....Here is a really long line....Here is a really long line....Here is a really long line....
+
+Line breaks will work.
+
+    So will leading spaces! Or multiple spaces: "        "
+
+</ pre>
+</pre>
+
+Schepp adds that the rather new Custom Highlight API (https://developer.mozilla.org/en-US/docs/Web/API/CSS_Custom_Highlight_API) could also be used to prettify such <nowiki><pre></nowiki> wrapped code.  
+
+
+* ... add notes
+
+----
+
+Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
+
+[[Category: IndieWebCamp Düsseldorf 2025]]
+[[Category: Sessions ]]
