@@ -36,10 +36,44 @@ ISBN numbers began use in 1970. Numbers assigned after 2007-01-01 are 13 digits 
 ISBN-13 numbers are comprised of 5 groups of digits each typically separated by a dash. They indicate, respectively from left to right: Bookland Country Code, Group, Publisher, the specific title, and a check digit.
 
 == Sessions ==
-Previous IndieWebCamp related sessions:
+Previous IndieWebCamp related sessions, most recent first:
 
+* [[2025/D%C3%BCsseldorf/moviesbooks]]
 * [[2022/Pop-ups/Personal_Libraries#Book_identifiers]]
 
+== Brainstorming ==
+=== Regex to detect ISBN usage plain text ===
+{{t}} here is regex to detect the explicit usage of ISBN numbers, intended as ISBN numbers, in plain text.
+* <code>\b(ISBN-10(\s?:\s?|\s)|ISBN-13(\s?:\s?|\s)(978|979)|(ISBN|isbn)(\s?:\s?|\s)(978|979)?)(\s|-)?(\d(\s|-)?){9}(\d|X)\b</code>
+
+This detects the following prefixes in plain text and looks for a 10 or 13 digit ISBN number with an optional space (' ') or dash (' ') character between each digit:
+* ISBN/isbn
+* ISBN-10
+* ISBN-13
+After that prefix, an optional " ", or a ":" with optional spaces on either side (or both sides) of the colon. Then a 10 or 13 digit series of digits (last can be an X) if the length is unspecified, or explicitly 10 or 13 digits if the prefix explicitly specifies the length, again with an optional space or dash character between each digit.
+
+Goal is to add this to my [[autolinker]] so my plain text posts that mention an ISBN explicitly are then automatically hyperlinked to an [[Open Library]] URL about that book.
+
+This regex is deliberately picky in some parts (only allowing 10 or 13 digits, especially if the prefix says so), and flexible in others (space and or ':' prefix separator, any pair of digits can be separated by a ' ' or a ':') based on looking at over a decade of email across lists etc where people mention ISBNs.
+
+One prefix variant that I saw in email that I explicitly decided to NOT support was:
+* <samp>ISBN-No.:</samp>
+because the <samp>No.</samp> is redundant like "Machine" in "ATM Machine" and should deliberately not work to motivate the user to correct their redundancy error.
+
+Other resources used:
+* [[Wikipedia:ISBN]]
+* [https://www.oreilly.com/library/view/regular-expressions-cookbook/9780596802837/ch04s13.html O’Reilly Regular Expressions Cookbook section 4.13 Validate ISBNs]
+
+Example test strings tested with above regex and https://regexr.com/ (from [[regex]]):
+* ISBN 99921-58-10-7 ...
+* ISBN 0-943396-04-2 ...
+* ISBN 978-0-596-52068-7, ISBN-13: 978-0-596-52068-7, ISBN-10 0-596-52068-9 ...
+* ISBN 0-596-52068-9 ...
+* ISBN 978-0-596-52068-7 ...
+* ISBN 978-3-901906-33-6 ...
+* ISBN : 978-1-5386-6894-8 ...
+* ISBN 1-4050-0020-1 ...
+* isbn:9781484704219, isbn:978-148-4-70421-9 ...
 
 == See Also ==
 * [https://en.wikipedia.org/wiki/International_Standard_Book_Number Wikipedia article on ISBN]
