@@ -11,32 +11,44 @@ https://indieweb.org/sanitize
 * ... who does what when they receive comments via [[webmention]] or [[Bridgy]] ?
 
 == Software Examples ==
-* [[Idno]]/[[Known]] currently aggressively strips tags.
-** Details? All HTML tags?
-* [[Mastodon]] does [https://docs.joinmastodon.org/spec/activitypub/#sanitization HTML sanitization], with very minimal HTML allowlists of:
-** elements: <code>a, br, p, span</code>
-** class names ([[mf2]] or other semantics): <code>h-*, p-*, u-*, dt-*, e-*, mention, hashtag, ellipsis, invisible</code>
-** and [https://github.com/mastodon/mastodon/pull/23913 soon]:
-*** elements: <code>del, pre, blockquote, code, b, strong, u, i, em, ul, ol, li</code>
-*** transforms: <code>h1</code>-<code>h6</code> tags to <code><nowiki><p><strong>contents</strong></p></nowiki></code>
-* [[WordPress]] has a [http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ small allowlist of tags]: 
-** <code>a, abbr, acronym, b, blockquote, cite, code, pre, del, em, i, q, strike, strong</code>. 
-** It also has allowlists of attributes within those tags.
-* [[Pleroma]] [https://docs-develop.pleroma.social/frontend/user_guide/posting_reading_basic_functions/#rich-text optionally lets users author] in [[Markdown]], [[BBCode]], or raw HTML. They don't document an explicit list of allowed HTML tags though.
-* [[Friendica]] [https://wiki.friendi.ca/docs/bbcode lets users author in] [[BBCode]], but doesn't document an explicit list of allowed HTML tags either.
+=== Known ===
+[[Idno]]/[[Known]] currently aggressively strips tags.
+* Details needed!
+* All HTML tags? Which HTML tags? Which does it allow
+
+=== Mastodon ===
+[[Mastodon]] does [https://docs.joinmastodon.org/spec/activitypub/#sanitization HTML sanitization], with very minimal HTML allowlists of:
+* elements: <code>a, br, p, span</code>
+* class names ([[mf2]] or other semantics): <code>h-*, p-*, u-*, dt-*, e-*, mention, hashtag, ellipsis, invisible</code>
+* and [https://github.com/mastodon/mastodon/pull/23913 soon]:
+** elements: <code>del, pre, blockquote, code, b, strong, u, i, em, ul, ol, li</code>
+** transforms: <code>h1</code>-<code>h6</code> tags to <code><nowiki><p><strong>contents</strong></p></nowiki></code>
+=== WordPress ===
+[[WordPress]] has a [http://wpbtips.wordpress.com/2010/05/23/html-allowed-in-comments-2/ small allowlist of tags]: 
+* <code>a, abbr, acronym, b, blockquote, cite, code, pre, del, em, i, q, strike, strong</code>. 
+* It also has allowlists of attributes within those tags.
+=== Pleroma ===
+[[Pleroma]] [https://docs-develop.pleroma.social/frontend/user_guide/posting_reading_basic_functions/#rich-text optionally lets users author] in [[Markdown]], [[BBCode]], or raw HTML. They don't document an explicit list of allowed HTML tags though.
+=== Friendica ===
+[[Friendica]] [https://wiki.friendi.ca/docs/bbcode lets users author in] [[BBCode]], but doesn't document an explicit list of allowed HTML tags either.
 
 == Service Examples ==
-* [[micro.blog]] has a list of [https://help.micro.blog/t/timeline-display-rules/29#allowed-html-tags-1 Allowed HTML tags] and their attributes:
-** elements: <code>a, audio, b, blockquote, br, code, div, em, i, img, li, ol, p, pre, source, span, strong, ul, video</code>
-** attributes on each:
-*** a: <code>href, title, class</code>
-*** span: <code>style, class</code>
-*** img: <code>src, style, class, width, height, alt</code>
-*** audio: <code>src, controls</code>
-*** video: <code>src, controls, width, height, preload, poster, alt, playsinline, style, class</code>
-*** source: <code>src, type</code>
-** <code>style</code> attribute allowed properties:
-*** <code>width, height, max-width, max-height, min-width, min-height, border</code>
+=== Flickr ===
+[[Flickr]] permits user entry of a few tags so that users may add explicit hyperlinks, and some amount of text formatting to their comments.
+* Which tags are allowed?
+
+=== micro.blog ===
+[[micro.blog]] has a list of [https://help.micro.blog/t/timeline-display-rules/29#allowed-html-tags-1 Allowed HTML tags] and their attributes:
+* elements: <code>a, audio, b, blockquote, br, code, div, em, i, img, li, ol, p, pre, source, span, strong, ul, video</code>
+* attributes on each:
+** a: <code>href, title, class</code>
+** span: <code>style, class</code>
+** img: <code>src, style, class, width, height, alt</code>
+** audio: <code>src, controls</code>
+** video: <code>src, controls, width, height, preload, poster, alt, playsinline, style, class</code>
+** source: <code>src, type</code>
+* <code>style</code> attribute allowed properties:
+** <code>width, height, max-width, max-height, min-width, min-height, border</code>
 
 == Approaches ==
 There are numerous approaches to sanitizing / filtering for HTML.
@@ -65,9 +77,6 @@ They expect to see that text in the comment.
 What you might see, due to perhaps overly aggressive sanitizing (e.g. a regex) that thinks it is removing HTML:
 
 <pre>if bc then you do not know whether b>c</pre>
-
-=== Some markup ===
-Other sites, e.g. [[Flickr]] permit user entry of a few tags so that users may add explicit hyperlinks, and some amount of text formatting to their comments.
 
 == See Also ==
 * [[comments]]
