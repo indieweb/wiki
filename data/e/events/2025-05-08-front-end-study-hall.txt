@@ -48,70 +48,97 @@ May 8, 2025
 * We would not have gotten <code>document.querySelectorAll()</code>; we got a whole lot of DOM tools from jQuery
 * Notes on how modern browser APIs do what jQuery used to: '''[https://github.com/you-dont-need-x/you-dont-need-jquery You Don't Need jQuery]
 
-== Changes made to web pages this week ==
-Michael text shadows removed - largest
-Pagespeed performance
-Largest contentful paint - PageSpeed
-Fancy 12-14 text-shadows
-Firefox - to play with the styles
+== Grab Bag of Topics ==
+=== Text Shadow Performance ===
+* {{kupietz}} removed multiple text shadows from home page
+** working on improving Google PageSpeed 
+** Largest contentful paint - PageSpeed
+** was: Fancy 12-14 text-shadows
+** Using Firefox - to toggle the styles to see results
 
-* Joe made a header with a picture element and multiple image ediutions rather than use a Png - 3 light, 3 dark based on user preference and min-width
-https://artlung.com/headers/-20250507
+=== PNG with Alpha vs light JPG / dark JPG ===
+* {{artlung}} Joe made [https://artlung.com/headers/-20250507 a header] with a <picture> element and multiple image editions to avoid a heavy PNG which could do alpha to support light and dark backgrounds - multiple jpeg images with black or white backgrounds were lighter.
 
-15 ye
+=== Pope Note 1 ===
+* Announced during meeting: '''Habemus papam! And he's American'''
 
+=== Joe Blogged about CSS Battle and FrESH ===
+* ''[https://artlung.com/blog/2025/05/06/110-css-battle/ 110 Hours of CSS Battle]''
+* ''[https://artlung.com/blog/2025/04/25/study-hall-reflections/ Study Hall Reflections]''
 
+=== Trek ===
+* Eric's background? ''Star Trek: TOS''
+* LCARS (from ''ST: TNG'') [https://www.thelcars.com thelcars]
+* Dan Hon has done some design with LCARS
+* Joe attended Dan Hon's Hallway Track ''[https://www.verylittlegravitas.com/hallwaytrack#:~:text=006%20Star%20Trek%20and%20Design 006 Star Trek and Design]'' in January 2024
+* In other venues, Mike will happily argue you into the ground that [https://michaelkupietz.com/writing/ideas-perspectives/reviews-cultural-reportage/picard-janeway-star-trek-fandom-fundamentals/ TNG is not Star Trek] 
 
-Habemus papam! And he's American
+=== List Item Icon Taking Too Much Memory? ===
+* Why are the icons used on the unordered list sometimes registering as taking lots of in-page memory?
+* Links page: https://vanderwal.net/links.php
+** Caching troubles?
+** Not sure if we're replicating the issue
+** icon ends up taking more memory? 
+** ''Later'', Joe took a stab redoing the icons as <code>conic-gradient()</code> https://codepen.io/artlung/pen/JooaJoK
 
-* In other venues, Mike will happily argue you into the ground that TNG is not Star Trek: https://michaelkupietz.com/writing/ideas-perspectives/reviews-cultural-reportage/picard-janeway-star-trek-fandom-fundamentals/
+=== Speaking of Popes, ''Typography!'' ===
 
+* [https://www.ncronline.org/opinion/guest-voices/typographers-react-pope-francis-botched-memorial Typographers react to Pope Francis' botched memorial] (Kerning mishap)
 
-Links page: https://vanderwal.net/links.php
-- icon ends up taking more memory? 
-
-* Kerning https://www.ncronline.org/opinion/guest-voices/typographers-react-pope-francis-botched-memorial
+=== Nuance with text-wrap: balance and non-English languages ===
 * https://ryelle.codes/2025/04/typography-troubles-balancing-in-japanese-korean/ nuance for Japanese and Korean text-balance
-
 * hyphenation breaks
-* text-wrap: balance vs pretty
+* <code>text-wrap: balance</code> vs <code>pretty</code>
 ** https://adactio.com/journal/21896 
 ** Something I’m reaching for now is the text-wrap property with its new values of pretty and balance:
+<pre>
 ul,ol,dl,dt,dd,p,figure,blockquote {
   hanging-punctuation: first last;
   text-wrap: pretty;
 }
-And maybe this for headings, if they’re being centred:
+/** And maybe this for headings, 
+  * if they’re being centred: */
 h1,h2,h3,h4,h5,h6 {
   text-align: center;
   text-wrap: balance;
 }
+</pre>
 * we need a better term for "widows and orphans" - words hanging after a headline
 
-This is Reilly: Wi-Fi is down, phone hotspot isn't fast enough to connect to Zoom audio
+''This is Reilly: Wi-Fi is down, phone hotspot isn't fast enough to connect to Zoom audio''
 
-* Joe has breaks on a tags on home page, text-wrap balance may help on a parent element helps
-* problem was pulled in html whioch included very long http links and would cause elements to be too wide
+* Joe has breaks on a <A> tags on home page to force long urls in-line from blowing out elements with a finite width
 
+<pre>
+main ul li:has(p) a {
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+</pre>
+** implemeted because pulled in html which included very long http links and would cause elements to be too wide
+** <code>text-wrap: balance</code> suggestion on a parent element ''(it works!)''
 
-* xhtml - anchors on anything
-* html5 - anchors can surround anything and be valid! Blame Eric M!
+=== On Linking every element, <a> around larger content ===
 
-* MichaelKupietz Page appearance - color modifiucations - color calculations in javascript, used jQuery
+* xhtml - allowed anchors on anything
+* html5 - anchors can surround anything and be valid!
+** Blame Eric M!
 
-* New pope chosen
+* MichaelKupietz showed off https://michaelkupietz.com Page appearance - color modifications - color calculations in javascript, used jQuery
 
-* ligature - font-variant-ligatures https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-ligatures
-* 
+* Michael also encountered problems with an uploaded html resume getting words wrong because of misinterpreted ligatures (maybe in OCR?)
+* maybe ligatures could be controlled with <code>font-variant-ligatures</code> https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-ligatures
 
+=== Reilly's goal: non JS hierarchical nav menu ===
 * Reilly's CSS only menu: https://reillyspitzfaden.com/
 
-TIL about https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-within
+* TIL about https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-within
 
-https://moderncss.dev/css-only-accessible-dropdown-navigation-menu/ 
+* https://moderncss.dev/css-only-accessible-dropdown-navigation-menu/ 
 ** https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/
 ** https://melsumner.github.io/details-as-a-menu 
 
+==== Joe wants to work on this ====
 * NAV MENU:
 ** WORK ON MOBILE
 ** TABS SHOULD WORK TO EXPOSE EVERY NAVIGABLE PART OF MENU
@@ -119,19 +146,21 @@ https://moderncss.dev/css-only-accessible-dropdown-navigation-menu/
 ** NO JAVASCRIPT
 ** ARROW KEYS (STRETCH GOAL)
 
-calc(infinity)
+
+=== <code>calc(infinity)</code>''! and beyond!'' ===
+* calc(infinity)
+* to set maximum z-index?
+* or to set a maximum text-indent or margin-left to push things off screen?
 
 * dropdown typeahead Kevin
-One place to look for thoughtful menu code would be https://projects.verou.me/awesomplete/
+* One place to look for thoughtful menu code would be https://projects.verou.me/awesomplete/
 
+=== Thanks for coming! ===
 Got to go now; thanks everyone
 
-----
-
-Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
 
 
 
-{{Homebrew Website Club}}
+{{Front End Study Hall}}
 
 [[Category:Events]]
