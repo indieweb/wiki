@@ -4,14 +4,13 @@ https://indieweb.org/obtaining-an-access-token
 
 Collecting notes here before moving them to the appropriate pages.
 
-⚠ Note: The details on this page do not seem to be up-to-date with the changes to the IndieAuth specification from 2020; see https://aaronparecki.com/2020/12/03/1/indieauth-2020 for a list of spec updates.
-
 ----
 
 OAuth 2.0 defines three roles: the '''[[#Authorization Endpoint|authorization endpoint]]''', the '''[[#Token Endpoint|token endpoint]]''', and the '''[[#Resource Server|resource server]]'''.
 
 In the context of the IndieWeb, the "resource server" will most likely be your website and your [[micropub]] endpoint.
 
+Note: The sequence diagram needs updating to show the indieauth server metadata discovery step.
 [[File:micropub-auth-flow.png|700px]]
 
 [[File:micropub-flow-diagram.png|600px]]
@@ -37,11 +36,12 @@ The app the user is signing in to is [[OwnYourGram]]:
 The user signing in is [[User:Aaronparecki.com|Aaron Parecki]]:
 * me = https://aaronparecki.com/
 
-In this example, Aaron has delegated authorization and token generation to separate external services:
-* authorization_endpoint = https://indieauth.com/auth
-* token_endpoint = https://tokens.indieauth.com/token
+In this example, Aaron has an IndieAuth server running as part of his website
+* indieauth-metadata = https://aaronparecki.com/indieauth-metadata
+* authorization_endpoint = https://aaronparecki.com/auth
+* token_endpoint = https://aaronparecki.com/auth/token
 
-Aaron's [[micropub]] endpoint is on his own domain:
+Aaron's [[micropub]] endpoint is also on his own domain:
 * Micropub Endpoint = https://aaronparecki.com/micropub
 
 == Web Sign-In Form ==
@@ -52,11 +52,35 @@ The app, ownyourgram.com, contains a web sign-in form prompting the user to ente
 
 == Discovery ==
 
-aaronparecki.com points to the three endpoints by specifying rel values on the index page.
+aaronparecki.com points to the two endpoints by specifying rel values on the index page.
 
-<pre>&lt;link rel="authorization_endpoint" href="https://indieauth.com/auth"&gt;
-&lt;link rel="token_endpoint" href="https://tokens.indieauth.com/token"&gt;
+<pre>&lt;link rel="indieauth-metadata" href="https://aaronparecki.com/indieauth-metadata"&gt;
 &lt;link rel="micropub" href="https://aaronparecki.com/micropub"&gt;</pre>
+
+== IndieAuth Metadata ==
+
+The <code>indieauth-metadata</code> URL hosts a JSON document with metadata about the IndieAuth server. This enables a user to delegate to an external IndieAuth server if they wish, where the IndieAuth server is responsible for serving the metadata.
+
+<pre>
+{
+  "issuer": "https://aaronparecki.com/",
+  "authorization_endpoint": "https://aaronparecki.com/auth",
+  "token_endpoint": "https://aaronparecki.com/auth/token",
+  "scopes_supported": [
+    "profile",
+    "email",
+    "create",
+    "draft",
+    "update",
+    "delete",
+    "media"
+  ],
+  "code_challenge_methods_supported": [
+    "S256"
+  ],
+  ...
+}
+</pre>
 
 == Authorization Endpoint ==
 The authorization endpoint is responsible for requesting authorization from the user and generating an '''authorization code'''. To start the sign-in flow, the client directs the user's browser to the authorization endpoint.
@@ -67,9 +91,11 @@ The authorization endpoint is responsible for requesting authorization from the 
 Values are shown without URL encoding for readability.
 
 <pre>
-https://indieauth.com/auth?me=https://aaronparecki.com/&
+https://aaronparecki.com/auth?me=https://aaronparecki.com/&
                            redirect_uri=https://ownyourgram.com/auth/callback&
                            client_id=https://ownyourgram.com&
+                           code_challenge=rtVk-LWF0KvE4U_H3TZv0SCjJbP9vQ6f-bM_LOWZ5BU&
+                           code_challenge_method=S256&
                            state=1234567890&
                            scope=create&
                            response_type=code
@@ -86,9 +112,9 @@ Location: https://ownyourgram.com/auth/callback?code=xxxxxxxx
 
 === Authorization ===
 The authorization server should present an interface describing the request being made. It must indicate:
-* The client_id making the request, which should be a valid URL
-** If [[h-product]] or [[h-x-app]] markup is found when fetching client_id, verify that any u-url/u-uid property given matches the client_id, and if so display the name and logo/photo properties of the app to ease identification. Note that the client_id MUST always be verified *and* displayed prominently to prevent identity spoofing
-** This is the URL of the actual application instance, not the generic product URL
+* The <code>client_id</code> making the request, which should be a valid URL
+** If [https://indieauth.spec.indieweb.org/#x4-2-client-information-discovery client metadata JSON] is found when fetching the client_id, verify the <code>client_id</code> in the JSON matches the given <code>client_id</code> in the request, and display the name and logo to the user.
+** For backwards compatibility, if an HTML page with [[h-app]] markup is found when fetching client_id, verify that any u-url/u-uid property given matches the client_id, and if so display the name and logo/photo properties of the app to ease identification. Note that the client_id MUST always be verified *and* displayed prominently to prevent identity spoofing
 * The requested [[scope]]
 ** May include an interface that allows the user to adjust the [[scope]] that will actually be granted
 
@@ -109,23 +135,14 @@ POST https://tokens.indieauth.com/token
 Content-type: application/x-www-form-urlencoded
 
 grant_type=authorization_code&
-me=https://aaronparecki.com/&
 code=xxxxxxxx&
+code_verifier=760057c08d5cc25ce10d153fc76f653b72cfb1c26b78028ace6f759a&
 redirect_uri=https://ownyourgram.com/auth/callback&
 client_id=https://ownyourgram.com
 </pre>
 
 ==== Response ====
-The token endpoint verifies the '''authorization code''' and issues an '''access token''' in response. The response format should be form-encoded or JSON depending on the HTTP Accept header.
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-
-access_token=XXXXXX&
-scope=create&
-me=https://aaronparecki.com/
-</pre>
+The token endpoint verifies the '''authorization code''', ensuring the SHA-256 hash of the provided <code>code_verifier</code> matches the <code>code_challenge</code> provided in the authorization request, and issues an '''access token''' in response. The response format should be a JSON OAuth token response.
 
 <pre>
 HTTP/1.1 200 OK
@@ -133,46 +150,12 @@ Content-Type: application/json
 
 {
   "access_token": "XXXXXX",
+  "token_type": "Bearer",
   "scope": "create",
   "me": "https://aaronparecki.com/"
 }
 </pre>
 
-(!) The form-encoded content type is only here for historical reasons. New code shall use JSON.
-
-=== Verifying the authorization code ===
-If your token endpoint and authorization endpoint are part of the same system, then the specific way the token endpoint verifies the authorization code is out of scope of this document. (e.g. if the token endpoint and authorization endpoint share a database, you can just look up the authorization code in the database.) If you are using separate token endpoint and authorization endpoint, then the below mechanism describes how the token endpoint can verify the authorization code since the code was generated not by the token endpoint.
-
-The token endpoint can query the authorization endpoint to verify the auth code given. To verify the auth code, the token endpoint makes a POST request to the authorization endpoint with the following values:
-
-<pre>
-POST https://indieauth.com/auth
-Content-type: application/x-www-form-urlencoded
-
-code=xxxxxxxx&
-redirect_uri=https://ownyourgram.com/auth/callback&
-client_id=https://ownyourgram.com
-</pre>
-
-After the authorization server verifies that the redirect_uri, client_id  match the code given, the response will include the "me" and "scope" values. The response should be form-encoded or JSON depending on the HTTP Accept header.
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/x-www-form-urlencoded
-
-me=https://aaronparecki.com/&
-scope=create
-</pre>
-
-<pre>
-HTTP/1.1 200 OK
-Content-Type: application/json
-
-{
-  "me": "https://aaronparecki.com/",
-  "scope": "create"
-}
-</pre>
 
 == Micropub Endpoint ==
 At this point, the client now has an access token that can be used on the user's Micropub endpoint. The Micropub endpoint will validate the access token and process the request. 
