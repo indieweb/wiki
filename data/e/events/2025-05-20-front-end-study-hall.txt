@@ -54,19 +54,27 @@ May 20, 2025
 * Having triples within RDF - relationhips in RDF are action, subject, 
 * XRD is more flexible - https://docs.oasis-open.org/xri/xrd/v1.0/xrd-1.0.html, https://equalsdrummond.name/2008/09/06/xri-in-a-nutshell/
 
-== Burning Questions ==
-* Editing things on a canvas?
+== Burning Questions 1 ==
+* From Jo Editing things on a canvas?
 * Form data is edited on an image
+* given a document with no server, and only client-side code, can a section of page or a canvas element update in real time?
 
-* James' code: https://gist.github.com/capjamesg/8e848debf2d89e5b5f910f7bb81f81b4
-* Claude example of drawing input text to a canvas: https://poe.com/chat/kr50o8zlvszldw1zsp
-* Taylor Swift example: https://gist.github.com/capjamesg/eee8640d41d5d9272f1052086c049346
+* yes, with event handlers to listen to form elements, and then update the target section:
 
-== Performance on iOS ==
-* JavaScript animation
+** James' code: https://gist.github.com/capjamesg/8e848debf2d89e5b5f910f7bb81f81b4
+** Claude example of drawing input text to a canvas: https://poe.com/chat/kr50o8zlvszldw1zsp
+** Taylor Swift example: https://gist.github.com/capjamesg/eee8640d41d5d9272f1052086c049346
+
+== Burning Questions 2: Performance on iOS ==
+* JavaScript animation which updates based on user input on a slider range element has terrible performance
 * Performance transform with keyframes
-* iOS 15 is slow, visual display
-* debouncee
+* iOS 15 is slow, visual display janky
+=== Answer ===
+* '''debounce!'''
+** a function that runs too frequently can be the cause of performance issues of this
+** [https://developer.mozilla.org/en-US/docs/Glossary/Debounce Debounce] on MDN
+** Some check to assure that if the function is running not to start another
+** time based programming with setTimeout or setInteval can be useful - to create an event loop that will do an action under certain conditions
 
 ==Joe's Green Lined Paper Demo==
 * https://codepen.io/artlung/pen/ZYYNJOx
