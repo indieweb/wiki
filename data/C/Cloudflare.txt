@@ -1,14 +1,14 @@
 https://indieweb.org/Cloudflare
 
-'''<dfn>CloudFlare</dfn>''' is service you may use as part of your personal site web hosting, in particular for [[DNS]] and a [[CDN]] that acts as a caching [[reverse proxy]] for traffic from the viewers of a website.
+'''<dfn>Cloudflare</dfn>''' is service you may use as part of your personal site web hosting, in particular for [[DNS]] and a [[CDN]] that acts as a caching [[reverse proxy]] for traffic from the viewers of a website.
 
 == Features ==
 * distributed [[DNS]] service
 * [[CDN]] that acts as a caching [[reverse proxy]] for traffic from the user to the website
-* [[HTTPS]] — The ability to use [[HTTPS]] is included in every plan and CloudFlare provides a "Universal SSL" feature in which they automatically create and manage an SSL certificate for their customer's domains. This is available in the free plan as well, making CloudFlare effectively a free certificate authority!
-** <span id="SSL_setups">SSL setup</span> details: Flexible SSL only encrypts the connection between the user and the CloudFlare proxy edge location, the traffic to the origin server is not encrypted! For static sites with mostly public content this should be fine, since the risk of an attack closer to the end user (e.g. ISP, untrusted WiFi hotspot) is more likely than an attack on the core infrastructure (IMHO).
-** Full SSL encrypts the connection between the user and the CloudFlare proxy edge location as well as between the edge location and the origin server. The origin server can use a self-signed certificate as well. It's not end-to-end encryption though, so you need to trust CloudFlare on this.
-* [[LLM]] training scraping blocking: CloudFlare can block [[LLM]] training scrapers on your behalf: 
+* [[HTTPS]] — The ability to use [[HTTPS]] is included in every plan and Cloudflare provides a "Universal SSL" feature in which they automatically create and manage an SSL certificate for their customer's domains. This is available in the free plan as well, making Cloudflare effectively a free certificate authority!
+** <span id="SSL_setups">SSL setup</span> details: Flexible SSL only encrypts the connection between the user and the Cloudflare proxy edge location, the traffic to the origin server is not encrypted! For static sites with mostly public content this should be fine, since the risk of an attack closer to the end user (e.g. ISP, untrusted WiFi hotspot) is more likely than an attack on the core infrastructure (IMHO).
+** Full SSL encrypts the connection between the user and the Cloudflare proxy edge location as well as between the edge location and the origin server. The origin server can use a self-signed certificate as well. It's not end-to-end encryption though, so you need to trust Cloudflare on this.
+* [[LLM]] training scraping blocking: Cloudflare can block [[LLM]] training scrapers on your behalf: 
 ** 2024-07-03 [https://blog.cloudflare.com/declaring-your-aindependence-block-ai-bots-scrapers-and-crawlers-with-a-single-click Declare your AIndependence: block AI bots, scrapers and crawlers with a single click]
 ** 2024-12-10 [https://blog.cloudflare.com/ai-audit-enforcing-robots-txt/ Robotcop: enforcing your robots.txt policies and stopping bots before they reach your website]
 
@@ -18,9 +18,9 @@ https://indieweb.org/Cloudflare
 == How to ==
 {{section-stub}}
 === <span id="Requirements_and_setup">How to setup</span> ===
-* To use CloudFlare, you need a domain and a registrar that allows you to change the DNS servers (NOT just DNS records).
-* You must either provide an IP address for your website (A record) or a hostname (CNAME record). CloudFlare also allows using CNAME for the [[naked domain|root domain]]!
-* For every A or CNAME record (e.g. different subdomains) you can specify to either use the CloudFlare proxy/CDN or not.
+* To use Cloudflare, you need a domain and a registrar that allows you to change the DNS servers (NOT just DNS records).
+* You must either provide an IP address for your website (A record) or a hostname (CNAME record). Cloudflare also allows using CNAME for the [[naked domain|root domain]]!
+* For every A or CNAME record (e.g. different subdomains) you can specify to either use the Cloudflare proxy/CDN or not.
 
 == IndieWeb Examples ==
 {{section-stub}}
@@ -32,20 +32,20 @@ There's a free basic plan available, with paid plans available for $20 (pro) or 
 
 == Possible issues and disadvantages ==
 
-* CloudFlare may block access to fight potential attackers, change the HTML source of your pages (e.g. add some custom code), minify or combine JS/CSS etc., either through services you request ("CloudFlare apps") or on their own because they decide it's required for better performance or security. Generally the less you pay the less control you have over how they "supercharge" your website. There's no visible CloudFlare branding on the site, but it's visible in the source and on the custom error pages they may show on your site.
-** In particular, CloudFlare shoves annoying CAPTCHAs right in the face of [[Tor]] users by default. You can [https://support.cloudflare.com/hc/en-us/articles/203306930 whitelist Tor traffic].
+* Cloudflare may block access to fight potential attackers, change the HTML source of your pages (e.g. add some custom code), minify or combine JS/CSS etc., either through services you request ("Cloudflare apps") or on their own because they decide it's required for better performance or security. Generally the less you pay the less control you have over how they "supercharge" your website. There's no visible Cloudflare branding on the site, but it's visible in the source and on the custom error pages they may show on your site.
+** In particular, Cloudflare shoves annoying CAPTCHAs right in the face of [[Tor]] users by default. You can [https://support.cloudflare.com/hc/en-us/articles/203306930 whitelist Tor traffic].
 * This mechanism also blocks VPNs and other unusual/potentially malicious source IPs, which can interfere with wanted crawlers as well (e.g. [http://www.tedunangst.com/flak/post/cloudflare-and-rss fetching feeds], verifying [[Webmention|Webmentions]])
 ** Webmention services like Brid.gy and Webmention.app will return 503 error when "Bot Fight Mode" (free) and/or "Super Bot Fight Mode" (pro) are turned-on. It is not possible to use Firewall rules to bypass these features (frequently requested in Cloudflare forums). The only workaround is to turn these off completely.
 * Universal SSL works with SNI only.
-* If you use your domain for [[email]], you may no longer be able to use email services provides by your registrar and CloudFlare does not provide any email services, so you have to provide MX records for your own or a hosted mail service.
-* A lot of global traffic passes through CloudFlare, which means the Internet is becoming more centralized.
-* According to [https://www.cloudflare.com/terms/ CloudFlare Terms of Service], "copies of [abuse complaints] may be provided to the CloudFlare user, the user’s hosting provider, posted on CloudFlare’s website, and/or provided to third party services such as ChillingEffects.org". Which already [http://www.idigitaltimes.com/wtf-cloudflare-sending-personal-data-abuse-reporters-8chan-owner-fredrick-brennan-407414 resulted in people being targeted for reporting abuse].
+* If you use your domain for [[email]], you may no longer be able to use email services provides by your registrar and Cloudflare does not provide any email services, so you have to provide MX records for your own or a hosted mail service.
+* A lot of global traffic passes through Cloudflare, which means the Internet is becoming more centralized.
+* According to [https://www.cloudflare.com/terms/ Cloudflare Terms of Service], "copies of [abuse complaints] may be provided to the Cloudflare user, the user’s hosting provider, posted on Cloudflare’s website, and/or provided to third party services such as ChillingEffects.org". Which already [http://www.idigitaltimes.com/wtf-cloudflare-sending-personal-data-abuse-reporters-8chan-owner-fredrick-brennan-407414 resulted in people being targeted for reporting abuse].
 
 === avoiding captcha pages with Python ===
 
 Cloudflare seems to be looking for "real" browser request headers and the ability to store session cookies. If this doesn't happen, it'll show a HTTP 403 page with a captcha challenge.
 
-In order to avoid this, the [https://2.python-requests.org/en/master/ requests] Python module has a functionality called Session. By sending a dummy request, the Session object will store the session cookie, and each consecutive request will use this session cookie, thus behaving "properly" in the eyes of CloudFlare. 
+In order to avoid this, the [https://2.python-requests.org/en/master/ requests] Python module has a functionality called Session. By sending a dummy request, the Session object will store the session cookie, and each consecutive request will use this session cookie, thus behaving "properly" in the eyes of Cloudflare. 
 
 Example code:
 
