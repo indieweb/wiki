@@ -1,43 +1,10 @@
 https://indieweb.org/Apache_httpd
 
-{{stub}}
+<html>
+<head><title>401 Authorization Required</title></head>
+<body>
+<center><h1>401 Authorization Required</h1></center>
+<hr><center>nginx/1.24.0</center>
+</body>
+</html>
 
-'''<dfn>Apache</dfn>''' HTTP Server Project is widely deployed open source web server software from the Apache Software Foundation. With Linux, MySQL and PHP it makes up the [[LAMP]] stack.
-
-== HTTP 406 Not Acceptable Error ==
-
-In some cases, Apache returns HTTP 406 when fetched from a client that does not include <code>*/*</code> in the Accept header. This is due to a common misconfiguration where PHP is enabled by using the <code>AddType</code> declaration instead of a proper solution.
-
-* https://stackoverflow.com/a/24598848/712641
-* https://stackoverflow.com/a/41793472/712641
-
-This error surfaced when [[XRay]] was unable to fetch posts on adactio.com because XRay does not include <code>*/*</code> in its Accept header. The fix was to remove the <code>AddType</code> declaration and include the below instead.
-
-<pre><Files "*.php">
-    MultiviewsMatch Any
-</Files></pre>
-
-
-== Permissions ==
-
-Summary (from [http://serverfault.com/questions/357108/what-are-the-best-linux-permissions-to-use-for-my-website serverfault thread]):
-
-* Apache usually runs as the www-data, which will at the very least need read access to files
-* “Application” files (e.g. *.php) don’t need execute permissions as they’re not directly executed by the web server, they only need read permissions
-* Your user should own the files
-* The www-data user should own the group, which should have read and execute (why execute?) permissions
-* Any files or folders which will be changed by apache need to have write (+w) permissions for the group owner
-* Run <code>umask XXX</code> to set the default permissions for newly created files. <code>umask 007</code> sets permissions to read+write for owner and group, no permissions for others, which is a sensible default
-
-[https://en.wikipedia.org/wiki/File_system_permissions#Notation_of_traditional_Unix_permissions wikipedia] has a clear explanation of the unix permissions shorthand.
-
-== See Also ==
-* [[deployment]]
-* [[lighttpd]]
-* [[nginx]]
-* [[OpenLiteSpeed]]
-* [[mod_security]]
-* Tuning/optimiziation guide: https://github.com/ptudor/betterhttpd
-* Criticism: name has a bad history of cultural appropriation:  https://blog.nativesintech.org/apache-appropriation/
-
-{{Open Source}}
