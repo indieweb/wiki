@@ -1,10 +1,175 @@
 https://indieweb.org/events/2025-05-08-front-end-study-hall
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+[[Category:Front end]]
+'''<dfn>[https://events.indieweb.org/2025/05/front-end-study-hall-027-6d0myV73Q7BB Front End Study Hall #027]</dfn>''' was an IndieWeb meetup on Zoom held on 2025-05-08.
 
+* Archived from: https://etherpad.indieweb.org/2025-05-08-front-end-study-hall
+
+= Front End Study Hall #027 =
+May 8, 2025
+
+== Participants ==
+* {{artlung}} https://artlung.com/
+* Eric M
+* {{vanderwal}} https://vanderwal.net
+* {{kevinmarks}}
+* {{jeremycherfas}}
+* {{gRegor}}
+* {{capjamesg}}
+* {{kupietz}}
+* {{reillypascal}}
+* Emily N
+* Mike
+
+== Joe's Zoom Background Today ==
+*  '''[https://web.archive.org/web/20060209035517/http://jquery.com:80/ jQuery website], 2006'''
+** Developed by John Resig, launched with a website, blog, mailing list, and plugin architecture
+** jQuery made writing JavaScript more accessible to amatuer programmers
+** Used CSS selectors as a means to choose and manipulate items on a page
+** Still very popular library deployed on the web 19 years later. Still in active development [https://jquery.com/ jquery.com]
+** Influenced CSS development and improvements; and CSS development influenced jQuery's development (here's [https://lists.w3.org/Archives/Public/www-style//2008Oct/0065.html discussion of CSS selector implementation on www-style mailing list, 2008].
+** Introduced a fluent "chained" programming style
+*** Example code: 
+
+<pre>$("p.surprise").addClass("ohmy").show("slow");
+</pre>
+
+*** In vanilla JS today:
+<pre>document.querySelectorAll('p.surprise')
+ .forEach(function(element) {
+  element.classList.add('ohmy');
+  element.style.display = 'block';
+  element.style.opacity = '1';
+});</pre>
+* {{artlung}} posits that we have <code>:has()</code> today because it was implemented in jQuery
+* Eric M: <code>:has()</code> date back to the late 1990s, ''although'' the first widespread implementation of <code>:has()</code> may have been in jQuery
+* Browsers got better, more efficiently
+* "Someone had to do it natively and performantly" (adblocker company hired ogalia to implement has ad proved it could work to the other browser makers)
+* We would not have gotten <code>document.querySelectorAll()</code>; we got a whole lot of DOM tools from jQuery
+* Notes on how modern browser APIs do what jQuery used to: '''[https://github.com/you-dont-need-x/you-dont-need-jquery You Don't Need jQuery]
+* ''See also'' [[jQuery]]
+
+== Grab Bag of Topics ==
+=== Text Shadow Performance ===
+* {{kupietz}} removed multiple text shadows from home page
+** working on improving Google PageSpeed 
+** Largest contentful paint - PageSpeed
+** was: Fancy 12-14 text-shadows
+** Using Firefox - to toggle the styles to see results
+
+=== PNG with Alpha vs light JPG / dark JPG ===
+* {{artlung}} Joe made [https://artlung.com/headers/-20250507 a header] with a <picture> element and multiple image editions to avoid a heavy PNG which could do alpha to support light and dark backgrounds - multiple jpeg images with black or white backgrounds were lighter.
+
+=== Color Modifications ===
+* [https://webkit.org/blog/16900/p3-and-alpha-color-pickers/ Webkit is shipping] <code><input type=color alpha></code>
+* Will also store color using the native color space ''(not reset to srgb)''
+* {{kupietz}} has a tool to play with his colors on hit site
+* does not use oklch, but does use JavaScript and jQuery:
+** [[File:michaelkupietz-visual-settings-tool.jpg]]
+
+=== Pope Note 1 ===
+* Announced during meeting: '''Habemus papam! And he's American'''
+
+=== Joe Blogged about CSS Battle and FrESH ===
+* ''[https://artlung.com/blog/2025/05/06/110-css-battle/ 110 Hours of CSS Battle]''
+* ''[https://artlung.com/blog/2025/04/25/study-hall-reflections/ Study Hall Reflections]''
+
+=== Trek ===
+* Eric's background? ''Star Trek: TOS''
+* LCARS (from ''ST: TNG'') [https://www.thelcars.com thelcars]
+* Dan Hon has done some design with LCARS
+* Joe attended Dan Hon's Hallway Track ''[https://www.verylittlegravitas.com/hallwaytrack#:~:text=006%20Star%20Trek%20and%20Design 006 Star Trek and Design]'' in January 2024
+* In other venues, Mike will happily argue you into the ground that [https://michaelkupietz.com/writing/ideas-perspectives/reviews-cultural-reportage/picard-janeway-star-trek-fandom-fundamentals/ TNG is not Star Trek] 
+
+=== List Item Icon Taking Too Much Memory? ===
+* Why are the icons used on the unordered list sometimes registering as taking lots of in-page memory?
+* Links page: https://vanderwal.net/links.php
+** Caching troubles?
+** Not sure if we're replicating the issue
+** icon ends up taking more memory? 
+** ''Later'', Joe took a stab redoing the icons as <code>conic-gradient()</code> https://codepen.io/artlung/pen/JooaJoK
+
+=== Speaking of Popes, ''Typography!'' ===
+
+* [https://www.ncronline.org/opinion/guest-voices/typographers-react-pope-francis-botched-memorial Typographers react to Pope Francis' botched memorial] (Kerning mishap)
+
+=== Nuance with text-wrap: balance and non-English languages ===
+* https://ryelle.codes/2025/04/typography-troubles-balancing-in-japanese-korean/ nuance for Japanese and Korean text-balance
+* hyphenation breaks
+* <code>text-wrap: balance</code> vs <code>pretty</code>
+** https://adactio.com/journal/21896 
+** Something I’m reaching for now is the text-wrap property with its new values of pretty and balance:
+<pre>
+ul,ol,dl,dt,dd,p,figure,blockquote {
+  hanging-punctuation: first last;
+  text-wrap: pretty;
+}
+/** And maybe this for headings, 
+  * if they’re being centred: */
+h1,h2,h3,h4,h5,h6 {
+  text-align: center;
+  text-wrap: balance;
+}
+</pre>
+* we need a better term for "widows and orphans" - words hanging after a headline
+
+''This is Reilly: Wi-Fi is down, phone hotspot isn't fast enough to connect to Zoom audio''
+
+* Joe has breaks on a <A> tags on home page to force long urls in-line from blowing out elements with a finite width
+
+<pre>
+main ul li:has(p) a {
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+</pre>
+** implemeted because pulled in html which included very long http links and would cause elements to be too wide
+** <code>text-wrap: balance</code> suggestion on a parent element ''(it works!)''
+
+=== On Linking every element, <a> around larger content ===
+
+* xhtml - allowed anchors on anything
+* html5 - anchors can surround anything and be valid!
+** Blame Eric M!
+
+* MichaelKupietz showed off https://michaelkupietz.com Page appearance - color modifications - color calculations in javascript, used jQuery
+
+* Michael also encountered problems with an uploaded html resume getting words wrong because of misinterpreted ligatures (maybe in OCR?)
+* maybe ligatures could be controlled with <code>font-variant-ligatures</code> https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-ligatures
+
+=== Reilly's goal: non JS hierarchical nav menu ===
+* Reilly's CSS only menu: https://reillyspitzfaden.com/
+* uses <code>pointer-events: none</code> in some states
+* hidden checkbox?
+
+* TIL about https://developer.mozilla.org/en-US/docs/Web/CSS/:focus-within
+
+* https://moderncss.dev/css-only-accessible-dropdown-navigation-menu/ 
+** https://www.w3.org/WAI/ARIA/apg/patterns/disclosure/examples/disclosure-navigation/
+** https://melsumner.github.io/details-as-a-menu 
+
+==== Joe wants to work on this ====
+* NAV MENU:
+** WORK ON MOBILE
+** TABS SHOULD WORK TO EXPOSE EVERY NAVIGABLE PART OF MENU
+** ACCESSIBLE
+** NO JAVASCRIPT
+** ARROW KEYS (STRETCH GOAL)
+
+=== <code>calc(infinity)</code>''! and beyond!'' ===
+* calc(infinity)
+* to set maximum z-index?
+* or to set a maximum text-indent or margin-left to push things off screen?
+
+* dropdown typeahead Kevin
+* One place to look for thoughtful menu code would be https://projects.verou.me/awesomplete/
+
+=== Thanks for coming! ===
+Got to go now; thanks everyone
+
+
+
+
+{{Front End Study Hall}}
+
+[[Category:Events]]
