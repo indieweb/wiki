@@ -1,10 +1,98 @@
 https://indieweb.org/events/2024-09-12-front-end-study-hall
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+[[Category:Front end]]
+'''<dfn>[https://events.indieweb.org/2024/09/front-end-study-hall-010-OgBuZxphjMHb Front End Study Hall #010]</dfn>''' was an IndieWeb meetup on Zoom held on 2024-09-12.
 
+* Archived from: https://etherpad.indieweb.org/2024-09-12-front-end-study-hall
+
+= Front End Study Hall #010 =
+September 12, 2024
+
+== Participants ==
+* {{artlung}}
+* {{to2ds}}
+* {{capjamesg}}
+* {{mat.tl}}
+* {{MatthiasK}}
+* {{alabut}}
+
+== Notes ==
+* capjamesg passed the baton to Joe for longest meeting ever
+* artlung recapping [[events/2024-08-27-front-end-study-hall|previous FReSH]]
+** web component for blink tags now works! (<code><my-blink></code>) https://codepen.io/artlung/pen/RwzJmLz
+
+=== Link Checking and Linters and validators ===
+* w3c link checker - suggested by {{t}} https://validator.w3.org/checklink
+** running on capjamesg's site as a demo
+** 300 typos recently fixed, hopefully no broken links
+*** cheated -- checked it yesterday!
+* artlung used a tool called: linklint (http://linklint.org)
+** it's in homebrew (!)
+** <code>brew install linklint</code>
+** does not appear to work with https sites (it's a 23 year old perl script)
+** <code>linklint -http -host mat.tl</code>
+** other examples: wget, etc
+** {{artlung}} will put out a call for link checking tools that work on a local set of files
+* how does local development work with link checkers?
+* XML/XHTML horror stories
+** embedding HTML code from elsewhere often breaks validation
+* Always worthwhile to mention https://validator.w3.org/
+* React vs. small pages
+* Legacy software
+* Pages with a reliance on JavaScript
+** [[curlability]]
+** Discussion of Cloudflare and tooling to prevent bad actors from abusing your website as a network resource
+
+=== Full Width Images with narrower content discussion ===
+* Question from {{capjamesg}} about adding nice big images to a narrow layout?
+* https://www.woodlandtrust.org.uk/blog/2020/10/why-autumn-leaves-change-colour/
+** Q: How does it work to have a centered column with images that extend wider than the screen
+** 1. Have a grid to decide some content is in a primary content grid positions, and then images can extend into the wider grid?
+** 2. Negative margins for full bleed images with regular content constrained to normal margins and the size of the content
+** https://nazhamid.com/journal/seattle/
+** https://alabut.com/writing/intro/
+** Al uses a special class to designate images that can break out of the usual width of the layout
+* https://lux.camera
+=== Optimizing Performance Discussion ===
+* History - at one time "mobile web" implied using entirely different markup from HTML for the "mobile" version of a website:
+** WML was at one time a solution for this: https://en.wikipedia.org/wiki/Wireless_Markup_Language
+*** {{mat.tl}} had a WAP-phone and used it for mobile data for a number of years because the data plan was near-free
+** {{artlung}} experimented with a slimmed down m.artlung.com but it was onerous to maintain
+* Google AMP has a similar idea and has fallen out of favor somewhat
+* But mobile devices changed the direction of the web profoundly as screen size, performance capability and battery life constrained what could be done with the web, this also stunted the ascent of Flash as a format
+** [https://en.wikipedia.org/wiki/Thoughts_on_Flash Thoughts on Flash] https://web.archive.org/web/20100501010616/http://www.apple.com/hotnews/thoughts-on-flash/
+*** {{mat.tl}} ran Linux on PowerPC at the time so no Flash player
+* https://hardcover.app/  website and app is an example of a highly performant applicaton
+* '''Discussion: What editor are you using?'''
+** VS Code is popular
+** Cursor ("AI" editor, using Claude (sp?) https://www.cursor.com/
+** {{artlung}} uses phpStorm and pyCharm + CoPilot, I also always have BBEdit open, and on a server I will typically use emacs
+** Todd uses Vim tune <code>.vimrc</code> file to stick to keyboard usage
+** {{mat.tl}} uses [https://nova.app Nova], plus BBEdit for some things that are text-mangling and mg in a Terminal. Previous GNU Emacs for a *long*, *long* time.
+** [https://zed.dev Zed] is a new editor whose selling point is speed. Zed.dev - {{capjamesg}} otherwise uses VS Code
+** https://zed.dev/
+** Clickhouse on performance: https://clickhouse.com/docs/en/faq/general/why-clickhouse-is-so-fast
+** A site whose design James likes: https://hardcover.app/books/before-the-coffee-gets-cold
+** Chrome DevTools Workspaces 
+*** https://developer.chrome.com/docs/devtools/workspaces
+** The iteration cycle of write code -> see result ought to get to be as tight and short as possible - the goal is always to see the results of the code you write as quickly as possible
+* '''Discussion: Performance - what's your tip?'''
+** Static pages = converting WP to static html 
+** https://github.com/mattl/wordpress-to-eleventy
+** added {{to2ds}}'s Synergy to the buzzwords in the README 
+** Lazy load those images, decode async
+** Static Website - webp some images - avif - only vanilla js
+** 80% compression on avif images is a solid quality level says {{alabut}}
+** Measure - metrics - PageSpeed Insights, if an interation feels slow it's probaly is
+** Framework wolrd: improves server side rendering of frameworkd
+** Do less, do it in advance, load lazily -- Pierre
+** Avif is great - srcset with avif srcset - topic for the next Front End Study Hall
+* And about {{artlung}}'s background today: the5k.org was a contest in the early 2000s to highlight how much could be done with a website in under 5k of source code - screenshot is from https://web.archive.org/web/20040202051437/http://www.the5k.org/ - the last contest was run in 2004. https://the5k.org/
+
+
+----
+
+
+{{Front_End_Study_Hall}}
+
+[[Category:Events]]
