@@ -1,10 +1,107 @@
 https://indieweb.org/story
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+A '''<dfn>story</dfn>''' is a singular (one per profile) time stream [[collection]] post, that consists of [[ephemeral]] [[photo]] and [[video]] posts that are shown in sequence one at a time and disappear from the collection some time after being added, usually 24 hours.
+
+Stories seem to be more easily shared than posts. Most stories are less edited, except when the story contains overlays like text or stickers. Their creation UI encourages spontaneity and sharing material right away. They also don't receive public likes and replies (one can reply privately on Snapchat and Instagram), and because they disappear after 24 hours, there is less pressure to make them perfect.
+
+The video fragments in stories are short, usually not longer than 10 seconds. This lessens the need to edit the message down to an interesting storyline, and moves the editing from the sender to the viewer who can skip to the next fragment with a tap.
+
+Some stories have built-in features for collecting simple responses such as a poll or "yes/no" toggle, and the author of the story can see the aggregate and individual responses, however the people responding can only see the aggregate responses.
+
+In the case of [[Instagram]] and [[Facebook]], There is usually no way to comment or otherwise react publicly to stories, other than the option of posting a copy of the story post to your own story.
+
+
+== IndieWeb Examples ==
+* {{aaronpk}} supports stories on his home page since 2017-11-04. If there is any content posted to the "stories" section, the circle around his profile photo will be a gradient outline if you haven't seen the content yet or a grey outline if you have.
+* {{capjamesg}} supports showing stories on his home page since May 2023. To post a story, James needs to manually update a list of images on his home page. Stories may not be ephermal on a 24 hour basis; rather, James can choose for how long an image is featured as a story. When a story is available, a blue border is displayed around James' profile image.
+
+[[File:cjgstories.png|250px]]
+
+* {{addyourself}}
+
+== Other Examples ==
+<dfn id="openstories">[https://openstories.fyi/ Open Stories]</dfn> is a project to add stories into a personal website found via https://muan.co/. 
+* Open source: https://github.com/dddddddddzzzz/OpenStories
+
+== Silo Examples ==
+===[[Snapchat]]===
+
+===[[Instagram]]===
+* [https://techcrunch.com/2016/08/02/instagram-stories/ since 2016-08-02]
+
+===[[WhatsApp]]===
+* [https://techcrunch.com/2017/02/20/whatsapp-status/ since 2017-02-20] under the name “Status”. See the [https://blog.whatsapp.com/10000630/WhatsApp-Status official announcement].
+
+===[[Facebook]]===
+* [https://techcrunch.com/2017/03/28/facebook-launches-stories-in-the-main-facebook-app/ since 2017-03-28]
+
+===[[YouTube]]===
+* [https://techcrunch.com/2018/11/29/youtube-rolls-out-stories-to-creators-with-over-10k-subscribers/ since 2018-11-29] (for channels with over 10k subscribers). See also official documentation [https://support.google.com/youtube/answer/7568166 on creating] and [https://support.google.com/youtube/answer/7573166 watching].
+
+Stories on YouTube are visible for 7 days. Like videos, stories may be shown to people who are not subscribed to a channel as well.
+
+Viewers can comment on stories, however the author can't reply to comments and is instead to "Reply in Story".
+
+YouTube reports stats on the number of people who have subscribed after watching a story.
+
+===[[Twitter]]===
+* [https://twitter.com/Twitter/status/1328684389388185600 2020-11-17] through [https://www.theverge.com/2021/7/14/22577166/twitter-fleets-shuts-down-stories-clone 2021-08-03](also [https://blog.twitter.com/en_us/topics/product/2021/goodbye-fleets Twitter blog]) under the name “Fleets”.
+
+Like most Story UIs, there is a horizontal scrolling list of avatars across the top of the Twitter app. On the far left, there is an add button to add your own story. At the time of this edit, this feature is only available if you're using the mobile Twitter app.
+
+[[File:fleet_story_example.jpg|500px]]
+
+
+Something that does stand out about Twitter's implementation is that ability to add Text as a Story rather than just images/video. You can see adding a "fleeting thought" and being able to align it and do some basic styling to it.  
+
+[[File:fleet_text_post_1.png|300px]]
+[[File:fleet_text_post_2.png|300px]]
+
+== Criticism ==
+=== Causes FOMO ===
+* [https://fireburn.ru/posts/Z9Y2yL0 Vika posted an article] that explains how ephemeral stories lead to fear that she will miss content if she isn’t opening the app related to the content frequently. See also [[FOMO]]
+
+== Brainstorming ==
+* Brainstorming thread about stories in the IndieWeb involving Vika, {{aaronpk}} and {{eddiehinkle.com}}. [https://fireburn.ru/posts/Z5Su3L0 Thread starts here].
+* Vika’s criticism above lists the fear of missing out on Stories due to their ephemeral nature. This is a common tactic by Silos to keep people addicted to the apps. How can we in the IndieWeb create stories that don’t create that dependency? Allow each person to view each story item once only? Give a longer time window? 2 days? 7 days?
+** The [https://chat.indieweb.org/2019-01-22#t1548171392212300 following brainstorming] occurred in result.
+** I suggest making a story another MF2 piece of content with following properties:
+*** u-photo, u-video and/or e-content (Instagram stories allow text-only stories, rendered as text on a colorful backdrop)
+*** An experimental property dt-expires - signifies the time when the content becomes obsolete and should be expunged (but can remain in archives if someone wants it to)
+This will allow people to treat stories like ephemeral posts. Conforming Microsub readers would expunge (or mark as obsolete and old) data about expired posts (but probably should allow to archive them - we need to do better than silos and offer a save button). [[User:Fireburn.ru|Fireburn.ru]] ([[User talk:Fireburn.ru|talk]]) 12:47, 8 September 2019 (PDT)
+* [https://ramon.codes/projects/zuck.js Zuck.js] has a specific JSON format for their stories that could be helpful for brainstorming purposes.
+** Notable pieces in the JSON:
+*** type - photo or video (this is also used in aaronpk's stories JSON)
+*** length - the length of the video or the length that the photo should be displayed
+*** src - the url of the photo or video file (aaronpk's stories JSON calls this filename)
+*** link - a url that the user is taken to if the button is clicked
+*** linkText - the text in the button that the user can take to open up the link url
+*** time - unix timestamp of when the photo/video was published, zuck.js then converts that to "time ago" format for display to the user
+
+== See Also ==
+* [[collection]]
+* [[ephemeral]]
+* [[photo]]
+* [[video]]
+* [https://ramon.codes/projects/zuck.js Zuck.js]
+* https://instapipe.net for PESOS from Instagram
+* [https://knowyourmeme.com/memes/will-now-have-stories $thing will now have stories], a meme that originated on Twitter before Twitter had stories.
+* https://twitter.com/AlecStapp/status/1328759059131080706
+** "Oct 2013: Snapchat launches Stories<br>Aug 2016: Instagram copies it<br>Feb 2017: WhatsApp copies it<br>Mar 2017: Messenger copies it<br>Nov 2018: YouTube copies it<br>Sep 2020: LinkedIn copies it<br>Nov 2020: Twitter copies it<br><br>Wild how closely this matches each company's reputation for shipping." [https://twitter.com/AlecStapp/timelines/1282396541748215810 @AlecStapp] November 17, 2020
+* https://twitter.com/VishalVerma_9/status/1328725968224096256
+** "So Twitter roll out stories like fleets feature globally today! <br>Meanwhile Snapchat, Instagram, Facebook, LinkedIn and WhatsApp to Twitter right now..<br>#fleets" [https://twitter.com/VishalVerma_9 @VishalVerma_9] November 17, 2020
+* ^ https://pbs.twimg.com/media/EnCVObNVkAI3R2g.jpg
+* Criticism: stories feature causes stress when added to an existing silo (with pre-existing social interaction expectations) 2020-11-17 The Hill: [https://thehill.com/policy/technology/526340-ocasio-cortez-says-new-twitter-features-stress-her-out Ocasio-Cortez says new Twitter features stress her out] <blockquote>“Does the fleets thing stress anyone else out?” the congresswoman wrote.</blockquote>
+* https://twitter.com/lunasorcery/status/1328859249976467457
+** "So I just got the new iTerm2 update and uh..." [https://github.com/lunasorcery @lunasorcery] November 18, 2020
+* ^ https://pbs.twimg.com/media/EnEONJWXcAIMZom.jpg
+* [[FOMO]]
+* https://twitter.com/comradespooky/status/1328743731827269632
+** "“capitalism breeds innovation”<br>the innovation:" [http://cash.app/$mkspooks @comradespooky] November 17, 2020
+* Example of a multi-photo story in action: https://telepathics.xyz/notes/2020/new-york-city-friends-food-sights/
+* [https://instapipe.net/ Instapipe] lets you download your Instagram stories so you can display them on your personal website.
+* Silo Example: https://twitter.com/signalapp/status/1589681755443073024
+** "Don’t want stories? That’s fine. You can turn off stories entirely by going to Settings → Stories." [http://signal.org @signalapp] November 7, 2022
+* {{capjamesg}} analysed how links work on the BBC and Wired Story pages as of August 2025 in "[https://jamesg.blog/2025/08/04/stories-and-links We need to define best practices for Stories and links]"
