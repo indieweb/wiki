@@ -1,10 +1,71 @@
 https://indieweb.org/license
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+    '''<dfn>license</dfn>''' is terms under which you are allowed to (re)use a piece of work; in the context of the IndieWeb, for source code such as in open source [[projects]], or content, like the IndieWeb wiki itself which has a specific [[Copyright]].
+
+== How to ==
+=== How to markup licensing of a post ===
+You can markup the licensing of an entire post on its permalink page with [http://microformats.org/wiki/rel-license rel-license]. Link from the permalink page to the license you're using (e.g. Creative Commons) and put <code>rel="license"</code> on that link.
+
+== Brainstorming ==
+=== Why and when ===
+* When [[repost]]ing a post, it would be nice to know if you have permission for such repost. If you tell your server to repost something, it can check for a usable license and then either display the full post, or only link to it.
+* The above could also apply to [[reply context]].
+* The above could also apply to displaying remote [[comments]] and [[likes]].
+
+=== Licensing specific things ===
+There's no good current way to markup licenses for specific / individual posts in a feed like a [[composite stream]].
+
+Similarly, if you only want to license part of a post, there's no good current way to do that either.
+
+Some possibilities:
+* Introduce a <code>u-license</code> property to [[h-entry]] that links to the license for that entry. This would replace <code>rel-license</code>, and provide more flexibility.
+* Have some separate specific license for the <code>u-photo</code> / <code>u-video</code> / <code>u-audio</code> in a post
+** Or just use the same <code>u-license</code> that is there for the entire post
+
+== IndieWeb Examples ==
+
+=== Christian Weiske ===
+{{cweiske}} links a license in the <head> of each blog post, e.g. http://cweiske.de/tagebuch/broken-plain-sight.htm:
+
+ <link rel="license" type="text/html" href="http://creativecommons.org/licenses/by-nc-sa/3.0/"/>
+ <link rel="license" type="application/rdf+xml" href="http://creativecommons.org/licenses/by-nc-sa/3.0/rdf"/>
+
+=== Jamie Tanna ===
+
+{{jamietanna}} defines two licenses per post:
+
+* Prose, for the post's written content (defaults to CC-BY-SA-NC-4.0)
+* Code, for any code snippets in the post (defaults to Apache-2.0)
+
+Jamie wrote about changing the way he approach licensing on [https://www.jvt.me/posts/2018/07/29/more-explicit-post-licensing/ 2018-07-29] and [https://www.jvt.me/posts/2019/09/28/microformats-licensing/ 2019-09-28]
+
+=== Matt Lee ===
+
+{{mat.tl}} uses Creative Commons BY-SA 4.0 on all content created and posted on his site with the following code:
+
+<pre><p xmlns:cc="http://creativecommons.org/ns#">This work is licensed under <a href="https://creativecommons.org/licenses/by-sa/4.0/" rel="license">CC BY-SA 4.0</a> unless otherwise stated or it doesn't have my name on it.</p></pre>
+
+* {{addyourself}}
+
+== Other Examples ==
+* The [https://creativecommons.org/ Creative Commons] [https://creativecommons.org/share-your-work/ License chooser] provides an HTML snippet that includes rel="license"
+
+<pre>&#60;a rel="license" href="http://creativecommons.org/licenses/by/4.0/"&#62;
+  &#60;img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /&#62;
+&#60;/a&#62;&#60;br /&#62;
+This work is licensed under a &#60;a rel="license" href="http://creativecommons.org/licenses/by/4.0/"&#62;Creative Commons Attribution 4.0 International License&#60;/a&#62;.</pre>
+
+
+== Sessions ==
+Related sessions at IndieWebCamps:
+* [[2019/Amsterdam/licensing]]
+* [[2017/Nuremberg/law]]
+
+
+== See Also ==
+* [[licensing]]
+* http://microformats.org/wiki/rel-license
+* [https://spdx.org/licenses/ SPDX list of software/documentation licenses and short identifiers for them]
+* [https://html.spec.whatwg.org/multipage/links.html#link-type-license WHATWG HTML spec about rel="license"]
