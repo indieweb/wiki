@@ -1,10 +1,239 @@
 https://indieweb.org/alt
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+'''<dfn>alt</dfn>''' is a required attribute of the <code>&lt;img></code> element and should be provided in any use of images on indieweb pages from [[photo]] posts to [[featured]] and other images in [[articles]].
+
+== Why ==
+You should add descriptive alt text to all your [[photo]] posts and content images added to the wiki for at least a few use-cases:
+* screenreader users
+* text fallback for when images don't load (for whatever reason, network flakiness, content blocking, tracking blocking, etc.)
+* being able to find an image using text search, when you know what you're looking for but forgot where the image is
+* ...
+
+== How to ==
+=== How to post photos with alt ===
+(this section is a stub)
+
+So far people are using the following tools to add alt text to their photos and other images:
+* use [[Quill]] image posting UI with alt text field
+* use [[WordPress]] image upload UI with alt text field
+* write in plain text and put (parenthetical alt text) just after your image URL and use the latest [[CASSIS]] (https://tantek.com/cassis.js) to auto-embed the text + alt
+* write in Markdown which has a [[#Markdown|syntax for adding alt text]]
+* write in HTML, where you can directly add the <code>alt=</code> to an <code>&lt;img&gt;</code> tag.
+* ... add yours here, after you've added yourself with permalinks to examples to the IndieWeb Examples section (no theoretical how-tos please!)
+
+=== Wiki instructions ===
+To add alt text to images in the IndieWeb wiki, use the following general syntax:
+
+ <nowiki>[[File:Image_filename.PNG|center|alt=Put your desired alt text here]]</nowiki>
+
+There is also a custom [[Template:photosrcalt|photosrcalt template]] that also includes a set up for easy inclusion of images with <code>u-photo</code> markup and alt text using the following format:
+
+<pre style="line-height: 1.4em; padding: 1em; border: 1px solid #ddd; color: black; background-color: #f9f9f9;">{{photosrcalt|src=http://example.com/pic.jpg|alt=Photo of something awesome}}</pre>
+
+More details on images in the wiki can be found here: https://www.mediawiki.org/wiki/Help:Images
+
+=== How to write good alt text ===
+Summary:
+<div style="background:#EFE;border:solid 2px black">
+Consider, how would you describe the image to someone on the phone (who already knows about the context of the earlier material on the page)? Now write exactly what you would say over the phone to describe the image.
+
+'''If it is a '''
+* '''simple inline image''' that only makes sense in the context of the text immediately before and after: include the words you would speak just after speaking that text before, and before the text after.
+* '''photograph, diagram, or other standalone image''': write the words you would speak in a sentence or brief description of the photo, ending with a period.
+* '''meme image with text on top''': in addition to the brief description of the image, add the literal word for word of the text. 
+</div>
+
+Any image description (including any literal text in the image) provided in visible caption text should be omitted from the alt text. Any text duplicated from visible caption text into the alt text will only cause a worse/redundant experience for folks using screen readers etc.
+
+==== Makes sense read out in context ====
+<div style="background:#EFE;border:solid 2px black">
+* Use alt text that makes sense when read out loud along with the context of any text before, and any text after the image.
+</div>
+
+==== Text length ====
+
+A common myth online is that HTML alt text should be restricted to 125 characters or less to prevent concatenation in some screen readers. As of 2022 (and likely much earlier) [https://yatil.net/blog/there-is-no-character-limit-for-alt-text no major screen reader does this]. It remains best practice to keep alt text concise, but it can be as long as necessary to convey the relevant information.
+
+==== More alt text writing guidelines ====
+For more decent guidelines on good <code>alt</code> attribute authoring, see:
+* https://www.w3.org/WAI/tutorials/images/decision-tree/
+* https://html.spec.whatwg.org/multipage/embedded-content.html#alt
+
+===== Caption Title Legend related =====
+Exception: sometimes the WHATWG spec has bad or bad out-of-context advice, e.g. <blockquote style="background:#FEE;border:dashed 2px gray">"...the alt attribute's value should never contain text that could be considered the image's caption, title, or legend."[https://html.spec.whatwg.org/multipage/embedded-content.html#alt]</blockquote>
+
+This is poor advice because:
+* Using the phrase <em>should never</em> is "scare" advice (more likely to cause inaction than action)
+* More likely to result in empty alt attributes than anything useful
+* An empty string "" contains no "text that could be considered the image's caption, title, or legend", satisfies the WHATWG statement, yet adds little or no value.
+
+Instead, see the summary guideline for positive guidance. In particular for this case:
+<div style="background:#EFE;border:solid 2px black">
+* Alt text may perfectly reasonably contain text that could be used or considered part of an image's caption, title, or legend. If such text is already present in the context of the text before or after the image, no need to duplicate the text. Instead, use alt to add information or an additional detail or two about what is actually in the image.
+</div>
+
+== IndieWeb Examples ==
+=== Rosemary Orchard ===
+{{rose}}: I write in Markdown, and use the image description as the alt text, so ![alt text](image.ref).
+
+* '''Example post permalink? Earliest post with an image with an alt? YYYY-MM-DD'''
+
+=== Jeremy Cherfas ===
+{{jeremycherfas}} I too write in Markdown for my site served by [[Grav]] and I too try to remember to add a verbal description of the image exactly as Rose (above) does. The Grav post composer automatically inserts (<code>![](link/to/image)</code>) making it easy to backspace and add the alt-text. When I write in [[Byword]] I generally remember the format, and I have a TextExpander snippet as backup, but seldom need to use it. 
+
+* '''Example post permalink? Earliest post with an image with an alt? YYYY-MM-DD'''
+
+=== Greg McVerry ===
+{{jgmac1106}} When publishing on my main site I am often writing in HTML and use the alt text, most of my images are from the [https://cogdog.github.io/flickr-cc-helper/ Flickr CC Creative Commons Attribution] tool and include alt text. When I use [[Known]] the photo post type does not allow for the entering of alt text and the photo's title becomes the alt text [https://gist.github.com/jgmac1106/30c769bb41e690562e90d7fbc5340d15 Example]. Untitled photos get no alt-text. When publishing a post in [[Known]] you use the TinyMCE WYSIWIG and enter an image description. This image description becomes the alt text.
+* [https://github.com/idno/known/issues/2438 Issue] 
+** When syndicating a photo post to Twitter the alt text does not translate and is left blank.
+** If you serve a large screen reader population or are personally liable for maintaining accessibility standards you may want to consider this when choosing [[Known]] as a platform until these issues are resolved.
+* [https://archive.jgregorymcverry.com/posts/page/51/ Archived WordPress Sie] 2011-05-19
+*[https://jgregorymcverry.com/SyNatIndieWeb.html New Static Site] 2019-03-19
+** These permalinks represent the "first" but the they do not indicate regularity. The majority of images from 2007-2019 were left without an alt. Regular inclusion did no occur until I had blind student in class and began to see how screen readers worked.
+
+=== Chris Burnell ===
+{{chrisburnell}}: I use the typical Markdown syntax (<code>![alt](src)</code>) for inline images. I have also recently set up some logic to parse a photo and alternate text defined in my posts’ metadata ([https://raw.githubusercontent.com/chrisburnell/chrisburnell.com/master/_posts/notes/2019-03-17-1552792631.md Example on GitHub]).
+
+* [https://chrisburnell.com/note/1552792631/ Example post]
+* [https://chrisburnell.com/article/first-article-ever/ Earliest post with an alt (2013-06-15)]
+
+=== Chris Aldrich ===
+{{chrisaldrich}}: When publishing with [[WordPress]], I most often add images and media using the "add media" button which pops up a search/selection UI that includes an [[alt]] field to remind me to enter the appropriate alt text. If the alt text is left empty, the text editor automatically includes an empty <code>alt=""</code> as an explicit reminder that is required, but empty. Sadly the visual editor doesn't include any indication that the alt text either does or doesn't exist as a reminder to include it. It would also be nice if the alt text field in the UI was above the 'caption' field. For improved UI it would be nice if it indicated what alt text was and why it was important to get more people to include it for [[accessibility]]. The idea of [[alt]] just feels too much like [[jargon]] for the average person to know what it is or why it is important.
+
+* '''Example post permalink? Earliest post with an image with an alt? YYYY-MM-DD'''
+
+[[File:WordPress_Alt_image_field.PNG|left|alt=A UI example of the WordPress image selection process which includes a field for the alt text.]] [[File:alt_text_description_and_link.PNG|right|alt=Update of image inclusion UI in WordPress 5.2.x which includes a helpful link about knowing what alt text to include.]]
+
+{{clear}}
+
+For additional details on the WordPress UI see [https://codex.wordpress.org/Inserting_Media_into_Posts_and_Pages Inserting Media into Posts and Pages] on the WordPress Codex.
+
+=== gRegor Morrill ===
+{{gRegor}}: When publishing with [[ProcessWire]], I usually insert images into posts using the rich text editor ([[CKEditor]]). The editor inserts a blank <code>alt=""</code> attribute by default. When I want to set alt text, I click "Source" to modify the HTML and update it manually.
+* Earliest example 2015-06-21: https://gregorlove.com/2015/06/100-words-006/
+
+=== Tantek ===
+{{t}}: Supports alt text on his image posts since 2019-078 (using latest deployed [[CASSIS]] auto_link), starting with adding alt text after the fact to his [https://tantek.com/2019/077/t1/sunset-crashing-waves-stained-glass most recent photo post the day before] adding alt text support.
+* [[multiphoto]]: 8 photos with alts: https://tantek.com/2019/078/t1/last-saturday-sfrc-clear-skies
+** Twitter POSSE first 4 with alts: https://twitter.com/t/status/1108272612378112000
+
+=== Jamie Tanna ===
+{{jamietanna}} writes Markdown with [https://gohugo.io Hugo], and uses [https://github.com/gjtorikian/html-proofer html-proofer] to ensure that all images have an alt tag set.
+
+* [https://www.jvt.me/posts/2018/11/19/gatling-highcharts-response-time-bounds/ Tweaking Gatling HighCharts Response Time Bounds] shows a couple of images with alt tags added to them
+* Since at least 2017-01-28 looking at Git history, but can also be seen in [https://www.jvt.me/posts/2014/07/15/intelligent-parenting/ a post from 2014-07-05] (which originally appeared on a different site)
+
+=== ... addyourself ... ===
+{{addyourself}} - '''Earliest post with an image with an alt? YYYY-MM-DD'''
+* '''Example post permalink'''
+
+== Tools ==
+=== Quill ===
+[[Quill]] supports publishing alt text to your site using [[Micropub]]
+
+[[File:Quill-alt-text-2019-03-19.png|none|thumb]]
+
+=== Bridgy Publish Images ===
+[[Bridgy Publish]] supports publishing alt text to [[Twitter]] as of 2018-07-27. [https://github.com/snarfed/bridgy/issues/756#issuecomment-408479810]
+* Example: http://jgregorymcverry.com/6851-2/ ([http://web.archive.org/web/20180917231349/http://jgregorymcverry.com/6851-2/ archived]) -> https://twitter.com/jgmac1106/status/1041295971911696385
+
+=== Markdown ===
+[[Markdown]] has syntax for adding alt text to an image embed.
+* Image embed: <kbd><nowiki>![](http://w3.org/Icons/text.gif)</nowiki></kbd>
+* With alt text: <kbd><nowiki>![text icon](http://w3.org/Icons/text.gif)</nowiki></kbd>
+
+=== CASSIS auto_link ===
+If you use the [[CASSIS]] auto_link function (latest deployed version), you can add alt text to your plain text content like this:
+* embed an image:
+** <kbd><nowiki>http://w3.org/Icons/text.gif</nowiki></kbd>
+* image with alt: 
+** <kbd><nowiki>http://w3.org/Icons/text.gif (text icon)</nowiki></kbd>
+And similarly for a linked image with alt:
+* hyperlink an image embed: 
+** <kbd><nowiki>http://w3.org/Icons/text.gif http://indiewebcamp.com/text</nowiki></kbd>
+* hyperlink image with alt: 
+** <kbd><nowiki>http://w3.org/Icons/text.gif (text icon) http://indiewebcamp.com/text</nowiki></kbd>
+
+This is part of a larger [http://tantek.com/w/Markdown#ThoughtsonMarkdown alternative to Markdown].
+
+See: http://tantek.com/w/Markdown#Alttextforimages for more.
+
+== Silo Examples ==
+=== Instagram ===
+[[Instagram]] introduced automatic alternative text as of 2018-11-28. The app also allows you to set custom alt text when publishing a photo or by editing an existing photo.
+
+* {{citation
+| title = Creating a More Accessible Instagram
+| url = https://instagram-press.com/blog/2018/11/28/creating-a-more-accessible-instagram/
+| author = Instagram
+| published = 2018-11-28
+| archiveurl = http://web.archive.org/web/20190329030024/https://instagram-press.com/blog/2018/11/28/creating-a-more-accessible-instagram/
+}}
+
+<gallery>
+File:instagram-alt-step1-2019-03-28.png|On the New Post screen, click "Advanced Settings"|alt=screenshot
+File:instagram-alt-step2-2019-03-28.png|Click "Write Alt Text"|alt=screenshot
+File:instagram-alt-step3-2019-03-28.png|Enter alt text and click "Save"|alt=screenshot
+</gallery>
+
+== Issues ==
+Alt text on images in a post can cause issues when trying to display that post in a [[reader]].
+
+On adactio.com, the img alt text is the same as the post contents. Since alt text is included in the p-name parsed result, this results in duplicated text for the posts.
+
+Below is a screenshot showing a few recent posts from adactio.com as rendered in an IRC-based reader.
+
+[[File:adactio-posts-in-irc-reader.png|500px]]
+
+Currently the python mf2 parser does not include alt text in the parsed result, so these posts look fine in [[Woodwind]]. However, if it did, as the parsing algorithm suggests, this is how a post would look. (with more representative alt text)
+
+[[File:adactio-post-with-alt-text-in-woodwind.png|500px]]
+
+Woodwind has no way of knowing the first line of the name property came from the alt text.
+
+=== Resolved ===
+Previous to 2019-078:
+
+Below are two posts from tantek.com in the same reader. Note that the text of the first post includes "a jpg" which is the alt text of the image.
+
+[[File:tantek-posts-in-irc-reader.png|500px]]
+
+Resolution: Starting 2019-078, tantek.com supports showing alt text on images so now it just depends on the author taking the time to add them (parenthetically as it were) to each photo post moving forward (and perhaps adding alt to past photo posts incrementally).
+
+== Brainstorming ==
+Ideas for improving the adding of alt text to images, photo posts, etc.
+
+== See Also ==
+* [[photos]]
+* [[accessibility]]
+* [[Google]] slides
+* https://axesslab.com/alt-texts/
+* [http://alistapart.com/blog/post/on-alt-text A List Apart On Alt Text], great discussion of cases in [http://alistapart.com/blog/post/on-alt-text#comments the comments].
+* https://twitter.com/thingskatedid/status/1360331792067166208?s=21
+** "🧵 Thread where I explain the pros and cons of writing alt-text for the things you post" [https://www.instagram.com/katelikesrectangles/ @thingskatedid] February 12, 2021
+* Excellent example of alt text in an HTML email with an embedded image: https://twitter.com/cscotta/status/1389733118802755586
+** "Flawless." [http://paradoxica.net @cscotta] May 5, 2021
+* https://dragonscave.space/@guilevi/106213420514454754
+** "I have encountered more image descriptions on Mastodon in 24 hours than I have in Twitter in a couple of years. Seriously. I'm not exaggerating.<br>As a blind person, this means a lot to me. If you read this and you describe your images, thank you so, so, so much on behalf of all of us. If you don't, now you know you'll be helping random Internet strangers make sense of your posts by typing in a few more words than usual." [https://dragonscave.space/@guilevi @guilevi] May 10, 2021
+* 2022-08-04 Jake Archibald: [https://jakearchibald.com/2021/great-alt-text/ Writing great alt text: Emotion matters] <blockquote>The relevant parts of an image aren't limited to the cold hard facts. Images can make you feel a particular way, and that's something that should be made available to a screen reader user.</blockquote>
+* 2021-06-03 Léonie Watson: [https://tink.uk/text-descriptions-emotion-rich-images/ Text descriptions and emotion rich images] <blockquote>Perhaps it’s time we introduced another group of images: Emotion rich images and encouraged the practice of providing descriptive alt texts for them.</blockquote>
+* https://www.niemanlab.org/2022/08/space-is-for-everyone-meet-the-scientists-trying-to-put-otherworldly-images-into-words/
+* {{citation
+| title = How to write text descriptions (alt text) in BBC News articles
+| url = https://www.bbc.co.uk/gel/how-to-write-text-descriptions-alt-text
+| author = [https://x.com/johnycassidy John Cassidy] & BBC Accessibility
+| published = 2024-06
+| archiveurl = https://web.archive.org/web/20240713190102/https://www.bbc.co.uk/gel/how-to-write-text-descriptions-alt-text
+}}, a series of how-tos to describe different types of images (e.g. decorative, functional), describe people, and more.
+** Announcement post: {{citation
+| title = Improving alt text image descriptions at the BBC
+| url = https://www.bbc.com/mediacentre/articles/2024/improving-alt-text
+| author = [https://x.com/johnycassidy John Cassidy]
+| published = 2024-05-30
+| archiveurl = https://web.archive.org/web/20240713190931/https://www.bbc.com/mediacentre/articles/2024/improving-alt-text
+}}.
+* {{capjamesg}} wrote about how he built a button to show/hide alt text visually on images on his website in "[https://jamesg.blog/2025/08/17/alt-text-button Developing an alt text button for images on my website]"
+* ^ How to make ALT buttons for your images (move James's blog post to a new "How to" subsection)
