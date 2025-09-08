@@ -1,10 +1,135 @@
 https://indieweb.org/IndieWeb_Search
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+'''<dfn>IndieWeb Search</dfn>''' was an open source search engine that indexes and provides a service to search for text in web pages and websites created by IndieWeb community members.
+
+The search engine is no longer operational.
+
+All content below is for reference.
+
+== Why ==
+
+IndieWeb Search is designed to make it easy to find new personal websites to browse as well as find answers to common IndieWeb questions.
+
+== Features ==
+IndieWeb search supports:
+
+* Finding web pages based on a query.
+* Searching for a web page by URL or site.
+* Returning rich snippets (also known as "featured snippets") for some queries.
+
+The indexing algorithm reads microformats to help retrieve specific pieces of information from a page. But, microformats markup is not required for the indexer to successfully retrieve information about a page.
+
+Developer features:
+* Returning h-cards for "what is [domain name]" queries.
+* All search feeds come marked up as h-feeds and have accompanying alternate RSS, JSON Feed, and jf2 feeds. More on this here: [https://jamesg.blog/2022/01/13/indieweb-search-pages-are-feeds/ IndieWeb Search results are also feeds]
+* Developers can parse and manipulate IndieWeb Search feeds in only a few lines of code, with a valid microformats parser. Here’s how you can do so in Python: [https://jamesg.blog/2022/01/11/parse-indieweb-search-results-python/ Parse IndieWeb Search in 15 lines of Python code]
+
+== Indexing ==
+The role of the indexing algorithm is to find information about a site that can then be served by (or interpreted by) the search engine.
+
+The main pieces of information the search engine indexes are:
+
+* Headings from h1 to h6
+* Meta description
+* Title tag
+* The contents of a page in HTML
+* The contents of a page in text
+* The URL of a page
+
+Fallbacks are in place to ensure that attributes like meta descriptions and titles can be generated even if they are not specified on the page. This ensures that search results appear consistent and with the information visitors need to accurately assess whether the content behind a link may meet their needs.
+
+All sites are given a 1,000 page crawl budget. Each page successfully indexed contributes towards this budget. Only HTML pages are indexed and pages that are likely to be tag pages are excluded. There are some tag pages in the index left over from previous indexes that will remain accessible to visitors.
+
+This budget ensures that the crawler can cover a wide range of sites as resources are limited.
+
+The indexer uses the user agent indieweb-search. You can block the indexer from indexing part or all of your site using directives in your robots.txt file.
+
+While the source code for the project is open sourced, the index used on the public version of the search engine is not accessible programmatically.
+
+== Development ==
+
+IndieWeb Search is in active development. This project is led by {{jamesgoca}}. The code for the project is [https://github.com/capjamesg/indieweb-search publicly available on GitHub] and welcomes any contributors no matter their experience with search.
+
+== Ranking Factors ==
+
+The following pieces of information are used to rank content on IndieWeb Search:
+
+* h1, h2, h3, h4, h5, h6
+* meta description
+* page <title> tag contents
+* URL
+* page word count
+* number of links pointing to the page from other sites
+
+The number of links pointing to each page in the index takes some time to calculate. This step is executed by running programs manually because: (i) an automated program has not yet been developed; (ii) the process is time-consuming and is not practical to run on a frequent cadence alongside other indexing tasks. As a result, some pages may lag behind where they will eventually rank when the number of pages linking to the page in question is calculated.
+
+You can see the ranking algorithm on the [https://github.com/capjamesg/indieweb-search/blob/main/elasticsearch_server.py public source code].
+
+=== Recency ===
+
+While recency -- the amount of time that has passed since a page was published -- has been considered as a ranking factor, a deliberate decision was made not to use recency in the search engine.
+
+Recency is not a ranking factor because the search engine is not designed to target particularly time-sensitive queries like other search engines. Visitors may ask some time-sensitive questions but these are the exception rather than the rule. A lot of the content indexed is blog posts and pages that are not likely to quickly go out of date.
+
+== Architecture ==
+
+IndieWeb Search has three main components:
+
+* The indexing algorithm, responsible for adding content into an Elasticsearch store.
+* The Elasticsearch server, used to store documents. This server is what you would call the "search index."
+* The web server through which visitors interact with the website.
+
+The Elasticsearch server has a custom-written, minimal API that lets the web server (which is hosted on a different server), make queries. This API also lets the indexing algorithm add contents to the index.
+
+=== Concurrency ===
+
+IndieWeb Search makes use of the Python concurrency.futures library which makes it easy to run the indexing program in multiple threads. Before using concurrency.futures, the search engine only indexed content using one Python thread. This was slow and meant one could only index 5,000-10,000 documents per day.
+
+Using concurrency, the indexer can index content from dozens of sites at the same time. The current rate of indexing is tens of thousands of documents per day.
+
+==== Being kind to servers ====
+
+A big obligation any search engine has is to ensure that the indexing process does not interfere with the usability of a site or cause the site to stop loading. This could be caused by an indexing algorithm trying to request too many pages at once.
+
+Incentives are aligned to prevent against server abuse: if you request resources too fast, the host might block the indexer so you cannot index a site. Conversely, a site may be unable to respond to all of your requests, leading to a partially-complete index of a site and a potentially unhappy site owner.
+
+== Questions and requests for help ==
+
+There are a few questions that need to be reviewed in more depth:
+
+* How do I enable featured snippets / direct answers on other domains? jamesg.blog, microformats.org/wiki/, and indieweb.org are all granted access to render featured snippets. More work needs to be done to understand how this feature may help other sites.
+
+Have any suggestions for the search engine or thoughts on the questions above? Message capjamesg in the IndieWeb IRC or make a [https://github.com/capjamesg/indieweb-search contribution on GitHub]. All contributions are welcome, from issues to pull requests.
+
+== Screenshot ==
+
+Here is a screenshot of the search result for the term "micropub header code":
+
+[[File:indieweb search query.png]]
+
+== Brainstorming ==
+
+=== IndieWeb link weights ===
+
+Many IndieWeb websites post likes, comments, replies, and other social interactions that relate to content the owner has seen on the web. These social interactions are often marked up using microformats. Here are some of the most common social interactions posted on IndieWeb sites:
+
+* likes (marked up with u-like-of)
+* bookmarks (u-bookmark-of)
+* replies (u-in-reply-to)
+* rsvps (p-rsvp and u-in-reply-to)
+* reposts (u-repost-of)
+
+Consideration has been given to give links marked up a certain way more weight than others. At the moment, weighing "social interaction" links is not a feature in the search engine, although some exploratory development work on this feature has been completed.
+
+The drawbacks of weighing links depending on the context in which the links are presented in markup may mean that sites that have only recently joined the IndieWeb are unfairly ranked in the search engine. The degree of one's technical proficiency should not determine how their blog posts and other content is ranked.
+
+== See Also ==
+* [[search]]
+
+{{python}}
+{{helpwanted}}
+[[Category:open source]]
+
+{{Open Source}}
