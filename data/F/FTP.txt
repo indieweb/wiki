@@ -1,10 +1,40 @@
 https://indieweb.org/FTP
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+'''<dfn>FTP</dfn>''' is an abbreviation for File Transfer Protocol, a way to move files for a website or application to a different machine (like your webserver)...
 
+'''<dfn>SSH File Transfer Protocol</dfn>''' ('''SFTP''') is a network protocol that allows users to transfer, upload, and download files. It is designed to provide secure file transfers.
+
+Most [[shared hosting]] providers provide a secure SFTP connection. Users then connect with an SFTP '''client''' such as [https://filezilla-project.org/ FileZilla] or [https://cyberduck.io CyberDuck].
+
+== Security ==
+
+FTP is the term used by many people using both insecure and secure transmission technologies.
+
+While it is true that regular FTP is insecure, most providers as of 2025 only support SFTP which is the secure version, encrypting traffic in transit and protecting credentials and wire traffic from would-be attackers.
+
+Other security considerations are that file overwrite, both intentional and accidental become more likely.
+
+If using SFTP, having a public and private key-pair presents more data for attackers to "crack" and can present as [weak] multi-factor authentication when the password for the private key-file is set.
+
+
+
+== Deployment ==
+
+FTP, or file-system snapshot / transfer as a way to get software online is very straightforward, but older method of deployment. While it does make up a part of most modern deployment patterns, it does not for example run database migrations, or automatically execute any scripts.
+
+Particularly of concern is for websites running distributed monoliths, or '''<dfn>scaling out</dfn>''' by putting parts or copies of their service on multiple servers, FTP alone would lead to many problems.
+
+== Problems ==
+
+* Partial file transfers may break established practice around source control, leading to irreversible changes, and down-time.
+* Filesystem snapshot changes may push new files, which interact with older files, leading to hard to track-down bugs.
+* If not using a secure variant of FTP, the contents of files and in some cases plain text usernames and passwords to push to servers may be read by malicious entities seeking to use file-system access to damage websites and services.
+* I am not aware of any MFA services providing any FTP guards, although sFTP/SSH to GitHub, can use branch protection when everyone including administrators are not allowed to push to a protected branch without checks such as code review and passing automated checks.
+
+== See Also ==
+
+* Still going strong in 2020 https://twitter.com/nakengelhardt/status/1342184079991721989
+** "oh dear, my 71 year old aunt started running her own linux server<br><br>I just heard her tell my mom "I set up sftp but I had to change the port because I was getting too many attacks. But it works now! I'll send you a link so you can download something"<br><br>u go auntie" [https://twitter.com/nakengelhardt @nakengelhardt] December 24, 2020
+
+[[Category:Protocols]]
+[[Category:Non-web Internet]]
