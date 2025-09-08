@@ -1,10 +1,139 @@
 https://indieweb.org/Grav
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{php}}
+[[Category:CMS]]
+[[Category: open source]]
+{{stub}}
+{{pagelogo|https://pbs.twimg.com/profile_images/529127267394260992/W__oOPP5_400x400.png}}
 
+'''<dfn>[https://www.getgrav.org/ Grav]</dfn>''' is an [[open source]] [[flat-file]] [[CMS]] built on [[PHP]], with [[Twig]] templating, and [[YAML]] + [[Markdown]] for storing articles (YAML for metadata, Markdown for the content).
+
+== Introduction ==
+
+Grav uses its filesystem as a database, and heavily relies on [https://learn.getgrav.org/advanced/performance-and-caching caching] (filesystem, memcache, redis…)
+
+There's an [https://github.com/getgrav/grav-plugin-admin admin] plugin with a nice user-interface which allows to:
+* add/edit pages and articles
+* configure the whole system and the plugins
+* run updates and backups
+* clear the cache manually
+__TOC__
+Grav is not a [[static site generator]], as it handles dynamic operations via plugins using an [https://learn.getgrav.org/plugins/grav-lifecycle eventing system]. Yet it is not a Wordpress-like CMS that renders all templates on every request, as it caches rendered templates (among others).
+
+As a concept, Grav brings the best of both worlds. But the current implementation is far from scalable (Grav team recommends setups with at max a few thousand pages).
+
+=== Pros ===
+
+* Fast setup, amazing [https://learn.getgrav.org documentation]
+* Nice responsive design
+* Many useful plugins
+* Multi-language support (url-based differenciation, support for language-based slugs)
+
+=== Cons ===
+
+* Dates are not translated
+* Not optimized for big websites (1000s of pages), as building collections/taxonomies (categories, tags, events) requires parsing through all of the pages (can be made faster with SSDs, but still requires lots of RAM)
+
+== Setup ==
+
+You can find both the Grav core and a package with the Admin plugin in the [https://getgrav.org/downloads downloads section of the Grav site]. If you download the package, simply extract it, and point your web server there to be guided through setup.
+
+Sample configuration files [https://github.com/getgrav/grav/tree/develop/webserver-configs are available] for nginx, caddy, Apache, IIS and lighttpd.
+
+=== Updates ===
+
+Updates can be made through the admin interface (from the main dashboard), or using the command-line tool, from your webroot : bin/gpm selfupgrade
+
+=== Backups ===
+
+Although backups are achievable through the web interface, data storage within Grav only relies on files, so making daily backups of your website can be as easy as a cron job running rdiff/rsync for the user/ folder in the webroot.
+
+== Indieweb ==
+
+=== IndieAuth ===
+
+{{robertvanbregt}} has created a basic [http://github.com/metbril/grav-plugin-indieauth IndieAuth plugin] that will inject authentication and token endpoints into your homepage.
+
+=== Microformats ===
+
+The default [https://github.com/getgrav/grav-theme-antimatter Antimatter] theme supports basic microformats2 out-of-the-box. Support for h-feed name and description is available [https://github.com/paulcmal/grav-theme-antimatter/tree/feature-mf2-feed in a fork of the Antimatter theme]. The [https://github.com/Birssan/grav-plugin-about-me About Me plugin] adds additional information, including h-card on the home page and links to your identity in silos and other sites.
+
+Themes and plugins generally provide full instructions for adding either via the command line or through the Grav admin interface.
+
+==== More microformats ====
+
+The [https://github.com/kalebheitzman/grav-plugin-events events] plugin has [https://github.com/paulcmal/grav-plugin-events a fork] adding microformats (no RSVP support yet).
+
+=== Open Graph / Twitter Cards ===
+
+To automatically generate og: and twitter: tags for your pages (can be overriden on a per-page basis), there's the [https://github.com/paulcmal/grav-plugin-socialmeta socialmeta] plugin.
+
+===RSS===
+
+OleVik has written a [https://github.com/OleVik/grav-plugin-twigfeeds plugin that will display RSS feeds] in a Grav site. This can be useful for bringing in content from elsewhere.
+
+=== Webmention ===
+
+There is a [https://github.com/Perlkonig/grav-plugin-webmention Webmention plugin] marked as "beta", with [[Vouch]] support and a published [https://github.com/w3c/webmention/blob/master/implementation-reports/grav-plugin-webmention.md implementation report] against the specification.
+
+{{jeremycherfas}}: <q>I tried using it and in the end gave up because the data it returned were so inconsistent, depending on the source markup. Tried to get it to use XRay instead but my ability wasn't up to it then.</q>
+
+[[User:Rosemaryorchard.com]] is working on an improved plugin.
+
+=== rel=me ===
+
+{{robertvanbregt}} has created the [https://github.com/metbril/grav-plugin-relme Rel Me plugin] than can add [[rel-me]] links to a site.
+
+=== Micropub ===
+[[micropub]] is not (yet) supported natively or through a plugin. However, it should be feasible to create (a fork of) [[nanopub]]. [[User:Rosemaryorchard.com|Rosemary Orchard]] is [https://github.com/RosemaryOrchard/Grav-MicroPub working on an endpoint plugin] in early 2019. Metbril also has a [https://github.com/metbril/grav-plugin-micropub plugin] (in progress) to provide basic support for post, reply and bookmark posts.
+
+
+== IndieWeb Examples ==
+Websites running Grav:
+
+=== Jeremy Cherfas ===
+* {{jeremycherfas}} runs Grav as a [http://jeremycherfas.net homepage]
+** New custom theme launched 2019-10-21 
+** <s>[https://github.com/Birssan/grav-plugin-about-me AboutMe plugin] for</s> h-card and social links hand coded into templates.
+** [https://github.com/OleVik/grav-plugin-twigfeeds RSS plugin] to display stream from WithKnown in sidebar
+** Webmentions received with [http://webmention.herokuapp.com/ webmention app by {{voxpelli}}]. See [https://www.jeremycherfas.net/blog/not-giving-up-on-indieweb Not giving up on IndieWeb]
+** [https://www.jeremycherfas.net/search/query:IndieWeb Posts tagged with IndieWeb], some of which contain practical information.
+
+=== Robert van Bregt ===
+* {{robertvanbregt}} has migrated from [[WordPress]] to Grav since 2019-01-01. 
+** Customized Antimatter theme ([[Microformats]])
+** [[IndieAuth]] plugin and [[rel-me|RelMe]] plugin. 
+** He is working on a basic Micropub plugin. 
+** Has not decided on what to use for Webmention, a plugin or external service.
+*** {{ jeremycherfas }} notes: Appears to be Jekyll not Grav on 2019-10-26 
+
+=== Max Westen ===
+* {{max}} has migrated from [[Statamic]] to Grav since 2019-01-06.
+** Customised Quark theme
+** [[IndieAuth]] plugin
+** Instead of using the AboutMe and [[rel-me|RelMe]] plugin, just using twig includes for this info
+** Looking into Webmentions and Micropub
+
+=== Nikhil Jha ===
+* {{njha}} runs his [https://nikhiljha.com/ blog] with Grav. It accepts and sends Webmentions, but does not display accepted mentions... yet. // [[User:Robertvanbregt.nl|Robertvanbregt.nl]] ([[User talk:Robertvanbregt.nl|talk]]) 09:08, 23 December 2018 (PST) Your site appears to be running WordPress?
+
+== Previous Examples ==
+=== cmal ===
+* {{cmal}} ran Grav as their homepage, in [https://cmal.info/en English] and [https://cmal.info/fr French]
+** about-me plugin for h-card support (not yet translated)
+** [https://github.com/paulcmal/grav-theme-antimatter/tree/feature-mf2-feed modified antimatter] theme
+*** {{ jeremycherfas }} notes: raises a security warning and 503 no service on 2019-10-26 
+
+=== Rosemary Orchard ===
+* {{rose}} ran her primary site on Grav before moving to [[WordPress]]
+
+=== Add yourself ===
+* {{addyourself}}
+
+== See Also ==
+* [[CMS]]
+* [[projects]]
+
+[[Category:CMS]]
+
+{{Open Source}}
