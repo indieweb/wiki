@@ -1,10 +1,509 @@
 https://indieweb.org/email
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+[[Category:Non-web Internet]]
 
+'''<dfn>Email</dfn>''' is a decentralized, non-web messaging transport, with user interfaces that enable a wide range of message formats and styles, and commonly used for [[account recovery]] by web sites and [[application]]s.
+
+== Why ==
+Email can be <span id="Use_cases">useful</span> for:
+* Asynchronous posting to your website.
+* A [[POSSE]] destination to reach people who use email as a reader
+
+Older reasons to use email:
+* One on one or one to many [[messaging]] among older internet users, some professions, and academia.
+* Messaging to a (often self-)selected group, i.e. [[email list]]
+
+[http://www.phdcomics.com/comics/archive.php?comicid=1790 http://www.phdcomics.com/comics/archive/phd032515s.gif]
+
+== How to ==
+(stub)
+=== How to POSSE ===
+How to POSSE to email:
+
+This section is a stub. 
+
+* Several [[WordPress]] plugins (Jetpack, for instance, uses the WordPress.com infrastructure for syndication) enable visitors to subscribe to your posts by email and will send out a message when you publish a new post.
+
+For now, see 
+* [[#POSSE_techniques|Brainstorming: POSSE techniques]] for proposed details for POSSEing to email informed by existing practices
+* [[#IndieWeb_Examples|IndieWeb Examples]] below and analyze how individuals are POSSEing from their personal sites to email.
+
+== IndieWeb Examples ==
+IndieWeb community members currently posting to their sites via email, and/or POSSEing to email:
+
+=== Nick Doty ===
+{{npdoty}} occasionally publishes emails on bcc.npdoty.name that he also POSSEs to mailing lists since [http://bcc.npdoty.name/Re-programmatic-typesetting 2009-01-22], e.g.:
+* [[article]]: http://bcc.npdoty.name/Re-programmatic-typesetting
+* he also occasionally publishes emails sent to an [[email list]]
+
+=== Barnaby Walters ===
+[[User:WaterPigs.co.uk|Barnaby Walters]] has been posting to his site occasionally via email [http://waterpigs.co.uk/notes/1441/ since 2013-05-22]. Example:
+* Test: http://waterpigs.co.uk/notes/1441/
+
+=== Aaron Parecki ===
+{{aaronpk}} has occasionally syndicated posts (POSSE) from his site to email lists since [https://aaronparecki.com/replies/2014/11/18/1/ 2014-11-18]. Example(s):
+* [[reply]] note: https://aaronparecki.com/replies/2014/11/18/1/
+* [[reply]] note: https://aaronparecki.com/2018/11/19/19/oauth
+
+It is currently a manual process of first making the post, then manually copying the text to reply to the email list.
+
+=== gRegor Morrill ===
+{{gRegor}}: syndicated at least one post from my site to email since 2023-06-20
+* An email to government officials: https://gregorlove.com/2023/06/please-keep-our-communities/
+
+=== Kelson Vibber ===
+
+{{kvibber}} uses Jetpack to syndicate WordPress posts to email subscribers.
+
+=== Add yourself! ===
+{{addyourself}}
+
+=== PESOS ===
+It's also possible to [[PESOS]] your email that you send to people or [[email list]]s to your own site. Examples of IndieWeb creators that have PESOSed email to their site.
+
+==== Tantek ====
+{{t}} has at least once PESOSed an email sent to co-workers, to his own site, with some bits redacted for public consumption, [http://tantek.com/log/2004/06.html#d29t1850 since 2004-06-29]:
+* http://tantek.com/log/2004/06.html#d29t1850
+
+== Support ==
+Due to its popularity and ubiquity email is extremely widely supported.
+=== Application integration ===
+Of particular interest is the fact that many native applications (especially on iOS) include it in their share/export/action menus by default. This could be an excellent UI to piggyback on for quick and easy posting to our own sites.
+
+=== Bridgy ===
+Bridgy does not support email currently, however there is an issue filed to support [[POSSE]] to [[email list]]s in particular (and [[backfeed]] replies)
+* [https://github.com/snarfed/bridgy/issues/257 Bridgy from and to email lists #257]
+
+=== Webmention ===
+[[questo.email]] was an indieweb/email bridge that aimed to be a hub for all kinds of interactions between indie sites and email addresses, including email-to-webmention and webmentions-to-email.
+
+== Clients ==
+{{section-stub}}
+=== Thunderbird ===
+'''<dfn>[https://www.thunderbird.net/ Thunderbird]</dfn>''' is a cross-platform open source [[email]] client which also includes messaging and feedreader capabilities.
+
+==== Enigmail ====
+[https://enigmail.net/ Enigmail] is a plug-in for Thunderbird that supports sending [[OpenPGP]] signed or encrypted email.  [https://emailselfdefense.fsf.org/en/ A guide on doing this] is published by the Free Software Foundation.
+
+=== Gmail ===
+Google [[Gmail]] is a popular Web-based email client.
+
+=== Apple Mail ===
+
+Apple ships a mail client with most of its operating systems. It can handle both POP and IMAP email, as well as mail from Yahoo!, AOL, Exchange and others.
+
+== Brainstorming ==
+=== POSSE techniques ===
+Some thoughts on techniques for POSSEing to email, based in [[#IndieWeb_Examples|IndieWeb Examples above]].
+
+* publish an [[article]]
+* name of the article --&gt; email Subject:
+* author: &lt;-- intended email From: of yours
+* [[audience]]: &lt;-- intended from email To & CC:
+* content: --&gt; email body
+* hyperlink with <code>class="u-syndication"</code> &lt;-- email list permalink
+
+If you are POSSEing a reply to an email (e.g. on a mailing list)
+* publish a [[reply]] note (no need for an article, since the name/title isn't something you came up with, but rather "just" a "Re:" and the name/title of the original email you are replying to, which can go in the [[reply context]]
+* author: &lt;-- intended email From: of yours
+* [[audience]]: &lt;-- intended from email To & CC:
+* content: --&gt; email body
+* use <code>&lt;blockquote&gt;</code> for portions of the original email that you’re quoting to respond to, or lines starting with <samp>&gt; </samp> in a plain text note (which you can upgrade to <code>&lt;blockquote&gt;</code> when rendering on your site)
+* hyperlink with <code>class="u-syndication"</code> &lt;-- email list permalink
+
+=== Redirect to public issues ===
+One possible approach is to redirect incoming email to public issues, hosted on your own site, or [[GitHub]], per:
+
+* http://aaronparecki.com/notes/2014/01/07/1/email-lifehack <blockquote>I wonder what would happen if I set an email auto-responder that instructed people to open an issue on github.com/aaronpk/self instead of send me an email. #email #lifehack</blockquote>
+
+== Criticism ==
+=== Bad for more than two people ===
+Whilst adequate for some one to one conversation it scales extremely badly to conversations with more than two people. 
+=== Bad for collaboration ===
+It is also appallingly bad for collaboration ([[wiki]]s or version control systems are much better for this[http://microformats.org/wiki/wiki-better-than-email]).
+
+=== Not web ===
+* URLs == web [https://chat.indieweb.org/2013-08-21#t1377127301000000]
+* email addresses != web. [https://chat.indieweb.org/2013-08-21#t1377127315000000]
+=== Not web identifiers ===
+* email addresses are internet identifiers, not web identifiers, by definition. [https://chat.indieweb.org/2013-08-21#t1377127333000000]
+=== Maintenance disinterest ===
+* "I would rather futz with a domain and shared hosting than my own SMTP server any day" [https://chat.indieweb.org/2013-08-22#t1377129620000000]
+=== Bad for identity ===
+* [[Why_web_sign-in#Why_not_email|Why not email for identity]]
+=== Encourages Constant Distraction ===
+* http://www.nytimes.com/2014/08/29/opinion/end-the-tyranny-of-24-7-email.html
+
+=== Unreliable Delivery ===
+Email delivery, especially with your own domain, has shown to be anecdotally unreliable due to overzealous spam filters' false positives, e.g.: https://twitter.com/dangillmor/status/579770619367170049 <blockquote>Is there a way to find out if my email is ending up semi-routinely in spam filters? Several folks recently said they didn't get my messages</blockquote>
+
+=== Ecosystem discriminates against indie servers ===
+The email server ecosystem has evolved to a small handful of very large (100s of millions of accounts) services that peer with each other, and are actively hostile to indie servers sending their own mail with the excuse that those indie servers lack "reputation" (an ineffable an ill-defined requirement) for the larger servers to accept email from them.
+
+For more details see:
+* 2015-10-17 Jody Ribton: <cite>[https://web.archive.org/web/20151017232218/http://liminality.xyz/the-hostile-email-landscape/ The Hostile Email Landscape]</cite>
+
+Email deliverability services such as [https://mailgun.com/ Mailgun] can help with this. <cite>[http://beesbuzz.biz/blog/9902-Setting-up-Postfix-Mailgun-for-multiple-outgoing-domains Setting up Postfix + Mailgun for multiple outgoing domains]</cite>
+
+* {{citation
+| title = After self-hosting my email for twenty-three years I have thrown in the towel. The oligopoly has won.
+| url = https://cfenollosa.com/blog/after-self-hosting-my-email-for-twenty-three-years-i-have-thrown-in-the-towel-the-oligopoly-has-won.html
+| author = [https://cfenollosa.com/ Carlos Fenollosa]
+| published = 2022-09-04
+| archiveurl = https://web.archive.org/web/20221022185248/https://cfenollosa.com/blog/after-self-hosting-my-email-for-twenty-three-years-i-have-thrown-in-the-towel-the-oligopoly-has-won.html
+}}: <blockquote>Email is now an oligopoly, a service gatekept by a few big companies which does not follow the principles of net neutrality.</blockquote>
+** Author [https://twitter.com/cfenollosa/status/1566484145446027265 posted excerpts of the article in tweet format], interesting comment threads.
+
+=== More Problems ===
+See and extract/cite from:
+* http://tantek.com/w/EmailEfail
+* https://twitter.com/EmailFail
+* https://gimletmedia.com/episode/22-bonus-episode-the-man-who-refused-to-email/
+
+== FAQ ==
+'''Can I point my domain to my VPS(/web server) but still use hosted email services? I don’t want to run a mailserver'''
+
+Yes, your domain name can resolve to the IP address of your web server for HTTP traffic, but direct mail agents to look elsewhere. See also [[DNS]].
+
+== Email Services by Type ==
+Here are various levels of email services available from different providers, roughly ordered from easiest/cheapest/friendliest to most powerful/technical. 
+
+=== Custom domain email providers ===
+{{main|email-hosting}}
+* to-do: providers from this subsection need to be copied into [[email-hosting]], and then leave a summary list here of only the top 3-5 providers being used by IndieWeb folks and recommended for new folks.
+
+Custom domain email providers have the ability to set up an email account to send email as if it is from your own personal domain. 
+
+You have to separately configure your domain (perhaps at your DNS provider or [[web hosting]] provider) to forward domain sent to your domain (e.g. example@example.com) to whatever email provider you use.
+
+Advantages:
+* ...
+Disadvantages:
+* ...
+
+'''Services roughly sorted by number of IndieWeb examples, and recommendations thereof:'''
+
+
+==== FastMail ====
+{{main|FastMail}}
+[[FastMail]] is a paid email service that has a range of options from only giving you a @fastmail address to others that allow you to have your own personal domain. Other differentiators are with how much email you can store.
+
+IndieWeb examples:
+* [[User:Jonnybarnes.net|Jonny Barnes]] is using Fastmail's service for receiving/reading/sending jonnybarnes.net emails. Fastmail works by setting up a custom domain as an alias for your fastmail inbox.
+* {{kylewm}} is a Fastmail user too. They recommend letting fastmail be your actual nameserver, but I opted to continue using my registrar's nameserver and just copy/paste MX, DKIM, and SPF records from Fastmail.
+* {{mat.tl}} is using Fastmail as part of his grand email strategy.
+* {{addyourself}}
+
+
+==== mailbox.org ====
+{{main|mailbox.org}}
+[https://mailbox.org/ mailbox.org] is a paid email service starting at 1 Euro a month and based in Germany. There is a help page for [https://kb.mailbox.org/display/MBOKBEN/Using+e-mail+addresses+of+your+domain "Using e-mail addresses of your domain,"] which includes instructions for adding SPF, DKIM, and DMARC records. mailbox.org also supports [https://kb.mailbox.org/display/MBOKBEN/Using+catch-all+alias+with+own+domain "catch-all"] aliases. See also: https://en.wikipedia.org/wiki/Mailbox.org
+
+IndieWeb examples:
+* {{ethanyoo}} is using [https://mailbox.org/ mailbox.org] to send and receive emails for both ethanyoo.com and yooand.me.
+* {{mat.tl}} is using mailbox.org as part of his grand email strategy.
+* {{addyourself}}
+
+
+==== Gmail ====
+{{main|Gmail}}
+[[Gmail]] (gmail.com run by [[Google]]) is a free email service that has the ability to set it up to send email as if it is from your own personal domain, optionally using the SMTP server from your domain host ([[web host]]).
+
+IndieWeb examples:
+* {{t}} is using Gmail for receiving/reading/sending tantek.com emails but does not recommend this to new folks.
+* {{mat.tl}} is using whatever legacy gratis-GSuite is called now as part of his grand email strategy.
+* {{addyourself}}
+
+
+==== Pobox ====
+[https://www.pobox.com/ Pobox] is a paid email service that has two types of accounts: mailstore and forwarding. All of their plans allow for personal domains. In late 2024 Pobox accounts were merged with Fastmail accounts, but the existing addresses still work.
+
+IndieWeb examples:
+* {{mat.tl}} is using Pobox as part of his grand email strategy.
+* {{kvibber.com}} uses Pobox's forwarding addresses.
+* {{addyourself}}
+
+==== ProtonMail ====
+{{main|ProtonMail}}
+
+ProtonMail supports custom domains with their paid plans. See [[ProtonMail#IndieWeb_Examples|IndieWeb Examples]].
+
+==== Soverin ====
+{{main|Soverin}}
+[https://soverin.net/ Soverin] is a paid one-plan only email service that provides a "private mailbox that’s truly yours". It's a European service, based in Amsterdam, that focuses on privacy and making it simple to get up and running with e-mail on a personal domain. Makes it easy to conf
+
+IndieWeb examples:
+* {{voxpelli}} is using Soverin for his newest set up domain and an old free G-Suite/Google Apps account for his other account (also using a calendar on the G-Suite account).
+* {{addyourself}}
+
+
+==== HEY ====
+hey.com is a paid email service and client from 37signals. You can use it with a personal domain name or get email service from 37signals. Unlike most traditional email services, hey.com does not support POP or IMAP access to the mailbox, but mbox format exports are available. Once a hey.com account is paid for once, 37signals will forward email to that account elsewhere gratis.
+
+IndieWeb examples:
+* {{mat.tl}} is using HEY.com as the primary part of his grand email strategy.
+* {{addyourself}}
+
+
+==== Pawnmail ====
+[https://pawnmail.com/ Pawnmail] is a service dedicated to provide "Email hosting for custom domains" that gives 2GB storage "free forever" to anyone. It provides a webmail client along with SMTP, IMAP and POP3 access.
+
+IndieWeb examples:
+* {{addyourself}}
+
+
+==== Zoho Mail ====
+[https://www.zoho.com/mail/ Zoho Mail] has a free account plan that allows you to receive mail in your own domain (1 per account, in the free plan).
+
+IndieWeb examples:
+* {{addyourself}}
+
+
+==== Migadu ====
+[https://migadu.com/ Migadu] is a paid email service starting at [https://migadu.com/pricing/ $19/year] for unlimited domains and aliases. 
+
+IndieWeb examples:
+* {{benji}} uses their Micro plan with several domain names for sending and receiving since 2020.
+* {{addyourself}}
+
+=== Mail as a Service ===
+==== Mandrill ====
+
+Mandrill is a service for sending and receiving emails run by Mailchimp. It formerly had a generous free plan, but will require a paid MailChimp account [http://blog.mandrill.com/important-changes-to-mandrill.html beginning 2016-04-27] and paid e-mail volume, now starting at [https://mandrill.zendesk.com/hc/en-us/articles/217467117 30$ a month].
+
+Greyed-out information below probably not correct any more -> '''if you still use Mandrill, please update it!'''
+<div style="color:#aaa;">
+'''Note''': Madrill '''does not charge''' for inbound email. See: https://twitter.com/sandeepshetty/status/463330411636994048
+
+# Register at http://mandrillapp.com
+# Create a new inbound domain and set up MX records for the domain you’ve chosen [http://help.mandrill.com/entries/21699367-Inbound-Email-Processing-Overview detailed here]
+# Set up your web server to accept POST requests to the URL you configured
+#* Make sure you verify the origin of the request as detailed [http://help.mandrill.com/entries/23704122-Authenticating-webhook-requests here]. You can see the key for your webhook [https://mandrillapp.com/settings/webhooks here]
+#* The format of the POST request is detailed [http://help.mandrill.com/entries/22092308-What-is-the-format-of-inbound-email-webhooks- here]. Send some test emails to yourself and store the results to learn about the format
+
+Beware: I have experienced some inconsistencies in the mandrill responses. Namely that sometimes attachments are in the msg.attachments key, but I have also seen them in msg.images. I am currently using <code>attachments = msg.attachments || msg.images || []</code> to cater for both cases. --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 10:26, 24 May 2013 (PDT)
+</div>
+
+==== Other Inbound Email Providers ====
+
+There are other email PaaS companies which offer similar inbound POST request hooks instead of using Mandrill. More details coming soon.
+
+* MailGun - [http://mailgun.com] 
+* PostMark - [http://postmarkapp.com]
+* Comparison of several providers - [https://github.com/opennorth/multi_mail/wiki/Incoming-email-APIs]
+
+=== Mail Forwarding Services ===
+
+Advantages:
+* The service provider handles all of the issues that are involved with mail delivery such as spam filtering, DKIM and SPF support and will also cache your mail if your MTA goes offline
+* ...
+Disadvantages:
+* You still need to setup a MTA to receive the email being forwarded by the vendor
+* ...
+
+IndieWeb community members using this approach: 
+* [[User:Bear.im|Bear]] is using MailRoute for receiving/sending bear.im emails.
+* ...
+
+==== MailRoute ====
+
+[http://mailroute.net/services.html MailRoute] allows you to specify its mail servers in your domain's MX records and then specify what server domain or IP Address to forward sanitized emails to. It offers spam filtering, greylisting and a number of other features. Once you have an account and have configured it for your domain you are then ready to setup your local MTA.
+
+=== Handling it Yourself ===
+
+==== Mail in a Box ====
+[https://mailinabox.email Mail in a Box] is a script that [http://razor.occams.info/ Josh Tauberer] has put together to turn a VPS into a functioning mail server.
+
+==== Running your own mail server  ====
+
+A MTA (Mail Transfer Agent) is a process that runs on your server and accepts incoming SMTP (port 25 generally) connections for mail delivery. Running your own MTA is fraught with trouble and can be so very time consuming that even people who run servers for a living generally use a forwarding service to handle all of the messy bits.
+
+The example I give here will be to use Mailroute as the forwarding service and Postfix as the local MTA, but other combinations can be used.
+
+*Note* this is a draft work-in-progress - I'll be filling in more concrete examples and other suggestions as I get time.
+
+I use Postfix primarily because it comes from all of the OS Distros with a very sane set of defaults that you enter during setup and it just works. The reason Postfix becomes a drop-in tool is because of the work that is being done by the Mail Forwarder you setup in the prior step.
+
+The key bits to configure is to tell the installer that you are using Postfix as "[http://www.postfix.org/STANDARD_CONFIGURATION_README.html#stand_alone Stand-alone Internet Host]" and then make sure the main.cf entries for mydestination contains your domain and relayhost contains the domain name for your Mail Forwarder.
+
+TODO:
+* tls and sasl configuration
+* show how to configure the host's MDA (Mail Delivery Agent) to deliver emails to a program instead of a user mailbox
+* show how to configure a mailbox to use store mail to be read by a cronjob or other agent
+
+A guide to setting up a self-hosted email server
+* https://prefet.ch/blog/2020/email-server/
+
+===== Indieweb examples =====
+{{petermolnar}} had been running his own mail stack for 10+ years; the current setup is postfix ( with postscreen ) + dovecot + dspam + opendkim + opendmarc.
+* [https://petermolnar.net/article/howto-spf-dkim-dmarc-postfix/ Getting DKIM, DMARC and SPF to work with Postfix, OpenDKIM and OpenDMARC] 
+* [https://petermolnar.net/article/debian-lightweight-mailserver-postfix-dovecot-dspam/ Lightweight, secure, database-free, spamfiltering mail server with Postfix, Dovecot, openDKIM and dspam on Debian 7]
+
+{{mat.tl}} has worked through and used [https://sive.rs/ti Derek Sivers' "Tech Independence" tutorial] which includes setting up an OpenBSD server with email functionality.
+
+=== Security Issues ===
+
+Anyone can send fake email from any email address. You need some way of determining that inbound email does indeed come from who it appears to. Possible solutions include:
+
+* Make sure you’re verifying the authenticity of the request sent to your webhook
+* Using “secret” email addresses by embedding the password in the address, e.g. myreallysecurepasswordorrandomkey@example.com — then store it in a private address book to save typing
+** [[Flickr]] does this - to let you upload [[photos]] by email - and the email address are pretty short too.
+* Use a mechanism such as [https://en.wikipedia.org/wiki/Sender_Policy_Framework SPF] to determine the authenticity of an email
+
+==== phishing ====
+'''<dfn>phishing</dfn>''' is the act of sending an email (a <dfn>phish</dfn>) with both a forged from address and HTML contents that pretend to be from a popular service provider (often [[silo]]), and usually have some sort of fear-invoking subject like "Account Termination", or greed-invoking like "Transfer Notification" from a bank, with a link or button to "Log in", "Verify Account", "Initiate Transfer" which appears to go to the service provider but actually goes to an attacker's website that looks very similar (if not identical) to the service provider in order to trick you into entering your username and password, so the attacker can gain access to your service provider account.
+
+The term "phish" comes from the attacker "fishing" for your username and password, which if you enter,  then you've been "<dfn>phished</dfn>".
+
+E.g. (documented examples of phishing emails)
+* [[Apple ID]]: https://bear.im/bearlog/2017/297/apple-phishing-email.html
+* ...
+
+==== spearphishing ====
+'''<dfn>spearphishing</dfn>''' is the act of tailoring a "phish" specifically for a particular individual, sometimes seeming to come from a trusted contact, friend, co-worker.
+
+== As Commenting ==
+In 2015, when shutting down their comment section, [https://www.vice.com/en_us/section/tech Motherboard] recommended people to take discussions to email rather than getting them burried in public discourse:
+
+<blockquote>Comment sections inspire quick, potent remarks, which too easily veer into being useless or worse. Sending an email knowing that a human will actually see it tends to foster thought, which is what we want.</blockquote>
+
+* {{citation
+| title = We're Replacing Comments with Something Better
+| url = https://www.vice.com/en_us/article/jp5yx8/im-on-twitter-too
+| author = [https://twitter.com/derektmead Derek Mead] (for Motherboard)
+| published = 2015-10-05
+| archiveurl = https://web.archive.org/web/20200717111133/https://www.vice.com/en_us/article/jp5yx8/im-on-twitter-too
+}}
+
+As of 2020, several personal blogs started including links to solicitate replies via email to their feeds. Specifically to interact with people not visiting the blogs directly and using non-social [[readers]].
+
+=== Examples ===
+The following are all announcement posts of personal blogs adding email links to their feeds:
+* {{citation
+| title = Reply link in RSS feed posts
+| url = https://destroytoday.com/blog/reply-link-in-rss-feed-posts
+| author = [https://destroytoday.com/ Jonnie Hallman]
+| published = 2020-07-12
+| archiveurl = https://web.archive.org/web/20200717091833/https://destroytoday.com/blog/reply-link-in-rss-feed-posts
+}}
+* {{citation
+| title = Reply links in RSS feeds
+| url = https://www.robinrendle.com/notes/reply-links-in-rss-feeds
+| author = [https://www.robinrendle.com/ Robin Rendle]
+| published = 2020-07-12
+| archiveurl = https://web.archive.org/web/20200717092020/https://www.robinrendle.com/notes/reply-links-in-rss-feeds
+}} – crediting Jonnie for the idea
+* {{citation
+| title = RSS reply links
+| url = https://colly.com/stream/rss-reply-links
+| author = [https://colly.com/ Simon Collison]
+| published = 2020-07-13
+| archiveurl = https://web.archive.org/web/20200717092208/https://colly.com/stream/rss-reply-links
+}} – crediting Jonnie and Robin for the idea
+* {{citation
+| title = Replyin’.
+| url = https://ethanmarcotte.com/wrote/replyin/
+| author = [https://ethanmarcotte.com/ Ethan Marcotte]
+| published = 2020-07-13
+| archiveurl = https://web.archive.org/web/20200717092531/https://ethanmarcotte.com/wrote/replyin/
+}} – crediting Jonnie, Simon, and Robin for the idea
+* {{citation
+| title = Reply via email
+| url = https://hiddedevries.nl/en/blog/2020-07-14-reply-via-email
+| author = [https://hiddedevries.nl/ Hidde de Vries]
+| published = 2020-07-14
+| archiveurl = https://web.archive.org/web/20200717092352/https://hiddedevries.nl/en/blog/2020-07-14-reply-via-email
+}} – crediting Ethan and Robin for the idea
+* {{citation
+| title = add reply link to rss feed
+| url = https://github.com/vfalconi/tattooed.dev/commit/deb36459ac0ec386059db58d08415c18c2e72e65
+| author = [https://tattooed.dev/ Vince Falconi]
+| published = 2020-07-14
+| archiveurl = https://web.archive.org/web/20200717114918/https://github.com/vfalconi/tattooed.dev/commit/deb36459ac0ec386059db58d08415c18c2e72e65
+}} – No announcement, but change on GitHub.
+** [https://twitter.com/vincefalconi/status/1283083231022252039 Loves the idea] (tweet), retweeting [https://chriscoyier.net/ Chris Coyier] who thinks it is [https://twitter.com/chriscoyier/status/1283082321554403330 “a neat idea”] (tweet, [https://email-is-good.com/2020/07/14/rss-with-reply-via-email/ post]) but has not done it yet.
+* {{citation
+| title = Reply via Email
+| url = https://snook.ca/archives/rss/reply-via-email
+| author = [https://snook.ca/ Jonathan Snook]
+| published = 2020-07-20
+| archiveurl = https://web.archive.org/web/20200721133657/https://snook.ca/archives/rss/reply-via-email
+}}
+* {{citation
+| title = Note on August 6, 2020
+| url = https://francescoschwarz.com/notes/reply-via-email/
+| author = [https://francescoschwarz.com/ Francesco Schwarz]
+| published = 2020-08-06
+| archiveurl = https://web.archive.org/web/20220802110639/https://francescoschwarz.com/notes/reply-via-email/
+}} – crediting Hidde, Ethan, and Robin for the idea
+* {{citation
+| title = Reply links in RSS items
+| url = https://meyerweb.com/eric/thoughts/2020/09/04/reply-links-in-rss-items/
+| author = [https://meyerweb.com/ Eric Meyer]
+| published = 2020-09-04
+| archiveurl = https://web.archive.org/web/20200905160924/https://meyerweb.com/eric/thoughts/2020/09/04/reply-links-in-rss-items/
+}} – crediting Jonnie, sharing [[WordPress]] code snippet, linking to both email and own [[comment]] form.
+
+A smaller number of personal blogs do the same right on their [[posts]]:
+
+* [https://www.jim-nielsen.com/ Jim Nielsen] started with an email link in his feed, citing Robin and Jonnie. Then added it to the footer of all blog posts during a design “realignment” ([https://github.com/jimniels/blog/pull/26 GitHub PR]) and has experimented with hiding his email address to combat spam. Blog posts:
+** {{citation
+| title = Email Replies in Feeds
+| url = https://blog.jim-nielsen.com/2020/email-replies-in-rss/
+| author = [https://www.jim-nielsen.com/ Jim Nielsen]
+| published = 2020-07-20
+| archiveurl = https://web.archive.org/web/20221022202407/https://blog.jim-nielsen.com/2020/email-replies-in-rss/
+}}
+** {{citation
+| title = Feat: New Style
+| url = https://blog.jim-nielsen.com/2021/feat-new-style/
+| author = [https://www.jim-nielsen.com/ Jim Nielsen]
+| published = 2021-01-20
+| archiveurl = https://web.archive.org/web/20221022203724/https://blog.jim-nielsen.com/2021/feat-new-style/
+}}
+** {{citation
+| title = Hide My mailto: Email
+| url = https://blog.jim-nielsen.com/2021/hide-my-mailto-email/
+| author = [https://www.jim-nielsen.com/ Jim Nielsen]
+| published = 2021-10-10
+| archiveurl = https://web.archive.org/web/20221022203644/https://blog.jim-nielsen.com/2021/hide-my-mailto-email/
+}}
+* {{citation
+| title = Online Conversations & Website Engagement
+| url = https://kevq.uk/online-conversations-website-engagement/
+| author = [https://kevq.uk/ Kev Quirk]
+| published = 2021-07-03
+| archiveurl = https://web.archive.org/web/20220802110924/https://kevq.uk/online-conversations-website-engagement/
+}}
+** <q>Problem was, despite all the useless comments, I still wanted the engagement from genuine readers, as that’s the main reason I write content. So I replaced the comment form with a simple button that said Reply via email, which linked to my email address.</q>
+
+== See Also ==
+* [[private posts]]
+* [[email list]]
+* [[texting]]
+* https://theconversation.com/the-only-safe-email-is-text-only-email-81434
+* [https://www.mailsploit.com/index Mailsploit: list of vulnerabilities in email clients, sender spoofing, code injection attacks, etc.]
+* 2017-11-30 Katie Notopoulos / BuzzFeed [https://www.buzzfeed.com/katienotopoulos/i-tried-emailing-like-your-boss  I Tried Emailing Like A CEO And Quite Frankly, It Made My Life Better]
+* [https://blog.fastmail.com/2018/02/14/email-is-your-electronic-memory/ Email is your electronic memory]
+* 2018-03-25 Criticism: https://twitter.com/SarahJamieLewis/status/978059205218205696
+** "(Another grand example is email, where a ridiculous amount of power is now concentrated in the hands of google despite the decentralized nature of the protocol)" [https://twitter.com/SarahJamieLewis @SarahJamieLewis] March 25, 2018
+* 2018-04-07 <cite>[https://jameshfisher.com/2018/04/07/the-dots-do-matter-how-to-scam-a-gmail-user The dots do matter: how to scam a Gmail user]</cite> - problem of email addresses being used for [[identity]], different email providers do different email address collapsing (e.g. Gmail and dots or +something)
+* https://www.theatlantic.com/amp/article/560780/?__indieweb_impression=true
+* 2013-06-13 Krebs: [https://krebsonsecurity.com/2013/06/the-value-of-a-hacked-email-account/ The Value of a Hacked Email Account] <blockquote><img style="max-width:100%" alt="diagram with 'hacked email' in the center, with arrows flowing outward to different clusterings of how your email account could be abused, including for spam, harvesting, employment, privacy violation, retail resale, and financial access" src="https://krebsonsecurity.com/wp-content/uploads/2013/06/HE-1-600x333.jpg" /></blockquote>
+* Secure email that does not require a phone number to sign-up: https://twitter.com/vectorvekar/status/1143301499008585728
+** "http://tutanota.com doesn’t need a phone number and it’s encrypted." [https://twitter.com/vectorvekar @vectorvekar] June 24, 2019
+* use-case: necessary for job applications. Thread: https://threadreaderapp.com/thread/1143275350777978880.html and original tweet: https://twitter.com/lisackaplan/status/1143275350777978880
+* POSSE example: http://self-issued.info/?p=2001 and POSSE copy to list: https://mailarchive.ietf.org/arch/msg/oauth/8uWRYfTmw9Bilbidcwb-R11Cais
+* Criticism: Running your own server means people may not get your emails: https://twitter.com/lightcoin/status/1214300933200515073
+** "indeed email has survived but if you run your own server people might never get your emails. it's already getting like that with Mastodon (as your suggestion to avoid http://madtodon.social shows). that's simply not an architecture I can invest energy into/ converting others to." [https://lightco.in @lightcoin] January 6, 2020
+* https://twitter.com/lightcoin/status/1128198395632521216
+** "If Google blacklists your email server's IP address, good luck getting anything done via email.<br><br>Email taught us that federated isn't good enough. The protocol needs to be P2P for it to be truly resilient to censorship." [https://lightco.in @lightcoin] May 14, 2019
+* [[email authentication]]
+* Good reason to keep all email encrypted, including on laptops: 2020-08-17 [https://viewfromthewing.com/us-border-patrol-says-they-can-create-central-repository-of-traveler-emails-keep-them-for-75-years/ US Border Patrol Says They Can Create Central Repository Of Traveler Emails, Keep Them For 75 Years]
+* 2020-09-02 Krebs on Security: [https://krebsonsecurity.com/2020/09/the-joys-of-owning-an-og-email-account/ The Joys of Owning an ‘OG’ Email Account] — lots of warnings about mistakes people make with email signing up for services, recovery email, and a good [[SMS]] debate in the comments.
+* Criticism: 2018-08-31 Fast Company [https://www.fastcompany.com/90228159/stop-annoying-everyone-with-these-common-email-mistakes Stop annoying everyone with these common email mistakes] <blockquote>“Email is a to-do list you don’t control,” says Aye Moah, chief of product and cofounder of the productivity software provider Boomerang. “It’s an open protocol, and anybody who can get hold of your email address can impose on you and demand attention in your inbox.”</blockquote>
+* [https://www.gov.uk/guidance/protect-domains-that-dont-send-email UK Government Digital Services article about communicating that a domain is never used for email]
+* https://www.newyorker.com/tech/annals-of-technology/e-mail-is-making-us-miserable
+* the importance of your own domain [https://statusq.org/archives/2021/12/03/10713/ University of Cambridge abandons open standards for proprietary ones, and starts to pay the price]
+* [https://toolbox.googleapps.com/apps/messageheader/ Google Admin Toolbox's MessageHeader]: Tool to paste in email headers to verify if SPF records/DKIM signing worked correctly
+* [https://mxtoolbox.com/ MX Toolbox]: site with a variety of tools to check email health/deliverability, including SPF record lookup: https://mxtoolbox.com/spf.aspx
