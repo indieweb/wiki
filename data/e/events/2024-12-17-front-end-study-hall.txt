@@ -1,10 +1,119 @@
 https://indieweb.org/events/2024-12-17-front-end-study-hall
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+[[Category:Front end]]
+'''<dfn>[https://events.indieweb.org/2024/12/front-end-study-hall-017-ninygkkRl7Mw Front End Study Hall #017]</dfn>''' was an IndieWeb meetup on Zoom held on 2024-12-17.
 
+* Archived from: https://etherpad.indieweb.org/2024-12-17-front-end-study-hall
+
+= Front End Study Hall #017 =
+December 17, 2024
+https://events.indieweb.org/2024/12/front-end-study-hall-017-ninygkkRl7Mw
+
+== Participants ==
+* {{artlung}} (facilitator)
+* {{gRegor}}
+* Eric Meyer
+* {{benji}}
+* {{t}}
+
+== Notes ==
+* Joe's background is the WCAG website... he has a goal for next year to do more about Accessibility in 2025
+
+* CSS is Awesome - the anniversary of the CSS spec is today - there is a CSS "game show" happening concurrently with FrESH today:  https://www.youtube.com/watch?v=fYfs6sKGciQ
+** On December 17, 1996 the W3C published the first standard for CSS, and we are celebrating on Winging It! A few of our CSS friends will join us for our "CSS Is Awesome Game" on Tuesday, December 17, 2024 at 1pm Eastern. If you love CSS as much as we do, then we hope you will watch and play along as we battle to see who will win the CSS Is Awesome game.
+* What is the state of CSS?
+** How do we keep up with CSS?
+** Is there a "Walter Cronkite" - "That was the week that was" for CSS?
+** The problem of multiple non-overlapping communication spheres.
+
+* Web Content Accessibility Guidelines (WCAG) 2 Overview
+** https://www.w3.org/WAI/standards-guidelines/wcag/
+** Some recent chat in #indieweb-dev about [[alt]]
+
+=== In praise of the "kbd" tag ===
+{{artlung}} shared the <code>Alt + R</code> keyboard shortcut he set up and use of <code>kbd</code> tag. Asked about best practices to advertise that. <code>accesskey</code> maybe? https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes/accesskey
+* https://lab.artlung.com/keystroke-to-go-to-random-page/
+
+=== CSS Miscellany ===
+{{gRegor}} TIL of these CSS properties from Eric, thanks!
+* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-thickness
+* https://developer.mozilla.org/en-US/docs/Web/CSS/text-decoration-style
+* https://developer.mozilla.org/en-US/docs/Web/CSS/text-underline-offset
+
+* Michael did Christmas lights on https://michaelkupietz.com/ right now
+
+* Font size at the root element
+** https://joshcollinsworth.com/blog/never-use-px-for-font-size
+** https://css-tricks.com/accessible-font-sizing-explained/#aa-avoid-setting-a-base-font-size
+
+* Rem vs Em:
+** https://codepen.io/artlung/pen/NWVvqEe
+
+Fluid Type Scale Calculator
+* https://www.fluid-type-scale.com/
+
+=== Other ===
+
+* Todd Rundgren and Thomas Dolby
+**  Musicians who write code!
+
+=== Further ===
+
+Back to font sizes on root element
+* Do browsers override the <code>:root</code> element font sizes?
+** It appears, in Firefox at least, the :root font-size overrides browser font size preferences, so generally probably good advice not to set font-size there, or at least make sure it's not smaller than 100%
+** Richard Rudder (start at 10px, and scale upward)
+
+{{t}}: https://tantek.com/CSS/Examples/dotleaders.html
+* and over 10 years later, Bert Bos published this: https://www.w3.org/Style/Examples/007/leaders.en.html (which cites {{t}}'s Bella Mia menu)
+
+Holiday theme
+* https://michaelkupietz.com/ blinking Christmas lights at the top of the page, they wiggle when you mouse over them
+
+=== A11y and Emoji Discussion ===
+
+* Emoji in text and accessibility with screenreaders
+** https://devyarns.com/accessible-emojis/
+** https://blog.easterseals.com/emojis-and-accessibility-the-dos-and-donts-of-including-emojis-in-texts-and-emails/
+** https://guides.cuny.edu/accessibility/memeEmoji
+** https://www.tiny.cloud/blog/emojis-and-accessibility/
+** https://www.barrierbreak.com/using-emojis-is-so-fun-but-how-to-make-them-accessible/
+** https://www.w3.org/WAI/WCAG20/Techniques/html/H86
+
+* use-case for semantic emojis:
+** https://tantek.com/2023/114/t1/venues-reviews-personal-pages
+
+* How Twitter does emoji, example from POSSEd post from {{t}}
+** https://tantek.com/2024/035/t2/indiewebcamp-brighton-tickets-available 
+** Twitter img tag (trimmed extra attributes):
+*** <code><nowiki><img alt="⚠️" src="https://abs-0.twimg.com/emoji/v2/svg/26a0.svg" style="max-width: 1rem;aspect-ratio: 1"></nowiki></code>
+
+* {{t}}'s brainstorm: <code><nowiki><abbr title="Warning:">⚠️</abbr></nowiki></code>
+
+* in the context of: https://tantek.com/2024/285/t1/io-domain-suggested-steps
+
+* Zalgo text:
+** https://stackoverflow.com/questions/1732348/regex-match-open-tags-except-xhtml-self-contained-tags/1732454#1732454
+** https://zalgo.org/
+** https://meta.stackoverflow.com/questions/261561/please-stop-linking-to-the-zalgo-anti-cthulhu-regex-rant
+
+* How screen readers read out abbr title vs aria-label
+** Appears that screen readers do not by default read out the title attribute of an abbr, so that's helpful but insufficient
+** However, it appears that they do read out aria-label by default:
+*** https://stackoverflow.com/questions/32888344/abbr-element-aria-label-or-title-attribute
+** See also:
+*** https://www.deque.com/blog/text-links-practices-screen-readers/ 
+*** https://stackoverflow.com/questions/45776312/how-do-screen-readers-read-abbr-tags
+
+so maybe (updated {{t}} brainstorm):
+* <code><nowiki><abbr title="Warning:" aria-label="Warning:">⚠️</abbr></nowiki></code>
+
+https://lab.artlung.com/speech-synthesis/
+
+=== After the event notes: ===
+* {{t}}: Note [[Template:play]] is a pre-existing abbr around an emoji template. added aria-label
+
+
+{{Front End Study Hall}}
+
+[[Category:Events]]
