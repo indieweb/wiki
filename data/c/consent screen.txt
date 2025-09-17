@@ -1,10 +1,158 @@
 https://indieweb.org/consent_screen
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+<span class="p-summary">'''<dfn>consent screen</dfn>''' is the page you see during an OAuth flow that asks whether you want to allow the application you're logging in to to be able to access the data it's requesting.</span>
+
+The idea is to provide the user with enough information to make an informed decision about what they are providing to the application, and give them the opportunity to amend / reject the request.
+
+== Examples ==
+
+=== Dmitri Shuralyov ===
+
+This is an example of a simple consent screen implemented in {{ds}}'s IndieAuth server. It displays an attempt to sign in to the https://unicyclic.com website as https://dmitri.shuralyov.com.
+
+[[File:dmitri_shuralyov_consent_screen.png|280px]]
+
+=== Jamie Tanna ===
+
+{{jamietanna}}'s IndieAuth server shows the user a choice of scopes, with information about what they allow, and allows the user to specify whether they'd like to grant a refresh token, as well as informing the user of how long tokens are valid for (with more human readable terminology):
+
+<img src="https://media.jvt.me/c4e9c15631.png" style="max-width:100%" alt="
+A screenshot of Jamie's consent screen, listing the client's URL, the currently authenticated user, a list of scopes and what they mean, presented as a tickbox. There is a checkbox option for allowing persistent access, with a description of what it means in less technical terms - listing all scopes that are supported by the server, with the scopes that have been requested pre-ticked, and unknown scopes listed separately. There is also the option to allow the request, or deny it." />
+
+When a client does not use Proof of Key Code Exchange (now the standard), a bold warning is presented to the user:
+
+<img src="https://media.jvt.me/f34f45fbf0.png" style="max-width:100%" alt="A screenshot of Jamie's consent screen, with a bold warning showing that Proof of Key Code Exchange isn't in use" />
+
+When a client is not requesting scopes (i.e. to just use the "authentication" flow), the scopes are not presented, and there is instead a note about what this means:
+
+<img src="https://media.jvt.me/424fa84a6d.png" style="max-width:100%" alt="A screenshot of Jamie's consent screen, with a human-readable description about only getting profile information and lack of persistent access to data" />
+
+=== Martijn van der Ven ===
+
+{{zegnat}}'s consent screen as of IWC East 2020:
+
+<img src="https://i.imgur.com/OmAdhzD.png" style="max-width:100%" alt="Screenshot of a consent user interface with checkboxes for scopes, a disclosure triangle for custom scopes, and a set of profile fields that will be shared" />
+
+=== Aaron Parecki ===
+
+[[File:aaronpk-p3k-consent-screen.png|600px|The consent screen of p3k, showing the profile and micropub and microsub scopes with checkboxes next to each]]
+
+The consent screen of [[p3k]] contains the following features:
+
+At the top, identifies the application requesting permission. It will show either the plain client ID URL or the application name and logo.
+
+If the client ID URL contains [[h-app]] markup, then the application's name and icon will appear instead of the URL.
+
+[[File:aaronpk-p3k-consent-screen-app-info.png|600px|screenshot of quill icon with the name quill in place of the previously shown application URL]]
+
+If the app requests profile scopes (profile and/or email), the profile section appears and shows which profile scopes the app is requesting. These are checkboxes and can be enabled or disabled by the user.
+
+If the app requests any scopes for publishing or reading (e.g. create or read), the next section appears and shows which scopes the app is requesting. Each is a checkbox and can be enabled or disabled by the user. The special scope "draft" can be turned on in which case any post the application creates will be set as a draft regardless of whether the app sets draft status in the Micropub request. This is a way to safely try out micropub clients without risking accidentally publishing posts publicly. The "media" scope is required for the app to upload to the media endpoint, and since some clients don't request it, I have to enable it when using those apps.
+
+[[File:aaronpk-p3k-consent-screen-channels.png|600px|the text "If any channels below are checked, all posts created with this access token will be added to the channels checked", followed by a list of channel names]]
+
+The "Channels" section can be expanded to enable this option. By default, posts go through an automatic filtering process to determine which channel the post appears in based on the contents of the post. (e.g. checkins go into the checkins channel, replies go into replies, photo posts that aren't replies go into the photos channel, etc). However if I choose, I can force every post this app makes to go into a certain channel bypassing the normal automatic sorting rules.
+
+[[File:aaronpk-p3k-consent-screen-security.png|600px|green box containing a lock icon emoji and the text "This client is using PKCE with method S256!", followed by a orange warning box explaining that the redirect URL does not match the domain of the client ID]]
+
+Lastly, two security features are shown. If the client included [[PKCE]] parameters in the request (recommended as of the 2020 IndieAuth spec), this is shown in green with a closed lock icon.
+
+If the redirect URL of the application has a different host than the client ID, then a warning is shown letting the user know where they will be sent to after authorizing the application.
+
+
+=== WordPress IndieAuth Plugin ===
+
+[[File:wordpress_indieauth_consent_screen.png]]
+
+=== Alto ===
+
+[[Alto]], maintained by {{capjamesg}}, shows the following information on the consent screen:
+
+[[File:alto consent screen.png]]
+
+=== capjamesg ===
+
+{{capjamesg}}'s IndieAuth server, which was only active for a few months and later used as the base for Alto that was released in September 2025, previously displayed:
+
+* The name and logo of a client, with a link to the client ID.
+* A description from the client, if one is specified in a p-summary microformat.
+* A list of scopes requested by a client, if any.
+* A message telling a user whether or not PKCE is in use by the client.
+* The redirect URL to which a user will be sent after authorizing an application.
+* A button to let the user authorize their request.
+
+A user must authenticate with the web server using RelMeAuth before they can authorize an application to log in with their domain.
+
+Here is how {{capjamesg}}'s IndieAuth consent screen appears:
+
+[[File:Screenshot from 2021-10-20 10-52-47.png]]
+
+[[Category:IndieAuth]]
+
+=== Vika ===
+[[Kittybox]] displays the following in the consent screen:
+
+* The name and the logo of a client, with a link to the client ID
+* A semi-non-technical explainer detailing what exactly is about to happen
+* A scope selector
+** Notably, all of the scopes are unset at first; user must indicate explicit intent by allowing scopes explicitly
+* A button to confirm authentication (with a chooser)
+
+[[File:Kittybox_consent_screen.png]]
+
+=== ProcessWire IndieAuth Module ===
+{{main|ProcessWire IndieAuth}}
+
+When only signing in (no scopes requested), it will prompt "[client] is asking you to sign in" and show the domain name you are signing in as, the redirect URL, a ''Continue'' button, and ''Cancel'' button:
+
+[[File:processwire-indieauth-authentication.png|alt=screenshot of ProcessWire IndieAuth authentication prompt]]
+
+When signing in and authorizing access to your site, it will prompt "[client] is asking to access your site" and show the scopes the client requested as checkboxes. There is a link to the IndieWeb [[scopes]] page for more information. There is also a checkbox option to authorize the client app with no expiration. Similar to authentication-only, it shows the domain name you are signing in as, the redirect URL, an ''Allow'' button, and a ''Cancel'' button:
+
+[[File:processwire-indieauth-authorization.png|alt=screenshot of ProcessWire IndieAuth authorization prompt]]
+
+For both flows, if the client advertises its name/logo with [[h-app]], the consent screens will display those (the [[indiebookclub]] example). Otherwise it falls back to using the client_id (the [[IndieLogin]] example).
+
+=== Indiekit ===
+
+[[Indiekit]] displays a sign in screen if the client hasn’t requested a scope. Entitled ‘Sign in’, the introductory text says ‘Sign in to [client] as [domain]’, and the submit button says ‘Sign in’:
+
+[[File:indiekit-consent-screen-sign-in.png|480px|alt=Screenshot of Indiekit’s sign in form.]]
+
+If the client is requesting scope(s), Indiekit displays a consent form. Entitled ‘Authorize application’, the introductory text says ‘[client] is requesting permission to access [domain]’, and the submit button says ‘Allow’:
+
+[[File:indiekit-consent-screen-with-client-info.png|480px|alt=Screenshot of Indiekit’s sign in form.]]
+
+If a client doesn’t not support PKCE, a warning is shown. It says ‘[client] is not using PKCE (Proof Key Code Exchange), which is more secure):
+
+[[File:indiekit-consent-screen-no-pkce.png|480px|alt=Screenshot of Indiekit’s consent screen with a warning about PKCE not being used.]]
+
+Other features:
+
+* Client logo is shown if provided. A light grey background is added as some clients provide a white logo on a transparent background, which would otherwise be invisible. Padding is also added around the image incase the logo goes edge-to-edge.
+* The word ‘scope’ is not used on the consent page. Indiekit aims to be user friendly, and try to avoid technical terms where they are not useful or meaningful.
+* The redirect URL is shown below the submit button, in close proximity to it.
+
+=== [https://github.com/benjifs/serverless-indieauth barnacle] ===
+
+When authenticating with barnacle the consent screen will show the clients information if available and it will display only the scopes provided with some definitions on what they do.
+
+[[File:Screenshot 2025-09-17 at 11-36-37 barnacle.png|480px|alt=Screenshot of barnacle showing consent screen with only the scopes provided as options]]
+
+== Ideas ==
+
+* A consent screen could search your site for history of having authorized the client_id before, and if so, find some stats e.g. how many posts were made with it, when the last post was made, etc. and show that to the user. When authorizing a new client, the consent screen could note that this client hasn’t been seen before. Both pieces of information could be helpful in avoiding phishing attacks, e.g. if a malicious app tries to imitate an existing app, the user will see that their server doesn’t recognise it, prompting closer examination and caution
+* A site with an integrated [[social reader]] could keep track of what apps people you follow use to post to their site (assuming some basic markup for [[giving-credit#Crediting_Applications]], say, “.h-entry.u-posted-via.h-app.u-url”), and when you go to authorize that app, the consent screen could list the people you know who appear to be using it
+* …
+
+== See Also ==
+* [[IndieAuth]]
+* https://www.oauth.com/oauth2-servers/authorization/the-authorization-interface/
+* https://www.flickr.com/photos/factoryjoe/sets/72157624457629866/
+* 2010-08-17 {{benward}} [https://benward.uk/blog/tumblr-968515729 Would this really be so bad?] (see screenshot, one of the first sketches of an accepted OAuth UI convention today!). Original link: http://blog.benward.me/post/968515729
+* https://www.oauth.com/oauth2-servers/scope/checkboxes/
+* https://www.oauth.com/oauth2-servers/scope/user-interface/
+* https://games.greggman.com/game/github-permission-problem/
+* https://www.flickr.com/photos/aaronpk/51246850947/
