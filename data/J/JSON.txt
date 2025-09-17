@@ -1,10 +1,145 @@
 https://indieweb.org/JSON
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+'''<dfn>[https://json.org/ JSON]</dfn>''' (abbreviation for <dfn>[[JavaScript]] Object Notation</dfn>) is a data serialization format often used by HTTP APIs, growing in popularity instead of XML, and also the canonical output of [[microformats2]] parsers. 
+
+== Specs ==
+There have been many descriptions of the JSON format. ECMA-404 includes some of this history, quoted here with links added:
+
+<blockquote>JSON was first presented to the world at the JSON.org website in 2001. A definition of the JSON syntax was subsequently published as IETF [https://tools.ietf.org/html/rfc4627 RFC 4627] in July 2006. [https://www.ecma-international.org/publications/standards/Ecma-262.htm ECMA-262], Fifth Edition (2009) included a normative specification of the JSON grammar. This specification, [https://www.ecma-international.org/publications/standards/Ecma-404.htm ECMA-404], replaces those earlier definitions of the JSON syntax. Concurrently, the IETF published [https://tools.ietf.org/html/rfc7158 RFC 7158]/[https://tools.ietf.org/html/rfc7159 7159] and in 2017 [https://tools.ietf.org/html/rfc8259 RFC 8259] as updates to RFC 4627. The JSON syntax specified by this specification and by RFC 8259 are intended to be identical.</blockquote>
+
+It must be noted that [https://www.tbray.org/ongoing/misc/Tim Tim Bray], editor of RFC 8259, actually recommends using I-JSON ([https://tools.ietf.org/html/rfc7493 RFC 7493]) and none of the above mentioned specifications. Because it “ex­plic­it­ly rules out some legal-but-dumbass things”. ({{citation
+| title = The Last JSON Spec
+| url = https://www.tbray.org/ongoing/When/201x/2017/12/14/RFC-8259-STD-90
+| author = <a href="https://www.tbray.org/ongoing/misc/Tim" class="h-card">Tim Bray</a>
+| published = 2017-12-14
+| archiveurl = https://web.archive.org/web/20180320081754/https://www.tbray.org/ongoing/When/201x/2017/12/14/RFC-8259-STD-90
+}}.)
+
+== HTML first gives you automatic JSON ==
+You should always support a human readable HTML page of any data you publish, and mark it up with microformats2. At that point you don't need a separate JSON representation, because microformats2 parsers give you back canonical JSON which you can then serve if you wish, e.g. see [[JSON#Aaron_Parecki|Aaron Parecki's example below]].
+
+== Issues ==
+
+=== Accepting JSON POST requests ===
+{{main|JSON form encoded}}
+
+JSON does not have as wide support for POST requests compared to [[form-encoded]] requests. 
+
+In most web frameworks you have to jump through hoops to read the raw POST data if it's JSON format.
+
+A Google search can confirm that lots of people are confused about how to handle JSON POST requests: [http://www.google.com/search?q=how+to+receive+JSON+post+in+(php%7Cruby%7Cpython%7Cnode) how to receive JSON post in php, ruby, python, node]
+
+== Indieweb Examples ==
+
+=== Barnaby Walters ===
+Previously, [[User:waterpigs.co.uk|Barnaby Walters]] using [[Taproot]] on waterpigs.co.uk would return a JSON version of a document by appending ".json" to the URL. However, in 2014-?? Barnaby dropped support for this.
+
+<blockquote>"I ditched content negotiation because it turned out to be a huge maintentance chore of very little actual value. ...the .json view was essentially the same as the parsed microformat view, and I never used it so it kept breaking"[http://indiewebcamp.com/irc/2014-05-17/line/1400359793]</blockquote>
+
+=== Aaron Parecki ===
+Previously, [[User:aaronparecki.com|Aaron Parecki]] returned JSON representations of URLs by appending ".json". However, in 2016-01 when Aaron launched the new version of his website, the new site did not support this feature.
+<blockquote>"My .json view is *literally* the parsed microformat view. As in, I render the HTML as normal, then pass it through mf2-php before responding. It's like getting content negotiation for free."[http://indiewebcamp.com/irc/2014-05-17/line/1400359912]</blockquote>
+
+Also see: [[p3k##JSON+representation|p3k]]
+
+== Resources ==
+* [http://jsonformatter.curiousconcept.com/ JSON Formatter]
+* [https://chrome.google.com/webstore/detail/jsonview/chklaanhfefbnpoihckbnefhakgolnmc JSONView] - Chrome plugin which pretty-prints JSON
+* [https://github.com/rfletcher/safari-json-formatter JSON Formatter] - A Safari extension which makes valid JSON documents human-readable.
+* [https://next.json-generator.com/ JSON Generator] - define a schema and generate sample JSON data for testing
+
+[[Category:jargon]]
+== See Also ==
+* [[microformats2]]
+* [[JavaScript]]
+* http://seriot.ch/parsing_json.php
+* [https://tools.ietf.org/html/rfc7493 RFC7493 The I-JSON Message Format]: ''Internet JSON'' for interoperability between JSON parsers
+* https://twobithistory.org/2017/09/21/the-rise-and-rise-of-json.html
+* https://twitter.com/dauwhe/status/927955449126838278
+** "It is a truth universally acknowledged, that a working group in possession of a problem, must be in want of a new JSON format." [https://twitter.com/dauwhe @dauwhe] November 7, 2017
+* [https://www.ibm.com/docs/en/datapower-gateway/2018.4?topic=20-jsonx JSONx] an “IBM® standard format to represent JSON as XML.”
+* [https://datatracker.ietf.org/doc/html/rfc8785 JSON Canonicalization Scheme (JCS)] (RFC 8785) for a canonical JSON format, which of course also links to [https://datatracker.ietf.org/doc/html/rfc8785#appendix-H more specs trying to do the same thing (Appendix H)].
+* [https://tools.ietf.org/html/rfc7464 JavaScript Object Notation (JSON) Text Sequences] (RFC 7464) can be used to combine multiple JSON documents into a single file/stream of JSON documents, a sequence. Though again many alternatives exist, [http://jsonlines.org/ JSON Lines] probably being the most prevalent. Wikipedia has [https://en.wikipedia.org/wiki/JSON_streaming a short overview].
+* JavaScript’s (and thus node’s) JSON parser has enabled Prototype Poisoning (https://medium.com/intrinsic/javascript-prototype-poisoning-vulnerabilities-in-the-wild-7bc15347c96) in multiple tools, see https://hueniverse.com/a-tale-of-prototype-poisoning-2610fa170061?gi=5984ffcbc7a9 for one such story and open-source solution
+* [[Microsoft]] has a format they call [https://code.visualstudio.com/docs/languages/json#_json-with-comments JSON with Comments] and refer to as jsonc. This is used in tools like [[VSCode]] and and has [https://github.com/Microsoft/node-jsonc-parser an open-source parser]. But should not be confused with [https://komkom.github.io/jsonc/ jsonc] another alternative JSON format, [https://github.com/tcorral/JSONC JSONC] the JSON compressor, or [https://json-c.github.io/json-c/ json-c] the [[C]] JSON implementation.
+* The original [http://www.json.org/license.html license] includes the line "The Software shall be used for Good, not Evil." This has lead to discussions about it not being [[OSS]].
+* [https://www.w3.org/TR/xslt-30/ XSL Transformations (XSLT) Version 3.0] ([[W3C]] Recommendation) [https://www.w3.org/TR/xslt-30/#func-json-to-xml specifies JSON to XML transformation], giving another way to express JSON as XML.
+* From [https://ubjson.org/ UBJSON], a binary format for JSON: “Attempts to make using JSON faster through binary specifications like [https://bsonspec.org/ BSON], [http://bjson.org/ BJSON] or [https://github.com/FasterXML/smile-format-specification Smile] exist”. Another wide split in different specifications having come from original JSON.
+* [https://github.com/WebReflection/JSONH JSONH], a “way to pack and unpack generic homogenous collections” (e.i. lists of objects to just flat arrays). For when you want to store JSON objects in JSON but in less bytes.
+** {{citation
+| title = Last Version Of JSON Hpack
+| url = https://webreflection.blogspot.com/2011/08/last-version-of-json-hpack.html
+| author = [https://webreflection.co.uk/ Andrea Giammarchi]
+| published = 2011-06-18
+| archiveurl = https://web.archive.org/web/20211229151324/https://webreflection.blogspot.com/2011/08/last-version-of-json-hpack.html
+}}
+** {{citation
+| title =  Beyond JSON Performance
+| url = https://calendar.perfplanet.com/2021/beyond-json-performance/
+| author = [https://webreflection.co.uk/ Andrea Giammarchi]
+| published = 2021-12-28
+| archiveurl = https://web.archive.org/web/20211231224727/https://calendar.perfplanet.com/2021/beyond-json-performance/
+}}, from the 2021 edition of the yearly [https://calendar.perfplanet.com/2021/ Web Performance Calendar]
+* [[lulz]]: Acronym of '''J'''avascript’s '''Son''', per [https://twitter.com/benorlin/status/1479121935799889928 Web Development Acronyms: A Convenient Reference List].
+* [https://pipewire.org/ PipeWire] and its policy manager [https://pipewire.pages.freedesktop.org/wireplumber WirePlumber] implement a dialect called SPA JSON:
+** {{citation
+| title = From Lua to JSON: refactoring WirePlumber's configuration system
+| url = https://www.collabora.com/news-and-blog/blog/2022/10/27/from-lua-to-json-refactoring-wireplumber-configuration-system/
+| author = Ashok Sidipotu
+| published = 2022-10-27
+| archiveurl = https://web.archive.org/web/20221030225706/https://www.collabora.com/news-and-blog/blog/2022/10/27/from-lua-to-json-refactoring-wireplumber-configuration-system/
+}} gives some examples of what would have the same parser outcomes.
+** PipeWire calls it “Relaxed JSON variant parsing.” The SPA stands for Simple Plugin API and has nothing to do with the JSON itself.
+** It looks like the implementations for WirePlumber ([https://pipewire.pages.freedesktop.org/wireplumber/c_api/spa_json_api.html docs], [https://gitlab.freedesktop.org/pipewire/wireplumber/-/merge_requests/303 merge request]) came later and is different from the one for PipeWire ([https://docs.pipewire.org/group__spa__json.html docs], [https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/7ca8491be3a730cba61ea0578b654a83bcdd552c original commit]). Neither docs will actually tell you what is relaxed, thus why the first mentioned blogpost by Ashok is valuable. One way to find out how the parser works is to read all the commit messages, like [https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/49b17bca22f07bc58b556509c2df76b8f1fa1c6c commit 49b17bca explaining what relaxing was done to the parser] ([https://web.archive.org/web/20221030231848/https://gitlab.freedesktop.org/pipewire/pipewire/-/commit/49b17bca22f07bc58b556509c2df76b8f1fa1c6c archived]).
+* [https://json5.org/ JSON5] dubs itself “JSON for Humans” and has the goal to be used for JSON that is written by hand rather than as a data communication format between computers.
+** It has [https://spec.json5.org/ a formal spec] that describes it as a superset of RFC 7159 and a subset of ECMA-262, 5.1 Edition.
+* newline-delimited JSON http://ndjson.org/
+* {{citation
+| title = JC (JSON Convert)
+| url = https://github.com/kellyjonbrazil/jc
+| archiveurl = https://web.archive.org/web/20240515195142/https://github.com/kellyjonbrazil/jc
+}} - an open-source tool to turn the output of [[cli]] applications into JSON
+** {{citation
+| title = Tips on Adding JSON Output to Your CLI App
+| url = https://blog.kellybrazil.com/2021/12/03/tips-on-adding-json-output-to-your-cli-app/
+| author = [https://blog.kellybrazil.com/ Kelly Brazil]
+| published = 2021-12-03
+| archiveurl = https://web.archive.org/web/20240515195002/https://blog.kellybrazil.com/2021/12/03/tips-on-adding-json-output-to-your-cli-app/
+}} - things to think about if your application is outputting JSON, with comments on streaming output and making sure filters are easy to apply
+* {{citation
+| title = Unexpected security footguns in Go’s parsers
+| url = https://blog.trailofbits.com/2025/06/17/unexpected-security-footguns-in-gos-parsers/
+| author = [https://jofrada.pt/ Vasco Franco]
+| published = 2025-06-17
+| archiveurl = https://web.archive.org/web/20250621185547/https://blog.trailofbits.com/2025/06/17/unexpected-security-footguns-in-gos-parsers/
+}} - showing how easy it is to parse open yourself up to issues when parsing untrusted (JSON) content. The first section applies mostly to Go specifically, but the other pitfalls are universal to parsers in different languages.
+** {{citation
+| title = JSON evolution in Go: from v1 to v2
+| url = https://antonz.org/go-json-v2/
+| author = [https://antonz.org/ Anton Zhiyanov]
+| published = 2025-06-22
+| archiveurl = https://web.archive.org/web/20250622145404/https://antonz.org/go-json-v2/
+}} - examples of how the new Go package can be used from Go version 1.25, which can assist developers to avert the footguns.
+** {{citation
+| title = A new experimental Go API for JSON
+| url = https://go.dev/blog/jsonv2-exp
+| author =  Joe Tsai, Daniel Martí, Johan Brandhorst-Satzkorn, Roger Peppe, Chris Hines, and Damien Neil
+| published = 2025-09-09
+| archiveurl = https://web.archive.org/web/20250917120611/https://go.dev/blog/jsonv2-exp
+}} - official Go blog introducing the new “encoding/json/v2” and “encoding/json/jsontext” packages.
+* {{citation
+| title = Progressive JSON
+| url = https://overreacted.io/progressive-json/
+| author = [https://danabra.mov/ Dan Abramov]
+| published = 2025-05-31
+| archiveurl = https://web.archive.org/web/20250621185551/https://overreacted.io/progressive-json/
+}} - an idea for being able to stream slow JSON from web servers (or other external services) and still allowing it to be parsed by progressively loading in elements.
+* {{citation
+| title = JSON is not a YAML subset
+| url = https://john-millikin.com/json-is-not-a-yaml-subset
+| author = [https://john-millikin.com/ John Millikin]
+| published = 2022-05-17
+| archiveurl = https://web.archive.org/web/20250824182620/https://john-millikin.com/json-is-not-a-yaml-subset
+}} - examples of how JSON should not be parsed with a [[YAML]] parser, even though it looks like YAML supports the JSON syntax.
