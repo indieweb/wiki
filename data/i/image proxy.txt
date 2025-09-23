@@ -23,6 +23,27 @@ Image proxies can help website performance, customize images for their page cont
 Archived:
 * Node.js: https://github.com/atmos/camo
 
+== Brainstorming ==
+
+=== Considerations for building an image proxy ===
+
+==== {{capjamesg}} ====
+
+{{capjamesg}} is experimenting with image layouts in his web reader, [[Artemis]].
+
+When a request is made to the image proxy, Artemis first checks if the user making the request is signed in. This ensures only users can use the proxy.
+
+Next, Artemis checks if the URL the proxy is requesting is in a post in his web reader. If it is, then the request will be made. This prevents users from using the proxy arbitrarily.
+
+Then:
+
+* A HEAD request is made to check for the Content-Length header.
+* If an image is more than a few MB according to the Content-Length, the request is not fulfilled.
+** TODO: Add a proper timeout mechanism.
+* If an image doesn't have an image Content-Type, the request is not fulfilled.
+
+One direction James wants to explore is whether there is a means by which to prevent a request unless it is made from a particular origin. James hasn't read into this yet.
+
 == See Also ==
 * [[video proxy]]
 * Brainstorming: strip EXIF (in particular lat long) for privacy reasons
