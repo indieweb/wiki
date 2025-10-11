@@ -5,9 +5,21 @@ https://indieweb.org/rel-authn
 '''<dfn>rel-authn</dfn>''' is a [[rel|link relation]] that can be added to your [[rel-me]] links to indicate you want to use them as an authentication option in [[RelMeAuth]].
 
 == How ==
+=== How to publish ===
+For site publishers who want to use their website as their identity (AKA identity providers / IdPs)
+
 Add <code>rel="me authn"</code> to the links you want to be used as an authentication option:
 
 <pre><a href="https://github.com/aaronpk" rel="me authn">github.com/aaronpk</a></pre>
+
+=== How to consume ===
+{{section-stub}}
+For sites who want to support consuming rel-authn (AKA relying parties / RPs)
+
+In your <code>[[rel-me|rel=me]]</code> consuming code:
+* when parsing <code>rel</code> attribute values for <code>me</code>, keep track of all other rel values on each rel-me link.
+* if any of those rel-me links has an additional rel value of <code>authn</code>, then drop the rel-me links that lack an <code>authn</code> value
+* treat the remaining set of rel-me links as the set to consume to support [[Web sign-in]] (e.g. by presenting only those rel-me links to the user to choose from)
 
 == IndieWeb Examples ==
 * [[indielogin.com]] has supported rel-authn since it launched in 2018:
