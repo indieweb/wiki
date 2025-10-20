@@ -27,6 +27,21 @@ The code to run an Octothorpe Protocol Server is open source: https://github.com
 * {{aciccarello}} has been experimenting with harmonizers on his site since 2025-10-09
 * {{addyourself}}
 
+== Brainstorming ==
+
+=== Setting up a harmonizer to parse microformats ===
+
+* There's a new feature called [https://docs.octothorp.es/harmonizers/ Harmonizers] which allows configuring how an OP server parses a page
+* A project maintainer opened a [https://github.com/stucco-software/octothorp.es/issues/94 Finalize WEBMENTION-CLIENT harmonizer definition] issue on GitHub
+* The [https://github.com/stucco-software/octothorp.es/blob/ccdae32d0f76a00c2b6013062324f611d777501f/src/routes/debug/testHarmonizer.js#L69-L74 project tests] reference a "Client-side Webmention to backlink harmonizer" which is defined with microformats2 selectors
+* {{aciccarello}} experimented with microformats2 selectors but had to make some adjustments since it's not a true microformats parser and picked up elements other than the primary h-entry
+* [https://github.com/stucco-software/octothorp.es/issues/137#issuecomment-3416972707 it appears] this feature is not quite ready for production use
+
+=== Using webmentions to trigger indexing ===
+
+* Rather than using the link preload approach defined in the quickstart, a hidden URL could be used by some webmention infrastructure to trigger indexing
+* The webmention sending will likely not send a webmention since the GET response will not have a webmention endpoint but the check alone should trigger indexing.
+
 == Criticism ==
 
 ===Registration per server===
@@ -56,7 +71,7 @@ The code to run an Octothorpe Protocol Server is open source: https://github.com
 
 === Usage of link preload ===
 
-The recommended approach to trigger indexing sends a request from each viewer's browser to the octothorpe server and does not actually preload any content for the page.
+The recommended approach to trigger indexing sends a request from each viewer's browser to the octothorpe server and does not actually preload any content for the page. See [[#Using_webmentions_to_trigger_indexing|Brainstorming]] for an alternate approach
 
 * {{citation
 | title = #indieweb-dev chat message
