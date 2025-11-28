@@ -1,0 +1,167 @@
+https://indieweb.org/2025/Berlin/photo
+
+'''<dfn>Photos</dfn>''' was a session at [[2025/Berlin|IndieWebCamp Berlin 2025]].
+* Watch: {{videoduration|link=https://archive.org/details/photos-iwcberlin-2025|duration=60:34}}
+Archived from: https://etherpad.indieweb.org/photo
+
+----
+
+When: 2025-11-01 15:30
+
+== Participants ==
+* {{t}} (facilitator)
+* {{jeremycherfas}} (proposer)
+* {{capjamesg}}
+* {{martymcguire}}
+* {{jo}}
+* {{gwg}}
+* {{alabut}}
+* {{addyourself}}
+
+== Notes ==
+* What we're here to talk about: anything photos!
+* A lot of us struggle with the ideal way to do anything with photos on our websites
+** Posting workflow (how to post? how to post from mobile?)
+** Presentation (on your home page? on aggregate pages? on permalink pages?)
+** How do you share photos only with a limited audience, which is becoming a more interesting use case
+*** Many of us want to share photos with friends/co-workers but not more widely on the internet
+
+* How do we get your own content off of Instagram?
+** Then you can start thinking about putting content on your website in a way that makes sense.
+** Instagram export is HTML and file structure that is very unfriendly.
+
+* {{jo}} has her Instagram archive on her site: https://dead.garden/photos/instagram/
+** CSS filters on her site removes colors.
+** complexities of the export makes adding CSS, getting containers right, a challenge.
+** It would be fun to get swiping working on multi-image posts (carousel)
+** On images tagged with location, Instagram gives table w/ lat and long; Jo is interested in getting location information and displaying it in a more human-readable way
+** Q: do posts have permalinks?
+*** There aren't permalinks right now, but Jo has interest in having HTML IDs for each post.
+
+* Instagram also offers a JSON format
+** https://github.com/greg-randall/memento-mori creates a web page based on your Instagram content
+
+* https://martymcgui.re/photos/ goes through all posts w/ images and presents them in an Instagram style
+** Scales well with screen resizing
+** It's hard to crop photos to the right place, especially dynamically
+** Videos get a video play icon on the grid
+** Marty has found live photos are tricky to work with; making a video from a live photo is "reasonably easy to do" but shortcuts Marty made have broken (again; sometimes Apple breaks things)
+** Desire for a web component to exist that displays live photos
+** Shows first image in each post with an image only
+
+* https://aaronparecki.com/photos is another example of a photo grid; no responsive design
+
+* "that's what the internet is for! [photos of cats]"
+
+* Photos can be huge; you can't just put a 12 MB photo on the web
+** Uploading a photo that big isn't ideal, especially on slower connections
+
+* Marty's process
+** Uploads original file to server, which is usually large, using [[Micropub]]
+*** Micropub media endpoint [[Spano]], PHP-based, open-source, self-hosted https://git.schmarty.net/schmarty/spano-php
+** Micropub describes a media endpoint to which you can send files like photos
+** Uses image proxy on website with an external service (Cloudinary)
+*** You give Cloudinary give a URL and say how big you want the image to be
+*** Marty is using the free tier
+** iOS may send live photos in various different formats depending on OS version, which is inconvenient
+** Cloudinary helps handle some of the complexity of working with photos in different formats
+** The original image is uploaded to Marty's own hosting; a DigitalOcean server
+** Q: Are there bandwidth limits on the server?
+*** A: Marty hasn't run into the limits on the server.
+*** Some people have run into various issues in hitting bandwidth limits
+
+* Jo uses ftp to upload photos to her server, and ImageMagick to convert / dither image
+** Q: Is there any good software for photo upload to server?
+
+* Daniel uses Git LFS, static site generator does various pieces of work to generate image variants at the build step
+
+* Tantek: prefers to upload photos on a free connection like WiFi rather than on a data plan
+** Would love for uploading to be decoupled from taking a photo
+** Flickr's API has an auto-upload setting that can upload images overnight
+** Don't want to auto-upload all photos; probably wants to edit images before they are ready to be uploaded, and there may be various versions of an image that are almost all the same and you only want one
+
+* There are privacy considerations for sharing photos on your online
+
+* You can message an image to yourself via Signal and it will remove metadata associated with images. You could then open the file on Signal for Desktop and save it.
+
+* Jeremy joined Flickr to share higher quality photographs, rather than something like a bowl of spaghetti
+** Stopped using Flickr mostly because Instagram made photos so easy to share
+** Q: What's the point of putting a "good photo" on Instagram because it doesn't look great within the constraints of the Instagram UI?
+
+* Tantek: mobile photo use case is the 99% use case
+** Q: Have you looked at using Shortcuts?
+** A: Tantek tried and within 1-2 iOS updates they broke, so he isn't interested in investing time in it.
+
+* Disconnect from the "insta" part of Instagram (the pressure to publish a photo immediately)
+
+* Flickr automatically creates resized versions of a photo, for embedding purposes
+
+* You can upload to Flickr and keep all your images private
+
+* Tantek is interested in spending less time on the back-end plumbing and more on the user-facing side
+** Being able to add alt text / a photo description would be a plus
+** Ideal UI: website already knows photos that have been automatically uploaded, and asks if you want to select one or more to make a post from? Then text/tags can be added. Because things have already been uploaded, there is no wait to upload time.
+
+* {{martymcguire}} mentions {{aaronpk}}'s recent discussion of an iOS app he is building which uploads all photos to his [https://indieweb.org/media-endpoint Micropub media endpoint]. That would then be paired with a Micropub client to select images to make posts.
+
+* {{alabut}} documented a few ways to display photos: https://alabut.com/writing/photobrainstorming/
+** Posts (individual photos), Albums, Photoessays, Series, Stories
+** I tested out using Pixelfed as a place to upload photos and then POSSE it out, but the (backend) service was too unreliable. 
+*** UI was great, close to Al's ideal.
+*** Al: maybe I was a little early; the infrastructure could have gotten better.
+*** On second thought, it could be a problem inherent to federation and ActivityPub?!?
+
+* Mastodon lets you post a maximum of four photos per post (but can be tweaked by an... (admin?))
+** When you federate out, a copy is downloaded by the instance. This copy could in theory be downscaled (does anyone have an example of this happening?).
+* Flickr doesn't have problems with big images
+
+* Joel mentioned Tauri https://tauri.app/ about creating cross platform apps (Android/iOS/macOS/Windows/Web)
+* Marty mentioned https://en.wikipedia.org/wiki/Content-addressable_storage and https://ipfs.tech/, but does anyone actually use it to run their website?
+** Tantek: I think a few people have tried and the resources are no longer around.
+*** IPFS criticism: if there is no longer a single node that hosts an image, the image is gone; the content is only preserved for as long as there is a server running it.
+
+* Mobile has the most user-friendly editing suite; Photoshop is known to be difficult to use.
+** Phones also have great cameras
+
+* Native applications can integrate with the share sheet on iOS
+** "This is what iOS Shortcuts was supposed to do 10 years ago" - Schmarty
+
+* {{jeremycherfas}} mentions Hazel
+** https://www.noodlesoft.com/manual/hazel/hazel-overview/
+** could be set up to watch a shared folder and take actions, like uploading to your own website.
+** an example https://iaindunn.medium.com/automated-photo-workflow-using-hazel-rules-and-exiftool-fa15be79d624 that could be built on
+** great idea. IFTTT and other automators look like they have mobile-specific scripts too
+** https://ifttt.com/flickr
+** https://ifttt.com/ios_photos
+
+* Tantek would like an img.tantek.com URL that would redirect to Flickr, which means Tantek would own his links.
+
+* Auto-uploading to a service has risks
+** Privacy considerations
+** What if the service shuts down?
+** Modern-day consideration: is the service going to train AI with your data?
+*** There is creator pressure for Flickr not to train AI; if they started training Ai with the service, people may stop using it entirely.
+
+* The owner of SmugMug, which acquired Flickr, worked in the Web 2.0 period, so there is more trust over their ability to manage the service.
+* Great discussion of who is profiting from your photos; if it's a small business charging you directly, then you're probably safer, as opposed to free or ad-driven services
+
+* Flickr embed resolutions: https://indieweb.org/Flickr#Features
+
+* GWG mentions self-hosting on https://immich.app/
+** he has started migrating to this, but photo metadata for old photos is challenging
+
+* We didn't talk about finding photos vs. showing photos, apart from minor mentions of tagging.
+* What is a nice minimal UI for a photo on your website? (what people see, not how you create one)
+** https://muan.co/photos has a great UI
+** They also do Stories too: https://muan.co/stories/4f81acdd-098e-435b-304c-e4154f828d00
+
+* Related wiki pages:
+* [[photo]]
+* [[photo_upload]] (this page could use some curation / gardening, perhaps separate upload vs storage)
+** [[photo_grid]]
+
+[[Category: 2025 sessions]]
+[[Category: IndieWebCamp Berlin 2025]]
+== See Also ==
+* [[2025/Berlin/Schedule]]
+* [[2025/Berlin]]
