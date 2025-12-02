@@ -1,10 +1,182 @@
 https://indieweb.org/analytics
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+[[Category:Analytics]]
+{{stub}}
 
+'''<dfn>analytics</dfn>''' is the collection, analysis and reporting of a websites traffic. Website analytics are often used to report key statistics to website owners. These data points include, but are not limited to; peak user time, the amount of traffic received from each social media website and how much time people spend on each page.
+
+Website analytics are provided by several open source and proprietary solutions. They can be split into two groups; active analytics and passive analytics.
+
+
+== IndieWeb Examples ==
+* [[User:Mxb.at|Max Böck]] 2021-02-07 [https://mxb.dev/blog/webmention-analytics/ Webmention Analytics] describes a set up for generating analytics of the webmentions on his site using [[webmention.io]], [[Eleventy]], and [[Netlify]]. He's got a [https://analytics.mxb.dev/ demo version] running on his site. The code can be found at https://github.com/maxboeck/webmention-analytics.
+
+
+== Active analytics ==
+Active analytics usually work by having you include a JavaScript file which asynchronously communicates with a server, providing it with data such as
+
+* Referrers
+* Screen size
+* Operating system and browser
+* Page load time
+* Even mouse position; which can be used to determine the most/least popular parts of a page
+
+=== Google Analytics ===
+{{main|Google Analytics}}
+
+=== Mixpanel ===
+
+[http://mixpanel.com Mixpanel] is a hosted service that "gives you the ability to measure any action a customer takes in your application while Google Analytics lets you measure the number of times specific pages in or site or app are viewed (page views)." (via [https://mixpanel.com/help/questions/articles/how-is-mixpanel-different-than-google-analytics Mixpanel])
+
+You can get 175k free data points per month (which is way more than most personal sites need) by displaying their badge somewhere on your site. After setting up your account, you can grab the badge code and verify the badge at [https://mixpanel.com/free/ https://mixpanel.com/free/].
+
+People using it on their own site:
+* [[User:mowens.com|mowens.com]] (Badge is visible in the expandable colophon)
+
+=== New Relic ===
+
+[http://newrelic.com New Relic] is a hosted service that provides server and application performance monitoring analytics with code-level visibility. Some of its recent additions to its service have added the ability to monitor and track user experiences in the browser as well as transaction tracking to better understand how your site or app perform in the real world setting of production.
+
+Free users only get 24 hours of data, but this tends to be enough to allow you to monitor changes in performance based on new features or to debug specific performance bottlenecks.
+
+People using it on their own site:
+* [[User:mowens.com|mowens.com]]
+
+=== Twitter Analytics ===
+
+Twitter Analytics is a companion analytics service to Twitter and Twitter Ads that provides link tracking on Twitter and conversion tracking around those links (i.e. "How many visitors arrived directly or indirectly due to engagement with a tweet containing my URL?").
+
+People using it on their own site:
+* [[User:mowens.com|mowens.com]]
+
+=== Matomo ===
+
+Matomo is an open source project that you install on your own service that can collect information about visitors to your website. Note that this project was previously called Piwik until a name change was announced on [https://matomo.org/blog/2018/01/piwik-is-now-matomo/ 2018-01-09].
+
+A project exists to make it easy to run Matomo on [https://www.openshift.com OpenShift] https://github.com/openshift/piwik-openshift-quickstart. It is also available on [[sandstorm.io]]: [https://sandstorm.io/news/2016-05-12-analytics-privacy]
+
+People using it on their own site:
+* [[User:Werd.io|werd.io]] (discontinued in early 2014?)
+* {{kylewm}} as of 2014-08-22. Installed out of curiosity, it's interesting to see the geographical diversity of visitors and get an idea of basic traffic volume.
+* {{strugee}} - used on main personal site since [https://github.com/strugee/strugee.github.com/commit/17b0a28d5fd64636ca41a20007d0f3597444934f 2015-06-10]
+* {{jacky}} has been using it on his site since January 21st, 2018. https://jacky.wtf/weblog/tracking-you/. He's stopped using this in favor of [[#Plausible|Plausible]] since March 2022.
+* {{jamietanna}} has been using analytics since having a personal website
+* {{q4.re}} has been using it on his site since 24th July 2020
+* {{Apiratelifefor.me}} uses it for some of his personal websites.
+
+=== Open Web Analytics (OWA) ===
+
+[http://www.openwebanalytics.com/ Open Web Analytics]
+
+=== Fathom ===
+
+[[Fathom]] is an open source, privacy focused website analytics package written in Go that is also available as a hosted service.
+
+People using it on their own site:
+* {{cleverdevil}}
+* {{eddiehinkle.com}}
+* {{cjwillcock.ca}}
+* [[wiki#Wiki_Features_We_Use|The IndieWeb Wiki]] uses it with an available dashboard at https://app.usefathom.com/share/zphfryaa/indieweb.org
+
+=== Offen ===
+
+[https://www.offen.dev/ Offen] is an open source, self hosted, opt-in only, website analytics system. When a visitor opts in to sharing their data, the visitor is also provided with a link where they can see the exact data they have shared. From this data view, consent can also be revoked, removing all the data again.
+
+<gallery widths=320px heights=240px mode=nolines caption="Screenshots, as of 2022-02-12">
+File:offen-opt-in-modal.png|Consent modal
+File:offen-control-home.png|Landing page when opted-in
+File:offen-control-home-out.png|Landing page when opted-out
+File:offen-auditorium.png|The Auditorium shows all your collected data<br>(click to view full scroll)|link=File:offen-auditorium-full.png
+</gallery>
+
+=== Plausible ===
+[https://plausible.io Plausible] is a self-hostable, open source analytics service. It has support for funnels and goal tracking.
+
+People using it on their site:
+* {{jacky}}: Since March 2022, I've been using Plausible (announced indirectly at https://jacky.wtf/colophon#analytics), tracked at https://plausible.io/jacky.wtf.
+
+== Passive Analytics ==
+Passive analytics are implemented on the server side, usually at the server or application level. Some of them work with server logs (e.g. AWStats) while others are more integrated to the platform they are running on (WordPress plugins).
+
+=== Advantages ===
+
+* Passive analytics do not affect the load time of a web page.
+** Users do not need to download a JavaScript script every time they visit a page.
+* Passive analytics scripts are easy to write for Nginx and Apache because logs are available in plain text. 
+
+=== Disadvantages ===
+
+* Passive analytics require more technical knowledge
+* You must have access to a server environment to implement passive analytics
+* Depending on the software you use, you are unlikely to receive real-time updates without developing an extension.
+* ...
+
+=== Examples ===
+
+==== Dobrado ====
+
+[[dobrado]] includes an analytics module that can record all page requests and referers where provided. It was added to avoid the overhead of running Piwik/Matomo on the same server, which requires extra javascript on the page and an extra network request.
+
+==== Log Analyzers ====
+This type of analytics software collect their data from server logs. The data in these logs are considerably less than the ones provided by active analytics, but they are still enough to generate useful reports. There are several tools to analyze these files.
+
+* [http://goaccess.io/ GoAccess] command-line, realtime log analyzer written in C. Single executable, no configuration necessary.
+** [[User:rascul.io]] uses it on his personal site to see high-level visit information
+** {{kylewm}} has also had good, albeit limited experiences with it
+* [[awstats]] is another popular tool. It can generate pretty graphs and it's written in Perl.
+* {{capjamesg}} used to use his own log analyzer script to view analytics for his website.
+** The log analyzer is open source on [https://gist.github.com/capjamesg/641fe600ebb58389a52ad4199eed2d4c GitHub Gists].
+
+== Criticism ==
+=== Makes Your Site Slower ===
+Anecdata: while browsing around the web, I often see sites (mainstream/big sites!) freezing with <blockquote>Waiting for ssl.google-analytics.com ...</blockquote> in the status bar in the bottom left for several seconds which is unacceptable latency. Based on such poor user experiences I can't imagine for what benefit I would make my users wait that long. - {{t}}
+
+* The way to avoid this is to load analytics scripts asynchronously which is theoretically supported by the following:
+** [https://developers.google.com/analytics/devguides/collection/gajs/asyncMigrationExamples#migrationInstructions Google Analytics] async how to. Examples of IndieWeb sites using Google analytics asynchronously:
+*** https://snarfed.org/
+*** https://aaronparecki.com
+*** http://caseorganic.com
+*** https://mowens.com
+** [https://www.gosquared.com/developer/tracker/installation/ GoSquared] async how to
+
+Have also seen similarly: <blockquote>Transferring from fonts.googleapis.com ...</blockquote>
+
+=== Privacy and Tracking ===
+
+Analytics silos like Google's collect and aggregate data about your site's visitors. These statistics might be interesting to me but they are majorly profitable to them. For this reason I would prefer to use self-hosted analytics or avoid them altogether [[User:Kylewm.com|Kylewm.com]]
+
+== IndieWeb Community Analytics ==
+
+The IndieWeb websites (indieweb.org, events.indieweb.org, etc) use [[Fathom]] rather than Google Analytics. The stats are available publicly:
+
+* [https://app.usefathom.com/share/zphfryaa/indieweb.org indieweb.org]
+* [https://app.usefathom.com/share/ryujpphk/events.indieweb.org events.indieweb.org]
+
+== Sessions ==
+* [[2020/London/analytics|London 2020: Analytics and the IndieWeb]]
+
+== See Also ==
+* [[2011/Web_Analytics]]
+* [[Do Not Track]]
+* [[surveillance]]
+* [[telemetry]]
+* 2018-03-21 Criticism: focusing on (common) analytics led to clickbait: Stanford News: [https://news.stanford.edu/2018/03/21/this-stanford-scholar-learned-clickbait-will-surprise/ What this Stanford scholar learned about clickbait will surprise you]
+* https://blog.kownter.com/about-kownter/
+* [https://sebastiangreger.net/2019/02/6336/ Some alternative web analytics options]
+* Criticism: 2019-10-18 Garrett Dimon: [https://garrettdimon.com/2019/quitting-analytics/ Quitting Analytics]: <blockquote>Some time ago, I removed all the tracking from my personal site, and I haven’t missed it. What started as a whimsical idea that was part performance-based, part referrer spam overload, and part backlash against Google evolved into a realization that analytics aren’t always all that important. </blockquote>
+* Open Source / remixable Glitch alternative to Google Analytics: https://twitter.com/lady_ada_king/status/1214848857022091264
+** "This is why I built http://adalytics-live.glitch.me, I didn't want to show cookie banners just for Google Analytics so I built an analytics solution which doesn't use them.<br><br>You can remix it to add it to your own site." [https://ada.is @Lady_Ada_King] January 8, 2020
+* [https://blog.jim-nielsen.com/2020/indexing-my-blogs-links/ Indexing My Blog’s Links] describing intern analytics of one's site
+* Criticism: waste of your time and your site readers time: https://twitter.com/jessevondoom/status/1352760588175364096
+** "I like making websites without analytics. For starters they're noticeably faster to load, but really for some things you just don't need to care, so don't be a snitch to some giant centralized behavioral database? Just...stop caring about things you don't need to care about." [https://jessevondoom.glitch.me/ @jessevondoom] January 22, 2021
+* https://plausible.io/ is a self-hostable and open source analytics tool made by https://twitter.com/ukutaht
+* https://github.com/berthubert/audience-minutes self-hosted tracking of time spent on articles
+* Deliberate non-use: https://twitter.com/adactio/status/900001910064693249
+** "What an excellent post! I’m afraid I have no thoughts on analytics though—I still publish as though shouting into a cold, uncaring void." [https://adactio.com @adactio] August 22, 2017
+* also deliberate non-use: https://twitter.com/rachelandrew/status/900002249354731520
+** "That’s my attitude too, and I’m always surprised when the void yells back at me." [https://rachelandrew.co.uk @rachelandrew] August 22, 2017
+* https://css-tricks.com/on-user-tracking-and-industry-standards-on-privacy/
+* A comparison between client- and server-side analytics, and a warning about data integrity: [https://daverupert.com/2022/04/server-side-vs-client-side-analytics/ Server-side vs Client-side Analytics]
+* [https://umami.is/ umami], tagline: <q>own your website analytics</q>, might be interesting for replacing proprietary analytics. See [https://app.umami.is/share/8rmHaheU/umami.is live demo of their own website’s statistics].
+* Criticism: 2023-09-14 [https://pcmaffey.com/counting-ghosts Counting Ghosts] / A case for abandoning web analytics <blockquote>In 2019, I wrote Roll Your Own Analytics, my simple approach to privacy-first web analytics. Since then, my feelings have evolved: I've dropped analytics from all my active projects. This is why.</blockquote>
+* Why (and Why not) 2025-08-24 [https://underlap.org/visitor-stats-and-the-point-of-blogging/ Visitor stats and the point of blogging]
