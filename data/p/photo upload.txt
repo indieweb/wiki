@@ -1,44 +1,33 @@
 https://indieweb.org/photo_upload
 
+[[Category:Photos]]
 {{stub}}
-'''<dfn>Photo upload</dfn>''' is the act of creating a [[post]] whose primary content is a [[photo]], typically captured by a camera on the same device that is creating the post.
+'''<dfn>Photo upload</dfn>''' is the act of sending a [[photo]] or other image file from a local device like a mobile phone of laptop to some place on the internet like a web server or service where it can be used to create a [[photo]] post or add a photo to another kind of [[post]].
 
-* 2020-02-13 {{t}}: Should this page be renamed to something like "photo publishing" or "photo storage" or "photo upload"? Or should it be rewritten to purely be about the act of uploading an image file? Or uploading/storage of image files? E.g. [[photo storage]]
-** ...
-
+Uploading is one step of many for creating a [[photo]] post, in roughly this order but sometimes with steps combined or re-ordered:
+* [[photo capture]] - the act of taking a photo on a camera or mobile phone
+* [[photo editing]] - editing a photo, often on a local device, often before uploading
+* [[photo upload]]
+* [[photo storage]] - where you store photos that are uploaded, perhaps longterm, and backups
+* [[photo hosting]] - where you serve photos displayed in [[posts]]
 
 For UIs to [[create]] a photo post, see:
 * [[create#Photo]]
 
-== POSSE ==
-It is possible to [[POSSE]] photo uploads via silo-specific APIs to the following:
-* [[Flickr]]
-* [[Twitter]]
-* [[Wikimedia Commons]] - the API is somewhat complex and undocumented, but for some images that meet [http://commons.wikimedia.org/wiki/COM:SCOPE the project scope] and are licensed under free licenses (CC BY-SA, CC BY, CC0/PD or equivalent)
-** So long as images are not deleted, you are able to store images there indefinitely, hot link them and use Commons to retrieve scaled versions.
+== Passive Uploads ==
+Ideally, whatever device you take photos can passively upload them (when on a free / fast connection) to your preferred [[photo storage]] destination.
 
-Manual POSSEing is possible to the following:
-* [[Facebook]] - due to posting APIs being dropped 2018-08-01.
-* [[Instagram]] - has never had official posting APIs
+There are a number of ways to set this up, depending on the destination.
 
-== PuPuPu ==
-The popular mobile photo site [[Instagram]] deliberately lacks an API for uploads[http://instagram.com/developer/endpoints/media/]. However it does have an API for real-time notifications of uploads[http://instagram.com/developer/realtime/].
+IndieWeb:
+* {{aaronpk}} made an iOS camera app that auto-uploads any photos taken to his [[Micropub]] endpoint. Photos can also be selected from the camera roll. https://chat.indieweb.org/dev/2025-10-30#t1761793727609500
+** status: private, unreleased
 
-This presents the opportunity to build a [[PuPuPu]] system with Instagram as a publishing client:
-
-* [[Instagram]]
-** -> real-time notification to (and post creation on) your own site 
-*** -> syndication with permalinks to:
-**** [[Facebook]]
-**** [[Flickr]]
-**** [[Twitter]]
-**** [[Wikimedia Commons]] (for photos you don't mind contributing as CC BY-SA, CC BY, CC0/PD or equivalent)
-**** ...
-
-Technically this would be Push-Push-Publishing, since the notifications from Instagram are done in real-time using the [[PuSH]] protocol.
-
-=== Implementations ===
-The [[OwnYourGram]] service enables you to use Instagram as a publishing client for posting photos to your own site.
+Silos:
+* [[Flickr]]’s iOS app has an '''Auto-Uploadr''' [sic] feature that: <blockquote>… is an easy way to privately store your photos and videos — until you choose to share them.</blockquote> and works in the background. It allows you to opt in or out of "uploading over cellular [mobile]" connections.
+** Limitations
+*** Does not re-upload locally edited photos
+*** Does not delete photos that are deleted locally (by design, so you can use your auto-uploaded photos as a backup in case you accidentally delete a photo locally)
 
 == HTML5 photo uploads ==
 HTML5 extends the input element to permit pages to declaratively attempt photo uploads with:
@@ -71,17 +60,11 @@ Until in-browser approaches mature, it may be necessary to use native apps (eith
 Some browsers support uploading images from a laptop/monitor camera:
 * [http://www.w3.org/TR/html-media-capture/ HTML Media Capture] API — W3C Candidate Recommendation, implemented in Chrome desktop, [https://bugzilla.mozilla.org/show_bug.cgi?id=741393 feature request bug for Firefox].
 
-== See also ==
+== See Also ==
 * [[create#Photo]]
 * [[Immich]]
 * [[photo]]
 * [[post]]
-* [[POSSE]]
-* [[PESOS]]
-* [[PuPuPu]]
-
-== See Also ==
-
 * 2021-06-23 Ars Technica: [https://arstechnica.com/gadgets/2021/06/the-big-alternatives-to-google-photos-showdown/ Google Photos is so 2020—welcome to the world of self-hosted photo management]
 * Reddit thread about ^ https://old.reddit.com/r/selfhosted/comments/k5nzkj/google_photos_the_megathread/
 * Blog post: 2022-06-21 [https://cathieleblanc.com/2022/06/21/photo-sharing-work-flow/ Photo Sharing Work Flow]
