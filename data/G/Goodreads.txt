@@ -6,7 +6,8 @@ https://indieweb.org/Goodreads
 
 '''<dfn>[http://goodreads.com Goodreads]</dfn>''' is a [[silo]] for keeping track of [[books]], [[review]]s, and reading progress. [[Amazon]] purchased Goodreads in 2013. It was [https://help.goodreads.com/s/article/Does-Goodreads-support-the-use-of-APIs announced] on 2020-12-17 that Goodreads will "no longer issues new developer keys for our public developer API and plans to retire the current version of these tools".
 
-== How to export your data ==
+== How ==
+=== How to export your data ===
 Goodreads provides <span id="Export">[[export]] of book lists to CSV, TXT or XLS files [https://www.goodreads.com/help#import_books]. The direct URL for this is at https://www.goodreads.com/review/import. Click the "Export" button to start building the CSV download in the background. The link to the CSV file to download will appear under the export button when it is ready.
 
 The metadata in the CSV are:
@@ -39,9 +40,7 @@ Would be good to mung any of these into h-review based files for import into an 
 
 There is also a plugin for the desktop software [[Calibre]] that will allow one to sync large portions of their data directly to their computer.
 
-__TOC__
-
-== How to import your data ==
+=== How to import your data ===
 '''To [[WordPress]]:'''
 * {{citation
 | title = How to Import Your GoodReads List Into WordPress, for free
@@ -50,6 +49,28 @@ __TOC__
 | published = 2018-07-28
 | archiveurl = http://web.archive.org/web/20181020214857/https://glenn.thedixons.net/how-to-import-your-goodreads-list-into-wordpress-for-free/
 }}
+
+=== How to POSSE to Goodreads ===
+{{main|POSSE}}
+
+* {{gRegor}} has manually [[POSSE]]d reviews to Goodreads.
+** https://www.goodreads.com/review/show/219905031
+* {{kylewm}} has been automatically POSSEing reviews to Goodreads since 2015-12-30
+** original: <nowiki>https://kylewm.com/2015/12/review-of-ancillary-justice-by-ann-leckie</nowiki> (could not find archive of this URL)
+** POSSE copy: https://www.goodreads.com/review/show/1484943470
+* {{chrisaldrich}} has been manually POSSEing both status updates and reviews to GoodReads since [http://boffosocko.com/2016/09/17/as-of-91316-im-beginning-to-own-all-of-my-reading-data-into-from-goodreads-%F0%9F%93%9A-indieweb/ 2016-09-13]. Examples can be found in [http://boffosocko.com/?kind=note&cat=945 this feed].
+* {{zachary.kai}} tracks his books read on [https://lunaseeker.com/goodreads Goodreads] and plans to leave reviews there.
+
+=== How to PESOS from Goodreads ===
+{{main|PESOS}}
+
+* {{chrisaldrich}} has experimented with [[PESOS]] of data from Goodreads. While each user has a primary [[RSS]] feed from Goodreads that can be found on their user page, it's a mixture of various interactions including [[note|status updates]] (with reading progress), [[follow]]s, [[bookmarks]] (aka "want to reads"), [[read]]s and other interactions. This doesn't make it easy to map directly to individual post types on one's website.
+** Alternate RSS feeds for better posting fidelity:
+*** Status updates: https://www.goodreads.com/user_status/list/#######-user-name?format=rss where #######-user-name is the typical user number and name combination at one’s profile page.
+*** Bookmarks (for want to read): https://www.goodreads.com/review/list_rss/#######-user-name?page=1&per_page=100&shelf=to-read&sort=date&utf8=%E2%9C%93
+*** Reads: https://www.goodreads.com/review/list_rss/#######-user-name?page=1&per_page=100&shelf=read&sort=date&utf8=%E2%9C%93
+*** All updates: https://www.goodreads.com/user/updates_rss/#######
+** Chris has [https://boffosocko.com/2020/01/21/using-ifttt-to-syndicate-pesos-content-from-social-services-to-wordpress-using-micropub/ outlined a method] for using services like [[IFTTT]], [[Zapier]], et al. to take RSS feeds and post to websites using [[webhooks]] to publish to a website's [[Micropub]] endpoint. Those without a Micropub endpoint my consider using direct posting if it's available on IFTTT to their platform.
 
 == Features ==
 * Multiple shelves (or [[tag]]s) to categorize your books.
@@ -77,18 +98,6 @@ Goodreads is removing a few features. You have '''until 2022-09-01''' to [https:
 * recommendations in review creation: "we no longer include the options of who recommended a book and who to recommend it to."
 * owned books: "we no longer support the option to add details about owned books such as condition and purchase date."
 
-== POSSE to Goodreads ==
-* {{gRegor}} has manually [[POSSE]]d reviews to Goodreads.
-** https://www.goodreads.com/review/show/219905031
-
-* {{kylewm}} has been automatically POSSEing reviews to Goodreads since 2015-12-30
-** original: <nowiki>https://kylewm.com/2015/12/review-of-ancillary-justice-by-ann-leckie</nowiki> (could not find archive of this URL)
-** POSSE copy: https://www.goodreads.com/review/show/1484943470
-
-* {{chrisaldrich}} has been manually POSSEing both status updates and reviews to GoodReads since [http://boffosocko.com/2016/09/17/as-of-91316-im-beginning-to-own-all-of-my-reading-data-into-from-goodreads-%F0%9F%93%9A-indieweb/ 2016-09-13]. Examples can be found in [http://boffosocko.com/?kind=note&cat=945 this feed].
-
-* {{zachary.kai}} tracks his books read on [https://lunaseeker.com/goodreads Goodreads] and plans to leave reviews there.
-
 == API for Goodreads ==
 
 On 2020-12-15, Goodreads [https://help.goodreads.com/s/article/Does-Goodreads-support-the-use-of-APIs announced] that it will "no longer issues new developer keys for our public developer API and plans to retire the current version of these tools".
@@ -112,16 +121,6 @@ To POSSE a [[review]] to Goodreads would basically involve:
 
 Their API guidelines also *require* a link back to the "original" post in Goodreads.
 * What if the post on Goodreads is a copy and not the original? - [[User:Tantek.com|Tantek]]
-
-
-== PESOS from Goodreads ==
-* {{chrisaldrich}} has experimented with [[PESOS]] of data from Goodreads. While each user has a primary [[RSS]] feed from Goodreads that can be found on their user page, it's a mixture of various interactions including [[note|status updates]] (with reading progress), [[follow]]s, [[bookmarks]] (aka "want to reads"), [[read]]s and other interactions. This doesn't make it easy to map directly to individual post types on one's website.
-** Alternate RSS feeds for better posting fidelity:
-*** Status updates: https://www.goodreads.com/user_status/list/#######-user-name?format=rss where #######-user-name is the typical user number and name combination at one’s profile page.
-*** Bookmarks (for want to read): https://www.goodreads.com/review/list_rss/#######-user-name?page=1&per_page=100&shelf=to-read&sort=date&utf8=%E2%9C%93
-*** Reads: https://www.goodreads.com/review/list_rss/#######-user-name?page=1&per_page=100&shelf=read&sort=date&utf8=%E2%9C%93
-*** All updates: https://www.goodreads.com/user/updates_rss/#######
-** Chris has [https://boffosocko.com/2020/01/21/using-ifttt-to-syndicate-pesos-content-from-social-services-to-wordpress-using-micropub/ outlined a method] for using services like [[IFTTT]], [[Zapier]], et al. to take RSS feeds and post to websites using [[webhooks]] to publish to a website's [[Micropub]] endpoint. Those without a Micropub endpoint my consider using direct posting if it's available on IFTTT to their platform.
 
 == See Also ==
 * [https://indiebookclub.biz Indie Book Club] by {{gregorlove}} is a simple app for tracking books that you are reading. It will publish to your site via micropub.
