@@ -1,10 +1,123 @@
 https://indieweb.org/planet
 
-<html>
-<head><title>401 Authorization Required</title></head>
-<body>
-<center><h1>401 Authorization Required</h1></center>
-<hr><center>nginx/1.24.0</center>
-</body>
-</html>
+{{stub}}
 
+A '''<dfn>planet</dfn>''', in the context of the indieweb, and blogs/feeds for even longer, is a site that aggregates feeds/updates from a variety of sources, typically focused on a particular topic or community. The original planets were [https://beesbuzz.biz/blog/8400-Planet-Planet gaming sites], but the concept spread to other kinds of topics from there.
+
+If you’re looking for an '''IndieWeb Planet''', see:
+* https://stream.indieweb.org
+
+== Why ==
+Similar to a [[public timeline]], a planet provides an easy way to get an overview or introduction to a topic or community.
+
+== How ==
+One way to build an indieweb-style planet is to use a [[reader]] that allows public access to view the page. This can be done using [[dobrado]], where an account is required to manage the subscription list but the page containing the feed list can be made public.
+
+=== markup ===
+Question {{sknebel}} 2017-03-24: How should posts on a planet be marked up? Should the planet [[repost]], or just produce an [[h-feed]] reproducing the posts (and u-uid and u-url pointing to the canonical source?
+
+* [[repost]] if full content is reproduced, [[h-cite]] otherwise, per [https://chat.indieweb.org/dev/2017-03-24#t1490387558605000 IRC discussion].
+* per later discussion, u-uid = original_post should be enough. also doesn't show up as repost on every post and is still detectable via Webmention. [https://chat.indieweb.org/2017-04-10#t1491837069346000]
+
+Atom specified a <code>source</code> property to indicate the original source of a post it republished. [https://tools.ietf.org/html/rfc4287#section-4.2.11]
+
+=== Webmention backfeed ===
+(accidential) interaction with the planet post instead of the original could be redirected by the planet’s webmention endpoint -> just re-send it to the original post’s, if wants to receive them it can add the URL of the syndicated copy to the list of URLs it accepts webmentions for.
+
+== Example "Planets" ==
+* https://unicyclic.com/indieweb
+** Subscribes to all feeds found from members of the community
+* https://stream.indieweb.org
+** Subscribes to feeds from community members and republishes posts that mention indieweb-specific keywords
+* http://planet.mozilla.org/
+** {{t}}’s [[article]] posts are aggregated into this planet
+* https://www.drupal.org/planet
+** Aggregates a tag from each included blog
+* https://planet.wordpress.org/
+* [https://fdroid.gitlab.io/planet/ Planet F-Droid]
+** Aggregating posts about open-source [[Android]] applications and the [[F-Droid]] ecosystem. Officially announced; {{citation
+| title = TWIF 34: F-Droid is a Planet
+| url = https://f-droid.org/en/2018/12/13/twif-34-f-droid-is-a-planet.html
+| author = [https://open.source.coffee/ Coffee]
+| published = 2018-12-13
+| archiveurl = https://web.archive.org/web/20181223153217/https://f-droid.org/en/2018/12/13/twif-34-f-droid-is-a-planet.html
+}}.
+** [https://gitlab.com/fdroid/planet Source available on GitLab]. See [https://gitlab.com/fdroid/planet/blob/master/fdroid.ini the fdroid.ini file] for the planet configurations, the list of subscriptions can easily be tweaked to build your own planet.
+** Uses [http://intertwingly.net/code/venus/ Planet Venus] (“an awesome ‘river of news’ feed reader”) to generate the planet. Runs on [[Python]].
+* [http://edu407.jgregorymcverry.com/feeds.html EDU 407] a preservice literacy class
+** built using inoreader embedded feeds
+** has different feeds: one for instructor, one for students, and one for updates
+* Archive Team collects and archives [https://github.com/ArchiveTeam/urls-sources/blob/master/43200_blog_aggregators.txt several planets].
+* https://powrss.com
+** "a public RSS feed aggregator with a mission to support the open, independent web”
+** [[feeds|feed]] are self-submitted; includes a “shuffle” feature
+
+== Offline Planets ==
+* [[indieweb.xyz]]
+* [https://web.archive.org/web/20210817140238/https://clmoocring.jgregorymcverry.com/clmooc-planet/ CLMOOC] (archived)
+** built using the inoreader RSS reader and then creating an iframe on a WordPress site
+** used to collect poetry, art, music and musings such [https://write.as/dogtrax/a-found-feldgang-poem-from-the-musings-of-friends A Found Feldgang Poem]
+* <nowiki>https://planet.jamesg.blog</nowiki> (not archived)
+** Aggregates the feeds to which James is subscribed in his "IndieWeb" Microsub channel.
+** The code is [https://github.com/capjamesg/planet open-source on GitHub] and can be used with any Microsub reader to create a public planet.
+
+== Software ==
+* [http://feedreader.github.io/ (another) Pluto], Ruby
+* [http://intertwingly.net/code/venus Venus], Ruby
+* [http://www.planetplanet.org/ Planet], Python
+* [https://framagit.org/bochecha/pelican-planet pelican-planet] Python, plugin for [[Pelican]]
+* [https://github.com/ChimeraCoder/Pluto Pluto], Go
+* [https://github.com/chregu/planet-php/ Planet PHP], PHP
+* [https://github.com/davorg-cpan/perlanet Perlanet], Perl
+* [https://github.com/hrw/very-simple-planet-aggregator Very Simple Planet Aggregator], Python
+* [https://github.com/moonmoon/moonmoon moonmoon], PHP
+* [https://github.com/openSUSE/planet-o-o planet-o-o], Ruby / Jekyll
+* [https://github.com/ralexander-phi/feed2pages Feed2Pages], Go / Hugo
+* [https://salsa.debian.org/wouter/ptlink ptlink], Perl
+* [https://src.alexschroeder.ch/planet-jupiter.git Jupiter], Perl - turn a list of feeds into a HTML page, a river of news
+
+== Brainstorming ==
+There have been various brainstorming discussions about planets, in particular, about the potential of building an IndieWebCamp Planet site, based on signups on this page:
+
+=== IndieWebCamp Planet ===
+Welcome to the IndieWebCamp Planet sign-up page.
+
+Are you a member of the IndieWebCamp community and want your personal site [[feed]] aggregated into http://planet.indieweb.org/ ? Add <em>your</em> personal site below (please don't add others' sites) and the aggregator will [[discover]] your feed and do the rest.
+
+==== Planet Sites ====
+Sites to aggregate into an IndieWebCamp Planet, sorted alphabetically by domain name:
+
+* ...
+* http://aaronparecki.com/
+* http://bret.io/
+* http://home.tylergillies.club/
+* http://tantek.com/
+* http://tommorris.org/
+* https://jacky.wtf/
+* https://mowens.com
+* {{addyourself}}
+
+{{chrisaldrich}} maintains an [[OPML]] file which includes a number of active IndieWeb members' sites and RSS/Atom links for easy subscription. http://boffosocko.com/wp-links-opml.php?link_cat=1521
+
+There's also a [https://github.com/snarfed/indie-map/blob/master/crawl/domains.txt text-based list] from [[indie map]] that could potentially be used.
+
+Additional IndieWebCamp shared-community resources:
+* https://twitter.com/indiewebcamp
+* https://twitter.com/indiewebcampuk
+* https://news.indieweb.org
+
+== See Also ==
+* https://en.wikipedia.org/wiki/Planet_%28software%29
+* [[feed]]
+* [[discovery]]
+* [[IndieNews]]
+* http://www.planetplanet.org/
+* [[OPML]]
+* http://inessential.com/2019/04/11/wishing_for_blog_search_engines
+* http://inessential.com/2019/04/14/more_thoughts_at_random_on_blog_search_e
+* http://cdevroe.com/2019/04/15/blog-search/
+** ""
+* [https://micro.blog/artkavanagh/3147768 Discussion in reply to Brent Simmon's Blog Post]
+* Example from Tom Critchlow https://tomcritchlow.com/feeds/
+* Search related example from SearchMySite.net: https://searchmysite.net/search/new/ by diaplyaing the newest posts in their search, the platform becomes a planet of recent posts made on independent websites
+* [[Wikipedia:Planet (software)]]
