@@ -1,0 +1,111 @@
+https://indieweb.org/events/2025-12-25-create-day
+
+
+'''<dfn>[https://etherpad.indieweb.org/2025-12-25-create-day ]</dfn>''' was an IndieWeb meetup on Zoom held on .
+
+* Archived from: https://etherpad.indieweb.org/2025-12-25-create-day
+
+    2025-12-25 Give the Gift of Create Day
+
+For the most part, the event will be people working on their sites. Normally, chat is done through the Indieweb rooms, but we're recovering from a massive spam attack, so chat may be disrupted. The Zoom room will be live all day for people to work together, and before we close, to present/demo what they did. 
+
+== Participants ==
+* {{gwg}}
+* {{burgeonlab}}
+* {{mossymaker}}
+* {{t}} - hoping the Zoom re-opens!
+* {{aciccarello}}
+* {{pierre}}
+* {{fractalkitty}} 
+* {{alabut}}
+* {{jeremycherfas}}
+* ... add names
+
+== Working On ==
+
+* {{gwg}} - Will be on periodically working during the 8 hour stretch
+** PRs sent by {{pfefferle}} for Indieweb Word/ClassicPress products and additional work in this area.
+
+* {{burgeonlab}}
+** Quite excited to get Indiekit (a Node.js server for Micropub implementation) https://getindiekit.com/ almost working with my Hugo site. I'm just ironing out a few more last hurdles before running tests from https://micropub.rocks.
+
+* {{mossymaker}}
+** Building an Ansible playbook for running multiple services with [https://podman.io/ Podman]
+** Based on https://github.com/Mati365/hetzner-podman-bunjs-deploy 
+** Modifying to support 2 or more domains, DNS-01 ACME challenge
+
+* {{t}}
+** ✅ updating his https://tantek.com/daylists 
+** ...
+
+* {{aciccarello}}
+** Working on https://omnibear.com/
+
+*{{fractalkitty}}
+**working on my first hugo site - integrating numbers + python +  hugo. I hope to have it be my journals central spot and a place for all the things that don't fit in on my other sites. Also - working on a post for toground.link and if I get time, I'll start porting over some p5js tools to typescript for runing a math seminar in the new year. 
+
+{{gRegor}}
+Working on some misc cleanup of the code and templates on my site.
+* ✅ Calendar page https://gregorlove.com/calendar/ should use modern templating, same as my events page.
+* Add a [[sitemap]] so I can get a better picture of all the top-level pages I have
+* ...
+
+{{alabut}}
+Working on replacing my RSS feed with a microformats one.
+* Haven't found any good resources on reverse engineering an existing feed so that it doesn't break or repost everything, so I'm going to document my findings afterwards.
+
+{{jeremycherfas}}
+Wasn't able to contribute on the day, but I spent a restful hour in the morning crocheting abnother hyperbolic creature (more like a kelp blade) for my small but growing coral reef.
+== Notes ==
+Discussed possible 2025 IndieWeb Hackathon plans
+
+In general
+* maybe a Zoom kickoff near the beginning of the month for folks to introduce each other, talk about their hack projects or offer help or ask for help with hack projects
+* maybe a mid-month Zoom check-in
+* wrap-up demo Zoom at end of month where everyone is invited to watch demos of hacks built during the month
+
+When would be a good month for an IndieWeb WordPress Hackathon?
+* {{gwg}} to talk with {{pfefferle}}
+* recruit {{snarfed}} too
+
+Pierre demonstrated a music thing!
+
+{{t}} is willing to host a late night continuation of Create Day if anyone is around / keeps the Zoom open long enough to hand-off
+* {{addyourself}} if you're interested
+
+* Ebird best practices: https://ebird.freshdesk.com/en/support/solutions/articles/48000795623#Include-in-your-list
+* Site list: https://www.ciccarello.me/sites/
+* Coypu (Nutria) https://www.inaturalist.org/observations/70771020
+
+*svg word cloud https://banjomagpi.com/haiku/
+
+{{alabut}} Had an Indieweb popup idea - zoom and/or blog series that interviews people, a la Manu's People and Blogs newsletter: https://peopleandblogs.com/
+* Came up because I wanted to interview someone about their workflow, in a way that people could get their own questions in too, so it was a blend of directed at first and then collaborative, like a panel discussion or Q&A at a conference.
+* Format: everyone is muted by default at the beginning except the moderator and guest, while people save their questions for the second part of the meeting.
+
+* UPDATE: {{alabut}} is currently stalled out on his Create Day project :(
+    ** Trying to replace my RSS with microformats+Granary
+    ** The goal is recreate exactly the XML that is currently live, so that feed readers don't break or duplicate.
+    ** Prototype page for the h-feed and h-entries is here: https://alabut.com/projects/microformats/mainfeed/static/
+    ** Ignore the ugly layout, it's just meant to be a test of the underling HTML.
+    ** Running it through Granary creates this XML: https://alabut.com/projects/microformats/mainfeed/rss-current-granary.xml
+    ** Unfortunately it doesn't use the p-summary element of h-entry posts and shoves all the e-content into the <description> instead of <content:encoded> like expected.
+    ** The XML structure I'm trying to recreate is this one from my live RSS file: http://alabut.com/rss.xml
+    ** Any help or tips would be greatly appreciated!
+* UPDATE 2: I couldn't debug how to get Granary to do the right thing with RSS, but it looks like it outputs Atom with the correct data and that using that instead would work. I've tested the above sample page and it handled summaries vs content correctly, so that's my new path forward for swapping out my current XML output. 
+* {{gRegor}}: I'll try to look at this more over the weekend. There might be a bug to file on Granary for RSS conversion.
+** quick notes before I forget: The RSS2 element is `description` and that's where the contents of the post should go. I don't believe RSS2 has a `content` element, though that might be from an earlier version of RSS? I'm not immediately sure where the `content:encoded` element comes from that appears in https://alabut.com/rss.xml
+** As far as I can tell, <content:encoded> is a pretty common extension but yeah, the RSS spec is a mess. Seems like RSS won the popularity war while Atom won the standards one.
+** UPDATE 3: I got it working! Switching from RSS to Atom as the output gives me full content posts that I can test out in Monocle, like so:
+    https://monocle.p3k.io/preview?url=https%3A%2F%2Fgranary.io%2Furl%3Finput%3Dhtml%26output%3Datom%26url%3Dhttps%253A%252F%252Falabut.com%252Fprojects%252Fmicroformats%252Fmainfeed%252Fstatic%252F
+* ... add notes
+
+----
+
+Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
+
+
+
+{{Homebrew Website Club}}
+
+[[Category:Events]]
