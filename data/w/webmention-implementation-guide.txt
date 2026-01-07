@@ -14,7 +14,18 @@ The beauty of simple protocols is that you can do most of this manually very eas
 === One-liner webmentions ===
 
 This will send the webmention in a single command:
- <nowiki>curl -i -d "source=$your_url&target=$target_url" `curl -i -s $target_url | grep 'rel="http://webmention.org/"' | sed 's/rel="webmention"//' | grep -o -E 'https?://[^ ">]+' | sort | uniq`</nowiki>
+ <nowiki>curl -i -d "source=$my_url&target=$target_url" $(curl -i -s "$target_url" | grep 'rel="webmention"' | grep -o -E 'https?://[^ ">]+' | sort | uniq)</nowiki>
+
+You can also incorporate the one-liner into an executable shell script:
+<code><pre>#!/usr/bin/env bash
+
+my_url="$1"
+target_url="$2"
+
+curl -i -d "source=$my_url&target=$target_url" $(curl -i -s "$target_url" | grep 'rel="webmention"' | grep -o -E 'https?://[^ ">]+' | sort | uniq)</pre></code>
+
+Save this as e.g., "send-wm.sh", run <code>sudo chmod +x send-wm.sh</code>, and then run the following:
+<code><pre>./send-wm.sh <your_url> <target_url></pre></code>
 
 See also this gist for sending pingbacks manually: https://gist.github.com/aaronpk/5744879
 
