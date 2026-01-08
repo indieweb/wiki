@@ -5,11 +5,24 @@ https://indieweb.org/Wayback_Machine
 The '''<dfn>[https://archive.org/web/ Wayback Machine]</dfn>''' is a digital [[archive]] of web pages created by the [[Internet Archive]]. It allows you to look up past versions of a URL. It also allows you to submit a URL to be captured as it exists currently.
 
 == How To ==
+=== How to find by date ===
+To find the closest snapshot of a URL by date, construct a URL in the format:
 
-Getting the oldest available version of a URL:
+<code><nowiki>https://web.archive.org/web/YYYYMMDD/</nowiki></code> followed by the original URL.
+* Replace the date section <code>YYYYMMDD</code> with the desired date. Partial dates like <code>YYYYMM</code> and <code>YYYY</code> are also accepted.
 
-    URL="http://example.com"
-    wget -O- -q "http://web.archive.org/web/timemap/link/${URL}" | grep "first memento" | sed -r "s/^<([^>]+)>;.*$/\1/"
+Examples: 
+* [https://web.archive.org/web/20250101/https://indieweb.org/Wayback_Machine snapshot of this page] closest to 2025-01-01
+* [https://web.archive.org/web/2024/https://indieweb.org/Wayback_Machine snapshot of this page] closest to 2024
+
+=== How to get oldest available snapshot ===
+Use this [[command line]] to get the oldest available snapshot of a URL:
+
+<pre>
+URL="http://example.com"
+wget -O- -q "http://web.archive.org/web/timemap/link/${URL}" | grep "first memento" | sed -r "s/^<([^>]+)>;.*$/\1/"
+</pre>
 
 == See Also ==
 * [[Internet Archive]]
+* [[archive]]
