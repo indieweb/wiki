@@ -3,10 +3,44 @@ https://indieweb.org/Astro
 {{stub}}
 {{pagelogo|https://avatars.githubusercontent.com/u/44914786}}
 
-'''<dfn>[https://astro.build Astro]</dfn>''' is [[static site generator]] used by several people in the IndieWeb community to run their personal sites.
+'''<dfn>[https://astro.build Astro]</dfn>''' is an [https://github.com/withastro/astro open source] [[JavaScript]]-based [[static site generator]] and front end framework used by several people in the IndieWeb community to run their personal sites.
 
-* Open source: https://github.com/withastro/astro
+Originally built to be a more performant and web-focused alternative to popular SSG frameworks like [[Gatsby]], [[Next.js]], and [[Nuxt]], Astro has always tried to minimise the amount of JavaScript that is actually sent to the browser. In more recent major version releases, this has increasingly taken the form of server-side JavaScript rendering, focusing on concepts like HTML streaming and the [https://docs.astro.build/en/concepts/islands/ "islands architecture"] method of hydration, both of which aim to send as much of a page as HTML as possible, before injecting dynamic content using JavaScript, if it is available.
 
-[[Category:SSG]]
+Astro is also designed with code migration in mind, allowing you to use almost any other front-end framework or templating language, and then fully converting the output to server-rendered HTML and vanilla JavaScript wherever possible.
+
+By default, it expects you to use the `.astro` templating format/language, which is based on JSX but removes any differences between web attributes/APIs and that format (for instance, Astro require you to use HTML attributes like `for` directly, rather than the more common JSX `htmlFor` attribute). However, you can also integrate other front-end frameworks, including React, Vue, Svelte, Preact, and HTMX, using "adaptors".
+
+This focus on working "with the grain of the web" has allowed Astro to adopt web-native technologies like the View Transitions API very early, falling back to polyfills for browsers that do not yet support it yet.
+
+There is an [https://astro.build/chat active community Discord] and [https://docs.astro.build/en/getting-started/ robust documentation]; docs are built using their [https://starlight.astro.build/ Starlight kit], a documentation-specific starter pack and plugin set built on top of the Astro framework. There are also a number of [https://docs.astro.build/en/guides/migrate-to-astro/ migration guides for other front end frameworks].
+
+As of January 2026 it was announced that the Astro project would be acquired and managed by [[Cloudflare]]: [https://astro.build/blog/joining-cloudflare/ Astro is Joining Cloudflare]
+
+==Getting Started==
+The Astro team maintain a [https://docs.astro.build/en/install-and-setup/ getting started guide], alongside a number of migration guides and [https://astro.build/themes/ themes/starter packs].
+
+== Building Blocks ==
+(See other [[static site generator]]s for basic principles)
+
+* Steve Frenzel has documented [[webmention]] integration:
+** [https://www.stevefrenzel.dev/posts/webmentions-in-astro-for-blog-posts/ Webmentions in Astro Blog Posts]
+* {{murray}} has documented how they are running Astro on a generic cPanel web host with Node.js
+** [https://theadhocracy.co.uk/wrote/launching-astro-from-cpanel Launching Astro from cPanel]
+** [https://theadhocracy.co.uk/wrote/updating-astro-from-cpanel Updating Astro from cPanel]
+
 == IndieWeb Examples ==
 * [[User:Jarema.me|Jarema]] uses [[Github]], [[Astro]] and [[Vercel]] for his personal website.
+* {{murray}} uses [[Astro]] on [https://theadhocracy.co.uk theadhocracy.co.uk], as well as several microsites e.g. [https://lp.theadhocracy.co.uk their music collection], with a mixture of SSG and SSR rendering. Currently hosted on [[Krystal]] using Node.js (see above)
+* {{addyourself}}
+
+== See Also ==
+* [[static site generator]]
+* [[Eleventy]]
+* [https://jaystechbites.com/posts/2025/why-astro-over-nextjs-2025/ Why Astro over Next.js in 2025]: documents why shipping less JavaScript is better for everyone
+
+[[Category:Software:JavaScript]]
+[[Category:open source]]
+[[Category:SSG]]
+
+{{Open Source}}
