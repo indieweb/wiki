@@ -1,0 +1,496 @@
+https://indieweb.org/POSSE-ja
+
+[[File:fit-into-the-network.png|alt=ネットワークにどう適合したいかを考えましょう。|link=]]
+
+[[File:posse.svg|frameless|right|128px|POSSE アイコン]]
+<span id="Diagram">[[Image:POSSE-2012-312.jpeg|320px|right]]</span>
+
+'''<dfn>POSSE</dfn>''' は、'''Publish (on your) Own Site, [[:Category:syndication|Syndicate]] Elsewhere'''（自分のサイトで公開し、他所に配信する）の略称です。これは、コンテンツをまず自分のサイトに投稿し、その後、コピーを公開したりサードパーティ（[[social media]] siloなど）にリンクを共有したりする手法を指します。その際、閲覧者があなたのコンテンツと直接やり取りできる経路を提供するために、[[original post link]]（元の投稿へのリンク）を添えます。
+
+<a style="border-radius:0.5em; padding:0.5em 0.5em 0.4em; background:silver; float:right; clear:right" href="https://www.youtube.com/watch?v=X3SrZuH00GQ&t=835s">▶️ Zachによる1分間の<b title="Zachのトークの残りの部分「Own your content on Social Media using the IndieWeb」では、PESOS、彼自身の個人サイトの設定、11tyなどについても触れています。">*</b> POSSE導入ビデオを見る</a>
+
+== なぜやるのか ==
+
+'''友人に、彼らの好きな方法であなたの投稿を読んでもらいましょう。''' POSSEを使えば、友人はあなたのコンテンツを読むために、彼らが普段使っているもの（[[Instagram]]、[[Tumblr]]、[[Twitter]]、[[Neocities]]などのソーシャルメディア [[silo]]）を使い続けることができます。
+
+'''「いつか」ではなく「今」、友人と連絡を取り合いましょう。''' POSSEは、将来的に友人とつながる可能性よりも、現在の友人と今つながり続けることを重視しています。 
+
+'''連邦化（Federation）よりも友人が大切です。''' 建築的な理想よりも人々にとって重要な人間関係に焦点を当てることで、人間的な観点から見れば、POSSEは[[federation]]よりも重要です。さらに、連邦化のアプローチがまずPOSSEの手法を取り入れれば、より採用されやすくなり（誰もが友人と連絡を取り合いたいと思っているため）、その結果、連邦化された未来により急速に近づくことができます。
+
+'''POSSEはブログの域を超えています。''' これは、IndieWebのムーブメントが単なる「全員が自分のサイトでブログを書く」ことや、「全員がお気に入りのソーシャルソフトウェアをインストールして実行する」といった[[monoculture]]（単一文化）的な解決策とは[[different]]（異なる）理由であり、その方法の核となる部分です。
+
+__TOC__
+=== 全般的な理由 ===
+
+<span id="Advantages">POSSEは、以下の理由から、堅牢で好ましい配信モデルであると考えられています</span>。
+
+* '''サードパーティへの依存を減らす。''' 自分のサイトに直接投稿することで、投稿のためにサードパーティのサービスに依存しなくて済みます。自分のサイトにアクセスできれば、コンテンツを公開できます。対照的にPESOSでは、[https://twitter.com/colinjohnston/status/772533151960707072 サードパーティのサイトがダウンしているとき]、コンテンツを追加することができません。
+* '''所有権。''' 自分のサイトに「最初に」投稿することで、中間にサードパーティのサービス（サイロ）の利用規約（TOS）を挟むことなく、自分にまで遡れる直接的な所有権の連鎖を構築できます（これは[[PESOS]]の脆弱性です）。
+* '''コンテンツの正規URLを所有する。''' コンテンツへの正規URL（Canonical URL）を自分のドメイン上に持てます。
+* '''コピーからオリジナルを引用できる。''' コンテンツを最初に自分のサイトに投稿する（つまりパーマリンクを作成する）ことで、サードパーティのサービスに投稿するコピーから、自分のサイトのオリジナルへリンクしたり引用したりできます（[[syndication_formats]] および [[Twitter#POSSE_Notes_to_Twitter|TwitterへのPOSSEノート]] を参照）。
+* '''より優れた検索。''' 自分のドメイン上の公開コンテンツを（任意の検索エンジンを使って）検索する方が、投稿の検索を[[silos]]だけに頼るよりも効果的です（例えば、Twitterは一時期、検索結果に最近のツイートしか表示しませんでした。[[Facebook]]の検索結果はいまだに非常に貧弱です）。
+* [[backfeed]]（バックフィード）を使用して、他のサービスからの反応を取り込む（逆配信する）ことができます。
+* コンテンツの正規コピーを自分のサイトに保存しながら、他のサービスのソーシャルレイヤーや集計機能を活用できます。
+* ...
+
+=== なぜオリジナルへリンクするのか ===
+一般的な[[POSSE]]の実践では、[[permashortlink]]を使用して、POSSEコピーからオリジナルへリンクを貼ります。その理由は以下の通りです。
+
+* '''オリジナルコンテンツの発見。''' サードパーティのサービスに投稿されたオリジナルへのパーマリンクにより、それらのサービス上のコピーからオリジナルのコンテンツを[[discovery]]（発見）することが可能になります。
+* '''投稿をコピーするスパマーを逆手に取る。''' スパマー（例: @sin3rss）があなたのPOSSEコピーを無意識にコピーして転載したとき、彼らはオリジナルへのリンクも一緒にコピーします。その結果、より多くの人があなたのオリジナルの投稿を見つけ、閲覧するための導線となります。ある種の「[http://tantek.com/2011/009/t3/value-searching-finding-past-tweets-self-hosting 2011-01-09 インターネット合気道]」です。
+* '''オリジナル投稿のランキング向上。''' あなたのPOSSEコピーが他者によってコピーされ、他所へ（手動リツイートやRSSボットなどを介して）転載された場合、それらのコピーがオリジナルへリンクしていれば、検索エンジンはそれらのリンクを辿ってオリジナルを特定し、ランクを高く設定します。
+
+== 方法 ==
+=== 実装方法 ===
+このセクションは、POSSEを実装するウェブ開発者向けです。
+==== 全般 ====
+一般的に、コンテンツ投稿ソフトウェアが何かを投稿するとき、選択した[[silo]]の宛先にもコピーを投稿し、そこからオリジナルへ戻る[[original post link]]（例: [[permashortlink]] や [[permashortcitation]]）を含めるべきです。
+
+その詳細は宛先によって異なります。以下のサイロ別のセクションを参照してください。
+
+コピーをサイロに投稿した後は、以下のことを行うべきです：
+* オリジナル投稿の '''[[posts-elsewhere]]''' セクションから、配信されたコピーへリンクを貼る。
+
+==== ユーザーインターフェース ====
+最高のユーザーインターフェース（UI）とは、自動的で、信頼でき、目に見えないものです。常に期待通りに、予測可能な形でPOSSEを実行できるのであれば、明示的なUIは必要ありません。
+
+===== プレビュー =====
+予測可能性を高め、安心感を与える一つの方法は、公開前に配信先にどのように表示されるかを（配信先の制限内で）プレビューとして表示することです。
+
+（スクリーンショットが必要）
+
+==== Twitter ====
+{{main|Twitter#POSSE_to_Twitter}}
+[[Twitter]]はおそらく最も人気のあるPOSSEの宛先であり、始めるのに適した場所です。
+
+ノート（ツイート）をTwitterに直接投稿するのではなく、自分のサイトに投稿してTwitterにPOSSEし始めることができれば、データの所有権を握るための大きな一歩を踏み出したことになります。
+
+詳細：
+* APIアクセス - 永続的なAPIトークンにより、[https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/post-statuses-update.html 新しいツイートの投稿]はスムーズに機能し、戻り値には投稿されたURLが含まれます。
+** 2022年11月現在、Twitterは、Twitterのルールやポリシーに違反する可能性があるという理由で、POSSE/バックフィードに使用されるアプリケーションの新しいAPIアクセスを拒否しています。 — {{barnabywalters}}
+* 非常に完成度の高いWebアクションエンドポイントをサポートしているため、半手動の投稿を簡単に実装できます。
+** これらのエンドポイントは何ですか？2022年現在もそうですか？ — {{barnabywalters}}
+
+ノートとアーティクル（ブログ投稿）の両方をTwitterにPOSSEする方法の詳細については、[[Twitter#POSSE_to_Twitter|TwitterへのPOSSE]]を参照してください。
+
+==== Facebook ====
+{{main|POSSE to Facebook}}
+現在、FacebookへPOSSEするためのオプションは2つあります：
+* 手動でクロスポストする。
+* [https://snarfed.org/2021-02-18_bridgy-browser-extension-for-facebook Facebook用Bridgyブラウザ拡張機能]を使って半自動で行う。
+
+==== Medium ====
+{{main|Medium}}
+* [https://github.com/Medium/medium-api-docs 投稿API]を介して投稿を作成できます。
+* Mediumは、オリジナルのURLへの[[rel-canonical]]リンクを保持する[https://medium.com/@Medium/import-all-the-things-578c8f9016f6#.e8mh2dyws インポート投稿機能]による手動POSSEもサポートしています。
+* {{shaners}} と {{benwerd}} はMediumに手動でPOSSEしています。
+* {{chrisaldrich}} はWordPressの [https://wordpress.org/plugins/medium/ Mediumプラグイン] を使用してMediumにPOSSEしています。彼らはまた、大量の投稿を移植するための [https://help.medium.com/hc/en-us/articles/218572107-How-to-move-to-Medium 一括移行]（別名：大量POSSE）もサポートしており、その後はプラグインを介してPOSSEできます。
+* {{aaron gustafson}} は、MediumにPOSSEするための [https://github.com/aarongustafson/jekyll-crosspost-to-medium Jekyllプラグイン] を作成しました。
+
+==== WordPress ====
+{{main|WordPress}}
+* veganstraightedge.com はどのように行っていますか？（彼のすべての記事はWordPress.comへ手動でPOSSEされています）
+* {{chrisaldrich}} は、セルフホストされたWordPressからWordPress.comへPOSSEするために、WordPressプラグイン [https://wordpress.org/plugins/wp-crosspost/ WordPress Crosspost] を使用しています。
+
+==== Ghost ====
+{{main|Ghost}}
+* コミュニティによって開発されたオープンソースツールが [https://github.com/wpowiertowski/posse GitHub] で公開されています。このツールはGhostのウェブフックを使用して最新の公開投稿をJSON形式で受信し、その投稿をMastodonやBlueskyのアカウントに配信します。
+** [https://behindtheviewfinder.com behindtheviewfinder.com] ブログは、上記のツールを使用して投稿を配信しています。
+
+==== プレーンテキストノート ====
+一部の宛先（例: [[SMS]] や [[push notification|プッシュ通知]]）では、純粋なプレーンテキスト表現が必要になる場合があります。
+* [[h-entry_to_text]] は、任意の [[h-entry]] からプレーンテキスト表現を生成する方法です。
+
+==== ソフトウェア ====
+POSSEを実装するためのソフトウェアとライブラリ：
+* PHP
+** [https://github.com/barnabywalters/php-helpers php-helpers] のPOSSE名前空間（別のパッケージに移動される可能性があります）には、HTMLからプレーンテキストのマイクロブログ構文への変換を含む、各種の切り詰め、準備、配信機能が含まれています。
+* Python
+** [https://bolt80.com/silorider/ SiloRider] はPythonで実装されたコマンドラインツールで、さまざまなサービス（2018-08-01時点でTwitterとMastodon）へのPOSSEを実装できます。
+** [https://gitlab.com/chaica/feed2toot Feed2Toot] は、任意の数のRSSフィードを解析し、そのコンテンツをActivityPubベースのサービス（Mastodon、Pleromaでテスト済み）に投稿するもう一つのコマンドラインPythonツールです。高度な投稿フィルタリング、フィード解析とトゥート形式に関する多数のオプションなど、便利な機能が含まれています。
+* Docker
+** <dfn id="posseparty">[https://posseparty.com/ POSSE Party]</dfn>: POSSEのためのセルフホストソフトウェア。
+
+==== サービス ====
+* [[Bridgy]] [https://www.brid.gy/about#publish Publish] は、POSSE-as-a-service（サービスとしてのPOSSE）です。[[Twitter]]、[[Flickr]]、[[GitHub]]、[[Mastodon]] をサポートしています。対話的、あるいは [[webmention]] を介してプログラムから使用できます。
+* [https://muggedtweets.com/ Mugged Tweets] - ノートをマグカップにPOSSEします（あらかじめTwitterへPOSSEしておく必要があるかもしれません）。
+* [https://ifttt.com/ IFTTT] は、RSSやAtomフィードを使用して、Twitter、Tumblr、Facebookなどの多数のサイロへコンテンツを自動的に転送することを可能にします。
+* [[EchoFeed]]
+
+==== 公開フロー ====
+POSSEのコンテンツ投稿フローを実装する方法は、少なくとも2つあります：
+
+===== クライアント → サイト → サイロ =====
+* ユーザーが公開用クライアントを使用してコンテンツを作成する
+** オプション：クライアントがサードパーティサービスを認識している場合、それらを選択するUIや、サービスごとのカスタマイズ機能を提供する
+* コンテンツが完成したら、ユーザーは自分のサーバーに公開する（オプション：どのサードパーティサービスに送るか、およびそのカスタマイズ内容などのメタデータを付与する）
+** オプション：クライアントはサーバーの状態を把握した上でパーマリンクを生成し、そのパーマリンクに対して公開を行うことができる
+* サーバーがコンテンツを公開し、必要に応じてパーマリンクと要約（および/またはサードパーティサービスに適したカスタマイズコンテンツ）を生成する
+* サーバーが、パーマリンク付きのコピーをサードパーティサービスに投稿する
+
+利点：
+* ユーザーはインターネット上で自分のサイトという1つの場所とだけやり取りすればよい
+* 配信（Syndication）をサーバー側で完全に自動化できる
+欠点：
+* 特になし？
+
+===== クライアント → サイト および サイロ =====
+* ユーザーが公開用クライアントを使用してコンテンツを作成する
+* コンテンツが完成したら、ユーザーは自分のサーバーに公開する
+* クライアントは、プッシュしたばかりのコンテンツのURLをサーバーに問い合わせる
+* 公開用クライアントは、以下を選択するためのインターフェースをユーザーに提示する：
+** どのサードパーティサービスに公開するか
+** サービスに公開する正確な内容（生成されたコンテンツに基づく要約が事前入力されている）
+* ユーザーがサービスを選択し、フォームを送信する
+* 公開用クライアントが、コンテンツの要約をサードパーティサービスに投稿する
+
+利点：
+* サードパーティサービスへのコンテンツコピーのタイミングや編集について、ユーザーがより細かく制御できる
+欠点：
+* 配信のたびに手動の手順が必要になる
+* クライアントからサードパーティサービスへの直接的な接続性に依存する（モバイル接続が不安定な状況や、クライアントがドメイン検閲のあるインターネットアクセスを使用して公開している場合に問題となる）
+
+== IndieWebの実装例 ==
+以下のIndieWebCamp参加者の<span id="IndieWeb_examples">サイト</span>は、POSSEアーキテクチャをサポートしています。実装している場合は、それを追加し、スクリーンショットやスクリーンキャスト、あるいはそれについてのブログ記事を作成して、詳細やリンクをここに投稿してください（日付順、古いものから）：
+
+=== Tantek ===
+'''[http://tantek.com Tantek.com]''' 2010-01-01時点[http://tantek.com/2010/001/t1/declaring-independence-building-it]（2010-01-26 Twitter配信開始[http://twitter.com/t/status/8228455558] および 追いつき[http://tantek.com/2010/026/t2/tweeting-from-tantek-com][http://twitter.com/t/status/8228820728]）。[[User:tantek.com|Tantek Çelik]] は [http://tantek.com tantek.com] 上の [http://tantek.com/w/Falcon Falcon] にPOSSEを実装しました。
+* すべてのセルフホスト投稿は、[[PuSH]] v0.4 + [[h-feed]] および Atom を使用して、PubsubHubbubハブを介して [[StatusNet]] や他の購読者などにリアルタイム配信される（閉鎖されるまでは [[Google Buzz]] にも配信されていた）。
+* [[note]]（および [[article]] のタイトル）、[[reply]]、[[RSVP]] 投稿は、個人サイトのサーバーによって [[snowflake]] 形式でコピーされ、オリジナルへのパーマショートリンク（詳細は [http://tantek.com/w/Whistle Whistle] を参照）を引用・参照として含めて Twitter に投稿される。Twitter へのノートのコピーは、そこから自動的に Facebook にも再コピーされる。
+** Facebook イベントへの [[RSVP]] は、[[Bridgy]] Publish を使用して Facebook に「コピー」（というより伝播）される。
+** ツイートへの [[like]]（いいね）は、[[Bridgy]] Publish を使用して Twitter に「コピー」（というより伝播）される。
+
+=== Barnaby Walters ===
+'''[http://Waterpigs.co.uk Waterpigs.co.uk]''' 2012-03-12時点。[[User:waterpigs.co.uk|Barnaby Walters]] は [http://waterpigs.co.uk waterpigs.co.uk] にてPOSSEを実装しました。
+* 2012-09-25時点で、すべてのコレクション（ノート、アーティクル、アクティビティ）は [[PuSH]] 購読可能な [[feeds]] となっている。
+* 「クライアント → サーバー → サードパーティ」のフローを使用。--[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 2012年9月25日 06:08 (PDT)
+* Twitter と Facebook に配信中。
+* 2014-06-19時点で、[[Taproot]] はノートやアーティクルを更新する際、追加の POSSE ツイートをオプションで投稿できるようになった。例：[http://waterpigs.co.uk/notes/4WfKUc/ 更新されたノート] と [https://twitter.com/BarnabyWalters/status/479721886503288832 更新分のPOSSEツイート]。[[Bridgy]] がオリジナルの POSSE ツイートだけでなく、更新ツイートからもサイロでの反応をバックフィードすることに成功している点に注目。
+
+=== Brennan Novak ===
+'''[https://brennannovak.com brennannovak.com]''' 2012-07-01時点[https://brennannovak.com/notes/10][https://twitter.com/brennannovak/status/212243963011280897]。[[User:Brennannovak.com|Brennan Novak]] は自身のサイト [https://brennannovak.com brennannovak.com] にて、Twitter と Facebook にコピーを投稿するPOSSEを実装しました。
+
+=== Aaron Parecki ===
+'''[http://aaronparecki.com aaronparecki.com]''' 2012-08-19時点[http://aaronparecki.com/2012/232/note/1][https://twitter.com/aaronpk/status/237344101928951808]。[[User:Aaronparecki.com|Aaron Parecki]] は自身のサイト [http://aaronparecki.com aaronparecki.com] にてPOSSEを実装し、自身のサイトのオリジナルへのパーマショートリンクを含むコピーを Twitter に投稿しています。
+* 2012-08-19時点で、すべてのコレクション（ノート、アーティクル、返信）は [[PuSH]] 購読可能な [[feeds]] となっている。
+* 2012-09-09時点の投稿用UI： http://aaronparecki.com/2012/253/note/3
+
+=== Sandeep Shetty ===
+'''[[User:Sandeep.io]]''' 初の POSSE 投稿は 2012-11-05。主に Twitter へ配信している。サイロ（Facebook, Twitter, Google+）が提供するシェアリンクを各投稿に追加し、それを手動でクリックして内容を事前入力・編集して投稿するという、非常にローファイな解決策を使用している。API の統合は、Facebook API を使用してそのランダムな変更に対処してきた広範な経験から、あえて避けている。「統合」は時に高いコストを伴うため、可能な限りシンプルに保っている。
+
+=== Ben Werdmuller ===
+'''[http://werd.io werd.io]''' 2013-05-31時点 [http://werd.io/view/51a7fb55bed7de2f06761712]。[[User:Benwerd.com|Ben Werdmuller]] は自身の [http://idno.co idno] プラットフォームにプラグイン経由でPOSSEを実装しました。新しいコンテンツには関連する Activity Streams オブジェクトタイプが付与され、POSSE プラグインはそれらのオブジェクトタイプに関連する投稿イベントをリッスンして、適切に配信を行います。
+* ノートとアーティクルは Twitter と Facebook に配信される。
+* 画像は Facebook、Flickr、Twitter に配信される。
+* 場所（チェックイン）は Foursquare に配信される。
+* 他のプラグインも非常に簡単に作成可能。Foursquare プラグインの構築には約 1 時間しかかからなかった。
+
+=== Shane Becker ===
+* [[User:Veganstraightedge.com|Shane Becker]] は veganstraightedge.com で [[Dark Matter]] を使用（2013-07-17より[http://indiewebcamp.com/irc/2013-10-31/line/1383205887]）。手動 POSSE 時に自動的に rel-syndication マークアップを付与：
+** [[articles]]： http://veganstraightedge.com/articles/2013/09/07/rorschach-and-roomba から [https://medium.com/short-fiction-8/b270785f2595/ Medium] および [https://veganstraightedge.wordpress.com/2013/09/07/rorschach-and-roomba/ WordPress] へ
+** [[notes]]： http://veganstraightedge.com/notes/2013/10/23/of-irons-and-fires から [https://twitter.com/veganstraightedge/status/393157895300202496 Twitter] へ
+** [[videos]]： http://veganstraightedge.com/videos/2013/5/30/backyard-squirrel-buddy から [https://vine.co/v/bYTZV5KX1Q0 Vine] へ
+
+=== Glenn Jones ===
+'''[http://glennjones.net glennjones.net]''' 2014-01-14時点。[[User:glennjones.net|Glenn Jones]] は、新しいバージョンの [http://transmat.io transmat.io] システムを使用してブログにPOSSEを実装しました。transmat に追加された新しいコンテンツはオブジェクトタイプに関連付けられます。POSSE Twitter プラグインが投稿イベントをリッスンし、コンテンツを配信します。現時点ではノートのみが配信されます。
+
+=== Jeremy Keith ===
+'''[http://adactio.com adactio.com]''' 2014-05-27時点。[[User:adactio.com|Jeremy Keith]] は独自のカスタムCMSを使用してPOSSEを実装しています。
+* 自身のサイトでノートの投稿を開始した [http://adactio.com/notes/6803/ 2014-05-27] からPOSSEを行っている（ノートのPOSSEコピーは [https://twitter.com/adactio/status/471076735417864192 2014-05-26 と表示される] 可能性があるが、これはおそらくタイムゾーンの違いによるもの。JeremyはBST、PDTの閲覧者はそれに応じて調整された日時を見るため）。[http://adactio.com/journal/6826/ 2014-06-01の関連ブログ記事] も参照。
+* 写真は、自身のサイトで投稿を開始した [http://adactio.com/notes/6978/ 2014-07-05] から Twitter へ、[http://adactio.com/notes/7021 2014-07-08] からは [[Flickr]] へPOSSEされている。例：
+** http://adactio.com/notes/6978/
+*** POSSEコピー： https://twitter.com/adactio/status/485552177080201217
+** http://adactio.com/notes/7021 - Twitter と Flickr の両方にPOSSEされた最初の写真：
+*** https://twitter.com/adactio/status/486617601167339521
+*** https://www.flickr.com/photos/adactio/14604446101
+
+=== Shane Hudson ===
+'''[https://shanehudson.net shanehudson.net]''' 2014-09-19時点。[[User:ShaneHudson.net|Shane Hudson]] は Craft CMS 用に Twitter へのPOSSEを実装しました。
+* 以前は WordPress で運用していたが、そのUXを好まなかった。
+* 返信コンテキスト（reply contexts）は機能しているが、IDを手動でコピーする必要がある。
+* 写真のPOSSEはまだだが、計画中。
+* 現在はメインのテキストボックスから140文字制限のツイート用テキストボックスへ手動でコピーしている。これを自動化する予定。
+
+=== Ravi Sagar ===
+http://www.ravisagar.in/blog/implementing-posse-my-site 2018-02-21時点で自身のサイトにPOSSEを実装。
+* 新しいブログとノートは Drupal に投稿される。
+* 「Share」キーワードがタグ付けされたブログとノート用に http://www.ravisagar.in/rss-social.xml RSSフィードが生成される。
+* Rebrandly を使用して RSS フィード用の短縮リンクを作成。
+* Zapier を使用して、新しく作成された Rebrandly リンクを Twitter と LinkedIn に共有。
+
+=== Ludovic Chabant ===
+'''[https://ludovic.chabant.com ludovic.chabant.com]''' 2018-07-30時点。[[User:Ludovic.chabant.com|Ludovic Chabant]] は、[[SiloRider]] を使用して [[PieCrust|PieCrust CMS]] から Twitter と Mastodon へのPOSSEを実装しました。
+* SiloRider は CMS に依存しない。公開されたマークアップ内のマイクロフォーマット（Microformats）のみに依存する。
+* 新しいアーティクルは、タイトルとリンクとして投稿される。
+* 新しいマイクロブログの更新は、ほとんどがそのままコピーされ（外部サービスの文字数制限に収まる場合）、写真投稿（複数写真投稿を含む）もサポートしている。
+
+=== Adam Dawkins ===
+'''[https://adamdawkins.uk adamdawkins.uk]''' 2019-01-16時点。[[User:adamdawkins.uk | Adam Dawkins]] は独自のカスタムCMSを使用してPOSSEを実装しました。
+* ノートは、自身のサイトで投稿を開始した [https://adamdawkins.uk/2019/1/16/this-tweet-originated-on-adamdawkins-uk-posse 2019-01-16] からPOSSEされている。
+
+==== 例 ====
+* オリジナルのノート： https://adamdawkins.uk/2019/1/16/this-tweet-originated-on-adamdawkins-uk-posse
+** POSSEコピー： https://twitter.com/adamdawkins/status/1085327551415894016
+
+=== Shaun Ewing ===
+'''[https://shaun.net shaun.net]''' 2020-01-16時点。[[User:shaun.net | Shaun Ewing]] は Jekyll とカスタムAPIを使用してPOSSEを実装しました。
+* 詳細情報： https://shaun.net/notes/taking-back-control-of-my-content/
+* 配信はまだ手動であり、WebMentions などのレベル 3/4 の「IndieMark」項目については現在取り組んでいる。
+
+=== capjamesg ===
+{{capjamesg}} は、自身のサイトから以下のサービスへノートを配信しています：
+
+* Twitter（brid.gy を使用）
+* micro.blog（micro.blog のフィードポーリングシステムを使用）
+* Fediverse（fed.brid.gy を使用）
+
+この配信は、James が [[Micropub]] クライアントや [[Microsub]] フィードリーダーを使用してノートを投稿するたびに自動的に行われます。
+
+=== Wojtek Powiertowski ===
+'''[https://behindtheviewfinder.com behindtheviewfinder.com]''' 2026-01-12時点で、Ghost ブログから以下のサービスへ投稿を配信しています：
+
+* Mastodon
+** [https://mastodon.social/@wojtekpow @wojtekpow@mastodon.social]
+** [https://pixelfed.social/behindtheviewfinder @behindtheviewfinder@pixelfed.social]
+* Bluesky
+** [https://bsky.app/profile/powiertowski.com @powiertowski.com]
+** [https://bsky.app/profile/behindtheviewfinder.com @behindtheviewfinder.com]
+
+この配信は、Wojtek がセルフホストしている [https://github.com/wpowiertowski/posse posse] クライアントを使用して新しい投稿を公開するたびに自動的に行われます。
+
+=== ……ここにさらに追加…… ===
+……POSSE対応サイトへのリンクと、サードパーティのソーシャル共有/公開サービスへコンテンツのコピーを配信し始めた日付を追加してください。
+
+=== 部分的 POSSE サイト ===
+一部のコンテンツのみをPOSSEし、POSSE先と同じサイロにも直接投稿し続けているサイト。
+
+その他の部分的 POSSE サイト：
+
+* '''[[User:Hupili.net]]''' は、以下のセットアップで部分的 POSSE を実装しています：
+** [[SNSAPI]] は、異なるソーシャルネットワーキングサービスのデータ構造とインターフェースを統一するための軽量なミドルウェア。開発者ユーザーがソーシャルサイロを操作するためのスクリプトの柔軟性を提供する。
+** [[SNSRouter]] は SNSAPI 上に構築された Web UI で、異なるサイトからの集約されたタイムラインの閲覧、メッセージの一括転送、および全チャネルでのステータス更新が可能。
+** 上記の説明にある通り、このモデルは真の POSSE ではない。オリジナルと配信されたステータスを区別することが（ほとんど）できない。各ステータス更新時に自身のサイトにパーマリンク付きのページを作成し、SNSAPI を使用して他のサイロに配信することを計画中。
+
+== 他のアプローチ ==
+=== COPE ===
+<abbr>COPE</abbr> は Create Once, Publish Everywhere（1度作って、どこでも公開）の略。これには最初の「1度公開（Publish Once）」というステップが明示的に欠けており、コンテンツを様々な宛先に複製することに主眼が置かれています。
+
+自分が「所有（Own）」するサイトでの「1度公開」ステップがなく、したがって [[original post permalink]] も欠けているため、COPE 戦略は、自分のコンテンツを読んだり見たりするための正規の場所に人々を引き寄せることに失敗します。その結果、他人のサイト上で（おそらく）バラバラの聴衆を増やすだけに終わります。
+
+記事：
+* 2009-10-13 [https://web.archive.org/web/20140517203502/http://www.programmableweb.com/news/cope-create-once-publish-everywhere/2009/10/13 COPE: Create Once, Publish Everywhere] （Daniel Jacobson 著、NPR アプリケーション開発ディレクター）。（オリジナルの <nowiki>https://www.programmableweb.com/news/cope-create-once-publish-everywhere/2009/10/13</nowiki> は、2022年の <nowiki>programmableweb.com</nowiki> の[[site-death-ja|サイト消滅]]によりオフライン）
+* 2019-10-28 [https://www.smashingmagazine.com/2019/10/create-once-publish-everywhere-wordpress/ Create Once, Publish Everywhere With WordPress] （Leonardo Losovitz 著、Smashing Magazine）
+* 2019 WordCamp Taipei トーク： [https://wordpress.tv/2020/06/16/leonardo-losoviz-create-once-publish-everywhere-with-wordpress-2/ Create Once, Publish Everywhere] （WordPress.tv のビデオ）
+
+=== POSE ===
+{{main|POSE}}
+[[POSE]]（Publish Once Syndicate Everywhere）は、POSSE のより広範な前身。特定の [[silo]] で 1 度公開し、そこから他のサイロへ配信することも含まれていました。
+
+=== PESOS ===
+{{main|PESOS}}
+
+似ているが逆のアプローチが [[PESOS]]。コンテンツをまずサードパーティのサービスに投稿し、それを個人のサイトにコピー/配信する手法です。
+
+コンテンツの正確なコピーが個人サイトとサードパーティサービスの両方に投稿されている場合、POSSE か PESOS かを（おそらく存在しない、1秒未満の正確な公開日時を比較しない限り）見分ける方法はありません。配信されたコピーに、公開されたオリジナルへ戻るパーマ(ショート)リンクが含まれていれば、そのサイトが POSSE をサポートしていることを証明できます。
+
+=== PESETAS ===
+{{main|PESETAS}}
+[[PESETAS]] は PESOS に似ているが、（個人サイトを一切介さずに）すべてを特定のサイロにコピー/配信する手法。
+
+例えば、ほとんどのサイロは [[Twitter]] へのクロスポストをサポートしているため、すべてを Twitter アカウントに接続し、常にコピーを保持するためにそこへ（自動）クロスポストすることができます。
+
+例：[[Tumblr]] には Twitter へクロスポストするための UI がある。[http://webapps.stackexchange.com/questions/15315/customize-the-message-tumblr-sends-to-twitter Webapps StackExchange の投稿] にドキュメントと UI のスクリーンショットがあります。
+
+ただし、Tumblr は十分に確立されており、より多様なコンテンツを扱え、より多くのテキストを許可し、Twitter のようにリンクをラップせずに URL へ直接リンクできるため、PESETAS の宛先としてはより適しています。
+
+== ブレインストーミング ==
+=== CRUD ===
+これまで（2013-222）のところ、POSSE は自身のサイトでのコンテンツの作成（'''C'''reation / 公開）を他のサイトに配信することのみを指してきました。このモデルは非常に成功しており、おそらくそれで十分かもしれません。
+
+しかし、POSSE 用の完全な CRUD プロトコルの潜在的な有用性を探る価値はあります。
+
+=== Create（作成） ===
+Create は POSSE のデフォルトです。自身のサイトでコンテンツを作成し、その Create を他のサイトに POSSE します。これについては上記、および [[silo]] ページのサイロ別の詳細で説明されています。
+
+=== Read（読み取り） ===
+動詞としての Read を POSSE に適用すると興味深いものになります。
+
+最低限、配信されたコピーからの将来的な読み取りの可能性に備えて、コンテンツの配信先コピーへのリンクを保存しておくことは有用です。
+
+参照：
+* [[u-syndication]]：コンテンツの配信先コピーへのリンクをマークアップする方法
+* [[syndication-link-use-cases]]：なぜそれを行うのか
+
+配信先 POSSE コピーからの読み取りの実際の直接的な用途：
+* オリジナル投稿に対する、POSSE コピー周辺のアクティビティの逆配信 / [[backfeed]]（バックフィード）：
+** [[comments]]/返信
+** [[favorites]]/いいね
+** [[reposts]]（リツイート）
+
+さらに、POSSE コピーへの [[u-syndication]] リンクを保持しておくことで、後述する Update や Delete アクションを実行するために、そのコピーを削除することが可能になります。
+
+=== Update（更新） ===
+もし POSSE の宛先が更新/編集を許可しているなら、投稿を編集した際、その更新を配信先の POSSE コピーにも伝播させることができます。
+* 例：[[Facebook]] は投稿のテキスト（テキスト内のリンクを含む）や人物タグの編集を許可しているが、写真投稿の画像自体の変更は許可していない。
+
+[[Twitter]] のように宛先が更新/編集を許可していない場合でも、POSSE ツイートを削除して再投稿することで、仮想的に POSSE 更新を実行することが可能です。すなわち：
+
+Twitter への POSSE 更新のみを検討する場合：
+* まだ誰も返信していない場合（そうしないと Twitter 上のツリー形式の会話を壊してしまうため）
+* 変更内容が Twitter 上の切り詰められたコピーに表示される場合（つまり、変更箇所が 140文字（実質 120文字）の地平線より先であれば、Twitter コピーを書き換える意味がない）
+* 非常に短い時間枠（おそらく 2〜5分以内）である場合。そうでないと、Twitter であなたを読んでいる人々にとって、更新が重複として見えてしまうため。
+
+これらの懸念はすべて、Twitter であなたのツイートを読んでいる友人への体験に関するものです。これこそが、そもそも Twitter へ POSSE する手間をかける唯一の（設計上の）理由であるべきです。
+
+詳細は、サイロ別の POSSE セクションを参照してください：
+* [[Facebook]]：[[POSSE to Facebook]] （[[to-do]]：テキスト編集はOKだが画像編集は不可、写真投稿は POSSE 更新をシミュレートするために削除/再投稿が必要、という詳細が必要）
+* [[Flickr]]： (UI は写真投稿の画像の手動更新をサポートしているが、API で利用可能か？もしそうなら、Flickr への POSSE 更新（写真投稿の画像を含む）をサポートするために、[[Bridgy]] Publish の機能リクエストを GitHub に起票すること)
+* [[Twitter#POSSE_to_Twitter|Twitter: POSSE to Twitter]] （[[to-do]]：上記の削除/再投稿戦略をそこにコピーする）
+* ……
+
+=== Delete（削除） ===
+削除をPOSSEで行うのは、特に削除をクライアントへ伝播させるサービスに対しては、比較的簡単に見えます。
+
+例：Twitterのノートはいつでも削除可能です。
+
+Update（更新）と同様に、以下の点を考慮してください：
+* すでにPOSSEコピーに返信（あるいは「いいね」やリツイートのようなアクティビティ）がある場合、会話のスレッド（および他人の「いいね」やリツイート）を維持するために、あえて削除せずに残しておくことを検討してください。
+
+しかし、自分のサイトとPOSSEコピー（例：Twitter）の両方からコンテンツを本当に削除したい場合は、そのまま実行してください。
+
+おそらく、投稿の削除用UIにおいて、削除を実行する前にPOSSEコピーにアクティビティ（返信、いいね、リツイート）があったかどうかを確認できるようにするのは良い機会です。実装案としては、UIがユーザーにこれらのアクティビティの有無を通知し、サービスごとに削除のリクエストを再確認させる方法が考えられます。
+
+
+==== IndieWebの実装例 ====
+
+* {{grantcodes}} は、2018-10-10時点でTwitterでのPOSSE削除をサポートしています。自身のサイトの投稿が非公開または削除されたかどうかを確認し、いいね、リポスト、ノートに対して適切なAPIリクエストを送信します。
+
+== FAQ ==
+=== 検索エンジンと重複コンテンツの心配 ===
+Q：検索エンジンが、重複していると思われる投稿にペナルティを与えることを心配する必要はありますか？
+
+A：そのために、POSSEコピーは常にオリジナルへリンクを貼る「べき（SHOULD）」なのです。そうすることで、検索エンジンはコピーが単なるコピーであることを推測できます。理想的には、サイロ上のPOSSEコピーは [[rel-canonical]] を使用してオリジナルへリンクすべきですが、明示的な rel-canonical がなくても、オリジナルへの明示的なリンクは、それがオリジナルであるという強力なヒントになります。
+
+これは、PESOSに対するPOSSEの利点でもあります。PESOSの場合、何がオリジナルで何がコピーかを判別する方法がないため、それらは単なる重複に見えてしまいます。
+
+=== POSSE投稿の発見とバックリンク ===
+Q：Brid.gy は、明示的なリンクがない場合でも、[[posse-post-discovery]] を使用して配信された投稿とオリジナルの関係を見つけることができます。これは、配信されたコピーに [[backlink]] を追加するのをやめてもいいということですか？
+
+A：[[backlink]] なしのPOSSEは「最後の手段」と考えられており、いくつかのコストが伴います。詳細は [[posse-post-discovery#Tradeoffs]] を参照してください。
+
+=== POSSEとWebmention送信のどちらを優先すべきか ===
+結論から言えば、'''まず [[POSSE]] を行い、その後に [[webmentions]] を送信してください'''。
+
+詳細と理由については、[[Webmention-faq#POSSE_or_Send_Webmentions_First|Webmention FAQ: POSSEとWebmention送信のどちらを優先すべきか]] を参照してください。
+
+== 背景 ==
+* 2010-05-26 POSSEという概念がオンラインで初めて記述されました： <cite>[https://steveivy.gitlab.io/tantek-celik-diso-20-brass-tacks.html Tantek Celik on DiSo 2.0: Down to Brass Tacks]</cite>（<cite>[https://web.archive.org/web/20130312135439/http://www.monkinetic.com/2010/05/26/tantek-celik-diso-20-brass-tacks アーカイブされた monkinetic のオリジナル記事]</cite>） : <blockquote>自分のサイトで公開し、自分のURL、自分のパーマリンクを所有し、<br/>他のサイトへ配信（Syndicate）する。Twitterへのテキスト更新、Foursquareへのチェックイン、Flickrへの写真など。</blockquote>
+* 2010-10-06 POSSE + backfeed の概念的アーキテクチャ（用語ができる前）： [http://www.flickr.com/photos/tantek/5301870765/ http://farm6.static.flickr.com/5250/5301870765_80a1e06212.jpg] <br/>中央の「Personal site」への矢印と、そこからの矢印に注目してください。外向きの矢印は概念的に [[POSSE]] を示しており、戻ってくる矢印は [[backfeed]] を示しています。<br/> これに関連・拡張した2011-01-10の投稿を参照： [http://tantek.com/2011/010/b1/owning-your-data On Owning Your Data: Follow-up to @Zeldman and the #indieweb]
+* 2011-06-25 IndieWebCamp 2011 セッション：「[[2011/Publish_Then_Syndicate_and_Replicate|Publish Then Syndicate and Replicate]]」でPOSSEの概念がさらに掘り下げられました。
+* 2012-06-21 「''POSSE''」という用語が定義されました： http://tantek.com/2012/173/t1/posse-core-indieweb-approach
+
+概念的な関連用語：
+* 2014-06-21[http://tantek.com/2012/173/t1/posse-core-indieweb-approach] 以前のどこかの時点で： ''[[POSE]]''（Publish Once Syndicate Everywhere）という用語が、POSSEより前に定義されました。概念的にはPOSSEよりも緩やかで、「Once（1度）」が「自分のサイト」ではなく特定の「サイロ」上であると解釈される可能性もありましたが、POSSE（およびその概念的前身）では「自分のサイト」であることが明示されました。
+
+== 記事 ==
+POSSE、特にその実装に関する記事やブログ投稿：
+* <span class="h-cite"><time class="dt-published">2013-12-04</time> <span class="p-author h-card">Chloe Weil</span>: <cite class="p-name">[http://chloeweil.com/blog/hipster Hipster]</cite></span>
+* <span class="h-cite"><time class="dt-published">2014-03-09</time> <span class="p-author">Sebastian Greger</span> <cite class="p-name">[http://sebastiangreger.net/2014/03/audience-context-conscious-posse-syndication-plugin-wordpress/ An audience/context-conscious POSSE syndication plugin for WordPress]</cite></span>
+* <span class="h-cite"><time class="dt-published">2015-11-03</time> <span class="p-author">Scott Gilbertson</span> (<span class="p-publication">Ars Technica</span>) <cite class="p-name">[http://arstechnica.com/information-technology/2015/11/googles-amp-an-internet-giant-tackles-the-old-myth-of-the-web-is-too-slow/ How Google’s AMP project speeds up the Web—by sandblasting HTML]</cite></span> <blockquote><p>……これはパブリッシャーを、IndieWebムーブメントにおける大きなアイデアへと後押しするものです。それが、Publish (on your) Own Site, Syndicate Elsewhere（略してPOSSE）です。</p><p>そのアイデアとは、自分のサイトにコンテンツの正規コピーを所有しつつ、そのコンテンツを可能な限りあらゆる場所へ送信するというものです。あるいは、読者にリーチしたいあらゆる場所へと言い換えてもいいでしょう。Facebook Instant Article？ もちろん、RSSフィードを接続しましょう。Apple News？ そこにもフィードを送りましょう。AMP？ ええ、AMPページを生成しましょう。そこで止まる必要はありません。新しいMedium APIや、他の数多くのサービスも活用しましょう。</p><p>「読む」という体験は断片化されています。ウェブで読むのが好きな人もいれば、お気に入りのリーダーでRSSを介して読む人も、Facebook Instant Articlesで読む人も、TwitterのAMPページで、あるいは復元されたTRS-80で動くターミナルのLynxで読む人（真面目な話、それは可能です。以下を参照）もいます。POSSEアプローチの素晴らしさは、単一の正規のソースから、これらすべての人々にリーチできることです。</p><p>……</p><p>ウェブのために、GoogleがAMPを十分に長く継続し、真の未来は自分自身のページを高速化しPOSSEスタイルのアプローチを受け入れることにあるのだとパブリッシャーたちを納得させてくれることを願いましょう。</p></blockquote>
+* {{citation
+| title = Stepping back from POSSE
+| url = https://werd.io/2018/stepping-back-from-posse
+| author = {{benwerd}}
+| published = 2018-07-31
+| archiveurl = http://web.archive.org/web/20180803184811/https://werd.io/2018/stepping-back-from-posse
+}}
+* {{citation
+| title = The poster’s guide to the internet of the future
+| url = https://www.theverge.com/2023/10/23/23928550/posse-posting-activitypub-standard-twitter-tumblr-mastodon 
+| author = [https://www.theverge.com/authors/david-pierce David Pierce]
+| published = 2023-10-23
+| archiveurl = http://web.archive.org/web/20231023182113/https://www.theverge.com/2023/10/23/23928550/posse-posting-activitypub-standard-twitter-tumblr-mastodon
+}}
+** POSSE、[[micro.blog]]、[[Bridgy]] について名前を挙げて言及し、このページにリンクしています。
+* {{citation
+| title = POSSE: Reclaiming social media in a fragmented world
+| url = https://www.citationneeded.news/posse/
+| author = [https://www.mollywhite.net/ Molly White]
+| published = 2024-09-27
+}}
+* ...
+
+== ウェブ以外のシナリオにおける手法としてのPOSSE ==
+
+=== POSSE git リポジトリ ===
+#indieweb で議論されたように、自身の git リポジトリを [[GitHub]] や [[GitLab]] といった git 「サイロ」に POSSE することも可能です。これを行う簡単な方法は、{{cweiske}} によって [https://chat.indieweb.org/2016-12-16#t1481891974356000] で説明されています。
+
+
+== セッション ==
+* [[2011]]: [[Publish Then Syndicate and Replicate]]（公開、そして配信と複製）
+* [[2013/Secure Cross-Posting]]（安全なクロスポスト）
+* [[2014/SF/possepatterns]]
+* [[2016/Brighton/howposse]]
+* [[2016/StaticPOSSE]]
+* [[2016/Dusseldorf/syndication]]
+* [[2017/Berlin/possepesos]]
+* [[2019/Amsterdam/syndication]]
+* [[2019/NYC/syndication]]
+* [[2019/Düsseldorf/syndicate]]
+* [[2024/Brighton/posse]]
+
+[[Category:building-blocks]]
+[[Category:syndication]]
+
+== 関連項目 ==
+* [[POSSE reply]]（POSSE 返信）
+* [[PESOS]]
+* [[PESETAS]]
+* [[why-ja]]（なぜやるのか）
+* [[original post link]]（オリジナル投稿へのリンク）
+* [[microsyntax]]：プレーンテキストの宛先へ POSSE するためのマイクロシンタックス
+* [[rel-canonical]]
+* [[syndication formats]]（配信フォーマット）に関するドキュメント
+* [[posts-elsewhere]]（他所での投稿セクション）
+* 2017-11-09 Nicolas Hoizey: [https://nicolas-hoizey.com/2017/11/medium-is-only-an-edge-server-of-your-posse-cdn-your-own-blog-is-the-origin.html Medium はあなたの POSSE CDN のエッジサーバーに過ぎず、あなた自身のブログがオリジン（源泉）である]
+* 2018-03-24 Hacker News のコメントスレッド: https://news.ycombinator.com/item?id=16663850
+* 同 HN: 「これらのプラットフォームには『カード』機能があるのに、なぜリンクだけでは不十分なのですか？」
+* 同 HN: 「これは興味深いことだが、一般人にとっては複雑すぎて範囲が広すぎる」 <-- ページ導入部の簡素化、POSSE 設定のより簡単な手順が必要。[[Generations]]（世代）のスペクトラムにおいて POSSE のユーザビリティがどの位置にあるかを認めるべき。
+* 同 HN: 「Facebook は、中央集権的な発見機能を備えた、美化された RSS フィードに過ぎない」 <-- [[Facebook#Features]]（および [[Twitter#Features]]）と RSS の機能セットを比較して論破する。視覚的な図や比較表が役立つかもしれない。
+* 同 HN: 「これは RSS では全く不可能です。特に、サイロ側が RSS を有意義な形でサポートしたがらないためです」 <-- 「なぜやるのか」に、POSSE と比較して RSS が不十分な理由を説明するサブセクションを追加するとよい。
+* 2021-11-07 Hacker News のコメントスレッド: https://news.ycombinator.com/item?id=29115696
+* [[Twitter]] や他の[[social media]]への非リアルタイム POSSE の推奨。これらが地方および国家の法執行機関の監視装置の一部として活発に使用されているため： https://theintercept.com/2020/07/09/twitter-dataminr-police-spy-surveillance-black-lives-matter-protests/
+* [https://jetpack.com/2020/09/01/jetpack-grow-subscribers-collect-donations/ Jetpack 8.9 が Social Previews を追加]。公開ボタンを押す前に、Facebook、Twitter、Google 検索結果で投稿がどのように表示されるかをプレビューできます！
+* POSSE の倫理的な使用を意図的に検討する。例として、明示的な自己規定の「関与ルール」のセットである [https://www.thesocialdilemma.com/code-of-ethics/ 倫理規定（Code of Ethics）] を参照。
+* 「Pluralistic は私のマルチチャネル公開の取り組みです。POSSE（自身のサイトで投稿し、どこでも共有する）の限界を押し広げるプロジェクトです」 [https://pluralistic.net/2021/05/05/clarkes-third-law/#indistinguishable-from-magic Pluralistic: 2021年5月5日]
+* Cory Doctorow が自身の POSSE の使い方を説明。This Week in Google (再生時間 474秒): https://www.youtube.com/watch?v=qyU2cZLFsik&t=474s <blockquote>私は他人のクローズドな庭（ウォールド・ガーデン）に閉じ込められないようにしています。……私は POSSE と呼ばれる公開戦略を追求しています。自分のサイトで投稿し、他所に配信する……</blockquote>
+* 記事：2018-02-06 Dries Buytaert [https://dri.es/to-pesos-or-to-posse PESOS にするか POSSE にするか？] および 2018-02-16 Dries Buytaert [https://dri.es/my-posse-plan-for-evolving-my-site 自分のサイトを進化させるための私の POSSE 計画]
+* https://twitter.com/SaraSoueidan/status/1539870410317221888
+** 「Matthias が言った通り。自分自身のブログで書き、他所に配信しましょう。自分のコンテンツを所有しましょう！ それに勝るものはありません」 [https://sarasoueidan.com @SaraSoueidan] 2022年6月23日
+* ブレインストーミング： {{t}}： POSSE の利点は主に配信（即時的）と[[discovery|発見]]（長期的）にあります。もしそのどちらも起こっていないなら、それを維持する価値はありません。投稿日時の証明は、オリジナルの投稿（または POSSE/ツイートのコピー）をインターネットアーカイブに送信することで解決でき、POSSE/ツイートのコピーを保持し続ける必要はありません。
+* https://andy-bell.co.uk/how-im-dealing-with-twitter-in-a-hands-off-manner/
+* なぜ： 2023-07-13 {{adactio}}: [https://adactio.com/journal/20323 配信（The syndicate）] <blockquote><p>それがいつまで続くか見てみましょう。それらのどれがいつまで持つか。今日のソーシャルメディアの寵児は、明日の Friendster や MySpace です。</p><p>現在のサービス群が枯れて死に絶えたとき、私自身のウェブサイトはまだ満開のままでしょう。</p></blockquote>
+* https://mastodon.social/@davidpierce/111284796654263440
+** 「ここ半年ほど、ブログとソーシャルメディアの長所を組み合わせるという、10年前のアイデアである POSSE に夢中になっています。記事と The Vergecast のために、POSSE がどのように機能するか、そしてなぜ機能しない可能性があるのかを突き止めようとしました https://www.theverge.com/2023/10/23/23928550/posse-posting-activitypub-standard-twitter-tumblr-mastodon」 [https://mastodon.social/@davidpierce @davidpierce] 2023年10月23日
+* to-do: Twitter を除いた（Bluesky に置き換えた）最新の図解を作成する。また、BridgyFed 経由で Fediverse へ向かう線を、末端が「Y」の字で 📤 📥 となっているものにする。
+* Twitter への POSSE に関するあらゆる言及・指示を更新し、歴史的な重要性と、現在の自動サポートの欠如を明記する。
+* [[to-do]]: 「方法」セクションに http://micro.blog のセクションを追加し、[[micro.blog]] へのリンクを確認する。
+* なぜ： 2024-02-24 [https://pluralistic.net/2024/02/24/anti-posse/ Pluralistic: Vice が降参した] <blockquote>今は POSSE (Post Own Site, Share Everywhere) の時です。ソーシャルメディアを、自分がコントロールするチャネルに読者を連れてくるための戦略と見なすアプローチです。</blockquote>
+* [https://joanwestenberg.com/blog/curation-is-the-last-best-hope-of-intelligent-discourse キュレーションは、知的な言説の最後の希望である。]
+* https://hachyderm.io/@pluralistic@mamot.fr/111987590552793552
+* ^ 実際のパーマリンク： https://mamot.fr/@pluralistic/111987590098901216
+** 「あなたと顧客や聴衆の間に位置するビッグテックという仲介者を信頼することの、明白で壊滅的な、差し迫ったリスクがあるとしたら、それは今です。今は『ソーシャル・ファースト』であるべき時ではありません。今は POSSE (Post Own Site, Share Everywhere) の時です。ソーシャルメディアを、*あなた*がコントロールするチャネルに読者を連れてくるための戦略と見なすアプローチです：https://pluralistic.net/2022/02/19/now-we-are-two/#two-much-posse14/」 [https://mamot.fr/@pluralistic @pluralistic] 2024年2月24日
+* 2024-03-09 Molly White: [https://www.mollywhite.net/micro/entry/202403091817 POSSE] <blockquote>数週間前から取り組んでいたものを、ついにデプロイしました。私の執筆、投稿、読書、その他の様々な活動のフィードで、私のウェブサイト https://www.mollywhite.net/feed にあります。</blockquote>
+* なぜ： 自分のコンテンツを検索する別の方法を持つため。時として（しばしば？今や大抵の場合）、[[Google]] や [[DDG]] のような大規模なウェブ検索エンジンは、サイト固有の検索（例: site:http://tantek.com）が非常に不得意である一方、Twitter のようなソーシャルメディアサイロはプロフィール固有の検索（例: from:t）が非常に得意であるため。
+* IndieWeb の例： 2024-03-09 Molly White が Twitter/Mastodon/Bluesky への自動 POSSE をデプロイ： [https://www.mollywhite.net/micro/entry/202403091817 POSSE]
+* https://mastodon.social/@flokosiol/112438679946887082 <blockquote>「Laura Kalbag と #indieweb のバイブスと共に #btconf の 2日目を開始します」 <img src="https://files.mastodon.social/media_attachments/files/112/438/677/114/882/928/original/e6b1de40d67b5be6.jpeg" alt="ステージ上でテキストスライドを提示する Laura。" style="max-width:100%" /> <cite style="display:block;text-align:right">[https://mastodon.social/@flokosiol @flokosiol] 2024年5月14日</cite></blockquote> Laura がステージでテキストスライドを提示している埋め込み写真付き： <blockquote>ソーシャルメディアのエチケット： <hr/>まず自分のサイトに投稿し、次にそれらの投稿をサードパーティのプラットフォームにミラーリングしましょう。</blockquote> — POSSE を言い換えたもの。
+* 2024-09-27 Molly White: [https://www.citationneeded.news/posse/ POSSE: 断片化された世界でソーシャルメディアを取り戻す]
+* X (Twitter) に POSSE してはいけない、と Richard MacManus は言う https://cybercultural.com/p/web-values/
+* [https://schedule.sxsw.com/2025/events/PP147154 Molly White が SXSW 2025 で POSSE などについて語る] 2025-03-09
+* https://changelog.com/friends/85#t=6099
+
+== 脚注 ==
+
+<references />
+
+[[Category:Pages in Japanese]]
