@@ -1,0 +1,162 @@
+https://indieweb.org/backfeed-ja
+
+'''<dfn>Backfeed</dfn>'''（バックフィード）とは、[[POSSE-ja|POSSE]]コピー上での[[interactions|反応（やり取り）]]を、オリジナルの投稿へ配信（シニジケーション）し直す（別名：<dfn>逆配信 / reverse syndicating</dfn>）プロセスのことです。
+
+== なぜやるのか ==
+私たちが [[POSSE-ja|POSSE]] を行うのは、'''友人や他の人々が私たちの投稿を読みやすくするため'''です。
+
+[[backfeed-ja]] を実装する目的は、それと同じように、友人が POSSE コピーに対して行った「反応」がオリジナルの投稿に反映されるようにすることで、IndieWeb サイト上のオリジナル投稿の著者である'''あなた自身が'''、友人たちのコメントを読んだり他の反応を確認したりするのを'''簡単にするため'''です。
+
+以下の理由から、バックフィードを実装すべきです：
+* '''自分の投稿へのコメントを一箇所で読む'''：IndieWeb上の[[comments|コメント]]と、POSSE コピー上のコメントをすべて一箇所に集約できます。
+* '''投稿への「いいね」やリポストを確認する'''：IndieWeb上の[[likes|いいね]]と、POSSE コピー上の「いいね/お気に入り」を一箇所に集約することで、それらの反応の全体像をより素早く把握できます。
+* '''コメント、いいね、リポストをより確実に保存する'''：一言で言えば、やり取りの[[longevity|長寿命化]]です。これらの反応を自分の投稿のパーマリンクにコピーしておくことで、悪意のある検閲から将来的な[[site-deaths-ja|サイトの消滅]]まで、サイロで起こりうる数々のコンテンツ消失シナリオからそれらを守ることができます。
+* '''より質の高い議論を行う'''：一部のサイロが許可しているものよりも、優れたS/N比（シグナル対ノイズ比）を得られます。例えば、[[Twitter]] には自分の投稿（ツイート）に対するコメント（@-返信）を削除したり切り離したりする仕組みがありません。ミュートや、不完全に実装されたブロック機能しかなく、それらは自分からは見えなくなりますが、他の誰からも攻撃的だったりノイズだったりする @-返信は見えたままです。自分のサイトであれば、適切と思われる形でそれらをモデレートできるため、サイロが許容しているものよりも全体的に優れたコメント欄を維持できます。
+
+== 方法 ==
+サイロからバックフィードを実装するには、大きく分けて2つのアプローチがあります。
+
+=== サイロのAPIを使用する ===
+サイロのAPIを使用して、反応に関する通知を受け取る（[[webhooks]] 経由）、または POSSE コピーをポーリングして反応を確認し、それらを自分の投稿に組み込むことができます。APIによって、このための機能の充実は異なります。
+
+サイロAPI別の「バックフィード方法」の詳細：
+
+==== Twitter ====
+Twitter の POSSE コピーに対する @-返信などを取得するために使用する [[Twitter]] API：
+* <code>DOMAIN filter:links</code> を <code>result_type=recent</code> で検索する。[https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L73 こちらのサンプルコード]（および[https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L149 こちら]）を参照。直近の結果しか返しませんが、それ以外は問題なく機能します。
+* 特定のツイートへの返信を取得する[http://stackoverflow.com/questions/2693553/replies-to-a-particular-tweet-twitter-api 公式な方法はありません]。ただし、投稿が古くなければ、元のツイートの著者の @-メンションを検索し、その結果の中から <code>in-reply-to</code> フィールドが元のツイートを指しているものを探すことができます。[https://github.com/snarfed/bridgy/blob/5e1f01016dc910369951cc0560e332025a6921bb/twitter.py#L113 こちらのサンプルコード]を参照。
+* それ以外には、信頼性は低いですが、ドキュメント化されていない非公式の 'related_results' エンドポイントが存在します。
+
+==== Facebook ====
+以下を参照：
+* [[Facebook#How_to_backfeed_from]]
+
+==== Flickr ====
+Flickr にはこのための直接的な API があります：
+* [http://www.flickr.com/services/api/flickr.photos.comments.getList.html flickr.photos.comments.getList]
+* [http://www.flickr.com/services/api/flickr.photos.getFavorites.html flickr.photos.getFavorites]
+
+=== バックフィード・プロキシを使用する ===
+あるいは、あなたが [[webmentions]] の受信をサポートし、あなたの代わりにサイロの API を呼び出して、各サイロでの反応ごとに [[webmentions]] を送信してくれるプロキシを使用することもできます。例：
+* [[Bridgy]]
+
+== IndieWebの実装例 ==
+=== Singpolyma ===
+[[User:Singpolyma.net|singpolyma]] は投稿を Twitter に配信し、返信やメンションの API エンドポイントを（認証済みで）ポーリングして応答を取り込む cron ジョブを実行しています。（????-??-??より）
+
+=== Ryan Barrett ===
+{{snarfed}} は、2011-12-02より [[Bridgy]]（後述）を使用して、サイロから自身のサイトへコメント、いいね、リポストをバックフィードしています：
+* https://snarfed.org/2011-12-02_thoughts_on_writing_my_first_android_app#comment-1153466
+例として、こちらの Facebook と Twitter のコメントを参照：
+* http://snarfed.org/2013-12-06_new-app-engine-logo#comments
+こちらの Facebook、Twitter、G+ のコメント、いいね、+1 を参照：
+* https://snarfed.org/2015-04-21_introducing-color-genomics
+
+=== Basil ===
+[https://trivial.observer/ Basil] は投稿を Mastodon に配信し、自身のインスタンスの API を使用して[https://trivial.observer/blog/mastodon-comments/ 返信を自身のサイトに引き戻しています。]
+
+=== Björn Schießle ===
+[https://www.schiessle.org/ Björn Schießle] も Mastodon API を使用して返信を自身のサイトに引き戻しています。例：https://www.schiessle.org/articles/2019/04/05/the-power-of-workflow-scripts/
+
+=== Abhinav Sarkar ===
+Mastodon API： https://notes.abhinavsarkar.net/2023/mastodon-comments
+
+=== Michael Thomas ===
+Mastodon API： https://blog.thms.uk/2023/02/mastodon-comments
+
+=== Kristof Zerbe ===
+[[User:Kiko.io|Kristof]] は、自身のブログ [https://kiko.io kiko.io] において、投稿の frontmatter で定義された配信先に応じて、複数のプロバイダーからやり取りをクライアントサイドで取得するために [https://github.com/kristofzerbe/Mentions-United Mentions-United] を使用しています。
+
+== その他の一般的な例 ==
+
+=== ジャーナリズム ===
+* Buzzfeed は [https://www.buzzfeed.com/bensmith/helping-you-see-outside-your-bubble?utm_term=.tkJv7j6gA#.br0DvEN8y 2017-02-17に、「Outside Your Bubble（あなたのバブルの外側）」と呼ばれるバックフィード関連の実験を発表しました]。これは、視聴者に自身のソーシャルメディア空間の外で何が起きているかを垣間見せる試みです。サイトに統合されたこの新機能の[https://www.buzzfeed.com/alexkantrowitz/twitter-is-now-temporarily-throttling-reach-of-abusive-accou?utm_term=.lfOGeyalA#.qyyBZqJlw 具体的な例]も記事内で提供されています。（[[filter bubble|フィルターバブル]]も参照。）
+
+=== 科学コミュニケーション ===
+* [http://biorxiv.org/ BioRxiv] は、学術論文のリーチと影響力の「社会的証明（ソーシャルプルーフ）」を提供するために、[http://biorxiv.org/content/early/2017/02/16/108977 科学論文に関するツイートのバックフィード]を使用しています。[http://www.nature.com/nature/journal/v464/n7288/full/464488a.html Let's make science metrics more scientific（科学の指標をより科学的にしよう）] も参照。
+* ある意味で [https://www.altmetric.com/ Altmetric] は、科学出版コミュニティにおける [[Bridgy]] の商用版のように機能しています。
+* Altmetric と同様に、Elsevier の子会社である [https://plumanalytics.com/learn/about-metrics/ Plum Analytics] も、バックフィードと言及分析を提供しています。
+** SSRNの記事「[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3132563 Pulling the Goalie: Hockey and Investment Implications]（キーパーを上げる：ホッケーと投資への示唆）」における[https://plu.mx/ssrn/a/?ssrn_id=3132563&display-tab=artifact-blog-mentions 分析例]。
+
+== サービス実装 ==
+=== Bridgy ===
+{{main|Bridgy}}
+[http://brid.gy/ brid.gy] は、Twitter、Instagram、Flickr、GitHub（以前は Facebook と Google+ も）上のコメント/返信、いいね、リポスト、メンションに対して [[webmentions]] を送信するサービスです。[[original post discovery]] を使用して webmention の送信先リンクを見つけます。[https://github.com/snarfed/bridgy GitHub リポジトリはこちら。]
+
+=== Salmon Unofficial ===
+[https://salmon-unofficial.appspot.com/ salmon-unofficial] は、[[Bridgy]] の以前の、現在はメンテナンスされていない代替サービスで、[[webmention]] の代わりに [[Salmon]] プロトコルを使用していました。Salmon の規定通り、LRDD、WebFinger、XRD を介して元のソースサイトを特定していました。[https://github.com/snarfed/salmon-unofficial GitHub リポジトリはこちら。]
+
+=== Altmetric ===
+[https://www.altmetric.com/ Altmetric] は、科学出版コミュニティ向けの [[Bridgy]] のプロプライエタリな商用版のように機能します。Twitter、Weibo、Reddit、Facebook、Wikipedia、Google+、LinkedIn、Pinterest、その他の研究関連プラットフォームやブログでの研究への言及データを [https://www.altmetric.com/support/almetric-api/ API] 経由で提供します。
+
+=== OwnYourSwarm ===
+{{main|OwnYourSwarm}}
+[https://ownyourswarm.p3k.io OwnYourSwarm] は、Swarm のチェックインを Micropub 経由でウェブサイトに送信し、チェックインに対するコメントやいいねの [[webmentions]] を送信するサービスです。
+
+== サーバー実装 ==
+=== WordPress プラグイン ===
+* [http://wordpress.org/plugins/social/ Social] - これは [https://github.com/crowdfavorite/wp-social/issues/213#issuecomment-282094259 2016年末に終了] し、ミドルウェアプロキシを使用していたため、二度と機能しない可能性があります。
+* [http://www.nextscripts.com/snap-features/auto-import-comments-from-facebook-and-twitter/ NextScripts SNAP]
+* [http://jetpack.me/support/publicize/ Jetpack Publicize] は素晴らしいですが、バックフィードはまだ実装されていません。
+
+=== Hugo (Mastodon用) ===
+* [https://carlschwan.eu/2020/12/29/adding-comments-to-your-static-blog-with-mastodon/ Carl Schwan]
+
+== クライアント実装 ==
+=== Mentions United ===
+[https://github.com/kristofzerbe/MentionsUnited Mentions United] は、投稿に関連付けられた配信先（syndications）に基づいて、ページ読み込み中にブラウザで利用可能なやり取りを取得するための JavaScript ソリューションです。このプロジェクトはメインスクリプトと2種類のプラグイン（特定のプラットフォームからやり取りを取得する Provider と、目的の HTML を生成する Renderer）で構成されています。
+
+== 議論 ==
+=== 保存、法的問題、データ所有権、UXなど…… ===
+これらの反応は、コンテンツの元のソースであるあなたのインディーページに「属する」ものなのでしょうか？ 保存、法的問題、データ所有権、UXなどの疑問があります。
+
+* 肯定派：
+** 人々にどこで返信を書くかの選択肢を与える。
+** UXの向上（使用するサービスによって議論の余地あり）。
+** 使いやすさ、参入障壁の低さ。[http://shawfactor.com/2013/08/06/thoughts-on-extending-webmentions/ Peter Shaw はこれをうまく説明しており]、特にソース記事がある場所で返信する価値と直感性は、技術に詳しくないユーザーや余分な手間をかけたくないユーザーにとって非常に魅力的です。
+** 技術的でなかったり、現在いる場所（サイロ）に強いこだわりがなかったりする大多数のユーザーに寄り添える。
+** +1 [[User:Waterpigs.co.uk|barnabywalters]]
+** +1 [[User:snarfed.org|Ryan]]
+** ……
+
+* 否定派：
+** クローズドなサイロからのバックフィードよりも、[[pingback]] のような汎用的でオープンなシステムの方が好ましい（ただし、オープンなレスポンスシステムについては全く別の議論になります）。
+** 回答者は元のソースサイトで公開することを選択したわけではない。稀なケースとして、これが法的な問題を引き起こす可能性がある。
+** オーバーヘッドが増える。
+** サイロを敵に回す可能性がある。サイロ側は、自社データのこのような外部への配信を阻止しようとすることが多い。[http://snarfed.org/2013-07-09_twitter-atom-is-back 一つの例]（他にも多数）。
+
+また、多くのサイロはプライベートやセミプライベートな投稿をサポートしています：[[Twitter]] の非公開アカウント、[[Instagram]] の[http://help.instagram.com/448523408565555 非公開アカウント]、[[Google+]] のサークル、[[Facebook]] の友達限定投稿などです。これらの投稿への返信は通常、同じオーディエンスに限定されているため、一般的に公開されているウェブページにバックフィード「されるべきではありません」。
+
+これらの（セミ）プライベートな返信は、同じオーディエンスにのみ表示される [[private_posts|プライベート投稿]] にバックフィードされる可能性があります。しかし、プライベート投稿はまだあまり普及しておらず、特に同じプライベートなオーディエンスに POSSE されるケースは少ないため、実際の実装例はまだほとんど見られません。
+
+=== モデレーションとスパム ===
+POSSE されたコンテンツのコピーがスパムの反応（例：偽のボットアカウントからの Twitter のいいね）を受けた場合、このスパムは元のページに引き継がれます。これは好ましくないため、サイト所有者による手動の対応が必要になる場合があります。バックフィード実装には通常、スパム検出機能が組み込まれていないためです（例えば、送られてくる [[Bridgy]] のバックフィード返信は、スパム自体が返信そのものであり内容ではないため、一般的な内容ベースのスパムフィルターでは処理できません）。
+
+この問題に対処するための考えられるアプローチ：
+* 手動モデレーション
+* スパムの多いソースからのバックフィードを一切表示しない
+* Twitter ユーザーがソーシャルグラフ上で例えば最大 1〜2 度以内に収まっているかを計算して、受信した返信を検証する
+* 受信したバックフィード返信を承認待ちキューに入れる
+
+[[Vouch]] はネイティブな IndieWeb モデレーションとして有望ですが、[[silos|サイロ]]には機能しません。Vouch は各ユーザーが独自のドメインを持っていることを前提としていますが、サイロでは通常そうではありません。また、サイロにおけるユーザーの質や行動、モデレーションなどは、IndieWeb サイトとは大きく異なり、サイロ間でも差があります。プログラムでバックフィードの webmention をフィルタリングしたい場合は、ソースURLドメインに基づいて Bridgy のようなバックフィード送信者を特別扱いするか、<code>u-url</code> のドメインとパスに基づいて個別のサイロや特定のサイロユーザーを判別することをお勧めします。
+
+[[Vouch#Backfeed]] も参照。
+
+== ブレインストーミング ==
+
+=== 「ピュア・ウェブ」バックフィード ===
+私たちは、[[silos|サイロ]]や [[POSSE-ja|POSSE]] コピーのための [[backfeed-ja]] について多く考えてきました。元の投稿ではないものの、ウェブ標準や IndieWeb プロトコルに可能な限り完全に準拠し、協力的なページである「ピュア・ウェブ」な配信コピーにおいて、バックフィードはどのように機能するでしょうか？ [[Webmention-brainstorming#.22pure_web.22_backfeed|こちらにスケッチがあります。]]
+
+== 背景 ==
+* 2010-02-03 バックフィードが <cite>[http://tantek.com/2010/034/t2/diso-2-personal-domains-shortener-hatom-push-relmeauth DiSo 2.0 の概念化]</cite> において概念として初めてオンラインで記述されましたが、当時は「reverse syndication（逆配信）」と呼ばれていました： <blockquote>#8 特定のサイトからのコメント＋タグ＋ノートの逆配信（reverse syndication）。</blockquote>
+* 2010-10-06 POSSE＋バックフィードの概念的アーキテクチャ（用語ができる前） [https://www.flickr.com/photos/tantek/5301870765/ https://farm6.static.flickr.com/5250/5301870765_80a1e06212.jpg] <br/>中央の「Personal site」への、またそこからの矢印に注目してください。外向きの矢印は概念的に [[POSSE-ja|POSSE]] を、戻ってくる矢印は [[backfeed-ja]] を示しています。
+
+== 関連項目 ==
+* [[interactions|やり取り]]（[[comments|コメント]]、[[likes|いいね]]/[[favorites|お気に入り]]、[[reposts|リポスト]]）
+* [[POSSE-ja|POSSE]]
+* [[webmention]]
+* [https://boffosocko.com/2020/01/30/manual-backfeed-in-the-blogosphere/ ブロゴスフィアにおける手動バックフィード]
+* なぜやらないのか： https://macwright.com/2022/09/15/hacker-news.html <blockquote>Hacker News からいくつかの悪い習慣を学びました。自分の主張が広義に捉えられすぎないよう、記事に「注意書き（Caveats）」セクションを追加するようになりました。楽しいけれど記事の焦点をぼやけさせてしまう余談やコメントを削るようになりました。何を書こうが、重箱の隅をつつくような、批判的なフィードバックを予期するようになりました。……自分が好まないものを遠ざける。このウェブサイトから Hacker News へのリンクをリダイレクトして外すのは、私にとって理にかなっています。このサイトへのトラフィックは私の生活を支えているわけではありません。刺激的な意見だけを求めてやってくる、関心の薄い読者は、私のサイトに戻ってくることも、私が別の何かを書いたときに認識してくれることも、自分自身でブログを書いて IndieWeb に新しい創造性をもたらしてくれることもないのです。</blockquote>
+* 方法、逆配信に関する考察： 2022-12-03 {{edent}}: [https://shkspr.mobi/blog/2022/12/the-ethics-of-syndicating-comments-using-webmentions/ WebMentions を使用したコメント配信の倫理]
+* https://graysky.app/blog/2024-02-05-adding-blog-comments
+* https://snorre.io/blog/2023-08-19-atproto-bluesky-comment-system/
