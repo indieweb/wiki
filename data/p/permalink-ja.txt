@@ -1,0 +1,107 @@
+https://indieweb.org/permalink-ja
+
+{{stub}}
+
+'''<dfn>permalink</dfn>'''（パーマリンク）とは、通常、単一の[[post|投稿]]を表現し、取得するためのURLのことです（明示的に「''post permalink''」とも呼ばれます）。
+
+== なぜやるのか ==
+投稿へのリンクが機能し続けるように、投稿のパーマリンクを維持すべきです。これは「[https://www.w3.org/Provider/Style/URI.html クールなURIは変わらない]」という意図に基づいています。
+
+== 方法 ==
+
+=== 設計 ===
+{{main|URL design}}
+ほとんどの[[projects|プロジェクト]]は、非常に意図的なパーマリンクURL設計を行っています。
+
+
+== IndieWebの実装例 ==
+=== Barnaby Walters ===
+{{barnabywalters}} は、waterpigs.co.uk で動作する [[Taproot]] を使用しています：
+* アーティクル
+** <code><nowiki>http://waterpigs.co.uk/articles/getting-started-with-microformats2/</nowiki></code>
+* ノート
+** ……
+
+=== gRegor Morrill ===
+{{gRegor}} は、gregorlove.com で [[ProcessWire]] を使用しています：
+* パーマリンクは、年と月 <code>/YYYY/MM/</code> で始まり、その後に [[slug|スラグ]] が続きます。
+** http://gregorlove.com/2015/07/100-words-027/
+
+=== Ethan Yoo ===
+{{ethanyoo}} は、ethanyoo.com で [[Hugo]] を使用しています：
+* gRegorと同様に、Ethanのパーマリンクは年と月（<code>/YYYY/MM/</code>）で始まり、その後に [[slug|スラグ]] が続きます。月を含めることで、異なる月であれば同じスラグを再利用できるようになります。例えば、[https://www.ethanyoo.com/2020/08/black-lives-matter/ Black Lives Matter (2020年8月)] と [https://www.ethanyoo.com/2020/10/black-lives-matter/ Black Lives Matter (2020年10月)] は、どちらも "black-lives-matter" というスラグを使用しています。
+
+== プロジェクトの例 ==
+=== WordPress ===
+[[WordPress]]（オープンソース版）は、以下のパーマリンク構造をサポートしています：
+
+* 日付と投稿名
+** <code><nowiki>http://example.com/2014/03/27/sample-post/</nowiki></code>
+* 月と投稿名
+** <code><nowiki>http://example.com/2014/03/sample-post/</nowiki></code>
+* 数字ベース
+** <code><nowiki>http://example.com/archives/123/</nowiki></code>
+* 投稿名
+** <code><nowiki>http://example.com/sample-post/</nowiki></code>
+* カスタム構造
+** [http://codex.wordpress.org/Using_Permalinks#Structure_Tags WordPress構造タグ]の組み合わせを使用
+
+== 消失への対処 ==
+パーマリンクは[[site-deaths-ja|毎年消失]]しています。コンテンツをエクスポートできれば自身のサイトで再ホストできますが、死んだパーマリンクの問題は残ります。死んだパーマリンクを少なくとも「発見可能」にするためのアプローチがいくつかあります。例えば、ウェブ検索エンジンでパーマリンクURLの文字列自体を検索する方法などです。
+
+=== 旧パーマリンクをプレーンテキストで掲載したアーカイブページ ===
+一つのアプローチは、死んだパーマリンクのURLを（ハイパーリンク化せずに）プレーンテキストでリスト化し、新しい場所と共に公開するアーカイブページを作成することです。例：
+* [http://jonudell.net/udell/2002-2006-index.html Jon Udell による 2002-2006年のインデックス]。もともと <samp>weblog.infoworld.com/udell</samp> で公開されていたブログ投稿のリストです。
+
+=== 新しいURLのパスに旧パーマリンクを含める ===
+別のアプローチは、旧パーマリンクをパスの一部に含む新しいページを作成し、アーカイブページから旧ドメインとパスをリンクテキストにしてその新URLへリンクを貼ることです。例：
+* [http://microformats.org/wiki/tr.im#equivalents microformats tr.im equivalents]。現在は廃止された短縮URLサービス <samp>tr.im</samp> の短縮リンクに対応するページです。例：
+** 死んだリンク <samp>tr.im/ufprs</samp> に対する [http://microformats.org/wiki/tr.im/ufprs microformats.org/wiki/tr.im/ufprs]
+
+== 投稿のパーマリンクを変更する場合 ==
+
+IndieWebサイトのパーマリンク設計を再構築（変更）する場合、古いパーマリンクから新しいものへ HTTP 301 Permanent Redirect レスポンスを送信することが推奨されます（参照：https://developer.mozilla.org/ja/docs/Web/HTTP/Status/301 ）。
+
+このような再設計はサイトの他の側面にも影響を与える可能性があり、その一部を以下に記します：
+
+* 投稿への[[comments|コメント]]や[[responses|レスポンス]]が投稿のパーマリンクで識別されている場合、それらを新しいパーマリンクを指すように更新する必要があります。
+
+* 他のウェブサイトの[[posts|投稿]]が依然として古いパーマリンクへリンクを貼り、そこに [[webmentions]] を送信してくる可能性があります。Webmention受信コードは、これらを新しいパーマリンクへのWebmentionとして適切に認識する必要があります。
+
+* [[Bridgy]] が [[posse-post-discovery]] を使用して、いくつかの[[backfeed|バックフィード]]Webmentionを新しいパーマリンクへ再送する可能性があります。これらは適切に重複排除（de-dupped）されるべきです。
+
+[[Category:building-blocks]]
+
+=== [[Hugo]] のエイリアス（alias）機能による旧URLのリダイレクト ===
+
+[https://gohugo.io/content-management/urls/ URL管理（Hugo公式）]
+
+フロントマターに1つ以上のエイリアスが含まれている場合、Hugoは旧URL（＝新URLのエイリアス）用に生成されたページに以下のHTMLコードを追加します。
+<code>
+  <head>
+    <title>https://example.com/posts/my-intended-url</title>
+    <link rel="canonical" href="https://example.com/posts/my-intended-url"/>
+    <meta name="robots" content="noindex">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="refresh" content="0; url=https://example.com/posts/my-intended-url"/>
+  </head>
+</code>
+
+上記のコードはユーザーを新しいURLへリダイレクトし、検索エンジンのロボットに対してはこの古いページをインデックスしないよう伝えます。
+
+== 関連項目 ==
+* [[permashortlinks]]（パーマショートリンク）
+* [[IndieArchive]]
+* [[posts]]（投稿）
+** [[notes]]（ノート）
+** [[articles]]（アーティクル）
+* [[short-domains]]（短縮ドメイン）
+* [[slug]]（スラグ）
+* https://twitter.com/brea_manuel3/status/1294021032152641538?s=20
+** 「初めての論文で、極限状態にあるとき。💗」 [https://twitter.com/brea_manuel3 @brea_manuel3] 2020年8月13日
+* [http://plasticbag.org/archives/2003/06/on_permalinks_and_paradigms/ On Permalinks and Paradigms…] パーマリンクの歴史と価値について
+* Twitterは2006年にツイート用パーマリンクを導入した https://mastodon.cloud/@vacapinta/109309183030156032
+** 「@bastianallgeier 私はグループSMSを設定するために2006年にTwitterに参加しました。当時はそれくらいしかできませんでした。コミュニティもなく、返信機能もなく、ハッシュタグもありません。これは2006年10月に受け取ったメールで、導入されたのは……パーマリンクです！！」 [https://mastodon.cloud/@vacapinta @vacapinta] 2022年11月8日
+* 2003-06-11 Tom Coates: [http://plasticbag.org/archives/2003/06/on_permalinks_and_paradigms/ On Permalinks and Paradigms…]
+
+[[Category:Pages in Japanese]]
