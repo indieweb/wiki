@@ -1,0 +1,87 @@
+https://indieweb.org/specifications-ja
+
+{{emojicon|🧰}}<span style="float:right;clear:right; margin: 0 0 1em 1em;">[https://xkcd.com/927/ <img src="https://imgs.xkcd.com/comics/standards.png" alt="14の競合する標準がある状況。1つのユニバーサルな標準を作ろうとした結果、15の競合する標準ができるというXKCDのコミック。" />]</span> 
+
+'''<dfn>Specifications（仕様）</dfn>'''（または<dfn>standards/標準</dfn>）とは、複数の[[implementations|実装]]間で相互運用可能な方法で通信するための技術文書です。特にIndieWebにおいて、標準は「公開、意味の表現、通知、購読」などの多くのユーザーアクションにおいて、より高度な機能を実現する助けとなります。
+
+== IndieWebの仕様 ==
+* メインサイト： '''https://spec.indieweb.org/'''
+
+以下の仕様は、IndieWebCampコミュニティによって信頼性の高い相互運用性のために使用されています。
+
+
+
+'''広く実装されているもの：''' これらの標準は、圧倒的多数のIndieWebソフトウェア、サービス、およびウェブサイトによって相互運用可能な形で実装されています。
+* [[IndieAuth]] (W3C Note)
+* [[microformats2]]
+** [[h-card]]
+** [[h-entry]]
+** [[h-feed]]
+* [[Micropub]] (W3C Recommendation)
+* [[rel-me]]
+* [[Webmention]] (W3C Recommendation)
+* [[WebSub]] (W3C Recommendation)
+
+'''多数の実装があるもの：''' これらの標準は、相互運用するいくつかの実装が存在し、仕様として十分に安定していると見なせます。
+* [[authorship|著者情報（authorship）]]
+* [[h-cite]]
+* [[h-event]]
+
+'''実装中／開発中のもの：''' これらの標準は、実装や実際の製品でのテスト、ユーザーによるフィードバックを通じた改善のサイクルの中で、活発に開発・進化を続けています。
+* [[fragmentions]]
+* [[Microsub]]
+* [[original-post-discovery|元記事の発見]]
+* [[post-type-discovery|投稿タイプの発見]] (W3C Note)
+* [[salmentions]]
+* [[twtxt]]
+* [[vouch]]
+
+'''一定のサポートがあり安定しているもの：''' 仕様自体は安定していますが（長期間変更がない）、限定的なサポートにとどまっているか、パブリッシャー（公開側）のみがサポートしているものです。
+* [[XFN]] (rel=me 以外) - 多くのサイトが公開していますが、これを利用するアプリケーションは今のところ知られていません。
+
+IndieWebCampの[[principles|原則]]に基づき、マイクロフォーマットの仕様はHTMLに対する不可欠でシンプルな「ビルディングブロック」の拡張として、重点的に（再）利用されています。
+__TOC__
+
+== 反復改善すべき仕様 ==
+「完了」と言えるレベルまで正式な公開やアナウンスに向けて反復改善すべき仕様です。おおよそシンプル／短文なものから順に並べています（これらはすべて、必要に応じて[[microformats|マイクロフォーマット]]やIndieWebの仕様を規範的に参照すべきです）。
+
+* [[post-type-discovery|投稿タイプの発見]] - 別名「暗黙の投稿タイプ」。まずは [[posts]] を参照。
+** +1 {{kartik}} ([[comments-presentation|コメント表示]]やその他の[[responses|レスポンス]]に有用)
+** +1 {{jacky}} (核心となるタイプは揃っていますが、[[gameplay]]、[[excerise]]、[[read]]なども標準化したい)
+* [[authorship|著者情報（authorship）]]
+** +1 {{kartik}} ([[response|レスポンス]]の著者を特定するのに有用)
+** +1 {{jacky}} (著者情報の柔軟性が高まる) (2022-06-27)
+* [[original-post-discovery|元記事の発見]]
+** +1 {{snarfed}} ([[u-syndication]] リンクがある場合や単一ユーザーの場合は簡単ですが、それ以外のバックリンクの解釈は現在困難で問題があります)
+** +1 {{jacky}} [[Koype]] は、この仕様を用いて[[canonical|カノニカル]]URLや[[syndicated|シンジケーション]]URLから投稿を見つける機能をサポートしています (2022-06-27)
+* [[indie-post-discovery]] - [[original-post-discovery]] から拡張し、[[PESOS]] シナリオも組み込む予定
+* [[fragmentions]]
+** +1 {{kartik}}
+* [[post streams]] - [[ActivityStreams]] に対する、シンプルで最小限な投稿中心のHTMLベースのアプローチ
+** [[h-entry]] を参照し、IndieWebのユースケースに必要なプロパティ（[[u-tag-of]] など）を追加。
+* [[Vouch]]
+* [[IndieAuth]] (2022-06-27 {{jacky}} これは重複？)
+** +0 {{kartik}} (まだあまり使っていませんが、将来的には確実に)
+* [[syndication-brainstorming#Syndicate_by_Reference|参照によるシンジケーション]]
+** +1 {{snarfed}} ([[Bridgy]] は長年これを行っており、[[IndieNews]] も移行中)
+** +1 {{jacky}} (2022-06-27) [[Koype]] はクライアントとしてこれをサポート
+* [[syndication-brainstorming#Syndicate_by_Content|コンテンツによるシンジケーション]]
+** +1 {{jacky}} (2022-06-27) [[Koype]] はクライアントとしてこれをサポート
+* [[Private Webmention|プライベート・ウェブメンション]]
+* [[metaformats]]
+** +1 {{aciccarello}} 返信コンテキストでの利用に関心あり
+* ...
+
+== その他の仕様 ==
+様々なIndieWeb実装やサイトがサポートしている可能性はありますが、「ウェブの独立性」に必須ではないため、ここでは省略しています。
+
+著者やパブリッシャーの手間を最小限にするため、IndieWebは著者にコンテンツの複製（[[DRY]] 原則への違反）を強いるような仕様（例：[[sidefile-antipattern|サイドファイル・アンチパターン]]）には依存しません。
+
+== 関連項目 ==
+* [[building blocks|ビルディングブロック]]
+* [[project|プロジェクト]]
+* [[format-ja|フォーマット]]
+* [[protocol-ja|プロトコル]]
+* [https://twitter.com/BrianNorgard/status/1454482653550301192 ジョン・ガールの法則]： <blockquote>「機能している複雑なシステムは、例外なく、機能していたシンプルなシステムから進化したものである。ゼロから設計された複雑なシステムが機能することはなく、それを機能させるためにパッチを当てることもできない。機能しているシンプルなシステムからやり直す必要がある。」</blockquote>
+
+[[Category:Pages in Japanese]]
