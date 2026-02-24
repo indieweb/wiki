@@ -1,0 +1,344 @@
+https://indieweb.org/h-feed-ja
+
+[[Category:Feed]]
+[[File:h-feed.svg|frameless|right|128px|h-feed icon]]
+
+'''<dfn>[https://microformats.org/wiki/h-feed h-feed]</dfn>''' は、HTMLをフィードとしてマークアップするための [[microformats2]] 仕様です。名前、写真、共通の [[author]] を任意で指定でき、内部には [[h-entry-ja|h-entry]] アイテム（または他のルート (h-*) オブジェクト）を含みます。数多くの個人サイトで公開されており、[[social reader]]s によって利用されています。
+
+h-feed は、機能的に RSS/Atom [[feed files]] よりも [[DRY]] な代替手段であり、それらに取って代わる可能性があります。
+
+== How ==
+=== How to markup ===
+マークアップ方法：
+* フィードのコンテナに `class="h-feed"` を指定します（例：<code>&lt;html&gt;</code> や <code>&lt;body&gt;</code>、あるいは <code>section</code> や <code>div</code> 内など）。
+* ページへのリンク、あるいはフィードコンテナへのアンカーがある場合は、そのハイパーリンクに `class="u-url"` を追加します。
+** トップレベルのリンクがない場合は、オプションで隠しリンクを追加できます：<code><nowiki><a class="u-url" href="/"></a></nowiki></code>
+** その h-feed が部分的なものである場合（例：コンテンツがなく名前とURLのみ）、`class="u-url u-uid"` を指定して完全な h-feed へのリンクを追加します。
+* 任意で名前を指定します。多くの場合、`class="p-name"` を持たせたトップレベルの <code>&lt;h1&gt;</code> を使用します。
+* 任意で、h-feed 内に `class="p-author"` を持つ [[h-card]] を追加します。あるいは、h-feed 内の個々のアイテムに h-card を持たせるか、h-feed コンテナの外側にトップレベルの h-card を置くことも可能です。
+* 任意で、ページの代表的な写真（バナーなど）に `class="u-photo"` を追加します。利用側は、前のステップでマークアップした p-author h-card の u-photo を推測または使用することがあります。
+* 任意で、h-feed 内に <code>rel=prev</code> および <code>rel=next</code> リンクを追加して、[[pagination]] のサポートを提供します。
+* 任意で、ホームページに主要な h-feed が含まれていない場合、フィードの発見を助けるために <code>rel="alternate" type="[[text/mf2+html]]"</code> 属性を持つ h-feed へのリンクをホームページに追加します。
+
+マークアップ例：
+
+<pre>
+<section class="h-feed">
+  <h1 class="p-name"><a href="/feed" class="u-url">My h-feed</a></h1>
+  <div class="h-entry">
+    <a href="/entry/1" class="u-url p-name">Entry #1</a>
+  </div>
+  <div class="h-entry">
+    <a href="/entry/2" class="u-url p-name">Entry #2</a>
+  </div>
+    ...
+  <div class="h-entry">
+    <a href="/entry/5" class="u-url p-name">Entry #5</a>
+  </div>
+  <a href="/next" rel="next">Next</a> &mdash; <a href="/previous" rel="prev">Previous</a>
+  <a class="p-author h-card" href="/">Jane S. Doe</a>
+</section>
+</pre>
+
+=== How to test ===
+h-feed でマークアップされたフィードは、h-entries の単純なリストと同じように動作するはずです。[[feed#How_To_Test|How to Test Feeds]] を参照してください。
+
+=== How to consume ===
+[[feed#How_To_Consume|How to Consume Feeds]] を参照してください。
+
+== Tools ==
+* [[Monocle]] には、URLを入力してどのようにレンダリングされるかを確認できる公開プレビューツールがあります：https://monocle.p3k.io/preview
+
+== Why ==
+あなたのサイトを購読している Indie [[readers]] が以下を表示できるようにするためです：
+* リスト内でのサイト/フィードの名前（およびアイコン）
+* フィードの [[authorship]]
+* フィード内の各エントリーの [[authorship]]
+* 1つのページ内にある複数のフィード（あまり一般的ではありません）
+
+その他のユースケース：
+* Atom フィードの生成
+** これはレガシーなユースケースのようであり、h-feed を正当化するには不十分かもしれません。
+* コンテンツのチャンネルごとのフィード - 名前が必要
+** 「タグ（チャンネル）ごとにフィードを持たせるので、それらに名前を付けたい」 - #indiewebcamp での Sandeep Shetty の発言。
+** IndieWeb サイトにおいて、コンテンツの特定のサブセットごとに個別のフィードを作成し、それらに「明示的に」名前を付けたいという要望があるようです。これにより、h-entry 要素のコンテナオブジェクトが必要となり、コンテナ自体に名前を付けられる必要があります。これは明示的な 'h-feed' の興味深い潜在的なユースケースです。
+* カレンダープログラムで購読可能な h-events の h-feed
+* ブログロールを示すことができる h-cards の h-feed
+* レスポンスフィードとして使用できる h-cites の h-feed
+
+== IndieWeb Examples ==
+h-feed をサポートしている IndieWeb コミュニティメンバー：
+
+=== Tantek ===
+{{t}} は、[[User:Sandeep.io|Sandeep Shetty]] の勧めにより、自身が構築している Indie [[reader]] を支援するため、[https://tantek.com/2012/198/t1/added-microformats2-h-feed-h-entry 2012-07-16] から [https://tantek.com/ tantek.com] のホームページで index.html テンプレートと [[Falcon]] を使用して h-feed をサポートしています。
+
+2019-07-23 時点の確認では、tantek.com のホームページには 3 つの h-feed があり、それらはトップレベルの h-card 内にネストされています。1 つ目は明示的な名前がなく、彼の投稿のフルフィードです。2 つ目は最近の記事の最小限のフィード、3 つ目は彼の講演やイベントを示す h-events のフィードです。このフィードにはページネーションリンクはありません。
+
+Tantek は、時間ベースのアイテムで更新される一部の静的なリストページでも、最小限のシンプルな h-feed マークアップをサポートしています：
+* https://tantek.com/daylists
+
+=== Shane Becker ===
+[[User:veganstraightedge.com|Shane Becker]] は、[https://github.com/veganstraightedge/sbbme/commit/90a6d6eabeb3ff4d64177f163146f1e506dd0600#diff-75a266e0ac273be00ba708fb9e5ad5e1 2012-11-18]（プライベートリポジトリ）以来、[http://veganstraightedge.com/ veganstraightedge.com] のホームページで投稿の複合フィード、および各投稿タイプ別のフィード（[http://veganstraightedge.com/notes /notes]、[http://veganstraightedge.com/articles /articles]、[http://veganstraightedge.com/bookmarks /bookmarks]、[http://veganstraightedge.com/videos /videos]）で h-feed をサポートしています。彼は以前、[https://github.com/veganstraightedge/sbbme/commit/4d24ced47e2d15894326948c45983e75cd5e9f23#diff-bb387ef52f60f88effbf8d999def732aR1 2010-06-04] から自身のフィードで hfeed のみをサポートしていました。
+
+2019-07-23 時点の確認では、この h-feed には名前などのプロパティはありませんが、ページネーションリンクは存在します。
+
+=== Kevin Marks ===
+{{kevinmarks}} は 2013-12-10 から [https://kevinmarks.com/ kevinmarks.com] で h-feed を使用しており、すべての [[known]] サイトと同様に [http://known.kevinmarks.com known.kevinmarks.com] にも h-feed があります。
+
+2019-07-23 時点の確認では、このページには明示的な著者 h-card、名前、要約（summary）を持つ h-feed があります。
+
+=== Barnaby Walters ===
+[[User:Waterpigs.co.uk|Barnaby Walters]] は 2014-01-21 から [http://Waterpigs.co.uk waterpigs.co.uk] のホームページで h-feed をサポートしています。
+* [http://waterpigs.co.uk/services/microformats-to-atom/ h-feed to atom gateway]
+
+2019-07-23 時点の確認では、この h-feed は名前と著者 h-card のプロパティを持っています。
+
+=== Jeena ===
+[[User:Jeena.net|Jeena]] は 2014-02-25 から https://jeena.net で、ブログ投稿（/posts）とメモ（/notes）の h-feed をサポートしています。写真（/photos）やポッドキャスト（/pods）の h-feed もあります。
+
+2019-07-23 時点の確認では、これらのフィードは名前、著者 h-card のプロパティを持っています。
+
+=== Tom Morris ===
+[[User:Tommorris.org|Tom Morris]] は 2014-02-25 から [http://tommorris.org/ tommorris.org] で投稿の h-feed をサポートしていました。
+
+2019-07-23 時点の確認では、このサイトはもはや h-feed やいかなる種類の mf2 もサポートしていません。
+
+=== Bear ===
+{{bear}} は 2014-07-25 から https://bear.im/bearlog でブログ投稿の h-feed をサポートしています。フィードの発見（discovery）機能が不足しており、ホームページに追加する必要があります。
+
+2019-07-23 時点の確認では、この h-feed は名前プロパティのみを持っています。
+
+=== Pelle Wessman ===
+{{voxpelli}} は [https://github.com/voxpelli/voxpelli.github.com/commit/b12f4a9efadfd00a7276e151f2c3696f6b7a9279 2014-09-07] 以降、http://voxpelli.com/ でブログ投稿、アーカイブ、ブックマーク、インタラクションの h-feed をサポートしています。ブログ投稿についてはタイトルのみの一部コンテンツですが、ブックマークとインタラクションについてはフルコンテンツです。
+
+2019-07-23 時点の確認では、この h-feed は名前、著者 h-card のプロパティを持っています。
+
+=== gRegor Morrill ===
+{{gRegor}} は 2014年頃から http://gregorlove.com/notes/ で [[notes]] の h-feed をサポートしています。
+* このフィードはホームページ上にないため、メモへのナビゲーションリンクは [[feed discovery]] のために <code>rel="feed"</code> を使用しています。
+
+2019-07-23 時点の確認では、ホームページには名前と著者 h-card をプロパティとして持つ h-feed があります。
+
+また、以下のフィードも持っています：
+* h-event https://gregorlove.com/events/past
+* h-cite https://gregorlove.com/responses/
+* h-card https://gregorlove.com/following/ (暗黙の h-feed)
+
+=== Ben Roberts ===
+{{benthatmustbeme}} は、サイトのメインページおよび、タイプ別ページ（/note、/photo など）や月別アーカイブを含む他のすべての投稿リストで h-feed をサポートしています。フィードにはまだ次へ/前へのリンクが必要で、これらはメインページから離れた別の（主要な）h-feed にのみ配置される可能性が高いです。メインページには 2014年3月から h-feed がありましたが、2015年5月にあらゆる投稿リスト形式のページに h-feed を追加するよう実装されました。
+
+2019-07-23 時点の確認では、h-feed はトップレベルの h-card 内にネストされており、名前プロパティを持ち、ページはページネーションをサポートしています。
+
+=== rhiaro ===
+{{rhiaro}} は 2015年2月頃から、ホームページおよび自身の投稿のコレクションであるすべてのページ（例：rhiaro.co.uk/tag/indieweb、rhiaro.co.uk/travel、rhiaro.co.uk/2015、rhiaro.co.uk/likes）に h-feed を持っています。
+* 異なるフィードを発見するために、ホームページやサイドメニューから rel=feed などを追加する計画があります。
+
+2019-07-23 時点の確認では、どのページにも h-feed は存在しません。
+
+=== Jonny Barnes ===
+{{jonnybarnes}} は、いつからか https://jonnybarnes.uk/notes で [[notes]] の h-feed をサポートしています。
+
+2019-07-23 時点の確認では、ホームページやメモなどにすべて h-feed があり、明示的な名前を持っていますが、名前は空文字列です。フィードにはページネーションがあります。
+
+=== Gokberk Yaltirakli ===
+[[User:Gkbrk.com|Gokberk Yaltirakli]] は [https://gkbrk.com/microblog microblog] ページに h-feed を持っています。
+
+2019-07-23 時点の確認では、この h-feed にはプロパティはありません。
+
+=== Vincent Pickering ===
+{{Vincent}} は 2019-01-01 以降、https://vincentp.me でブログ投稿の h-feed をサポートしています。
+
+2019-07-23 時点の確認では、このページには名前、要約、コンテンツ（ページ全体のコンテンツを含んでしまっているためエラーと思われます）をプロパティに持つ h-feed があります。フィードにはページネーションがあります。
+
+=== Piper McCorkle ===
+{{pmc}} は https://piperswe.me/posts および https://piperswe.me/notes で、それぞれ投稿とメモの h-feed をサポートしています。
+
+フィードには名前プロパティがあります。
+
+=== Chris McLeod ===
+{{mrk}} は [[Autonomie]] テーマを使用することで、https://mrkapowski.com/ の WordPress ブログで h-feed をサポートしています。
+
+フィードには名前と著者 h-card のプロパティがあります。以前は写真プロパティもありましたが、[[photo]] 投稿の配信で問題が発生したため削除されました。
+
+=== Jamie Tanna ===
+
+{{jamietanna}} は [https://www.jvt.me/posts/2019/05/12/implementing-hfeed-making-content-discoverable/ 2019-05-12] 以降、すべてのフィード（ホームページ、コンテンツタイプ別、タグなどのタクソノミー項目用）で h-feed をサポートしています。
+
+フィードには名前と URL プロパティがあります。
+
+=== Sequr ===
+
+{{sequr}} は 2025-02-13 以降、サイトのメインページおよび /blog などの他のすべての投稿リストで h-feed をサポートしています。
+
+=== Bobby Hiltz ===
+
+2025-03-18 時点で、{{bbbhltz}} はサイトの [https://bobbyhiltz.com homepage] および他の投稿リストで h-feed をサポートしています。
+
+== Implied Examples ==
+いくつかのサイトでは、トップレベルの h-entry（または他）のマイクロフォーマットのコレクションを持っており、それによってセットとしての「h-feed」を暗黙的に示すことを意図しています。
+
+* {{aaronpk}} — 詳細を含むサブセクションを作成予定
+* {{addyourself}}
+
+== Past Examples ==
+
+=== Eddie Hinkle ===
+{{eddiehinkle.com}} は 2017-03-10 以降、eddiehinkle.com の [https://eddiehinkle.com homepage]、[https://eddiehinkle.com/social/ social] ページ、および social からリンクされているすべてのサブフィードページに h-feed を持っていました。
+
+2019-07-23 時点の確認では、ホームページには最近の投稿の最小限の表現があるものの、もはや h-feed はありません。メインフィードは /all にあるようで、著者 h-card プロパティのみを持っています。Social はもはや有効なリンクではありません。
+
+=== Will Norris ===
+[[User:Willnorris.com|Will Norris]] は 2013年中頃から、WordPress とカスタマイズした [https://github.com/pfefferle/wordpress-uf2 wordpress-uf2] を使用して [https://willnorris.com/ willnorris.com] ホームページで h-feed をサポートしていました。
+
+2019-07-23 時点の確認では、このページはもはや WordPress で動作しておらず、ページ上に h-feed はありません。
+
+== Consumers of h-feed ==
+このセクションでは h-feed の利用者（コンシューマー）を扱います。現時点では、主にフィードリーダーです。
+
+=== Readers ===
+* [[Monocle]]
+* [[Together]]
+* [[Woodwind]]
+* [[Shrewdness]]
+* [[Microsub]] 仕様を実装しているリーダーも h-feed を利用します。リストについては [[Microsub]] を参照してください。
+
+=== Proxies ===
+* [[Bridgy]]
+
+=== Converters ===
+* [[unmung]]
+* [[granary]]
+
+== Brainstorming ==
+
+=== recommended practices ===
+
+{{gwg}} がコミュニティの h-feed 使用状況を確認したところ、このページにリストされているものの大部分が名前（name）プロパティを持っていました。多くが著者（author）プロパティを持っていましたが、すべてではありませんでした。少数が要約（summary）またはページネーションを持っていました。調査した中では、写真（photo）プロパティを持っているものはありませんでした。
+
+=== Feeds other than h-entry ===
+
+フィードの定義は伝統的に多数の h-entry でしたが、他の h-* オブジェクトもフィードで使用されています。
+
+今後のイベントリストには h-events の h-feed が使用されています。フォロワーリストには h-cards の h-feed が使用されています。
+
+* {{gRegor}}: 私は以下のための h-feed を持っています：
+** h-event https://gregorlove.com/events/past
+** h-cite https://gregorlove.com/responses/
+** h-card https://gregorlove.com/following/ (暗黙の h-feed)
+
+=== multiple h-feeds in the same page ===
+# ページ内で最初に見つかった h-feed（文書順）が、「そのページ」の h-feed となります。
+# 追加の h-feed は、ページの h-feed を処理する側からは無視される可能性があります。
+# 公開者が二次的な h-feed を参照可能にしたい場合は、それらに一意の ID 属性を付ける必要があります。
+# したがって、利用側のコードがページ上の二次的な h-feed を参照したい場合は、その二次的な h-feed のフラグメント ID を含む URL で参照する必要があります。
+
+=== partial feeds ===
+部分的（例：切り詰められた）フィード vs 完全な h-feed。
+
+多くのブログには部分的なコンテンツのフィードがあり、エントリーには投稿名/タイトル、パーマリンク、時には要約のみが含まれ、フルコンテンツは含まれません。これは、リーダーが長い投稿にさらされるのではなく、短い要約のクイックリストを表示するという UX 上の理由で行われることがあります。
+
+部分的なフィードを持っている場合（例：ホームページなど）、（Indie [[reader]] の利用のために）別途フルフィードのページを持つことが推奨されます。
+
+部分的なフィードは、`u-uid u-url` を使用してフルフィードページにリンクでき、これは正規の h-feed 発見アルゴリズムによって発見される可能性があります。
+<pre>
+    <div class="h-feed" id="partial_feed">
+        <h1 class="p-name">
+         <a class="u-url" href="#partial_feed">Partial Feed</a></h1>
+        <a class="u-uid u-url" href="/feed.html">Full Feed</a>
+        <ol>
+            <li class="h-entry"><a href="permalink1">Article1 name</a></li>
+            <li class="h-entry"><a href="permalink2">Article2 name</a></li>
+        </ol>
+    </div>
+</pre>
+
+==== design freedom ====
+部分的なフィードと完全なフィードを分ける可能性は、コンテンツ公開者により多くのデザインの自由を提供します。ホームページに完全なフィード、部分的なフィード、あるいはフィードなしのいずれかを選択し、それに応じてデザインできるからです。
+
+<blockquote>acegiak: KartikPrabhu: 私の妻のサイト（マイクロフォーマットなどの追加を手伝っています）は、この潜在的なテストケースになります。彼女はアーティストなので、ランディングページの外観を非常に特定のものにしたいと考えているからです。</blockquote>
+引用元：https://chat.indieweb.org/2014-03-27/1395970560000
+
+=== canonical feed autodiscovery ===
+「正規（canonical）」のフィードという想定は、間違った枠組みかもしれません。
+
+ホームページで複数の情報フィードを共有しており、その中に「主要な（primary）」フィードがあるサイトを想定する方が適切です。詳細は "feed autodiscovery" を参照してください。
+
+=== feed autodiscovery ===
+==== prior work ====
+フィードリーダーは、HTMLページから <code>rel="alternate"</code> とそれぞれ <code>type="application/rss+xml"</code> または <code>type="application/atom+xml"</code> を持つリンクをパースすることで、レガシーな RSS/Atom フィードファイルへのリンクを自動的に発見します。
+
+そのようなリンクがページの <code>&lt;head&gt;</code> 内で <code>&lt;link&gt;</code> タグを使用している場合、ユーザーがフィードやフィードファイルの「配管」を意識する必要がないという優れた UX を提供できる可能性があります。
+
+[http://feedly.com Feedly] における [https://adactio.com adactio.com] の例：
+
+[[File:autodiscovery-feed-example-adactio.jpg|500px|thumb|center|adactio.com からのフィード自動発見の例]]
+
+（おそらく複数ある）h-feed を同様に発見するにはどうすればよいでしょうか？
+
+==== rel alternate type mf2 html ====
+ホームページから h-feed でマークアップされた HTML ページへ、<code>rel="alternate"</code> と <code>type="text/mf2+html"</code>、および任意の <code>title="Feed Title"</code> を使用してリンクします。[[rel-feed]] も参照してください。
+
+発見と利用の方法については、https://microformats.org/wiki/h-feed#Discovery を参照してください。
+
+関連する取り組み：
+# https://tools.ietf.org/html/draft-ietf-atompub-autodiscovery-01
+# https://blog.whatwg.org/feed-autodiscovery
+
+==== url uid ====
+あるいは、h-feed が現在のページ自体の URL ではない u-url u-uid プロパティを持っている場合、その u-url u-uid の URL を正規のフルフィードとして扱うことができます。
+
+==== Zegnat proposal 2018 ====
+{{Zegnat}} はここでアルゴリズムを提案しました：
+* https://chat.indieweb.org/dev/2018-11-16#t1542370898681400
+
+* tantek.com を購読できますか？
+* tantek.com とは何ですか？ tantek.com は Tantek Çelik (h-card) です。
+* tantek.com はフィードですか？ いいえ。
+* tantek.com は rel-feed URL を宣伝していますか？ いいえ。
+* tantek.com のメインオブジェクト (h-card) にはフィードが含まれていますか？ はい！
+* 複数のフィードがありますか？ はい
+** 発見された場合は uid を使用して、そうでない場合はフラグメントとして使用できる ID を使用してフィードを特定します。
+*** ユーザーがどれを購読するかを決定できるように、複数のフィードを返します。
+*** メインフィードを想定します。
+
+==== Tantek example ====
+私の tantek.com ホームページには、3 つの h-feed 要素があります。
+* 名前なし
+* Recent Articles
+* Speaking & Events
+
+このパターンは、メイン/主要なフィードには個別の名前や「Main」のような余計な明示的名前は必要ないという観点から理にかなっていると気づきました。したがって、h-feed 利用側は以下のことができます：
+* 最初の名前なし h-feed をページの主要な h-feed として扱う。
+* それがない場合は、単純に最初の h-feed を主要な h-feed として扱う。
+
+== Articles ==
+* Superfeedr 上の [http://blog.superfeedr.com/indieweb-microformats-fragments-subscriptions/ "IndieWeb: fragment subscriptions to microformats"]。
+
+== WordPress ==
+
+=== WordPress classic hfeed ===
+非常に高い割合の WordPress テーマ（どれくらいか？ いつから？ ユーザーの何％か？）が、複数の <code>hentry</code> エントリーがあるページだけでなく、すべてのページでクラシックな [[hAtom]] <code>hfeed</code> クラスを使用しています。WordPress の人気により、これは膨大な数のウェブサイトに存在しています。
+
+=== WordPress theme support ===
+* {{aaronpk}} 2018-08 時点で、WordPress テーマのマイクロフォーマット対応状況はまばらです：
+** aaronpk: <cite>mf2 は常に一貫性がないので、リーダーで人々をフォローする際は WordPress の Atom フィードをマイクロフォーマットフィードよりも優先して購読することさえあります</cite> [https://chat.indieweb.org/wordpress/2018-07-29#t1532887939550200 ソース]
+** しかし、正しく行われれば、マイクロフォーマットフィードは様々な [[posts#Kinds_of_Posts|post types]] や、豊かな [[reply-context]]（例：[[h-cite]] を伴う）を持つ [[responses]] などを伝えることができるため、他のフィードフォーマットよりもはるかに豊かなデータを提供します。
+*** [[WordPress Theme]] における、より豊かな h-feed、より多くの投稿タイプ、返信コンテキストなどの URL の例が必要です。
+* {{kupietz}} 2024-11-02 時点で、私の WordPress テーマにはフロントページのヒーローセクションとすべてのアーカイブページ（https://michaelkupietz.com）に h-feed を組み込んでいます。フロントページのヒーローセクション生成スクリプトとテーマのアーカイブページテンプレートに追加することで実現しました。さらに、wp_tag_cloud フックを使用してタグクラウドに rel="feed" を追加しました。実装は難しくなく、ただ座って作業するだけでした。WordPress テーマ間でのサポートがまばらなままであれば、それは技術的な実装の問題ではなく、単に普及活動（アウトリーチ）の問題です。人々を興味を持たせる必要があります。なお、異なる投稿タイプやレスポンスなどのより豊かなタイプは、私のサイトの構造には（まだ）関連していないため実装していません。しかし、もし関連するようになれば、テンプレートの適切な場所にクラスを貼り付けるだけなので、実装は容易です。
+
+== See Also ==
+* [[feeds]]
+* [[microformats2]]
+* [[h-entry-ja|h-entry]]
+* [[reader]]
+* https://microformats.org/wiki/h-feed
+レガシー：
+* [[RSS]]/[[Atom]] [[feed files]]
+
+[[Category:microformats]]
+* [[pagination]]
+* [[Category:jargon]]
+* Articles: 2026-01-03 {{capjamesg}}: [https://jamesg.blog/2026/01/03/turn-a-list-into-a-web-feed Turn a list into a web feed]
+* [[h-feed discovery]]
+
+[[Category:Pages in Japanese]]
