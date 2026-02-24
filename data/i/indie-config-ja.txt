@@ -1,0 +1,147 @@
+https://indieweb.org/indie-config-ja
+
+'''<dfn>indie-config</dfn>''' は、あなたのIndieWebサイトをWebブラウザに認識させるための設定方法です。これにより、他のサイトにある[[webactions]]（[[reply|返信]]や[[like|いいね]]ボタンなど）をブラウザが認識し、それらのアクションの処理をあなたのサイトに委任できるようになります。indie-configは、プロトコルハンドラとpostmessageを使用してこの機能を実装しています。
+
+indie-config と indie-action の違い：
+* '''indie-config''' は、自身のホームページに設定するものです。これにより、'''あなた'''が他のサイトでWebアクションボタンをクリックした際、自分の個人サイトでそのアクションを処理できるようになります。
+* '''[[webactions#How_to_markup|<code>&lt;indie-action&gt;</code>]]''' は、自分の投稿のパーマリンクに返信やいいねなどのボタンとして使用するマークアップです。これにより、他のユーザーがそれらをクリックした際、彼ら自身のサイトでアクションを処理できるようになります。
+
+indie-configは、[[2014/UK|IndieWebCampUK 2014]]で導入、議論、プロトタイプの作成、およびデモンストレーションが行われました。
+
+2019年現在、iframeを介した web+action ポリフィルは完全には動作していません。さらなる実験が歓迎されています。
+
+== 理由 ==
+自身の個人サイトにindie-configを設定することで、他者のサイトにある[[web action]]（「返信」や「お気に入り」など）のリンクやボタンをクリックした際、それらのアクションを自動的に「あなたの」サイトの[[posting interface|投稿インターフェース]]で起動させることができます。
+
+自身の投稿のパーマリンク（および[[webactions]]を設置しているその他の場所）にindie-configの読み込みを追加することで、サイトにindie-configを設定しているIndieWebユーザーが、自身のサイトを使ってあなたの投稿に対して素早く「いいね」や「リポスト」、「返信」を行えるようになります。
+
+Indie-configは、Web上でのアクションを実行するために使用したいツールを、ブラウザに認識させる方法の最初の実用的なプロトタイプです。ユースケースが証明されフローが成熟するにつれて、ブラウザ自体に組み込まれたより適切な手法に取って代わられることが期待されています。
+
+== ブラウザのサポート状況 ==
+
+* [[Firefox]]の [https://bugzilla.mozilla.org/show_bug.cgi?id=1196151 バグ 1196151] がindie-configの動作を妨げていました —— バージョン78で修正済み。
+* Chrome/iumでは正常に動作します —— 2019年12月22日時点では、CSP（コンテンツセキュリティポリシー）違反によりiframeの読み込みが妨げられ、動作しません。
+
+== 公開方法 ==
+自身の個人サイトにindie-configを設定する方法：
+
+=== 設定ページの作成 ===
+自身のみがアクセスする必要のあるページをサイト上に作成します。例えば "config.html" のようなページです。このページには、以下の[[Javascript]]を含める必要があります。
+
+<pre>
+<script>
+(function() {
+  if (window.parent !== window) {
+    window.parent.postMessage(JSON.stringify({
+      // 返信を書くために使用するエンドポイント
+      reply: 'https://aaronparecki.com/note.php?reply_to={url}'
+    }), '*');
+  }
+}());
+</script>
+</pre>
+
+上記のURLを、あなた自身の投稿インターフェースのURLに置き換えてください。
+
+=== Webアクションプロトコルの登録 ===
+ホームページ内で、自分のサイトにサインインしている時にだけ自分自身に表示される場所に、以下のコードを追加します。
+
+<pre>
+<script>
+window.navigator.registerProtocolHandler('web+action', 'https://aaronparecki.com/config.html?handler=%s', 'Aaron Parecki');
+</script>
+</pre>
+
+URL（<code>https://aaronparecki.com/config.html</code>）と名前（<code>'Aaron Parecki'</code>）は、自身の情報に置き換えてください。URLは前のステップで作成したページのものにします。3番目のパラメータに指定したテキストはブラウザのプロンプトに表示されるため、あなたの名前やサイトのソフトウェア名などにするのが適切です。
+
+
+=== 有効化 ===
+ホームページにアクセスすると、サイトに "web+action://" リンクの処理を許可するかどうかを尋ねるプロンプトが表示されます。
+[[File:web-action-permission-prompt.png]]
+
+「アプリケーションを追加」（またはブラウザごとの同様のボタン）をクリックすると、ウェブサイトがブラウザまたはオペレーティングシステムに登録されます。
+
+* Chromeの場合、プロンプトは少し分かりにくいです。アドレスバーの右側に小さなひし形のアイコンが表示されます。それをクリックすると「[example.com] にすべての web+action リンクを開くことを許可しますか？」というプロンプトが表示され、「許可」「拒否」「無視」のボタンが表示されます。
+** [[File:Chrome-prompt-protocol-handler-2016-03-07.png]]
+
+=== 例 ===
+* 動画: http://aaronparecki.com/notes/2014/09/10/1/webactions
+
+== 利用方法（コンシューム） ==
+[https://github.com/voxpelli/voxpelli.github.com/blob/master/js/indieconfig.js indieconfig.js] のようなindie-configローダーと、[https://github.com/voxpelli/voxpelli.github.com/blob/master/js/webaction.js webaction.js] のような [[webactions]] シム（shim）が必要です。
+
+これらをサイトの head セクションで読み込みます。
+
+<pre>
+<script type="text/javascript" src="/path/to/indieconfig.js"></script>
+<script type="text/javascript" src="/path/to/webaction.js"></script>
+</pre>
+
+これで完了です！Webアクションがindie-configの読み込みを待機していることを示すために、<code>.indieconfig-loading</code> クラスにスタイルを追加すると良いでしょう。
+
+上記の例（[[User:Voxpelli.com|Pelle]]のブログ http://voxpelli.com/ より）のスクリプトは、ページ読み込み後の最初のWebアクション操作時にindie-configを読み込みます。3秒のタイムアウトを設定しており、読み込めない場合はフォールバックとして、webactionsタグ内にある最初の <code>&lt;a></code> の <code>href</code> へリダイレクトします。このタイムアウトにより、indie-configを使用していないユーザーも一定時間後にリダイレクトされます。Pelleはこれをユーザーに伝えるため、Webアクションのアイコンをアニメーションに置き換えています。
+
+__TOC__
+== FAQ ==
+=== 毎回 registerProtocolHandler を実行しても大丈夫ですか？ ===
+Q: ホームページを読み込むたびに、プロトコル登録の処理を実行しても問題ありませんか？
+
+A: はい、問題ありません。すでに登録済みのページで registerProtocolHandler() を実行しても何も起こりません。すべてが正しく登録されていると認識されるだけです。
+
+=== 設定情報の代わりに、返信用のカスタムハンドラを直接使わないのはなぜですか？ ===
+Q: なぜカスタムハンドラは、返信を直接処理せずに設定情報を返すのですか？（例: web+action://permalink を <nowiki>http://example.com/reply?u=permalink</nowiki> で直接処理するなど）
+
+A: ハンドラが登録されていない場合のフォールバック（代替策）が提供できないからです。その場合、ページ上の &lt;a href="web+action://permalink">Reply&lt;/a> リンクをクリックしてもどこにも繋がらなくなってしまいます。
+
+=== isProtocolHandlerRegistered について ===
+Q: isProtocolHandlerRegistered を使ってハンドラが登録されているか確認し、登録されている場合のみカスタムプロトコルを使うことはできませんか？
+
+A: その関数は[https://bugzilla.mozilla.org/show_bug.cgi?id=440620 存在しません！] また、プライバシー漏洩の可能性もあります。例えば、サイト側が facebook: や twitter: などをチェックすることで、あなたのスマホにどのアプリがインストールされているかを確認できてしまうためです。
+
+== IndieWebの実装例 ==
+
+=== [[User:Voxpelli.com|Pelle Wessman]] ===
+
+Pelleは http://voxpelli.com で、indie-actionが初めてクリックされた際にユーザーの登録済み web+action ハンドラを照会するJavaScriptを公開しています。適切なアクションハンドラが見つかった場合、彼のサイトの「返信」や「投稿」リンクは、デフォルトの挙動ではなくそのハンドラを使用します。
+
+<strike>[http://x-tags.org/ X-Tags] ライブラリを使用し、シンプルな [https://github.com/voxpelli/indie-action-component プルーフ・オブ・コンセプト（概念実証）用Webコンポーネント] を通じて &lt;indie-action> タグを設定していました。</strike>
+
+また、Pelleは [[2016/Nuremberg|IndieWebCamp Nürnberg 2016]] の期間中に、誰でも自分用のindie-configをセットアップできる [http://voxpelli.com/demo/indie-config/ localStorageベースの公開ツール] を作成しました。
+
+=== [[User:waterpigs.co.uk|Barnaby Walters]] ===
+
+[[2014/UK|IndieWebCamp UK 2014]] でPelleと協力し、voxpelli.com上のリンクから waterpigs.co.uk 上の返信リンクへと誘導するデモンストレーションを行いました。Barnabyは、web+action ハンドラを登録するための静的なページを自身のサイトに持っています：https://waterpigs.co.uk/indie-config.html
+
+=== [[User:kylewm.com|Kyle Mahan]] ===
+
+* https://kylewm.com/test/indieconfig.html を使用して、返信、リポスト、お気に入り、いいねのアクションに対するindie-configハンドラを登録しています。
+
+* 2014-02-05：Voxpelliの indieconfig.js と webaction.js を追加しました。これにより、indie-configハンドラを持っているユーザーであれば誰でも「返信」や「いいね」リンクが動作するようになります。
+
+=== [[User:Unicyclic.com_mal|Malcolm Blaney]] ===
+
+* [[dobrado]] は、ユーザーのブラウザに登録された web+action ハンドラのサポートを終了しました。代わりに、ユーザーがURLを入力した際に [[webaction_handler|rel="webaction"]] エンドポイントを探す仕組みになっています。取得された設定はlocalStorageに保存されます。
+
+* indie-configを拡張し、`status` オプションを探して、見つかった場合にCORS（オリジン間リソース共有）を使用してリクエストを実行するようにしました。（「ブレインストーミング」を参照）
+
+== ブレインストーミング ==
+
+=== リターンルート（Return Route） ===
+アクション完了後に戻るためのURLを引数として持てると便利です。そうすれば、ポップアップを必要とせず、一つのウィンドウですべてを完結させることができます。
+
+=== ステータスオプション（Status Option） ===
+[[User:Unicyclic.com_mal|Malcolm]] は2015-10-22に、自身の実装に `status` オプションを追加しました。
+
+このアイデアは、indie-configがCORS経由でユーザーのサイトにリクエストを返し、ターゲットの状態を返させるというものです。そのユーザーとターゲットURLの組み合わせに対して、ユーザーのサイトが把握しているすべてのアクションの状態を返すべきです。状態はJSON（例: `{ "like": true, "follow": true }` など）で提供されます。`false` の値は暗黙的に示されるため、省略可能です。
+
+呼び出し側のサイトはこの情報を受け取ると、各アクションの表示を好きなようにマークアップできます。例えば、アクションに "highlight" のようなクラス名を追加したり、リンクのテキストを "follow" から "following"（フォロー中）に変更したりできます。
+
+* 一般的に、これは興味深いアプローチだと思います。ただ、ユーザーがサイト上で何のアクションも起こす前にステータスを問い合わせると、サイトへのアクセス許可を求めるプロンプトがいきなり表示される可能性があり、少し煩わしく感じるかもしれません。 --[[User:Kodfabrik.se|Kodfabrik.se]] 2015年10月22日 00:52 (PDT)
+* 標準的なindie-configの各値に対して、例えば <code>{ "follow-status": "http://example.com/follow-status" }</code> のような指定を（単独または追加で）許可できると良いでしょう。少なくとも「フォロー状態」は [[indie-reader]] だけが知っている情報かもしれませんが、「いいね状態」についてはindie-readerは何も知らない可能性があるからです。 --[[User:Kodfabrik.se|Kodfabrik.se]] 2015年10月22日 00:52 (PDT)
+* 複数のURLのステータスを一度に照会できると便利かもしれません。そうすれば、数回の呼び出しだけでフィード内のすべての [[webactions]] の状態を表示できます。 --[[User:Kodfabrik.se|Kodfabrik.se]] 2015年10月22日 01:41 (PDT)
+* 「action-status」（つまり "follow-status"、"like-status" など）のサポートを追加しましたが、私自身は汎用的なフォールバックオプションである "status" のみを使用しています。また、`url[]=target1&url[]=target2...` という形式で複数URLの照会も可能にしました。JSONレスポンスは、例えば `{ "target1": { "like": true }, "target2": { "reply": true } }` のように返されるべきです。ステータス情報がないターゲットや、状態が `false` のアクションは省略可能です。 --[[User:Unicyclic.com_mal|Malcolm]] 2015年10月27日
+
+== 関連項目 ==
+* [[webactions]]
+
+[[Category:Pages in Japanese]]
