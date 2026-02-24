@@ -1,0 +1,111 @@
+https://indieweb.org/h-entry-ja
+
+[[Category:Feed]]
+[[File:h-entry.svg|frameless|right|128px|h-entry icon]]
+
+'''<dfn>[https://microformats.org/wiki/h-entry h-entry]</dfn>''' は、[[articles]] から [[notes]]、[[replies]] など、ブログの [[posts]] をマークアップするための、あるいはウェブサイト上のエピソード形式や時系列ベースのコンテンツ全般をマークアップするための [[microformats2]] ボキャブラリであり、通常は [[h-feed]] の内部で使用されます。
+
+[[h-feed]] の一部として h-entry をマークアップまたはパースする方法を探している場合は、以下を参照してください：
+* '''[[h-feed-ja|h-feed]]'''
+
+== Why ==
+=== Why publish ===
+[[homepage]] や [[permalinks]] に h-entry マークアップを追加することは、IndieWeb の [[readers]] のようなコンシュームコードにとって、それらのページを最も簡単に読み取り可能にする方法です。
+
+投稿ページに h-entry を追加することで、[[permalinks]] 上での投稿情報の [[discovery]] が可能になります。これは以下のような様々な用途に役立ちます：
+* [[reply]] コンテキストのシンジケーション
+* あなたのサイトからの [[replies]] を、返信先サイトのパーマリンク上でコメントとして配信する。
+
+ホームページに h-entry を追加すると、以下のことが可能になります：
+* ホームページから直接投稿を購読できる（個別のフィードは不要）。
+* アップデートをリアルタイムで購読するユーザー向けに [[PuSH]] 0.4 サポートを追加するための構成要素となる。
+
+明示的な著者と公開日を持つすべてのページで h-entry を使用でき、以下のことが可能になります：
+* より洗練された [[link-preview]]（特にオプションの [[u-featured]] 画像がある場合）。
+* 例えば：[https://w3.org/TR/webmention Webmention] や [https://w3.org/TR/micropub Micropub] といった W3C 仕様書では、名称、編集者、公開日がすべて h-entry でマークアップされています。
+
+=== Why consume ===
+[[microformats2]] パーサーを使用し、h-entry アイテムを探すことで、プログラムは人々の投稿ページやホームページから h-entry と従来の [[hAtom]] の両方の投稿情報を自動的に取得できます。これらは（[[WordPress]] のデフォルトテンプレートに5年以上含まれていることもあり）ウェブ全体の2桁パーセント、特に最先端の IndieWeb サイトで公開されています。
+
+ページ上の HTML は、歴史的に [[feed files]] よりも正確です（理由の詳細はそのページを参照）。
+
+したがって、最高のユーザーエクスペリエンスを提供するために、利用側のコードは二次的なサイドファイルを確認する前に、まずページの h-entry（およびパーサーの後方互換性による hAtom）を利用すべきです。
+
+== How to ==
+=== How to publish ===
+クイックガイドについては、[https://osteophage.neocities.org/projects/guides/h-entries The Lazybones Guide to H-entries] を参照してください。
+
+h-entry は [[posts]]、[[notes]]、[[articles]]、[[comments]]、およびその他すべての投稿タイプのマークアップに使用できます。特定の投稿タイプの Wiki ページには「How To」セクションと例があるはずです。h-entry プロパティの完全なリストは [https://microformats.org/wiki/h-entry#Core_Properties microformats wiki] で確認できます。
+
+h-entry は通常2つの場所で使用されます：[[post]] パーマリンクページに単独で配置される場合と、[[feed]] ページに複数配置される場合です。
+
+投稿のパーマリンクページでは、h-entry はトップレベルのマイクロフォーマットである必要があります（何にもネストされていない状態）。
+
+複数の投稿があるフィードページで、個々のエントリーの著者プロパティを省略したい場合は、それらを [[h-feed-ja|h-feed]] で囲み、[[h-feed-ja|h-feed]] 側に著者情報を記述できます。これにより、[[authorship]] アルゴリズムによって著者情報が発見されるようになります。
+
+=== How to consume h-entry ===
+複数の h-entry 投稿を含むフィードの利用方法については、[[feed#How_To_Consume|How To Consume Feeds]] を参照してください。
+
+単一の h-entry を利用する場合：
+* ページ上の最初の h-entry を探します。見つからない場合、そのページは投稿を表していません。
+
+各 h-entry について（単一の投稿かフィードの一部かを問わず）：
+* h-entry の著者を特定するには、[[authorship]] アルゴリズムを使用します。
+* 投稿をコメントとしてどのように表示するかを決定するには、[[comment-presentation#How_to_display|comment presentation]] アルゴリズムを使用します。
+* 公開日時を決定するには：
+** h-entry が有効な日時である <var>published</var> または <var>updated</var> プロパティを持っている場合：
+*** 日時がフローティング（タイムゾーンなし）の場合、[[datetime#implying_timezone_from_webmentions|implied timezone]] ヒューリスティックを使用してタイムゾーンを決定します。
+** 固定された公開日時が未来である場合、現在時刻を上限とします。
+*** 派生した時間においてソースのタイムゾーンを保持したり、任意で10分程度の「未来」の投稿を許容する猶予時間を設けたりすることも検討してください。
+** 日時情報がない場合、その投稿が最初に確認された日時を公開日時とします。
+
+[[webmention]] や [[PuSH]]、その他の仕組みを通じて h-entry の更新通知を受けた場合：
+* 任意で現在のステータスをアーカイブします。
+* 上記と同じ日時解決プロセスを使用して、<var>updated</var> プロパティを投稿の更新日に更新します。
+* 上記の h-entry ごとのアルゴリズムを再適用し、[[published]] への更新は無視します。
+
+受信したコメントの処理、更新、削除については、[[comment]] に記載されているプロセスも参照してください。
+
+==== Issues ====
+===== move general processing =====
+[[comment]] に記載されているプロセスの多く（削除など）は、他の h-entry 利用ケース（リーダーなど）にも同様に適用でき、ここに記載された詳細の一部はコメント処理（日時の処理など）にも適用されます。一般的な h-entry 処理に適用可能なものはすべてここへ移動し、[[comment]] には特定のユースケースのみを残して、そこからこれらのアルゴリズムを参照するようにすべきです。 --[[User:Waterpigs.co.uk|Barnaby Walters]] 05:33, 9 June 2014 (PDT)
+
+===== bad hentry properties =====
+一部の h-entry では "content" プロパティが欠落しており、暗黙の "p-name" プロパティのみが不適切な値で設定されているケースが見られます。これらは aaronparecki.com の [https://aaronparecki.com/articles/2012/07/29/1/oauth2-simplified blog post] に pingback で送信された URL であり、microformats2 バージョンではなく [[hEntry]] 投稿です。
+* [[WordPress]] のクラシックな [[microformats]] "hentry" マークアップ：
+** http://raymondhlee.wordpress.com/2014/12/21/implementing-oauth2-with-spring-security/
+** http://curiouser.cheshireeng.com/2014/09/10/digression-using-oauth-2-0-at-wordpress-com/
+** http://blogmobile.itude.com/2014/04/08/checklist-for-building-an-api/
+** 分析：おそらく、他の hentry プロパティが欠落している不完全なテーマを伴うデフォルトの WordPress コアの "hentry" が問題の源です。
+** 解決案：クラシック・マイクロフォーマットの後方互換パースでは、暗黙のプロパティを取得すべきではないかもしれません。なぜなら、クラシック・マイクロフォーマットの作成者は暗黙のプロパティが発生することを想定していないからです。
+
+* …解決すべき h-entry 利用上の課題をここに追加してください。
+
+== IndieWeb Examples ==
+IndieWeb のほぼ全員が [[h-entry-ja|h-entry]] を公開しています。なぜなら、これは [[Webmentions]] による [[comments]] の連携や表示、返信ページでの高精度な [[reply-context]] の表示といった豊かな UX のための基本的な構成要素だからです。
+
+例えば、[[chat-names]] からリンクされている個人のサイトを参照してください。
+
+== What uses it ==
+数多くの [[projects]] やサイトが、以下のような様々な目的で h-entry をパース・利用しています：
+* [[reply-context]] - 特に、h-entry + [[h-card]] から解析された返信コンテキスト情報を表示している [[reply-context#IndieWeb_Examples|indieweb sites]] を参照。
+* [[comment-presentation]] - 他者の返信投稿から h-entry をパースして、転送されたコメントを表示している [[comment-presentation#Current_Indiewebcamp_Practices|indieweb sites]] を参照。
+要するに、[[h-entry-ja|h-entry]] は IndieWeb にとっての鍵となる構成要素です。これは、様々なユースケースで配信されるコンテンツの単位を表しています。
+
+== Requests ==
+h-entry サポートの追加リクエスト（公開および利用コードの両方）。
+=== Requested consuming code ===
+* Firefox reader 機能：https://bugzilla.mozilla.org/show_bug.cgi?id=543630
+
+== See Also ==
+* http://microformats.org/wiki/h-entry
+* [[microformats2]]
+* [[in-reply-to]]
+* [[datetime]]
+
+[[Category:microformats]]
+* to do: 投稿の明示的な [[audience]] を表現するためのメカニズム（プロパティとプロトコル？）を検討する問題を提起する。ユースケース：公開/保護/非公開が混在した投稿を単一の h-feed にエクスポートし、各投稿がそのオーディエンスを表現することで、インポート先で期待通りのプライバシーを再現できるようにする。
+* ^ この種の情報が欠落していることで問題が発生する現実世界の例（Twitter のエクスポート/インポートに関連）：https://indieweb.social/@philhawksworth/109353365961680480
+** 「私や他の多くの人々のように、ツイートを自身のサイトの新しい拠点に移動させている最中なら、注意が必要です。Twitter サークルのツイートはエクスポート時にラベル付けされないため、信頼できるグループ向けに意図したものが公開されてしまうリスクに注意してください」 [https://indieweb.social/@philhawksworth @philhawksworth] 2022年11月16日
+
+[[Category:Pages in Japanese]]
