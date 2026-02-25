@@ -1,0 +1,73 @@
+https://indieweb.org/How_to_set_up_web_sign-in_on_your_own_domain-ja
+
+[[Category:how]]
+
+自分の独自ドメインで [[web sign-in]] を設定する方法です。
+
+== 設定手順 ==
+自分の独自ドメインでウェブサインインのサポートを追加するには、2つの補完的な方法があります。
+
+* [[IndieAuth]]：自身のウェブサイトにサインインして、ドメインを検証します。
+* [[RelMeAuth]]：他のプラットフォームへの双方向リンクを使用して、ドメインを検証します。
+__TOC__
+
+=== IndieAuthの設定方法 ===
+WordPress、Known、Drupal、micro.blog、Gravなどの多様なウェブサイトプラットフォームには、[[IndieAuth]] のサポートが組み込まれているか、プラグインやモジュールで簡単に追加できます。使用しているサイトが対応していれば、素早くインストール、有効化し、いくつかの設定を行うだけでウェブサイトのウェブサインインを有効にできる場合があります。（対応していない場合は、以下の [[RelMeAuth]] 方式を試してください。）
+
+対応しているプラットフォームのリストやプラグイン、設定手順へのリンクについては、[[IndieAuth#IndieAuth_Providers|IndieAuth Providers]] を参照してください。
+
+設定が完了したら、[https://sso.indieweb.org/login?url=https%3A%2F%2Findieweb.org%2FMain_Page indieweb.org wikiへのログイン] を試してみてください。ログイン後、自身の情報を [[wikify]] することができます。
+
+=== RelMeAuthの設定方法 ===
+==== 1. ホームページからソーシャルプロフィールへリンクする ====
+
+自身のホームページから各プロフィールへリンクを貼り、リンクに <code>rel="me"</code> 属性を追加します。
+
+具体的には以下のような記述になります：
+
+<pre><ul>
+  <li><a href="https://github.com/aaronpk" rel="me">Githubの @aaronpk</a></li>
+  <li><a href="https://aaronpk.bsky.social" rel="me atproto">aaronpk.bsky.social</a></li>
+  <li><a href="mailto:me@example.com" rel="me">me@example.com</a></li>
+  <li><a href="sms:+15035551212" rel="me">(503) 555-1212</a></li>
+</ul></pre>
+
+リンクを可視化したくない場合は、ホームページの head セクション内に visible なリンクの代わりに link 要素を使用することもできます。
+
+<pre>
+<link rel="me" href="https://github.com/aaronpk" />
+</pre>
+
+ただし、不可視のデータよりも可視化されたリンクが推奨されます。その理由については [[antipattern#invisible_metadata|antipattern:invisible metadata]] を参照してください。
+
+このWikiは認証に indielogin.com を使用しています。認証に使用できるサービスの一覧は https://indielogin.com/setup を参照してください。
+
+==== 2. 各サービスからホームページへリンクする ====
+
+各サービスから自身のホームページへの逆リンクがあることを確認する必要があります。便宜上、サポートされている全サービスの「プロフィール編集」リンクを以下にまとめました。これらのサービスの自己紹介（bio）欄に代替URLを追加することも可能です。
+
+* [https://github.com/settings/profile Githubプロフィールの編集]
+
+メールアドレスやSMSによるログインの場合は、どこかにリンクを追加する必要はありません。代わりに、メールや電話に送信されるショートコードを介して本人確認を行います。
+
+==== 3. 完了！ ====
+
+以上です！これで完了です。これで、[http://microformats.org/wiki/web-sign-in web sign-in] をサポートしている任意のサイトに自身のドメインを使ってサインインできるようになります。
+
+[https://sso.indieweb.org/login?url=https%3A%2F%2Findieweb.org%2FMain_Page indieweb.org wikiへのログイン] を試して、自身の情報を [[wikify]] してみましょう。
+
+== 既知の問題 ==
+* 2018-06-03: Google+ および Flickr を使用した [[RelMeAuth]] はしばらく機能しておらず、このページの推奨事項から削除されました。Wikiが [[IndieLogin.com]] の使用に切り替わったため、サポートされている認証メカニズムのリストについては同サイトのドキュメントを参照してください。
+* …具体的な問題がある場合は、日付と解決策をここに追記してください。
+
+== なぜ必要か ==
+[[Why web sign-in]] を参照してください。
+
+== 関連項目 ==
+* [[web-sign-in]]
+* [[creator]]
+* [[why-ja|なぜIndieWebを実践するのか]]
+* [[RelMeAuth]]
+* [[IndieAuth]]
+
+[[Category:Pages in Japanese]]
