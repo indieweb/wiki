@@ -1,0 +1,199 @@
+https://indieweb.org/h-card-ja
+
+[[File:h-card.svg|frameless|right|128px|h-card icon]]
+
+{{stub}}
+
+'''<dfn>[https://microformats.org/wiki/h-card h-card]</dfn>'''は、ウェブサイト上で人物、組織、会場をマークアップするための[[microformats2]]語彙であり、hCardを継承するものです。名前、住所、写真、関連する連絡先情報などのアイデンティティ情報を含むことが多いため、俗語として、名刺のオンライン版の同義語として「h-card」という言葉を使う人も多くいます。
+
+<div style="clear: both"></div>
+
+== なぜ必要か ==
+'''name'''（名前）、'''url'''、'''photo'''（写真）プロパティを含む最小限のh-cardを[[homepage]]のプロフィールにマークアップすることで、インディーウェブにおけるh-cardの利用シーンのほとんどをカバーできます：
+
+* フィード[[readers]]が、投稿の横にあなたのプロフィール写真を表示できるようになります。
+* あなたの投稿に対する[[reply]]（返信）投稿の[[reply context]]内に、あなたの著者プロフィールが表示されます。
+* あなたが返信した先の投稿の[[comments]]表示欄に、あなたの著者プロフィールが表示されます。
+* [[IndieAuth]]でサインインしたアプリ（またはあなたのURLを知っているアプリ）が、あなたの名前と写真を自動入力・自動更新できるようになります。
+* [[Why_web_sign-in#Why_not_email|メールアドレスの代わりにドメイン]]に基づいた[[Gravatar]]のようなルックアップが可能になります。
+
+== 方法 ==
+=== マークアップ方法 ===
+名前、写真、URLのための最小限の[[h-card-ja|h-card]]は、2つの要素と1つのクラス名で作成できます。例：
+
+<pre>
+<a class="h-card" href="http://waterpigs.co.uk">
+ <img src="/photo.png" alt="" />
+ Barnaby Walters
+</a>
+</pre>
+
+[[WordPress]]でのh-card作成の詳細は、[[Getting_Started_on_WordPress#Identity_2|Getting Started on WordPress]]に記載されています。
+
+投稿内で誰かに言及するときにh-cardを含めることもできます。以下のような最小限のマークアップから始めてください：
+<pre>
+ <a class="h-card" href="https://aaronparecki.com">Aaron Parecki</a>
+</pre> 
+
+言及に相手のサイトへのリンクが含まれている場合、相手は[[person-mention|@-mention]]を受け取ることができます。その投稿がその人物に関するものであることや、その人物が主題であることを伝えたい場合は、[[person-tag]]を使用してください。
+
+== バリデーター ==
+
+以下のバリデーターを使用して、ホームページのh-cardの完全性やよくある間違いを確認できます：
+* [https://indiewebify.me/validate-h-card/ indiewebify.me h-card]
+* [https://pin13.net/mf2/ pin13.net mf2 parser]（解析された生のJSONを表示）
+
+== 課題 ==
+
+純粋にユーザー機能の観点から、かつ[[antipatterns#invisible_metadata|不可視のメタデータ]]がないと仮定した場合、以下のようなことは（h-cardを使って）どのように達成されるのでしょうか？
+
+* 投稿にはプロフィール情報（名前など）を表示したいが、写真は表示したくない。一方で、別のページ（例：'''/about'''）には写真（[[icon]]を含む）など追加のプロフィール情報を表示したい場合。
+
+* 他人の投稿に[[comment]]、[[like]]、[[repost]]、[[rsvp]]をした際、相手がその反応を表示する（[[comments-presentation]]）にあたって、相手が望むなら写真を含む私の追加プロフィール情報を表示できるようにしたい。''[[authorship]]（著者情報）で一部は解決しますが、例えば「自分のサイトのどこにも写真を表示していない」ケースなどはカバーできないかもしれません。''
+
+* 同様に、このWikiのようなサイトに[[IndieAuth]]などでログインした際、サイト側が私の写真を含む追加のプロフィール情報を見つけ出し、プロフィールページやアクティビティ、その他の適切な場所に表示できるようにしたい。''[https://microformats.org/wiki/representative-hcard-parsing 代表的なh-cardの解析]は惜しいところまで行っていますが、完全ではありません。以下の[[#Brainstorming|ブレーンストーミング]]にある案が助けになるかもしれません。''
+
+h-card特有の視点からは、以下のような追加の課題や質問があります：
+* 一部の人々（例：[[User:David.shanske.com|GWG]]、[[User:kartikprabhu.com| Kartik]]、[[User:Snarfed.org]]、[[User:Mowens.com]]、{{gRegor}}、{{kisik21}}、{{LewisCowles}}、[[User:Jmtd.net about|jmtd]]）は、ページ上に最小限のh-cardを掲載しつつ、詳細な情報（連絡先や写真など）を含む「完全な」h-cardへのリンクを設ける方法を求めています。[[authorship]]と[https://microformats.org/wiki/representative-hcard-parsing 代表的なh-cardの解析]は関連していますが少し異なり、現在はどちらもインラインのh-cardがあればそれのみを使用します。インラインのh-cardに拡張版h-cardへのリンクを含めることができるかもしれません。
+
+* 同様に、一部の人々（例：[[User:Snarfed.org]]、[[User:Mowens.com]]、{{gRegor}}）は、h-cardの一部をどこにも表示させたくないが、プログラムによる利用者には提供したいと考えています（例：一部のサイロへのrel-meリンク、公開暗号鍵など）。関連：[[antipatterns#invisible_metadata]]
+** 私のサイトでは現在、各投稿の著者hCardを非表示にしています。すべての投稿に自分の写真やURL、名前を表示する必要性を感じないからです。マルチ著者サイトであれば話は別でしょう。{{gRegor}}
+** 私もデザイン上の理由でホームページのh-cardを非表示にしています。詳細はそこに出したくないからです。[[User:jeremycherfas.net|Jeremy Cherfas]]
+
+=== h-cardにおいて何が <code>u-url</code> であるべきで、何がそうでないべきか？ ===
+'''答え：''' ホームページ、およびその人物や組織を代表するその他のURLです。この点を明確にするため、2019年5月8日にh-cardの仕様が更新されました。[https://microformats.org/wiki/index.php?title=h-card&diff=67001&oldid=66804&rcid=103888]
+
+これまでの議論：
+# [https://microformats.org/wiki/h-card 仕様]では、<code>u-url</code> はアイデンティティの「ホームページ」のためのものであるとされています。
+# [https://microformats.org/wiki/hcard-authoring#Link_it_up hCardオーサリングの「Link it up」セクション]では、「あなたのウェブサイト、ソーシャルネットワークのプロフィール、および特にあなたを代表するその他のサイトへのリンクを、クラス名 <code>url</code> を使ってhCardに追加すること」を推奨しています。（注：h-card-authoringがまだ書かれていないため、h-cardから間接的にリンクされています）。そして、[[rel-me]]リンクにこのクラスを付与する[https://microformats.org/wiki/hcard-authoring#connect_with_yourself 例]を示しています。
+
+両方の解釈の例が存在します：
+
+# {{aaronpk}} は、自身のホームページのh-cardに <code><nowiki>aaronparecki.com</nowiki></code> と <code><nowiki>w7apk.com</nowiki></code> のみをurlプロパティとして含めています。外部プロフィールは [[rel-me]] 解析を通じてのみ見つけることができます。
+# {{t}} は、ホームページのh-cardにすべての [[rel-me]] リンクをurlプロパティとして含めています。
+
+一般的なアドバイスはどうあるべきでしょうか？ [[silo]]（サイロ）のアイデンティティは、依然として <code>u-url</code> でマークアップされるべきホームページなのでしょうか？
+
+# {{jacky}} は（2022-05-17）、インディーウェブで利用可能なマークアップ（[[microformats]]など）を持つページのみを [[h-card]] からリンクすべきであり、それ以外はすべて [[rel-me]] 経由でリンクすればよいと考えています。
+
+== インディーウェブでの例 ==
+インディーウェブの基本的な[[building-block]]（構成要素）として、h-cardはオンライン[[identity]]の確立に役立ちます。多数の例が[https://microformats.org/wiki/h-card#Examples_in_the_wild Microformats Wiki]に掲載されているほか、以下の例も参考にしてください：
+
+=== Chris Aldrich ===
+{{chrisaldrich}} は、[https://boffosocko.com ホームページの右サイドバー]に、人間が読めるデータとマシンが読めるデータの両方を備えたh-cardを設置しています。
+
+=== Martijn van der Ven ===
+{{martijnvdven}} （[https://twitter.com/martijnvdven 自称]「h-card術」の達人）は、http://vanderven.se/martijn/ に広範なh-cardを公開しています。これには[https://microformats.org/wiki/microformats2-experimental-properties#p-x-dietary-preference 食事の好み]のような実験的プロパティや、[https://microformats.org/wiki/measure-brainstorming h-measure]のような実験的フォーマット、分単位で指定された <code>dt-bday</code> などが含まれます。
+* 彼のカードから何か一つ取り入れるなら、[[pronoun]]（代名詞）のマークアップを見てほしいとのことです。
+
+=== gRegor Morrill ===
+{{gRegor}}: gregorlove.com の各 [[h-entry]] のフッターにh-cardを置いていますが、[[about]] ページにある既存の情報をマークアップし、各投稿からそこへリンクする実験をしてみたいと考えています。
+
+=== Amit Gawande ===
+{{Amit Gawande}} は、[https://www.amitgawande.com ウェブサイトのフッター]にh-cardを設置しており、名前、ニックネーム、メールアドレス、写真の情報を含めています。
+
+=== Jacky Alcine ===
+{{JackyAlcine}} は、[https://jacky.wtf サイトのフッター]に位置情報を含むh-cardを設置しています。
+
+2022年3月25日現在、フル版のh-cardは [https://jacky.wtf/about 自己紹介ページ] にあり、各ページには「軽量版」を置いています。
+
+=== Piper McCorkle ===
+{{pmc}} は、[https://piperswe.me ウェブサイトのホームページ]の中央上部にh-cardを設置しています。
+
+=== Jamie Tanna ===
+{{jamietanna}} は、https://www.jvt.me のトップページに個人のh-cardを置いています。
+
+=== Simon Prickett ===
+simonprickett.dev は、https://simonprickett.dev のトップページにh-cardを置いています。
+
+=== Kev Quirk ===
+{{kevquirk}} は、自身のサイト https://kevq.uk のホームページに個人のh-cardを置いています。
+
+=== Ethan Yoo ===
+{{ethanyoo}} は、2020年11月25日に名前、URL、代名詞、ノート、写真、メールアドレスのh-cardマークアップを https://www.ethanyoo.com に追加しました。
+
+=== Watts Martin ===
+Wattsは、自身のウェブサイト [https://coyotetracks.org/ Coyote Tracks] のトップページにh-cardを置いています。
+
+=== Peter Smith ===
+多くのデバッグとこのリストの仲間の助けを経て、{{Petersmith.org}} は2022年12月10日、Javascriptを使わずに自身のHugoウェブサイト [https://petersmith.org] でh-cardマークアップ（名前、URL、ノート、写真）を動作させました。
+
+=== Jasmine Amalia ===
+[[User:Jasm1nii.xyz|Jasmine]] は、[https://jasm1nii.xyz/ ホームページ] 上でh-cardを文字通りの「カード」としてデザインしました。彼女の [https://mas.to/@jasmine@jasm1nii.xyz Mastodonアカウント] 用のヘッダー画像（u-featured）は、イースターエッグ 🌼 の中に隠されています。
+
+=== Otto Rask ===
+Otto Raskは、[https://www.ottorask.com 自身のウェブサイト] の各ページのフッター付近に汎用的なh-cardを設置しています。
+
+=== Coding Otaku ===
+[[User:Codingotaku.com|Coding Otaku]] は、[https://codingotaku.com ホームページ] にh-cardを設置し、他の全ページの記名フッター部分にもh-cardを含めています。
+
+=== 自身を追加してください！ ===
+
+=== h-cardを使用しているツール ===
+
+* [[Telegraph]] は、ログイン後にあなたのプロフィールアイコンと名前を取得するためにホームページのh-cardを使用します。[https://chat.indieweb.org/2016-01-05/1452020782123000]
+* [[indiewebring]] は、[https://xn--sr8hvo.ws/directory ディレクトリ] 表示のためにh-card情報を解析します。
+* ほとんどの[[comments#IndieWeb_Examples|コメント実装]]はh-cardを消費します。
+* ほとんどの[[reply-context-examples|reply-context実装]]はh-cardを消費します。
+* ほとんどの[[reader]]はh-cardを消費します。
+* …
+
+[[microformats]] wikiでも [https://microformats.org/wiki/h-card#Examples_in_the_wild 実世界での例] を収集しています。
+
+== 記事 ==
+* 2020-04-11 [https://randomgeekery.org/ Brian Wisti] [https://randomgeekery.org/2020/04/11/indieweb-h-cards/ Indieweb h-cards: microformatsを使ってプロフィールページを構築する]
+
+
+== ブレーンストーミング ==
+=== 部分的 vs 完全版 ===
+[[#Issues|「部分的＋完全版のh-card」問題]]の一つの解決策は、完全なh-cardへのrel-meリンクを含めつつ、ホームページ上の部分的なプロフィール情報はh-cardとしてマークアップ「しない」ことです。[https://microformats.org/wiki/representative-h-card-parsing 代表的なh-cardの解析]アルゴリズムがそのrel-meリンクを辿り、完全なデータを利用することになります。理想的とは言えませんが、機能はします。
+
+この方法の問題点は、ホームページには通常多くのrel-meリンク（例：サイロへのリンク）があり、どれが「カノニカル（正規）」なものであるかを示す方法がまだないことです。{{gRegor}}、[[User:Mowens.com]]らは、このために u-uid や新しい rel-canonical プロパティを使用することを提案しています。
+
+* どのh-cardが最も完全で正規のアイデンティティh-cardであるかを指定するために、<code>uid</code> で何かできないか考えています。 — {{martijnvdven}}
+* {{jacky}} は、曖昧さ回避のために自身の代表的なh-cardに "rel=canonical" を使用しています。
+* <del>[https://microformats.org/wiki/rel-author rel-author] はこれに適しているでしょうか？ 投稿ページから著者のURLへリンクするのには理にかなっていますが、パブリッシャーがホームページには部分的なh-cardを置き、/aboutページなどに拡張版を置きたい場合にはあまり向かないかもしれません。 — {{barnabywalters}}</del>
+* 「ホームページに部分的、別ページに拡張版」というユースケースには、rel=aboutが理想的かもしれません。「about（について）」は、UIとURLデザインの両方において「このサイト/人物に関する追加情報」を指す非常に一般的な用語だからです。rel-authorをオーバーロードすることもなく、連鎖させることも可能です。例えば、消費側の実装が投稿ページで最小限のh-cardを見つけ、そのurlプロパティを取得して同じ最小限の代表的h-cardを見つけ、さらにそのページにあるrel=aboutリンクを辿って完全なh-cardがあるページにたどり着く、といった具合です。 — {{barnabywalters}}
+** これが受け入れられれば、[[authorship]] と [[representative h-card]] の仕様に「著者/代表h-cardが見つかった際、同じページにrel=aboutリンクがあれば、消費側はオプションでそのページを取得し、（代表URLやuidが一致する）人物に関する詳細情報を含むh-cardを解析できる」といった付録を追加するだけで済みます。 — {{barnabywalters}}
+** {{snarfed}} による [[indiemap]] データの検索結果（感謝！）は以下の通りです：
+*** rel=About 150件
+*** rel=about 95件
+*** その他バリエーション（about…、about,, など）12件
+*** さらに分析したところ、indiemapにおける rel=About/about の使用例はすべて一つのドメインからのもので、拡張プロフィールページへのリンクとしては使用されていなかったため、実世界でそのように使われている証拠は皆無のようです。
+* [https://microformats.org/wiki/RelMeAuth#users_with_separate_contact_pages relmeauth] [https://microformats.org/wiki/RelMeAuth#detailed_algorithm 仕様]では、拡張連絡先ページへのリンクに単に rel-me を使うことを提案しており、消費側は追加の連絡先情報を探す際に、同じドメインに一致する rel-me URLを調べて取得することを想定しています。 — {{barnabywalters}}
+** 実世界での例は？
+** aaronparecki.com には aaronparecki.com/aaronpk への rel-me があり、そこにはフォロワー数などのカウントはありますが、追加のh-card情報はありません。
+** {{snarfed}} が [[indiemap]] データをクエリしたところ、[https://console.cloud.google.com/bigquery?sq=586366768654:047463741d5343c3ab218b152561b005&project=api-project-962594101220&ws=!1m5!1m4!1m3!1sapi-project-962594101220!2sbquxjob_7951a0a1_1845465c1ca!3sUS 同一ドメインのrel-me公開パターンの例が29件]見つかりました。
+** 同一または類似ドメインのrel-me公開パターンの例：
+*** http://equivalentideas.com/contact
+*** https://webrocker.de/impressum/
+** indiemapにおける同一または類似ドメインの /about 公開パターン（現在はrel-meマークアップなし）は90件あり、[https://docs.google.com/spreadsheets/d/10y3irnLHP8ntdyFZxlQD4MI2Mmhevc6zLnV8epDWvxI/edit?pli=1#gid=1780452207 こちらにリスト]されています。
+** indiemapにおける {domain}/contact の例は46件あり、これらはおそらく追加の連絡先（プロフィール）情報と問い合わせフォームが混在しています。[https://console.cloud.google.com/bigquery?sq=586366768654:515ee576e5f348688c809723f7078088&project=api-project-962594101220&ws=!1m5!1m4!1m3!1sapi-project-962594101220!2sbquxjob_19ed8cf6_184548f8ab4!3sUS ここでクエリ可能]です。
+
+=== 代名詞のユースケース ===
+より多くの情報や追加プロパティを加えることで、さらなる可能性が開かれます：
+
+* アプリがあなたの好みの[[pronoun]]（代名詞）を見つけて表示・利用できるようになります。
+** どのアプリで？ 具体的にどのようなユースケースで表示が必要になるでしょうか？
+*** [[reader|ソーシャルリーダー]]が、アクション内での短い言及に使用できます（例：「彼（they）はこの写真をいいねしました」）。{{jacky}} 2022-07-03
+*** [[ticketing|IndieAuthのチケッティング]]をサポートする [[IndieAuth]] クライアントが、人間向けの言語を使用できます（例：「xer に $RESOURCE へのチケットを送信しますか？」）。{{jacky}} 2023-11-18
+* …
+
+=== h-cardジェネレーター ===
+h-cardジェネレーターが必要です。どなたかボランティアはいませんか？
+
+以下のツールの代替となるものが必要です：
+
+{{warning|以下は microformats2 の h-card ではなく、古い microformats1 の hCard を生成します。<br>ツールが更新されるまで、使用しないほうがよいでしょう。}}
+[[microformats]] ウェブサイトには、[https://microformats.org/code/hcard/creator 空欄補充式の hCard ジェネレーター]があります。表示したいデータを入力すると、適切なマークアップが自動生成され、そのセマンティックなHTMLをウェブページにコピー＆ペーストできるようになっています。
+
+== 関連項目 ==
+* [[microformats]]
+* [[h-entry-ja|h-entry]]
+
+[[Category:building-blocks]]
+[[Category:microformats]]
+* [https://chat.indieweb.org/dev/2018-04-30#t1525100824911600 h-cardへの発音ガイド追加に関する議論]
+* 批判： https://github.com/tootsuite/mastodon/pull/6645#issuecomment-381345084
+
+[[Category:Pages in Japanese]]
