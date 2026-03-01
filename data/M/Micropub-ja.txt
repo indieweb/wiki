@@ -1,0 +1,507 @@
+https://indieweb.org/Micropub-ja
+
+<span style="background:white; float:right;">[[File:micropub.svg|frameless|128px|Micropub icon]]<br>
+[[File:w3c-logo.svg|frameless|128px|W3C logo]]</span>
+
+'''<dfn>Micropub</dfn>''' は、オープンな Web 標準（[[W3C]] 勧告）であり、自身のドメインのようなウェブサイト上で投稿の作成、編集、削除を行うための API です。数多くのサードパーティ製クライアント、[[CMS]]、[[social readers|ソーシャルリーダー]]によってサポートされています。
+
+* 最新の公開バージョン: https://www.w3.org/TR/micropub/
+* 最新のドラフト: https://micropub.spec.indieweb.org/
+
+[[File:w3c-spec-REC.svg|640px]]
+
+== なぜ ==
+'''ユーザーとして''' Micropub アプリを使用する最大の理由は、ユーザーによる選択権にあります。公開に使用したい Micropub アプリケーションと、それとは別に、使用したい Micropub 対応サービスまたはオープンソースソフトウェアを自分で選択することができます。
+
+'''開発者として'''は、以下を含む数多くの理由があります：
+* '''テストスイート。''' クライアントおよびサーバーの完全なテストスイート： https://micropub.rocks/
+* '''多様なネットワーク効果。''' あなたの実装が相互運用できるクライアントやサーバーが、すでに多様に存在しています。
+* '''ユーザーのプライバシーとセキュリティ。''' パスワード共有（しばしば平文）に依存する [[MetaWeblog]] や [[AtomPub]] の使用を、OAuth ベースの [[Micropub]] に置き換えることができます。
+__TOC__
+
+== クライアント ==
+{{main|Micropub/Clients}}
+
+自身のサイトで [[article|記事]]、短い [[note|ノート]]、[[reply|コメント]]、[[like|いいね]]、[[photo|写真]]、[[event|イベント]]、その他の種類の [[posts|投稿]] を行ったり編集したりするために、Micropub をサポートする幅広いアプリ（Web、iPhone、Android）が存在します。
+
+Micropub 経由で公開を行うサイトやクライアントアプリケーションのリスト、および実装状況を示す表については、メイン記事の [[Micropub/Clients|Micropub クライアント]] を参照してください。
+
+== サーバー ==
+{{main|Micropub/Servers}}
+
+Micropub エンドポイントの例は [[Micropub/Servers]] にリストされています。
+
+
+----
+このページの残りの部分では、Micropub の高度に技術的な詳細について説明しており、現在は開発者向けに書かれています。
+----
+
+
+== 背景 ==
+Micropub の語彙（Vocabulary）は、Microformats の語彙から直接派生しています。Micropub は、HTTP POST として送信可能な Microformats のシリアル化となることを意図しています。新しい Micropub 語彙を開発する方法は、Microformats の表現を確認し、そこから逆方向にたどることです。
+
+== 構文 ==
+[[microformats|Microformats]] が HTML ドキュメントをデータ構造にパースするための比較的小さなルールセットを持っているのと同様に、Micropub は HTTP POST および GET リクエストを Micropub コマンドとして解釈するための小さなルールセットを定義しています。Microformats が h-entry のようなオブジェクトの新しいプロパティを導入するためにパースルールを変更する必要がないのと同様に、Micropub も動画の投稿と「いいね」の投稿など、異なる投稿タイプに対応するリクエストを解釈するためにパースルールを変更する必要はありません。
+
+Micropub の構文は、HTTP POST および GET リクエストをサーバーが実行可能な有用なアクションに解釈する方法を記述しています。
+
+完全な仕様書は https://www.w3.org/TR/micropub/ で読むことができます。
+
+=== 概要 ===
+
+投稿を作成するためのすべての Micropub リクエストは、フォームエンコード（form-encoded）[http://www.w3.org/TR/html5/forms.html#url-encoded-form-data]、マルチパート・フォームデータ（multipart form-data）[http://www.w3.org/TR/html5/forms.html#multipart-form-data]、または JSON エンコードされた HTTP リクエストとして送信されます。レスポンスには通常レスポンスボディは含まれず、必要な情報（作成された投稿の URL など）は HTTP ヘッダーに示されます。レスポンスボディが必要な場合は、HTTP Accept[http://tools.ietf.org/html/rfc7231#section-5.3.2] ヘッダーに応じて、フォームエンコードまたは JSON[https://tools.ietf.org/html/rfc7159] のいずれかで返されます。
+
+
+== 実装方法 ==
+エンドポイントを発見してそこに公開できるクライアント、およびリクエストに応じて投稿の作成/更新/削除を行うエンドポイントをサポートするサーバーの両方において、Micropub API を実装する方法について説明します。
+
+'''テストスイートを進めて、Micropub の実装レポートを提出しましょう！'''
+* ここから開始： https://micropub.rocks/
+
+=== エンドポイントの発見 ===
+IndieAuth を使用して自身のドメイン名として認証を行うことで、API クライアントを設定できる必要があります。サインインした後、自身のドメインは、クライアントが新しい投稿を作成するために使用する API エンドポイントを指定する方法を必要とします。
+
+ホームページの HTML head 内に <link> タグを追加するか、HTTP Link ヘッダーを送信します。
+
+==== HTTP ヘッダー ====
+<pre>Link: &lt;https://example.com/micropub&gt;; rel="micropub"</pre>
+
+==== HTML Head ====
+<pre>&lt;link rel="micropub" href="https://example.com/micropub"&gt;</pre>
+
+=== 認証 ===
+Micropub リクエストは、[http://tools.ietf.org/html/rfc6750#section-2 OAuth Bearer Token RFC] に記述されているように、HTTP ヘッダーまたはフォームエンコードされたボディパラメータのいずれかにベアラートークン（Bearer Token）を含めることで認証されます。
+
+認可は、OAuth 2.0 の上に構築された IndieAuth プロトコルを介して処理されるべきです。詳細については [[obtaining-an-access-token]] を参照してください。ユーザーの Micropub エンドポイントに投稿したいアプリは、アクセストークンを取得するためにユーザーから認可を得る必要があります。
+
+==== HTTP ヘッダー ====
+<pre>
+Authorization: Bearer XXXXXXXX
+</pre>
+
+==== フォームエンコードされたボディパラメータ ====
+<pre>
+access_token=XXXXXXXXX
+</pre>
+
+=== スコープ ===
+クライアントは認可リクエスト中に1つ以上のスコープを要求することができます。これは、認可リクエストの中でスペース区切りのスコープ名のリストを渡すという、標準的な OAuth 2.0 の手法に従って行われます。
+
+認可サーバーは、認可サーバーがそのスコープを認識しているかどうかにかかわらず、リクエストの一部であるすべてのスコープをユーザーに示す必要があります。また、認可サーバーは、クライアントが要求したスコープをユーザーが追加または削除できるようにしても構いません。
+
+例えば、ほとんどの Micropub サーバーは、投稿を作成するためにクライアントが "create" スコープを取得することを要求します。（レガシーな "post" スコープは、以前は作成と更新の両方を網羅していました。）しかし、一部のサーバーでは、"delete" や "create:video" など、よりきめ細かなスコープのリクエストを要求する場合があります。詳細および現在使用されているすべてのスコープ値のリストについては、[[scope]] を参照してください。
+
+=== 検証 ===
+Micropub クライアントは、ユーザーの [[token endpoint|トークンエンドポイント]] に問い合わせることで、アクセストークンがまだ有効であること（およびその他の詳細）を確認できます。
+
+課題：
+
+* これは、例えばユーザーのサイトへのアクセス権が削除されたために、サーバーがトークンを受け入れないことを決定した場合をカバーしていません。
+** Micropub エンドポイントが将来的にトークンを拒否する予定がある場合は、トークンエンドポイントもそのトークンを拒否するようにする必要があります。トークンエンドポイントと Micropub エンドポイントが同じソフトウェアの一部であるシステムでは、これは実装の詳細です。トークンエンドポイントと Micropub エンドポイントが異なるシステムにある場合は、Micropub エンドポイントがトークンエンドポイントでトークンを期限切れにするためのメカニズムが必要です。これはトークン失効（token revocation）として知られており、OAuth 2 向けに書き上げられています： https://tools.ietf.org/html/rfc7009
+
+=== フォームエンコードされた Microformats 表現 ===
+クライアントとサーバーの作成をシンプルにするために、すべての Micropub エンドポイントは標準のフォームエンコード形式を処理する必要があります。最も基本的なレベルでは、HTML フォームを作成し、フォームの action を自身のエンドポイントに設定して、自身のサイトへの投稿に使用できるはずです。
+
+
+=== オブジェクト作成の例 ===
+一般的な [[:Category:PostType|投稿タイプ]] の作成方法です。
+
+==== 作成されるオブジェクトの指定 ====
+
+作成されるオブジェクトを指定するには、"h"（これは Microformats オブジェクトのプロパティ名にはなり得ません）という名前のプロパティを使用し、その後に Microformats オブジェクトの名前を続けます。例：
+
+* h=entry
+* h=card
+* h=event
+* h=cite
+
+==== h-entry ====
+
+新しい [[h-entry-ja|h-entry]] を作成するリクエストには、以下のプロパティが含まれる場合があります：
+
+* name
+* summary
+* content
+* published
+* updated
+* category = tag1, tag2, tag3 (配列構文として送信： <code>&category[]=tag1&category[]=tag2</code>)
+* location
+** [http://tools.ietf.org/html/rfc5870 Geo URI] として。例： <code>geo:45.51533714,-122.646538633</code>
+*** GeoURI では、場所の名称を含めるために使用できる [https://tools.ietf.org/html/rfc5870#section-6.4 追加パラメータ] が許可されています： <code>geo:1,2;name=Somewhere</code>
+** [[h-card-ja|h-card]] を含む URL として。
+** 私の Micropub クライアントには現在、緯度経度値で特定の場所をマークするための地図と、実際の場所名を入力するためのテキスト入力があります。そのため、私のクライアントは "&location=1.23,%40-4.56:An%40Address" という形式のリクエストを送信しています。 [[User:Jonnybarnes.net|Jonnybarnes.net]] 07:57, 10 June 2014 (PDT)
+* in-reply-to
+* like-of
+* repost-of
+* syndication
+** このエントリがすでに存在している場所を指す1つ以上の URL を渡します。 [[PESOS]] の実装に使用できます。
+* [[mp-syndicate-to]] = <nowiki>https://myfavoritesocialnetwork.example/aaronpk, https://archive.org/</nowiki> など。
+** このプロパティは、オブジェクトを記述するのではなくサーバーにコマンドを与えるものであるため、他のプロパティとはわずかに異なり、"mp-" というプレフィックスが付けられています。
+
+===== 新しいノート =====
+
+タグを付け、myfavoritesocialnetwork にシンジケーション（転載）を行う、新しい [[note|ノート]] の投稿：
+
+* content
+* category
+* mp-syndicate-to
+* published (任意。存在しない場合はデフォルトで「現在」になります。オフラインで書いて後で同期する場合に便利です)
+
+<pre style="overflow: auto">
+POST /micropub HTTP/1.1
+Host: aaronparecki.com
+Content-type: application/x-www-form-urlencoded
+
+h=entry
+&content=The+%40Jawbone+UP%2C+my+favorite+of+the+%23quantifiedself+trackers%2C+finally+released+their+official+API%21+http%3A%2F%2Fjawbone.com%2Fup%2Fdeveloper%2F
+&category[]=jawbone&category[]=quantifiedself&category[]=api
+&mp-syndicate-to=https://myfavoritesocialnetwork.example/aaronpk
+</pre>
+
+====== 最小限の例 ======
+<pre style="overflow: auto">
+POST /micropub HTTP/1.1
+Host: example.com
+Content-type: application/x-www-form-urlencoded
+Authorization: Bearer XXXXXXX
+
+h=entry
+&content=Hello+World
+</pre>
+
+<pre style="overflow: auto">
+curl https://example.com/micropub -d h=entry -d "content=Hello World" -H "Authorization: Bearer XXXXXXX"
+</pre>
+
+===== 新しい返信 =====
+
+新しい [[reply|返信]] の投稿、myfavoritesocialnetwork へのシンジケーション：
+
+* content
+* in-reply-to
+* mp-syndicate-to
+* published
+
+<pre style="overflow: auto">
+POST /post/new HTTP/1.1
+Host: aaronparecki.com
+Content-type: application/x-www-form-urlencoded
+
+h=entry
+&content=%40BarnabyWalters+My+favorite+for+that+use+case+is+Redis.+It%27s+easy+to+set+up+and+use%2C+I+often+use+it+to+move+data+between+apps+written+in+different+languages+too.
+&in-reply-to=http://waterpigs.co.uk/notes/4S0LMw/
+&mp-syndicate-to=https://myfavoritesocialnetwork.example/aaronpk
+</pre>
+
+===== 新しいリポスト =====
+
+新しい [[repost|リポスト]] を投稿し、追加のタグを付与します。
+
+* repost-of
+* category
+
+<pre>
+POST /micropub HTTP/1.1
+Host: aaronparecki.com
+Content-type: application/x-www-form-urlencoded
+
+h=entry
+&repost-of=http://waterpigs.co.uk/notes/4S0LMw/
+&category=realtime
+</pre>
+
+===== 新しい記事 =====
+
+新しい [[article|記事]] の投稿
+
+* content
+* name
+* category
+* published
+
+<pre style="overflow: scroll">
+POST /micropub HTTP/1.1
+Host: aaronparecki.com
+Content-type: application/x-www-form-urlencoded
+
+h=entry
+&content=Now+that+I%27ve+been+%5Bhttp%3A%2F%2Faaronparecki.com%2Fevents+creating+a+list+of+events%5D+on+my+site+using+%5Bhttp%3A%2F%2Findiewebcamp.com%2Fp3k+p3k%5D%2C+it+would+be+great+if+I+could+get+a+more+calendar-like+view+of+that+list.+%0A%0ASince+I+live+in+Google+Calendar+every+day+anyway%2C+it+would+be+great+to+use+that+interface+to+browse+my+%23indieweb+events+as+well%21+Since+my+events+page+is+marked+up+with+%5Bhttp%3A%2F%2Fmicroformats.org%2Fwiki%2Fh-event+h-event+microformats%5D%2C+all+it+would+take+is+to+write+an+h-event+to+iCal+converter+script+to+generate+an+iCal+feed+from+my+list+of+events.+Then+I+could+just+subscribe+to+the+iCal+feed+from+within+Google+Calendar.%0A%0A%23%23%23+Bonus%3A+read%2Fwrite+access+to+indieweb+events+via+Google+Calendar%0A%0AEven+better+would+be+to+use+Google+Calendar+to+also+create+events+on+my+site.+Unfortunately+Google+Calendar+doesn%27t+support+CalDAV%2C+so+we+can%27t+do+it+that+way.+%28Of+course+I+could+use+Apple%27s+iCal+to+publish+directly%2C+but+that+also+means+I%27d+have+to+write+some+code+tot+speak+CalDAV%29.+%0A%0AInstead%2C+I+can+create+a+%22write-only%22+calendar+in+Google+Calendar%2C+and+have+p3k+subscribe+to+it.+Any+new+events+in+that+feed+would+be+moved+over+to+the+internal+events+page+and+deleted+from+the+Google+Calendar.
+&name=Itching%3A+h-event+to+iCal+converter
+&category[]=indieweb&category[]=hevent&category[]=events&category[]=calendar&category[]=p3k
+</pre>
+
+===== 新しいブックマーク =====
+
+名前、引用、およびタグを含めた新しい [[bookmark|ブックマーク]] の投稿。
+
+* bookmark-of
+* name
+* content
+* category
+
+<pre style="overflow: auto">
+POST /micropub HTTP/1.1
+Host: aaronparecki.com
+Content-type: application/x-www-form-urlencoded
+
+h=entry
+&bookmark-of=https%3A%2F%2Fplus.google.com%2F%2BKartikPrabhu%2Fposts%2FUzKErSbfmHq
+&name=To+everyone+who+is+complaining+about+Popular+Science+shutting+down+comments...
+&content=%22Why+is+there+this+expectation+that+every+website+should+be+a+forum%3F+No+website+has+any+obligation+to+provide+a+space+for+your+rants.+Use+your+own+space+on+the+web+to+do+that.%22
+&category[]=indieweb&category[]=comments
+</pre>
+
+===== ファイルの追加 =====
+
+Micropub リクエストにファイルが含まれる場合、リクエスト全体は <code>multipart/form-data</code> エンコーディングで送信され、ファイルはコンテンツタイプに応じて "audio"、"video"、または "photo" のいずれかで命名されます。リクエストには、これらのファイルを1つ以上含めることができます。
+
+[[OwnYourGram]] がビデオを投稿するために Micropub リクエストを行う際、ビデオのサムネイルプレビューである写真も送信されます。
+
+PHP では、これらのファイルは <code>$_FILES</code> 配列を使用してアクセス可能です：
+ $_FILES['video']
+ $_FILES['photo']
+ $_FILES['audio']
+
+参照： [[Micropub-brainstorming#Uploading_files_in_separate_requests]]
+
+なお、リクエストボディが JSON エンコードされている場合、ファイルをアップロードする実用的な方法はありません。その場合は [[media-endpoint|メディアエンドポイント]] を使用する必要があります。
+
+curl の例：
+
+ $ curl -H 'Authorization: Bearer abc'\
+        -F 'h=entry'\
+        -F 'content=an image!'\
+        -F 'photo=@/home/cweiske/Bilder/openid-id.bogo.png'\
+        'http://known.bogo/micropub/endpoint'
+
+==== h-event ====
+
+新しい [[h-event]] を作成するリクエストには、以下のプロパティが含まれる場合があります：
+
+新しいイベントの投稿
+
+* name
+* summary
+* description
+* start
+* end
+* duration
+* category
+* location
+
+<pre>
+POST /micropub HTTP/1.1
+Host: aaronparecki.com
+Content-type: application/x-www-form-urlencoded
+
+h=event
+&name=IndieWeb Dinner at 21st Amendment
+&description=In SF Monday evening? Join @caseorganic and I for an #indieweb dinner at 6pm! (Sorry for the short notice!)
+&start=2013-09-30T18:00:00-07:00
+&category=indieweb
+&location=http://21st-amendment.com/
+</pre>
+
+
+==== h-cite ====
+
+新しい [[h-cite]] を作成するリクエストには、以下のプロパティが含まれる場合があります：
+
+（以下のリストは [http://microformats.org/wiki/h-cite#Properties microformats.org/wiki/h-cite] からの引用です）
+
+* name
+* published - 作品の出版日（h-cite が作成された日付ではありません）
+* author - h-card の URL
+* url - 引用された作品にアクセスするための URL
+* content - 作品自体のコンテンツまたは部分的なコンテンツ（作品の引用スニペットを含む場合など）
+
+==== 入れ子になった Microformats オブジェクト ====
+
+可能な限り、入れ子になった Microformats オブジェクト（Nested Microformats Objects）は避けるべきです。より良い代替案は、オブジェクトをその URL で参照することです。最も一般的な例は、場所へのチェックインや写真への人物・場所のタグ付けなど、会場（venue）の h-card を含める場合です。これらのケースでは、必要に応じてオブジェクトを先に作成した上で、URL でオブジェクトを参照する方が適切です。
+
+緯度と経度を持つ h-geo プロパティのような単純な値の場合は、単に <code>geo:37.786971,-122.399677</code> のような [http://en.wikipedia.org/wiki/Geo_URI Geo URI] を使用してください。
+
+この手法には、作成される各オブジェクトが独自の URL を持つ（各データが独自のリンクを持つ）ことを保証できるという利点があります。これにより、サーバー側で各エンティティを個別に処理する機会も得られます。例えば、既存の会場の複製を作成するのではなく、すでに作成されている会場へのリンクを返し、必要に応じて新しく受信したデータを先にマージするといった処理が可能になります。
+
+より複雑なオブジェクトの場合は、まずターゲットサイト上にオブジェクトを作成して独自の URL を持たせ、その後にメインのリクエストでそのオブジェクトの URL を参照する方が良いでしょう。
+
+例えば、チェックイン投稿を作成する場合、2つの POST リクエストが必要になります：
+
+まず、h-card をポストして会場を作成します：
+
+<pre>
+POST /micropub
+
+h=card
+&name=Ford+Food+and+Drink
+&url=http://www.fordfoodanddrink.com/
+&street-address=2505 SE 11th Ave
+&locality=Portland
+&region=OR
+&postal-code=97214
+&geo=geo:45.5048473,-122.6549551
+&tel=(503) 236-3023
+</pre>
+
+レスポンス：
+
+<pre>
+HTTP/1.1 201 Created
+Location: http://example.com/venue/10
+</pre>
+
+次に、チェックイン投稿を作成します：
+
+<pre>
+POST /micropub
+
+h=entry
+&location=http://example.com/venue/10
+&name=Working on Micropub
+&category=indieweb
+</pre>
+
+レスポンス：
+
+<pre>
+HTTP/1.1 201 Created
+Location: http://example.com/entry/1001
+</pre>
+
+* この手法には、作成される各オブジェクトが独自の URL を持つ（各データが独自のリンクを持つ）ことを保証できるという利点があります。
+* また、サーバー側で各エンティティを個別に処理する機会も得られます。例えば、既存の会場の複製を作成するのではなく、すでに作成されている会場へのリンクを返し、必要に応じて新しく受信したデータを先にマージするといった処理が可能になります。
+
+=== Micropub リクエストの処理 ===
+この実装ガイドの解説では、以下のエラーレスポンスの略記を使用しています：
+
+* 「'''unauthorized''' を返す」とは、HTTP 401 レスポンスを返すことを意味します。オプションで、[https://micropub.spec.indieweb.org/#error-response こちら]で定義されている JSON エンコードされた '''unauthorized''' エラーペイロードを含めます。
+* 「'''forbidden''' を返す」とは、HTTP 403 レスポンスを返すことを意味します。オプションで、[https://micropub.spec.indieweb.org/#error-response こちら]で定義されている JSON エンコードされた '''forbidden''' エラーペイロードを含めます。
+* 「'''invalid_request''' を返す」とは、HTTP 400 レスポンスを返すことを意味します。オプションで、[https://micropub.spec.indieweb.org/#error-response こちら]で定義されている JSON エンコードされた '''invalid_request''' エラーペイロードを含めます。
+* 「'''insufficient_scope''' を返す」とは、HTTP 403 レスポンスを返すことを意味します。オプションで、[https://micropub.spec.indieweb.org/#error-response こちら]で定義されている JSON エンコードされた '''insufficient_scope''' エラーペイロードを含めます。
+
+[[micropub-endpoint|Micropub エンドポイント]]への HTTP リクエストを処理するには：
+
+* 認証トークン（auth token）を探します。
+** リクエストに <code>Authorization: Bearer</code> ヘッダーがある場合、'''auth_token''' に <code>Bearer </code> 以降の文字列の値を設定し、空白文字を取り除きます。
+** そうでない場合、メソッドが POST であり、フォームエンコードされたリクエストボディの解析済みコンテンツに '''auth_token''' キーが含まれていれば、'''auth_token''' にそのキーに関連付けられた値を設定します。
+* '''auth_token''' が見つからない場合は、'''unauthorized''' を返します。
+* '''auth_token''' が見つかった場合は、その検証を試みます。詳細は Micropub の範囲外ですので、詳細については [[IndieAuth]] を参照してください。
+** '''auth_token''' が無効な場合は、'''forbidden''' を返します。
+** そうでない場合は、後で参照できるように '''auth_token''' に関連付けられたユーザー情報を保存します。
+* [[micropub-extensions|Micropub 拡張機能]]をサポートしている場合は、リクエストが拡張機能リクエストであるかどうかを検出し、適切に処理します。
+* リクエストが GET リクエストである場合は、クエリ文字列をパースして '''query_params''' とします。
+** '''query_params''' に '''q''' キーが含まれている場合は、それを '''q''' の下に格納します。
+*** もし <code>'''q''' == "config"</code> であれば、[https://micropub.spec.indieweb.org/#configuration こちら]で定義されている有効な JSON エンコードされた設定レスポンスを返します。
+*** そうではなく、もし <code>'''q''' == "source"</code> であれば、'''query_params''' に <code>url</code> キーがあるか確認します。
+**** '''url''' キーが存在しない場合、または '''query_params.url''' で特定されるコンテンツが存在しない場合は、'''invalid_request''' を返します。
+**** '''query_params.url''' で特定されるコンテンツは存在するが、現在の '''auth_token''' にそれを閲覧するスコープが付与されていない場合は、'''insufficient_scope''' を返します。
+**** '''source_properties''' という名前の空のリストを作成します。
+***** '''query_params''' に <code>properties</code> キーが含まれている場合は、'''query_params.properties''' の下の関連付けられた値を '''source_properties''' に追加します。
+***** そうでない場合、'''query_params''' に <code>properties[]</code> キーに関連付けられた1つ以上の値が含まれている場合は、各値を '''source_properties''' に追加します。
+**** '''url''' と '''source_properties''' の値に基づいて、有効な [https://micropub.spec.indieweb.org/#source-content ソースコンテンツ（Source Content）] レスポンスを作成して返します。
+*** そうではなく、もし <code>'''q''' == "syndicate-to"</code> であれば、有効な JSON エンコードされた [https://micropub.spec.indieweb.org/#syndication-targets シンジケーションターゲット（Syndication Target）] レスポンスを返します。
+*** ここまで到達した場合、そのリクエストは不明な GET リクエストです。'''invalid_request''' を返します。
+* そうではなく、リクエストが POST リクエストである場合：
+** リクエストに <code>Content-type: application/json</code> ヘッダーがある場合は、リクエストボディを JSON としてパースし、その結果を '''request_body''' に割り当てます。パースエラーの場合は '''invalid_request''' を返します。
+** そうではなく、リクエストに <code>Content-type: x-www-form-urlencoded</code> がある場合は、リクエストボディをパースし、その結果を '''request_body''' に割り当てます。パースエラーの場合は '''invalid_request''' を返します。
+** そうではなく、リクエストに <code>Content-type: multipart/form-data</code> がある場合は、リクエストボディをパースします。フォーム部分を '''request_body''' に、ファイル部分を '''request_files''' に割り当てます。
+** そうでない場合、リクエストはサポートされていない形式です。'''invalid_request''' を返します。
+** '''request_body''' に '''action''' キーが含まれている場合：
+*** もし <code>'''request_body.action''' == "delete"</code> であれば：
+**** エンドポイントが削除をサポートしていない場合は、'''invalid_response''' を返します。
+**** '''request_body''' に <code>url</code> キーがあるか確認します。キーがない場合、または '''request_body.url''' が削除可能なコンテンツを特定していない場合は、'''invalid_request''' を返します。
+**** '''access_token''' に、'''request_body.url''' で特定されるコンテンツを削除するために必要なスコープがあるか確認します。ない場合は、'''insufficient_scope''' を返します。
+**** '''request_body.url''' で特定されるコンテンツを削除します。空の HTTP 204 レスポンスを返します。
+*** そうではなく、もし <code>'''request_body.action''' == "undelete"</code> であれば：
+**** エンドポイントが削除取り消し（undelete）をサポートしていない場合は、'''invalid_response''' を返します。
+**** '''request_body''' に <code>url</code> キーがあるか確認します。キーがない場合、または '''request_body.url''' が削除取り消し可能なコンテンツを特定していない場合は、'''invalid_request''' を返します。
+**** '''access_token''' に、'''request_body.url''' で特定されるコンテンツの削除を取り消すために必要なスコープがあるか確認します。ない場合は、'''insufficient_scope''' を返します。
+**** '''request_body.url''' で特定されるコンテンツの削除を取り消します。
+***** 削除取り消しが成功し、コンテンツの URL が変更されなかった場合は、空の HTTP 204 レスポンスを返します。
+***** そうではなく、削除取り消しが成功したがコンテンツの URL が変更された場合は、コンテンツの新しい URL を指す <code>Location:</code> ヘッダーを含む HTTP 201 レスポンスを返します。
+*** そうではなく、もし <code>'''request_body.action''' == "update"</code> であれば：
+**** エンドポイントが更新をサポートしていない場合は、'''invalid_response''' を返します。
+**** '''request_body''' に <code>url</code> キーがあるか確認します。キーがない場合、または '''request_body.url''' が更新可能なコンテンツを特定していない場合は、'''invalid_request''' を返します。
+**** '''access_token''' に、'''request_body.url''' で特定されるコンテンツを更新するために必要なスコープがあるか確認します。ない場合は、'''insufficient_scope''' を返します。
+**** 仕様に従って [https://micropub.spec.indieweb.org/#update 更新（Update）] リクエストを処理します。
+***** 更新が成功し、コンテンツの URL が変更されなかった場合は、空の HTTP 204 レスポンスを返します。
+***** そうではなく、更新が成功したがコンテンツの URL が変更された場合は、コンテンツの新しい URL を指す <code>Location:</code> ヘッダーを含む HTTP 201 レスポンスを返します。
+*** ここまで到達した場合、不明な '''action''' が提供されています。'''invalid_response''' を返します。
+** そうでない場合（パースされたボディに <code>action</code> キーがない POST リクエストの場合）、そのリクエストは '''作成（create）''' リクエストであるとみなします。
+** '''access_token''' に新しいコンテンツを作成するために必要なスコープがあるか確認します。ない場合は、'''insufficient_scope''' を返します。
+** リクエストの content-type が <code>application/json</code> 以外であった場合は、以下のようにフォームエンコードされたパラメータを標準的な mf2 構造に正規化します：
+*** '''normalized_body''' を <code>{'type': ['h-entry'], 'properties': {}}</code> とします。
+*** '''request_body''' 内の各 '''key'''、'''value''' のペアに対して：
+**** もし <code>'''key''' == "h"</code> であれば、'''normalized_body.type''' に <code>['''value''']</code> を設定します。
+**** そうではなく、'''key''' が <code>"[]"</code> で終わる場合は、'''normalized_body.properties[key]''' に、その '''key''' に関連付けられたすべての値のリストを割り当てます。
+**** そうでない場合は、'''normalized_body.properties[key]''' に '''value''' を割り当てます。
+*** '''request_body''' = '''normalized_body''' とします。
+** '''request_body''' と '''request_files''' を使用して、仕様に従って [https://micropub.spec.indieweb.org/#create 作成（Create）] リクエストを処理します。
+*** リクエストが成功した場合は、作成されたコンテンツの URL を含む <code>Location:</code> ヘッダーと、オプションで <code>Link rel=syndication</code> および/または <code>rel=shortlink</code> ヘッダーを含む HTTP 201 レスポンスを返します。
+* ここまで到達した場合、リクエストを処理できませんでした。'''invalid_request''' を返します。
+
+=== 開発者向けの追加ノート ===
+
+* [[reply context|返信コンテキスト]]は Micropub サーバーによって提供されることが期待されており [https://chat.indieweb.org/dev/2020-08-15/1597478547558300][https://chat.indieweb.org/dev/2020-08-15/1597484118984900]、投稿全体が含まれます。
+** 部分コンテキスト（part-context）返信などのブレインストーミング： IndieWeb の多くの人々は、自分が何に対して返信、いいね、またはリポストしたのかを明確にしたり、特に注目させたりするために、元の投稿の一部を引用します。
+
+== ライブラリ ==
+<span id="Open Source"></span>
+クライアントアプリ側での Micropub サポート、およびサーバー側の API エンドポイント側でのサポートに使用されるオープンソースライブラリと<span id="Implementations">実装</span>：
+* [https://github.com/aaronpk/p3k-micropub p3k-micropub]: [[p3k]] で使用されている '''PHP''' ライブラリ
+* [https://github.com/taproot/micropub-adapter taproot/micropub-adapter]: 既存のアプリに Micropub 機能を追加したり、新しいアプリを素早く開発したりするために設計された '''PHP''' ライブラリ
+* [https://github.com/snarfed/wordpress-micropub wordpress-micropub]: サーバーエンドポイント用の [[WordPress]] プラグイン
+* [https://github.com/kylewm/flask-micropub flask-micropub]: クライアントアプリケーションに IndieAuth 認証と Micropub 認可を簡単に追加できるようにする [[Flask]] ([[Python]]) プラグイン
+* [https://github.com/voxpelli/node-micropub-express micropub-express]: {{voxpelli}} によって作成され、voxpelli.com の Micropub エンドポイントで使用されている '''Node.js''' サーバーライブラリ
+* [https://www.npmjs.com/package/micropub-helper micropub-helper]: [[grant.codes]] によって作成・使用されている '''Node.js''' クライアントライブラリ
+* [https://www.drupal.org/project/indieweb IndieWeb for Drupal 8]: {{realize.be}} によって書かれた、Micropub サーバーエンドポイントの設定をサポートするモジュール
+* [https://github.com/am1t/blotpub blotpub] '''Node.js''': Micropub リクエストを受け取り、シンプルな Blot 投稿を作成して設定済みの Dropbox フォルダに保存するエンドポイント。これにより、Micropub クライアントを通じて [https://blot.im/ Blot] ブログを更新できるようになります。
+
+== 課題 ==
+仕様書内の現在の機能に関する課題や議論については、[https://github.com/indieweb/Micropub/issues/ GitHub リポジトリ] を使用してください。
+
+過去の課題、議論、ブレインストーミングは、[https://github.com/w3c/Micropub/issues 旧 GitHub リポジトリ] および [[Micropub-brainstorming]] で確認できます。
+
+== 拡張機能 ==
+コアとなる Micropub 仕様に基づいた新機能や機能の追加については、[[Micropub-extensions]] ページを参照して新しい Micropub 拡張を提案してください。
+
+[[Category:IndieAuth]]
+[[Category:building-blocks]]
+[[Category:Micropub]]
+[[Category:jargon]]
+[[Category:Protocols]]
+
+== セッション ==
+2026年:
+* [[2026/Micropub]]
+2020年:
+* [[2020/West/micropub-queries|IndieWebCamp West 2020: Micropub クエリ]]
+* [[2020/London/staticmicropub|London 2020: 静的ウェブサイトと Micropub]]
+2019年:
+* [[2019/Amsterdam/micropub]]
+2018年:
+* [[2018/Baltimore/micropub]]
+* [[2018/Berlin/micropub]]
+* [[2018/micropub]]
+* [[2018/Nuremberg/micropub]]
+2017年:
+* [[2017/Austin/micropub|IndieWebCamp Austin 2017 における Micropub ライフサイクル]]
+2014年:
+* [[2014/Online/Micropub|IndieWebCamp Online 2014 における Micropub]]
+
+== 関連項目 ==
+* [http://micropub.net/draft/ 最新のエディターズドラフト]
+* <span id="Brainstorming">[[Micropub-brainstorming]]</span>
+* [[Micropub-extensions]]
+* [[post|投稿]] - [[h-entry]]
+* [[event|イベント]] - [[h-event]]
+* [[obtaining-an-access-token|アクセストークンの取得]]
+* [[token-endpoint|トークンエンドポイント]]
+* [[micropub-endpoint|Micropub エンドポイント]]
+* [[access_token]]
+* [[incremental authorization|段階的な認可]]
+* [[micropub media endpoint|Micropub メディアエンドポイント]]
+* ブログ投稿: 2024-09-14 {{manton}}: [https://www.manton.org/2024/09/14/toward-a-common.html 共通の投稿 API に向けて] <blockquote>…上記の標準を用いて進むべきあらゆる可能な道を検討した結果、今日すぐに利用可能で、複数のブログプラットフォームで何年も実装されている完全なソリューションは、実のところ1つしかありません。それは [[Micropub]] + [[Microsub]] です。</blockquote>
+* ブレインストーミング： 誤字脱字修正を取り込んだ 1.0.1 リリース（新機能なし）と、人気の Micropub 拡張機能や、少なくとも [[MarsEdit]] がフィードバックで要求したものを組み込んだ 1.1 アップデートの両方を検討してください。
+
+[[Category:Pages in Japanese]]
