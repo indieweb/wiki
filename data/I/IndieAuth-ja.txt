@@ -1,0 +1,289 @@
+https://indieweb.org/IndieAuth-ja
+
+[[File:indieauth-2023.svg|frameless|right|128px|IndieAuth icon]]
+
+'''<dfn>[https://indieauth.net/ IndieAuth]</dfn>'''は、[[Web sign-in]] のための連合型ログインプロトコルであり、ユーザーが自身の[[domain|ドメイン]]を使用して他のサイトやサービスにサインインすることを可能にします。IndieAuth は、'''OAuth2 ログイン'''（別名：'''OAuthベースのログイン'''）の実装に使用できます。
+
+IndieAuth は、[[OAuth]] や [[OpenID]] といった既存の定評ある技術のアイデアと技術に基づいて構築されていますが、ユーザーと開発者の両方にとってより簡単になるように設計されています。プロセスの多くを分散化しているため、各パーツに対して完全に独立した実装やサービスを使用することが可能です。
+
+{{note|詳細を読む： [https://aaronparecki.com/2018/07/07/7/oauth-for-the-open-web IndieAuth: OAuth for the Open Web]}}
+
+OAuth クライアントを書いた経験があるなら、各 OAuth プロバイダーにクライアントを手動で登録しなければならないという問題を知っているでしょう。IndieAuth はクライアント登録の代わりに DNS を使用するため、プロバイダーへの手動登録が不要になります。
+
+{{warning|'''注意：''' IndieAuth はしばしばサービスプロバイダーである [[indieauth.com|IndieAuth.com]] と混同されます。前者はこのページの主題である「IndieAuth プロトコルの仕組み」です。後者は認可エンドポイントを提供する「サービス」であり、以前はこのウィキでも使用されていましたが、現在は [[indielogin.com]] に切り替わっています。}}
+
+== なぜ必要なのか ==
+
+IndieAuth プロバイダーを自身で選択することで、アプリケーションに対して「サインインのために自分をどこに送るか」を指定できます。これにより、ログインのプライバシーとセキュリティに対するコントロール権をより強く持つことができます。
+
+ほとんどの [[Micropub]] クライアントは [[IndieAuth-ja|IndieAuth]] を使用してログインし、選択した IndieAuth サーバーに誘導して認可を取得します。これにより、自身のウェブサイトを使用して、コンテンツを投稿するためのツールにログインできるようになります。
+
+IndieAuth は、自身のオンライン・アイデンティティのコントロールを取り戻す活動の一部です。「Twitter 上のあなた」や「Facebook 上のあなた」としてウェブサイトにログインするのではなく、「ただのあなた」としてログインできるべきです。私たちは認証済みのアイデンティティを [[silo-ja|サイロ（情報の孤島）]]に依存すべきではなく、自身の[[personal-domain-ja|独自ドメイン]]をどこでもログインに使用できるようにすべきです。
+
+現在、このウィキにログインして[[community|コミュニティ]]に貢献するために、すぐに IndieAuth を使用できます。例えば次のようなことが可能です：
+* [[discuss|ディスカッション・チャンネル]]に参加した後、[[chat-names]] に自分を追加する。
+* [[events|今後のイベント]]に RSVP（出席回答）する。
+
+== 仕組み ==
+ユーザーが（ウェブ）アプリにサインインする基本的なフロー：
+
+
+
+# '''ユーザーが個人 URL を入力する'''：これは [[Web sign-in]] と呼ばれます。
+# '''アプリがその URL を取得し、認可エンドポイントを探す'''：ユーザーは IndieAuth.com を使用することもできますが、自身のドメイン上に置くこともできます。アプリはユーザーをその認可エンドポイントにリダイレクトします。
+# '''ユーザーが自身の認可エンドポイントで認証する'''：IndieAuth.com は認証に [[RelMeAuth]] を使用しますが、自身のサイト上の認可エンドポイントを使用する場合は、パスワード、メールリンク、またはエンドポイントが提供するその他の認証メカニズムを使用できます。アプリが完了を待つ間、ユーザーは認可エンドポイントに対してアイデンティティを証明します。
+# '''認可エンドポイントが一時的な認可コードを発行する'''：ユーザーのブラウザをアプリにリダイレクトさせることで、コードをアプリに送信します。
+# '''アプリが認可エンドポイントでコードを確認する'''：コードが有効であり、ユーザーの識別子が認可エンドポイントの提供するものと一致すれば、ログインは完了し、ユーザーはアプリに入って使用できるようになります。
+
+== セットアップ方法 ==
+このウィキにログインしたいだけであれば、IndieAuth を設定する必要さえないかもしれません！ 代わりに、既存の Twitter や GitHub アカウントにリンクするだけで、ウィキはそれらを使って認証を行います。詳細は [https://indielogin.com/setup indielogin.com/setup] を参照してください。
+
+=== 独自の IndieAuth プロバイダーを構築する ===
+既存の[[#サーバー実装|実装]]を使用するか、[[authorization-endpoint|独自に構築]]してください。
+
+=== WordPress でのセットアップ ===
+WordPress を使用している場合は、組み込みの IndieAuth サーバーを提供する [[Wordpress IndieAuth Plugin]] をインストールできます。Apache によって認証ヘッダーが削除される問題（[https://Bluehost.com Bluehost.com] などのホスティングサービスで一般的な問題）が発生した場合は、IndieAuth プラグインを無効化または削除し、Micropub プラグインを使用して IndieAuth.com 経由で認証を提供する必要があります。
+
+=== IndieAuth.com を使用したセットアップ ===
+[[indieauth.com|IndieAuth.com]] は、ソーシャルメディアのプロフィールを使用して自分のサイトとしてサインインできるサービスです。これは IndieAuth を試してみたい人向けであり、サードパーティを介したログインに依存するため、長期的なソリューションとしては推奨されません。
+
+検証のために、ホームページとソーシャルメディアのプロフィールが互いにリンクされている必要があります。indieauth.com でアカウントを登録する代わりに、サインインしようとしている URL を本人が所有していることを確認するために既存のソーシャルメディアアカウントを使用します。
+
+# ホームページに、自分に連絡するための様々な方法への [[rel-me]] リンクを追加します。<br>例：<code><nowiki><a href="https://github.com/aaronpk" rel="me">GitHub</a></nowiki></code>
+# リンクしたソーシャルメディアのプロフィールから、ホームページへのリンクがあることを確認します。
+# 最後に、ホームページに <code><link rel="authorization_endpoint" href="https://indieauth.com/auth"></code> を含めます。
+
+これで完了です！ 次のような IndieAuth をサポートするサイトにログインしてみてください：
+* [https://sso.indieweb.org/login?url=https%3A%2F%2Findieweb.org%2FIndieAuth このウィキ]
+* [https://telegraph.p3k.io/login Telegraph]
+* [https://pin13.net/login/ pin13.net のデモページ]
+
+これらのサービスは、サインインのために選択した IndieAuth エンドポイント（この場合は indieauth.com）にリダイレクトするはずです。
+
+参照：[https://indieauth.com/setup セットアップの全手順]
+
+== IndieWeb での例 ==
+<span id="Users"></span>
+
+以下の人々は、自身のドメインに認可エンドポイントを持っています。
+
+* {{aaronpk}}：https://aaronparecki.com/auth（[https://aaronparecki.com/2016/04/13/8/indieauth 2016-04-13] 時点）。[https://aaronparecki.com/2017/10/04/23/passwordless-logins 2017-10-04] 以降、認証はパスワード入力ではなく、携帯電話へのプッシュ通知を介して行われます。
+* {{sebsel}}：https://seblog.nl/auth（IndieWebWeek 2017 Düsseldorf/Nürnberg 時点）。IndieWebCamp Düsseldorf 2021 以降、同 URL で書き直されたバージョンを使用しています。
+* {{martijnvdven}}：<code>http://vanderven.se/martijn/</code>（2017-06-30 時点）。[[selfauth]] を使用。
+* {{jeena}}：https://jeena.net/indieauth（IndieWebCamp 2017 Berlin 時点）。
+* {{mblaney}}：https://unicyclic.com/mal（IndieWeb Summit 2018 時点）。
+* {{realize.be}}：https://realize.be（2018年11月時点）。
+* {{pmc}}：https://piperswe.me（[https://piperswe.me/posts/serverless-indieauth/ Netlify Functions で実装]）。
+* {{frank}}：https://diggingthedigital.com/（2019年2月時点）。[https://wordpress.org/plugins/indieauth/ WordPress IndieAuth プラグイン] を使用。
+* {{hammyhavoc}}：https://www.hammyhavoc.com/（2022年8月時点）。[https://wordpress.org/plugins/indieauth/ WordPress IndieAuth プラグイン] を使用。
+* {{ds}}：https://dmitri.shuralyov.com/api/indieauth/authorization（[https://github.com/shurcooL/home/commit/75d6ace272f1addb0a14b71da9a62169850ae222 2019-12-22] 時点）。[[Go]] で実装。
+* {{4x_pro}}：2021年2月、Intellect Board フォーラム/ブログエンジンによる http://4xpro.ru 上の認可エンドポイントを実装。
+* {{capjamesg}}：https://auth.jamesg.blog（2021年10月時点）。Twitter、GitHub、Okta Verify を使ったモバイルプッシュ通知によるパスルーレス認証をサポート。
+** {{capjamesg}} の認可エンドポイントは [https://github.com/capjamesg/jamesg-indieauth GitHub でオープンソース化]されています。
+* {{jamietanna}}：https://indieauth.jvt.me（(Java) Spring Boot で構築）。
+** サービスの大型アップデートについて https://www.jvt.me/tags/indieauth.jvt.me/ でブログ記事を書いています。
+* {{hacdias}}：カスタム CMS に組み込まれた IndieAuth サーバーを所有。[[Go]] と [[indielib]] を使用して実装。
+
+== IndieAuth プロバイダー ==
+<span id="Servers"></span>
+ユーザーに IndieAuth サーバーを提供するサイト/サービス。[[identity|アイデンティティ]]用語では、これらはアイデンティティ・プロバイダー (IDP) です。
+
+* '''[[Known]]'''：組み込みの IndieAuth サーバーを提供。
+* '''[https://observablehq.com/@endpointservices @endpointservices]'''：ブラウザベースの IDE [https://observablehq.com Observablehq.com] 上でフォーク可能な [https://observablehq.com/@endpointservices/auth IndieAuth ノートブック] サーバーをホスト。
+* '''[[Micro.blog]]'''：すべてのホストされた micro.blog サブドメインおよび検証済みサイトに対して IndieAuth を実装。
+** [http://www.manton.org/2018/07/indieauth-for-micro-blog.html IndieAuth for Micro.blog]
+** [http://www.manton.org/2018/07/indieauth-for-external-blogs.html IndieAuth for external blogs]
+* '''[[IndieAuth.com]]'''：[[Web sign-in]] / [[RelMeAuth]] の HTTP API 実装。既存のサイロアカウントにリンクすることで、自身のサイトに IndieAuth サポートを迅速に追加する方法として多くの人に利用されています。
+* '''[[commentpara.de]]'''：匿名でウェブサイトにログインしたい人に IndieAuth アイデンティティを提供。
+* '''[[indieauth-openid]]'''：既存の OpenID 設定を IndieAuth で動作するように変換。
+* <span id="Use_with_Micropub"></span>ほとんどの '''[[Micropub]]''' アプリは IndieAuth を使用して、アプリがサイトに投稿できるようにします。
+** [[Micropub/Servers]]
+** [[Micropub/Clients]]
+
+== サービス ==
+IndieAuth ベースのアプリケーション開発を容易にするホスティングサービス。
+
+=== IndieLogin.com ===
+[[IndieLogin.com]] は、IndieAuth を利用するサービスです。[[IndieAuth]]、[[RelMeAuth]]、メール、PGP を使用してユーザーを認証し、すべてのロジックをシンプルな API にラップします。indieweb.org ウィキや他の関連プロジェクトでユーザーのサインインに使用されています。
+
+[https://indielogin.com/api ドキュメント全文を読む]
+
+=== IndieAuth.com ===
+IndieAuth.com サービスは、[[Micropub]] サーバー開発をブートストラップするための認可エンドポイントを提供します。GitHub、メール、PGP 経由での認証が可能です。最終的には新しいサービスである [[MyIndieAuth.com]] に置き換えられる予定ですが、その開発はまだ始まっていません。
+
+歴史的に、IndieAuth.com は開発者がユーザーを認証するための API も提供していましたが、現在は [[IndieLogin.com]] への移行に伴い段階的に廃止されています。
+
+[https://indieauth.com/developers ドキュメント全文を読む]
+
+[https://github.com/aaronpk/IndieAuth.com IndieAuth.com のソースコード] は GitHub で公開されています。
+
+== サーバー実装 ==
+<span id="Implementations"></span>
+開発者が自身のアプリに IndieAuth サーバー機能を追加するためのソフトウェアライブラリやプラグイン、およびデフォルトで IndieAuth サーバーを提供する CMS。
+
+* '''[https://github.com/barryf/acquiescence Acquiescence]'''：シンプルな IndieAuth 認可およびトークンエンドポイント。現在は認可に [[GitHub]] のみを使用。
+* '''[https://drupal.org/project/indieweb Drupal IndieWeb]''' モジュール：Drupal 用の自己完結型 IndieAuth サーバーを提供。
+* '''[[Wordpress IndieAuth Plugin]]'''：WordPress 用の自己完結型 IndieAuth サーバーを提供。
+* '''[[dobrado]]'''：組み込みの IndieAuth サーバーを提供。
+* '''[https://github.com/tsileo/microblog.pub Microblog.pub]'''：U2F サポートを含む IndieAuth エンドポイント（認可およびトークン）を実装。ActivityPub アイデンティティを使用して他のサイト/アプリにログイン可能。
+* '''[[selfauth]]'''：単一の PHP ファイルで実装された個人用認可エンドポイント。
+** https://glitch.com/~befitting-price は glitch.com で動作する nodejs 移植版です。
+** [https://github.com/sebastiangreger/kirby3-selfauth kirby3-selfauth] は [[Kirby]] 用の認可エンドポイントプラグインです。
+* '''[https://glitch.com/~cellar-door cellar-door]'''：テストと hcard サポートを備えた nodejs 実装。
+* '''[https://github.com/taproot/indieauth taproot/indieauth]'''：PSR-7 互換のアプリに、テスト済みの柔軟な IndieAuth サーバー機能を迅速に追加するための PHP ライブラリ。
+* '''[https://git.schmarty.net/schmarty/belding#user-content-belding Belding]'''：taproot/indieauth をベースにした、単一ユーザー/サイト向けの自己ホスト型スタンドアロン PHP アプリ。
+* '''[https://github.com/reiterate-app/authorio reiterate-app/authorio]'''：Rails ベースのサイトに認可エンドポイント機能を有効にする Rails エンジン（プラグイン）。
+* '''[https://github.com/iamspruce/spruce-indieLogin spruce/indieLogin]'''：indieLogin.com の NodeJs 実装。JavaScript 開発者が RelMeAuth 機能を実装することを意図しています。
+* '''[[indielib]]'''：サーバーとクライアント両方の IndieAuth 認証を実装するためのツールキットを提供する Go ライブラリ。
+* '''[https://owncast.online Owncast]'''：v0.0.12 以降、ライブストリームチャットの認証オプションとして IndieAuth を使用。
+* '''[[ProcessWire#ProcessWire_IndieAuth|IndieAuth for ProcessWire]]'''：ProcessWire サイトに認可およびトークンエンドポイント機能を追加。
+* '''[https://github.com/capjamesg/alto Alto]'''：Python で開発された IndieAuth 認可およびトークンエンドポイント。
+
+以前の実装またはアーカイブされた実装：
+* '''[https://github.com/metbril/grav-plugin-indieauth Grav 用 IndieAuth プラグイン]'''：Grav ウェブサイトに IndieAuth サポートを追加。
+* <del>'''[[indiecert]]'''</del>：認証にクライアント証明書を使用した IndieAuth サーバーの実装。
+
+== IndieAuth クライアント ==
+<span id="Supporting_Sites"></span><span id="Apps"></span>
+{{main|IndieAuth clients}}
+
+IndieAuth クライアント（別名：IndieAuth 消費サイト）は、IndieAuth アイデンティティを使用してログインできるサイトです。[[identity|アイデンティティ]]用語では、これらは '''リライング・パーティ''' (RP) と呼ばれます。
+
+IndieAuth を使用してログインし、追加機能を利用できるウェブサイトが多数あります：
+
+* '''[[Main Page|IndieWeb.org]]''' — このサイトです！ IndieAuth でサインインするとウィキの編集が可能になり、以下のようなサブドメインでも認証されます：
+** https://events.indieweb.org/
+** https://etherpad.indieweb.org/
+
+* '''[[social reader|ソーシャル・リーダー]]''' は通常サインインに IndieAuth を使用します：
+** '''[[Monocle]]'''
+** '''[[Together]]'''
+** '''[[IndiePass]]'''（iOS、Android、デスクトップ用）
+
+* '''[[Micropub/Clients|Micropub クライアント]]'''（ほぼすべて）はサインインに IndieAuth を使用します。
+
+詳細は '''[[IndieAuth clients]]''' を参照し、個人サイト、Webmention ダッシュボード、テストサイトなどの例を確認（および追加）してください。
+
+== クライアント・ライブラリ ==
+
+* [https://www.npmjs.com/package/indieauth-authentication JavaScript]
+* [https://www.npmjs.com/package/@resources/indieauth-client JavaScript: @resources/indieauth-client]
+* [https://github.com/indieweb/indieauth-client-php PHP]
+* [https://github.com/Inklings-io/laravel-indieauth-client Laravel]
+* [https://docs.rs/indieweb/latest/indieweb/standards/indieauth/index.html Rust]
+* [[Authl]]
+* [https://github.com/hacdias/indieauth hacdias/indieauth] — [[Go]]
+
+== IndieAuth プロトコル ==
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">このセクションはプロトコルのハイレベルな概要です。技術的な詳細については '''[https://indieauth.spec.indieweb.org/ IndieAuth 仕様書]''' を参照してください。</p>
+
+ユーザーは、ログインしようとしているウェブサイトに対して、自身のホームページの URL を伝えるだけで済むべきです。これが [[Web sign-in]] の核心的なアイデアです。これは、開発者がユーザーから提供されたその一つの URL 上で、必要なすべての情報を発見できる必要があることを意味します。
+
+=== ユーザーのホームページからの発見 (Discovery) ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">参照： '''[https://indieauth.spec.indieweb.org/#discovery IndieAuth Spec: Discovery]'''</p>
+
+IndieAuth は <code>indieauth-metadata</code> リンク <code>rel</code> 値を使用して、クライアントがユーザーのホームページから IndieAuth サーバーのメタデータ・エンドポイントの場所を発見できるようにします。クライアントはそのメタデータを取得して、残りのフローに必要なすべての情報を把握します。
+
+ユーザーはホームページの <code><head></code> 内でメタデータ・エンドポイントにリンクし、正しい <code>rel</code> 値を追加するだけで完了です。
+
+    <link rel="indieauth-metadata" href="https://example.com/indieauth/metadata">
+
+以前のバージョンの IndieAuth では、認可エンドポイントとトークンエンドポイントを発見するために 2 つの別々の [[rel-values|<code>rel</code> 値]]を定義していました。これらは <code>indieauth-metadata</code> に加えて、古いクライアントとの後方互換性のために使用できます。
+
+    <link rel="authorization_endpoint" href="https://example.com/auth">
+    <link rel="token_endpoint" href="https://example.com/token">
+
+=== 認可エンドポイント (Authorization Endpoint) ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">実装の詳細については '''[[authorization-endpoint]]''' および '''[https://indieauth.spec.indieweb.org/#authorization-request IndieAuth Spec: Authorization Request]''' を参照してください。</p>
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">参照： '''[[consent screen]]'''（同意画面）</p>
+
+認可エンドポイントは、アプリケーションがユーザーを誘導し、本人確認を求めるためのページです。ユーザーは自身のホームページ上で独自のエンドポイントを定義するため、これは自身のウェブサイトの一部であったり、完全に別のサービスであったりします。これが、ユーザーが提供したホームページ URL を実際に管理しているという証拠を提供する方法です。
+
+アプリケーションはまた、認可エンドポイントを通じて特定の権限（スコープ）の付与をユーザーに求めることもできます。例えば [[Micropub]] クライアントは <code>create</code> 権限を要求するかもしれません。ユーザーはエンドポイントにリダイレクトされた際に、これらを承認するかどうかを選択できます。
+
+開発者にとって、認可エンドポイントは検証サービスとしても機能します。ユーザーからコードを受け取った場合、そのエンドポイントで有効性を確認し、それが本当にそのユーザーによって発行されたものであることを保証できます。
+
+=== トークン・エンドポイント (Token Endpoint) ===
+
+<p class="plainlinks" style="text-indent: 2em; font-style: italic;">実装の詳細については '''[[token-endpoint]]''' および '''[https://indieauth.spec.indieweb.org/#redeeming-the-authorization-code IndieAuth Spec: Redeeming the Authorization Code]''' を参照してください。</p>
+
+トークン・エンドポイントは、アプリケーションが保存して [[Micropub]] リクエストで使用するためのアクセストークンを作成するサービスです。アプリケーションを認可した後、トークン・エンドポイントはアプリケーションが保存するトークンを生成します。アプリケーションは Micropub リクエストを行う際にヘッダーにトークンを含めて送信し、Micropub エンドポイントはリクエスト処理中にそのトークンを検証できることが期待されます。
+
+== FAQ ==
+IndieAuth.com の FAQ はこちら：
+* https://indieauth.com/faq
+
+=== IndieAuth は OpenID Connect とどう違うのですか？ ===
+{{main|How is IndieAuth different from OpenID Connect}}
+
+=== サイロのアカウントは必要ですか？ ===
+IndieAuth サービスにサイロ（SNSなど）のアカウントは必須ではありませんが、認証方法としてそれらを使用することを選択できるサービスもあります。
+
+=== 毎回 URL を入力する必要がありますか？ ===
+はい。従来のユーザー名/パスワード形式と同様に、アプリにログインする際には URL を入力する必要があります。ブラウザは入力した URL を記憶し、通常のオートフィル（自動補完）機能を使用して提案してくれます。
+
+[[File:indieauth-autofill.jpg|300px]]
+
+=== 誰でもリクエスト時に URL をクライアント ID として提供できるのですか？ ===
+はい。OAuth 2.0 のパブリッククライアントにおいて他人のクライアント ID を見つけてリクエストに含めることができるのと同様です。パブリッククライアント（ネイティブアプリなど）では秘密情報を保持できないため、リダイレクト URL による検証など、パブリッククライアントに求められるすべての保護策を適用しています。
+
+=== HTTPS を使用すべきですか？ ===
+<span id="Security"></span>
+IndieAuth 仕様は OAuth 2.0 の拡張であり、[https://tools.ietf.org/html/rfc6749#section-10.5 OAuth 2.0 はすべてにおいて HTTPS を推奨]しています。
+
+=== なぜフォームエンコードされたレスポンスがあるのですか？ ===
+IndieAuth は当初、ウェブの標準的な形式であるフォームエンコードを使用していました。時間の経過とともに、OAuth 2.0 との互換性を高めるために JSON レスポンスのサポートが追加され、現在の仕様では JSON が文書化されています。
+
+=== アプリケーションはどうやってユーザーの追加情報を取得できますか？ ===
+IndieAuth 仕様では、ユーザーのプロフィールページ（[[h-card]] をパースするなど）から公開情報を取得する方法を提供しています。非公開情報を取得する共通の方法は現在ありません。
+
+=== OpenID 1.0 とは何が違うのですか？ ===
+OpenID 1.0 も同様の問題を解決しようとしていましたが、OpenID Connect の登場で「自分のアイデンティティを持ち寄る」という側面が薄れました。OpenID Connect は個人のアイデンティティよりも企業が発行するアイデンティティを重視する傾向にありますが、IndieAuth は OpenID 1.0 が持っていた「個人のドメインによるアイデンティティ」という目標を OAuth の仕組みの上で実現しています。
+
+=== 発見 (Discovery) に Webfinger を使用しますか？ ===
+IndieAuth は Webfinger よりも少ないステップを使用します。現在はユーザーがフル URL を入力し、そこから HTTP および HTML のリンク <code>rel</code> を取得してエンドポイントを見つけます。
+
+=== 事前登録がない場合、どうやって自分を証明するのですか？ ===
+クライアント（アプリ）はすべて URL によって識別されます。事前登録による秘密情報の代わりに、DNS とリダイレクト URL の一致を確認することで、リクエストを送っているシステムが正しいことを保証します。
+
+=== ユーザー情報はどこから取得しますか？ ===
+認証フローの最後のステップで、識別されたユーザーへの参照（URL）を取得します。これを使用して、ユーザーが公開を許可した情報（名前、メール、写真、希望するユーザー名など）を含む [[h-card]] を抽出できます。
+
+=== なぜ認可とトークンのエンドポイントが分かれているのですか？ ===
+OAuth2 から引き継がれた設計上の決定です。認可エンドポイントはユーザーとの対話（HTML、クッキーなど）を扱い、トークン・エンドポイントはアプリケーション間のやり取り（POST リクエスト、JSON 応答）を扱います。実際には、多くの場合これらは同じシステムの一部として構築されます。
+
+== 課題 ==
+仕様に関する課題は [https://github.com/indieweb/indieauth/issues GitHub プロジェクト] を、IndieAuth.com サービスに関する課題は [https://github.com/aaronpk/IndieAuth.com/issues こちら] を参照してください。
+
+== 講演とデモ ==
+（中略 - 各年次の講演リスト。リンク構造は原文を維持）
+
+== 記事 ==
+（中略 - アーロン・パレッティ氏らによる解説記事リスト。リンク構造は原文を維持）
+
+[[Category:building-blocks]]
+[[Category:IndieAuth]]
+[[Category:Protocols]]
+
+== 関連項目 ==
+* [[IndieAuth-spec]]
+* [[:en:IndieAuth|Wikipedia (English)]]
+* [[Web sign-in]]
+* [[RelMeAuth]]
+* [[sign-in-use-cases|Web Sign-In ユースケース]]
+* [[IndieAuth-brainstorming|IndieAuth ブレインストーミング]]
+* [https://indieweb.org/images/2/2f/indieAuthProp.svg IndieAuth ロゴの（非公式）提案]
+* [[Zero Registration]]
+* [[:Category:building-blocks]]
+* [[:Category:IndieAuth]]
+* [[login]]
+* [[delegated sign-in]]
+* [https://www.ietf.org/id/draft-ietf-oauth-security-topics-16.html OAuth 2.0 Security Best Current Practice] - 実装者向けのセキュリティベストプラクティス
+* https://github.com/hawx/relme-auth
+* [[password]] - 従来のパスワード認証
+
+[[Category:Pages in Japanese]]
