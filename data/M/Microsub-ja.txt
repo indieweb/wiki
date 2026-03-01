@@ -1,0 +1,183 @@
+https://indieweb.org/Microsub-ja
+
+[[File:microsub.svg|frameless|right|128px|Microsub icon]]
+
+'''<dfn>Microsub</dfn>''' は、新世代のソーシャル [[readers|リーダー]] を作成するための [[Microsub-spec|提案標準（proposed standard）]] です。これは、[[feeds|フィード]] への購読管理やコンテンツの解析・配信を、ユーザーインターフェースやコンテンツの提示から切り離すことを目的としています。
+
+この仕様の広範な目標は、旧来の [[feed reader|フィードリーダー]] の多くの要素をより小さな [[:Category:building-blocks|ビルディングブロック]] に分割し、開発者やデザイナーが個々の要素により密接に集中できるようにすることです。これにより、問題の配管部分（バックエンド）をデザインやユーザーインターフェース部分から分離させ、全体的なスペースにおける競争と [[pluralism-ja|多様性]] を促進します。この分割により、購読リストをリーダー間で持ち運びできるようになるほか、リーダーを切り替えた際にも、以前読んでいた投稿の続きから読書を再開できるようになります。
+
+__TOC__
+
+'''[[Microsub#Servers|Microsub サーバー]]''' は、フィードの購読リストの維持、それらからの投稿の収集と解析（潜在的に [[WebSub-ja|WebSub]] を使用）を行い、一貫した API を提供します。これにより、'''[[Microsub#Clients|Microsub クライアント]]''' はサーバーから最新の投稿を取得することで、[[reader|リーダー]] インターフェースにフィードや投稿の内容を提示できます。投稿の表示や提示に加えて、リーダー・クライアントは、リーダー内から個々の投稿とどのように対話するかを決定することもできます（オプション）。
+
+リーダー・クライアントやアプリは、（オプションで）[[Micropub-ja|Micropub]] を使用して、リーダー内で作成したレスポンスを、投稿を読んで応答している本人のウェブサイトに投稿できます。これらのレスポンス（[[like|いいね]]、[[repost|リポスト]]、[[comment|コメント]] などが含まれることが多い）は、本人のサイトに投稿された後、応答対象のサイトに対して [[Webmention-ja|Webmention]]を送信することができます。
+
+サーバーとクライアントは、ウェブサイトに直接統合することも、スタンドアロンのウェブアプリ、モバイルアプリ、またはその他のアプリケーションとして作成することも可能です。
+
+Microsub に関する短い議論は、{{aaronpk}} の [https://percolator.today/media/Episode_17.mp3#t=53 Percolator ポッドキャスト] で聴くことができます。
+
+* Microsub クライアントまたはサーバーを実装したいですか？ '''[[Microsub-spec|Microsub 仕様書]]''' を参照してください。
+
+=== 記事 ===
+* {{aaronpk}} 2018-03-12 [https://aaronparecki.com/2018/03/12/17/building-an-indieweb-reader IndieWeb リーダーの構築]
+* {{aaronpk}} 2018-04-20 [https://www.godaddy.com/garage/an-indieweb-reader-my-new-home-on-the-internet/ IndieWeb リーダー：インターネットにおける私の新しい家]
+
+
+== クライアント ==
+=== IndiePass ===
+[[IndiePass]]（旧称：Indigenous）は、開発中のネイティブ iOS および Android 用 Microsub リーダーアプリのセットです。
+<div style="float:left;max-width:45%;padding-right:5%">
+==== iOS ====
+[[Indigenous for iOS]] は、{{eddiehinkle.com}} によって構築されたネイティブ iOS Microsub リーダーアプリです。
+
+<img src="https://indieweb.org/images/2/2a/indigenous-0.3-reader.png" width="300">
+</div><div style="float:left;max-width:45%">
+
+==== Android ====
+[[IndiePass for Android]] は、{{realize.be}} によって構築されたネイティブ Android Microsub リーダーアプリです。
+
+<img src="https://realize.be/indigenous-screenshots/indigenous_timeline.jpg" width="300">
+</div><div style="clear:both">&nbsp;</div>
+
+==== デスクトップ ====
+IndiePass for Desktop は、Electron を使用して {{realize.be}} によって構築されています。ソースとリリースは https://github.com/IndiePass/indiepass-desktop で入手可能です。
+
+=== Monocle ===
+[[Monocle]] は、{{aaronpk}} によって構築された Microsub リーダー・ウェブアプリです。Microsub サーバーをお持ちであれば、https://monocle.p3k.io でホストされているバージョンを使用できます。
+
+[[File:monocle-timeline-view.png|600px]]
+
+=== Together ===
+[[Together]] はウェブベースの Microsub リーダーで、主に {{grantcodes}} によって開発されています。ソースコードは [https://github.com/alltogethernow/web/ https://github.com/alltogethernow/web/] にあり、オンライン版は [https://alltogethernow.io https://alltogethernow.io] で利用可能です。
+
+[[File:together-screenshot-2019-06-19.jpg|600px]]
+
+=== Ekster Reader ===
+[[Ekster Reader]] は、ブラウザで動作する Microsub リーダーです。独自の Microsub プロキシバックエンドを持たず、Microsub サーバーに直接接続します。これが動作するためには、ブラウザからのアクセスを許可するために CORS ヘッダーを処理する Microsub サーバーが必要です。これは [[IndieAuth]] エンドポイントにも当てはまります。ホストされているバージョンは https://reader.p83.nl/ にあります。
+
+[[File:ekster-reader.png]]
+
+=== Microsub Notifier ===
+[[microsub notifier]] は、Microsub チャンネルのいずれかに新しいコンテンツがあった場合に通知を送信するためだけに構築された Microsub クライアントです。{{grantcodes}} によって構築され、https://microsub-notifier.tpxl.io でホストされています。
+
+（スクリーンショット募集中！）
+
+=== capjamesg の Microsub クライアント ===
+
+{{capjamesg}} は、Python Flask を使用して [https://github.com/capjamesg/microsub オープンソースの Microsub クライアント] を構築しました。このクライアントは Microsub サーバーに接続されていますが、サーバーの使用はオプションです。現在は個人利用向けですが、誰でも独自のバージョンをデプロイできます。
+
+[[File:feed.png]]
+
+=== PADD ===
+
+{{crowdersoup}} は [[PADD]] を構築しています。Microsub サーバーをお持ちであれば、https://padd.crowdersoup.com でホストされているバージョンを使用するか、[https://github.com/CrowderSoup/PADD ソースをダウンロードして] 自前で実行することができます。
+
+[[File:Screenshot 2026-02-19 at 9.36.51 AM.png]]
+
+== サーバー ==
+=== Aperture ===
+* [[Aperture]] は {{aaronpk}} によって構築された Microsub サーバーで、投稿を表示するための UI は備えていません。これはサーバー専用として意図されており、すべての表示処理は Microsub クライアントを使用して行われます。PHP で構築され、MySQL でストレージを管理しています。 [https://github.com/aaronpk/Aperture GitHub 上のソース]
+
+=== Drupal IndieWeb モジュール ===
+* {{realize.be}} によって構築された [https://drupal.org/project/indieweb Drupal IndieWeb] モジュールには、Microsub サーバーが組み込まれています。
+
+=== Dobrado ===
+* [[dobrado]] には、{{mblaney}} によって構築された Microsub サーバーが含まれています。
+
+=== Micro.blog ===
+* [[Micro.blog]] は Microsub サーバーとして使用できます。チャンネルは、Timeline（タイムライン）、Mentions（メンション）、Favorites（お気に入り）といった Micro.blog の組み込みセクションにマッピングされます。
+
+=== Yarns ===
+* [[Yarns]] は、{{jackjamieson}} によって構築された、自身の [[WordPress]] サイトから Microsub サーバーを実行するためのプラグインです。{{GWG}} によって構築された [https://github.com/dshanske/parse-this Parse This] ライブラリを使用しています。チャンネルや購読を管理するための UI を備えています。
+
+=== Ekster ===
+* [[Ekster]] は {{pstuifzand}} によって構築された Microsub サーバーで、ストレージに Redis または Postgres を使用し Go で書かれています。全文検索、リアルタイムのフィード取得のための WebSub をサポートしています。 [https://github.com/pstuifzand/ekster GitHub 上のソース] に加え、[https://hub.docker.com/r/pstuifzand/ekster Docker イメージ] としても利用可能です。
+
+=== その他のプロキシ ===
+プロキシ - 完全なサーバーではありませんが、既存のサービスをラップして Microsub サーバー API を実装しているものです：
+
+==== Baffle ====
+* [[Baffle]] は、[[NewsBlur]] や [[Feedly]] のような従来のフィードリーダーを Microsub に対応させるためのブリッジでした。 [https://snarfed.org/microsub-bridge 詳細な背景]
+
+=== capjamesg の Microsub サーバー ===
+
+* {{capjamesg}} は、Python Flask と SQLite を使用して Microsub サーバーを開発しました。プロジェクトには Microsub サーバーと、購読しているすべてのフィードをポーリングするためのスクリプトの両方が含まれています。サーバーは一般登録を受け付けていませんが、コードは [https://github.com/capjamesg/microsub GitHub 上で誰でも利用できるようにオープンソース化されています]。
+
+== IndieWeb での例 ==
+* {{aaronpk}} は、Microsub サーバーとして [[Aperture]] を使用し、クライアントとして [[Together]] と [[IndiePass]] を使用しています。
+** https://aaronparecki.com/2018/03/12/17/building-an-indieweb-reader
+* {{eddiehinkle.com}} は、自身の Microsub サーバーとしてセルフホストした [[Aperture]] を使用し、クライアントとして [[Indigenous for iOS]]（モバイル）と [[Monocle]]（コンピューター上）を使用しています。
+** {{martymcguire}} も 2018-03-05 から同一の構成を使用しています。
+* {{realize.be}} は、Drupal Indieweb モジュールの組み込み Microsub サーバーを使用し、クライアントとして [[IndiePass for Android]]（モバイル）と [[Monocle]]（コンピューター上）を使用しています。
+* {{doubleloop}} は、{{aaronpk}} の Aperture インスタンス上のアカウントを使用し、2018-09-07 からクライアントとして [[IndiePass for Android]]（モバイル）と [[Monocle]]（コンピューター上）を使用しています。
+* {{pstuifzand}} は、自身の Microsub サーバーである [[Ekster]] と共に、[[Monocle]]、[[IndiePass]]、[[Together]]、Ekster Reader を使用しています。
+* {{jamesgoca}} は、[[Monocle]] と独自のカスタム Microsub サーバーを使用しています。
+* {{tonz}} は、自身の WordPress ブログとは別の WordPress インスタンスで [[Yarns_Microsub_Server]] を使用し、自身のブログに投稿できる自作の Microsub クライアントを使用しています。
+* {{addyourself}}
+
+=== 進行中 ===
+* {{sknebel}} は、[[Inoreader]] から Microsub へのブリッジを構築中です（まだ準備ができていません、すみません！）。
+* {{jackjamieson}} は、Yarns Microsub Server という WordPress プラグインを構築中です。 [https://github.com/jackjamieson2/yarns-microsub-server GitHub 上のソース]
+* {{sebsel}} は、[https://seblog.nl/2018/10/22/13/three-things-about-readers Seblog.nl のこの記事] で説明されているように、Leesmap というコードネームのプロジェクトに取り組んでいます。
+* {{jackyalcine}} は、[[Lwa]] という Microsub クライアント + サーバーに取り組んでいます。
+* {{capjamesg}} は、Microsub サーバーを積極的に開発しています。
+
+== IndieWebCamp 関連セッション ==
+* [[2020/London/microsubfeeds|London 2020: Microsub とフィード]]
+* [[2018/indieweb-readers|IndieWeb の次なる波：リーダー]]（[[2018|IndieWeb Summit 2018]] 基調講演）
+* [[2018/microsub|Microsub：サーバーとクライアントの構築方法]]（IndieWeb Summit 2018）
+* [[2017/Austin/audio|Austin 2017: Audio]]（ここで Microsub に関連する付随的なアイデアが出ました）
+
+
+== はじめに ==
+Microsub アプリを使用するには、あなたのウェブサイトが [[IndieAuth]] をサポートし、Microsub エンドポイントを通知している必要があります。プレーンな HTML のホームページから始めて、以下の手順に従ってセットアップを行い、IndieWeb リーダーアプリにログインできるようにしましょう。
+
+=== IndieAuth のセットアップ ===
+もし WordPress やその他のネイティブな IndieAuth サポートを持つウェブサイトを使用しているなら、それが最良の選択肢です。WordPress や CMS に IndieAuth プラグインをインストールしてください。
+
+ネイティブな IndieAuth サポートを持たない CMS を使用している場合は、以下の手順に従ってすべての認証を外部サービスに委任することで、静的サイトやその他のプロジェクトでも利用できるようになります。
+
+* GitHub プロフィールへの rel=me リンクを追加します。
+** 例： <code><nowiki><a href="https://github.com/username" rel="me">github の username</a></nowiki></code>
+* 自身の [[IndieAuth]] 処理を indieauth.com に委任するために、以下のタグを追加します。
+** <code><nowiki><link rel="authorization_endpoint" href="https://indieauth.com/auth"></nowiki></code>
+** <code><nowiki><link rel="token_endpoint" href="https://tokens.indieauth.com/token"></nowiki></code>
+
+=== Microsub のセットアップ ===
+* 自身のドメインを使用して https://aperture.p3k.io/login にサインインします。
+** サインイン後、ダッシュボードに link タグが表示されます。
+* 生成された <link> タグを自身のウェブページに追加します。
+** 例： <code><nowiki><link rel="microsub" href="https://aperture.p3k.io/microsub/000"></nowiki></code>
+* IndieWeb リーダーにサインインします！
+** https://monocle.p3k.io
+** https://alltogethernow.io
+** [[IndiePass]]
+
+== ライブラリ ==
+
+== ブレインストーミング ==
+[[Microsub-spec#Brainstorming]] を参照。
+
+[[Category:building-blocks]]
+[[Category:Feed]]
+[[Category:jargon]]
+[[Category:Protocols]]
+
+== 関連項目 ==
+* [[Microsub-spec]]
+* [[Micropub-ja|Micropub]]
+* [[IndieAuth-ja|IndieAuth]]
+* [[obtaining-an-access-token|アクセストークンの取得]]
+* [[token-endpoint|トークンエンドポイント]]
+* [[access_token]]
+* http://tantek.com/presentations/2005/01/attentionxml.html
+* http://web.archive.org/web/20051228094539/developers.technorati.com/wiki/attentionxml
+* [[Microsub bridge]]
+* 2018-04-20 {{aaronpk}} の GoDaddy ブログ： [https://www.godaddy.com/garage/an-indieweb-reader-my-new-home-on-the-internet/ IndieWeb リーダー：インターネットにおける私の新しい家]
+* [[2018/indieweb-readers|IndieWeb の次なる波：リーダー]]（[[2018|IWS 2018]] 基調講演）
+* [[2018/microsub|IWS 2018 の Microsub セッション]]
+* [[2018/indiealgorithm|IWS 2018 の IndieAlgorithm セッション]]
+* [https://p83.nl/posts/701 OPML ファイルから Microsub サーバーへフィードを追加する]
+* [https://www.jvt.me/posts/2021/05/01/social-reader-features/ 「自身のソーシャルリーダーに欲しい機能」]（{{jamietanna}} による）
+
+[[Category:Pages in Japanese]]
