@@ -1,0 +1,507 @@
+https://indieweb.org/Webmention-ja
+
+<span style="background:white; float:right;">[[File:webmention.svg|frameless|128px|Webmention icon|link=]]<br/>[[File:w3c-logo.svg|frameless|128px|W3C logo|link=]]</span>
+
+'''<dfn>[https://www.w3.org/TR/webmention/ Webmention]</dfn>'''（ウェブメンション）は、ウェブ上での会話や相互作用のためのオープンなウェブ標準（[[W3C]] 勧告）です。これは、ウェブ全体に広がるピア・ツー・ピアの[[comment|コメント]]、[[like|いいね]]、[[repost|リポスト]]、その他の[[responses|反応]]からなる、成長を続ける分散型ネットワークのための強力な構成要素（ビルディングブロック）です。
+
+* 最新の公開バージョン： https://www.w3.org/TR/webmention/
+* 最新のドラフト： https://webmention.net/draft/
+
+[[File:w3c-spec-REC.svg|640px|W3C 勧告へのステップ： 1. 作業草案 (Working Draft)、2. 勧告候補 (Candidate Recommendation)、3. 勧告案 (Proposed Recommendation)、4. W3C 勧告 (W3C Recommendation)|link=]]
+
+== なぜ必要なのか ==
+'''サイトを跨いだ会話を可能にします'''。あるウェブサイトにリンクを張る際、通知のために Webmention を送信できます。相手のサイトが Webmention をサポートしていれば、あなたの投稿が[[comment|コメント]]や[[like|いいね]]、その他の[[responses|反応]]として表示されます。これだけで、サイトからサイトへと跨がる会話が成立するのです！
+
+
+
+<blockquote>「……ウェブサイト間で機能する『@メンション』のようなものです。これにより、Twitter や Facebook から離れられないといった感覚を持たずに済みます。」 <cite class="h-cite">— [https://twitter.com/rngala/status/852354426983591937 <span class="p-author">Rony Ngala</span>]</cite></blockquote>
+
+== 実装・表示方法 ==
+他のサイトへのリンクを含む投稿を公開すると、あなたのサイトは、リンクされたことを知らせるために Webmention を受け付けるサイトへ通知を'''送信'''（send）できます。
+
+Webmention の受信側（レシーバー）は、リンクを張った他者が発見できるように、自身の Webmention エンドポイントを公開（Discovery）します。受信側のエンドポイントが Webmention 通知を'''受信'''（receive）すると、送信側の投稿を確認し、それを反応として表示することがあります。
+
+メンションには主にページ上の受信者へのリンクが必要ですが、送信側の投稿に [[microformats|マイクロフォーマット]] を追加することで、より意味のある[[responses|反応]]（[[comments|コメント]]、[[reposts|リポスト]]、[[likes|いいね]]など）へと'''拡張'''できます。
+
+'''Webmention 追加ガイド（英語）：'''
+* [https://daily-dev-tips.com/posts/goodbye-comments-welcome-webmentions/#how-to-implement-webmentions-on-my-site Webmention を始める]
+* [https://neonaut.neocities.org/blog/2019/indieauth-and-webmentions-on-neocities Neocities での IndieAuth と Webmention]
+* [https://mxb.dev/blog/using-webmentions-on-static-sites/ Eleventy で Webmention を使用する]
+* [https://reillyspitzfaden.com/wiki/tutorials/webmention-tutorial/ Webmention について私が知っていることのクイックガイド]
+
+技術的な詳細についてさらに知りたい場合は、以下を参照してください：
+* '''[[Webmention-developer]]'''
+<div style="clear:both"></div>
+
+__TOC__
+
+== IndieWeb での例 ==
+Webmention を[[IndieWeb_implementations|実装]]し、美しく表示している IndieWeb サイトの例です。
+* 時系列順の詳細なリストについては、[[Webmention-developer#IndieWeb_Examples|Webmention developer: IndieWeb Examples]] を参照・追加してください。
+
+==== Aaron Parecki (p3k 使用) ====
+* [[User:Aaronparecki.com|Aaron Parecki]] は 2013-05-26 以降、[http://aaronparecki.com/ aaronparecki.com] で [[p3k]] を使用。詳細：
+** 投稿にコメント URL を貼り付けて手動で Webmention を送信できる入力フォームを設置（2013-10-12 時点）。
+
+[[File:aaronparecki-webmention-display.png|400px|link=https://aaronparecki.com/2017/02/27/4/day-69-editing-in-quill]]
+
+==== Ben Werdmuller (Known 使用) ====
+* [[User:Werd.io|Ben Werdmuller]] は 2013-05-31 以降、[http://werd.io werd.io] で [[Known]] ([[idno]]) を使用。
+
+==== Barnaby Walters (Taproot 使用) ====
+* [[User:Waterpigs.co.uk|Barnaby]] は 2013-06-11 以降、[http://waterpigs.co.uk/ waterpigs.co.uk] で [[Taproot]] を使用。
+
+[[File:waterpigs-webmention-display.png|400px|link=https://waterpigs.co.uk/notes/4n2Kp2/]]
+
+==== Jeremy Keith (adactio.com) ====
+* [[User:Adactio.com|Jeremy Keith]] は [http://adactio.com/journal/6495/ 2013-09-15] 以降。ブログ投稿に手動送信用のフォームを設置。
+
+==== Barry Frost (barryfrost.com) ====
+* Barry Frost は 2013-09-15 以降。フッターに「この記事にコメントする方法」へのリンクを設置し、[[h-entry]] や [[h-card]] を使った Webmention 送信方法を解説。
+
+==== Bear (bear.im) ====
+* [[User:Bear.im|Bear]] は 2013-12-01 以降。Python ライブラリ [[ronkyuu]] を使用して処理。
+
+==== Kartik Prabhu (kartikprabhu.com) ====
+* [[User:kartikprabhu.com|Kartik Prabhu]] は 2013-12-03 以降。Webmention は反応の種類ごとに分類されて表示されます。
+
+==== Jeena (jeena.net) ====
+* {{jeena}} は 2013-12-06 以降、自作の Rails アプリを使用。ホームページで Webmention を受信するとメールで通知されます。
+
+==== Pelle Wessman (webmention.herokuapp.com 使用) ====
+* [[User:Kodfabrik.se|Pelle Wessman]] は 2013-12-18 以降。静的ページでの Webmention 受信を実装。
+
+==== Christian Kruse (wwwtech.de) ====
+* [https://indiewebcamp.com/User:Wwwtech.de_about Christian Kruse] は自作の [[Phoenix]] アプリを使用。HTTP ヘッダーと HTML の両方でエンドポイントを公開。
+
+==== Andy Sylvester (WordPress プラグイン使用) ====
+* [[User:Andysylvester.com|Andy Sylvester]] は 2014-01-24 以降、WordPress 用 [http://wordpress.org/plugins/webmention Webmention plugin] を使用。
+
+==== gRegor Morrill (ProcessWire プラグイン使用) ====
+* [[User:Gregorlove.com|gRegor Morrill]] は 2014-02-04 以降。自作の [[ProcessWire]] 用カスタムプラグインを使用。受信したメンションはローカルのコメントと混ぜて表示されます。
+
+==== David Shanske (WordPress プラグイン使用) ====
+* {{gwg}} は 2014-03-?? 以降、WordPress で送受信をサポート。
+
+==== Ben Roberts (ben.thatmustbe.me) ====
+* [[User:Ben.thatmustbe.me|Ben Roberts]] は 2014-04-24 以降。返信、メンション、いいねを解析。cron ジョブによる非同期処理を実装。
+
+==== Chris Aldrich (WordPress プラグイン使用) ====
+* {{chrisaldrich}} は 2014-07-05 以降、[[Semantic Linkbacks]] 等を併用。2017年からは[[facepile]]（顔写真の並び）による表示を開始。
+
+[[File:Webmention.PNG|400px|link=http://boffosocko.com/2017/10/06/using-facepiles-in-comments-for-wordpress-with-webmentions-and-semantic-linkbacks/]]
+
+==== Khürt Williams (WordPress プラグイン使用) ====
+* [[User:Islandinthenet.com|Khürt Williams]] は 2017年より WordPress で送受信をサポート。
+
+==== Will Norris (webmention.herokuapp.com 使用) ====
+* [[User:Willnorris.com|Will Norris]] は 2014-07-31 以降。オンサイトのエンドポイントから外部サービスへプロキシして受信。
+
+==== Joel Dueck (thelocalyarn.com) ====
+* [[User:Thelocalyarn.com|Joel Dueck]] は 2014-09-23 以降。受信したメンションはテキストファイルに記録され、モデレーション後に手動でコメントとして追加。
+
+==== Johnny Oskarsson (joskar.se) ====
+* [[User:Joskar.se|Johnny Oskarsson]] は 2014-10-23 以降。エンドポイントを HTTP Link ヘッダーのみで公開。
+
+==== Stuart Langridge (Pelican) ====
+* [[User:www.kryogenix.org|Stuart Langridge]] は 2014-11-29 以降、静的サイトジェネレーター Pelican に機能を追加して運用。
+
+[[File:kryogenix-webmention-comment-display.png|400px|link=https://www.kryogenix.org/days/2017/02/24/a-standard-password-change-api/]]
+
+==== Alex Kearney (IndieAnndroid) ====
+* {{kongaloosh}} は 2015-08-04 より [[IndieAnndroid]] を使用して送信。
+
+==== Tantek (Falcon) ====
+* {{t}} は 2015-06-11 以降、[[Falcon]] を使用して RSVP、コメント、いいね等のリンクに対して自動送信。
+
+==== Jason Garber (FrancisCMS) ====
+* {{jgarber}} は 2016-01-27 以降、[[FrancisCMS]] を使用。[[Bridgy]] を介して SNS からの反応を[[backfeed|逆同期]]。
+
+==== Calum Ryan (calumryan.com) ====
+* {{calumryan}} は 2016-08-28 以降。自作の PHP ベース CMS で送受信を実装。
+
+==== Sebastiaan Andeweg (seblog.nl) ====
+* {{sebsel}} は受信した Webmention をコメントとして表示。
+
+[[File:seblog-webmention-comment.png|400px|link=https://seblog.nl/2017/02/16/2/day-32-new-repost-policy]]
+
+==== Daniel Goldsmith (Hugo) ====
+* {{dgold}} は 2017-01-25 以降、静的サイトジェネレーター Hugo で受信をサポート。
+
+==== Amit Gawande (amitgawande.com) ====
+* {{amit}} は 2018-01-28 以降。[[Webmention.io]] を使用して受信。現在は [[micro.blog]] へ移行。
+
+[[File:amit-webmentions-comment.png|400px|link=https://www.amitgawande.com/indiewebify-hugo-website/]]
+
+==== fluffy (beesbuzz.biz) ====
+* [[User:beesbuzz.biz|fluffy]] は [[webmention.io]] と [https://github.com/PlaidWeb/Pushl Pushl] を使用。JavaScript 埋め込みで表示。
+
+==== Jamie Tanna (Hugo) ====
+* {{jamietanna}} は 2019年より送受信を実装。デプロイ時に自動送信する仕組みを構築。
+
+==== Wouter Groeneveld (Hugo) ====
+* 自作の送受信機 [https://github.com/wgroeneveld/go-jamming go-jamming] を開発。RSS フィードをパースして自動処理。
+
+==== Alberto Mardegan (Bussator) ====
+* {{Www.mardy.it}} は 2019-10 より、[https://gitlab.com/mardy/bussator Bussator] を介して Webmention を [https://posativ.org/isso/ Isso] コメントに変換。
+
+==== Jan-Lukas Else (Hugo/GoBlog) ====
+* {{jlelse}} は 2019年より自作のソリューションで受信・表示を開始。
+
+==== Danny Steenman (GatsbyJS) ====
+* [https://indieweb.org/User:Dannys.cloud Danny] は 2020-03 より、[[webmention.io]] 等を使用して Twitter のメンションを表示。
+
+==== Ferdinand Mütsch (Hexo) ====
+* [https://indieweb.org/User:Muetsch.io Ferdinand] は 2020-04 より、Telegram 経由で受信通知を受け取る仕組みを構築。
+
+==== Rasul Kireev (Gridsome) ====
+* [[User:Rasulkireev.com|Rasul Kireev]] は 2020-08-17 以降。[[brid.gy]] により Twitter での「いいね」やリプライをサイトに反映。
+
+==== Max Dietrich (Next.js) ====
+* [[User:mxd.codes|Max Dietrich]] は 2021-02 より、種類別（リポスト、いいね等）にフィルタリングして表示。
+
+==== Mrs. D (Hugo) ====
+* [[User:dianoetic.me|Mrs. D]] は GitHub Actions と curl を使用してビルド後に自動送信。
+
+[[File:dwebmntn.png|400px]]
+
+==== capjamesg (jamesg.blog) ====
+* {{jamesgoca}} は自作のレシーバーを使用し、JavaScript でレンダリング。
+
+==== 4X_Pro (4xpro.ru) ====
+* {{4x_pro}} は 2022-04 より Intellect Board エンジンで Webmention を特別なユーザーのコメントとして表示。
+
+==== Robijntje (geheimesite.nl) ====
+* {{robijntje}} は 2022-04 より [https://github.com/PlaidWeb/webmention.js webmention.js] を使用して表示。
+
+==== ᜌᜓᜃᜒ (Yuki) (Hugo) ====
+* [[User:Im.youronly.one|I'M YourOnly.One 🔏]] は 2022-05 より複数のブログで送受信と表示を実装。
+
+==== Owen Young (Zola) ====
+* [[User:www.owenyoung.com|Owen Young]] は 2022-06 より、Github Actions でデータをキャッシュして表示。
+
+==== Mike Bifulco (Next.js) ====
+* [[User:www.mikebifulco.com|Mike Bifulco]] はロード時に API を叩いて動的に表示。
+
+==== EINDEX (Astro) ====
+* [[User:eindex.me|EINDEX]] は 2022-12 より CI ワークフローを活用して表示。
+
+==== Luis Quintanilla (WebmentionFs) ====
+* {{Lqdev.me}} は F# と Azure Functions を使った自作ツール [https://github.com/lqdev/WebmentionFs WebmentionFs] で送受信。
+
+==== carrvo (SVNmentions) ====
+* Subversion（SVN）との互換性を持たせる [https://github.com/carrvo/SVNmentions-hook SVNmentions] を利用。
+
+== 公開用ソフトウェア ==
+標準機能として Webmention をサポートしており、一般的なユーザーがすぐに利用できるオープンソースソフトウェア：
+
+=== Known ===
+* [[Known]] は Webmention の送信、およびコメント（更新含む）や「いいね」の受信をサポートしています。
+
+=== Perch ===
+* [[Perch]] は 2017-07-16 よりベータ版でサポートを開始し、[[facepile]] のソート機能などを追加。
+
+以下の CMS 用には'''プラグイン'''が存在します：
+
+=== WordPress ===
+* [[WordPress]] 用の [https://wordpress.org/plugins/webmention/ 公式プラグイン] があります。
+
+=== Drupal ===
+* [[Drupal]] 8 以上では [https://www.drupal.org/project/indieweb indieweb] または [https://www.drupal.org/project/vinculum viniculum] プラグインが対応。
+
+=== Craft ===
+* [[Craft]] CMS 用には [https://github.com/matthiasott/webmention webmention client] があります。
+
+=== Nucleus CMS ===
+* [[Nucleus]] 用には [https://github.com/gRegorLove/nucleus-plugin-webmention Webmention プラグイン] があります。
+
+=== Kirby ===
+* [[Kirby]] 2 用および Kirby 3 用（Commentions 等）のプラグインが存在します。
+
+=== ProcessWire ===
+* [[ProcessWire#Plugins|ProcessWire]] 用プラグイン。
+
+=== Elgg ===
+* [[Elgg]] 用プラグイン。
+
+=== Django ===
+* [https://github.com/easy-as-python/django-webmention django-webmention]（受信のみ）や [https://github.com/beatonma/django-wm/ django-wm]（送受信）。
+
+=== Grav ===
+* [[Grav]] CMS 用のプラグインがありましたが、現在はメンテナンスが引き継ぎ待ちの状態です。
+
+=== b2evolution ===
+* [[b2evolution]] バージョン 6.11.0-beta よりサポート。
+
+=== その他 ===
+* [[FrancisCMS]], [[WWWTech]], [[phorkie]], [[gRSShopper]] (2018年より), [[Pelican]], [[Ghost]] など。
+* [[p3k]], [[Taproot]], [[Falcon]] なども一部または全部でサポート。
+
+=== クローズドソースの公開用ソフトウェア ===
+オープンソースではありませんが、Webmention を標準サポートしているプラットフォーム：
+
+==== Micro.blog ====
+* [[Micro.blog]] は送受信をサポート。外部サイトへのリプライ時に Webmention を送信し、受信時は Micro.blog ユーザーへの紐付けを試みます。
+
+==== i.haza.website ====
+* dobrado 上でサイトを運営できるホスティングサービスで、Webmention をサポート。
+
+==== Typlog ====
+* [https://typlog.com/ Typlog] は 2020-03-30 にサポートを発表。
+
+== アグリゲーター（集約ツール） ==
+=== Prismo ===
+* [[Prismo]] はリンク集約ソフトウェア。投稿されたリンクに対して Webmention を送信します。
+
+== サービス ==
+投稿内のリンクに対して自動的に Webmention を送受信するサービス。
+
+=== Lobsters ===
+[[Lobsters]] (lobste.rs) は集約されたリンクに対して Webmention を送信します。
+
+=== Web We Want ===
+Web We Want サイトでは、[[like]] や [[bookmark]] の Webmention を受け取ることで「賛成票」を投じる仕組みがあります。
+
+== パブリッシャー向けサービス ==
+受信・送信の処理や、[[POSSE]]（自分のサイトで書き、他所で公開する）などの追加機能を提供。
+
+=== Bridgy ===
+{{main|Bridgy}}
+[http://brid.gy/ brid.gy] は、Twitter、Flickr、GitHub、Mastodon、Instagram での反応（コメント、いいね等）に対して Webmention を送信するサービスです。
+[https://www.brid.gy/about#publish Bridgy Publish] 機能により、Webmention をトリガーとして各 SNS へ投稿を拡散することも可能です。
+
+[[File:bridgy_example_screenshot.png]]
+
+=== Bussator ===
+[https://gitlab.com/mardy/bussator Bussator] は Webmention をコメントとして公開するレシーバー。現在は [https://posativ.org/isso/ Isso] 用プラグインが実装されています。
+
+=== capjamesg Webmention Receiver ===
+{{capjamesg}} が開発中のオープンソースのレシーバー。 [https://github.com/capjamesg/webmention-receiver GitHub] で公開されています。
+
+=== Go-Jamming ===
+[https://github.com/wgroeneveld/go-jamming go-jamming] は Go 言語製のマイクロサーバー。RSS フィードに基づいて自動的に送受信を行い、スパム対策機能も備えています。
+
+=== Lazymention ===
+[[lazymention|Lazymention]] は、静的サイトから Webmention を送信するための Node.js サービス。
+
+=== mention-tech ===
+{{main|mention.tech}}
+[https://mention.tech/ mention.tech] は以下の機能を提供します：
+* ホームページのフォームから代理で Webmention を送信。
+* [[Internet Archive]] へ URL を送信。
+* ページ内のすべてのリンクに対してメンションを送信。
+
+=== stapibas ===
+[[stapibas]] は、ウェブサイトやブログで Webmention を送受信するためのセルフホスト型サービスです。静的サイト上の新しい投稿に対して、Webmention や Pingback を送信するために使用できます。
+
+=== Telegraph ===
+[[Telegraph]] は、[[webmentions|Webmention]] や [[pingbacks|Pingback]] を送信するためのオープンソースプロジェクトおよびホスト型サービスです。ページ上のすべてのリンクにメンションを送信したり、特定のソースとターゲットを指定して Webmention を送信したりできます。
+
+=== webmention.herokuapp.com ===
+{{main|webmention.herokuapp.com}}
+[https://webmention.herokuapp.com/ webmention.herokuapp.com] は、登録されたサイトの [[webmentions|Webmention]] を受信し、JavaScript を通じてそれらを表示できるようにするオープンソースプロジェクトおよびホスト型サービスです。
+
+=== webmention.io ===
+{{main|webmention.io}}
+[http://webmention.io webmention.io] は、あなたの IndieWeb サイトに代わって [[webmentions|Webmention]] や [[pingbacks|Pingback]] を受信するためのオープンソースプロジェクトおよびホスト型サービスです。
+
+=== webmention.app ===
+[https://webmention.app webmention.app] はプラットフォームに依存しないサービスで、指定された URL やフィードからコンテンツエントリを確認し、Webmention をサポートするリンクがあるかどうかを発見（Discovery）して、ターゲットに送信します。自動化されたワークフローを意図しており、既存のワークフロー（IFTTT、コマンドライン、Netlify など）への統合方法も提供されています。
+
+== ツール ==
+Webmention を送信するために使用・インストールできるツールです。
+
+=== Firefox アドオン ===
+* [https://github.com/eliemichel/firefox-webmention-addon 右クリックメニューから Webmention を送信できる Firefox アドオン] (GitHub ソース); 元の機能していた [https://addons.mozilla.org/firefox/addon/webmention/ アドオン] は Firefox のサイトから削除されました。
+
+=== Pushl ===
+[[Pushl]] は、任意のフィード（RSS, Atom, h-feed）から発見されたページに対して Webmention を送信するためのコマンドラインツールです。
+
+=== 手動での Webmention ===
+自分のサイトから Webmention を送信する簡単な手段がないユーザーは、以下のツールインターフェースを使用して、代理で「手動」送信を行うことができます：
+* http://mention-tech.appspot.com/
+* https://telegraph.p3k.io/send-a-webmention
+
+プログラミングの知識がある場合は、[[Webmention-developer#How_to_send_webmentions_with_cURL|cURL を使用して Webmention を送信する方法]]もあります。
+
+Webmention を手動で受信するには、サーバーの Webmention エンドポイント URL に送信された HTTP POST リクエストをファイルに記録するように設定します。その後、テキストエディタでログファイルを確認し、手動で応答したり、スクリプトを作成したりできます。nginx での実行例（「nginx を使用して Webmention（および Pingback）を *受信* するための静的かつ手動のシステム」）は以下にあります：
+http://superkuh.com/blog/2020-01-10-1.html
+
+=== 匿名 Webmention（コメント用） ===
+[[commentpara.de]] を使用すると、匿名で Webmention を送信できます。これにより、読者は自身のウェブサイトを持っていなくても IndieWeb の投稿に[[comment|コメント]]を残すことができます。
+
+== リソース ==
+* <span id="FAQ">[[Webmention-faq|FAQ（よくある質問）]]</span>: 問題を報告したり [[Webmention-brainstorming]] に追加したりする前に、こちらをお読みください。
+
+== Webmention の Font Awesome アイコン ==
+* Font Awesome のアイコンセットに Webmention アイコンを追加してもらうための投票（親指アップ）はこちら： https://github.com/FortAwesome/Font-Awesome/issues/5377
+1ページ目に掲載されるには少なくとも50票、開発の検討が始まるには少なくとも100票が必要です。
+
+== ライブラリ ==
+* 参照： '''[[Webmention-developer#Libraries]]'''
+
+== 記事 ==
+Webmention に関するブログ投稿や記事（新しい順）
+
+* {{citation
+| title = なぜ Disqus を Webmention に置き換えるべきか
+| url = https://gabriellazcano.com/blog/why-you-might-replace-disqus-with-webmentions/
+| author = [https://gabriellazcano.com/ Gabriel Lazcano]
+| published = 2022-08-08
+| archiveurl = http://web.archive.org/web/20220809223323/https://gabriellazcano.com/blog/why-you-might-replace-disqus-with-webmentions/
+}}
+* {{citation
+| title = 静的 IndieWeb パート2: Webmention を使う（[[Eleventy]] と Jekyll に焦点を当てて）
+| url = https://mxb.at/blog/using-webmentions-on-static-sites/
+| author = [https://mxb.at/ Max Böck]
+| published = 2019-01-10
+| archiveurl = https://web.archive.org/web/20190119073106/https://mxb.at/blog/using-webmentions-on-static-sites/
+}}
+* {{citation
+| title = 投稿と一緒に Webmention を表示する
+| url = https://www.amitgawande.com/display-webmentions/
+| author = {{amitgawande}}
+| published = 2018-12-27
+}}
+* {{citation
+| title = Webmention：インターネット上のコミュニケーションをより良くする
+| url = https://alistapart.com/article/webmentions-enabling-better-communication-on-the-internet
+| author = {{chrisaldrich}}
+| published = 2018-07-19
+| archiveurl = https://web.archive.org/web/20180726185347/https://alistapart.com/article/webmentions-enabling-better-communication-on-the-internet
+}}
+* {{citation
+| title = ゼロから最初の Webmention を送信する
+| url = https://aaronparecki.com/2018/06/30/11/your-first-webmention
+| author = {{aaronpk}}
+| published = 2018-06-30
+}}
+* {{citation
+| title = De magie van Webmentions（Webmention の魔法）
+| url = https://seblog.nl/2018/05/09/5/de-magie-van-webmentions
+| author = {{sebsel}}
+| published = 2018-05-09
+| archiveurl = https://web.archive.org/web/20180509210136/https://seblog.nl/2018/05/09/5/de-magie-van-webmentions
+}} (オランダ語)
+* {{citation
+| title = lazymention の発表：静的サイトのための洗練されたアウトバウンド Webmention
+| url = https://strugee.net/blog/2017/12/announcing-lazymention-elegant-outbound-webmention-for-static-sites
+| author = [http://strugee.net AJ Jordan]
+| published = 2017-12-29
+}}
+* {{citation
+| title = Disqus よさらば、Webmention こんにちは
+| url = https://nicolas-hoizey.com/articles/2017/07/27/so-long-disqus-hello-webmentions/
+| author = Nicolas Hoizey
+| published = 2017-07-27
+| archiveurl = https://web.archive.org/web/20180427150553/https://nicolas-hoizey.com/2017/07/so-long-disqus-hello-webmentions.html
+}}
+* {{citation
+| title = Webmention の実装
+| url = https://allinthehead.com/retro/378/implementing-webmentions
+| author = Drew McLellan ([[Perch]] より)
+| published = 2017-07-16
+| archiveurl = https://web.archive.org/web/20170718190733/https://allinthehead.com/retro/378/implementing-webmentions
+}}
+* {{citation
+| title = 新しい Webmention と Annotation の W3C 標準が WordPress にとって意味すること
+| url = https://premium.wpmudev.org/blog/webmentions-annotations-web-standards/
+| author = Michael McCallister
+| published = 2017-07-15
+| archiveurl = https://web.archive.org/web/20170718191100/https://premium.wpmudev.org/blog/webmentions-annotations-web-standards/
+}}
+* 2016-04-02 Jon Penland (WPMU DEV ブログ): [http://premium.wpmudev.org/blog/trackbacks-pingbacks-webmentions/ WordPress におけるトラックバック vs ピンバック vs Webmention]
+* 2016-03-18 James Richman (WPTavern): [http://wptavern.com/is-w3c-replicating-the-wordpress-pingback-system W3C は WordPress のピンバックシステムを複製しているのか？]
+** <blockquote>Webmention は人間のコメントのような見た目と質感を持っています</blockquote>
+* 2016-03-11 {{jeena}} [https://jeena.net/initiating-conversations-indieweb IndieWeb で会話を始めること。私たちの UX はまだかなり貧弱です]
+* 2016-02-18 The Register: [http://www.theregister.co.uk/2016/02/18/remember_wordpress_pingbacks_the_w3c_wants_us_to_use_them_across_the_whole_web/ WordPress のピンバックを覚えていますか？W3C はそれをウェブ全体で使いたいと考えています]
+** <blockquote>その控えめな名前の裏には、最終的にユーザーが Facebook や Twitter だけでなく、ウェブを支配する巨大企業を捨てる方法を提供するかもしれない何かが潜んでいます。</blockquote>
+* 2015-04-20 {{aaronpk}} [https://aaronparecki.com/2015/04/20/7/results-from-six-months-of-expiring-webmention-endpoints 有効期限付き Webmention エンドポイントを6ヶ月運用した結果]
+* 2014-12-21 {{GWG}} [https://david.shanske.com/articles/2014/12/21/problem-future-mentions/ IndieWebCamp の構成要素の一つが Webmention です]
+* 2014-11-29 {{kryogenix}} [http://www.kryogenix.org/days/2014/11/29/enabling-webmentions/ Webmention を有効にする] - [[Pingback]] の発明者が自身のブログで Webmention を有効にしました！
+* {{citation
+| title = Webmention の解析
+| url = https://adactio.com/journal/6495
+| author = {{adactio}}
+| published = 2013-09-15
+| archiveurl = https://web.archive.org/web/20171117221327/https://adactio.com/journal/6495
+}}
+
+== 拡張機能 ==
+* [[Vouch]] - スパム対策拡張
+* [[Salmention]] - 自分がメンションされたときに、自分が言及しているページに Webmention を送る
+* [[Private Webmention]] - 非公開投稿のための Webmention
+
+== Webmention 開発 ==
+* [[Webmention-developer]]
+* [[Webmention-brainstorming]]
+* [[webmention-implementation-guide]]
+* [[Webmention-faq#Developer_Questions]]
+
+== FAQ ==
+[[Webmention-faq]] を参照してください。
+
+== 歴史 ==
+[https://github.com/converspace/webmention/commit/3c19e8f586abaaa2d1a2217d7c05ad568a670b43 Webmention プロトコルの最初の草案] は、2012-10-22 に [[User:Sandeep.io|Sandeep Shetty]] によって書かれました。
+
+=== 過去の例 ===
+
+==== Sandeep Shetty ====
+[[User:Sandeep.io|Sandeep Shetty]] は [[Converspace]] を使用していました。ドメインは現在リダイレクトされていますが、履歴によると：
+* 2013-06-04: Webmention 送信機能を追加
+* 2013-06-09: Webmention 受信機能を追加
+* 2013-06-11: {{aaronpk}} から Webmention を受信し、コメントとして表示。
+** これは Webmention と [[h-entry]] を使用した最初の[[federated|フェデレーション]]型コメントスレッドと思われます。
+
+==== Tom Morris ====
+* [[User:Tommorris.org|Tom Morris]] は [http://tommorris.org/ tommorris.org] で [[Ferocity]] を使用（2013年）。全投稿で（非同期に）Webmention を送信していました。
+
+==== Christian Weiske (stapibas 使用) ====
+* [[User:Cweiske.de|Christian Weiske]] は 2013-10-22 より [http://cweiske.de/ cweiske.de] で Webmention を受信。
+** 全投稿で [http://git.cweiske.de/stapibas.git/ stapibas] を使用して受信。
+** ピンバックへのフォールバックを含む送信アプローチを実装。
+
+== 推薦の声 ==
+* 推薦の声: https://twitter.com/jeremyfelt/status/1215341288112844800 と IndieWeb の例: https://jeremyfelt.com/2020/01/06/now-supporting-webmention/。
+** 「このウサギの穴は深く、そして美しい！ https://indieweb.org/Webmention <br><br> Steve と私のやり取りを例として見てください： https://jeremyfelt.com/2020/01/06/now-supporting-webmention/」 — [https://jeremyfelt.com @jeremyfelt] 2020年1月9日
+* https://twitter.com/_/status/1582775498584645636
+** 「ああ、それと Webmention。Webmention は最高にクールなものだと思う。基本的にはグローバル互換の @通知、リプライ、ブックマークなどだ。自分のブログでもリプライ用に設定してある。」 — [https://person-al.github.io/ @person72443] 2022年10月19日
+
+[[Category:building-blocks]]
+[[Category:jargon]]
+
+== 関連項目 ==
+* [[comments]] - Webmention の主要なユースケース、全般的な[[responses|反応]]（[[likes|いいね]]、[[reposts|リポスト]]など）
+* [[notification]]
+* [[indieweb-messaging|messaging]] - Webmention のもう一つのユースケース
+* [http://en.wikipedia.org/wiki/WebMention Wikipedia - Webmention]
+* https://github.com/PlaidWeb/Pushl
+* [[Webmention syndication]]
+* [[spam#Webmention|実際に確認されたネイティブ Webmention スパムの候補]]
+* https://webwewant.fyi/voting/
+* [https://www.aboutmonica.com/blog/getting-started-with-webmention-next-js Webmention と NextJS を始める] (コードとビデオ付きチュートリアル)
+* [https://martymcgui.re/2020/07/15/what-we-talk-about-when-were-talking-about-webmentions/ 「Webmention」について話すときに私たちが話していること]
+* 「これを言うと祖父のように感じますが、当時は誰かの投稿に応答したいときは、自分のサイトに何かを書いてリンクを貼ったものです」 [http://plasticbag.org/archives/2007/08/why_i_require_you_to/ なぜコメント投稿にログインが必要になったのか…]
+* Next.js での取得と表示の設定 https://aboutmonica.com/blog/getting-started-with-webmention-next-js
+* Eleventy への Webmention の追加 [https://sia.codes/posts/webmentions-eleventy-in-depth/ Webmention + Eleventy の詳細チュートリアル]
+* [https://brainbaking.com/post/2021/05/beyond-webmention-io/ 独自の Webmention レシーバーをホストする]
+* [https://bionicjulia.com/blog/integrating-webmentions-nextjs-blog Webmention を NextJS ブログに統合する] — [https://bionicjulia.com Julia Tan] 著
+* https://github.com/capjamesg/webmention-receiver
+
+==== Glenn Jones (node webmentions モジュール使用) ====
+* [[User:glennjones.net|Glenn Jones]] は 2014-02-19 より自作の node.js モジュールを使用。
+
+==== Dan Lyke (www.flutterby.com) ====
+* [[Www.flutterby.net user:danlyke|Dan Lyke]] は 2014-10-10 より [http://www.flutterby.com Flutterby.com] で Webmention を受信。
+
+==== Jay Robinson (aruna) ====
+* {{j4y_funabashi}} は 2016-06-13 以降 [http://j4y.co j4y.co] で使用。webmention.rocks の全 21 テストに合格。
+
+==== Ru Singh (Eleventy 使用) ====
+* {{hirusi}} は 2020-04 より [https://rusingh.com/ rusingh.com] で [[webmention.io]] と [[brid.gy]] を使用。[[likes]]、[[reposts]]、[[mentions]]、[[replies]] の表示をサポート。
+[[File:rusingh-com-webmentions-example.png|400px]]
+* 2021-12-27 時点では、サイトは [[WordPress]] で運用されているようで、Webmention のサポートは確認できません。
+* クリエイティブな表示例: [https://www.johnpe.art/2023/10/31/making-webmentions-look-more-conversational/ Webmention をより「会話」らしく見せる工夫]
+* https://webmention.isbrill.com/
+
+[[Category:Pages in Japanese]]
