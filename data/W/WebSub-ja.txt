@@ -1,0 +1,237 @@
+https://indieweb.org/WebSub-ja
+
+[[Category:Feed]]
+<span style="background:white; float:right;">
+[[File:websub.svg|frameless|128px|WebSub icon]]<br>
+[[File:w3c-logo.svg|frameless|128px|W3C logo]]
+</span>
+
+'''<dfn>[https://www.w3.org/TR/websub/ WebSub]</dfn>''' は、オープンな標準（[[W3C]] 勧告）であり、ウェブパブリッシングや [[streams|ストリーム]]、およびレガシーな [[feed files|フィードファイル]] への購読をリアルタイムで行うための通知ベースのプロトコルです。以前は <dfn>PubSubHubbub</dfn> や <dfn>PuSH</dfn>、また一時的に <dfn>PubSub</dfn> としても知られていました。
+
+* 最新の公開バージョン: https://www.w3.org/TR/websub/
+* 最新のドラフト: https://websub.net/draft
+
+[[File:w3c-spec-REC.svg|640px]]
+
+WebSub は PubSubHubbub として始まり、W3C の [[Social Web Working Group]] で洗練され、W3C 勧告として公開されました。
+
+== なぜ ==
+IndieWeb の [[readers|リーダー]]（[[Woodwind]] や [[Monocle]] など）が以下のことを行えるように、ホームページの更新に WebSub を実装すべきです：
+* あなたが投稿を公開した際、即座にそれを取得できるようにするため
+* 不要なトラフィックであなたのサーバーにポーリング（巡回）することを避けるため
+
+== 方法 ==
+__TOC__
+参照： [[How to publish and consume WebSub]]
+
+== IndieWeb での例 ==
+WebSub 通知を生成している IndieWeb サイトはいくつか存在し、それらを消費する IndieWeb 中心的なアプリケーションもいくつかあります（特にインディー [[reader|リーダー]] の [[Shrewdness]] を参照）。現在、WebSub 経由で何かを購読している既知の IndieWeb サイトはありませんが、WebSub を使用して [[h-feed]] ストリームを購読する、UI が独立したインディー・[[readers|リーダー]] はいくつか存在します。
+
+=== Tantek ===
+{{t}} は、自身のサイト tantek.com から WebSub 通知を送信するために [[Falcon]] を使用しています。
+* [http://tantek.com/2010/032/t3/bits-tweeting-from-my-site-favicon-twitter-pubsubhubbub 2010-02-01 以降]、彼の Atom フィードファイル内の各エントリに対して PuSH 0.3 通知が送信されています。
+* [http://tantek.com/2015/077/t3/switched-google-hub-to-superfeedr 2015-03-18 以降]、tantek.com の HTML + [[h-feed]] ホームページ上の各 [[h-entry]] 投稿に対して PuSH 0.4 通知が送信されています。
+
+=== Aaron Parecki ===
+{{aaronpk}} は、自身のサイト aaronparecki.com から PuSH 通知を送信するために [[p3k]] を使用しています。
+* 2012-08-18 から 2015-02-27 まで - Atom フィード（ノート、記事、返信）のすべてのエントリに対して PuSH 0.3 通知を送信。Google の appspot.com ハブを使用していました。
+* 2015-02-27 以降 - 投稿作成後に更新されるすべてのフィード（ホームページの [[h-entry]]、ノート/記事/返信などのページ、タグページを含む）に対して PuSH 0.4 通知を送信。Superfeedr のハブを使用していました。
+* 2015-03-26 - ハブを Superfeedr から [[Switchboard]] に変更しました。
+
+=== Bret Comnes ===
+{{bret}} は、bret.io の GitHub Pages/Jekyll Atom フィードファイルに対して、[http://bret.io/2014/03/16/github-pages-pubsubhubbub-support-levels-up/ 2014-03-16 より] PuSH 通知を送信しています。
+* [https://github.com/bcomnes/bcomnes.github.io/blob/a29b0bf5cb26871f1c1002a2f8078b941c820fca/_includes/head-meta.html 2015-03-20 より]、ホームページの [[h-entry]] で PuSH 0.4 をサポートしています。
+
+=== Kyle Mahan ===
+{{kylewm}} は、kylewm.com の Atom フィードファイルにおける新しい投稿/編集された投稿、および新しいメンションに対して、2014-03-23 より PuSH 通知を送信するために [[Red Wind]] を使用しています。
+* 現在は、superfeedr.com のハブを使用して、kylewm.com のメイン h-feed の更新に対しても PuSH 0.4 通知を送信しています。2015-02-21 に動作確認済み。
+
+=== Barnaby Walters ===
+{{barnabywalters}} は、2014-03-25 より PuSH 0.4 と Google のハブを使用して、WaterPigs.co.uk のホームページ HTML フィード上の各新規投稿に対して PuSH 通知を送信するために [[Taproot]] を使用しています。
+
+=== David Shanske ===
+{{gwg}} は、2014-02-16 より [[WordPress]] と PushPress プラグインを使用して、[https://david.shanske.com/feed/ 自身の RSS フィード] 更新の PuSH 0.3 通知を送信しています。
+
+=== Matthias Pfefferle ===
+{{pfefferle}} は、2011-01-29 より [[WordPress]] と [https://wordpress.org/plugins/pubsubhubbub/ WebSub/PubSubHubbub プラグイン] を使用して（ドッグフーディングとして）PuSH 通知を送信しています。
+* 2012年より h-entrys サポートを含む PuSH 0.4 に対応。
+
+=== Christian Weiske ===
+{{cweiske}} は、2015-04-01 より自身のハブである [[phubb]] を使用して PuSH 0.4 通知を送信しています。
+
+=== Ben Werdmuller ===
+{{benwerd}} は、少なくとも 2015-05-04（Known 0.7.8 リリース日）より、werd.io のホームページ HTML フィード上の各新規投稿に対して PuSH 0.4 通知を送信するために [[Known]] を使用しています。
+
+=== Pelle Wessman ===
+{{voxpelli}} は、自身のサイト voxpelli.com から PuSH 通知を送信するために GitHub Pages + Superfeedr を使用しています。
+* [https://github.com/voxpelli/voxpelli.github.com/commit/b767625345d78987e9dce11cb0092353fd7ca81d 2011-08-09 以降] - 各 Atom ファイルに対して手動で PuSH 通知を送信。
+* 2015-04-05 - [https://developer.github.com/v3/activity/events/types/#pagebuildevent GitHub page_build webhook] を使用した自動通知を開始。
+* [https://github.com/voxpelli/voxpelli.github.com/blob/4d6812d11cb76cabad85eec226403cc4f23fad56/_layouts/default.html 2015-05-16 以降] - ホームページに対しても PuSH 0.4 通知を送信。
+
+=== Andy Leap ===
+[[User:Vendaria.net|Andy Leap]] は、2015-05-16 より [http://vendaria.net Vendaria.net] で PuSH 0.4 通知を送信しています。
+
+=== 数千の Known サイト ===
+数千の *.withknown.com サイトが、信頼性の高い PuSH 0.4 サポートを備えた Known 0.7.8 がリリースされた 2015-05-04 以降、ホームページの HTML フィード上の各新規投稿に対して PuSH 0.4 通知を送信しています。
+
+また、無数（数百？）の [[Known]] インストール環境も、すべて Known 0.7.8 以降を実行している可能性が高く、その結果 PuSH 0.4 通知を送信しています。
+
+=== Malcolm Blaney ===
+{{mblaney}} は、新規および更新された投稿の PuSH 通知を送信するために [[dobrado]] を使用しています。dobrado へのサポートは [https://gitlab.com/dobrado/dobrado/commit/c77b59f7290bd57975971d26649e7332fe18f2d3 2016-05-13] に追加されました。
+
+=== fluffy ===
+{{beesbuzz.biz}} は、2018年10月時点で、ハブとして [[Superfeedr]] を使用し、サイト公開時に WebSub 通知を送信するために [[Pushl]] を使用しています。
+
+== サイロでの実装 ==
+
+=== Flickr ===
+Flickr は、特定の場所内または特定のタグを付けて投稿された写真の購読のために PuSH をサポートしています。 https://www.flickr.com/services/api/flickr.push.subscribe.html
+
+=== 歴史的 / 非推奨 ===
+==== Instagram ====
+Instagram は以前、ユーザーが新しい写真を投稿した際にアプリが通知を購読できるように PuSH をサポートしていました。彼らのドキュメントページ（https://instagram.com/developer/subscriptions）は現在 404 を返しますが、これはビジネスアカウントのみで動作する Facebook の Graph API を優先して彼らの API が廃止されたことに関連していると思われます。
+
+== 消費側の実装 ==
+以下の実装は、PuSH フィードの消費および購読を行います：
+
+WebSub:
+* [https://feedmail.org FeedMail]
+
+PuSH 0.4:
+* [[shrewdness]]
+* [[Woodwind]]
+* [[dobrado]]
+* [[Feed on Feeds]]
+
+PuSH 0.3:
+* [[StatusNet]]
+* <strike>[[tt-rss]]</strike> WebSub サポートは [https://git.tt-rss.org/fox/tt-rss.git/commit/?id=5b6ea1ef914d0d33516ce59df69637576055ce66 2017-05-16 に削除]（[https://discourse.tt-rss.org/t/pubsubhubbub-websub-subscription-not-renewed/184/5 議論]）
+
+== ハウツー ==
+=== WebSub 対応フィードの公開と消費 ===
+{{main|How to publish and consume WebSub}}
+
+PuSH 0.4 は以前のバージョンを超えて、パブリッシャーが *あらゆる* HTTP リソース（例： [[h-feed]]）に対してプッシュ通知を送信できるようにしています。新しい仕様である 0.4 を使用すべきです。PuSH 0.3 は、レガシーな XML フィードファイルのみプッシュ通知をサポートしていました。
+
+'''メイン記事を参照してください： [[How to publish and consume WebSub]]'''
+
+=== PuSH 用の WordPress プラグイン ===
+セルフホストの [[WordPress]] 環境では、[https://wordpress.org/plugins/pushpress/ PushPress] プラグインをインストールできます。[[WordPress.com]] を使用している場合は、デフォルトですでに PuSH をサポートしています（このプラグインの組み込みバージョンを使用しています）。
+
+より新しい PubSubHubbub v0.4 仕様をサポートする、{{pfefferle}} によって書かれた代替プラグインは、[https://wordpress.org/plugins/pubsubhubbub/ WebSub/PubSubHubbub プラグイン] です。
+
+=== 断片（Fragments）への購読 ===
+Superfeedr はまた、# 記号を使用してページ上の断片を購読するというユニークな機能を提供しています。例えば、http://tantek.com/#.hentry を購読すると、http://tantek.com/ 上のクラス「hentry」の最初の要素の内容を含む POST があなたの webhook/コールバックエンドポイントに送信されます。
+
+これは最適化の一種と見なされるべきです。最小限のコンシューマー（消費側）は、ピングを受信したときに単にそのリソース自体を再取得すれば済みます。
+
+=== PuSH 対応フィードのテスト ===
+PuSH フィードとピングが適切に動作しているかどうかをテストする方法がいくつかあります：
+
+==== PuSH 0.4 のテスト ====
+* [[websub.rocks]] - WebSub の実装（パブリッシャーおよびサブスクライバー）のテストを支援するバリデーター。
+
+# 以下のインディー [[readers|リーダー]] のいずれかで、自分のホームページを購読します：
+#* [[Woodwind]]
+# 新しい投稿を公開し、PuSH 0.4 通知を送信します。
+# リーダーを監視して、投稿が表示されるか確認します。数秒以内に表示されるはずです。
+
+==== PuSH 0.3 のテスト ====
+'''RSS リーダー'''
+
+ほとんどの [http://blog.superfeedr.com/state-of-pubsubhubbub/ 人気のある RSS リーダー] は PubSubHubbub を実装しているため、それらのいずれかで自分のフィードを購読し、コンテンツを追加した後に更新が伝播されるかを確認するだけです。
+
+'''Status.net'''
+
+# Status.net アカウントから自分のホームページを購読します。
+# 自分のホームページでコンテンツを公開します。
+# Status.net アカウントに更新がリアルタイムで表示されるのを確認します。
+
+'''ボット'''
+
+フィードを購読し、任意の [[XMPP]] または [[IRC]] クライアントを介して更新の通知を受け取ることができる [[XMPP]]/[[IRC]] ボットがいくつかあります。XMPP アカウントまたは IRC クライアントが必要です。
+* https://github.com/julien51/notifix (下記参照)
+* http://blog.superfeedr.com/notifixlight/
+* http://push-bot.appspot.com/
+
+'''Notifix'''
+
+Notifix はボットです（ソースコードについては上記参照）。常に irc.freenode.net に接続しています。+help のようなプライベートメッセージを送ると、利用可能なコマンドが表示されます。+subscribe <feed> で購読し、コンテンツを公開して、IRC 経由で直接ピングが届くか確認してください。
+
+* 私は PuSH Bot よりも notifixlite の方が良い経験をしています。 --[[User:Waterpigs.co.uk|Waterpigs.co.uk]] 03:16, 5 June 2013 (PDT)
+
+=== PuSH サブスクライバーのテスト ===
+* [[websub.rocks]] - WebSub の実装（パブリッシャー、サブスクライバー、ハブ）のテストを支援するバリデーター。
+* http://push-tester.cweiske.de/ は、購読用コードをテストするための便利なアプリケーションです。これは正常に動作することが知られている WebSub パブリッシャーであるため、これを購読し、更新を投稿して、そのハブからピングを受信したことを確認できます。
+
+* [http://git.cweiske.de/push-tester.git/ push-tester] は、[[h-feed]] と [[h-entry]] を備えたブログを模倣し、ワンクリックで新しい記事を投稿できるようにするツールです。新しい投稿については、設定可能な PuSH ハブに通知されます。公開インスタンス： http://push-tester.cweiske.de/
+
+== ハブ ==
+* https://pubsubhubbub.superfeedr.com/ の [[Superfeedr]]
+** Superfeedr に登録して、独自のサブドメイン（例： https://kylewm.superfeedr.com）を取得することもできます。これにより、購読者数や通知数などの有用な統計にアクセスできます。
+* https://pubsubhubbub.appspot.com/
+** 私が確認できた限りでは、このハブの開発は2011年に完全に停止しており、奇妙な状態のまま放置されています。非 XML フィードを部分的にサポートしているようですが、例えば <code>hub.verify</code>（0.4 で削除されたパラメータ）を要求したりします。新規の開発や、すべての h-feed において、このハブを「使用しない」ことを強く推奨します。 [[User:Kylewm.com|Kylewm.com]] 13:55, 28 February 2015 (PST)
+** [[User:Onebigfluke.com]] はこの問題を認識しており、修正を計画しています。 [https://twitter.com/kylewm2/status/571772478910963712 この Twitter スレッドに詳細があります] [[User:Kylewm.com|Kylewm.com]]
+* [[phubb]]: オープンソースの PHP WebSub サーバー
+* {{aaronpk}} による [[Switchboard]]
+* [https://wordpress.org/plugins/pubsubhubbub/ WebSub WordPress プラグイン]
+* [https://axxim.net/ Luke Strickland] による https://websubhub.com/
+
+その他のハブについては https://github.com/pubsubhubbub/PubSubHubbub/wiki/Hubs を参照してください。
+
+=== ハブのテスト ===
+[https://websub.rocks websub.rocks] には、購読可能な [[h-entry]] を含むページを生成するツールがあります。
+
+[http://git.cweiske.de/push-tester.git/ push-tester] は、[[h-feed]] と [[h-entry]] を備えたブログを模倣し、ワンクリックで新しい記事を投稿できるようにするツールです。新しい投稿については、設定可能な PuSH ハブに通知されます。
+
+公開インスタンス： http://push-tester.cweiske.de/
+
+== 議論 ==
+WebSub に関する議論は主に [https://github.com/w3c/websub/issues GitHub リポジトリ] で行われていますが、W3C コミュニティグループも存在します：
+* https://www.w3.org/TR/websub/ - 公式仕様
+* https://www.w3.org/community/swicg/ - W3C の Social コミュニティグループ。WebSub を含む SocialWG の仕様の拡張に取り組んでいます。WebSub に関心があり、すでに W3C ログインをお持ちの場合は、WebSub 全体の取り組みを支援するために参加することをお勧めします。
+
+== ブレインストーミング ==
+=== ウェブに面していないコンシューマー ===
+ファイアウォールや NAT の背後にあるデバイスなど、パブリックにルーティング可能な URL を持たない PuSH コンシューマーをどのようにサポートできるでしょうか？ おそらくハブや外部サービスが、websockets や eventsource のような代替の購読メカニズムを提供し、それがコンシューマーに代わって PuSH 購読を行うことができるかもしれません。 <span class="h-card">[[User:Aaronparecki.com|Aaron Parecki]]</span> 12:32, 26 May 2015 (PDT)
+
+== 課題 ==
+=== 複雑すぎる ===
+過去（2013年頃）、PubSubHubbub は IndieWeb にとって複雑すぎるという論争がありました。それ以来、数多くの IndieWeb サイトが公開コンテンツの PuSH 通知をサポートするようになり、IndieWeb の人々によって構築・維持される新しい PuSH ハブや、PuSH 更新を購読するリーダーもいくつか登場しました。以下は、過去の問題の歴史的記録として残されています。
+
+* 「（Google による Google のための）PubSubHubbub や、ウェブのためのいかなるプッシュベースのソリューションも、#indieweb にとっては不必要に複雑だ。ポーリングで十分に機能する。」： http://indiewebcamp.com/irc/2013-05-29#t1369859193
+** 非同期（async）ならポーリングで良いですが、私たちはもうその先へ進んでいます。 [[User:Kylewm.com|Kylewm.com]] 22:24, 25 February 2015 (PST)
+
+== FAQ ==
+'''Q:''' 使用しているハブを更新し、購読者がそれに応じて更新されるようにするにはどうすればよいですか？
+
+'''A:''' 購読者は、ハブが更新されたかどうかを確認するために、時々ポーリングを行うべきです。プロセスを早めるために、しばらくの間、両方のハブをリストアップしてピングすることもできます。 [http://indiewebcamp.com/irc/2015-06-30#t1435697212867]。
+また、ハブは実際には（発見リンクの一部として）ハブ URL を通知すべきです。つまり、購読者はすべての通知で指定されたハブを知ることになり、「定期的」なポーリングを完全にオプションにすることができます。
+フィード/パブリッシャーがハブを変更した際に、（発見リンクが削除された後も）一定期間は古いハブにもピングを送り続けることが、グッドプラクティスとされています。
+
+'''Q:''' ヘッダーに <tt>hub</tt> リンクを置き、HTML に <tt>self</tt> リンクを置くこと（またはその逆）は許可されていますか？
+
+'''A:''' 仕様書には次のようにあります：「パブリッシャーは、少なくとも1つの rel=hub を持つ Link ヘッダー [RFC5988]（ハブリンクヘッダー）と、正確に1つの rel=self を持つ Link ヘッダー [RFC5988]（セルフリンクヘッダー）を含めるべき（SHOULD）である」。これは、それらが一緒に指定されなければならないことを示唆しています。
+
+== 関連項目 ==
+* [[feeds|フィード]]
+* [[streams|ストリーム]]
+* [[push-vs-pull|プッシュ vs プル]]
+* [[Webmention-ja|Webmention]]
+* [[webhook]]
+* [https://github.com/pubsubhubbub 以前の PubSubHubbub 仕様]
+
+[[Category:building-blocks]]
+[[Category:jargon]]
+[[Category:Protocols]]
+
+
+
+* [[Pushl]]
+* [http://beesbuzz.biz/blog/8139-Some-WebSub-Atom-observations いくつかの WebSub-Atom に関する考察]
+* https://podnews.net/article/pubsubhubbub-for-podcasters
+* サイロでの実装: YouTube: https://developers.google.com/youtube/v3/guides/push_notifications
+* 野生における WebSub スパム攻撃: 2025-09-19 {{cweiske}}: [https://cweiske.de/tagebuch/spammers-websub.htm スパマーが壊したもの：websub] — 「オープンな」WebSub ハブをデプロイする前の検討事項。
+* [[rssCloud]]
+
+[[Category:Pages in Japanese]]
