@@ -1,0 +1,340 @@
+https://indieweb.org/rel-me-ja
+
+[[File:rel-me.svg|frameless|right|128px|rel-me icon]]
+
+{{stub}}
+
+ハイパーリンクに '''<dfn>rel=me</dfn>''' を使用することは、そのリンク先が現在のページと同じ個人またはエンティティを代表していることを示します。これは [[web-sign-in]]、[[IndieAuth]]、および ✅ 分散型アイデンティティ検証の主要な [[building-block]] となっています。
+
+[[indielogin.com]] は <code>rel=me</code> リンクを使用して、IndieWeb.org などのウェブサイトへのサインインを可能にしています。
+
+詳細については [https://microformats.org/wiki/rel-me rel-me specification]（仕様書）を参照してください。
+
+<div style="clear: both"></div>
+
+== なぜ必要か ==
+ホームページから他のプロフィールへのハイパーリンクに <code>rel="me"</code> を追加すべき理由は以下の通りです：
+* 🪪 自身のドメインを使用して '''[[Web sign-in]] と [[IndieAuth]] を有効にする'''
+* ✅ ホームページとプロフィールの '''分散型検証（distributed verification）'''
+
+[[Web sign-in]] と [[IndieAuth]] を利用すると、[[social media]] のアイデンティティや [[silo sign-in]] メソッドに依存することなく、自身のドメインをアイデンティティとして使用できます。
+
+分散型検証は、あるサイトのアカウントが別のサイトと同じ人物の管理下にあることの証明を示します。
+
+例：
+* [[Mastodon]] プロフィールからホームページに <code>rel=me</code> でリンクしている場合、Mastodon はそのホームページを検証済み（✅ と緑色の背景）として表示します。
+* [[Huffduffer]] は rel="me" リンクを辿り、個別に読み込むことなく接続されたソーシャルアカウントを表示します。
+* {{kevinmarks}} によって作成された、同様の分散型検証を可能にする [http://www.kevinmarks.com/distributed-verify.html ブラウザプラグイン] も存在します。
+
+特に Mastodon プロフィールの場合、Mastodon の検索結果でより適切に表示されるようになります！
+* https://social.coop/@eloquence/111135380251540525
+** 「これは最近 Mastodon に追加された素晴らしい機能です。プロフィールを検索すると、ドメインのリンク検証が完了しているかどうかが表示されるようになりました。Mastodon で本人確認を行いたい人にとって、これ以上の理由はないでしょう。詳細は https://docs.joinmastodon.org/user/profile/#verification を参照してください。」 [https://social.coop/@eloquence @eloquence] 2023年9月27日
+
+== 方法 ==
+=== rel me の使い方 ===
+以下を参照してください：
+* [[How to set up web sign-in on your own domain]]
+==== WordPress での方法 ====
+以下を参照してください：
+* [[Getting_Started_on_WordPress#Rel-me|Getting Started on WordPress: rel-me]]
+
+=== rel me の取り込み（consume）方法 ===
+以下を参照してください：
+* [https://indieauth.com/developers IndieAuth for Developers: Using IndieAuth.com to sign users in to your website]
+
+== オンラインツール ==
+ページ上の rel="me" リンクを確認するために使用できるウェブツール：
+
+* [[Indiewebify]] — https://indiewebify.me/validate-rel-me/ にアクセスし、テストしたい URL を入力してエンターを押します。検出された rel=me リンクの一覧が表示されます。
+* [[pin13]] — https://pin13.net/mf2 にアクセスし、テストしたい URL を入力してエンターを押します。検出されたすべての rel=me リンクが格納された「me」配列を含む、トップレベルコレクション「rels」を持つ JSON が返されます。
+
+== ブラウザツール ==
+ページ上の rel="me" リンクを確認するためにブラウザにインストールできるツール：
+
+=== verify-me ===
+{{kevinmarks}} による '''[https://github.com/indieweb/verify-me verify-me]''' は、すべての <code>rel="me"</code> リンクが相互リンク（reciprocal）であるかを確認し、分散型検証を行うブラウザ拡張機能です。
+* {{martijnvdven}} は、マージ済みのフォークでローカル検証のサポートを追加しました：'''[https://github.com/Zegnat/verify-me-locally verify-me-locally]'''
+
+=== rel-me verifier ===
+[https://vil.lv/ Bill Doyle] による '''[https://github.com/vilhalmer/rel-me-verifier rel=me verifier]''' は、verify-me 拡張機能に触発された [[userscript]] です。
+
+=== Streetpass ===
+[https://streetpass.social/ Streetpass] は、rel-me リンクのあるサイトを閲覧した際に [[Mastodon]] プロフィールをリストに追加し、見つけやすくするブラウザ拡張機能です。
+
+== よくある質問（FAQ） ==
+=== rel-me は hCard の中に入れるべきですか？ ===
+'''回答:''' 言い換えると、<code>rel="me"</code> ハイパーリンクに <code>class="u-url"</code> を持たせ、[[h-card]] 内に配置すべきか？という問いですが、答えは：
+
+'''回答2:''' はい、そうすべきです。そうすることで h-card が強化され、[[representative h-card]] になります。ただし、[[indieauth]] で rel=me を機能させるために必須というわけではありません。
+
+'''追記の質問:''' これは私のブログですが、メインの IndieAuth に使っているものではありません。それでもそのように設定すべきですか？
+
+'''追記の回答:''' それがあなたのブログであるなら、その URL を p-author の h-card URL として使用している可能性が高いです。そのため、適切な representative h-card を持たせることは良いアイデアです。
+
+=== プロフィール以外のページに rel-me を追加してもいいですか？ ===
+rel-me リンクが指す先のプロフィールと同じユーザーを代表していないページには、rel-"me" を追加すべきではありません。
+
+rel-"me" は、リンク先のプロフィールと同じユーザーを代表していると見なされるページにのみ追加すべきです。そのようなページには、シングルユーザーサイトのホームページや、マルチユーザーサイトの著者ページなどが含まれます。
+
+プロフィール以外のページからプロフィールページへリンクする場合は、代わりに [[rel-author]] が求められていることが多いです。
+
+== 実装 ==
+* '''PHP''' [https://github.com/indieweb/rel-me indieweb/rel-me] パッケージには、サイト上の rel=me URL を取得し、プロフィール URL を安全に派生させ、サイロの [[backlink]] URL をプロフィール URL と安全に照合する機能があります。
+* '''Ruby''' [https://github.com/aaronpk/IndieAuth.com/blob/main/lib/relparser.rb relparser.rb] (IndieAuth.com の一部) には、同様の処理を行う機能が含まれています。
+* '''Python'''
+** [https://github.com/bear/ronkyuu/blob/master/ronkyuu/relme.py relme.py] (Ronkyuu の一部) には、サイト上の rel=me URL を発見し、プロフィールとリソースの両方の正規 URL を生成し、リソース URL が特定のプロフィール URL に対して正当であることを確認する機能が含まれています。
+** [[IndieWeb_Utils]] は、一方向および双方向の rel me リンクを発見する <code>get_valid_relmeauth_links</code> 関数を実装しています。[https://indieweb-utils.readthedocs.io/en/latest/indieauth.html#indieweb_utils.get_valid_relmeauth_links この関数のドキュメントを表示]。
+
+== ソフトウェアのサポート ==
+=== Mastodon ===
+[[Mastodon]] はプロフィールページでの <code>rel="me"</code> URL をサポートしており、現在の Mastodon インスタンスではデフォルトで有効です。
+
+{{kevinmarks}} は [https://mastodon.social/@kevinmarks 自身の Mastodon.social アカウント] でリンク検証済みです。すべてのプロフィールページには以下の情報が記載されています：
+<blockquote>プロフィールメタデータのリンクの所有者として自分自身を証明できます。そのためには、リンク先のウェブサイトに自身の Mastodon プロフィールへの逆リンクが含まれている必要があります。その逆リンクには rel="me" 属性が必要です。リンクのテキスト内容は問いません。</blockquote>
+Mastodon に rel=me リンクを追加する方法：
+# 歯車アイコンをクリックして「設定」に移動
+# 「プロフィール編集」をクリック
+# 検証セクションにある Mastodon へのリンクをコピー
+# 自身のウェブサイトに移動
+# <code>rel="me"</code> を含む Mastodon へのリンクを追加
+# Mastodon プロフィールに戻る
+# メタデータセクションに自身のウェブサイトへのリンクを追加
+# GitHub へのリンクを追加するには、設定で URL を編集して GitHub プロフィールに Mastodon アカウントへのリンクを追加するだけです。
+
+=== PixelFed ===
+[[PixelFed]] は 2018年9月よりプロフィールページで <code>rel="me"</code> URL をサポートしています。
+* https://mastodon.social/@dansup/100726520814958974
+** 「Mastodon が rel=me を実装？最高だ！PixelFed でも先週サポートを開始しました。 #indieweb https://pixelfed.social/dansup」 [https://mastodon.social/@dansup @dansup] 2018年9月14日
+
+=== MediaWiki ===
+MediaWiki 拡張機能の実装：
+* https://www.mediawiki.org/wiki/Extension:RealMe
+
+=== 導入状況の分析 ===
+* 2024年の Mastodon、misskey、sharkey、fedibird 等における使用状況分析： https://stefanbohacek.com/blog/verification-in-the-fediverse/
+
+== サービスのサポート ==
+=== Keybase ===
+[[Keybase]] は [https://github.com/keybase/keybase-issues/issues/634 2014-06-23 より] プロフィールで <code>rel="me"</code> をサポートしています！ 例：
+* https://keybase.io/cleverdevil
+
+=== micro.blog ===
+[[Micro.blog]] は、あらゆる HTML ページに <code>rel="me"</code> を含めます。
+
+{{jgmac1106}} は、自身の [http://jgmac1106.micro.blog/about-me/ micro.blog about me] ページの h-card に rel=me リンクを含めました。<code>rel="me"</code> 付きのリンクを追加する方法：
+# 「post」をクリック
+# 「pages」をクリック
+# 「About Me」という新しいページを作成
+# 自身が管理する他のウェブサイトへのリンクを追加し、<code>rel="me"</code> を忘れずに付与する
+
+=== IndieLogin ===
+{{main|IndieLogin}}
+[[IndieLogin]] は、[[RelMeAuth]] の実装を通じて、アイデンティティおよびログインサービス用の rel="me" の取り込みをサポートしています。
+
+=== omg.lol ===
+{{main|omg.lol}}
+[[omg.lol]] は、デフォルトで公開ページでの rel="me" 公開をサポートしています。
+
+=== Wikipedia ===
+https://wikis.world/@wikipedia/110396865170645710 より：
+* 「#Wikipedia の利用者ページへのリンクを Mastodon で検証済みとしてマークできるようになりました！ドキュメント： https://www.mediawiki.org/wiki/Special:MyLanguage/Help:Extension:RealMe <br/>これは @taavi によって開発・実装されたもので、"RealMe" という名前の #MediaWiki 拡張機能として書かれました。オープンソースであり（すべての Wikipedia ソフトウェアと同様）、あらゆる MediaWiki ウィキで使用できます： https://www.mediawiki.org/wiki/Extension:RealMe」 [https://wikis.world/@wikipedia @wikipedia] 2023年5月19日
+
+方法：
+* https://en.wikipedia.org/wiki/Special:Preferences に移動
+* 以下の場所までスクロール： <blockquote>'''利用者ページ'''<br/><br/>外部プロフィールへのURL：</blockquote>
+* 自身のサイトの URL を <code>https://</code> プレフィックス付きのフル形式で入力します（例： <kbd>https://example.com</kbd>）
+* 保存
+
+自身の利用者ページでソースを表示すると、以下のようなリンクが見つかるはずです：
+* <code><nowiki><link href="https://tantek.com/" rel="me"></nowiki></code> (https://en.wikipedia.org/wiki/User:Tantek より)
+
+=== Threads ===
+[[Threads]] は双方向の rel=me をサポートしています。Threads プロフィールから自身のサイトへ rel=me を公開することと、そのサイトから Threads への inbound な rel=me リンクを解析することの両方に対応しています。双方向のリンクが確認されると、Threads はサイトリンクの横に 2 つの矢印（⇄）アイコンを表示します（反映に最大 1 日かかる場合があります）。⇄ アイコンにホバーすると「双方向リンク」というツールチップが表示されます。
+
+{{needs_screenshot}}
+
+Threads は 2023-08-09 に outbound rel=me サポートを発表しました：
+<blockquote>
+「Mastodon のようなプラットフォームでアイデンティティを検証しやすくするため、Threads でも rel=me リンクのサポートを開始しました。サポートされているプラットフォームに Threads のプロフィールリンクを追加して、アイデンティティを検証できるようになりました。」
+<cite>https://www.threads.net/@mosseri/post/Cvu2eXurRbB</cite>
+</blockquote>
+
+そして 2025-02-06 に inbound rel=me サポートを発表しました：
+<blockquote>
+「私のお気に入りの最新隠し機能です。プロフィールのリンクにおける双方向リンク検証です。以前は outbound の rel=me リンクのみをサポートしていましたが、現在は inbound 方向もサポートしており、URL の隣のダブル矢印アイコンで Threads プロフィールリンクの双方向の所有権を証明できます。手順は以下の通り（🧵 1/3）」
+<cite>https://www.threads.net/@0xjessel/post/DFvd8k4SEGq</cite>
+</blockquote>
+
+方法：
+* Threads アプリを開く
+* 右下の 👤 アイコンをタップ
+* 「プロフィールを編集」ボタンをタップ
+* 「リンク」フィールドをタップし、自身のドメインを入力して「完了」をタップ
+
+記事/投稿：
+* 2023-08-09 The Verge: [https://www.theverge.com/2023/8/9/23826257/threads-verify-profile-mastodon-decentralized-platforms-fediverse Threads プロフィールを Mastodon で検証可能に]
+* 2023-08-10 The Verge: [https://www.theverge.com/23826506/threads-mastodon-profile-verification-how-to Mastodon プロフィールを使用して Threads アカウントを検証する方法]
+* 2023-08-10 TechCrunch: [https://techcrunch.com/2023/08/09/meta-adds-ability-to-verify-your-threads-profile-on-mastodon/ Meta が Mastodon での Threads プロフィール検証機能を追加]
+* 2023-08-10 {{benwerd}}: https://werd.io/2023/how-to-verify-your-threads-account-using-your-mastodon-profile
+* 2023-08-22 {{t}}: https://tantek.com/2023/234/t1/threads-supports-indieweb-rel-me
+
+=== Gravatar ===
+[[Gravatar]] は ????-??-?? よりアカウント検証のための rel-me をサポートしています。
+* https://support.gravatar.com/profiles/verified-accounts/
+
+=== Letterboxd ===
+[[Letterboxd]] は少なくとも [https://web.archive.org/web/20231207181701/https://letterboxd.com/escapehatchpod/ 2023-12-07] から rel-me をサポートしています。
+
+例として、この Letterboxd プロフィール：
+* https://letterboxd.com/escapehatchpod/
+には、以下のサイトへの <code>rel="me"</code> リンクがあります：
+* http://escapehatchpod.com/
+
+== サイロ（閉鎖的プラットフォーム）の詳細 ==
+=== Twitter ===
+
+[[Twitter]] は、もはやプロフィールページに <code>rel="me"</code> URL を含めていないようです。
+
+以前の [[Twitter]] はプロフィールページに <code>rel="me"</code> URL を含めていましたが、その URL は [[t.co]] リダイレクトサービスの背後に隠されていました。2018-09-19 時点の例：
+<pre><a class="u-textUserColor" target="_blank" rel="me nofollow noopener" href="https://t.co/UT1OXws8A5" title="https://vanderven.se/martijn/">vanderven.se/martijn/</a></pre>
+Twitter に [[backlink]] があるかどうかを確認する方法はいくつかあります：
+
+# リダイレクトを 1 回追跡するように指定されている [[RelMeAuth]] [https://microformats.org/wiki/relmeauth-algorithms アルゴリズム] に従う。
+# すべての <code>rel-me</code> URL を完全に解決する。
+# Twitter 固有のパースを行い、<code>title</code> 属性からフル URL を抽出する。
+
+1 と 2 については、[[t.co]] URL のリクエストに問題が生じる可能性があることに注意してください。特定のユーザーエージェントでは HTTP リダイレクトが返されず、代わりに [https://developer.mozilla.org/ja/docs/Web/HTTP/Redirections#html_redirections HTML リダイレクトページ] が提供されることがあります。
+
+一部の実装では、この問題を回避するためにダミーのユーザーエージェントを明示的に設定しています。例： [https://github.com/Zegnat/verify-me-locally/commit/51d45f601d6058126cf949439b5feb5f7696c1e5 verify-me-locally におけるこのコミット]。
+
+== 要望 ==
+* [[Liberapay]]: https://github.com/liberapay/liberapay.com/issues/1034#issuecomment-461898619
+* ...
+
+== rel=me と relmeauth ==
+（要確認）
+
+これは私（誰？）の現在の解釈です。真実を断定するものではなく、修正や批評を歓迎します。
+
+rel=me は、リンク先が現在のページと「同じ人物」であることを表すためのものです。
+
+しかし、[[RelMeAuth]] ベースの認可に使用される場合、二重の目的を果たします。この場合、rel=me リンクはリンク先が現在のページを「管理していると主張できる」ことを意味することを求めています。この 2 つの文脈を区別するために、代わりに「rel=is-controlled-by」というタグがあると仮定することもできます。
+
+'''なぜこの区別が重要なのでしょうか？'''
+
+github.com/kbsriram のようなページは、github.com に対して（正当に）rel=me リンクを主張することはできません。明らかに、サイト「github.com」は github.com/kbsriram と「同一人物」を表すものではないからです。
+
+しかし、すべてのウェブサイトのルートドメインはその下のすべてのサブページを管理しているため、実際には github.com/kbsriram は github.com に対して暗黙的な「rel=is-controlled-by」を持っていますが、github.com への rel=me リンクは持っていません。
+
+この区別は、アイデンティティの統合と relmeauth ベースの認可という 2 つの文脈で rel=me の閉包（closures）を見つける際に重要になります。
+
+具体的にするために、以下の rel=me リンクを持つ 3 つのページがあると仮定しましょう。
+
+  myfamily.example.com/tommy [rel=me] -> {plus.google.com/+tommy}
+  myfamily.example.com [rel=me] -> {plus.google.com/+tommy}
+  plus.google.com/+tommy [rel=me] -> {myfamily.example.com/tommy}
+
+=== アイデンティティ統合のユースケース ===
+
+あるページが与えられたとき、現在のページと「同一人物」であるすべてのページを見つけます。
+
+このアプローチでは、開始ページからすべての rel=me リンクを再帰的に辿り、開始ページを含む rel=me リンクのループ内にあるサブセットのみを返します。
+
+これは、相互に検証し合っているページのグループのみが返されるようにするためです。そうでなければ、誰でも自分のページに rel=me リンクを貼るだけで https://plus.google.com/+LinusTorvalds であると主張できてしまうからです。
+
+myfamily.example.com/tommy から開始した場合、
+  {myfamily.example.com/tommy, plus.google.com/+tommy}
+が myfamily.example.com/tommy と「同一人物」であるページとして返されます。
+
+そして myfamily.example.com から開始した場合、
+  {myfamily.example.com}
+のみが返されます。
+
+=== Web sign-in ===
+{{main|Web sign-in}}
+[[Web sign-in]] は relmeauth ベースのログインです。
+
+あるページが与えられたとき、現在のページを「管理できる」すべてのページを見つけます。「現在のページ」はユーザー名として使用され、管理ページの 1 つが（OAuth などで）ユーザーのログインに使用されます。
+
+原理的には（実装が必ずしもそうしているとは限りませんが）、アプローチは似ていますが、ドメインのサブページはそのベアドメイン（ルート）によって管理されているという暗黙の前提が加わります。
+
+特に、myfamily.example.com を「管理できる」すべてのページのセットは以下の通りです：
+
+  {myfamily.example.com, plus.google.com/+tommy, myfamily.example.com/tommy}
+
+これは、myfamily.example.com/tommy が myfamily.example.com によって管理されている（is-controlled-by）という暗黙のリンクがあるためです。
+
+== エッジケース ==
+エッジケースとは、通常 1 人（またはごく少数）によって提起される問題であり、実際にはごく少数の人にしか影響しません。それでも、それ以外の人々を助けるために記録していますが、広範な [[#FAQ]] とは別にし、FAQ はより多くの人に適用される「頻繁に」尋ねられる質問に焦点を当てています。
+
+=== RDFa の問題について ===
+RDFa を使用していて問題が発生している場合、RDFa は HTML(5) 標準と互換性のない 'rel' 属性処理を再定義しているため、RDFa 内で rel=me が予期しない結果を生む可能性があることに注意してください。[https://microformats.org/wiki/rel#RDFa_Incompatibility]
+
+RDFa ワーキンググループのメールアーカイブに解決策があります： https://lists.w3.org/Archives/Public/public-rdfa/2014Oct/0005.html
+
+<blockquote>
+同じ要素内に @property 属性がある場合、CURIE でないもの（例：「me」）は @rel 内で無視されます。以下のようなマークアップを推奨します。mailto: を繰り返す必要がないため、簡潔になります。ul から @rel を削除し、次のように記述してください：
+
+<pre>
+<ul vocab="http://schema.org/">
+  <li>
+    <a rel="me" property="contactPoint" typeof="ContactPoint" href="mailto:
+perpetual-tripper@wwelves.org"><span
+property="name">email (smtp)</span></a>
+  </li>
+</ul>
+</pre>
+</blockquote>
+
+== 記事 ==
+* {{citation
+| title = The Real Deal About <code>rel="me"</code>
+| url = https://wiki.zegnat.net/media/the-real-deal-about-rel-me.html
+| author = {{martijnvdven}}
+| published = 2018-04-26
+| archiveurl = https://web.archive.org/web/20180503173524/https://wiki.zegnat.net/media/the-real-deal-about-rel-me.html
+}}
+
+[[Category:building-blocks]]
+[[Category:microformats]]
+
+== 関連項目 ==
+* [[microformats]]
+* [[web-sign-in]]
+* [[IndieAuth]]
+* [[verify-me]]
+* [[verified]]
+* [[rel registry]]
+* https://glitch.social/@gcupc/100613354693156448
+** 「@kaniini rel=me は分散型アイデンティティ検証を行うための最良の方法です。AP がそうであるように、どのみち DNS を必要とするのであればなおさらです。」 [https://glitch.social/@gcupc @gcupc] 2018年8月25日
+* [https://pleroma.site/objects/ff1e65ad-a467-4179-8a0e-26e1b43e2688 分散型アイデンティティ検証のための rel=me の使用に関するスレッド]
+* https://mastodon.social/@Gargron/100726489667811566
+** 「開発者以外の人を遠ざけたくなかったので『特別な属性』が何であるかは言及しませんでしたが、複雑な提案をたくさん受けています。そう、私が言いたかったのは microformats の rel="me" です。これが一番シンプルです。なぜ TXT レコードや公開鍵で苦労する必要があるのでしょう？」 [https://mastodon.social/@Gargron @Gargron] 2018年9月14日
+* https://mastodon.social/@Gargron/100726508288588883
+** 「@JonathanGerlach DNS はあまりうまくいきません。誰もが DNS レコードの編集方法を知っているわけではないからです。Tumblr の自己紹介に rel="me" リンクを貼ったり、共有ホスティングサイトに置いたりするのは簡単ですが、DNS レコードの編集は不可能な場合もあります。」 [https://mastodon.social/@Gargron @Gargron] 2018年9月14日
+* [[XFN]]
+* [http://www.kevinmarks.com/distributed-verify.html Distributed Verification 2016-09-22]
+* [http://known.kevinmarks.com/2018/rel-me-mastodon-and-browser-plugins Rel-me, mastodon and browser plugins]
+* https://help.micro.blog/2017/web-site-verification/
+* サイトからの rel=me リンクをパース・表示するための UI： https://rel-me.cc/
+* [[backlink]]
+* 避けるべきエッジケース： https://edoverflow.com/2018/logic-flaws-in-wot-services/
+* https://twitter.com/simonw/status/1588563298597101569
+** 「Mastodon の検証方法は賢いです。rel="me" リンクを使用し、プロフィールページで検証済みリンクを緑色の背景で表示します。 https://fedi.simonwillison.net/@simon」 [https://simonwillison.net/ @simonw] 2022年11月4日
+* ^ https://pbs.twimg.com/media/Fgu14HwUUAALzQ6.png
+* Mastodon 検証のために WordPress に rel-me を追加する手順： https://g13g.blog/2022/11/09/how-to-verify-your-wordpress-site-on-mastodon/
+** 「WordPress サイトを Mastodon で検証する方法 #mastodon #wordpress https://g13g.blog/2022/11/09/how-to-verify-your-wordpress-site-on-mastodon/」 [https://g13g.blog/author/georgehotelling/ @georgehotelling] 2022年11月9日
+* https://hci.social/@cfiesler/109406111320023346
+** 「Mastodon でなりすましアカウントが増え始めている今、検証済みウェブサイトという仕組みがあることを思い出してください。完璧ではありませんが、個人レベルで実装可能です。これによって、例えばどれが本物の @stephenfry かが分かります。意味のないチェックマークがついている方ではありません。 :)」 [https://hci.social/@cfiesler @cfiesler] 2022年11月25日
+* https://meta.trac.wordpress.org/ticket/6642 WordPress.org プロフィールページのプロフィールリンクに rel-me を追加するリクエスト
+* Mastodon での検証に rel-me を使用することに関する記事： https://themarkup.org/levelup/2022/12/22/how-we-verified-ourselves-on-mastodon-and-how-you-can-too
+* ブラウザアドオン： https://streetpass.social/
+* ワシントン・ポストのジャーナリストのプロフィールが rel=me をサポート： https://mastodon.social/@drewharwell/109830211615397520
+** 「ワシントン・ポストは現在、Mastodon 上でジャーナリストのプロフィールを検証済みとしてフラグを立てています。」 [https://mastodon.social/@drewharwell @drewharwell] 2023年2月8日
+* Mastodon サポートドキュメント： https://joinmastodon.org/verification
+* Friendica はユーザープロフィールの検証済みリンクの隣にチェックマークを表示します [https://github.com/friendica/friendica/pull/12109 #12109 ユーザープロフィールへの rel-me リンクを確認してホームページを検証する]
+* GitHub がプロフィールで 4 つの rel=me リンクをサポート： https://hachyderm.io/@derekprior/109790473003989772
+** 「GitHub プロフィールに最大 4 つのソーシャルアカウントリンクを追加できるようになりました。これらは主要プラットフォーム向けのフォーマットサポート付きでレンダリングされます。はい、これらのリンクはレンダリング時に Mastodon の検証要件を満たします。始めるには、プロフィールにアクセスしてサイドバーの『Edit profile』ボタンをクリックしてください。」 [https://hachyderm.io/@derekprior @derekprior] 2023年2月1日
+* 新しい取り込み（consume）の実装： [https://werd.io/2023/subscribing-to-the-blogs-of-people-i-follow-on-mastodon Mastodon でフォローしている人々のブログを購読する]
+
+[[Category:Pages in Japanese]]
