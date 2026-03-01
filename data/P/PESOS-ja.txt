@@ -1,0 +1,87 @@
+https://indieweb.org/PESOS-ja
+
+[[File:pesos.svg|frameless|right|128px|PESOS icon]]
+
+'''<dfn>PESOS</dfn>''' は、'''Publish Elsewhere, Syndicate (to your) Own Site'''（他所で公開し、自身のサイトに配信する）の頭文字をとった略語です。これは[[syndication-models|シンジケーション・モデル]]の一種で、サードパーティのサービスへの投稿から公開を開始し、その後にインフラ（例：[[feed|フィード]]、[[Micropub-ja|Micropub]]、[[webhooks|ウェブフック]]）を使用して自身の[[personal-domain-ja|ドメイン（サイト）]]上に[[archival_copy|アーカイブコピー]]を作成する手法を指します。
+
+対照的な（そしてより好ましい）アプローチは [[POSSE-ja|POSSE]] です。これは、ユーザーがオリジナルのコンテンツを自身のサイトに公開し、その後にコピーをサードパーティのサービスへ配信するもので、自身のサイトにあるオリジナルへのパーマリンク（または短縮リンク）を添えることが推奨されます。
+
+== 実装 ==
+=== IndieWeb での例 ===
+
+==== [[User:Hupili.net|HU, Pili]] ====
+SNSAPI（https://github.com/hupili/snsapi）を使用して、複数のサイロからコンテンツを取得し、自身のサイトに（現在は RSS フィードの形式のみで）表示しています。
+* Facebook
+* Twitter
+* 人人網（Renren）：中国の巨大な OSN。Facebook のようなモデルです。 http://www.renren.com/
+* 新浪微博（SinaWeibo）：「微博（Weibo）」は中国語で「マイクロブログ」を意味します。Twitter のようなモデルです。 http://weibo.com/
+* 騰訊微博（TecentWeibo）：中国のもう一つのマイクロブログサービス。騰訊の幅広い製品ラインにより、TecentWeibo は（モバイルデバイスからの WeChat など）ユニークなアクセスポイントを持っています。 http://t.qq.com/
+* これらのサイロからの集約されたステータス更新： http://hupili.net/feeds/all.xml 。現在はすべての素材が混ざっています。後で英語と中国語のメッセージを分ける予定です。
+
+==== [[User:Www.flutterby.net_user:danlyke|danlyke]] ====
+* Twitter のエクスポート機能を使用して、元々 Twitter に配信されたものの、API から Twitter ID が回収できていなかった投稿に対し、遡って Twitter ID をパッチ（修正適用）しました。
+* [https://support.google.com/calendar/answer/37111?hl=en Google カレンダーのエクスポート]を使用して、自身のレポジトリにカレンダーデータをバックアップしています。
+
+==== [[User: Zoyander.cc|Zoyander]] ====
+* [[Peertube]] を使用して自身の [[Tiktok]] アカウントをアーカイブし、[https://peertube.intrapology.com/c/zoyzone/videos この目的のために指定されたチャンネル]上で、将来のあらゆる Tiktok 投稿のアーカイブコピーを自動的に作成するようにしました。
+
+
+==== {{addyourself}}
+* あなた自身と、あなたが PESOS を行っているサイロのリストを追加してください。
+
+=== ソフトウェア ===
+
+* [[WordPress]] プラグインについては [[WordPress/Plugins#PESOS_Plugins]] を参照してください。
+* [[OwnYourGram]] は、Instagram の写真をリアルタイムで自身のサイトにストリーミングするサービスでした。
+* [https://github.com/snarfed/ownyourresponses ownyourresponses] は、Facebook、Twitter、Instagram での[[interactions|インタラクション]]や[[responses|レスポンス]]を、[[Micropub]] 経由で自身のサイトへ PESOS します。
+* [https://github.com/snarfed/ownyourcheckin ownyourcheckin] は、[https://developer.wordpress.com/docs/api/ WordPress REST API] 経由で Facebook のチェックインを WordPress サイトへ PESOS します。
+* [https://github.com/cweiske/instagram2micropub instagram2micropub] は、[[Micropub]] 経由で [[Instagram]] の投稿を自身のサイトへ PESOS します。
+* [https://datasette.io/tools/twitter-to-sqlite Twitter to SQLite] は、[https://simonwillison.net/ Simon Willison] による [[datasette]] を使用して、自身のツイートを sqlite データベースにインポートするためのツールです。
+* [[PeerTube]] は、[https://joinpeertube.org/news#release-4.3 リリース 4.3] 時点で、[[Youtube]] などの他の動画共有サイトから PESOS することができます。これは[https://docs.joinpeertube.org/use/channel-sync チャンネル同期（channel synchronisation）]と呼ばれます。
+
+=== Micropub ===
+[[Micropub]] 経由で投稿を作成する際は、[[u-syndication|<code>syndication</code>]] プロパティを投稿の元の URL に設定してください。これにより、新しい投稿がその投稿の正規（オリジナル）バージョンであると定義されます。
+
+もし新しい投稿をサイロの URL のコピーとして見なすのであれば、[[u-syndication|<code>syndication</code>]] は適切なプロパティではありません。[[repost|リポスト（再投稿）]]とする方が良いでしょう。
+
+== 利点 ==
+
+* '''より多くの API オプション:''' コンテンツの作成用 API と取得用 API では制限が異なる場合があります。例えば Facebook のコメントのように、プッシュ（投稿）はできないがプル（取得）は可能なデータを取得できることがあります。
+* '''ネイティブなインタラクション''': サイロのネイティブインターフェースは、時として非常によく作り込まれています。
+* '''「共有しすぎ」を防ぐ''': すべてのネットワークに同じコンテンツを過剰に共有することを防げます（同じ内容をばらまくのは通常良くありません。ネットワークごとに異なるオーディエンスが集まっており、すべてのコンテンツを全員と共有すべきではないからです）。
+* '''実装が非同期になる''':
+** 自身のサイトや POSSE レイヤーで障害が発生しても、サイロへの投稿を妨げません（こうした障害は望ましくないほど頻繁に起こります）。
+** 静的サイトジェネレーターを使用している場合でも、サイロでのリアルタイム性を失わずに利用できます。
+** コンテンツの自動投稿に関する制限を回避できます（[https://premium.wpmudev.org/blog/how-to-increase-your-traffic-from-facebook-by-650-in-5-seconds/ Facebook における自動投稿と手動投稿のリーチ範囲に関する WPMUdev の実験]）。
+
+== 欠点 ==
+PESOS は、以下の理由から [[POSSE]] よりも堅牢性に欠け、劣っていると考えられています：
+
+* '''所有権の喪失や制限の可能性。''' 「先に」サイロに投稿することで、データの入力と後の取り出しの両方において、そのサイロの利用規約（TOS）に従うことになります。自身のデータを取り出すために彼らの API やフィードを呼び出したとしても、そのデータには彼らの権利が付きまとう可能性があります（例：[[Foursquare]] の会場情報のようなサイロのコレクションに寄与したコンテンツに対する「データベース著作権」）。コンテンツの所有権チェーン（作成からシンジケーション・再利用、消費に至るまで）が「依存的」になり、サイロという決して排除できない中間依存者が介在することになります。
+** '''[[Twitter]] の開発者規約は、自身のサイトへのエクスポートを禁止しているように見えます''': <blockquote cite="https://dev.twitter.com/terms/api-terms"> Twitter コンテンツをサービスとしてのデータストアやその他のクラウドベースのサービスにエクスポートすることは許可されていません。[https://dev.twitter.com/terms/api-terms]</blockquote> [https://twitter.com/michielbdejong/status/347438063187804161] 経由で発見。
+* '''信頼性の低さ。''' 自身のサイトが、あらゆるコンテンツを投稿するためにサードパーティのサービスに依存することになります。
+** 2014-10-05 例： [[Flickr]] https://twitter.com/anomalily/status/518830141502685185
+* '''非正規性。''' 自身のドメインにアーカイブされたコピーは正規（オリジナル）のコピーではありません。
+* '''品質の低下。''' サードパーティのサービスから取得することで、コンテンツの品質が低下する場合があります。例：
+** 文字数制限（例：140文字の [[Twitter]] 投稿、200文字の Foursquare のシャウト/チップ）。
+*** これは完全にサイロに依存します。特定のサイロ向けに意図された投稿であれば、品質に違いはありません。 - 2017-06-08 {{ petermolnar }}
+** リンクのラッピング（例：Twitter はすべてのリンクを独自の t.co リンクラッパーの背後に隠します）。
+*** リンクを追跡して抽出することは可能ですが、余計な手間がかかります。 - 2017-06-08 {{ petermolnar }}
+
+== 背景 ==
+* 2012-06-22 <i>PESOS</i> という用語の定義： http://tantek.com/2012/174/t2/opposite-posse-pesos-publish-elsewhere
+
+
+== 関連項目 ==
+* [[2011]]年の関連セッション： [[Publish_Then_Syndicate_and_Replicate]]
+* [[syndication-models]]
+* Matt Maldre は、自身の Facebook の「いいね！」を（リンクはないものの）一つの[[collection|コレクション]]としてすべて PESOS した投稿を行っています： https://www.spudart.org/blog/all-the-facebook-pages-i-liked/
+
+== 関連 ==
+* [[POSSE-ja|POSSE]]
+
+
+[[Category:building-blocks]]
+[[Category:syndication]]
+
+[[Category:Pages in Japanese]]
