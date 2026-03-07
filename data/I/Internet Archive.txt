@@ -16,8 +16,8 @@ To find the closest snapshot of a URL by date, construct a URL in the format:
 * Replace the date section <code>YYYYMMDD</code> with the desired date. Partial dates like <code>YYYYMM</code> and <code>YYYY</code> are also accepted.
 
 Examples: 
-* [https://web.archive.org/web/20250101/https://indieweb.org/Wayback_Machine snapshot of this page] closest to 2025-01-01
-* [https://web.archive.org/web/2024/https://indieweb.org/Wayback_Machine snapshot of this page] closest to 2024
+* [https://web.archive.org/web/20250101/https://indieweb.org/Internet_Archive snapshot of this page] closest to 2025-01-01
+* [https://web.archive.org/web/2024/https://indieweb.org/Internet_Archive snapshot of this page] closest to 2024
 
 === How to get oldest available snapshot ===
 Use this [[command line]] to get the oldest available snapshot of a URL:
@@ -35,10 +35,12 @@ To request the archival of a URL, construct and request a URL in the format:
 For example,
 
 <pre>
-curl "https://web.archive.org/save/https://indieweb.org/Wayback_Machine"
+curl "https://web.archive.org/save/https://indieweb.org/Internet_Archive"
 </pre>
 
 will schedule the capture of this very page.
+
+For additional command line and programming examples, see the [[#Trigger an Archive|Trigger an Archive]] section below.
 
 ===Upload an Archive===
 
@@ -143,10 +145,6 @@ curl -X GET -H "Accept: application/json" --cookie "logged-in-sig=AAAAAAAAAA;log
 </nowiki></pre>
 </blockquote>
 The method described below is supposed to call through to the new API and enqueue it, but it may be slower - the current quoted backlog is 671 minutes
-
-=== Retrieve the oldest available version of a URL ===
-<pre>URL="http://example.com"
-wget -O- -q "http://web.archive.org/web/timemap/link/${URL}" | grep "first memento" | sed -r "s/^<([^>]+)>;.*$/\1/"</pre>
 
 === Known ===
 {{new}} There is a [[Known]] plugin to auto-archive your posts and edits to your posts, as well as pages that you bookmark:
