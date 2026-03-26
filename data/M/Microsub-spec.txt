@@ -255,13 +255,134 @@ The response results are a [[jf2]] version of the [[h-feed]] vocabulary. The onl
 TBD: It might be nice to show an approximate frequency of posts, e.g. [[:File:feedly-search-for-url.png|Feedly]], and https://aaronparecki.com/follow
 
 ==== Searching for Content ====
-TBD: implementing a search API for searching past posts that the Microsub server has indexed.
+Search past posts that the Microsub server has indexed.
+
+GET or POST
 
 * action=search
 * channel={uid}
 * query={term}
+* author={url}
+* category={tag}
+* kind={value}
+* source={url}
+* before={cursor}
+* after={cursor}
+* limit={n}
 
 The presence of the "channel" parameter indicates to the server that the client wants to search for posts rather than search for feeds. The channel parameter can be set to an individual channel uid, or "global" to search across all channels.
+
+If the server receives a request with the "channel" parameter, it MUST treat the request as a search for content.
+
+The "query" parameter is a free-text search term. The server SHOULD search indexed text content such as the post name, summary, and content text when available.
+
+The "author" parameter filters results to posts with a matching author profile URL.
+
+The "category" parameter filters results to posts with a matching value in the post's <code>category</code> property.
+
+The "kind" parameter filters results to posts matching one or more standardized inferred kinds. A post MAY match more than one kind.
+
+Servers SHOULD support the following kind values:
+
+* like
+* repost
+* bookmark
+* reply
+* checkin
+* photo
+* video
+* audio
+
+A post matches these kinds when the corresponding properties are present:
+
+* <code>like</code> matches posts with a <code>like-of</code> property
+* <code>repost</code> matches posts with a <code>repost-of</code> property
+* <code>bookmark</code> matches posts with a <code>bookmark-of</code> property
+* <code>reply</code> matches posts with an <code>in-reply-to</code> property
+* <code>checkin</code> matches posts with a <code>checkin</code> property
+* <code>photo</code> matches posts with a non-empty <code>photo</code> property
+* <code>video</code> matches posts with a non-empty <code>video</code> property
+* <code>audio</code> matches posts with a non-empty <code>audio</code> property
+
+Servers MAY support additional kind values.
+
+The "source" parameter filters results to posts from the specified source feed URL.
+
+The server MAY support searching with only the "query" parameter, only structured filter parameters, or a combination of both. If none of "query", "author", "category", "kind", or "source" are provided, the server SHOULD return an error.
+
+If multiple different filter parameters are provided, the server SHOULD combine them with a logical AND. If the same parameter is repeated multiple times, the server SHOULD combine those values with a logical OR.
+
+Search results are returned in the same format as timeline responses.
+    
+    {
+      "items": [
+        { ... },
+        { ... }
+      ],
+      "paging": {
+        "after": "xxxxx",
+        "before": "xxxxx"
+      }
+    }
+    
+
+Servers SHOULD support the "before" and "after" parameters using the same paging model as timelines.
+
+Servers SHOULD support the "limit" parameter to allow clients to request a specific number of results. Servers MAY enforce minimum or maximum values for "limit".
+
+Results SHOULD be returned newest-first.
+
+Example request:
+    
+    POST /microsub
+    Content-type: application/x-www-form-urlencoded
+    
+    action=search
+    &channel=global
+    &query=webmention
+    &author=https://alice.example/
+    &category=indieweb
+    &kind=reply
+    &source=https://alice.example/feed
+    &limit=20
+    
+
+Example response:
+    
+    HTTP/1.1 200 Ok
+    Content-type: application/json
+    
+    {
+      "items": [
+        {
+          "type": "entry",
+          "name": "Replying to your post",
+          "url": "https://alice.example/reply/1",
+          "published": "2026-03-26T14:12:00+00:00",
+          "content": {
+            "text": "I finally got webmentions working."
+          },
+          "author": {
+            "type": "card",
+            "url": "https://alice.example/",
+            "name": "Alice"
+          },
+          "category": [
+            "indieweb",
+            "webmention"
+          ],
+          "in-reply-to": "https://example.com/original-post",
+          "_source": {
+            "url": "https://alice.example/feed",
+            "name": "Alice"
+          },
+          "_id": "12345"
+        }
+      ],
+      "paging": {
+        "before": "12345"
+      }
+    }
 
 === Preview ===
 
