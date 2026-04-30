@@ -1,0 +1,142 @@
+https://indieweb.org/events/2026-04-29-hwc-pacific
+
+
+'''<dfn>[https://events.indieweb.org/2026/04/homebrew-website-club-pacific-JF6HblyZj9vv <span class="p-name">Homebrew Website Club - Pacific</span>]</dfn>''' was an IndieWeb meetup on Zoom held on 2026-04-29.
+
+* Archived from: https://etherpad.indieweb.org/2026-04-29-hwc-pacific
+
+Homebrew Website Club - Pacific
+29 Apr 2026
+
+== Participants ==
+* {{artlung}} (host)
+* {{gRegor}}
+* {{burgeonlab}} https://burgeonlab.com/
+* {{enocc}} https://enocc.com
+* {{rossabaker}} https://rossabaker.com/
+* {{kupietz}}
+* {{gwg}}
+* {{reillypascal}} https://reillyspitzfaden.com
+* {{angelo}} https://ragt.ag
+* Pablo M https://lifeofpablo.com
+
+== Notes ==
+=== What is new on your websites? ===
+* Joe: https://artlung.com/art/ https://artlung.com/sketchnotes/
+** Joe wishes he had created a page on AI metaphors about a year ago to catalog the metaphors for ai. gasoline, computers, asbestos, polyester, petroleum, Ross brought up "cars" as one he used today.
+* gRegor: getting back to working on indiebookclub posting UI, adding optional book search with cover images (https://indiebookclub.biz/)
+** added a "sentience check" based on fluffy's post, and seems to be working well
+* https://gregorlove.com/2026/03/i-am-testing-out/
+** a ui element that can be edited but most users will not
+* Naty: created sparklines finally (during IWC:DUS too!), it's on the /stats page (https://burgeonlab.com/stats/) and also on the bottom of postType (section) pages
+* Angelo:  Arroyo Seco Group Calls for Halt to Goat Grazing Program Over Environmental Concerns
+https://pasadenanow.com/main/arroyo-seco-group-calls-for-halt-to-goat-grazing-program-over-environmental-concerns
+** https://ragt.ag/goats
+** Joe was able to log into Angelo's site for the first time with no difficulty. Uses self-auth, a single file php authenticator tool
+https://github.com/Inklings-io/selfauth
+* Pablo M: https://lifeofpablo.com/api/v1/blog
+** Pablo M. thinking of building an app
+** Ross: I like this a lot.  Makes things easier for people doing things the right way.  Bozos won't notice it to exploit it.
+** We can log into https://test.lifeofpablo.com - Pablo is experimenting with allowing users to log in with their websites! worked well for me using both github and my own provider
+
+=== What's new recently in IndieWeb ===
+* https://indieweb.org/IWC_DUS
+** Animated (AVIF) image of attendees (maybe? looks like a GIF?)
+** AVIF https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types#avif_image
+** Example of another AVIF https://danielpietzsch.com/notes/hwc-nov-2025
+** https://indieweb.org/AVIF is full colour vs GIF 256 only, supports transparency, 
+** IWC:DUS notes from sessions, video to come! https://indieweb.org/2026/D%C3%BCsseldorf/Schedule
+* https://indieweb.org/IndieWeb_Movie_Club
+** https://www.justwatch.com/ site that shows information on where to find a film
+*** https://www.justwatch.com/us/movie/network Michael's favorite movie
+*** https://en.wikipedia.org/wiki/MirrorMask also mentioned
+
+=== Libraries ===
+* A writer friend of Mike's who is recovering from homelessness recently had a nice piece published about his experience of libraries https://www.thesmallbow.com/p/libraries-kept-me-safe-when-the-world-did-not
+* https://smorgasborg.artlung.com/bruce-sterling/free_as_knowledge/
+* A new book landed in the Internet Archive: https://blog.archive.org/2026/04/23/introducing-vanishing-culture-a-new-book-on-the-loss-of-our-digital-memory/
+* Zine popup in the works https://indieweb.org/zine
+* Library science vs information science vs data science, information literacy
+** Organizing information, analyzing information, all slightly different disciplines, the ability to use information
+
+Blog carnival: https://indieweb.org/IndieWeb_Carnival
+* Pablo hosting this month: https://lifeofpablo.com/blog/indieweb-carnival-2026-adventure with the theme of "Adventure"!
+
+=== Instagram ===
+* Instagram exporter: https://github.com/greg-randall/memento-mori
+* The "best way" so far is to manually create a note post on your own site and then add a manual IG link 
+* Deprecated now: https://ownyourgram.com/ by Aaron
+* https://github.com/instaloader/instaloader also doesn't work properly
+* Naty read this recently might be of interest, https://www.404media.co/sxsw-used-ai-powered-trademark-tool-to-censor-dissent-on-instagram/
+* Instagram algorithmic tools fail to assure followers see what a person follows
+
+* Pablo E has same negative feelings towards Instagram but for Substack
+** https://indieweb.org/Substack has a lot of criticisms
+* https://smorgasborg.artlung.com/feed-patterns/ includes the fact that (most) substacks have feeds at `/feed` 
+
+* Violentmonkey script to hook Instagram comment field for PESOS (https://indieweb.org/PESOS)
+** Naty: This is really interesting
+** https://violentmonkey.github.io/ - open source version of Greasemonkey - which we discussed a bit at FrESH number 22: https://indieweb.org/events/2025-02-25-front-end-study-hall
+
+<pre>
+// ==UserScript==
+// @name         Instagram Comment Hook
+// @match        https://www.instagram.com/*
+// @grant        none
+// ==/UserScript==
+
+(function () {
+  'use strict'
+
+  document.addEventListener('click', function (e) {
+    const postBtn = e.target.closest('div[role="button"]')
+
+    if (postBtn && postBtn.innerText.trim() === 'Post') {
+      const textarea = document.querySelector('textarea[aria-label="Add a comment…"]')
+      if (textarea) {
+        alert(textarea.value) // post to your website
+      }
+    }
+  }, true)
+})()
+</pre>
+
+=== RSS (multilanguage) ===
+* Q: How should multiple lanaguage feeds be implemented?
+* Q: What do readers expect or what should webmasters do?
+* Stephan Max - A little bit of German (https://stephanmax.com/little-bit-german/)
+* Ruben - Kedara - More miltilingualism please (https://kedara.eu/more-multilingualism/)
+* https://indieweb.org/rel-alternate there is an `hreflang` attribute if you want to advertise multiple feeds in different languages, helpful for discovery (when people initially subscribe)
+* https://indieweb.org/translations
+* Alex Sirac writes in En/Fr on their IndieWeb site: https://alexsirac.com/
+* Hugo offers multilingual features: https://gohugo.io/content-management/multilingual/, separates languages into bundles which will have all the keys to the words that need to exist in the languages set
+* https://tilde.team/~zinricky/multilingualism/
+* https://indieweb.org/translations
+* Styling XML
+** https://indieweb.org/XSLT
+** https://reillyspitzfaden.com/styles/rss-styles.xsl
+** used in: https://reillyspitzfaden.com/feed.xml
+** Naty tried it for the first time on just her notes feed: https://burgeonlab.com/notes/feed.xml but not sure if she should implement it to all feeds
+** paragraph about XSLT by Reilley: https://reillyspitzfaden.com/posts/2025/04/databending-part-3/#website-updates
+
+=== Misc ===
+* Not sure if it's Beto's site Joe is referring to: https://robida.net/ re: offline-first site
+** https://indieweb.org/service_worker
+
+* https://www.citationneeded.news/free-and-open-access-in-the-age-of-generative-ai/
+
+* Everyone using Cloudflare is not the way to protect from scrapers
+
+* https://github.com/yt-dlp/yt-dlp
+* YouTube is different in terms of support for clients (compared to Instagram which doesn't support other clients)
+* https://indieweb.org/yt-dlp supports Instagram downloads
+
+* https://maddiem4.cc/
+** Interesting feature: curl or wget a page to get its Markdown source
+
+----
+
+Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
+
+
+[[Category:Events]]{{Homebrew Website Club}}
