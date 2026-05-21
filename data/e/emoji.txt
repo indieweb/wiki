@@ -13,17 +13,37 @@ Emoji can be used to briefly communicate an impression, or more creatively punct
 As a developer of IndieWeb related software and services, supporting emoji requires paying careful attention to three areas:
 * user input: make sure wherever a user can enter text that you handle emoji either by allowing and supporting it, or providing good feedback to the user where it may be disallowed  (e.g. perhaps in a username)
 * storage: make sure your software and interfaces which store textual content support full fidelity Unicode both storing and retrieving
-* display: either directly render emoji via its Unicode characters, or if you are doing the extra work to display representative images (like many [[social media]] silos do), be sure to put the the respective Unicode characters in the <code>alt</code> text of the images
+* display: either directly render emoji via its Unicode characters, or if you are doing the extra work to display representative images (like many [[social media]] silos do), consider putting the respective Unicode characters in the <code>alt</code> text of the images
 
 See this article for more support and implementation tips:
 * 2016-08-06: [https://web.archive.org/web/20190405105558/https://glasnt.com/blog/2016/08/06/solve-for-emoji.html Solve for emoji] originally posted at: <nowiki>http://glasnt.com/blog/2016/08/06/solve-for-emoji.html</nowiki>
 
-__TOC__
-== IndieWeb Examples ==
-Emoji are prominently used in [[reacji]] responses and [[tagmoji]] aggregation pages.
+=== How to markup ===
+How to markup emoji depends a lot on the use and context.
 
+If the emoji is a shorthand for a word, you may wish to mark it up with an <code>&lt;abbr&gt;</code> element and put the complete word or phrase in the <code>title=</code> attribute, e.g.
+<pre>
+I had a <abbr title="coffee">☕️</abbr>
+</pre>
+
+If the emoji is purely decorative, you should mark it up with <code>&lt;span aria-hidden="true"&gt;</code> for accessibility, e.g. in order to avoid having it read out loud by screen readers.
+
+<pre>
+I had a <span aria-hidden="true">☕️</span> coffee
+</pre>
+
+== IndieWeb Examples ==
+Emoji are prominently used in [[reacji]] responses and [[tagmoji]] aggregation pages, and sometimes decoratively
+
+=== Aaron Parecki ===
 * {{aaronpk}} includes emoji characters in note and photo contents, and outputs the raw emoji characters in the HTML rather than replacing them with images. Examples: [https://aaronparecki.com/2016/04/18/18/travel] [https://aaronparecki.com/2016/04/16/16/]
 * {{aaronpk}}'s [[posts]] show a different profile picture depending on the emoji used in the post. more info: [https://aaronparecki.com/2019/02/25/9/emoji Emoji avatars for my website]
+
+=== James G ===
+{{capjamesg}} has an emoji coffee-cup on [https://jamesg.blog/posts his blog posts index] which changes seasonally.
+
+=== Tantek ===
+{{t}} uses decorative emojis in the subhead on his homepage and has marked them up with <code>aria-hidden="true"</code> per the markup advice above.
 
 == Issues ==
 === standardized vs platform-specific display ===
