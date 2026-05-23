@@ -2,21 +2,11 @@ https://indieweb.org/JSON-LD
 
 {{stub}}
 
-'''<dfn>[https://json-ld.org/ JSON-LD]</dfn>''' is a method of encoding [[RDF]] (aka "Linked Data") as [[JSON]]. It makes special points of IDing resources with URIs, and of including the URIs of schema-like "contexts" for vocabularies defined by a variety of sources.
+'''<dfn>[https://json-ld.org/ JSON-LD]</dfn>''' is a method of encoding [[RDF]] (aka "Linked Data") as [[JSON]] and has been highly criticized for the burdens it places on developers, especially in the context of [[ActivityPub]] and [[ActivityStreams]].
 
-[http://manu.sporny.org/ Manu Sporny] has released a number of introductory videos (hosted on [[YouTube]]):
-
-* {{citation|title=What is JSON-LD?|url=https://www.youtube.com/watch?v=vioCbTo3C-4|published=2012-06-19}}
-* {{citation|title=JSON-LD: Core Markup|url=https://www.youtube.com/watch?v=UmvWk_TQ30A|published=2015-02-17}}
-* {{citation|title=JSON-LD: Compaction and Expansion|url=https://www.youtube.com/watch?v=Tm3fD89dqRE|published=2015-02-17}}
-
-And written about the origin of the standard and its posision in the [[Semantic Web]] and [[RDF]] universe, published in the month of W3C 1.0 release of the standard:
-
-* {{citation|title=The Origins of JSON-LD|url=http://manu.sporny.org/2014/json-ld-origins/|published=2014-01-19|archiveurl=https://web.archive.org/web/20220212132819/http://manu.sporny.org/2014/json-ld-origins/}}
-* {{citation|title=
-JSON-LD and Why I Hate the Semantic Web|url=http://manu.sporny.org/2014/json-ld-origins-2/|published=2014-01-21|archiveurl=https://web.archive.org/web/20220212132831/http://manu.sporny.org/2014/json-ld-origins-2/}}
-
-== Articles ==
+== Criticism ==
+{{section-stub}}
+This section needs expansion by extracting criticism articles from the below sections and clustering them by areas of primary criticism in this section.
 
 * {{citation
 | title = No Namespaces in JSON, Please
@@ -25,6 +15,10 @@ JSON-LD and Why I Hate the Semantic Web|url=http://manu.sporny.org/2014/json-ld-
 | published = 2017-05-25
 | archiveurl = https://web.archive.org/web/20180811095602/https://hsivonen.fi/no-json-ns/
 }}
+
+...
+
+== Articles ==
 * {{citation
 | title = Why Microformats? Owning My Reviews
 | url = https://aaronparecki.com/2016/12/17/8/owning-my-reviews
@@ -39,6 +33,20 @@ JSON-LD and Why I Hate the Semantic Web|url=http://manu.sporny.org/2014/json-ld-
 | published = 2013-08-08
 | archiveurl = https://web.archive.org/web/20180120120942/https://veganstraightedge.com/articles/2013/08/08/json-ld-is-an-unneeded-spec
 }}
+
+== History ==
+[http://manu.sporny.org/ Manu Sporny] has released a number of introductory videos (hosted on [[YouTube]]):
+
+* {{citation|title=What is JSON-LD?|url=https://www.youtube.com/watch?v=vioCbTo3C-4|published=2012-06-19}}
+* {{citation|title=JSON-LD: Core Markup|url=https://www.youtube.com/watch?v=UmvWk_TQ30A|published=2015-02-17}}
+* {{citation|title=JSON-LD: Compaction and Expansion|url=https://www.youtube.com/watch?v=Tm3fD89dqRE|published=2015-02-17}}
+
+And written about the origin of the standard and its posision in the [[Semantic Web]] and [[RDF]] universe, published in the month of W3C 1.0 release of the standard:
+
+* {{citation|title=The Origins of JSON-LD|url=http://manu.sporny.org/2014/json-ld-origins/|published=2014-01-19|archiveurl=https://web.archive.org/web/20220212132819/http://manu.sporny.org/2014/json-ld-origins/}}
+* {{citation|title=
+JSON-LD and Why I Hate the Semantic Web|url=http://manu.sporny.org/2014/json-ld-origins-2/|published=2014-01-21|archiveurl=https://web.archive.org/web/20220212132831/http://manu.sporny.org/2014/json-ld-origins-2/}}
+
 
 == See Also ==
 
@@ -87,4 +95,4 @@ JSON-LD and Why I Hate the Semantic Web|url=http://manu.sporny.org/2014/json-ld-
 * Criticism: https://hachyderm.io/@hrefna/116121486165715666
 * Giving up on JSON-LD in a website rewrite: https://mastodontech.de/@jak2k/116235644734516919
 ** "I will probably cancel my current (very JSON-LD focused) website rewrite. It is not very nice to work with when editing *and* coding.<br>I'll do the next one in Rust too. But this time, I'll create one giant KDL file to configure everything (pages, colllections, feeds, …). I'll might also create a new URL structure (while redirecting all old ones) and add a native comment system. I'll definitely do a design refresh and restructure my navigation and footer.(1/2)<br>#website #personalBlog #indieweb" [https://mastodontech.de/@jak2k @jak2k] March 15, 2026
-* Criticism: https://hachyderm.io/@hrefna/116121486165715666
+* Criticism: https://hachyderm.io/@hrefna/116121486165715666 <blockquote><p>Let me talk, following on @thisismissem's post, about JSON-LD from a data engineering and web backend perspective: </p><p>It's a nightmare. </p><p>First: one of the first things you learn about how to address the OWASP lists is the importance of not just accepting random payloads, but carefully validating them, but with JSON-LD: </p><ol><li>Basically any field may be absent, present, a URI, a list of objects, a list of URIs of objects, a list containing URIs AND Objects, etc. </li><li>Fields do not have consistent names. BY DESIGN. You _have_ to parse an object to know what is in it. Parsing the context and then building the map of names is basically an Ο(n*m) process where the amount of processing time you spend is _under the control of the sender_ by default, and nothing is ever fully defined. </li><li>Actually fully validating an object to the degree of knowing if it is the same thing as something else requires solving a GI-hard problem if there are blank nodes. </li></ol><p>Applying basic type theory to anything done with JSON-LD is an exercise in frustration. </p><p>There are certainly use cases for it, but 99% of the time when I've seen it being used it is not for those use cases, but for use cases where we would strongly prefer JSON-Schema and/or OpenAPI definitions for things.</p></blockquote>
