@@ -12,9 +12,16 @@ Twitter used to be most well known for being originally limited to 140 character
 Why use Twitter? Besides all the usual [[social media]] [[silo]] reasons like "everyone is on there", see what people come up with when they ask why am I using Twitter:
 * 2010-11-29 [https://aurorameyer.com/tag/why-am-i-using-twitter/ Why am I using Twitter?]
 * [https://twitter.com/search?f=tweets&vertical=default&q=%22why%20am%20I%20using%20twitter%22 Twitter search for "why am I using twitter"]
+* [https://omfg.town/@dansinker/110397397474067798 For reaching others via DM]:
+** "I absolutely abhor the current state of Twitter, but the reality is if I need to reach someone, especially via DM... there's no better option. Frustrating, but also, a necessity." [https://omfg.town/@dansinker @dansinker] May 19, 2023
+* [https://omfg.town/@glennf@twit.social/110397465985412267 to avoid having someone else claim it and receive DMs meant for you]
+* [https://help.twitter.com/en/rules-and-policies/inactive-twitter-accounts Inactive Account policy]: "be sure to login at least every 30 days" 
 
 == How to ==
 __TOC__
+=== How to View & Search ===
+[https://nitter.net/ Nitter] (and other instances such as [https://xcancel.com/ xcancel]) is an alternate front-end for Twitter that allows viewing replies, running searches, and a captcha-d no JS required minimal reading experience of Twitter profiles. It also provides RSS feeds for individual users' Twitter accounts.
+
 === How to export your data ===
 ==== Download all your tweets ====
 <span style="float:right; clear:right;max-width:40%">[http://bradcolbow.com/archive/view/the_long_slow_death_of_twitter/ <img src="http://bradcolbow.com/img/death-of-twitter-2.gif" style="max-width:100%" alt="Comic about the long slow death of Twitter"/>]</span>
@@ -32,10 +39,24 @@ The most interesting things in the JSON twitter archive are:
 
 After you download your archive, you can update in using a Ruby Gem called [https://github.com/DeMarko/grailbird_updater GrailbirdUpdater].
 
+* Article about archiving tools for saving and using your Twitter data: https://bavatuesdays.com/archiving-twitter/
+* https://www.movetodon.org/ a tool for migrating from Twitter to Mastodon which allows you to check your followers on Twitter to follow them individually or in bulk on Mastodon.
+* The Internet Archive is accepting your downloadable Twitter Archive for uploading to their site: https://help.archive.org/help/how-to-archive-your-tweets-with-the-wayback-machine/
+* Archival copy of Tweets on your own site https://boffosocko.com/2016/12/05/how-to-own-display-your-twitter-archive-on-your-website-in-under-10-minutes/ ([https://boffosocko.com/author/chrisaldrich/ @chrisaldrich] December 5, 2016)
+* In-browser tool for turning your ~2022 twitter archive ZIP into an archive you can drop on a web server to get tweet search and archive permalinks ([https://tinysubversions.com/twitter-archive/ example]). Doesn’t currently seem to support also showing a paginated feed of tweets [https://tinysubversions.com/twitter-archive/make-your-own/ Make your own simple, public, searchable Twitter archive (tinysubversions.com)]
+* A plugin for putting one's Twitter archive on their [[WordPress]]-based website: https://github.com/shawnhooper/twitter-archive-to-wp
+* [https://www.jvt.me/posts/2023/09/30/tweetus-deletus/ Introducing tweetus-deletus 🐦🪄💀 - a tool to automate deleting your tweets, through the browser]
+* be sure to unfurl your t.cos in your archives when you receive them since the t/.co domain will likely stop working when Twitter shuts down: https://inkdroid.org/2022/11/20/t-dot-co/
+* A [https://github.com/tweetback/tweetback Twitter archive project] for [[Eleventy]] 
+* exporting follower data https://listfollowers.com/
+* Be aware that exports do not mark content from Circles differently to other tweets, so when migrating you may end up making previously private content public: 
+** "If like me and many others, you're in the process of moving your tweets to a new home on your own site, a word of caution:Tweets to twitter circles are not labelled as such in the export, so be aware of the risk of making public what you might have intended for a trusted group" [https://indieweb.social/@philhawksworth/109353365961680480 @philhawksworth] November 16, 2022
+* [https://github.com/timhutton/twitter-archive-parser a tool to parse your archive]
+
 ==== Download Direct Messages ====
 * You can use [http://www.jwz.org/blog/2014/01/psa-back-up-your-shit/ this method] to download DMs from Twitter. It is complicated to set up and involves registering a new Twitter application. It can only archive about a year's worth of DMs.
 
-==== Backup using t command line tool ====
+==== Backup using a command line tool ====
 See: https://github.com/sferik/t#using-t-for-backup
 
 You can also export your lists with the "t" command line tool:
@@ -93,6 +114,13 @@ To do this, [[#How_to_export_your_data|download your archive]], extract <code>fo
 <pre>
 grep accountId following.js | cut '-d"' -f4 | xargs -n 1 -I %% twurl /1.1/friendships/destroy.json -d user_id=%%
 </pre>
+
+=== How to turn off Grok Training ===
+To turn off training Grok on your posts, uncheck the setting under [https://twitter.com/settings/grok_settings Grok Settings].
+
+=== How to Embed ===
+Change "twitter" in the URL to "fxtwitter" before embedding / sharing and it will embed a much friendlier (no cookies) version.
+* [https://adrianroselli.com/2021/01/bulletproofing-embedded-tweets.html Bulletproofing Embedded Tweets]
 
 == Porting to the IndieWeb ==
 === Challenges ===
@@ -487,7 +515,13 @@ Twitter provides the following features currently:
 * [[API]] for developers including
 ** [[Twitter Cards]]
 ** [[Sign in with Twitter]]
-** ... and more
+* [[Super Follow]]
+* [[XMPP]] for reading your feed, tweeting, and for their firehose as well: https://blog.twitter.com/en_us/a/2008/twitter-and-xmpp-drinking-from-the-fire-hose
+* Cotweets dropped: [https://mashable.com/article/twitter-shuts-down-cotweets Twitter is shutting down its CoTweets feature immediately]
+* 2009 [https://twitter.com/stop/status/1594046450723192833 logged in home screen design]: 
+** "For posterity, here’s a screenshot of Twitter’s home timeline after creating a brand new test account during my first week there in 2009. I went looking for this to recall the name of the Everyone timeline. I have a whole folder of these from an audit I did that week." [https://stopdesign.com @stop] November 19, 2022
+* 2022-08-31 Mashable: [https://mashable.com/article/twitter-circle-memes Twitter is lighting up with Circle memes]
+* [[Reply downvotes]] feature: 2022-02-04 Washington Post:[https://www.washingtonpost.com/technology/2022/02/04/twitter-downvote/ Twitter got a ‘downvote’ button. Here’s what happens if you click it.] 
 
 === 2006 original ===
 At launch, Twitter provided the roughly following features:
@@ -509,6 +543,8 @@ This list may be incomplete/imprecise and was done from ~8 year old memory. Plea
 Screenshot of 2006 sign-in / sign-up screen:
 
 [http://makers.crew.co/chris-messina/ <img src="http://makers.crew.co/wp-content/uploads/2016/03/OG-Twitter.png" style="max-width:100%" alt="Screenshot of twttr.com" />]
+
+* 2006 [https://www.instagram.com/reel/C1IcNm4PatI/ UI demo by Jack Dorsey (video)]
 
 === Embedding Tweets ===
 Twitter offers copy/paste embed markup on its site that allows one to embed the appearance/text of a tweet in one's own page, as well as [[oEmbed]] option. As both the oEmbed and the embed markup include the text of the tweet in a blockquote, if Twitter shut down, this could continue to display the text minus the appearance.
@@ -690,10 +726,22 @@ The account has < 10 tweets and follows people of left-leaning political beliefs
 
 Despite the apparent violation of terms and conditions, providing a valid phone number will unlock the account with support forms demanding to know full name as well.
 
-=== Poor handling of abuse ===
-Twitter unfortunately has a long, well documented, history of poor handling of abuse, from:
+=== Moderation ===
+* 2023-10-05 Bloomberg: [https://www.bloomberg.com/opinion/articles/2023-10-05/the-moral-case-for-no-longer-engaging-with-elon-musk-s-x The Moral Case for No Longer Engaging With Elon Musk’s X] / The former Twitter is incentivizing violent content, which will only become worse to stand out to users.
+* 2022-08-30 [https://www.theverge.com/23327809/twitter-onlyfans-child-sexual-content-problem-elon-musk How Twitter’s child porn problem ruined its plans for an OnlyFans competitor] - long report about Twitter's inability to protect users, attempts to implement a [[OnlyFans]] alternative and notes on what NOT to do regarding trust and safety for a platform
+* repeatedly suspends people who actually openly discuss how they’re being harassed & threatened! [https://twitter.com/stealthygeek/status/1561884846791737344 Thread]:
+** "Hi y'all!<br><br>I'm back after two days on my 6th permanent Twitter suspension.<br><br>Yeah, you read that right. My account has been "permanently suspended" by @twitter SIX. FUCKING. TIMES.<br><br>Might be a record, honestly.<br><br>Each time I have been maliciously reported by literal criminals. 1/" [http://www.patrickstomlinson.com @stealthygeek] August 23, 2022
+* 2022-02-22 unverified paid [[Twitter Blue]] accounts [https://infosec.exchange/@JosephMenn/109909077981714944 being used to spread disinformation]: [https://www.washingtonpost.com/technology/2023/02/22/russian-propagandists-said-buy-twitter-blue-check-verifications/ Russian propagandists are buying Twitter blue-check verifications]
+** "Russian propagandists are buying Twitter’s new blue checks, giving their lies about Ukraine more prominence. A dozen are tweeting in English, reaching millions. [https://wapo.st/3m2enaY Gift link]" [https://infosec.exchange/@JosephMenn @JosephMenn] February 22, 2023
+* 2021-10-23 [https://twitter.com/captn3m0/status/1451890982031482884suspends (especially new) accounts] without a linked [[phone number]]: 
+** "Stop suspending accounts without a linked phone number, thank you." [https://captnemo.in @captn3m0]
+* 2021-06-16 iNews: [https://inews.co.uk/opinion/chrissy-teigen-twitter-malicious-troll-could-turn-you-too-1055700 Twitter turned Chrissy Teigen into a malicious troll – and it could turn you into one too] <blockquote>Human beings cannot cope with Twitter. The endless scroll required to maintain a good-sized account is ruinous to the mind, let alone anything more intense – ask any neuroscientist. Twitter is effectively a livestream binfire of brain synapses.</blockquote>
+* 2021-01-21 [https://hapgood.us/2021/01/21/twitter-should-cancel-the-appeals-process-or-make-it-work-also-im-in-twitter-jail-in-case-youve-missed-me/ Twitter Should Cancel the Appeals Process or Make It Work (also: I’m in Twitter jail!)]
+* 2021-01-15 [https://techcrunch.com/2021/01/15/twitters-vision-of-decentralization-could-also-be-the-far-rights-internet-endgame/ Twitter’s decentralized future: The platform’s vision of a sweeping open standard could also be the far-right’s internet endgame]
 * 2018-12-19<cite>[https://decoders.amnesty.org/projects/troll-patrol/findings#what_did_we_find_container]</cite>
 **A research study by Amnesty International found female journalists and politicians face abuse on Twitter every 30 seconds.
+* 2018-07-20 [https://www.nytimes.com/2018/07/20/sunday-review/maggie-haberman-twitter-donald-trump.html Maggie Haberman: Why I Needed to Pull Back From Twitter] <blockquote><p>Twitter has stopped being a place where I could learn things I didn’t know, glean information that was free from errors about a breaking news story or engage in a discussion and be reasonably confident that people’s criticisms were in good faith.</p><p>The viciousness, toxic partisan anger, intellectual dishonesty, motive-questioning and sexism are at all-time highs, with no end in sight. It is a place where people who are understandably upset about any number of things go to feed their anger, where the underbelly of free speech is at its most bilious.</p><p>Twitter is now an anger video game for many users. It is the only platform on which people feel free to say things they’d never say to someone’s face. For me, it had become an enormous and pointless drain on my time and mental energy.</p></blockquote>
+* 2018-02-08 @mattsta: [https://twitter.com/mattsta/status/961644343118278656 …scam reply accounts with the same attributes from twitter botnets (only reply to other bots, all joined Feb 2018, etc). and TWITTER HAS NOT TAKEN IT DOWN…]
 * 2008-05-22: <cite>[http://arielwaldman.com/2008/05/22/twitter-refuses-to-uphold-terms-of-service/ Twitter refuses to uphold Terms of Service]</cite>
 to
 * 2014-08-12 <cite>[http://rhrealitycheck.org/article/2014/08/12/twitterfail-twitters-refusal-handle-online-stalkers-abusers-haters/ #TwitterFail: Twitter’s Refusal to Handle Online Stalkers, Abusers, and Haters]</cite>
@@ -718,12 +766,14 @@ Unlikely that Twitter will take any actions to resolve this long term trend.
 Twitter has no mechanisms for <nowiki>[defining a community]</nowiki>. Every user floats by themselves, interacting with who they please. This denies us the ability to build communities, to set social norms, and to enforce them. Twitter has absolutely no way for me to share with others that someone isn't a person I want in my communities
 </blockquote>
 
-=== Lack of usernames ===
+=== Usernames ===
 Per https://twitter.com/webster/status/697984790323007488 the suggested usernames have become seemingly random long strings of letters and numbers:
 
 https://pbs.twimg.com/media/Ca-9ZNSVIAE6hEm.png
 
-=== Amplifies low value content ===
+* 2020-08-31 [[Darius Kazemi]]: [https://tinysubversions.com/notes/twitter-usernames/ On Twitter usernames with lots of numbers] has screenshots of Twitter’s mobile sign-up circa 2020, as well as some reasons for the origins of so many "FirstName BunchOfNumbers" accounts.
+
+=== Amplifies low value and misleading content ===
 As criticized in this tweet (ironically)
 * https://twitter.com/AbrasiveGhost/status/639601942973562880 <blockquote>SON: Dad whats Twitter <br/><br/>ME: u know when one dog barks & every single one in the area starts howling? <br/><br/>SON: ya <br/><br/>ME: its like that but all day</blockquote>
 
@@ -737,6 +787,8 @@ Retweets encourage viral and angry content.
 }}
 
 One way to mitigate this is to turn off retweets from individual accounts in your feed: https://help.twitter.com/en/using-twitter/retweet-faqs (''How do I turn Retweets off?'')
+
+* 2023-01-05 [https://natematias.medium.com/how-twitter-misleads-us-about-how-many-people-have-left-and-what-to-do-about-it-bba484b6fed6 How Twitter misleads us about how many people have left — and what to do about it] / Social feeds are engines for distorting social understanding. Here’s how to push back against the algorithm. <blockquote>Social media feeds are designed to mislead us about the opinions and behaviors of the people in our lives</blockquote>
 
 === Suspension of accounts that mention fediverse/mastodon services ===
 
@@ -759,6 +811,16 @@ Users who pointed out how to evade the blocks preventing links to Mastodon (e.g.
 }}
 * The official Twitter Support account posted on 2022-12-18 ([https://web.archive.org/web/20221219015355/https://twitter.com/TwitterSupport/status/1604531261791522817 archived]) about the new "Promotion of alternative social platforms policy" and linked to this new Help page for it. Within the day, this Help page appears to have been deleted (404) and the Twitter thread deleted.
 
+== 2FA ==
+* Criticism: 2019-10-09 ArsTechnica: [https://arstechnica.com/information-technology/2019/10/twitter-used-phone-numbers-provided-for-2fa-to-match-users-to-advertisers/ Twitter transgression proves why its flawed 2FA system is such a privacy trap] / Twitter [[2FA]] is every bit as bad as critics said it was. Site signals a change is coming.<blockquote>… [Twitter] used phone numbers and email addresses provided for 2FA protection to tailor ads to users.</blockquote>
+
+=== Rename to X ====
+* 2024-09-29 [https://fxtwitter.com/paulg/status/1840318262870974576 criticism of renaming to X by Paul Graham]
+
+=== Privacy ===
+* 2022-11-07 [https://twitter.com/stevekrenzel/status/1589700721121058817 a thread about data collection practices with the native applications of Twitter]
+* 2022-05-25 NPR: [https://www.npr.org/2022/05/25/1101275323/twitter-privacy-settlement-doj-ftc Twitter will pay a $150 million fine over accusations it improperly sold user data] <blockquote>… until at least September 2019, Twitter was also using that information to boost its advertising business by allowing advertisers access to users' phone numbers and email addresses …</blockquote>
+
 === General ===
 * {{citation
 | title = If you’re still on Elon Musk’s X, ask yourself this: why?
@@ -772,6 +834,25 @@ Users who pointed out how to evade the blocks preventing links to Mastodon (e.g.
 | author = Paris Marx
 | published = 2026-03-23
 }}
+* {{citation
+| title = Twitterlike is a Bad Shape
+| url = https://osteophage.neocities.org/essays/twitterlike
+| author = {{Coyote}}
+| published = 2025-04-12
+}}
+* {{citation
+| title = What do we do with the Twitter-shaped hole in the internet?
+| url = https://chelseatroy.com/2023/09/15/what-do-we-do-with-the-twitter-shaped-hole-in-the-internet/
+| author = Chelsea Troy
+| published = 2023-09-15
+}}
+* {{citation
+| title = You Really Need to Quit Twitter
+| url = https://www.theatlantic.com/ideas/archive/2021/07/twitter-addict-realizes-she-needs-rehab/619343/
+| author = Caitlin Flanagan
+| published = 2021-07-05
+}}
+* [https://twitterisgoinggreat.com/ Twitter is Going Great]
 
 == Downtime ==
 Live: http://downrightnow.com/twitter
@@ -928,8 +1009,6 @@ Etc. your tweets to do so, per that CC license (e.g. CC-BY, attributing you) ind
 * 2017-12-19 BuzzFeed: [https://www.buzzfeed.com/charliewarzel/internal-emails-show-twitter-struggled-to-interpret-its-own  Internal Emails Show Twitter Struggled To Interpret Its Own Verification Rules While Hunting Trolls] /  Emails suggest that verification was never quite what Twitter said it was and that the company was aware it served as a tacit endorsement long before it admitted so publicly.
 * 2018-01-31 New York Times: [https://www.nytimes.com/interactive/2018/01/31/technology/social-media-bots-investigations.html Twitter Followers Vanish Amid Inquiries Into Fake Accounts] <blockquote>More than a million followers have disappeared from the accounts of dozens of prominent Twitter users in recent days as the company faces growing criticism over the proliferation of fake accounts and scrutiny from federal and state inquiries into the shadowy firms that sell fake followers.</blockquote>
 * 2018-01-27 New York Times: [https://www.nytimes.com/interactive/2018/01/27/technology/social-media-bots.html The Follower Factory] / Everyone wants to be popular online. Some even pay for it. Inside social media’s black market. <blockquote>… an obscure American company named Devumi that has collected millions of dollars in a shadowy global marketplace for social media fraud. Devumi sells Twitter followers and retweets to celebrities, businesses and anyone who wants to appear more popular or exert influence online. Drawing on an estimated stock of at least 3.5 million automated accounts, each sold many times over, the company has provided customers with more than 200 million Twitter followers, a New York Times investigation found.</blockquote>
-* 2018-02-08 @mattsta: [https://twitter.com/mattsta/status/961644343118278656 …scam reply accounts with the same attributes from twitter botnets (only reply to other bots, all joined Feb 2018, etc). and TWITTER HAS NOT TAKEN IT DOWN…] - Criticism: Twitter tolerates bot accounts gaming replies
-* 2018-07-20 Criticism: NYTimes [https://www.nytimes.com/2018/07/20/sunday-review/maggie-haberman-twitter-donald-trump.html Maggie Haberman: Why I Needed to Pull Back From Twitter] <blockquote><p>Twitter has stopped being a place where I could learn things I didn’t know, glean information that was free from errors about a breaking news story or engage in a discussion and be reasonably confident that people’s criticisms were in good faith.</p><p>The viciousness, toxic partisan anger, intellectual dishonesty, motive-questioning and sexism are at all-time highs, with no end in sight. It is a place where people who are understandably upset about any number of things go to feed their anger, where the underbelly of free speech is at its most bilious.</p><p>Twitter is now an anger video game for many users. It is the only platform on which people feel free to say things they’d never say to someone’s face. For me, it had become an enormous and pointless drain on my time and mental energy.</p></blockquote>
 * Annoying feature: [[In case you missed]]
 * 2018-08-10 Andy Baio thread reminiscing on joining Twitter in 2006, comparing to Mastodon 2017 https://twitter.com/waxpancake/status/1027793044500668418 (see thread top for start)
 ** "It happened before, it can happen again." [https://waxy.org/ @waxpancake] August 10, 2018
@@ -983,74 +1062,19 @@ Etc. your tweets to do so, per that CC license (e.g. CC-BY, attributing you) ind
 * https://blog.twitter.com/engineering/en_us/topics/insights/2017/using-deep-learning-at-scale-in-twitters-timelines.html
 * “People spend their days on Twitter because it helps their work, their profile, their social networks, friendship groups, love lives, or a combination of all of the above. In exchange, they must be ready for the possibility that they can be thrown to the wolves at a moment’s notice.” https://thecritic.co.uk/issues/july-august-2020/the-eye-of-the-storm/
 * Criticism: early acknowledgment of distraction problems: 2010-07-16 NYT: [https://www.nytimes.com/2010/07/17/opinion/17herbert.html Tweet Less, Kiss More]
-* https://nitter.net/ provides RSS feeds for individual users' Twitter accounts
 * https://twitter.com/AtokNiiro/status/1292279430199431168
 ** "Don't want Twitter to crop your images in the preview? <br>Use these aspect ratios:" [http://tapas.io/series/Treehouse @AtokNiiro] August 9, 2020
 * mobile signup flow as of 2020-08-31 https://tinysubversions.com/notes/twitter-usernames/
 * Criticism: Re-assigning unused usernames per 2019-11-19 WIRED: [https://www.wired.com/story/flawless-victory-twitter-handle A Flawless Twitter Dunk 12 Years in the Making] / Twitter says it will soon redistribute inactive account handles. Just don't come for @flawless.
 * ^ a year later, the supposed viral tweet was silenced by Twitter because of the "flawless" account being suspended: https://twitter.com/flawless/status/1199437832730894337
 * ^ "This Tweet is from a suspended account. Learn more"
-* https://techcrunch.com/2021/01/15/twitters-vision-of-decentralization-could-also-be-the-far-rights-internet-endgame/
-* criticism of moderation due to misinformation https://hapgood.us/2021/01/21/twitter-should-cancel-the-appeals-process-or-make-it-work-also-im-in-twitter-jail-in-case-youve-missed-me/
 * https://twitter.com/TwitterSupport/status/1371235587718582274
 ** "A number of accounts that Tweeted the word “Memphis” were temporarily limited due to a bug. It’s been fixed and the accounts have now been restored. We’re sorry this happened." [https://help.twitter.com @TwitterSupport] March 14, 2021
 * ^ screencapture video on mobile of doing this: https://twitter.com/JonDBarker/status/1371359686189068289
 ** "" [http://jondbarker.com @JonDBarker] March 15, 2021
 * ^ Hacker News post about Memphis banning, and the bots that got snared: [https://news.ycombinator.com/item?id=26458296 Tweeting “Memphis” autolocks your Twitter account]
 * tweetstamp
-* https://www.theatlantic.com/ideas/archive/2021/07/twitter-addict-realizes-she-needs-rehab/619343/
-* Criticism: 2021-06-16 iNews: [https://inews.co.uk/opinion/chrissy-teigen-twitter-malicious-troll-could-turn-you-too-1055700 Twitter turned Chrissy Teigen into a malicious troll – and it could turn you into one too] <blockquote>Human beings cannot cope with Twitter. The endless scroll required to maintain a good-sized account is ruinous to the mind, let alone anything more intense – ask any neuroscientist. Twitter is effectively a livestream binfire of brain synapses.</blockquote>
-* Criticism: suspends (especially new) accounts without a linked [[phone number]]: https://twitter.com/captn3m0/status/1451890982031482884
-** "Stop suspending accounts without a linked phone number, thank you." [https://captnemo.in @captn3m0] October 23, 2021
 * 2009-08-14 {{kevinmarks}}: [https://epeus.blogspot.com/2009/03/how-twitter-works-in-theory.html How Twitter works in theory]
-* [[Reply downvotes]] feature: 2022-02-04 Washington Post:[https://www.washingtonpost.com/technology/2022/02/04/twitter-downvote/ Twitter got a ‘downvote’ button. Here’s what happens if you click it.] / Can other people see your downvotes? How will this affect your timeline?
-* https://opml.glitch.me/ A Glitch project that will get websites and RSS Feeds of the people you follow on Twitter, so you can import the OPML-file with your favorite feedreader. (May be helpful for those leaving Twitter so they can follow the sites of people they followed there.)
 * Criticism: 2022-04-06 The Verge: [https://www.theverge.com/2022/4/6/23012913/twitter-tweet-embeds-deleted-tweets-empty-iframe-broken Twitter change leaves huge gaps in websites] / Embedded tweets later deleted now show a blank box
 * “Twitter, like many technology companies, fell into the classical trap by thinking that they, the technologists, were the innovators. Technologists today are almost never innovators, but rather plumbers who build pipelines to move ideas in the form of data back and forth with varying efficacy. Users are innovators, and its users that made Twitter unique.”
-* Criticism: Twitter gave your phone number to advertisers: 2022-05-25 NPR: [https://www.npr.org/2022/05/25/1101275323/twitter-privacy-settlement-doj-ftc Twitter will pay a $150 million fine over accusations it improperly sold user data] <blockquote>… until at least September 2019, Twitter was also using that information to boost its advertising business by allowing advertisers access to users' phone numbers and email addresses …</blockquote>
-* New Feature: [[Super Follow]]
-* Criticism: repeatedly suspends people who actually openly discuss how they’re being harassed & threatened! Thread: https://twitter.com/stealthygeek/status/1561884846791737344
-** "Hi y'all!<br><br>I'm back after two days on my 6th permanent Twitter suspension.<br><br>Yeah, you read that right. My account has been "permanently suspended" by @twitter SIX. FUCKING. TIMES.<br><br>Might be a record, honestly.<br><br>Each time I have been maliciously reported by literal criminals. 1/" [http://www.patrickstomlinson.com @stealthygeek] August 23, 2022
-* https://www.theverge.com/23327809/twitter-onlyfans-child-sexual-content-problem-elon-musk long report about Twitter's inability to protect users, attempts to implement a [[OnlyFans]] alternative and notes on what NOT to do regarding trust and safety for a platform
-* New feature Circle: 2022-08-31 Mashable: [https://mashable.com/article/twitter-circle-memes Twitter is lighting up with Circle memes]
 * 2022-10-27 WaPo: [https://www.washingtonpost.com/technology/2022/10/27/twitter-elon-musk/ Elon Musk closes Twitter deal and fires top executives] / Musk’s $44 billion deal to acquire the social media company closed on Thursday night <blockquote>The top executives were hastily escorted out of the company’s San Francisco headquarters.</blockquote>
-* https://adrianroselli.com/2021/01/bulletproofing-embedded-tweets.html
-* a thread about data collection practices with the native applications of Twitter https://archive.ph/EKLCB
-* https://github.com/timhutton/twitter-archive-parser a tool to parse your archive
-* Be aware that exports do not mark content from Circles differently to other tweets, so when migrating you may end up making previously private content public: https://indieweb.social/@philhawksworth/109353365961680480
-** "If like me and many others, you're in the process of moving your tweets to a new home on your own site, a word of caution:Tweets to twitter circles are not labelled as such in the export, so be aware of the risk of making public what you might have intended for a trusted group" [https://indieweb.social/@philhawksworth @philhawksworth] November 16, 2022
-* exporting follower data https://listfollowers.com/
-* 2009 logged in home screen design: https://twitter.com/stop/status/1594046450723192833
-** "For posterity, here’s a screenshot of Twitter’s home timeline after creating a brand new test account during my first week there in 2009. I went looking for this to recall the name of the Everyone timeline. I have a whole folder of these from an audit I did that week." [https://stopdesign.com @stop] November 19, 2022
-* ^ https://pbs.twimg.com/media/Fh8v8D4UUAAvTYy.jpg
-* How to export: be sure to unfurl your t.cos in your archives when you receive them since the t/.co domain will likely stop working when Twitter shuts down: https://inkdroid.org/2022/11/20/t-dot-co/
-* A Twitter archive project for [[Eleventy]] https://github.com/tweetback/tweetback
-* https://twitterisgoinggreat.com/
-* Article about archiving tools for saving and using your Twitter data: https://bavatuesdays.com/archiving-twitter/
-* https://www.movetodon.org/ a tool for migrating from Twitter to Mastodon which allows you to check your followers on Twitter to follow them individually or in bulk on Mastodon.
-* The Internet Archive is accepting your downloadable Twitter Archive for uploading to their site: https://help.archive.org/help/how-to-archive-your-tweets-with-the-wayback-machine/
-* Archival copy of Tweets on your own site https://boffosocko.com/2016/12/05/how-to-own-display-your-twitter-archive-on-your-website-in-under-10-minutes/ ([https://boffosocko.com/author/chrisaldrich/ @chrisaldrich] December 5, 2016)
-* In-browser tool for turning your ~2022 twitter archive ZIP into an archive you can drop on a web server to get tweet search and archive permalinks ([https://tinysubversions.com/twitter-archive/ example]). Doesn’t currently seem to support also showing a paginated feed of tweets [https://tinysubversions.com/twitter-archive/make-your-own/ Make your own simple, public, searchable Twitter archive (tinysubversions.com)]
-* A plugin for putting one's Twitter archive on their [[WordPress]]-based website: https://github.com/shawnhooper/twitter-archive-to-wp
-* Criticism: 2023-01-05 [https://natematias.medium.com/how-twitter-misleads-us-about-how-many-people-have-left-and-what-to-do-about-it-bba484b6fed6 How Twitter misleads us about how many people have left — and what to do about it] / Social feeds are engines for distorting social understanding. Here’s how to push back against the algorithm. <blockquote>Social media feeds are designed to mislead us about the opinions and behaviors of the people in our lives</blockquote>
-* Feature removal: 2023-01-31 Cotweets dropped: [https://mashable.com/article/twitter-shuts-down-cotweets Twitter is shutting down its CoTweets feature immediately] / If you're reading this, it's already too late to post a CoTweet.
-* Criticism: unverified paid [[Twitter Blue]] accounts being used to spread disinformation: https://infosec.exchange/@JosephMenn/109909077981714944
-** "Russian propagandists are buying Twitter’s new blue checks, giving their lies about Ukraine more prominence. A dozen are tweeting in English, reaching millions. Gift link: https://wapo.st/3m2enaY" [https://infosec.exchange/@JosephMenn @JosephMenn] February 22, 2023
-* Criticism: 2019-10-09 ArsTechnica: [https://arstechnica.com/information-technology/2019/10/twitter-used-phone-numbers-provided-for-2fa-to-match-users-to-advertisers/ Twitter transgression proves why its flawed 2FA system is such a privacy trap] / Twitter [[2FA]] is every bit as bad as critics said it was. Site signals a change is coming.<blockquote>… [Twitter] used phone numbers and email addresses provided for 2FA protection to tailor ads to users.</blockquote>
-* Inactive Account policy: "be sure to login at least every 30 days" https://help.twitter.com/en/rules-and-policies/inactive-twitter-accounts
-* Why: for reaching others via DM: https://omfg.town/@dansinker/110397397474067798
-** "I absolutely abhor the current state of Twitter, but the reality is if I need to reach someone, especially via DM... there's no better option. Frustrating, but also, a necessity." [https://omfg.town/@dansinker @dansinker] May 19, 2023
-* Why keep your account: to avoid having someone else claim it and receive DMs meant for you: https://omfg.town/@glennf@twit.social/110397465985412267
-* [https://www.jvt.me/posts/2023/09/30/tweetus-deletus/ Introducing tweetus-deletus 🐦🪄💀 - a tool to automate deleting your tweets, through the browser]
-* Criticism: amplifies posts about violence 2023-10-05 Bloomberg: [https://www.bloomberg.com/opinion/articles/2023-10-05/the-moral-case-for-no-longer-engaging-with-elon-musk-s-x The Moral Case for No Longer Engaging With Elon Musk’s X] / The former Twitter is incentivizing violent content, which will only become worse to stand out to users.
-* 2006 UI demo by Jack Dorsey (video): https://www.instagram.com/reel/C1IcNm4PatI/
-* 2020-08-31 [[Darius Kazemi]]: [https://tinysubversions.com/notes/twitter-usernames/ On Twitter usernames with lots of numbers] has screenshots of Twitter’s mobile sign-up circa 2020, as well as some reasons for the origins of so many "FirstName BunchOfNumbers" accounts.
-* Permalink embed hack: change "twitter." in the URL to "fxtwitter." before embedding / sharing and it will embed a much friendlier (no cookies) version.
-* how do we replace twitter https://chelseatroy.com/2023/09/15/what-do-we-do-with-the-twitter-shaped-hole-in-the-internet/
-* How to turn off training Grok on your tweets: uncheck this setting: https://twitter.com/settings/grok_settings
-* criticism of renaming to X by paulg: https://fxtwitter.com/paulg/status/1840318262870974576
-* ^ <blockquote>Renaming Twitter X doesn't seem to have damaged it. But it doesn't seem to have helped it either. So it was a waste of time and a domain name.</blockquote> 2024-09-29 02:10 Paul Graham
-* https://xcancel.com/ is a service that mimics the Twitter/X URL structure and provides a captcha-d no JS required minimal reading experience of Twitter profiles (e.g. https://xcancel.com/t) and tweet permalinks (click on any datestamps in an xcancel profile view for example).
-* Official Flickr account, Internet Archive copy: https://web.archive.org/web/20230517193703/https://www.flickr.com/photos/twitteroffice/
-* Criticism: similar to Argument Machine points and expanding thereupon, applicable to [[Mastodon]] and [[Bluesky]] as well: 2025-04-12 {{osteophage}}: [https://osteophage.neocities.org/essays/twitterlike Twitterlike is a Bad Shape]
-* Feature: support [[XMPP]] for reading your feed, tweeting, and for their firehose as well: https://blog.twitter.com/en_us/a/2008/twitter-and-xmpp-drinking-from-the-fire-hose
