@@ -1,0 +1,141 @@
+https://indieweb.org/events/2026-06-17-hwc-eastern
+
+
+'''<dfn>[https://events.indieweb.org/2026/06/homebrew-website-club-eastern-C4Wqn2UksQbJ <span class="p-name">Homebrew Website Club - Eastern</span>]</dfn>''' was an IndieWeb meetup on Zoom held on 2026-06-17.
+
+* Archived from: https://etherpad.indieweb.org/2026-06-17-hwc-eastern
+
+
+= Homebrew Website Club - Eastern =
+Jun 17, 2026
+
+== Participants ==
+* {{vanderwal}} https://vanderwal.net
+* {{burgeonlab}} Naty https://burgeonlab.com/
+* {{rossabaker}} https://rossabaker.com/
+* {{aciccarello}} https://www.ciccarello.me
+* Pierre https://pcarrier.com
+* {{kupietz}} https://michaelkupietz.com/
+
+== Notes ==
+What's new on your site?
+
+=== Naty === 
+* {{burgeonlab}} started a Junited-2026 page https://burgeonlab.com/junited-2026/ 
+** It's by Robert https://robertbirming.com/junited-2026-blog-sharing/
+* Likes the community and discovery aspect of this event
+* Had to work on some CSS and HTML to make the two columns have different widths, using <colgroup>, https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/col
+** Added a responsive / mobile version that converts it to single column with <code>:before</code>
+* Also created a Hugo shortcode with simple JS that counts down the last update time from Git commit time using Hugo's enableGitInfo config, https://gohugo.io/configuration/all/#enablegitinfo
+** e.g. instead of showing last updated on 2006-01-02, it will show (up to 30 days) a countdown: 10 min ago, 5 days ago, etc. 
+
+=== Thomas ===
+* "...building the site as a living archive"
+* Trying to organize the database of posts, organize posts into collections of 20, pruning some broken posts
+* Thinking of doing analytics with Python + D3 for tweet collection and also huge bookmark collection
+
+=== Ross ===
+* Many updates on his public Emacs config.  Sadly, little else.
+* Will be on an Emacs live stream with Sacha Chua tomorrow! https://www.youtube.com/watch?v=_tEcqbi_2o8
+
+* Is hosting Emacs Carnival this month: https://rossabaker.com/blog/underappreciated-emacs-built-ins/
+
+=== Mike ===
+* Working with Jira ticket tracking agent editor, pulling context as ticket queries are usually functional, and working to add Slack integration
+** Agentic AI seems helpful for summarization and fetching infomation (analytics only, not for generative)
+** Semantic chunking is important for LLMs to process information
+
+=== Anthony ===
+* Birds stats imported as JSON into site via CVS export from eBird, https://www.birds.cornell.edu/landtrust/how-to-ebird/
+* Not using API at the moment, doing manual exports
+* JS used for sorting tatic tables column headers 
+* Looking to make static graphics
+** https://www.ciccarello.me/birds/stats/
+** Inspired by https://banjomagpi.com/observing/
+
+=== Pierre ===
+* Working on a virtual keyboard for Linux to use with portable Android device
+* Wayland - good window management
+* Niri window manager: https://niri-wm.github.io/niri/
+* Working on Orleans-style framework
+** https://github.com/dotnet/orleans
+* Is there any open source web-based agent UI?
+
+=== Tabitha ===
+* New feature: upvotes https://tabitha.computer/meta/2026/06/added-upvotes/
+* Adding tags to posts and styling pages to match, like poetry into a notebook look
+* First weeklog/weeknotes for this site, to be published on a Wednesday
+* Mobile device is a shrinked desktop version, hope to make an actual mobile version in the future
+* Each widget/feature on tabitha.computer is a plugin 
+* Currently, uses WordPress 2025 theme
+* Disappointed on discontinuation of community theme, and of the push for AI features
+** Naty is working on migrating off WordPress, and in the interim, have disabled AI since the latest WP 7.0 update, https://burgeonlab.com/notes/2026/0524-175213/
+
+== Database ==
+* MySQL/MariaDB (FOSS) database used in many areas, like blogs 
+** MariaDB got bought by private company https://mariadb.com/newsroom/press-releases/k1-acquires-a-leading-database-software-company-mariadb-and-appoints-new-ceo/
+** Naty had to move to from MySQL to SQLite for her Digikam image library, https://docs.digikam.org/en/setup_application/database_settings.html#the-mysql-internal-server
+* PostgreSQL is a good alternative 
+** Webmention project by Ross uses Postgres + Rust
+* Supabase is another alternative, used in https://iine.to/, that Tabitha added to her site recently
+
+== Diagram / Visualization ==
+* Naty uses ECharts for visualization, can do custom export with  https://echarts.apache.org/en/builder.html for her stats page, https://burgeonlab.com/stats/
+* Lots of other options:
+** D3 (JS) https://d3js.org/
+** Matplotlib, https://matplotlib.org/
+** Plotty (interactive function included), https://plotly.com/python/
+** Vega (JS), https://vega.github.io/vega/, can export to SVG/PNG for static rendered graphs
+** Observable, https://observablehq.com/
+
+== WordPress ==
+** WP announced they won't be making community annual themes any more, https://twentig.com/wordpress-twenty-twenty-six/
+** Mike likes the Classic editor and basic text editor for WordPress, doesn't use Gutenburg blocks editor
+* Thomas has a WP site which is part Classic part Block mode
+* Cons for block editor:
+** To add subhead requires blocks
+** Hard to edit text / code
+** Might affect page performance
+* Pros for block editor:
+** Beginner friendly
+
+== Bookmarking / Data Capture ==
+* Pinboard.in went down for some time, https://abit.ee/en/soft/pinboardin-domain-expired-dns-bookmarks-maciej-ceglowski-service-down-en
+** Supports bookmarking links, annotations, tags, and private mode
+** Searches the indexed page
+** Can follow people, social aspect appeals to Thomas a lot, helps discovery of new material, https://pinboard.in/popular/
+*** For example, this popular post was interesting: SQL to ER Diagram — Free Online ERD Generator from SQL (no signup), https://sqltoerdiagram.com/
+** Thomas has RSS feed going from Pinboard to DevonThink
+** Thomas has +83k (with Delicious bookmarks) and Naty has +14k
+* Tabitha uses Notion to clip everything she reads
+* https://linkding.link/ is a self-hosted version that looks like Pinboard
+* Thomas uses Instapaper, Pinboard, Readwise to capture reading data
+** DevonThink (local) has a search feature that displays links / relation between the whole database of notes
+*** https://www.devontechnologies.com/apps/devonthink
+** Aggregation workflow: Python scripts, Markdown, etc to gather all the information of what was consumed that week (reading, video, audio, etc)
+* Tabitha is using IFTTT to gather the songs from Spotify
+
+== Webmentions ==
+* Anyone using webmention + static site generator?
+** Pierre working on something about webhooks? but waiting for the project's domain name to transfer over so he can make the project public
+
+== Miscellaneous ==
+* Vibe coding / front-end generators are using React and that is not that easy to troubleshoot
+* Wordpress File Manager plugin - https://wordpress.org/plugins/wp-file-manager/ (Pretty sure this is the plugin I used for a long time. Not 100% positive, but like 98% positive —Mike) 
+* Zig, https://ziglang.org/
+** Zig CEO very anti-AI
+* Ghostty and Bun is probably the most famous two Zig projects
+** Bun unfortunately got migrated to Rust with LLM, https://news.ycombinator.com/item?id=48132488
+* Pierre uses the Totem split keyboard, https://github.com/GEIGEIGEIST/TOTEM
+** https://pcarrier.com/totem
+** https://pcarrier.com/planck
+* Naty has a fan-girl moment when she realizes Pierre is the creator of the Planck keyboard which she bought many years ago!
+** The Planck is a grid 40% keyboard, https://40s.wiki/boards/planck
+
+----
+
+Please note that all contributions to this pad and other IndieWebCamp documents are considered to be released under the public domain according to CC0.
+
+
+[[Category:Events]]
+{{Homebrew Website Club}}
