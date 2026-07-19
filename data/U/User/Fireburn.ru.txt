@@ -12,15 +12,16 @@ https://indieweb.org/User%3AFireburn.ru
 Hello. I'm Vika. This is my wiki page. I don't really know what to write here.
 
 == Kittybox ==
-[https://sr.ht/~vikanezrimaya/kittybox Kittybox] is a blazing-fast all-in-one website management platform. It's written in Rust and supports a lot of IndieWeb features (or at least will support once I manage to write those features).
+[https://git.vikanezrimaya.xyz/kittybox Kittybox] is a blazing-fast all-in-one website management platform. It's written in Rust and supports a lot of IndieWeb features (or at least will support once I manage to write those features).
 
 * Basic MF2 markup: works, template system is used to generate HTML
 * [[Micropub]]: Full support, including media endpoint uploads
 ** Implementing extensions is planned, but not on the roadmap yet
-* [[IndieAuth]]: Needs improvements
+* [[IndieAuth]]: Mostly polished
 ** In-house authentication and login page
-** WebAuthn planned, but hard to do due to the state of the ecosystem
-** Password used in the interim
+** Full passkey support
+*** Password authentication is still supported as fallback
+*** No plans to remove passwords yet; however, "restoring access" can be probably done via backdoor access through direct database manipulation
 * [[Webmentions]]: Partially implemented
 ** Saving webmentions works
 *** Updates the Micropub source with webmentions, archiving them in process for display
@@ -48,7 +49,7 @@ Plans:
 ** Blobs should be presented in the UI in reverse-chronological order
 ** Danbooru-like tagging of media blobs for quick filtering and retrieval
 *** Geographic tagging (extracted from EXIF data or added manually)
-*** Categories (manually assigned - don't have resources for using ML nor am excited about ML in general)
+*** Categories (manually assigned or using an image classification model — running ML self-hosted has become much easier in the last 5 years)
 *** alt-text management (post creation could automatically suggest inserting pre-configured alt-text into <code>u-photo</code>)
 ** Auto-upload photos from phone's Camera Roll via companion app
 * Food and recipe collection
@@ -57,3 +58,5 @@ Plans:
 ** <code>?q=food</code> support in Micropub to quickly reference food items when creating posts
 ** A recipe book on the website
 ** Interactive measurement adjustments (double all measures, convert metric to <s>inferior</s> Imperial units)
+*** May require client-side JS for interactivity
+*** Could also be implemented server-side via a query parameter that would post-process all measurements as a no-JS fallback
