@@ -10,20 +10,31 @@ By writing and posting a translation of a post in another language, you provide 
 Similarly by linking to translations of your posts, you provide a way for those who prefer those translations to better what you wrote about.
 
 == How to ==
-(stub)
-Display conventions for linking to alternate translations of one of your web pages?
 
 === How to markup ===
-On the link to the translated article, use <code>rel=[[rel-alternate|alternate]]</code> and <code>hreflang="lang-code"</code> attributes. If the link text is also in the translated language, use <code>lang="lang-code"</code> as well. The string "lang-code" is meant to be replaced by the ISO 639-1 language code for the translated language.
+Use [[rel-alternate]] on a link to the translated article. You can also use a <code><nowiki><link></nowiki></code> tag.
+* Set the <code>hreflang</code> attribute with the [[#Language Codes|language code]] of the translation
+* If the link text is also in the translated language, set the <code>lang</code> attribute as well
 
+If you have translated an article, it's sensible to make the original source aware of your translation, as they might want to add a link to it. One of the IndieWeb examples [[#Evgeny_Kuznetsov|below]] uses <code>u-translation-of</code> microformat and sends a webmention to the original page.
+
+Examples:
+
+<pre>
+<a hreflang="es" rel="alternate" href="https://example.com/es/post">read this in Spanish</a>
+
+<a lang="es" hreflang="es" rel="alternate" href="https://example.com/es/post">Lee esto en español</a>
+
+<link rel="alternate" hreflang="es" href="https://example.com/es/post">
+</pre>
+
+==== Language Codes ====
 ISO 639-1 is surprisingly difficult to research due to the many standards in use. Useful resources include:
 
-* [http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes List of ISO 639-1 Codes] on wikipedia
-* [http://en.wikipedia.org/wiki/BCP47 BCP47 on wikipedia]
-* [http://www.iana.org/assignments/language-subtag-registry IANA Subtag Listing] (warning, this is verbose)
+* [https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes List of ISO 639-1 Codes] on Wikipedia
+* [https://en.wikipedia.org/wiki/BCP47 BCP47] on Wikipedia
+* [https://www.iana.org/assignments/language-subtag-registry IANA Subtag Listing] (warning, this is verbose)
 * … Add more here
-
-If you have translated an article, it's sensible to make the original source aware of your translation, as they might want to add a link to it. One of the IndieWeb examples [https://indieweb.org/translations#Evgeny_Kuznetsov below] uses <code>u-translation-of</code> microformat and sends a webmention to the original page.
 
 == IndieWeb Examples ==
 Current Examples of IWC Translated Articles: Indieweb community members' posts and translated versions:
