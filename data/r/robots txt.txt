@@ -14,6 +14,24 @@ Example command names:
 * Sitemap
 * Content-signal
 
+== Why ==
+
+A robots.txt file allows website owners to communicate crawling preferences to automated agents. It is commonly used to reduce unnecessary crawling, prevent indexing of duplicate or low-value content, and advertise the location of an XML sitemap.
+
+== Common uses ==
+
+Common uses for robots.txt include:
+
+* preventing crawlers from accessing administrative areas
+* reducing crawl activity on search results or filtered pages
+* directing robots to XML sitemaps
+* blocking or limiting specific crawlers
+* reducing unnecessary server load
+
+== How it works ==
+
+A web crawler typically requests <code>/robots.txt</code> before crawling other pages on a site. If a robots.txt file is present, the crawler may use its directives to determine which URLs it is permitted to request.
+
 == Examples ==
 The following examples may be copy pasted into a plain text robots.txt file and placed at the root of your domain.
 
@@ -57,6 +75,29 @@ Disallow: /
 
 More examples:
 * http://pin13.net/robots.txt
+
+== Opting out of search engines and AI crawlers ==
+
+Website owners may use <code>robots.txt</code> to request that compliant web crawlers do not crawl or use their content. Search engines have long supported robots.txt as a mechanism for communicating crawling preferences, and many AI providers now publish user-agent names that website owners can choose to allow or disallow.
+
+Some AI providers distinguish between crawlers used for search indexing and those used for training large language models or other AI services. For example, Google's <code>Googlebot</code> is used for Search, while <code>Google-Extended</code> allows publishers to opt out of content being used for certain generative AI products without affecting Search indexing.
+
+Because robots.txt is voluntary, compliance depends on the crawler. Reputable search engines and many AI providers publicly state that they honor robots.txt directives, while malicious or unknown crawlers may ignore them entirely.
+
+== Robots.txt management and enforcement ==
+
+While <code>robots.txt</code> communicates crawling preferences, some web hosting providers and content delivery networks (CDNs) offer tools to automatically generate, manage, or enforce these rules.
+
+For example, Cloudflare provides managed <code>robots.txt</code> features that can automatically generate rules for known AI crawlers, as well as AI Crawl Control, which allows site owners to monitor, allow, or block individual AI crawlers at the network edge.
+
+== Finding which bots to allow or disallow ==
+
+The following resources maintain lists of common web crawler user agents that may be referenced when configuring <code>robots.txt</code> or bot management rules.
+
+* https://developers.cloudflare.com/ai-crawl-control/reference/bots/ — Cloudflare Bot Reference
+* https://radar.cloudflare.com/bots/directory — Cloudflare Radar Bots Directory
+* https://developers.google.com/crawling/docs/crawlers-fetchers/google-common-crawlers — Google's common crawler documentation
+
 
 == Articles ==
 === Unreachable vs missing robots.txt ===
