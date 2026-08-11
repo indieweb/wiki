@@ -8,31 +8,25 @@ __NOTITLE__
 
 My site ([https://rmendes.net rmendes.net]) is powered by [[Indiekit]]
 
-my Indiekit fork is a personal IndieWeb publishing platform, built as a constellation of small packages around Indiekit (https://getindiekit.com). Upstream Indiekit is a server that connects a website to the independent web; this workspace is what happens when someone takes that foundation seriously and spends a year turning it into a full social operating system for their own domain — one codebase that currently runs two live sites and a demo, each with its own identity and its own selection of capabilities.
+My site rmendes.net runs on Indiekit.
 
-Writing and owning your content. The heart of it is publishing from anywhere: a Micropub endpoint accepts posts from any IndieWeb-compatible app, augmented here so post discovery follows content type rather than upstream's stricter path rules; a post manager lets you browse, edit, and re-syndicate anything you've published; a media endpoint takes many files at once rather than one at a time; and a share endpoint turns a bookmarklet into a quick-capture tool where you choose whether the thing you grabbed is a note or a bookmark. IndieAuth handles signing in with your own domain as your identity. Beyond the ordinary article and note, you can publish photos, videos, audio, bookmarks, replies, reposts, likes, events, RSVPs, and "jams" — the song you have on repeat — and a dedicated page type produces the root-level slash pages every personal site accumulates: /about, /now, /uses. A JSON Feed endpoint and an Eleventy preset that fixes upstream's permalink generation make sure all of it lands at sensible URLs and is machine-readable on the way out.
+Indiekit is a server that sits between you and your website — you post to it, it writes to your site's repo. I've been extending it for about a year. What started as "add a couple of plugins" is now ~25 packages of my own plus forks of seven that Indiekit ships with. One codebase runs two sites (rmendes.net and v2.chardonsbleus.org), each with a different plugin set.
 
-Making the site yours without touching code. A site-configuration endpoint holds everything that distinguishes one site from another — identity, navigation, category vocabulary, homepage composition, and an OKLCH-based colour system that derives a full palette and critical CSS from your choices — and stores it in the database rather than in files. It scans the other installed plugins at boot to discover which sections and widgets they offer, then lets you arrange them into pages from the admin UI. That is what makes the multi-site design work: one shared Eleventy theme with no personal data in it, and all the per-site character supplied at runtime.
+Roughly what I added:
 
-Being part of a conversation. This is where the workspace goes furthest past stock Indiekit. Posts can be cross-posted to Mastodon, Bluesky, LinkedIn, and IndieNews, with the syndicators extended to carry likes and reposts outward, not just original writing. Webmentions flow both directions — one endpoint sends them to everyone you linked, another pulls incoming ones from webmention.io into your own database where you can moderate, block, and honour privacy-removal requests instead of trusting a third party to hold them. 
+Publishing — a page post type for the root-level pages every site ends up with (/about, /now, /uses), multi-file uploads, a share bookmarklet that asks whether the thing is a note or a bookmark, and a permalink fix for the Eleventy preset.
 
-Visitors who don't have their own site can still leave comments by authenticating through IndieAuth or RelMeAuth, and you can reply to them in place. 
+Site config in the database — colours, navigation, categories, homepage layout. Changing a site doesn't mean editing files, which is what lets two sites share one theme.
 
-A conversation aggregator watches notifications across Mastodon, Bluesky, and ActivityPub and stitches the scattered replies to a post back into a single readable thread. 
+Talking to other places — syndication to Mastodon, Bluesky, LinkedIn and IndieNews, extended to carry likes and reposts and not just posts. Webmentions both directions, with incoming ones stored in my own database so I can moderate them instead of trusting webmention.io to hold them. Comments from people who don't have their own site, via IndieAuth or RelMeAuth. A thread aggregator that pulls the replies scattered across Mastodon and Bluesky back under the original post. And a full ActivityPub implementation on Fedify: inbox, outbox, followers, a timeline I can read and post from in my own admin UI, a Mastodon-compatible API, and a migration path off a Mastodon account.
 
-And a full ActivityPub implementation built on Fedify makes the site a first-class fediverse actor: it has an inbox and outbox, followers, a timeline reader and composer for reading and posting to the fediverse from your own admin UI, a Mastodon-compatible API so existing clients can talk to it, and a migration path for moving off a Mastodon account. An early-stage AT Protocol endpoint is doing the same groundwork for Bluesky, backed by a shared utilities library.
+Reading — Microsub server, RSS aggregator, blogroll built from OPML, podroll pulled out of FreshRSS, read-it-later.
 
-Reading, not just writing. The workspace treats consumption as a first-class feature. A Microsub server gives you a social reader with subscriptions and channels; an RSS endpoint aggregates and caches feeds for display on the site itself; a blogroll builds itself from OPML or your reader subscriptions; a podroll pulls podcast episodes out of FreshRSS; and a read-it-later endpoint catches URLs from any context for when you actually have time.
+The rest of a person — GitHub activity, Last.fm and Funkwhale listening history, YouTube videos, a CV editor, Stripe donations.
 
-Showing what you do. Several plugins exist to make a personal site reflect a whole person rather than just their posts: GitHub activity with commits, stars, and featured repositories; listening history from Funkwhale and from Last.fm; latest videos and live status from a YouTube channel; a CV editor for maintaining work, projects, skills, and education as structured data; a Stripe-backed donation endpoint that treats products as campaigns so a site can be supported directly; and a LinkedIn OAuth helper that keeps the tokens the syndicator needs obtainable through the UI instead of by hand.
+Plumbing — a versioned plugin registry, so a site is described by which plugins it gets rather than by a Dockerfile; Cloudron and docker-compose packaging; a startup gate that keeps background pollers quiet until the first Eleventy build finishes, because that build is where all the memory goes.
 
-The machinery underneath. A version-pinned plugin registry catalogues every package above and is consumed as a submodule, so composing a site means declaring which plugins it gets rather than editing a Dockerfile. 
-
-The Cloudron packaging builds a separate image per site from that registry plus a private per-site overlay; a sibling repo does the same job with plain Docker Compose for standalone servers. 
-
-A small startup-gate library keeps every background-polling plugin quiet until the first Eleventy build finishes, so nothing competes for memory during the expensive part. 
-
-Alongside those sit an MCP Micropub client for drafting posts through Claude, a federation test harness, sync scripts for tracking upstream, and a central hub where all plans, audits, and documentation are written.
+Everything is published as @rmdes/* on npm. Source: github.com/rmdes.
 
 == Working On ==
 * ActivityPub for Indiekit via Fedify (Beta)
