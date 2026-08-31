@@ -1,0 +1,88 @@
+https://indieweb.org/User%3AHayobethlehem.nl
+
+<div class="p-summary">
+{{Infobox person
+|name = Hayo Bethlehem
+|url = https://hayobethlehem.nl
+|photo_url = https://hayobethlehem.nl/content/about/img/hayo-photo-2024.jpg
+|pronouns = he/him
+|summary = Hayo Bethlehem has published on his own hand-coded website since 1996 and advises on digital matters in the Dutch government.
+|city = The Hague
+|country = the Netherlands
+|elsewhere = {{mastodon-link| instance = infosec.exchange | username = kineticdiplomacy }} [https://codeberg.org/hayo Codeberg]
+|contact = https://hayobethlehem.nl/about/colophon
+|chatname = hayo
+}}
+</div>
+
+I have published on the web since 1996 and on this domain since February 2001, through fifteen redesigns and one long detour through [[WordPress]]. The current site is hand-coded: no framework, no build step, no third-party JavaScript. By day I advise on digital matters in the Dutch government.
+
+== Topics ==
+Web stuff, communication, photography, book reviews, gear reviews.
+
+== My site ==
+'''https://hayobethlehem.nl''' is where everything goes first.
+* '''Articles''' - long-form posts, going back to 2004
+* '''Library''' - every book I read, as a database application with its own taxonomy, built out of reviews I salvaged from [[Goodreads]]
+* '''Forge''' - things I am building: a photo gallery, a local news aggregator for Wassenaar with propaganda and misinformation filtering, and a searchable index for airsoft gear
+* '''About''' - [[colophon]], a [[uses]] page, a [[blogroll]] and a wishlist
+
+=== How it is built ===
+* Vanilla PHP 8.5. No framework, no package manager, no dependencies.
+* MariaDB, reached only through prepared statements.
+* Shared [[web hosting]] at Hetzner, which keeps the code honest about what it costs to run.
+* Source, build and deploy at Codeberg.
+
+* No cookies, no analytics, no third-party JavaScript. All on purpose.
+
+== What my site speaks ==
+Implemented:
+* [[Webmention]] - sending and receiving, hand-written, see below
+* [[Atom]] - five feeds, no [[RSS]], on purpose
+* [[microformats2]] - [[h-card]] on the front page, [[h-feed]] and [[h-entry]] on the changelog
+* schema.org microdata on every article
+* [[WebFinger]] - the domain answers for the name, so I am reachable as @hayo@hayobethlehem.nl
+* [[rel-me]] - linked both ways, to [[Mastodon]] and Codeberg
+* [[IndieAuth]] - my own authorization endpoint, so I can sign in elsewhere as my domain
+* security.txt, signed, and a published OpenPGP key
+* noai and noimageai, asking the scrapers to leave it be
+
+Deliberately not implemented, and why:
+* [[Micropub]] - posting happens in my own backend
+* [[Microsub]] - no reader lives here
+* [[WebSub]] - the feeds are polled, not pushed
+* [[ActivityPub]] - my fediverse presence is an account elsewhere, and the WordPress plugin I tried was never going to be complete
+
+=== Webmention setup ===
+Endpoint: https://hayobethlehem.nl/webmention, advertised in the head of every page.
+* Nothing is fetched at the moment you send. Verification happens later, from cron.
+* I fetch the source, confirm it really links back, and then read it myself. Nothing is published automatically.
+* Approved replies join the Mastodon conversation at the foot of the article; likes and reposts are named and shown with their authors rather than summed up as a count.
+* Outgoing mentions go out on publish, to everything an article links to that has somewhere to be told.
+
+== Working On ==
+* ...
+
+== Itches ==
+* Replace the link log I lost in 2025 when Inoreader stopped offering custom RSS feeds, this time as [[bookmark]] posts I own
+* ...
+
+== Skills ==
+Comfortable with:
+* vanilla PHP and MariaDB, plain HTML and CSS, no framework
+* information architecture and [[URL design]]
+* security headers, CSP and hardening on shared hosting
+* digital strategy and policy writing in large organisations, in Dutch and English
+
+== Figured out ==
+Things I have shipped on my own site and am happy to explain to anyone who asks
+* receiving [[Webmention]]s on hand-written PHP, with verification deferred to cron and every mention approved by hand before it appears
+* running your own [[IndieAuth]] authorization endpoint rather than delegating it
+* answering [[WebFinger]] from your own domain so your fediverse handle matches your website
+* getting off [[WordPress]] without picking up another CMS
+* CSP and security headers on shared hosting
+* keeping your reading history in your own database instead of a silo
+
+== See Also ==
+* [[wikifying]]
+* [[IndieMark]]
