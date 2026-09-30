@@ -1,0 +1,147 @@
+https://indieweb.org/events/2026-09-30-hwc-europe
+
+'''<dfn>[https://events.indieweb.org/2026/09/homebrew-website-club-europe-london-2KRY1hyun0NS <span class="p-name">Homebrew Website Club Europe/London</span>]</dfn>''' was an IndieWeb meetup on Zoom held on 2026-09-30.
+
+* Archived from: https://etherpad.indieweb.org/2026-09-30-hwc-europe
+
+== Participants ==
+* {{capjamesg}} https://jamesg.blog
+* {{thamarakandabada}} https://thamara.co.uk
+* {{vanderwal }} https://vanderwal.net
+* Ricardo https://www.ricardochavezt.com
+* {{jl}} https://jlopes.eu
+* {{wturrell}}
+* {{sofie}} https://www.sophy.be
+* {{daveHenry}} https://davehenry.blog/
+* {{kupietz}} https://michaelkupietz.com
+
+== Notes ==
+Welcome to HWC! 
+
+=== New guidance for demos: ===
+* Focus on one thing you want to share
+* Share something you think will be interesting to the group (ideally something others can use)
+* Keep your demo under 2 mins long
+* Focus more on what you made (rather than the tech details); people interested in the tech side can always ask after the demo.
+
+* Ebbing between the seasons
+* CSS filters
+** Quite intensive on progressing on older computers
+** mix-blend-mode
+** Experimentation is the fun part
+* What we're doing on our websites
+** Joao wrote a blog post! https://jlopes.eu/blog/design-tokens-beyond-dark-mode/
+*** There is no standard way to do dark/light mode in terms of the UI.
+*** There is prefers-colour-scheme for automatically choosing colour schemes based on user preference, but there is also the question of allowing explicit user choice on and for your website.
+*** relative luminance or wizardry?
+*** RGB vs OKLCH (or HSL)
+*** https://www.youtube.com/watch?v=9UyJe22WH58
+** Ricardo would like to write a post about the book "Don't Call It Art": https://www.penguin.co.uk/books/476616/dont-call-it-art-by-kleon-austin/9780241799598
+*** Planned to write post but ended up adding lots of paper tabs to the book with notes.
+** What Art Does book by Brian Eno: https://www.faber.co.uk/product/9780571395514-what-art-does-an-unfinished-theory/
+*** James recommends this book!
+* Thomas has Webmentions functioning
+** Had old JavaScript from past implementation that he didn't know worked
+** Parsers were picking between two different endpoints that were configured
+** Host was doing things to prevent AI crawling, including blocking AI bots; this included some standard user agents that were used to retrieve Thomas' website
+** Has been working on longer posts for Personal InfoCloud; has taken more work than expected. Working on writing formal definitions for things that Thomas hasn't written yet in a public place, but parts of which exist in presentations.
+** Suspects many/most instances of older user agents may be bots
+
+
+* Random musings
+** We have light and dark mode, why not waffle mode?
+** "What are you doing? I'm just tinkering with my hexes [spells]."
+List of AI user agents: https://github.com/ai-robots-txt/ai.robots.txt
+
+* James wishes he had automated tooling around blocking AI bots.
+** Dave is looking to implement a middleware for his site that will look for .env, .php, etc. and add the corresponding IPs to a list, and another middleware that will reject requests for 24 hours from IPs that have been added to the list.
+*** Progressive back-offs for banning people; bots may also look for this behaviour so they can probe again.
+*** You don't want to ban IPs outright in case a legitimate user uses them eventually.
+* Sophia has been using a service worker to allow for offline access
+** Means site is available even if/when the server is bombarded with requests
+** JL has been using server-side caching to reduce load too.
+** Some bots have 800x600 resolutions.
+** Many bots ignore robots.txt now.
+
+* James love to build search interfaces; current site search is implemented in python and takes up a lot of memory
+** Can I make my search client-side? Yes!
+** Took a day to build, even used own blog post from 2 years ago to help build it: https://jamesg.blog/2024/08/17/tf-idf-python
+** https://jamesg.blog/search-site (page is 6MB)
+** looks for exact phrases, still some work to do on it
+** newer posts come up first, older posts are "downvoted"
+** Still WIP
+** Might right a blog post about how it was made
+** JavaScript is scary! (co-signed by Thamara)
+** Sophia uses tags on her pages to search (as it's a static site)
+
+* Sophia has been working on https://www.inquiries.link/tools/topology/tangle-truchet
+* Sophia worked on https://www.fractalkitty.com/artsy-math-squaring-square-patterns/
+** Post needed diagrams
+** Wanted to make a quilt, Ms. Perkins' Quilt. It's a problem from 1917 and nobody had sewed one and published it on the web. Led to rabbit hole of more explorations to get the picture for the main post:
+*** https://www.fractalkitty.com/rabbit-hole-minimum-l-seams/
+*** https://www.fractalkitty.com/mrs-perkins-quilt/
+*** Blog posts that make you make something in the real world
+**** “I like any blog post that makes you make something in the real world too.” - James
+
+* Dave: Q on Mastodon: do you prefer RSS, Atom, JSON? (majority was RSS, 0 said JSON)
+** https://toot.wales/@mort8088/117303445705015889
+** Why is RSS the default feed? Is it because we always refer to feeds as RSS? Many sites say they offer RSS even though it is Atom.
+** RSS was first. When people switched to Atom, everyone knew what RSS was, and that was their frame of reference.
+** Is there a point in supplying RSS, Atom, and/or JSON, or should you stick with one?
+** Most feed readers will pick up RSS and Atom; not everything picks up JSON.
+* https://en.wikipedia.org/wiki/Don%27t_repeat_yourself
+** Better to maintain one thing that works
+** James recommends publishing an h-feed that converts to RSS
+*** https://jamesg.blog/2024/06/06/publish-h-feed
+*** Having a visible RSS link as a means to introduce people to RSS who may otherwise be unaware of it
+*** https://subscribeopenly.net/subscribe/?url=https://jamesg.blog/feeds/posts.xml
+*** Orange feed icon is still recognisable to some
+*** You may want to have a /feeds page that links to your feeds
+*** https://vanderwal.net/vdwalxml.php has example of local link, link to Subscribe Openly, and also a link to the feed validator from the W3C.
+* Sophy wrote https://www.sophy.be/blog/too-many-interests/ this week!
+** Started website as a place to share learning progress as a developer. At the time looking to change jobs. Found job quicker than expected and the site became a playground.
+** Wants website to be a place to do anything creative. Really enjoys writing. Didn't have a place to share writing until she set up her website.
+** Wants website to be a place that shares everything she is interested in.
+* Websites/blogs as online extensions of our selves -- Thamara
+** Thamara has made a point to add lots of different interests to his website. Lists music he is listening to, guitars he owns, films he has watched, things he is making with his website, etc.
+** Blogging was always an outlet. Focus shifted from a particular topic to being more general. Just like being a person: you are not just one thing.
+** The IndieWeb community has many like-minded people with creative interests.
+*** Many answers to common questions like coming up with a blog name were about commercial interests / conversion rates / SEO, etc.
+**** "No, I just want to write stuff and find tips about it!"
+**** There were many tips on the IndieWeb website.
+**** Jame's zine https://jamesg.blog/2026/09/05/creative-web-guide-zine
+**** How do we encourage people to put things they enjoy on their websites
+** At least one person has sent Webmentions with an image of text typed on a typewriter
+*** https://boffosocko.com/2026/09/25/okay-typosphere-who-else-is-using-their-typewriter-to-converse-with-others-via-web-and-webmention/
+** Make your website a home for things that are interesting to you. Maybe what you share will be interesting to other people too. 
+** You can find interesting people by sharing interesting things.
+* The joy of exploring someone's website and figuring out their interests.
+** Some people have shrines / fan pages that go deep into a specific topic.
+** It doesn't matter that everyone will not find what you share interesting.
+* You can also put easter eggs on your site and it's always fun when people notice them.
+* Mike's site started when he had creative projects in lots of different places / different silos. Wanted a single place to bring things together, including works in progress.
+** Site has lots of different things on it today
+** Site is called Kupietz Arts and Code; hasn't figured out how to make other topics fit in thematically yet.
+** Kwitter -- the one person social media network. https://michaelkupietz.com/kwitter-one-user-social-network/
+* Dave is interested in having a photo feed and also having a feed that presents everything
+** IndieWeb example of a "firehose" feed https://taylordrayson.com/
+** Reading a feed with different types of content is fun (notes, photos, articles, films, tv, books, etc) 
+** Your blog posts don't always have to be 1,000 words on a subject
+** A blog feed vs A feed of what you're putting out into the world
+* Having lots of ideas, working on one, then focusing on another
+* Sharing yourself to help you find your people
+** Don't let a polished post for future recruiters get in the way
+* Sophy didn't include full name in domain name so it isn't as associated with her identity.
+* "Use condiments of your choice, unless you're James" - https://michaelkupietz.com/air-fryer-chicken-strips-success/
+* /condiments page?
+* Worchester sauce on a cheese toastie
+* Homemade mayo >>> store-bought mayo
+* Days since post made in IndieWeb meeting -- add to wiki
+* Truffles
+* "Sandwich masochism"
+* https://michaelkupietz.com/movie-review/the-last-amityville-movie/ - Mike's review of "The Last Amityville Movie", the "Reuben Sandwich" of movies, everything he hates in movies combined into one and he liked it
+* https://addons.mozilla.org/en-GB/firefox/addon/adaptive-tab-bar-colour/
+* https://relay.fm/designed/
+
+[[Category:Events]]
+{{Homebrew Website Club}}
