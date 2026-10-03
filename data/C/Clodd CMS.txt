@@ -1,0 +1,53 @@
+https://indieweb.org/Clodd_CMS
+
+'''<dfn>[https://github.com/jimmitchell/clodd-cms Clodd CMS]</dfn>''' is an open source [[CMS]] by [[User:Jimmitchell.org|Jim Mitchell]], written in [[PHP]] with a [[SQLite]] database. It has its own [[Micropub]] server and [[IndieAuth]] server, and serves its public pages as static HTML.
+
+Posts and pages are written in Markdown in a PHP admin panel. Publishing generates plain HTML files that Nginx serves directly, so no PHP runs when a visitor reads the site. That makes it a cross between a [[static site generator]] and a dynamic CMS: you edit in a dynamic admin, and visitors get static pages.
+
+Clodd CMS is released under the MIT License. Development started in February 2026.
+
+== IndieWeb Features ==
+=== Micropub ===
+Clodd CMS has a [[Micropub]] endpoint at <code>/micropub.php</code>, which it advertises with <code><nowiki><link rel="micropub"></nowiki></code>.
+* '''Create''' using form-encoded, JSON or multipart requests, including uploading photos with the post.
+* '''Update''', '''delete''' and '''undelete'''. Deleting a post is a soft delete, so <code>action=undelete</code> can restore it.
+* '''Queries''': <code>q=config</code>, <code>q=source</code>, <code>q=syndicate-to</code> and <code>q=category</code>.
+* '''Post List''': <code>q=source</code> without a URL lists your posts, as in the [[Micropub-extensions#Query_for_Post_List|Query for Post List extension]]. It supports <code>limit</code>, <code>offset</code>, <code>post-type</code> and <code>post-status</code>.
+* '''Post types''': <code>q=config</code> lists the post types Clodd CMS stores, which are [[note]], [[article]], [[photo]], [[reply]], [[repost]], [[like]] and [[bookmark]]. Video, audio, RSVP and checkin aren't listed, because the server can't store those yet.
+* '''Media endpoint''' at <code>/media.php</code>.
+* '''Syndication targets''': Mastodon, Bluesky and Pixelfed, when they're configured.
+* '''Scheduled posts''': a post sent with a future publish date is scheduled.
+
+=== IndieAuth ===
+Clodd CMS has its own [[IndieAuth]] server, so the site can be used to sign in to IndieAuth apps, and can authorize Micropub clients without using a third-party service.
+* [[authorization-endpoint|Authorization endpoint]] (<code>/indieauth.php</code>) with a consent screen. Approving a sign-in needs the admin login, including two-factor authentication if it's turned on.
+* [[token-endpoint|Token endpoint]] (<code>/token.php</code>) with token revocation and introspection.
+* [[IndieAuth]] server metadata document (<code>rel="indieauth-metadata"</code>).
+* PKCE using <code>S256</code>.
+* Scoped tokens: <code>create</code>, <code>update</code>, <code>delete</code> and <code>media</code>.
+* A single shared Micropub token can also be generated in Settings, for clients that don't use IndieAuth.
+
+=== Other IndieWeb features ===
+* '''[[h-entry]]''' markup on posts and listings. Short titleless posts, which the admin calls "asides", are marked up as [[note]]s with no <code>p-name</code>.
+* '''[[POSSE]]''' to [[Mastodon]], [[Bluesky]] and [[Pixelfed]] when a post is first published. Pixelfed only receives photo posts. When a post is edited the copies are updated, and when it's deleted or unpublished the copies are removed. Notes are posted in full as native posts, with no title and no link back. Each post links to its copies under "Also on:".
+* '''[[Webmention]]s''': incoming webmentions are received through [[webmention.io]] and shown on posts, with reactions shown as avatars and replies as threads. Outgoing webmentions are sent by a command-line script that can run from cron.
+* '''Feeds''': Atom, RSS 2.0 and [[JSON Feed]].
+* '''Other clients''': Clodd CMS also has a WordPress-compatible [[XML-RPC]] API, so [[MarsEdit]] works with it too.
+
+== Clients ==
+These clients have been used with Clodd CMS's Micropub endpoint:
+* [[OutPost]]
+* [[iA Writer]]
+* [[Quill]]
+
+== IndieWeb Examples ==
+* [[User:Jimmitchell.org|Jim Mitchell]] runs https://jimmitchell.org/ on Clodd CMS.
+
+== See Also ==
+* [[CMS]]
+* [[Micropub/Servers]]
+* [[IndieAuth]]
+* [[OutPost]]
+
+[[Category:CMS]]
+[[Category:Software]]
