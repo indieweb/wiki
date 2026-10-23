@@ -3,6 +3,19 @@ https://indieweb.org/htaccess
 {{stub}}
 '''<dfn>.htaccess</dfn>''' is the file used for configuring particular sites on [[apache]] (as opposed to httpd.conf which is global).
 
+== How to ==
+{{section-stub}}
+=== How to block POST ===
+If you need to block all POST requests, e.g. due to an underlying language handling vulnerability (e.g. [https://en.wikipedia.org/wiki/PHP2Shell PHP2Shell]), you can add the following lines to your .htaccess:
+<pre>
+RewriteEngine on
+RewriteCond %{REQUEST_METHOD} POST
+RewriteRule .* - [F,L]
+</pre>
+
+* {{t}} has set this up on his server
+* {{addyourself}}
+
 == See Also ==
 * [[Apache]]
 * [[LiteSpeed]]
