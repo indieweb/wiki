@@ -582,11 +582,25 @@ All geo returns would follow the common properties of an h-adr object with only 
 }
 </pre>
 
+{{gwg}} went back to the drawing board on above in 2026-10 with a new query parameter, q=places, that still allow for a geo URI or the individual parameters. The geo=lat.lng;u=xx is close to the geo URI format of geo:37.786971,-122.399677;u=35 but in the interest of consistency should actually be a GEO URI and a separate property. Therefore, the query for a request with a Geo URI should be ?q=places&uri=geo:37.786971,-122.399677;u=35  or optionally, each variable individually... q=places&lat=x&lon=y&u=z 
+
+Arguments
+* <code>q=places</code>
+* <code>lat=37.786971</code> - Latitude
+* <code>lon=-122.399677</code> - Longitude
+* <code>geo=lat,lon</code> - Geo URI
+* <code>limit=10</code> (Optional) - Limit the results
+* <code>local=1</code> - (Optional) - Limits returns to locally stored venues. This allows you to keep previously used ones on your endpoint, but use an external option for others.
+
+The following example would be returned as part of the <code>?q=places&lat=x&lon=y</code> query. Return would contain a single property, places, which would be the returned list of venues. 
+
+All places returns would follow the properties of an h-card object. There are two optional extra properties, following the proposed [https://indieweb.org/Micropub-extensions#Location_Visibility Location Visibility] property which would allow the query to suggest whether this location should be publicly displayed, allowing for private venues, and the local property.
+
 ===== Implementations =====
 * Clients
 ** [[IndiePass for Android]] - uses the geo property, places as suggestions
 * Servers
-** [[Micropub for WordPress]] - uses the geo property only
+** [[Micropub for WordPress]] + [[Simple Location]] - supports the places query.
 ** [[IndieWeb for Drupal]] - uses the geo property, can return places
 
 ==== Contacts ====
