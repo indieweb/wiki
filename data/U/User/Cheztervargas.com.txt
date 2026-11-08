@@ -1,0 +1,37 @@
+https://indieweb.org/User%3ACheztervargas.com
+
+My website, [https://cheztervargas.com cheztervargas.com], is a [[Hugo]] site with a hand-written C++ backend I like to call Lorekeeper, [[self-hosting|self-hosted]] on a laptop at home behind a [[Cloudflare]] tunnel. I left the [[silo|silos]] to run it, and I write everything on it myself.
+
+== Site ==
+* '''Static side:''' [[Hugo]] with hand-written HTML, CSS and JS, no framework. The layout is a terminal-style dashboard with a CRT overlay, a live ECG strip in the footer and a light/dark toggle. The theme choice lives in localStorage and nothing is sent to the server.
+* '''Dynamic side:''' Lorekeeper, a single-file C++ backend, plus a small publish script. It uses three [[SQLite]] databases, one each for messages, webmentions and reactions.
+* '''Offline page:''' since the server is a laptop, a [[Cloudflare]] Worker serves a fully self-contained offline page when the origin is down or returns a 5xx.
+* '''Admin routes''' are gated per path with [[Caddy]] basic auth, and [[CrowdSec]] runs alongside the origin.
+* '''Analytics:''' self-hosted [[Umami]], no cookies, no persistent visitor ID.
+
+== IndieWeb features ==
+* [[POSSE]]: notes are published on my site first and syndicated elsewhere later.
+* [[Notes]] come in four kinds ([[like]], [[bookmark]], [[reply]] and quote) with the matching microformats classes (<code>u-like-of</code>, <code>u-bookmark-of</code>, <code>u-in-reply-to</code>, <code>u-repost-of</code>).
+* [[webmention]]: I receive them at <code>/api/webmention</code>. The server fetches the source page to check it really links to me, stores the author's public h-card details and a 280 character excerpt, and shows nothing until I approve it.
+* [[Comments]]: approved comments and approved webmentions are merged into one list under each post and note, sorted by date.
+* [[Guestbook]]: shares the same moderation queue as comments. I review each entry and can add a reply that appears under it. A rate limit of five submissions an hour is counted across the guestbook and all comments together, using a hashed IP.
+* [[Reactions]]: a heart button on posts. The IP is hashed and only the hash is kept, to stop duplicate reactions. Every post starts with one heart from me by default.
+* [[h-entry]], [[h-card]] and [[rel-me]] markup on posts, notes and the homepage.
+* [[RSS]]: one feed at <code>/feed.xml</code> covering both posts and notes. (Might separate later if readers complain to me via email or elsewhere ;^^)
+* [[Privacy policy]]: a GDPR-style policy at [https://cheztervargas.com/privacy.html /privacy.html] that lists every category of data stored, the legal basis and the retention.
+* [[webring]]s: IndieWeb, Literring, Star Wars, Hotline, No AI, Webmaster, JournalRing and *nixRing.
+
+== Moderation ==
+Comments, guestbook entries, and webmentions all wait in a queue. A small CLI (<code>modqueue</code>) handles approving, rejecting and replying. A shell script sends me an email and an hourly desktop notification when something is pending, run from a systemd timer. Rejected comments are deleted straight away, and rejected webmentions are marked rejected instead.
+
+== No AI ==
+Posts are human-written, and the site says so on the blog page. <code>robots.txt</code> disallows a long list of AI and scraper user agents and includes <code>Content-Usage: ai=n</code>, and there is an <code>ai.txt</code> with a blanket disallow. I am also in the [[No AI webring]].
+
+== Writing ==
+* Blog posts about the homelab, books and film, and personal life, and many more.
+* Short notes in a micro-log feed, with a tag filter and infinite scroll.
+
+== Elsewhere ==
+* Site: https://cheztervargas.com
+* GitHub: https://github.com/LeCaseus (this site's source and my Linux dotfiles)
+* Email: records [at] cheztervargas [dot] com
