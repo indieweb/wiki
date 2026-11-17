@@ -14,23 +14,26 @@ There is no OutPost service or account. The app finds the Micropub, authorizatio
 === Writing ===
 * Write in Markdown, with a formatting bar and a preview.
 * Shows a character count for notes and a word count for articles as you type.
-* A post with a title is sent as an [[article]]. A post without one is a [[note]].
+* A post with a title is sent as an [[article]]. A post without one is a [[note]]. Each site can choose which kind of post a new one starts as.
 * Also supports [[photo]] posts, [[reply|replies]], [[like]]s, [[repost]]s, [[bookmark]]s and [[RSVP]]s, with a field for the URL you're responding to.
 * Uploads images to your site's [[Micropub#Media_Endpoint|media endpoint]] and asks you to describe each one as you add it, so posts go out with [[alt text]].
 * An optional summary field, for sites that show an excerpt in listings or feeds.
-* Suggests categories from the tags your site already uses (<code>q=category</code>).
+* Suggests categories from the tags your site already uses (<code>q=category</code>), most-used first. Sites that don't share a list of their tags get suggestions from the posts you've published to them from that device.
 * Publishes posts live or as drafts (<code>post-status</code>).
+* Lets you set the date a post goes out with (<code>published</code>), for example to backdate it, or leave it to your site. Dates are sent in your own time zone.
 * Lets you tick [[syndication]] targets your site offers (<code>q=syndicate-to</code>) for one post, or set them as the account's default. OutPost only sends syndication targets when a post is first published, so editing a post later doesn't syndicate it a second time.
+* '''Start a post from another app''': opening a link like <code><nowiki>outpost://new?title=…&text=…</nowiki></code> opens a new post with that title and text filled in, so a read-later app or a shortcut can send a highlight to write about. Both parts are optional. Nothing is published until you post it.
 
 === Editing what you've published ===
-* Opens a published post for editing by asking your site for its source (<code>q=source</code>), then sends the changes back as a Micropub update.
+* Opens a published post for editing by asking your site for its source (<code>q=source</code>), then sends the changes back as a Micropub update. You can change a post's date when you edit it.
 * Deletes posts with a Micropub delete.
 * '''Edit by URL''': paste the address of any post on your site and edit it, whether or not you wrote it in OutPost.
-* Shows your posts in a list with their type (note, article, photo, reply, bookmark), publish date and tags, and keeps drafts on a separate tab. If your server can list posts over Micropub, OutPost loads them 50 at a time. If not, it reads the site's Atom or RSS feed and adds the posts and drafts made from OutPost.
+* Shows your posts in a list with their type (note, article, photo, reply, bookmark), publish date, the date your site says each was last edited, and tags, and keeps drafts on a separate tab. If your server can list posts over Micropub, OutPost loads them 50 at a time. If not, it reads the site's Atom or RSS feed and adds the posts and drafts made from OutPost.
+* On the Mac, the post table can be sorted by any column, and any column but Title can be hidden.
 
 === More than one site ===
 * Sign in to as many sites as you like. The Mac app lists them in a sidebar, next to a sortable table of posts. On iOS you switch between them from the toolbar.
-* Settings are per site: the content format to send (Markdown source, Markdown converted to HTML, plain text or HTML), which blog to post to on hosts that run several (<code>mp-destination</code>), and the default syndication targets.
+* Settings are per site: the content format to send (Markdown source, Markdown converted to HTML, plain text or HTML), the kind of post a new one starts as, which blog to post to on hosts that run several (<code>mp-destination</code>), and the default syndication targets.
 * Shows what your server reported from <code>q=config</code>, so you can see what OutPost is working with.
 
 == Screenshots ==
@@ -40,7 +43,7 @@ File:OutPost-mac-post-preview.png|The same post in Preview.
 </gallery>
 
 == IndieAuth ==
-OutPost's client ID is <code>https://jimmitchell.dev/outpost/</code>. That page carries [[h-app]] markup and a <code><nowiki><link rel="redirect_uri"></nowiki></code> for the app's custom-scheme callback (<code>outpost://auth/callback</code>). Your authorization server has to fetch that page to accept the request, because the callback doesn't share an origin with the client ID.
+OutPost's client ID is <code>https://jimmitchell.dev/outpost/</code>, and that page carries [[h-app]] markup. Its redirect URI is <code>https://jimmitchell.dev/outpost/auth/callback/</code>, which shares the client ID's origin and passes the authorization code on to the app's <code>outpost://auth/callback</code>. It's https rather than a custom scheme because some servers, such as [[IndieKey]], refuse any redirect that isn't http or https. Mac builds before 1.2.1 sent <code>outpost://auth/callback</code> directly, and the client page still lists it in a <code><nowiki><link rel="redirect_uri"></nowiki></code> for them.
 
 OutPost uses [[PKCE]] where your server supports it, and refreshes tokens when the server issues refresh tokens.
 
@@ -48,6 +51,8 @@ It asks for the scopes <code>create</code>, <code>update</code>, <code>delete</c
 
 == Requirements ==
 OutPost needs a website with a Micropub endpoint. If your site doesn't have one, OutPost has nowhere to publish. Signing in with IndieAuth is recommended, but a token your server issues itself also works (see below).
+
+The Mac app needs macOS 15 or later. The iPhone and iPad app needs iOS or iPadOS 18 or later.
 
 == Works with ==
 OutPost should work with any site that has a Micropub endpoint. Sites without [[IndieAuth]] can still sign in by entering their Micropub endpoint and an access token issued by the server. OutPost can't refresh a token entered this way, so it has to be replaced when it expires.
@@ -87,7 +92,12 @@ Platforms marked '''Confirmed''' have been tested with OutPost. The rest support
 |}
 
 == Privacy ==
-OutPost has no server, no analytics and no tracking, and nothing syncs to iCloud. The only network request the Mac app makes beyond your own sites is Sparkle's update check against <code>jimmitchell.dev</code>.
+OutPost has no server, no analytics and no tracking, and nothing syncs to iCloud. Beyond your own sites:
+* Signing in passes once through the callback page on <code>jimmitchell.dev</code>, which hands the authorization code straight on to the app and keeps no record of it.
+* The Mac app checks for updates with Sparkle against <code>jimmitchell.dev</code>.
+* The Mac app's Leave a Tip button opens a Stripe payment page in your browser. The app itself sends nothing and never learns whether you tipped.
+
+The iPhone and iPad app makes no other requests. The [https://jimmitchell.dev/outpost/privacy/ privacy policy] has the details.
 
 == IndieWeb Examples ==
 * [[User:Jimmitchell.org|Jim Mitchell]] has used OutPost to post to https://jimmitchell.org/ since 2026-08-25.
